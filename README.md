@@ -49,6 +49,8 @@ Lualine has sections as shown below.
 Each sections holds it's components e.g. current vim's mode.
 Colorscheme of sections is mirrored, meaning section `A` will have the same colorscheme as section `Z` etc.
 
+Configuration is currently limited to lua, please use lua block or a separate lua file to configure lualine.
+
 ### Starting lualine
 ```lua
 local lualine = require('lualine')
