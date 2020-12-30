@@ -5,7 +5,7 @@ A blazing fast and easy to configure neovim statusline written in pure lua.
 ## Screenshots
 
 | normal                                    | insert                                  |  visual                                |  replace                               |
-| :---------------------------------------- | :-------------------------------------: | -------------------------------------: | -------------------------------------: |
+| :---------------------------------------: | :-------------------------------------: | :------------------------------------: | :------------------------------------: |
 |  ![normal](./screenshots/normal.png)      | ![normal](./screenshots/insert.png)     | ![normal](./screenshots/visual.png)    | ![normal](./screenshots/replace.png)   |
 
 ## Performance compared to other plugins
@@ -14,7 +14,7 @@ Unlike other statusline plugins lualine loads only defined components, nothing e
 Startup time performance measured with an amazing plugin [tweekmonster/startuptime.vim](https://github.com/tweekmonster/startuptime.vim)
 
 | clean vimrc    | lualine      |  airline     |  lightline   |
-| :------------- | :----------: | -----------: | -----------: |
+| :------------: | :----------: | :----------: | :----------: |
 |  8.943 ms      | 9.034 ms     | 13.425 ms    | 11.463 ms    |
 
 
