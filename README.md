@@ -320,6 +320,15 @@ lualine.theme = gruvbox
 Please create an issue/ pr if you want to see more functionality implemented
 - General
   - [ ] create doc file
+- Components
+  - [x] branch component
+  - [x] file encoding component
+  - [x] file format component
+  - [x] filename component
+  - [x] filetype component
+  - [x] location in file component
+  - [x] vim mode component
+  - [x] file progress component
 - Icons usage
   - [x] [ryanoasis/vim-devicons](https://github.com/ryanoasis/vim-devicons)
   - [x] [kyazdani42/nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons)
