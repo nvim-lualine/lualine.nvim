@@ -5,9 +5,10 @@ A blazing fast and easy to configure neovim statusline written in pure lua.
 ## Screenshots
 Here is a preview of how lualine can look like.
 
-| normal                                    | insert                                  |  visual                                |  replace                               |
-| :---------------------------------------: | :-------------------------------------: | :------------------------------------: | :------------------------------------: |
-|  ![normal](./screenshots/normal.png)      | ![normal](./screenshots/insert.png)     | ![normal](./screenshots/visual.png)    | ![normal](./screenshots/replace.png)   |
+![normal](./screenshots/normal.png)
+![normal](./screenshots/insert.png)
+![normal](./screenshots/visual.png)
+![normal](./screenshots/replace.png)
 
 ## Performance compared to other plugins
 Unlike other statusline plugins lualine loads only defined components, nothing else.
