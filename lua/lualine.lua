@@ -66,33 +66,33 @@ local function StatusLine(isFocused)
     M.theme = utils.setTheme(M.theme)
     highlight.createHighlightGroups(M.theme)
   end
-  local status = ''
+  local status = {}
   if sections.lualine_a ~= nil then
-    status = status .. highlight.formatHighlight(isFocused, 'lualine_a')
-    status = status .. utils.drawSection(sections.lualine_a, M.separator)
+    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_a'))
+    table.insert(status, utils.drawSection(sections.lualine_a, M.separator))
   end
   if sections.lualine_b ~= nil then
-    status = status .. highlight.formatHighlight(isFocused, 'lualine_b')
-    status = status .. utils.drawSection(sections.lualine_b, M.separator)
+    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_b'))
+    table.insert(status, utils.drawSection(sections.lualine_b, M.separator))
   end
   if sections.lualine_c ~= nil then
-    status = status .. highlight.formatHighlight(isFocused, 'lualine_c')
-    status = status .. utils.drawSection(sections.lualine_c, M.separator)
+    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_c'))
+    table.insert(status, utils.drawSection(sections.lualine_c, M.separator))
   end
-  status = status .. [[%=]]
+  table.insert(status, "%=")
   if sections.lualine_x ~= nil then
-    status = status .. highlight.formatHighlight(isFocused, 'lualine_c')
-    status = status .. utils.drawSection(sections.lualine_x, M.separator)
+    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_c'))
+    table.insert(status, utils.drawSection(sections.lualine_x, M.separator))
   end
   if sections.lualine_y ~= nil then
-    status = status .. highlight.formatHighlight(isFocused, 'lualine_b')
-    status = status .. utils.drawSection(sections.lualine_y, M.separator)
+    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_b'))
+    table.insert(status, utils.drawSection(sections.lualine_y, M.separator))
   end
   if sections.lualine_z ~= nil then
-    status = status .. highlight.formatHighlight(isFocused, 'lualine_a')
-    status = status .. utils.drawSection(sections.lualine_z, M.separator)
+    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_a'))
+    table.insert(status, utils.drawSection(sections.lualine_z, M.separator))
   end
-  return status
+  return table.concat(status)
 end
 
 function M.status()

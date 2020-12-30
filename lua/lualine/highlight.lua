@@ -1,27 +1,23 @@
 local M = {  }
 
 local function highlight (name, foreground, background, special)
-  if special == nil then
-    special = 'none'
-  end
-  local command = 'highlight '
-  command = command .. name .. ' '
-  command = command .. 'guifg=' .. foreground .. ' '
-  command = command .. 'guibg=' .. background .. ' '
-  if special then
-    command = command .. 'gui=' .. special .. ' '
-  end
-  return command
+  local command = {
+    'highlight', name,
+    'guifg=' .. foreground,
+    'guibg=' .. background,
+    'gui=' .. (special or 'none'),
+  }
+  return table.concat(command, ' ')
 end
 
 function M.createHighlightGroups(theme)
   for mode, sections in pairs(theme) do
     for section, colorscheme in pairs(sections) do
+      local special = nil
       if section == 'a' then
-        vim.cmd(highlight('lualine_' .. section .. '_' .. mode, colorscheme.fg, colorscheme.bg ,'bold'))
-      else
-        vim.cmd(highlight('lualine_' .. section .. '_' .. mode, colorscheme.fg, colorscheme.bg ))
+        special = 'bold'
       end
+      vim.cmd(highlight('lualine_' .. section .. '_' .. mode, colorscheme.fg, colorscheme.bg, special))
     end
   end
 end

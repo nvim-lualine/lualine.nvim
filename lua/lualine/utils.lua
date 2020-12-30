@@ -5,29 +5,21 @@ function M.setTheme(theme)
 end
 
 function M.drawSection(section, separator)
-  local status = ''
-  for index, statusFunction in pairs(section) do
+  local status = {}
+  for _, statusFunction in pairs(section) do
     local localstatus = statusFunction()
-    if localstatus:len() > 0 then
-      if separator:len() > 0 then
-        if index > 1 then
-          status = status .. separator .. ' '
-        end
-        status = status .. localstatus
-        status = status .. ' '
-      else
-        status = status .. localstatus
-        status = status .. ' '
-      end
+    if #localstatus > 0 then
+      table.insert(status, localstatus)
     end
   end
-  if status:len() > 0 then
-    if separator:len() > 0 and table.maxn(section) > 1 then
-      return ' ' .. status .. ' '
-    end
-    return ' ' .. status
+  if #status == 0 then
+    return ''
   end
-  return ''
+  local sep = ' '
+  if #separator > 0 then
+    sep = ' ' .. separator .. ' '
+  end
+  return ' ' .. table.concat(status, sep) .. ' '
 end
 
 return M
