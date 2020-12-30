@@ -103,6 +103,4 @@ function M.status()
   vim.cmd([[autocmd WinLeave,BufLeave * setlocal statusline=%!v:lua.statusline()]])
 end
 
-M.status()
-
 return M
