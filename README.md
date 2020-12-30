@@ -3,6 +3,7 @@ A blazing fast and easy to configure neovim statusline written in pure lua.
 
 `lualine.nvim` requires neovim 0.5
 ## Screenshots
+Here is a preview of how lualine can look like.
 
 | normal                                    | insert                                  |  visual                                |  replace                               |
 | :---------------------------------------: | :-------------------------------------: | :------------------------------------: | :------------------------------------: |
