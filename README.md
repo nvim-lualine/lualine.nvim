@@ -8,6 +8,7 @@ Here is a preview of how lualine can look like.
 ![normal](./screenshots/normal.png)
 ![normal](./screenshots/insert.png)
 ![normal](./screenshots/visual.png)
+![normal](./screenshots/command.png)
 ![normal](./screenshots/replace.png)
 
 ## Performance compared to other plugins
