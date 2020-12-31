@@ -64,8 +64,8 @@ local function StatusLine(isFocused)
   end
   if type(M.theme) == 'string' then
     M.theme = utils.setTheme(M.theme)
-    highlight.createHighlightGroups(M.theme)
   end
+  highlight.createHighlightGroups(M.theme)
   local status = ''
   if sections.lualine_a ~= nil then
     status = status .. highlight.formatHighlight(isFocused, 'lualine_a')
