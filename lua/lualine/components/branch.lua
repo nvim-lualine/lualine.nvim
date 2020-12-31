@@ -15,7 +15,7 @@ local function Branch()
     return branch
   end
   ok = (vim.fn.exists('*WebDevIconsGetFileTypeSymbol'))
-  if ok then
+  if ok ~= 0 then
     local icon =  ''
     return icon .. ' ' .. branch
   end
