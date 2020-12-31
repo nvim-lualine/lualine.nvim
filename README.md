@@ -193,7 +193,7 @@ Please create a pr if you managed to create an extension before me
 
 </details>
 
-### `.vimrc`/`init.vim` config
+### Full config example inside `.vimrc`/`init.vim`
 
 <details>
 <summary><b>vimrc config</b></summary>
