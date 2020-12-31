@@ -11,7 +11,7 @@ local function Filetype()
     return filetype
     end
     ok = (vim.fn.exists('*WebDevIconsGetFileTypeSymbol'))
-    if ok then
+    if ok ~= 0 then
       local icon = vim.call('WebDevIconsGetFileTypeSymbol')
       return icon .. ' ' .. filetype
     end
