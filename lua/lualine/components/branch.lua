@@ -1,11 +1,19 @@
+local utils = require 'lualine.utils'
+
 local function Branch()
-  local branch = vim.fn.systemlist(
-  'cd '..vim.fn.expand('%:p:h:S')..' 2>/dev/null && git status --porcelain -b 2>/dev/null')[1]
+  local branch
+
+	local cb = function (err, data)
+		if err == 0 and data then branch = data:match "^%*(.-)%s*$" end
+	end
+
+	utils.asyncCall('git', {'branch', '--show-current'}, cb)
+
   if not branch or #branch == 0 then
-    return ''
+		utils.asyncCall('git', {'rev-parse', '--abbrev-ref', 'HEAD'}, cb)
+
+		if not branch or #branch == 0 then return '' end
   end
-  branch = branch:gsub([[^## No commits yet on (%w+)$]], '%1')
-  branch = branch:gsub([[^##%s+(%w+).*$]], '%1')
   local ok,devicons = pcall(require,'nvim-web-devicons')
   if ok then
     local icon = devicons.get_icon('git')

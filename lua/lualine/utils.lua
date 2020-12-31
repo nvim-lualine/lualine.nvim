@@ -1,5 +1,34 @@
 local M = {  }
 
+local uv = vim.loop
+
+function M.asyncCall (cmd, args, cb)
+	local handle
+	local stdout, stderr = uv.new_pipe(false)
+
+	local function onread(err, data)
+		cb(err, data)
+	end
+
+	handle = uv.spawn(cmd, {
+		args=args,
+		cwd=vim.fn.expand('%:p:h:S')
+	},
+	vim.schedule_wrap(function(response_code)
+		-- do error handling here if response_code ~= 0
+		stdout:read_stop()
+		stderr:read_stop()
+
+		stdout:close()
+		stderr:close()
+		handle:close()
+	end)
+	)
+
+	uv.read_start(stdout, onread)
+	uv.read_start(stderr, onread)
+end
+
 function M.setTheme(theme)
   return require('lualine.themes.'..theme)
 end
