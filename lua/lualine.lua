@@ -65,7 +65,6 @@ local function StatusLine(isFocused)
     sections = M.inactiveSections
   end
   if not theme_set  then
-    print('only called once')
     if type(M.theme) == 'string' then
       M.theme = utils.setTheme(M.theme)
     end
