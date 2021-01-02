@@ -2,14 +2,20 @@
 A blazing fast and easy to configure neovim statusline written in pure lua.
 
 `lualine.nvim` requires neovim 0.5
+
+## Contributing
+Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before contributing.
+
 ## Screenshots
 Here is a preview of how lualine can look like.
 
-![normal](./screenshots/normal.png)
-![normal](./screenshots/insert.png)
-![normal](./screenshots/visual.png)
-![normal](./screenshots/command.png)
-![normal](./screenshots/replace.png)
+![normal](https://user-images.githubusercontent.com/41551030/103467902-06b44080-4d54-11eb-89db-6d3bebf449fa.png)
+![insert](https://user-images.githubusercontent.com/41551030/103467914-1764b680-4d54-11eb-9e3d-528d3568dce7.png)
+![visual](https://user-images.githubusercontent.com/41551030/103467916-23507880-4d54-11eb-804e-5b1c4d6e3db3.png)
+![command](https://user-images.githubusercontent.com/41551030/103467919-2ba8b380-4d54-11eb-8585-6c667fd5082e.png)
+![replace](https://user-images.githubusercontent.com/41551030/103467925-32372b00-4d54-11eb-88d6-6d39c46854d8.png)
+
+Screenshots of all available themes are listed in [THEMES.md](./THEMES.md)
 
 ## Performance compared to other plugins
 Unlike other statusline plugins lualine loads only defined components, nothing else.
@@ -61,15 +67,9 @@ lualine.status()
 lualine.theme = 'gruvbox'
 ```
 
-<details>
-<summary><b>Available themes</b></summary>
+All available themes are listed in [THEMES.md](./THEMES.md)
 
-* gruvbox
-* dracula
-* onedark
-
-Please create a pr if you managed to port a popular theme before me
-</details>
+Please create a pr if you managed to port a popular theme before me, [here is how to do it](./CONTRIBUTING.md).
 
 ### Changing separator in section
 Lualine defines a separator between components in given section, the default
@@ -149,13 +149,7 @@ By default no plugin extension are loaded to improve performance. If you are usi
 lualine.extensions = { 'fzf' }
 ```
 
-<details>
-<summary><b>Available extensions</b></summary>
-
-* fzf
-
-Please create a pr if you managed to create an extension before me
-</details>
+All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
 
 ### Full config example using [packer.nvim](https://github.com/wbthomason/packer.nvim)
 
@@ -199,7 +193,7 @@ Please create a pr if you managed to create an extension before me
 
 <details>
 <summary><b>vimrc config</b></summary>
-  
+
 ```vim
 lua << EOF
 local lualine = require('lualine')
@@ -228,130 +222,6 @@ EOF
 ```
 </details>
 
-### Defining custom themes
-
-
-<details>
-<summary><b>Theme example</b></summary>
-
-To create a custom theme you need to define a colorscheme for each of vim's modes. Each mode has a `fg` and `bg` field for every lualine section.
-This is really easy in lua. Here is and example of a gruvbox theme.
-
-```lua
-local gruvbox = {  }
-
-local colors = {
-  black = "#282828",
-  white = '#ebdbb2',
-  red = '#fb4934',
-  green = '#b8bb26',
-  blue = '#83a598',
-  yellow = '#fe8019',
-
-  gray = '#a89984',
-  darkgray = '#3c3836',
-
-  lightgray = '#504945',
-  inactivegray = '#7c6f64',
-}
-
-gruvbox.normal = {
-  a = {
-    bg = colors.gray,
-    fg = colors.black,
-  },
-  b = {
-    bg = colors.lightgray,
-    fg  = colors.white,
-  },
-  c = {
-    bg = colors.darkgray,
-    fg = colors.gray
-  }
-}
-
-gruvbox.insert = {
-  a = {
-    bg = colors.blue,
-    fg = colors.black,
-  },
-  b = {
-    bg = colors.lightgray,
-    fg = colors.white,
-  },
-  c = {
-    bg = colors.lightgray,
-    fg = colors.white
-  }
-}
-
-
-gruvbox.visual = {
-  a = {
-    bg = colors.yellow,
-    fg = colors.black,
-  },
-  b = {
-    bg = colors.lightgray,
-    fg = colors.white,
-  },
-  c = {
-    bg = colors.inactivegray,
-    fg = colors.black
-  },
-}
-
-gruvbox.replace = {
-  a = {
-    bg = colors.red,
-    fg = colors.black,
-  },
-  b = {
-    bg = colors.lightgray,
-    fg = colors.white,
-  },
-  c = {
-    bg = colors.black,
-    fg = colors.white
-  },
-}
-
-gruvbox.command = {
-  a = {
-    bg = colors.green,
-    fg = colors.black,
-  },
-  b = {
-    bg = colors.lightgray,
-    fg = colors.white,
-  },
-  c = {
-    bg = colors.inactivegray,
-    fg = colors.black
-  },
-}
-
-gruvbox.terminal = gruvbox.normal
-
-gruvbox.inactive = {
-  a = {
-    bg = colors.darkgray,
-    fg = colors.gray,
-  },
-  b = {
-    bg = colors.darkgray,
-    fg = colors.gray,
-  },
-  c = {
-    bg = colors.darkgray,
-    fg = colors.gray
-  },
-}
-
-lualine.theme = gruvbox
-```
-
-</details>
 
 ## TODO's
 Please create an issue/ pr if you want to see more functionality implemented
