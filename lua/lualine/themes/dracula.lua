@@ -1,16 +1,16 @@
 local M = {  }
 
 local Colors = {
-    grey      = "#44475a",
-    lightGrey = "#5f6a8e",
-    orange    = "#ffb86c",
-    purple    = "#bd93f9",
-    red       = "#ff5555",
-    yellow    = "#f1fa8c",
-    green     = "#50fa7b",
+  grey      = "#44475a",
+  lightGrey = "#5f6a8e",
+  orange    = "#ffb86c",
+  purple    = "#bd93f9",
+  red       = "#ff5555",
+  yellow    = "#f1fa8c",
+  green     = "#50fa7b",
 
-    white = "#f8f8f2",
-    black = "#282a36",
+  white = "#f8f8f2",
+  black = "#282a36",
 }
 
 M.normal = {
