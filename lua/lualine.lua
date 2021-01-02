@@ -17,6 +17,8 @@ M.sections = {
   lualine_diagnostics = {  }
 }
 
+local theme_set = false
+
 M.inactiveSections = {
   lualine_a = {  },
   lualine_b = {  },
@@ -62,10 +64,15 @@ local function StatusLine(isFocused)
   if not isFocused then
     sections = M.inactiveSections
   end
-  if type(M.theme) == 'string' then
-    M.theme = utils.setTheme(M.theme)
+  if not theme_set  then
+    print('only called once')
+    if type(M.theme) == 'string' then
+      M.theme = utils.setTheme(M.theme)
+    end
+    highlight.createHighlightGroups(M.theme)
+    theme_set = true
   end
-  highlight.createHighlightGroups(M.theme)
+
   local status = ''
   if sections.lualine_a ~= nil then
     status = status .. highlight.formatHighlight(isFocused, 'lualine_a')
