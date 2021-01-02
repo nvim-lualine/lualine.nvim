@@ -65,6 +65,7 @@ lualine.theme = 'gruvbox'
 <summary><b>Available themes</b></summary>
 
 * gruvbox
+* dracula
 
 Please create a pr if you managed to port a popular theme before me
 </details>
