@@ -23,78 +23,79 @@ local Colors = {
 
 M.normal = {
   a = {
-    bg = Colors.black,
-    fg = Colors.green,
+    fg = Colors.black,
+    bg = Colors.green,
   },
   b = {
-    bg = Colors.white,
-    fg = Colors.visual_grey,
+    fg = Colors.white,
+    bg = Colors.visual_grey,
   },
   c = {
-    bg = Colors.green,
-    fg = Colors.black,
+    fg = Colors.green,
+    bg = Colors.black,
   },
 }
 
 M.insert = {
   a = {
-    bg = Colors.black,
-    fg = Colors.blue,
+    fg = Colors.black,
+    bg = Colors.blue,
   },
   b = {
-    bg = Colors.white,
-    fg = Colors.visual_grey,
+    fg = Colors.white,
+    bg = Colors.visual_grey,
   },
   c = {
-    bg = Colors.blue,
-    fg = Colors.black,
+    fg = Colors.blue,
+    bg = Colors.black,
   },
 }
 
 M.visual = {
   a = {
-    bg = Colors.black,
-    fg = Colors.purple,
+    fg = Colors.black,
+    bg = Colors.purple,
   },
   b = {
-    bg = Colors.white,
-    fg = Colors.visual_grey,
+    fg = Colors.white,
+    bg = Colors.visual_grey,
   },
   c = {
-    bg = Colors.purple,
-    fg = Colors.black,
+    fg = Colors.purple,
+    bg = Colors.black,
   },
 }
 
 M.replace = {
   a = {
-    bg = Colors.black,
-    fg = Colors.red,
+    fg = Colors.black,
+    bg = Colors.red,
   },
   b = {
-    bg = Colors.white,
-    fg = Colors.visual_grey,
+    fg = Colors.white,
+    bg = Colors.visual_grey,
   },
   c = {
-    bg = Colors.red,
-    fg = Colors.black,
+    fg = Colors.red,
+    bg = Colors.black,
   },
 }
 
 M.terminal = M.normal
+M.command = M.normal
 
 M.inactive = {
   a = {
-    bg = Colors.black,
-    fg = Colors.white,
+    fg = Colors.black,
+    bg = Colors.white,
   },
   b = {
-    bg = Colors.white,
-    fg = Colors.visual_grey,
+    fg = Colors.white,
+    bg = Colors.visual_grey,
   },
   c = {
-    bg = Colors.white,
-    fg = Colors.visual_grey,
+    fg = Colors.white,
+    bg = Colors.visual_grey,
   },
 }
 
