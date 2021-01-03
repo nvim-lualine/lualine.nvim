@@ -116,14 +116,17 @@ lualine.inactiveSections = {
 <details>
 <summary><b>Available components</b></summary>
 
-* branch
-* encoding
-* fileformat
-* filename
-* filetype
-* location
-* mode
-* progress
+* general
+  * branch
+  * encoding
+  * fileformat
+  * filename
+  * filetype
+  * location
+  * mode
+  * progress
+* plugin
+  * signify
 
 </details>
 
@@ -249,7 +252,7 @@ Please create an issue/ pr if you want to see more functionality implemented
   - [ ] [liuchengxu/vista.vim](https://github.com/liuchengxu/vista.vim)
   - [ ] [preservim/tagbar](https://github.com/preservim/tagbar)
 - Plugin Components
-  - [ ] [vim-signify](https://github.com/mhinz/vim-signify)
+  - [x] [vim-signify](https://github.com/mhinz/vim-signify)
 - Diagnostics
   - [ ] nvim-lsp status support
   - [ ] [coc.nvim](https://github.com/neoclide/coc.nvim)
