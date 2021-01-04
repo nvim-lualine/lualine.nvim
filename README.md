@@ -268,5 +268,5 @@ Please create an issue/ pr if you want to see more functionality implemented
   - [ ] [coc.nvim](https://github.com/neoclide/coc.nvim)
   - [ ] [dense-analysis/ale](https://github.com/dense-analysis/ale)
 - Themes
-  - [ ] support for `notermguicolors`
+  - [x] support for `notermguicolors`
   - [x] nord theme

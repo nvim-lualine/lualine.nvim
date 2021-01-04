@@ -1,12 +1,26 @@
 local M = {  }
 
-local function highlight (name, foreground, background, special)
-  local command = {
-    'highlight', name,
-    'guifg=' .. foreground,
-    'guibg=' .. background,
-    'gui=' .. (special or 'none'),
-  }
+local function highlight (name, foreground, background, gui)
+  local command = {}
+  if type(foreground) == 'table' and type(background) == 'table' then
+    command = {
+      'highlight', name,
+      'ctermfg=' .. foreground[2],
+      'ctermbg=' .. background[2],
+      'cterm=' .. (gui or 'none'),
+      'guifg=' .. foreground[1],
+      'guibg=' .. background[1],
+      'gui=' .. (gui or 'none'),
+    }
+  else
+    command = {
+      'highlight', name,
+      'guifg=' .. foreground,
+      'guibg=' .. background,
+      'gui=' .. (gui or 'none'),
+    }
+  end
+
   return table.concat(command, ' ')
 end
 
@@ -28,12 +42,12 @@ function M.create_highlight_groups(theme)
   apply_defaults_to_theme(theme)
   for mode, sections in pairs(theme) do
     for section, colorscheme in pairs(sections) do
-      local special = nil
-      if section == 'a' then
-        special = 'bold'
+      local gui = colorscheme.gui
+      if section == 'a' and gui == nil then
+        gui = 'bold'
       end
       local highlight_group_name = { 'lualine', section, mode }
-      vim.cmd(highlight(table.concat(highlight_group_name, '_'), colorscheme.fg, colorscheme.bg, special))
+      vim.cmd(highlight(table.concat(highlight_group_name, '_'), colorscheme.fg, colorscheme.bg, gui))
     end
   end
 end

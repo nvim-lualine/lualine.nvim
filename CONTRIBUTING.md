@@ -18,30 +18,34 @@
 <summary><b>theme example</b></summary>
 
 To create a custom theme you need to define a colorscheme for each of vim's modes. Each mode has a `fg` and `bg` field for every lualine section.
+You can add special effects with `gui`. 
+Note: (normal.a is bold by default)
 This is really easy in lua. Here is and example of a gruvbox theme.
 
 ```lua
 local gruvbox = {  }
 
 local colors = {
-  black = "#282828",
-  white = '#ebdbb2',
-  red = '#fb4934',
-  green = '#b8bb26',
-  blue = '#83a598',
-  yellow = '#fe8019',
+ -- color format { termguicolor, notermguicolor}
+  black = {"#282828", 0},
+  white = {'#ebdbb2', 15},
+  red = {'#fb4934', 12},
+  green = {'#b8bb26', 10},
+  blue = {'#83a598', 9},
+  yellow = {'#fe8019', 14},
 
-  gray = '#a89984',
-  darkgray = '#3c3836',
+  gray = {'#a89984', 7},
+  darkgray = {'#3c3836', 8},
 
-  lightgray = '#504945',
-  inactivegray = '#7c6f64',
+  lightgray = {'#504945', 7},
+  inactivegray = {'#7c6f64', 7},
 }
 
 gruvbox.normal = {
   a = {
     bg = colors.gray,
     fg = colors.black,
+    gui = "italic",
   },
   b = {
     bg = colors.lightgray,
