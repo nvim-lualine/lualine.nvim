@@ -8,6 +8,12 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![visual](https://user-images.githubusercontent.com/41551030/103468264-652eee00-4d57-11eb-8ec8-e433cb396a63.png)
 ![replace](https://user-images.githubusercontent.com/41551030/103468272-88f23400-4d57-11eb-93fe-c3715f1bc335.png)
 
+### forest_night
+![Normal](https://user-images.githubusercontent.com/10103146/103585856-b8f52080-4e98-11eb-85df-1c62edcf5d04.png)
+![Insert](https://user-images.githubusercontent.com/10103146/103585855-b85c8a00-4e98-11eb-8abd-9d99b9d2be58.png)
+![Visual](https://user-images.githubusercontent.com/10103146/103585852-b7c3f380-4e98-11eb-9022-59deaf804c81.png)
+![Replace](https://user-images.githubusercontent.com/10103146/103585857-b8f52080-4e98-11eb-9e71-b34ddb9612bc.png)
+
 ### gruvbox
 ![normal](https://user-images.githubusercontent.com/41551030/103467902-06b44080-4d54-11eb-89db-6d3bebf449fa.png)
 ![insert](https://user-images.githubusercontent.com/41551030/103467914-1764b680-4d54-11eb-9e3d-528d3568dce7.png)
