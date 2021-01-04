@@ -4,6 +4,7 @@ local highlight = require('lualine.highlight')
 local M = { }
 
 M.theme = 'gruvbox'
+local theme_set = {}
 
 M.separator = '|'
 
@@ -57,14 +58,21 @@ local function  loadExtensions()
   end
 end
 
+local function setLualineTheme()
+  if type(M.theme) == 'string' then
+    M.theme =require('lualine.themes.'.. M.theme)
+  end
+  highlight.createHighlightGroups(M.theme)
+  theme_set = M.theme
+end
+
 local function StatusLine(isFocused)
   local sections = M.sections
   if not isFocused then
     sections = M.inactiveSections
   end
-  if type(M.theme) == 'string' then
-    M.theme = utils.setTheme(M.theme)
-    highlight.createHighlightGroups(M.theme)
+  if M.theme ~= theme_set then
+    setLualineTheme()
   end
   local status = {}
   if sections.lualine_a ~= nil then
@@ -95,12 +103,19 @@ local function StatusLine(isFocused)
   return table.concat(status)
 end
 
+function execAutocommands()
+  _G.statusline = StatusLine
+  _G.highlight = setLualineTheme
+  vim.cmd([[autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.statusline(1)]])
+  vim.cmd([[autocmd WinLeave,BufLeave * setlocal statusline=%!v:lua.statusline()]])
+  vim.cmd([[autocmd ColorScheme * call v:lua.highlight()]])
+end
+
 function M.status()
   loadComponents()
   loadExtensions()
-  _G.statusline = StatusLine
-  vim.cmd([[autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.statusline(1)]])
-  vim.cmd([[autocmd WinLeave,BufLeave * setlocal statusline=%!v:lua.statusline()]])
+  setLualineTheme()
+  execAutocommands()
 end
 
 return M

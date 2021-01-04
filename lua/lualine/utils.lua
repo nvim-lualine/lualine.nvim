@@ -1,9 +1,5 @@
 local M = {  }
 
-function M.setTheme(theme)
-  return require('lualine.themes.'..theme)
-end
-
 function M.drawSection(section, separator)
   local status = {}
   for _, statusFunction in pairs(section) do
