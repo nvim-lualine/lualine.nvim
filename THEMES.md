@@ -26,3 +26,10 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![insert](https://user-images.githubusercontent.com/41551030/103468174-cdc99b00-4d56-11eb-8723-fd817ff06404.png)
 ![visual](https://user-images.githubusercontent.com/41551030/103468184-ea65d300-4d56-11eb-99e2-73cb649ab679.png)
 ![replace](https://user-images.githubusercontent.com/41551030/103468213-07020b00-4d57-11eb-9b66-5061de556f44.png)
+
+### powerline
+![normal](https://user-images.githubusercontent.com/13149513/103506288-8fcb9480-4e86-11eb-97f8-3768a34188fd.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/103506295-978b3900-4e86-11eb-8eca-d31514c66275.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/103506318-a40f9180-4e86-11eb-85fd-153d6de2a62f.jpg)
+![command](https://user-images.githubusercontent.com/13149513/103506333-aa057280-4e86-11eb-8098-422eca99c23a.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/103506349-af62bd00-4e86-11eb-9f11-bd6a56214fa3.jpg)
