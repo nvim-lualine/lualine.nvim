@@ -14,8 +14,8 @@ local Colors = {
   gray2          = '#303030',
   gray4          = '#585858',
   gray5          = '#606060',
-  gray7          = '#8a8a8a',
-  gray10         = '#d0d0d0',
+  gray7          = '#9e9e9e',
+  gray10         = '#f0f0f0',
 }
 
 M.normal = {
@@ -25,7 +25,7 @@ M.normal = {
   },
   b = {
     fg = Colors.gray10,
-    bg = Colors.gray4,
+    bg = Colors.gray5,
   },
   c = {
     fg = Colors.gray7,
