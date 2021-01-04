@@ -88,15 +88,15 @@ local function statusline(is_focused)
   end
   table.insert(status, "%=")
   if sections.lualine_x then
-    table.insert(status, highlight.format_highlight(is_focused, 'lualine_c'))
+    table.insert(status, highlight.format_highlight(is_focused, 'lualine_x'))
     table.insert(status, utils.draw_section(sections.lualine_x, M.separator))
   end
   if sections.lualine_y then
-    table.insert(status, highlight.format_highlight(is_focused, 'lualine_b'))
+    table.insert(status, highlight.format_highlight(is_focused, 'lualine_y'))
     table.insert(status, utils.draw_section(sections.lualine_y, M.separator))
   end
   if sections.lualine_z then
-    table.insert(status, highlight.format_highlight(is_focused, 'lualine_a'))
+    table.insert(status, highlight.format_highlight(is_focused, 'lualine_z'))
     table.insert(status, utils.draw_section(sections.lualine_z, M.separator))
   end
   return table.concat(status)

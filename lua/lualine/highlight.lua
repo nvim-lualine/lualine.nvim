@@ -17,6 +17,9 @@ local function apply_defaults_to_theme(theme)
     theme[mode]['a'] = (theme[mode]['a'] or theme['normal']['a'])
     theme[mode]['b'] = (theme[mode]['b'] or theme['normal']['b'])
     theme[mode]['c'] = (theme[mode]['c'] or theme['normal']['c'])
+    theme[mode]['x'] = (theme[mode]['x'] or theme[mode]['c'])
+    theme[mode]['y'] = (theme[mode]['y'] or theme[mode]['b'])
+    theme[mode]['z'] = (theme[mode]['z'] or theme[mode]['a'])
   end
   return theme
 end
