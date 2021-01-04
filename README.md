@@ -259,4 +259,4 @@ Please create an issue/ pr if you want to see more functionality implemented
   - [ ] [dense-analysis/ale](https://github.com/dense-analysis/ale)
 - Themes
   - [ ] support for `notermguicolors`
-  - [ ] nord theme
+  - [x] nord theme
