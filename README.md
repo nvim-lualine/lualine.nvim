@@ -229,6 +229,8 @@ EOF
 ## TODO's
 Please create an issue/ pr if you want to see more functionality implemented
 - General
+  - [x] async support
+  - [ ] additional settings for components
   - [ ] create doc file
 - Components
   - [x] branch component
