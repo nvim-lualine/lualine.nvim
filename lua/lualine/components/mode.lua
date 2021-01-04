@@ -1,4 +1,4 @@
-local function Mode()
+local function mode()
   local mode_map = {
     ['__'] = '------',
     ['n']  = 'NORMAL',
@@ -15,4 +15,4 @@ local function Mode()
   return mode_map[vim.fn.mode()]
 end
 
-return Mode
+return mode

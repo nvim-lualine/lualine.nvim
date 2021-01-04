@@ -1,6 +1,6 @@
 local M = {  }
 
-local Colors = {
+local colors = {
   red = "#E06C75",
   dark_red = "#BE5046",
   green = "#98C379",
@@ -23,61 +23,61 @@ local Colors = {
 
 M.normal = {
   a = {
-    fg = Colors.black,
-    bg = Colors.green,
+    fg = colors.black,
+    bg = colors.green,
   },
   b = {
-    fg = Colors.white,
-    bg = Colors.visual_grey,
+    fg = colors.white,
+    bg = colors.visual_grey,
   },
   c = {
-    fg = Colors.green,
-    bg = Colors.black,
+    fg = colors.green,
+    bg = colors.black,
   },
 }
 
 M.insert = {
   a = {
-    fg = Colors.black,
-    bg = Colors.blue,
+    fg = colors.black,
+    bg = colors.blue,
   },
   b = {
-    fg = Colors.white,
-    bg = Colors.visual_grey,
+    fg = colors.white,
+    bg = colors.visual_grey,
   },
   c = {
-    fg = Colors.blue,
-    bg = Colors.black,
+    fg = colors.blue,
+    bg = colors.black,
   },
 }
 
 M.visual = {
   a = {
-    fg = Colors.black,
-    bg = Colors.purple,
+    fg = colors.black,
+    bg = colors.purple,
   },
   b = {
-    fg = Colors.white,
-    bg = Colors.visual_grey,
+    fg = colors.white,
+    bg = colors.visual_grey,
   },
   c = {
-    fg = Colors.purple,
-    bg = Colors.black,
+    fg = colors.purple,
+    bg = colors.black,
   },
 }
 
 M.replace = {
   a = {
-    fg = Colors.black,
-    bg = Colors.red,
+    fg = colors.black,
+    bg = colors.red,
   },
   b = {
-    fg = Colors.white,
-    bg = Colors.visual_grey,
+    fg = colors.white,
+    bg = colors.visual_grey,
   },
   c = {
-    fg = Colors.red,
-    bg = Colors.black,
+    fg = colors.red,
+    bg = colors.black,
   },
 }
 
@@ -86,16 +86,16 @@ M.command = M.normal
 
 M.inactive = {
   a = {
-    fg = Colors.black,
-    bg = Colors.white,
+    fg = colors.black,
+    bg = colors.white,
   },
   b = {
-    fg = Colors.white,
-    bg = Colors.visual_grey,
+    fg = colors.white,
+    bg = colors.visual_grey,
   },
   c = {
-    fg = Colors.white,
-    bg = Colors.visual_grey,
+    fg = colors.white,
+    bg = colors.visual_grey,
   },
 }
 

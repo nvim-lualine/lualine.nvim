@@ -1,6 +1,6 @@
-local function Encoding()
-  local encoding = [[%{strlen(&fenc)?&fenc:&enc}]]
-  return encoding
+local function encoding()
+  local data = [[%{strlen(&fenc)?&fenc:&enc}]]
+  return data
 end
 
-return Encoding
+return encoding

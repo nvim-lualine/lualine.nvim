@@ -1,6 +1,6 @@
 local M = {  }
 
-local Colors = {
+local colors = {
   black = "#282828",
   white = '#ebdbb2',
   red = '#fb4934',
@@ -17,77 +17,77 @@ local Colors = {
 
 M.normal = {
   a = {
-    bg = Colors.gray,
-    fg = Colors.black,
+    bg = colors.gray,
+    fg = colors.black,
   },
   b = {
-    bg = Colors.lightgray,
-    fg  = Colors.white,
+    bg = colors.lightgray,
+    fg  = colors.white,
   },
   c = {
-    bg = Colors.darkgray,
-    fg = Colors.gray
+    bg = colors.darkgray,
+    fg = colors.gray
   }
 }
 
 M.insert = {
   a = {
-    bg = Colors.blue,
-    fg = Colors.black,
+    bg = colors.blue,
+    fg = colors.black,
   },
   b = {
-    bg = Colors.lightgray,
-    fg = Colors.white,
+    bg = colors.lightgray,
+    fg = colors.white,
   },
   c = {
-    bg = Colors.lightgray,
-    fg = Colors.white
+    bg = colors.lightgray,
+    fg = colors.white
   }
 }
 
 
 M.visual = {
   a = {
-    bg = Colors.yellow,
-    fg = Colors.black,
+    bg = colors.yellow,
+    fg = colors.black,
   },
   b = {
-    bg = Colors.lightgray,
-    fg = Colors.white,
+    bg = colors.lightgray,
+    fg = colors.white,
   },
   c = {
-    bg = Colors.inactivegray,
-    fg = Colors.black
+    bg = colors.inactivegray,
+    fg = colors.black
   },
 }
 
 M.replace = {
   a = {
-    bg = Colors.red,
-    fg = Colors.black,
+    bg = colors.red,
+    fg = colors.black,
   },
   b = {
-    bg = Colors.lightgray,
-    fg = Colors.white,
+    bg = colors.lightgray,
+    fg = colors.white,
   },
   c = {
-    bg = Colors.black,
-    fg = Colors.white
+    bg = colors.black,
+    fg = colors.white
   },
 }
 
 M.command = {
   a = {
-    bg = Colors.green,
-    fg = Colors.black,
+    bg = colors.green,
+    fg = colors.black,
   },
   b = {
-    bg = Colors.lightgray,
-    fg = Colors.white,
+    bg = colors.lightgray,
+    fg = colors.white,
   },
   c = {
-    bg = Colors.inactivegray,
-    fg = Colors.black
+    bg = colors.inactivegray,
+    fg = colors.black
   },
 }
 
@@ -95,16 +95,16 @@ M.terminal = M.normal
 
 M.inactive = {
   a = {
-    bg = Colors.darkgray,
-    fg = Colors.gray,
+    bg = colors.darkgray,
+    fg = colors.gray,
   },
   b = {
-    bg = Colors.darkgray,
-    fg = Colors.gray,
+    bg = colors.darkgray,
+    fg = colors.gray,
   },
   c = {
-    bg = Colors.darkgray,
-    fg = Colors.gray
+    bg = colors.darkgray,
+    fg = colors.gray
   },
 }
 

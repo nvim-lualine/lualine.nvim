@@ -1,6 +1,6 @@
-local function FileFormat()
-  local fileformat = [[%{&ff}]]
-  return fileformat
+local function fileformat()
+  local data = [[%{&ff}]]
+  return data
 end
 
-return FileFormat
+return fileformat

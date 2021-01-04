@@ -1,91 +1,91 @@
 local M = {  }
 
-local Colors = {
-  grey      = "#44475a",
-  lightGrey = "#5f6a8e",
-  orange    = "#ffb86c",
-  purple    = "#bd93f9",
-  red       = "#ff5555",
-  yellow    = "#f1fa8c",
-  green     = "#50fa7b",
+local colors = {
+  grey       = "#44475a",
+  light_gray = "#5f6a8e",
+  orange     = "#ffb86c",
+  purple     = "#bd93f9",
+  red        = "#ff5555",
+  yellow     = "#f1fa8c",
+  green      = "#50fa7b",
 
-  white = "#f8f8f2",
-  black = "#282a36",
+  white      = "#f8f8f2",
+  black      = "#282a36",
 }
 
 M.normal = {
   a = {
-    bg = Colors.purple,
-    fg = Colors.black,
+    bg = colors.purple,
+    fg = colors.black,
   },
   b = {
-    bg = Colors.lightGrey,
-    fg  = Colors.white,
+    bg = colors.light_gray,
+    fg  = colors.white,
   },
   c = {
-    bg = Colors.grey,
-    fg = Colors.white,
+    bg = colors.grey,
+    fg = colors.white,
   }
 }
 
 M.insert = {
   a = {
-    bg = Colors.green,
-    fg = Colors.black,
+    bg = colors.green,
+    fg = colors.black,
   },
   b = {
-    bg = Colors.lightGrey,
-    fg = Colors.white,
+    bg = colors.light_gray,
+    fg = colors.white,
   },
   c = {
-    bg = Colors.grey,
-    fg = Colors.white,
+    bg = colors.grey,
+    fg = colors.white,
   }
 }
 
 
 M.visual = {
   a = {
-    bg = Colors.yellow,
-    fg = Colors.black,
+    bg = colors.yellow,
+    fg = colors.black,
   },
   b = {
-    bg = Colors.lightGrey,
-    fg = Colors.white,
+    bg = colors.light_gray,
+    fg = colors.white,
   },
   c = {
-    bg = Colors.grey,
-    fg = Colors.white,
+    bg = colors.grey,
+    fg = colors.white,
   },
 }
 
 M.replace = {
   a = {
-    bg = Colors.red,
-    fg = Colors.black,
+    bg = colors.red,
+    fg = colors.black,
   },
   b = {
-    bg = Colors.lightGrey,
-    fg = Colors.white,
+    bg = colors.light_gray,
+    fg = colors.white,
   },
   c = {
-    bg = Colors.grey,
-    fg = Colors.white,
+    bg = colors.grey,
+    fg = colors.white,
   },
 }
 
 M.command = {
   a = {
-    bg = Colors.grey,
-    fg = Colors.white,
+    bg = colors.grey,
+    fg = colors.white,
   },
   b = {
-    bg = Colors.lightGrey,
-    fg = Colors.white,
+    bg = colors.light_gray,
+    fg = colors.white,
   },
   c = {
-    bg = Colors.purple,
-    fg = Colors.white
+    bg = colors.purple,
+    fg = colors.white
   },
 }
 
@@ -93,16 +93,16 @@ M.terminal = M.normal
 
 M.inactive = {
   a = {
-    bg = Colors.white,
-    fg = Colors.purple,
+    bg = colors.white,
+    fg = colors.purple,
   },
   b = {
-    bg = Colors.grey,
-    fg = Colors.purple,
+    bg = colors.grey,
+    fg = colors.purple,
   },
   c = {
-    bg = Colors.purple,
-    fg = Colors.purple,
+    bg = colors.purple,
+    fg = colors.purple,
   },
 }
 

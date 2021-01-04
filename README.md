@@ -101,7 +101,7 @@ lualine.sections = {
   lualine_diagnostics = {  }
 }
 
-lualine.inactiveSections = {
+lualine.inactive_sections = {
   lualine_a = {  },
   lualine_b = {  },
   lualine_c = { 'filename' },
@@ -139,7 +139,7 @@ You can define a custom function as a lualine component
 local function hello()
   return [[hello world]]
 end
-lualine.sections = { lualine_a = { hello } }
+lualine.sections.lualine_a = { hello }
 ```
 
 </details>
@@ -174,9 +174,8 @@ All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location'  },
-        lualine_diagnostics = {  }
       }
-      lualine.inactiveSections = {
+      lualine.inactive_sections = {
         lualine_a = {  },
         lualine_b = {  },
         lualine_c = { 'filename' },
@@ -209,9 +208,8 @@ local lualine = require('lualine')
       lualine_x = { 'encoding', 'fileformat', 'filetype' },
       lualine_y = { 'progress' },
       lualine_z = { 'location'  },
-      lualine_diagnostics = {  }
     }
-    lualine.inactiveSections = {
+    lualine.inactive_sections = {
       lualine_a = {  },
       lualine_b = {  },
       lualine_c = { 'filename' },

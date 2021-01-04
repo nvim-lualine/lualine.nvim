@@ -15,10 +15,9 @@ M.sections = {
   lualine_x = { 'encoding', 'fileformat', 'filetype' },
   lualine_y = { 'progress' },
   lualine_z = { 'location'  },
-  lualine_diagnostics = {  }
 }
 
-M.inactiveSections = {
+M.inactive_sections = {
   lualine_a = {  },
   lualine_b = {  },
   lualine_c = { 'filename' },
@@ -30,8 +29,8 @@ M.inactiveSections = {
 M.extensions = {
 }
 
-local function loadComponents()
-  local function loadSections(sections)
+local function load_components()
+  local function load_sections(sections)
     for _, section in pairs(sections) do
       for index, component in pairs(section) do
         if type(component) == 'string' then
@@ -40,17 +39,17 @@ local function loadComponents()
       end
     end
   end
-  loadSections(M.sections)
-  loadSections(M.inactiveSections)
+  load_sections(M.sections)
+  load_sections(M.inactive_sections)
 end
 
-local function  loadExtensions()
+local function  load_extensions()
   for _, extension in pairs(M.extensions) do
     if type(extension) == 'string' then
-      require('lualine.components.extensions.' .. extension).loadExtension()
+      require('lualine.extensions.' .. extension).load_extension()
     end
     if type(extension) == 'table' then
-      extension.loadExtension()
+      extension.load_extension()
     end
     if type(extension) == 'function' then
       extension()
@@ -58,64 +57,64 @@ local function  loadExtensions()
   end
 end
 
-local function setLualineTheme()
+local function set_lualine_theme()
   if type(M.theme) == 'string' then
-    M.theme =require('lualine.themes.'.. M.theme)
+    M.theme = require('lualine.themes.'.. M.theme)
   end
-  highlight.createHighlightGroups(M.theme)
+  highlight.create_highlight_groups(M.theme)
   theme_set = M.theme
 end
 
-local function StatusLine(isFocused)
+local function statusline(is_focused)
   local sections = M.sections
-  if not isFocused then
-    sections = M.inactiveSections
+  if not is_focused then
+    sections = M.inactive_sections
   end
   if M.theme ~= theme_set then
-    setLualineTheme()
+    set_lualine_theme()
   end
   local status = {}
-  if sections.lualine_a ~= nil then
-    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_a'))
-    table.insert(status, utils.drawSection(sections.lualine_a, M.separator))
+  if sections.lualine_a then
+    table.insert(status, highlight.format_highlight(is_focused, 'lualine_a'))
+    table.insert(status, utils.draw_section(sections.lualine_a, M.separator))
   end
-  if sections.lualine_b ~= nil then
-    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_b'))
-    table.insert(status, utils.drawSection(sections.lualine_b, M.separator))
+  if sections.lualine_b then
+    table.insert(status, highlight.format_highlight(is_focused, 'lualine_b'))
+    table.insert(status, utils.draw_section(sections.lualine_b, M.separator))
   end
-  if sections.lualine_c ~= nil then
-    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_c'))
-    table.insert(status, utils.drawSection(sections.lualine_c, M.separator))
+  if sections.lualine_c then
+    table.insert(status, highlight.format_highlight(is_focused, 'lualine_c'))
+    table.insert(status, utils.draw_section(sections.lualine_c, M.separator))
   end
   table.insert(status, "%=")
-  if sections.lualine_x ~= nil then
-    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_c'))
-    table.insert(status, utils.drawSection(sections.lualine_x, M.separator))
+  if sections.lualine_x then
+    table.insert(status, highlight.format_highlight(is_focused, 'lualine_c'))
+    table.insert(status, utils.draw_section(sections.lualine_x, M.separator))
   end
-  if sections.lualine_y ~= nil then
-    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_b'))
-    table.insert(status, utils.drawSection(sections.lualine_y, M.separator))
+  if sections.lualine_y then
+    table.insert(status, highlight.format_highlight(is_focused, 'lualine_b'))
+    table.insert(status, utils.draw_section(sections.lualine_y, M.separator))
   end
-  if sections.lualine_z ~= nil then
-    table.insert(status, highlight.formatHighlight(isFocused, 'lualine_a'))
-    table.insert(status, utils.drawSection(sections.lualine_z, M.separator))
+  if sections.lualine_z then
+    table.insert(status, highlight.format_highlight(is_focused, 'lualine_a'))
+    table.insert(status, utils.draw_section(sections.lualine_z, M.separator))
   end
   return table.concat(status)
 end
 
-function execAutocommands()
-  _G.statusline = StatusLine
-  _G.highlight = setLualineTheme
+local function exec_autocommands()
+  _G.statusline = statusline
+  _G.set_lualine_theme = set_lualine_theme
   vim.cmd([[autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.statusline(1)]])
   vim.cmd([[autocmd WinLeave,BufLeave * setlocal statusline=%!v:lua.statusline()]])
-  vim.cmd([[autocmd ColorScheme * call v:lua.highlight()]])
+  vim.cmd([[autocmd ColorScheme * call v:lua.set_lualine_theme()]])
 end
 
 function M.status()
-  loadComponents()
-  loadExtensions()
-  setLualineTheme()
-  execAutocommands()
+  load_components()
+  load_extensions()
+  set_lualine_theme()
+  exec_autocommands()
 end
 
 return M

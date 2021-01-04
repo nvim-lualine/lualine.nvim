@@ -4,7 +4,7 @@
 ### General
 
 * 2 spaces
-* camelCase
+* snake_case
 
 ### All contributions are very welcome but themes/ extensions require a lot of work on my part if not done properly so here's a guide on how to do them.
 

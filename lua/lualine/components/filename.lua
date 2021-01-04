@@ -1,5 +1,6 @@
-local function FileName()
-  return [[%t %m]]
+local function filename()
+  local data = [[%t %m]]
+  return data
 end
 
-return FileName
+return filename

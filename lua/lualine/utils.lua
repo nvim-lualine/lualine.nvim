@@ -1,9 +1,9 @@
 local M = {  }
 
-function M.drawSection(section, separator)
+function M.draw_section(section, separator)
   local status = {}
-  for _, statusFunction in pairs(section) do
-    local localstatus = statusFunction()
+  for _, status_function in pairs(section) do
+    local localstatus = status_function()
     if #localstatus > 0 then
       table.insert(status, localstatus)
     end

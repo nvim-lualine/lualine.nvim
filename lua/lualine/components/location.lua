@@ -1,5 +1,6 @@
-local function Location()
-  return[[%3l:%-2c]]
+local function location()
+  local data = [[%3l:%-2c]]
+  return data
 end
 
-return Location
+return location
