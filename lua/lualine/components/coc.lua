@@ -1,6 +1,7 @@
 local function coc_diagnostic_count(section)
-  if vim.api.nvim_eval('exists("b:coc_diagnostic_info")') == 0 then return 0 end
-  return vim.api.nvim_buf_get_var(0, 'coc_diagnostic_info')[section]
+  local info = vim.b.coc_diagnostic_info
+  if info == nil or next(info) == nil then return 0 end
+  return info[section]
 end
 
 local function coc_diagnostic(symbol, section)
@@ -14,8 +15,8 @@ local function coc_ok()
 end
 
 local function coc_status()
-  if vim.fn.exists('coc_status') == 0 then return '' end
-  return vim.api.nvim_get_var('coc_status')
+  if not vim.g.coc_status then return '' end
+  return vim.g.coc_status
 end
 
 local coc_errors = function() return coc_diagnostic('E', 'error') end
