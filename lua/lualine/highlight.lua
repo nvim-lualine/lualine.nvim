@@ -10,7 +10,33 @@ local function highlight (name, foreground, background, special)
   return table.concat(command, ' ')
 end
 
+local function apply_defaults_to_theme(theme)
+  local modes = {'insert', 'visual', 'replace', 'command', 'terminal', 'inactive'}
+  -- normal mode cann't have a fallback for now
+  local sections = {'a', 'b', 'c'}
+  for _, mode in ipairs(modes) do
+    repeat
+      if theme[mode] == nil then
+        theme[mode] = theme['normal']
+        break
+      end
+      for _, section in ipairs(sections) do
+        repeat
+          if theme[mode][section] == nil then
+            theme[mode][section] = theme['normal'][section]
+            break
+          end
+          break
+        until true
+      end
+      break
+    until true
+  end
+  return theme
+end
+
 function M.create_highlight_groups(theme)
+  apply_defaults_to_theme(theme)
   for mode, sections in pairs(theme) do
     for section, colorscheme in pairs(sections) do
       local special = nil
