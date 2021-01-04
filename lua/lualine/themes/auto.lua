@@ -27,28 +27,28 @@ local _ = {
 local M = {
 	normal = {
 		a = { bg = _.normal,  fg = _.back1  },
-		b = { bg = _.back2,   fg = _.fore   },
-		c = { bg = _.back1,   fg = _.normal },
+		b = { bg = _.back1,   fg = _.normal },
+		c = { bg = _.back2,   fg = _.fore   },
 	},
 	insert = {
 		a = { bg = _.insert,  fg = _.back1  },
-		b = { bg = _.back2,   fg = _.fore   },
-		c = { bg = _.back1,   fg = _.insert },
+		b = { bg = _.back1,   fg = _.insert },
+		c = { bg = _.back2,   fg = _.fore   },
 	},
 	replace = {
 		a = { bg = _.replace, fg= _.back1   },
-		b = { bg = _.back2,   fg= _.fore    },
-		c = { bg = _.back1,   fg= _.replace },
+		b = { bg = _.back1,   fg= _.replace },
+		c = { bg = _.back2,   fg= _.fore    },
 	},
 	visual = {
 		a = { bg = _.visual,  fg= _.back1   },
-		b = { bg = _.back2,   fg= _.fore    },
-		c = { bg = _.back1,   fg= _.visual  },
+		b = { bg = _.back1,   fg= _.visual  },
+		c = { bg = _.back2,   fg= _.fore    },
 	},
 	command = {
 		a = { bg = _.command, fg = _.back1  },
-		b = { bg = _.back2,   fg = _.fore   },
-		c = { bg = _.back1,   fg = _.command},
+		b = { bg = _.back1,   fg = _.command},
+		c = { bg = _.back2,   fg = _.fore   },
 	},
 }
 
