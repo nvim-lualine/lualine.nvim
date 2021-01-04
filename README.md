@@ -127,6 +127,7 @@ lualine.inactive_sections = {
   * progress
 * plugin
   * signify
+  * coc
 
 </details>
 
@@ -255,7 +256,7 @@ Please create an issue/ pr if you want to see more functionality implemented
   - [x] [vim-signify](https://github.com/mhinz/vim-signify)
 - Diagnostics
   - [ ] nvim-lsp status support
-  - [ ] [coc.nvim](https://github.com/neoclide/coc.nvim)
+  - [x] [coc.nvim](https://github.com/neoclide/coc.nvim)
   - [ ] [dense-analysis/ale](https://github.com/dense-analysis/ale)
 - Themes
   - [ ] support for `notermguicolors`
