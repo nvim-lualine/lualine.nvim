@@ -26,7 +26,7 @@ local function branch()
     end
     return git_branch
   end
-  ok = (vim.fn.exists('*WebDevIconsGetFileTypeSymbol'))
+  ok = vim.fn.exists("*WebDevIconsGetFileTypeSymbol")
   if ok ~= 0 then
     local icon =  ''
     return icon .. ' ' .. git_branch

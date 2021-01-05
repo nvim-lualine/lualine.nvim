@@ -23,7 +23,7 @@ M.inactive_sections = {
   lualine_c = { 'filename' },
   lualine_x = { 'location' },
   lualine_y = {  },
-  lualine_z = {   }
+  lualine_z = {  }
 }
 
 M.extensions = {
@@ -102,11 +102,18 @@ local function statusline(is_focused)
   return table.concat(status)
 end
 
+function M.set_active_statusline()
+  vim.wo.statusline = statusline(1)
+end
+
+function M.set_inactive_statusline()
+  vim.wo.statusline = statusline()
+end
+
 local function exec_autocommands()
-  _G.statusline = statusline
   _G.set_lualine_theme = set_lualine_theme
-  vim.cmd([[autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.statusline(1)]])
-  vim.cmd([[autocmd WinLeave,BufLeave * setlocal statusline=%!v:lua.statusline()]])
+  vim.cmd([[autocmd WinEnter,BufEnter * lua require('lualine').set_active_statusline()]])
+  vim.cmd([[autocmd WinLeave,BufLeave * lua require('lualine').set_inactive_statusline()]])
   vim.cmd([[autocmd ColorScheme * call v:lua.set_lualine_theme()]])
 end
 
