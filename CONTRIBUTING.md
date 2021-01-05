@@ -19,6 +19,7 @@
 
 To create a custom theme you need to define a colorscheme for each of vim's modes. Each mode has a `fg` and `bg` field for every lualine section.
 This is really easy in lua. Here is and example of a gruvbox theme.
+By default `x,y,z` mirror `c,b,a` . But you can set `x,y,z` to specifically theme theme them.
 
 ```lua
 local gruvbox = {  }
