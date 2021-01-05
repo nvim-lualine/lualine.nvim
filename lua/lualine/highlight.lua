@@ -1,5 +1,22 @@
 local M = {  }
 
+local function get_cterm_color(color)
+  local function round(num)
+    if num - math.floor(num) < 0.5000000 then
+      return math.floor(num)
+    else
+      return math.ceil(num)
+    end
+  end
+
+  local r = tonumber(color:sub(2,3), 16)
+  local g = tonumber(color:sub(4,5), 16)
+  local b = tonumber(color:sub(6,7), 16)
+  return round(36 * round(r * 5/256) + 
+               6 * round(g * 5/256) +
+               round(b * 5 / 256) + 16) 
+end
+
 local function highlight (name, foreground, background, gui)
   local command = {}
   if type(foreground) == 'table' and type(background) == 'table' then
@@ -15,6 +32,9 @@ local function highlight (name, foreground, background, gui)
   else
     command = {
       'highlight', name,
+      'ctermfg=' .. get_cterm_color(foreground),
+      'ctermbg=' .. get_cterm_color(background),
+      'cterm=' .. (gui or 'none'),
       'guifg=' .. foreground,
       'guibg=' .. background,
       'gui=' .. (gui or 'none'),
