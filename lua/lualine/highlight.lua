@@ -12,25 +12,11 @@ end
 
 local function apply_defaults_to_theme(theme)
   local modes = {'insert', 'visual', 'replace', 'command', 'terminal', 'inactive'}
-  -- normal mode cann't have a fallback for now
-  local sections = {'a', 'b', 'c'}
   for _, mode in ipairs(modes) do
-    repeat
-      if theme[mode] == nil then
-        theme[mode] = theme['normal']
-        break
-      end
-      for _, section in ipairs(sections) do
-        repeat
-          if theme[mode][section] == nil then
-            theme[mode][section] = theme['normal'][section]
-            break
-          end
-          break
-        until true
-      end
-      break
-    until true
+    theme[mode] = (theme[mode] or theme['normal'])
+    theme[mode]['a'] = (theme[mode]['a'] or theme['normal']['a'])
+    theme[mode]['b'] = (theme[mode]['b'] or theme['normal']['b'])
+    theme[mode]['c'] = (theme[mode]['c'] or theme['normal']['c'])
   end
   return theme
 end
