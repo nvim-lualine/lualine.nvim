@@ -13,10 +13,13 @@ end
 local function apply_defaults_to_theme(theme)
   local modes = {'insert', 'visual', 'replace', 'command', 'terminal', 'inactive'}
   for _, mode in ipairs(modes) do
-    theme[mode] = (theme[mode] or theme['normal'])
-    theme[mode]['a'] = (theme[mode]['a'] or theme['normal']['a'])
-    theme[mode]['b'] = (theme[mode]['b'] or theme['normal']['b'])
-    theme[mode]['c'] = (theme[mode]['c'] or theme['normal']['c'])
+    if not theme[mode] then
+      theme[mode] = theme['normal']
+    else
+      for section_name, section in pairs(theme['normal']) do
+        theme[mode][section_name] = (theme[mode][section_name] or section)
+      end
+    end
   end
   return theme
 end
