@@ -11,6 +11,7 @@ local function mode()
     ['Rv'] = 'V-REPLACE',
     ['c']  = 'COMMAND',
     ['t']  = 'TERMINAL',
+    ['s']  = 'SELECT',
   }
   return mode_map[vim.fn.mode()]
 end

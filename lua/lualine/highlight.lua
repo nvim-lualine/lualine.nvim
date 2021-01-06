@@ -48,6 +48,8 @@ function M.format_highlight(is_focused, highlight_group)
       highlight_group = highlight_group .. '_visual'
     elseif mode == 'V-REPLACE' then
       highlight_group = highlight_group .. '_replace'
+    elseif mode == 'SELECT' then
+      highlight_group = highlight_group .. '_terminal'
     else
       highlight_group = highlight_group .. '_' .. mode:lower()
     end
