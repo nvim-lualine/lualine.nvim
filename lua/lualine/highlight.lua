@@ -12,35 +12,20 @@ local function get_cterm_color(color)
   local r = tonumber(color:sub(2,3), 16)
   local g = tonumber(color:sub(4,5), 16)
   local b = tonumber(color:sub(6,7), 16)
-  return round(36 * round(r * 5/256) + 
-               6 * round(g * 5/256) +
-               round(b * 5 / 256) + 16) 
+  return 36 * round(r * 5/256) + 6 * round(g * 5/256) +round(b * 5 / 256) + 16
 end
 
 local function highlight (name, foreground, background, gui)
   local command = {}
-  if type(foreground) == 'table' and type(background) == 'table' then
     command = {
       'highlight', name,
-      'ctermfg=' .. foreground[2],
-      'ctermbg=' .. background[2],
+      'ctermfg=' .. (foreground[2] or get_cterm_color(foreground)),
+      'ctermbg=' .. (background[2] or get_cterm_color(background)),
       'cterm=' .. (gui or 'none'),
-      'guifg=' .. foreground[1],
-      'guibg=' .. background[1],
+      'guifg=' .. (foreground[1] or foreground),
+      'guibg=' .. (background[1] or background),
       'gui=' .. (gui or 'none'),
     }
-  else
-    command = {
-      'highlight', name,
-      'ctermfg=' .. get_cterm_color(foreground),
-      'ctermbg=' .. get_cterm_color(background),
-      'cterm=' .. (gui or 'none'),
-      'guifg=' .. foreground,
-      'guibg=' .. background,
-      'gui=' .. (gui or 'none'),
-    }
-  end
-
   return table.concat(command, ' ')
 end
 

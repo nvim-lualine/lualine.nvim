@@ -45,7 +45,8 @@ gruvbox.normal = {
   a = {
     bg = colors.gray,
     fg = colors.black,
-    gui = "italic",
+    -- optional gui parameter
+    -- gui = "italic",
   },
   b = {
     bg = colors.lightgray,
