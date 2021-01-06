@@ -30,9 +30,11 @@ Unlike other statusline plugins lualine loads only defined components, nothing e
 
 Startup time performance measured with an amazing plugin [tweekmonster/startuptime.vim](https://github.com/tweekmonster/startuptime.vim)
 
-| clean vimrc    | lualine      |  airline     |  lightline   |
-| :------------: | :----------: | :----------: | :----------: |
-|  8.943 ms      | 9.034 ms     | 13.425 ms    | 11.463 ms    |
+All times are measured with only `startuptime.vim` and given statusline plugin installed
+
+| clean vimrc    | lualine      | lightline    |  airline     | galaxyline   |
+| :------------: | :----------: | :----------: | :----------: | :----------: |
+|  8.943 ms      | 9.034 ms     |  11.463 ms   | 13.425 ms    | 14.734 ms    |
 
 
 ## Installation
