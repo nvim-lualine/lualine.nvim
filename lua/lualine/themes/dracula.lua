@@ -17,6 +17,7 @@ M.normal = {
   a = {
     bg = colors.purple,
     fg = colors.black,
+    gui = 'bold',
   },
   b = {
     bg = colors.light_gray,
@@ -32,6 +33,7 @@ M.insert = {
   a = {
     bg = colors.green,
     fg = colors.black,
+    gui = 'bold',
   },
   b = {
     bg = colors.light_gray,
@@ -48,6 +50,7 @@ M.visual = {
   a = {
     bg = colors.yellow,
     fg = colors.black,
+    gui = 'bold',
   },
   b = {
     bg = colors.light_gray,
@@ -63,6 +66,7 @@ M.replace = {
   a = {
     bg = colors.red,
     fg = colors.black,
+    gui = 'bold',
   },
   b = {
     bg = colors.light_gray,
@@ -78,6 +82,7 @@ M.command = {
   a = {
     bg = colors.grey,
     fg = colors.white,
+    gui = 'bold',
   },
   b = {
     bg = colors.light_gray,
@@ -89,12 +94,11 @@ M.command = {
   },
 }
 
-M.terminal = M.normal
-
 M.inactive = {
   a = {
     bg = colors.white,
     fg = colors.purple,
+    gui = 'bold',
   },
   b = {
     bg = colors.grey,
