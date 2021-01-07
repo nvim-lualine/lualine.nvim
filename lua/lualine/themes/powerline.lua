@@ -20,7 +20,7 @@ local Colors = {
 
 M.normal = {
   a = {
-    fg = Colors.darkestgreen, 
+    fg = Colors.darkestgreen,
     bg = Colors.brightgreen,
     gui = 'bold',
   },
@@ -57,8 +57,6 @@ M.visual = {
     bg = Colors.brightorange,
     gui = 'bold',
   },
-  b = M.normal.b,
-  c = M.normal.c,
 }
 
 M.replace = {
@@ -67,12 +65,7 @@ M.replace = {
     bg = Colors.brightred,
     gui = 'bold',
   },
-  b = M.normal.b,
-  c = M.normal.c,
 }
-
-M.command = M.normal  
-M.terminal = M.normal
 
 M.inactive = {
   a = {

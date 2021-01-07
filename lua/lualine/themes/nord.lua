@@ -33,8 +33,6 @@ M.insert = {
     bg = colors.nord6,
     gui = 'bold',
   },
-  b = M.normal.b,
-  c = M.normal.c,
 }
 
 
@@ -44,8 +42,6 @@ M.visual = {
     bg = colors.nord7,
     gui = 'bold',
   },
-  b = M.normal.b,
-  c = M.normal.c,
 }
 
 M.replace = {
@@ -54,13 +50,7 @@ M.replace = {
     bg = colors.nord13,
     gui = 'bold',
   },
-  b = M.normal.b,
-  c = M.normal.c,
 }
-
-M.command = M.normal 
-
-M.terminal = M.normal
 
 M.inactive = {
   a = {
