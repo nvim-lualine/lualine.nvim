@@ -14,6 +14,10 @@ A blazing fast and easy to configure neovim statusline written in pure lua.
 ## Contributing
 Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before contributing.
 
+You can check [this](https://github.com/hoob3rt/lualine.nvim/projects/3) out if you want to see what is currently worked on.
+
+Feel free to create an issue/pr if you want to see anything else implemented.
+
 ## Screenshots
 Here is a preview of how lualine can look like.
 
@@ -232,41 +236,3 @@ local lualine = require('lualine')
 EOF
 ```
 </details>
-
-
-## TODO's
-Please create an issue/ pr if you want to see more functionality implemented
-- General
-  - [x] async support
-  - [ ] additional settings for components
-  - [ ] create doc file
-- Components
-  - [x] branch component
-  - [x] file encoding component
-  - [x] file format component
-  - [x] filename component
-  - [x] filetype component
-  - [x] location in file component
-  - [x] vim mode component
-  - [x] file progress component
-- Icons usage
-  - [x] [ryanoasis/vim-devicons](https://github.com/ryanoasis/vim-devicons)
-  - [x] [kyazdani42/nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons)
-- Plugin Extensions
-  - [x] [junegunn/fzf.vim](https://github.com/junegunn/fzf.vim)
-  - [ ] [tpope/vim-fugitive](https://github.com/tpope/vim-fugitive)
-  - [ ] [junegunn/goyo.vim](https://github.com/junegunn/goyo.vim)
-  - [ ] [preservim/nerdtree](https://github.com/preservim/nerdtree)
-  - [ ] [kyazdani42/nvim-tree.lua](https://github.com/kyazdani42/nvim-tree.lua)
-  - [ ] [ms-jpq/chadtree](https://github.com/ms-jpq/chadtree)
-  - [ ] [liuchengxu/vista.vim](https://github.com/liuchengxu/vista.vim)
-  - [ ] [preservim/tagbar](https://github.com/preservim/tagbar)
-- Plugin Components
-  - [x] [vim-signify](https://github.com/mhinz/vim-signify)
-- Diagnostics
-  - [ ] nvim-lsp status support
-  - [ ] [coc.nvim](https://github.com/neoclide/coc.nvim)
-  - [ ] [dense-analysis/ale](https://github.com/dense-analysis/ale)
-- Themes
-  - [ ] support for `notermguicolors`
-  - [x] nord theme
