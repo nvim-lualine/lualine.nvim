@@ -16,8 +16,7 @@ local function get_cterm_color(color)
 end
 
 local function highlight (name, foreground, background, gui)
-  local command = {}
-    command = {
+  local command = {
       'highlight', name,
       'ctermfg=' .. (foreground[2] or get_cterm_color(foreground)),
       'ctermbg=' .. (background[2] or get_cterm_color(background)),
@@ -47,12 +46,8 @@ function M.create_highlight_groups(theme)
   apply_defaults_to_theme(theme)
   for mode, sections in pairs(theme) do
     for section, colorscheme in pairs(sections) do
-      local gui = colorscheme.gui
-      if section == 'a' and gui == nil then
-        gui = 'bold'
-      end
       local highlight_group_name = { 'lualine', section, mode }
-      vim.cmd(highlight(table.concat(highlight_group_name, '_'), colorscheme.fg, colorscheme.bg, gui))
+      vim.cmd(highlight(table.concat(highlight_group_name, '_'), colorscheme.fg, colorscheme.bg, colorscheme.gui))
     end
   end
 end
