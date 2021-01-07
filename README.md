@@ -32,9 +32,9 @@ Startup time performance measured with an amazing plugin [tweekmonster/startupti
 
 All times are measured with only `startuptime.vim` and given statusline plugin installed
 
-| clean vimrc    | lualine      | lightline    |  airline     | galaxyline   |
-| :------------: | :----------: | :----------: | :----------: | :----------: |
-|  8.943 ms      | 9.034 ms     |  11.463 ms   | 13.425 ms    | 14.734 ms    |
+| clean vimrc    | lualine      | lightline    |  airline     |
+| :------------: | :----------: | :----------: | :----------: |
+|  8.943 ms      | 9.034 ms     |  11.463 ms   | 13.425 ms    |
 
 
 ## Installation
