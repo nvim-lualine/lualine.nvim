@@ -18,11 +18,11 @@
 <summary><b>theme example</b></summary>
 
 To create a custom theme you need to define a colorscheme for each of vim's modes. Each mode has a `fg` and `bg` field for every lualine section.
-You can add special effects with `gui`. 
-You can provide colors in two ways 
+You can add special effects with `gui`.
+You can provide colors in two ways
   1. As a table like `{'hexcode', 256_color_code}`
   2. As a String like `'hexcode'`
-Note : You can use table `lualine.util.color_table` to genarate 256_color_codes from hex_codes. 
+Note : You can use table `lualine.util.color_table` to genarate 256_color_codes from hex_codes.
   When method 2 is used 256_color_codes are genarated with that .
 
 Adding theme is really easy in lua. Here is and example of a gruvbox theme.
@@ -42,109 +42,50 @@ local colors = {
   -- color format 'hex_color'
   gray         = '#a89984',
   darkgray     = '#3c3836',
-
   lightgray    = '#504945',
   inactivegray = '#7c6f64',
 }
 
 gruvbox.normal = {
-  a = {
-    bg = colors.gray,
-    fg = colors.black,
-    -- optional gui parameter
-    gui = "bold",
-  },
-  b = {
-    bg = colors.lightgray,
-    fg  = colors.white,
-  },
-  c = {
-    bg = colors.darkgray,
-    fg = colors.gray
-  }
+  -- gui parameter is optional and behaves the same way as in vim's highlight command
+  a = { bg = colors.gray, fg = colors.black, gui = "bold", },
+  b = { bg = colors.lightgray, fg  = colors.white, },
+  c = { bg = colors.darkgray, fg = colors.gray }
 }
 
 gruvbox.insert = {
-  a = {
-    bg = colors.blue,
-    fg = colors.black,
-    gui = "bold",
-  },
-  b = {
-    bg = colors.lightgray,
-    fg = colors.white,
-  },
-  c = {
-    bg = colors.lightgray,
-    fg = colors.white
-  }
+  a = { bg = colors.blue, fg = colors.black, gui = "bold", },
+  b = { bg = colors.lightgray, fg = colors.white, },
+  c = { bg = colors.lightgray, fg = colors.white }
 }
 
 
 gruvbox.visual = {
-  a = {
-    bg = colors.yellow,
-    fg = colors.black,
-    gui = "bold",
-  },
-  b = {
-    bg = colors.lightgray,
-    fg = colors.white,
-  },
-  c = {
-    bg = colors.inactivegray,
-    fg = colors.black
-  },
+  a = { bg = colors.yellow, fg = colors.black, gui = "bold", },
+  b = { bg = colors.lightgray, fg = colors.white, },
+  c = { bg = colors.inactivegray, fg = colors.black },
 }
 
 gruvbox.replace = {
-  a = {
-    bg = colors.red,
-    fg = colors.black,
-    gui = "bold",
-  },
-  b = {
-    bg = colors.lightgray,
-    fg = colors.white,
-  },
-  c = {
-    bg = colors.black,
-    fg = colors.white
-  },
+  a = { bg = colors.red, fg = colors.black, gui = "bold", },
+  b = { bg = colors.lightgray, fg = colors.white, },
+  c = { bg = colors.black, fg = colors.white },
 }
 
 gruvbox.command = {
-  a = {
-    bg = colors.green,
-    fg = colors.black,
-    gui = "bold",
-  },
-  b = {
-    bg = colors.lightgray,
-    fg = colors.white,
-  },
-  c = {
-    bg = colors.inactivegray,
-    fg = colors.black
-  },
+  a = { bg = colors.green, fg = colors.black, gui = "bold", },
+  b = { bg = colors.lightgray, fg = colors.white, },
+  c = { bg = colors.inactivegray, fg = colors.black },
 }
 
+-- you can assign one colorscheme to another, if a colorscheme is
+-- undefined it falls back to normal
 gruvbox.terminal = gruvbox.normal
 
 gruvbox.inactive = {
-  a = {
-    bg = colors.darkgray,
-    fg = colors.gray,
-    gui = "bold",
-  },
-  b = {
-    bg = colors.darkgray,
-    fg = colors.gray,
-  },
-  c = {
-    bg = colors.darkgray,
-    fg = colors.gray
-  },
+  a = { bg = colors.darkgray, fg = colors.gray, gui = "bold", },
+  b = { bg = colors.darkgray, fg = colors.gray, },
+  c = { bg = colors.darkgray, fg = colors.gray },
 }
 
 lualine.theme = gruvbox

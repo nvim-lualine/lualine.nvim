@@ -1,4 +1,4 @@
-local M = {  }
+local nord = {}
 
 local colors = {
   nord1  = {"#3B4252", 237},
@@ -10,61 +10,28 @@ local colors = {
   nord13 = {"#EBCB8B", 221},
 }
 
-M.normal = {
-  a = {
-    fg = colors.nord1,
-    bg = colors.nord8,
-    gui = 'bold',
-  },
-  b = {
-    fg = colors.nord5,
-    bg = colors.nord1,
-  },
-  c = {
-    fg = colors.nord5,
-    bg = colors.nord3,
-  }
+nord.normal = {
+  a = { fg = colors.nord1, bg = colors.nord8, gui = 'bold', },
+  b = { fg = colors.nord5, bg = colors.nord1, },
+  c = { fg = colors.nord5, bg = colors.nord3, }
 }
 
-M.insert = {
-  a = {
-    fg = colors.nord1,
-    bg = colors.nord6,
-    gui = 'bold',
-  },
+nord.insert = {
+  a = { fg = colors.nord1, bg = colors.nord6, gui = 'bold', },
 }
 
-
-M.visual = {
-  a = {
-    fg = colors.nord1,
-    bg = colors.nord7,
-    gui = 'bold',
-  },
+nord.visual = {
+  a = { fg = colors.nord1, bg = colors.nord7, gui = 'bold', },
 }
 
-M.replace = {
-  a = {
-    fg = colors.nord1,
-    bg = colors.nord13,
-    gui = 'bold',
-  },
+nord.replace = {
+  a = { fg = colors.nord1, bg = colors.nord13, gui = 'bold', },
 }
 
-M.inactive = {
-  a = {
-    fg = colors.nord1,
-    bg = colors.nord8,
-    gui = 'bold',
-  },
-  b = {
-    fg = colors.nord5,
-    bg = colors.nord1,
-  },
-  c = {
-    fg = colors.nord5,
-    bg = colors.nord1,
-  },
+nord.inactive = {
+  a = { fg = colors.nord1, bg = colors.nord8, gui = 'bold', },
+  b = { fg = colors.nord5, bg = colors.nord1, },
+  c = { fg = colors.nord5, bg = colors.nord1, },
 }
 
-return M
+return nord
