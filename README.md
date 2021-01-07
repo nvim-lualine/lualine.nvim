@@ -14,7 +14,7 @@ A blazing fast and easy to configure neovim statusline written in pure lua.
 ## Contributing
 Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before contributing.
 
-You can check [this](https://github.com/hoob3rt/lualine.nvim/projects/3) out if you want to see what is currently worked on.
+You can check [this](https://github.com/hoob3rt/lualine.nvim/projects/3) out if you want to see what is currently being worked on.
 
 Feel free to create an issue/pr if you want to see anything else implemented.
 
