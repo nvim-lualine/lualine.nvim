@@ -8,7 +8,6 @@ local colors = {
   nord7  = {"#8FBCBB", 158},
   nord8  = {"#88C0D0", 159},
   nord13 = {"#EBCB8B", 221},
-
 }
 
 M.normal = {

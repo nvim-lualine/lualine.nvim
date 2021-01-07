@@ -26,18 +26,18 @@ local gruvbox = {  }
 
 local colors = {
  -- color format { termguicolor, notermguicolor}
-  black = {"#282828", 0},
-  white = {'#ebdbb2', 15},
-  red = {'#fb4934', 12},
-  green = {'#b8bb26', 10},
-  blue = {'#83a598', 9},
-  yellow = {'#fe8019', 14},
+  black        = {"#282828", 235},
+  white        = {'#ebdbb2', 223},
+  red          = {'#fb4934', 203},
+  green        = {'#b8bb26', 143},
+  blue         = {'#83a598', 108},
+  yellow       = {'#fe8019', 209},
 
-  gray = {'#a89984', 7},
-  darkgray = {'#3c3836', 8},
+  gray         = {'#a89984', 144},
+  darkgray     = {'#3c3836', 237},
 
-  lightgray = {'#504945', 7},
-  inactivegray = {'#7c6f64', 7},
+  lightgray    = {'#504945', 239},
+  inactivegray = {'#7c6f64', 242},
 }
 
 gruvbox.normal = {

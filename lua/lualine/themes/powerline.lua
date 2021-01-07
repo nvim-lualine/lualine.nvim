@@ -2,12 +2,12 @@ local M = {  }
 
 local Colors = {
   white          = {'#ffffff', 231},
-  darkestgreen   = {'#005f00', 22},
+  darkestgreen   = {'#005f00', 22 },
   brightgreen    = {'#afdf00', 148},
-  darkestcyan    = {'#005f5f', 23},
+  darkestcyan    = {'#005f5f', 23 },
   mediumcyan     = {'#87dfff', 117},
-  darkestblue    = {'#005f87', 24},
-  darkred        = {'#870000', 88},
+  darkestblue    = {'#005f87', 24 },
+  darkred        = {'#870000', 88 },
   brightred      = {'#df0000', 160},
   brightorange   = {'#ff8700', 214},
   gray1          = {'#262626', 235},
