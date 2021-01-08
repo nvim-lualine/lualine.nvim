@@ -22,7 +22,7 @@ You can add special effects with `gui`.
 You can provide colors in two ways
   1. As a table like `{'hexcode', 256_color_code}`
   2. As a String like `'hexcode'`
-Note : You can use table `lualine.util.color_table` to genarate 256_color_codes from hex_codes.
+Note : You can use `lualine.util.get_cterm_color(hex_color)` function to genarate 256_color_codes from hex_codes.
   When method 2 is used 256_color_codes are genarated with that .
 
 Adding theme is really easy in lua. Here is and example of a gruvbox theme.

@@ -19,7 +19,7 @@ function M.draw_section(section, separator)
 end
 
 -- color conversion
-M.color_table = {
+local color_table = {
   -- lookup table for cterm colors
   -- format {'color_code', {r,g,b}}
 
@@ -288,33 +288,31 @@ M.color_table = {
   {'255', { 238, 238, 238 }},
 }
 
-local color_table_meta = {
-  __index = function(color_table, hex_color)
-    local function get_color_deviation(color1, color2)
-      -- returns how much color2 deviates from color1
-      local dr = math.abs(color1[1] - color2[1]) / (color1[1]+1) * 100
-      local dg = math.abs(color1[2] - color2[2]) / (color1[2]+1) * 100
-      local db = math.abs(color1[3] - color2[3]) / (color1[3]+1) * 100
-      return (dr + dg + db)
-    end
-
-    local r = tonumber(hex_color:sub(2,3), 16)
-    local g = tonumber(hex_color:sub(4,5), 16)
-    local b = tonumber(hex_color:sub(6,7), 16)
-
-    -- check which color deviates lest from haxcolor
-    local lest_deviation = {0, 10000}
-    for _, color in ipairs(color_table) do
-      local deviation = get_color_deviation(color[2], {r,g,b})
-      if deviation < lest_deviation[2] then
-        lest_deviation[2] = deviation
-        lest_deviation[1] = color[1]
-      end
-    end
-    return lest_deviation[1]
+function M.get_cterm_color(hex_color)
+  local function get_color_distance(color1, color2)
+    -- returns how much color2 deviates from color1
+    local dr = math.abs(color1[1] - color2[1]) / (color1[1]+1) * 100
+    local dg = math.abs(color1[2] - color2[2]) / (color1[2]+1) * 100
+    local db = math.abs(color1[3] - color2[3]) / (color1[3]+1) * 100
+    return (dr + dg + db)
   end
-}
 
-setmetatable(M.color_table, color_table_meta)
+  local r = tonumber(hex_color:sub(2,3), 16)
+  local g = tonumber(hex_color:sub(4,5), 16)
+  local b = tonumber(hex_color:sub(6,7), 16)
+
+  -- check which cterm color is closest to hex colors in terms of rgb values
+  local closest_cterm_color = 0
+  local min_distance = 10000
+  for _, color in ipairs(color_table) do
+    local current_distance = get_color_distance(color[2], {r,g,b})
+    if current_distance < min_distance then
+      min_distance = current_distance
+      closest_cterm_color = color[1]
+    end
+  end
+  return closest_cterm_color
+end
+
 
 return M
