@@ -1,12 +1,16 @@
 local M = {  }
+local utils = require "lualine.utils"
 
-local function highlight (name, foreground, background, special)
+local function highlight (name, foreground, background, gui)
   local command = {
-    'highlight', name,
-    'guifg=' .. foreground,
-    'guibg=' .. background,
-    'gui=' .. (special or 'none'),
-  }
+      'highlight', name,
+      'ctermfg=' .. (foreground[2] or utils.get_cterm_color(foreground)),
+      'ctermbg=' .. (background[2] or utils.get_cterm_color(background)),
+      'cterm=' .. (gui or 'none'),
+      'guifg=' .. (foreground[1] or foreground),
+      'guibg=' .. (background[1] or background),
+      'gui=' .. (gui or 'none'),
+    }
   return table.concat(command, ' ')
 end
 
@@ -28,12 +32,8 @@ function M.create_highlight_groups(theme)
   apply_defaults_to_theme(theme)
   for mode, sections in pairs(theme) do
     for section, colorscheme in pairs(sections) do
-      local special = nil
-      if section == 'a' then
-        special = 'bold'
-      end
       local highlight_group_name = { 'lualine', section, mode }
-      vim.cmd(highlight(table.concat(highlight_group_name, '_'), colorscheme.fg, colorscheme.bg, special))
+      vim.cmd(highlight(table.concat(highlight_group_name, '_'), colorscheme.fg, colorscheme.bg, colorscheme.gui))
     end
   end
 end
