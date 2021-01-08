@@ -8,12 +8,25 @@ local get_git_branch = async:new({
     if data then
       git_branch = data:gsub('\n', '')
     end
-  end
+  end,
+  on_stderr = function (_, data)
+    if data then
+      if data:find("fatal: not a git repository") then
+        git_branch = ''
+      end
+    end
+  end,
 })
 
 local timer = vim.loop.new_timer()
 timer:start(0, 1000, vim.schedule_wrap(function()
-  get_git_branch:start()
+  local cur_dir = vim.fn.getcwd()
+  local buffer_working_directory = vim.fn.expand("%:p:h")
+  local status, _ = pcall(vim.api.nvim_set_current_dir, buffer_working_directory)
+  if status == true then
+    get_git_branch:start()
+    vim.api.nvim_set_current_dir(cur_dir)
+  end
 end))
 
 local function branch()
