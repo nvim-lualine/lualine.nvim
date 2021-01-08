@@ -12,33 +12,33 @@ local colors = {
 }
 
 onedark.normal = {
-  a = { fg = colors.black, bg = colors.green, gui = 'bold', },
-  b = { fg = colors.white, bg = colors.visual_grey, },
-  c = { fg = colors.green, bg = colors.black, },
+  a = { colors.black, colors.green, 'bold', },
+  b = { colors.white,colors.visual_grey, },
+  c = { colors.green, colors.black, },
 }
 
 onedark.insert = {
-  a = { fg = colors.black, bg = colors.blue, gui = 'bold', },
-  b = { fg = colors.white, bg = colors.visual_grey, },
-  c = { fg = colors.blue, bg = colors.black, },
+  a = { colors.black, colors.blue, 'bold', },
+  b = { colors.white,colors.visual_grey, },
+  c = { colors.blue, colors.black, },
 }
 
 onedark.visual = {
-  a = { fg = colors.black, bg = colors.purple, gui = 'bold', },
-  b = { fg = colors.white, bg = colors.visual_grey, },
-  c = { fg = colors.purple, bg = colors.black, },
+  a = { colors.black, colors.purple, 'bold', },
+  b = { colors.white,colors.visual_grey, },
+  c = { colors.purple, colors.black, },
 }
 
 onedark.replace = {
-  a = { fg = colors.black, bg = colors.red, gui = 'bold', },
-  b = { fg = colors.white, bg = colors.visual_grey, },
-  c = { fg = colors.red, bg = colors.black, },
+  a = { colors.black, colors.red, 'bold', },
+  b = { colors.white,colors.visual_grey, },
+  c = { colors.red, colors.black, },
 }
 
 onedark.inactive = {
-  a = { fg = colors.black, bg = colors.white, gui = 'bold', },
-  b = { fg = colors.white, bg = colors.visual_grey, },
-  c = { fg = colors.white, bg = colors.visual_grey, },
+  a = { colors.black, colors.white, 'bold', },
+  b = { colors.white,colors.visual_grey, },
+  c = { colors.white, colors.visual_grey, },
 }
 
 return onedark

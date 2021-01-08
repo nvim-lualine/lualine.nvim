@@ -33,7 +33,7 @@ function M.create_highlight_groups(theme)
   for mode, sections in pairs(theme) do
     for section, colorscheme in pairs(sections) do
       local highlight_group_name = { 'lualine', section, mode }
-      vim.cmd(highlight(table.concat(highlight_group_name, '_'), colorscheme.fg, colorscheme.bg, colorscheme.gui))
+      vim.cmd(highlight(table.concat(highlight_group_name, '_'), colorscheme[1], colorscheme[2], colorscheme[3]))
     end
   end
 end

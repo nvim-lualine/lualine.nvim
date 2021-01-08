@@ -13,39 +13,39 @@ local colors = {
 }
 
 dracula.normal = {
-  a = { bg = colors.purple, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.light_gray, fg  = colors.white, },
-  c = { bg = colors.grey, fg = colors.white, }
+  a = { colors.black, colors.purple, 'bold', },
+  b = { colors.white, colors.light_gray, },
+  c = { colors.white, colors.grey, }
 }
 
 dracula.insert = {
-  a = { bg = colors.green, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.light_gray, fg = colors.white, },
-  c = { bg = colors.grey, fg = colors.white, }
+  a = { colors.black, colors.green, 'bold', },
+  b = { colors.white, colors.light_gray, },
+  c = { colors.white, colors.grey, }
 }
 
 dracula.visual = {
-  a = { bg = colors.yellow, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.light_gray, fg = colors.white, },
-  c = { bg = colors.grey, fg = colors.white, },
+  a = { colors.black, colors.yellow, 'bold', },
+  b = { colors.white, colors.light_gray, },
+  c = { colors.white, colors.grey, },
 }
 
 dracula.replace = {
-  a = { bg = colors.red, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.light_gray, fg = colors.white, },
-  c = { bg = colors.grey, fg = colors.white, },
+  a = { colors.black, colors.red, 'bold', },
+  b = { colors.white, colors.light_gray, },
+  c = { colors.white, colors.grey, },
 }
 
 dracula.command = {
-  a = { bg = colors.grey, fg = colors.white, gui = 'bold', },
-  b = { bg = colors.light_gray, fg = colors.white, },
-  c = { bg = colors.purple, fg = colors.white },
+  a = { colors.white, colors.grey, 'bold', },
+  b = { colors.white, colors.light_gray, },
+  c = { colors.white , colors.purple},
 }
 
 dracula.inactive = {
-  a = { bg = colors.white, fg = colors.purple, gui = 'bold', },
-  b = { bg = colors.grey, fg = colors.purple, },
-  c = { bg = colors.purple, fg = colors.purple, },
+  a = { colors.purple, colors.white, 'bold', },
+  b = { colors.purple, colors.grey, },
+  c = { colors.purple, colors.purple, },
 }
 
 return dracula

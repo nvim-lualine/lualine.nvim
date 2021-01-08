@@ -19,30 +19,30 @@ local Colors = {
 }
 
 powerline.normal = {
-  a = { fg = Colors.darkestgreen, bg = Colors.brightgreen, gui = 'bold', },
-  b = { fg = Colors.gray10, bg = Colors.gray5, },
-  c = { fg = Colors.gray7, bg = Colors.gray2, },
+  a = { Colors.darkestgreen, Colors.brightgreen, 'bold', },
+  b = { Colors.gray10,Colors.gray5, },
+  c = { Colors.gray7, Colors.gray2, },
 }
 
 powerline.insert = {
-  a = { fg = Colors.darkestcyan, bg = Colors.white, gui = 'bold', },
-  b = { fg = Colors.darkestcyan, bg = Colors.mediumcyan, },
-  c = { fg = Colors.mediumcyan, bg = Colors.darkestblue, },
+  a = { Colors.darkestcyan, Colors.white, 'bold', },
+  b = { Colors.darkestcyan,Colors.mediumcyan, },
+  c = { Colors.mediumcyan, Colors.darkestblue, },
 }
 
 
 powerline.visual = {
-  a = { fg = Colors.darkred, bg = Colors.brightorange, gui = 'bold', },
+  a = { Colors.darkred, Colors.brightorange, 'bold', },
 }
 
 powerline.replace = {
-  a = { fg = Colors.white, bg = Colors.brightred, gui = 'bold', },
+  a = { Colors.white, Colors.brightred, 'bold', },
 }
 
 powerline.inactive = {
-  a = { fg = Colors.gray1, bg = Colors.gray5, gui = 'bold', },
-  b = { fg = Colors.gray1, bg = Colors.gray5, },
-  c = { bg = Colors.gray1, fg = Colors.gray5, },
+  a = { Colors.gray1, Colors.gray5, 'bold', },
+  b = { Colors.gray1,Colors.gray5, },
+  c = { Colors.gray1, Colors.gray5, },
 }
 
 return powerline

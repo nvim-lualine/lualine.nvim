@@ -14,40 +14,40 @@ local colors = {
 }
 
 gruvbox.normal = {
-  a = { bg = colors.gray, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.lightgray, fg  = colors.white, },
-  c = { bg = colors.darkgray, fg = colors.gray }
+  a = { colors.black, colors.gray, 'bold', },
+  b = { colors.white, colors.lightgray, },
+  c = { colors.gray , colors.darkgray}
 }
 
 gruvbox.insert = {
-  a = { bg = colors.blue, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.lightgray, fg = colors.white, },
-  c = { bg = colors.lightgray, fg = colors.white }
+  a = { colors.black, colors.blue, 'bold', },
+  b = { colors.white, colors.lightgray, },
+  c = { colors.white , colors.lightgray}
 }
 
 
 gruvbox.visual = {
-  a = { bg = colors.yellow, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.lightgray, fg = colors.white, },
-  c = { bg = colors.inactivegray, fg = colors.black },
+  a = { colors.black, colors.yellow, 'bold', },
+  b = { colors.white, colors.lightgray, },
+  c = { colors.black , colors.inactivegray},
 }
 
 gruvbox.replace = {
-  a = { bg = colors.red, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.lightgray, fg = colors.white, },
-  c = { bg = colors.black, fg = colors.white },
+  a = { colors.black, colors.red, 'bold', },
+  b = { colors.white, colors.lightgray, },
+  c = { colors.white , colors.black},
 }
 
 gruvbox.command = {
-  a = { bg = colors.green, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.lightgray, fg = colors.white, },
-  c = { bg = colors.inactivegray, fg = colors.black },
+  a = { colors.black, colors.green, 'bold', },
+  b = { colors.white, colors.lightgray, },
+  c = { colors.black , colors.inactivegray},
 }
 
 gruvbox.inactive = {
-  a = { bg = colors.darkgray, fg = colors.gray, gui = 'bold', },
-  b = { bg = colors.darkgray, fg = colors.gray, },
-  c = { bg = colors.darkgray, fg = colors.gray },
+  a = { colors.gray, colors.darkgray, 'bold', },
+  b = { colors.gray, colors.darkgray, },
+  c = { colors.gray , colors.darkgray},
 }
 
 return gruvbox

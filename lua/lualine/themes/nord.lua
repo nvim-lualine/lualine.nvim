@@ -11,27 +11,27 @@ local colors = {
 }
 
 nord.normal = {
-  a = { fg = colors.nord1, bg = colors.nord8, gui = 'bold', },
-  b = { fg = colors.nord5, bg = colors.nord1, },
-  c = { fg = colors.nord5, bg = colors.nord3, }
+  a = { colors.nord1, colors.nord8, 'bold', },
+  b = { colors.nord5,colors.nord1, },
+  c = { colors.nord5, colors.nord3, }
 }
 
 nord.insert = {
-  a = { fg = colors.nord1, bg = colors.nord6, gui = 'bold', },
+  a = { colors.nord1, colors.nord6, 'bold', },
 }
 
 nord.visual = {
-  a = { fg = colors.nord1, bg = colors.nord7, gui = 'bold', },
+  a = { colors.nord1, colors.nord7, 'bold', },
 }
 
 nord.replace = {
-  a = { fg = colors.nord1, bg = colors.nord13, gui = 'bold', },
+  a = { colors.nord1, colors.nord13, 'bold', },
 }
 
 nord.inactive = {
-  a = { fg = colors.nord1, bg = colors.nord8, gui = 'bold', },
-  b = { fg = colors.nord5, bg = colors.nord1, },
-  c = { fg = colors.nord5, bg = colors.nord1, },
+  a = { colors.nord1, colors.nord8, 'bold', },
+  b = { colors.nord5,colors.nord1, },
+  c = { colors.nord5, colors.nord1, },
 }
 
 return nord
