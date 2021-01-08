@@ -8,7 +8,14 @@ local get_git_branch = async:new({
     if data then
       git_branch = data:gsub('\n', '')
     end
-  end
+  end,
+  on_stderr = function (_, data)
+    if data then
+      if data:find("fatal: not a git repository") then
+        git_branch = ''
+      end
+    end
+  end,
 })
 
 local timer = vim.loop.new_timer()
