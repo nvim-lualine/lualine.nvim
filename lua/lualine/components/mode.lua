@@ -13,7 +13,12 @@ local function mode()
     ['t']  = 'TERMINAL',
     ['s']  = 'SELECT',
   }
-  return mode_map[vim.fn.mode()]
+  local function get_mode()
+    local mode_code = vim.api.nvim_get_mode().mode
+    if mode_map[mode_code] == nil then return mode_code end
+    return mode_map[mode_code]
+  end
+  return get_mode()
 end
 
 return mode
