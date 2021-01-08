@@ -22,8 +22,8 @@ local timer = vim.loop.new_timer()
 timer:start(0, 1000, vim.schedule_wrap(function()
   local cur_dir = vim.fn.getcwd()
   local buffer_working_directory = vim.fn.expand("%:p:h")
-  if not buffer_working_directory:find("term://*") then
-    vim.api.nvim_set_current_dir(buffer_working_directory)
+  local status, _ = pcall(vim.api.nvim_set_current_dir, buffer_working_directory)
+  if status == true then
     get_git_branch:start()
     vim.api.nvim_set_current_dir(cur_dir)
   end
