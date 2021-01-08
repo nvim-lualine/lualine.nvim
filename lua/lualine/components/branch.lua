@@ -13,7 +13,10 @@ local get_git_branch = async:new({
 
 local timer = vim.loop.new_timer()
 timer:start(0, 1000, vim.schedule_wrap(function()
+  local cur_dir = vim.fn.getcwd()
+  vim.api.nvim_set_current_dir(vim.fn.expand("%:p:h"))
   get_git_branch:start()
+  vim.api.nvim_set_current_dir(cur_dir)
 end))
 
 local function branch()
