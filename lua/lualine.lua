@@ -34,7 +34,31 @@ local function load_components()
     for _, section in pairs(sections) do
       for index, component in pairs(section) do
         if type(component) == 'string' then
-          section[index] = require('lualine.components.' .. component)
+          local ok,loaded_component = pcall(require, 'lualine.components.' .. component)
+          if not ok then
+            -- vim veriable component
+            if component:sub(1,2) == 'g:' then
+              component = component:sub(3,#component)
+              loaded_component = function()
+                -- Displays nothing when veriablea aren't present
+                local ok, value = pcall(function() return vim[scope][component] end)
+                if ok then
+                  local ok, return_val =  pcall(tostring, value)
+                  if ok then return return_val end
+                end
+                return ''
+              end
+            else
+              -- vim function component
+              loaded_component = function()
+                local ok, return_val = pcall(vim.fn[component])
+                if not ok then return '' end -- function call failed
+                local ok, return_str =  pcall(tostring, return_val)
+                if ok then return return_str else return '' end
+              end
+            end
+          end
+          section[index] = loaded_component
         end
       end
     end
