@@ -44,12 +44,16 @@ function M.format_highlight(is_focused, highlight_group)
   if not is_focused then
     highlight_group = highlight_group .. [[_inactive]]
   else
-    if mode == 'V-BLOCK' or mode == 'V-LINE' then
+    if mode == 'VISUAL' or mode == 'V-BLOCK' or mode == 'V-LINE' or mode == 'SELECT' then
       highlight_group = highlight_group .. '_visual'
-    elseif mode == 'V-REPLACE' then
+    elseif mode == 'V-REPLACE' or mode == 'REPLACE' then
       highlight_group = highlight_group .. '_replace'
-    elseif mode == 'SELECT' then
-      highlight_group = highlight_group .. '_visual'
+    elseif mode == 'INSERT' then
+      highlight_group = highlight_group .. '_insert'
+    elseif mode == 'COMMAND' then
+      highlight_group = highlight_group .. '_command'
+    elseif mode == 'TERMINAL' then
+      highlight_group = highlight_group .. '_terminal'
     else
       highlight_group = highlight_group .. '_normal'
     end
