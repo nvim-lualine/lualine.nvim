@@ -4,7 +4,7 @@ local function signify()
    if added == -1 then return '' end
    local data = {
     '+'..added,
-    '-'..removed
+    '-'..removed,
     '~'..modified,
    }
   return table.concat(data, ' ')
