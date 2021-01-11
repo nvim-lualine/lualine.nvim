@@ -1,6 +1,5 @@
 local function mode()
   local mode_map = {
-    ['__']   = '------',
     ['n']    = 'NORMAL',
     ['no']   = 'O-PENDING',
     ['nov']  = 'O-PENDING',
