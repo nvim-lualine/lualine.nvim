@@ -1,3 +1,10 @@
+-- =============================================================================
+-- Filename: lua/lightline/themes/material.lua
+-- Author: shadman
+-- Credit: Lokesh Krishna(lightline)
+-- License: MIT License
+-- =============================================================================
+
 local M = {}
 
 local colors = {
