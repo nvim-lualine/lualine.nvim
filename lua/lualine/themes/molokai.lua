@@ -1,4 +1,4 @@
-local gruvbox = {}
+local molokai = {}
 
 local colors = {
   black  = { '#232526', 233 },
@@ -14,29 +14,29 @@ local colors = {
 
 }
 
-gruvbox.normal = {
+molokai.normal = {
   a = { fg = colors.black, bg = colors.cyan , gui = 'bold', },
   b = { fg = colors.black, bg = colors.pink , },
   c = { fg = colors.orange, bg = colors.black , }
 }
 
-gruvbox.insert = {
+molokai.insert = {
   a = { fg = colors.black, bg = colors.green , gui = 'bold', },
 }
 
 
-gruvbox.visual = {
+molokai.visual = {
   a = { fg = colors.black, bg = colors.yellow , gui = 'bold', },
 }
 
-gruvbox.replace = {
+molokai.replace = {
   a = { fg = colors.black, bg = colors.red , gui = 'bold', },
 }
 
-gruvbox.inactive = {
+molokai.inactive = {
   a = { fg = colors.pink, bg = colors.black , gui = 'bold', },
   b = { fg = colors.white, bg = colors.pink , },
   c = { fg = colors.gray, bg = colors.black , },
 }
 
-return gruvbox
+return molokai
