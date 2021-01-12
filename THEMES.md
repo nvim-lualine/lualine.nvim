@@ -39,3 +39,9 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![visual](https://user-images.githubusercontent.com/13149513/103506318-a40f9180-4e86-11eb-85fd-153d6de2a62f.jpg)
 ![command](https://user-images.githubusercontent.com/13149513/103506333-aa057280-4e86-11eb-8098-422eca99c23a.jpg)
 ![replace](https://user-images.githubusercontent.com/13149513/103506349-af62bd00-4e86-11eb-9f11-bd6a56214fa3.jpg)
+
+### wombat
+![normal](https://user-images.githubusercontent.com/13149513/104332798-c0f93400-551a-11eb-8f8d-02e17ab6c8b3.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104332760-b9d22600-551a-11eb-9331-3410ae9d97cc.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104332820-c9ea0580-551a-11eb-8771-2764eec506ed.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104332921-e128f300-551a-11eb-8eb3-a8f8567a3dca.jpg)
