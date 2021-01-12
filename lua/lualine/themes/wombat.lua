@@ -1,3 +1,10 @@
+-- =============================================================================
+-- Filename: lua/lualine/themes/wombat.lua
+-- Author: shadman
+-- Credit: itchyny(lightline)
+-- License: MIT License
+-- =============================================================================
+
 local M = {}
 
 local colors = {
