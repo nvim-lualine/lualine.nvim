@@ -1,3 +1,10 @@
+-- =============================================================================
+-- Filename: lua/lualine/themes/solarized.lua
+-- Author: shadman
+-- Credit: itchyny(lightline)
+-- License: MIT License
+-- =============================================================================
+
 local M = {}
 
 local colors = {
