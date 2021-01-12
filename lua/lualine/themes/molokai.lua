@@ -1,3 +1,10 @@
+-- =============================================================================
+-- Filename: lua/lualine/themes/molokai.lua
+-- Author: shadman
+-- Credit: challsted(lightline)
+-- License: MIT License
+-- =============================================================================
+
 local molokai = {}
 
 local colors = {
