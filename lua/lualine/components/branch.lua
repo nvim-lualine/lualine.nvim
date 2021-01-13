@@ -12,6 +12,8 @@ end
 
 local function find_git_dir()
   local file_path = vim.fn.expand('%:p:h')
+  -- doen't show branch for terminal buffers
+  if file_path:match('^term://.*$') then return nil end
   -- See if we already know where it is
   if known_git_dirs[file_path] then
     return known_git_dirs[file_path]
