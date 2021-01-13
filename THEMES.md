@@ -39,3 +39,15 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![visual](https://user-images.githubusercontent.com/13149513/103506318-a40f9180-4e86-11eb-85fd-153d6de2a62f.jpg)
 ![command](https://user-images.githubusercontent.com/13149513/103506333-aa057280-4e86-11eb-8098-422eca99c23a.jpg)
 ![replace](https://user-images.githubusercontent.com/13149513/103506349-af62bd00-4e86-11eb-9f11-bd6a56214fa3.jpg)
+
+### vimone_dark
+![normal](https://user-images.githubusercontent.com/13149513/104421215-4295a400-55a5-11eb-9b81-5f02889e1309.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104421219-44f7fe00-55a5-11eb-8c8f-be111732cdbb.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104421227-475a5800-55a5-11eb-8025-4607b24cb7ba.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104421235-49bcb200-55a5-11eb-9351-7a6d63e89a13.jpg)
+
+### vimone_dark
+![normal](https://user-images.githubusercontent.com/13149513/104421482-999b7900-55a5-11eb-9fe1-7a10b3914e84.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104421489-9c966980-55a5-11eb-97ee-2073e019f9f4.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104421509-a0c28700-55a5-11eb-9c46-8b841a8cbb01.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104421519-a324e100-55a5-11eb-89d1-ae690509d295.jpg)
