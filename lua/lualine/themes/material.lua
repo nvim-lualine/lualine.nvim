@@ -32,7 +32,6 @@ M.insert = {
   b = { fg = colors.fg, bg = colors.gray3 , },
 }
 
-
 M.visual = {
   a = { fg = colors.bg, bg = colors.purple, 'bold' , gui = 'bold', },
   b = { fg = colors.fg, bg = colors.gray3 , },
