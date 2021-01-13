@@ -1,5 +1,5 @@
 -- =============================================================================
--- Filename: lua/lualine/themes/solarized.lua
+-- Filename: lua/lualine/themes/solarized_light.lua
 -- Author: shadman
 -- Credit: itchyny(lightline)
 -- License: MIT License
