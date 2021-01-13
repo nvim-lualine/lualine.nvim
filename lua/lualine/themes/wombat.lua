@@ -24,10 +24,6 @@ local colors = {
   blue    = { '#8ac6f2', 117 },
   cyan    = { '#8ac6f2', 117 },
   green   = { '#95e454', 119 },
-
-
-
-
 }
 
 M.normal = {
@@ -39,7 +35,6 @@ M.normal = {
 M.insert = {
   a = { fg = colors.base02, bg = colors.green , gui = 'bold', },
 }
-
 
 M.visual = {
   a = { fg = colors.base02, bg = colors.magenta , gui = 'bold', },
