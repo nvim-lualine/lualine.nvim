@@ -17,8 +17,6 @@ local colors = {
   pink   = { '#f92672', 161 },
   red    = { '#ff0000', 160 },
   yellow = { '#e6db74', 229 },
-
-
 }
 
 molokai.normal = {
@@ -30,7 +28,6 @@ molokai.normal = {
 molokai.insert = {
   a = { fg = colors.black, bg = colors.green , gui = 'bold', },
 }
-
 
 molokai.visual = {
   a = { fg = colors.black, bg = colors.yellow , gui = 'bold', },
