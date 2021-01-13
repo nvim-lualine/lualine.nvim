@@ -33,6 +33,18 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![visual](https://user-images.githubusercontent.com/41551030/103468184-ea65d300-4d56-11eb-99e2-73cb649ab679.png)
 ![replace](https://user-images.githubusercontent.com/41551030/103468213-07020b00-4d57-11eb-9b66-5061de556f44.png)
 
+### papercolor_dark
+![normal](https://user-images.githubusercontent.com/13149513/104417232-3e668800-559f-11eb-8b85-9a09ed3078f6.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104417238-41617880-559f-11eb-9fdb-5e31eeb35a47.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104417247-43c3d280-559f-11eb-840c-2c05c475d3fb.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104417255-46262c80-559f-11eb-87b4-cfb500046997.jpg)
+
+### papercolor_light
+![normal](https://user-images.githubusercontent.com/13149513/104417355-6bb33600-559f-11eb-9017-7b2f00059000.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104417361-6d7cf980-559f-11eb-9965-df0038e7d1a0.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104417368-6fdf5380-559f-11eb-9923-27679ba37e2c.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104417378-7241ad80-559f-11eb-97e5-74813da51191.jpg)
+
 ### powerline
 ![normal](https://user-images.githubusercontent.com/13149513/103506288-8fcb9480-4e86-11eb-97f8-3768a34188fd.jpg)
 ![insert](https://user-images.githubusercontent.com/13149513/103506295-978b3900-4e86-11eb-8eca-d31514c66275.jpg)
