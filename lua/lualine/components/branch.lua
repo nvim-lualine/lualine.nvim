@@ -6,8 +6,8 @@ local sep = package.config:sub(1,1)
 local function exists(path)
   local f = io.open(path)
   if not f then return false, false end
-  local _, _, code = f:read()
-  return true, code == 21
+  local _, _, errno = f:read()
+  return true, errno == 21 -- is a directory
 end
 
 local function find_git_dir()
@@ -25,13 +25,12 @@ local function find_git_dir()
     n = n - 1
     local git_dir = dir..'.git'
     local is_available, is_directory = exists(git_dir)
-    -- if exists(git_dir) then
     if is_available then
       if not is_directory then
         -- separate git-dir is used
         local git_file = io.open(git_dir)
         git_dir = git_file:read()
-        git_dir = git_dir:match("gitdir: (.+)")
+        git_dir = git_dir:match("gitdir: (.+)$")
       end
       -- store for reuse
       known_git_dirs[file_path] = git_dir
@@ -47,7 +46,7 @@ local function get_git_head()
     local head_file = io.open(git_dir..sep..'HEAD')
     if head_file then
       local HEAD = head_file:read()
-      local branch = HEAD:match('ref: refs/heads/(.+)')
+      local branch = HEAD:match('ref: refs/heads/(.+)$')
       if branch then return branch end
       return HEAD:sub(1,6)
     end
