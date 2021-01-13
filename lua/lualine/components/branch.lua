@@ -43,6 +43,7 @@ local function find_git_dir()
     end
     dir = dir:match("(.*"..sep..").+$") -- "(.*/).+$"
   end
+  return nil
 end
 
 local function get_git_head()
@@ -56,7 +57,7 @@ local function get_git_head()
       return HEAD:sub(1,6)
     end
   end
-  return ''
+  return nil
 end
 
 local timer = vim.loop.new_timer()
