@@ -11,20 +11,23 @@ local function exists(path)
 end
 
 local function find_git_dir()
-  local file_path = vim.fn.expand('%:p:h')
-  -- doen't show branch for terminal buffers
-  if file_path:match('^term://.*$') then return nil end
-  -- See if we already know where it is
-  if known_git_dirs[file_path] then
-    return known_git_dirs[file_path]
-  end
-
   -- path seperator is not in the end add it
-  local dir = file_path..sep
+  local file_path = vim.fn.expand('%:p:h')..sep
+  -- don't show branch for terminal buffers
+  if file_path:match('^term://.*$') then return nil end
+
+  local dir = file_path
   -- do we need to iterate more than that?
   local n = 30
   while dir and n > 0 do
     n = n - 1
+    -- See if we already know where it is
+    if known_git_dirs[dir] then
+      if dir ~= file_path then
+        -- store it if file_path is a sub directory of dir
+        known_git_dirs[file_path] = known_git_dirs[dir] end
+      return known_git_dirs[dir]
+    end
     local git_dir = dir..'.git'
     local is_available, is_directory = exists(git_dir)
     if is_available then
