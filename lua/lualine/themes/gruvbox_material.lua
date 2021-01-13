@@ -1,3 +1,9 @@
+-- =============================================================================
+-- Filename: lua/lualine/themes/gruvbox_material.lua
+-- Author: shadman
+-- License: MIT License
+-- =============================================================================
+
 local colors = {
   fg1 = "#282828",
   color2 = "#504945",
@@ -14,11 +20,11 @@ local colors = {
 local M = {
   normal = {
     a =  { fg = colors.fg1, bg = colors.color4, "bold" },
-    b = { fg = colors.fg2, bg = colors.color2, },
-    c = { fg = colors.fg2, bg = colors.color3, },
+    b =  { fg = colors.fg2, bg = colors.color2, },
+    c =  { fg = colors.fg2, bg = colors.color3, },
   },
   command = {
-    a = { fg = colors.fg1, bg = colors.color5, "bold" },
+    a =  { fg = colors.fg1, bg = colors.color5, "bold" },
   },
   inactive = {
     a =  { fg = colors.fg2, bg = colors.color2, },
@@ -34,6 +40,6 @@ local M = {
   },
   visual = {
     a =  { fg = colors.fg1, bg = colors.color9, "bold" },
-  }
+  },
 }
 return M
