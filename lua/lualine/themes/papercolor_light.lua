@@ -3,7 +3,6 @@
 -- Author: shadman
 -- Credit: TKNGUE(lightline)
 -- License: MIT License
--- Last Change: 2015/07/28 07:46:40.
 -- =============================================================================
 
 local M = {}
