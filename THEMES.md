@@ -22,10 +22,10 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![replace](https://user-images.githubusercontent.com/41551030/103467925-32372b00-4d54-11eb-88d6-6d39c46854d8.png)
 
 ### nightfly
-![normal](https://user-images.githubusercontent.com/13149513/104446483-b85d3800-55c4-11eb-949c-7ccee55c5066.jpg)
-![insert](https://user-images.githubusercontent.com/13149513/104446782-24d83700-55c5-11eb-9df2-7d147b80b469.jpg)
-![visual](https://user-images.githubusercontent.com/13149513/104446514-c7dc8100-55c4-11eb-97a7-49f87a83e52b.jpg)
-![replace](https://user-images.githubusercontent.com/13149513/104446534-cdd26200-55c4-11eb-913b-1fdae14dac3c.jpg)
+![normal](https://user-images.githubusercontent.com/13149513/104553790-7b954d80-5665-11eb-8d57-070fb650d16a.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104553800-7df7a780-5665-11eb-921f-aaa6db2cd95d.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104553818-7fc16b00-5665-11eb-8dde-ca25bf500005.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104553829-8223c500-5665-11eb-99c1-7b939c846cf2.jpg)
 
 ### nord
 ![normal](https://user-images.githubusercontent.com/13149513/103517642-ad0b5d80-4e9c-11eb-84fd-71541a50abaa.jpg)
