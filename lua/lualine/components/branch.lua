@@ -7,6 +7,7 @@ local function exists(path)
   local f = io.open(path)
   if not f then return false, false end
   local _, _, errno = f:read()
+  f:close()
   return true, errno == 21 -- is a directory
 end
 
@@ -36,6 +37,7 @@ local function find_git_dir()
         local git_file = io.open(git_dir)
         git_dir = git_file:read()
         git_dir = git_dir:match("gitdir: (.+)$")
+        git_dir:close()
       end
       -- store for reuse
       known_git_dirs[file_path] = git_dir
@@ -53,6 +55,7 @@ local function get_git_head()
     if head_file then
       local HEAD = head_file:read()
       local branch = HEAD:match('ref: refs/heads/(.+)$')
+      head_file:close()
       if branch then return branch end
       return HEAD:sub(1,6)
     end
