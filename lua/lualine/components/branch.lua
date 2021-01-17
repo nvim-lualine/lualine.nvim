@@ -11,6 +11,23 @@ local function exists(path)
   return true, errno == 21 -- is a directory
 end
 
+-- adapted from luv docs
+local function readFileAsync(path, callback)
+  vim.loop.fs_open(path, "r", 438, function(err, fd)
+    assert(not err, err)
+    vim.loop.fs_fstat(fd, function(err, stat)
+      assert(not err, err)
+      vim.loop.fs_read(fd, stat.size - 1, 0, function(err, data)
+        assert(not err, err)
+        vim.loop.fs_close(fd, function(err)
+          assert(not err, err)
+          return callback(data)
+        end)
+      end)
+    end)
+  end)
+end
+
 local function find_git_dir()
   -- path seperator is not in the end add it
   local file_path = vim.fn.expand('%:p:h')..sep
@@ -51,21 +68,18 @@ end
 local function get_git_head()
   local git_dir = find_git_dir()
   if git_dir then
-    local head_file = io.open(git_dir..sep..'HEAD')
-    if head_file then
-      local HEAD = head_file:read()
+    readFileAsync(git_dir..sep..'HEAD', function(HEAD)
       local branch = HEAD:match('ref: refs/heads/(.+)$')
-      head_file:close()
-      if branch then return branch end
-      return HEAD:sub(1,6)
-    end
+      if branch then git_branch = branch
+      else git_branch =  HEAD:sub(1,6) end
+    end)
   end
   return nil
 end
 
 local timer = vim.loop.new_timer()
 timer:start(0, 1000, vim.schedule_wrap(function()
-  git_branch = get_git_head()
+  get_git_head()
 end))
 
 
