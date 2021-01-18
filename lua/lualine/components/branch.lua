@@ -65,23 +65,29 @@ local function find_git_dir()
   return nil
 end
 
-local function get_git_head()
-  local git_dir = find_git_dir()
-  if git_dir then
-    readFileAsync(git_dir..sep..'HEAD', function(HEAD)
-      local branch = HEAD:match('ref: refs/heads/(.+)$')
-      if branch then git_branch = branch
-      else git_branch =  HEAD:sub(1,6) end
-    end)
-  end
+local function get_git_head(head_file)
+  readFileAsync(head_file, function(HEAD)
+    local branch = HEAD:match('ref: refs/heads/(.+)$')
+    if branch then git_branch = branch
+    else git_branch =  HEAD:sub(1,6) end
+  end)
   return nil
 end
 
-local timer = vim.loop.new_timer()
-timer:start(0, 1000, vim.schedule_wrap(function()
-  get_git_head()
-end))
-
+local file_changed = vim.loop.new_fs_event()
+local function watch_head()
+  file_changed:stop()
+  local git_dir = find_git_dir()
+  if git_dir then
+    local head_file = git_dir..sep..'HEAD'
+    get_git_head(head_file)
+    file_changed:start(head_file, {}, vim.schedule_wrap(function()
+      watch_head()
+    end))
+  else
+    git_branch = nil
+  end
+end
 
 local function branch()
   if not git_branch or #git_branch == 0 then return '' end
@@ -100,5 +106,9 @@ local function branch()
   end
   return git_branch
 end
+
+watch_head()
+_G.lualine_branch_update = watch_head
+vim.cmd[[autocmd BufEnter * call v:lua.lualine_branch_update()]]
 
 return branch
