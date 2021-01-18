@@ -1,3 +1,9 @@
+-- =============================================================================
+-- Genarated by lightline to lualine theme converter
+--   https://gist.github.com/shadmansaleh/000871c9a608a012721c6acc6d7a19b9
+-- License: MIT License
+-- =============================================================================
+
 local colors = {
   color14  = "#718c00",
   color0   = "#666666",
@@ -14,25 +20,25 @@ local colors = {
 
 local Tomorrow = {
   inactive = {
-    a = { fg = colors.color0, bg = colors.color1 },
+    a = { fg = colors.color0, bg = colors.color1, gui = "bold" },
     b = { fg = colors.color2, bg = colors.color3 },
     c = { fg = colors.color0, bg = colors.color1 },
   },
   normal = {
-    a = { fg = colors.color1, bg = colors.color4 },
+    a = { fg = colors.color1, bg = colors.color4, gui = "bold" },
     b = { fg = colors.color5, bg = colors.color6 },
     c = { fg = colors.color7, bg = colors.color1 },
   },
   visual = {
-    a = { fg = colors.color1, bg = colors.color8 },
+    a = { fg = colors.color1, bg = colors.color8, gui = "bold" },
     b = { fg = colors.color5, bg = colors.color6 },
   },
   replace = {
-    a = { fg = colors.color1, bg = colors.color11 },
+    a = { fg = colors.color1, bg = colors.color11, gui = "bold" },
     b = { fg = colors.color5, bg = colors.color6 },
   },
   insert = {
-    a = { fg = colors.color1, bg = colors.color14 },
+    a = { fg = colors.color1, bg = colors.color14, gui = "bold" },
     b = { fg = colors.color5, bg = colors.color6 },
   },
 }
