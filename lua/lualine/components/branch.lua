@@ -54,7 +54,7 @@ local function find_git_dir()
         local git_file = io.open(git_dir)
         git_dir = git_file:read()
         git_dir = git_dir:match("gitdir: (.+)$")
-        git_dir:close()
+        git_file:close()
       end
       -- store for reuse
       known_git_dirs[file_path] = git_dir
