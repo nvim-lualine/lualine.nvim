@@ -33,11 +33,15 @@ local function find_git_dir()
     local is_available, is_directory = exists(git_dir)
     if is_available then
       if not is_directory then
-        -- separate git-dir is used
+        -- separate git-dir or submodule is used
         local git_file = io.open(git_dir)
         git_dir = git_file:read()
         git_dir = git_dir:match("gitdir: (.+)$")
         git_file:close()
+        -- submodule / relative file path
+        if git_dir:sub(1,2) == '..' then
+          git_dir = dir..git_dir
+        end
       end
       -- store for reuse
       known_git_dirs[file_path] = git_dir
