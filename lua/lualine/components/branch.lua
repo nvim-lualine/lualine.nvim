@@ -9,7 +9,7 @@ local function find_git_dir()
   local file_dir = vim.fn.expand('%:p:h') .. ';'
   -- find .git/ folder genaral case
   local git_dir = vim.fn.finddir('.git', file_dir)
-  -- find .git file in case of submodules or any other case git dir is in 
+  -- find .git file in case of submodules or any other case git dir is in
   -- any other place than .git/
   local git_file = vim.fn.findfile('.git', file_dir)
   -- for some weird reason findfile gives relative path so expand it to fullpath
