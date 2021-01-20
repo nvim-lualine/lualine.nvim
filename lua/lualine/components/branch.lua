@@ -3,14 +3,18 @@ local git_branch
 -- os specific path separator
 local sep = package.config:sub(1,1)
 
+-- takes file path
+-- return file_eists(bool), is_derectory(bool)
 local function exists(path)
-  local f = io.open(path)
-  if not f then return false, false end
-  local _, _, errno = f:read()
-  f:close()
+  local file = io.open(path)
+  if not file then return false, false end
+  local _, _, errno = file:read()
+  file:close()
   return true, errno == 21 -- is a directory
 end
 
+-- returns full path to git directory for current directory
+-- returns nil if not found in 30 iterations or if root directory is reached
 local function find_git_dir()
   -- path separator is not in the end add it
   local dir = vim.fn.expand('%:p:h')..sep
@@ -37,11 +41,13 @@ local function find_git_dir()
       end
       return git_dir
     end
+    -- go up directory lavel
     dir = dir:match("(.*"..sep..").+$") -- "(.*/).+$"
   end
   return nil
 end
 
+-- sets git_branch veriable to branch name or commit hash if not on branch
 local function get_git_head(head_file)
   local f_head = io.open(head_file)
   if f_head then
@@ -54,6 +60,7 @@ local function get_git_head(head_file)
   return nil
 end
 
+-- event watcher to watch head file
 local file_changed = vim.loop.new_fs_event()
 local function watch_head()
   file_changed:stop()
@@ -62,13 +69,16 @@ local function watch_head()
     local head_file = git_dir..sep..'HEAD'
     get_git_head(head_file)
     file_changed:start(head_file, {}, vim.schedule_wrap(function()
+      -- reset file-watch
       watch_head()
     end))
   else
+    -- set to nil when git dir was not found
     git_branch = nil
   end
 end
 
+-- returns the git_branch value to be shown on statusline
 local function branch()
   if not git_branch or #git_branch == 0 then return '' end
   local ok,devicons = pcall(require,'nvim-web-devicons')
@@ -87,8 +97,12 @@ local function branch()
   return git_branch
 end
 
+-- run watch head on load so branch is present when component is loaded
 watch_head()
+
+-- TODO Don't export as a global function
 _G.lualine_branch_update = watch_head
+-- update branch state of BufEnter as different Buffer may be on different repos
 vim.cmd[[autocmd BufEnter * call v:lua.lualine_branch_update()]]
 
 return branch
