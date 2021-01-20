@@ -5,9 +5,14 @@ local sep = package.config:sub(1,1)
 
 -- returns full path to git directory for current directory
 local function find_git_dir()
+  -- get file dir so we can search from that dir
   local file_dir = vim.fn.expand('%:p:h') .. ';'
+  -- find .git/ folder genaral case
   local git_dir = vim.fn.finddir('.git', file_dir)
+  -- find .git file in case of submodules or any other case git dir is in 
+  -- any other place than .git/
   local git_file = vim.fn.findfile('.git', file_dir)
+  -- for some weird reason findfile gives relative path so expand it to fullpath
   if #git_file > 0 then git_file = vim.fn.fnamemodify(git_file, ':p') end
   if #git_file > #git_dir then
     -- separate git-dir or submodule is used
