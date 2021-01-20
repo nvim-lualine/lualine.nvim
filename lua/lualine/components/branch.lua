@@ -39,7 +39,7 @@ local function find_git_dir()
         git_dir = git_dir:match("gitdir: (.+)$")
         git_file:close()
         -- submodule / relative file path
-        if git_dir:sub(1,2) == '..' then
+        if git_dir:sub(1,1) ~= sep and not git_dir:match('^%a:.*$') then
           git_dir = dir..git_dir
         end
       end
