@@ -3,48 +3,24 @@ local git_branch
 -- os specific path separator
 local sep = package.config:sub(1,1)
 
--- takes file path
--- return file_eists(bool), is_derectory(bool)
-local function exists(path)
-  local file = io.open(path)
-  if not file then return false, false end
-  local _, _, errno = file:read()
-  file:close()
-  return true, errno == 21 -- is a directory
-end
-
 -- returns full path to git directory for current directory
--- returns nil if not found in 30 iterations or if root directory is reached
 local function find_git_dir()
-  -- path separator is not in the end add it
-  local dir = vim.fn.expand('%:p:h')..sep
-  -- don't show branch for terminal buffers
-  if dir:match('^term://.*$') then return nil end
-
-  -- do we need to iterate more than that?
-  local iteration_count = 30
-  while dir and iteration_count > 0 do
-    iteration_count = iteration_count - 1
-    local git_dir = dir..'.git'
-    local is_available, is_directory = exists(git_dir)
-    if is_available then
-      if not is_directory then
-        -- separate git-dir or submodule is used
-        local git_file = io.open(git_dir)
-        git_dir = git_file:read()
-        git_dir = git_dir:match("gitdir: (.+)$")
-        git_file:close()
-        -- submodule / relative file path
-        if git_dir:sub(1,1) ~= sep and not git_dir:match('^%a:.*$') then
-          git_dir = dir..git_dir
-        end
-      end
-      return git_dir
+  local file_dir = vim.fn.expand('%:p:h') .. ';'
+  local git_dir = vim.fn.finddir('.git', file_dir)
+  local git_file = vim.fn.findfile('.git', file_dir)
+  if #git_file > 0 then git_file = vim.fn.fnamemodify(git_file, ':p') end
+  if #git_file > #git_dir then
+    -- separate git-dir or submodule is used
+    local file = io.open(git_file)
+    git_dir = file:read()
+    git_dir = git_dir:match("gitdir: (.+)$")
+    file:close()
+    -- submodule / relative file path
+    if git_dir:sub(1,1) ~= sep and not git_dir:match('^%a:.*$') then
+      git_dir = git_file:match('(.*).git')..git_dir
     end
-    -- go up directory lavel
-    dir = dir:match("(.*"..sep..").+$") -- "(.*/).+$"
   end
-  return nil
+  return git_dir
 end
 
 -- sets git_branch veriable to branch name or commit hash if not on branch
@@ -65,7 +41,7 @@ local file_changed = vim.loop.new_fs_event()
 local function watch_head()
   file_changed:stop()
   local git_dir = find_git_dir()
-  if git_dir then
+  if #git_dir > 0 then
     local head_file = git_dir..sep..'HEAD'
     get_git_head(head_file)
     file_changed:start(head_file, {}, vim.schedule_wrap(function()
