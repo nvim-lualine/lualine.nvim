@@ -1,6 +1,6 @@
 local git_branch
 
-local known_git_dirs = {}
+-- os specific path separator
 local sep = package.config:sub(1,1)
 
 local function exists(path)
@@ -12,23 +12,15 @@ local function exists(path)
 end
 
 local function find_git_dir()
-  -- path seperator is not in the end add it
-  local file_path = vim.fn.expand('%:p:h')..sep
+  -- path separator is not in the end add it
+  local dir = vim.fn.expand('%:p:h')..sep
   -- don't show branch for terminal buffers
-  if file_path:match('^term://.*$') then return nil end
+  if dir:match('^term://.*$') then return nil end
 
-  local dir = file_path
   -- do we need to iterate more than that?
-  local n = 30
-  while dir and n > 0 do
-    n = n - 1
-    -- See if we already know where it is
-    if known_git_dirs[dir] then
-      if dir ~= file_path then
-        -- store it if file_path is a sub directory of dir
-        known_git_dirs[file_path] = known_git_dirs[dir] end
-      return known_git_dirs[dir]
-    end
+  local iteration_count = 30
+  while dir and iteration_count > 0 do
+    iteration_count = iteration_count - 1
     local git_dir = dir..'.git'
     local is_available, is_directory = exists(git_dir)
     if is_available then
@@ -43,8 +35,6 @@ local function find_git_dir()
           git_dir = dir..git_dir
         end
       end
-      -- store for reuse
-      known_git_dirs[file_path] = git_dir
       return git_dir
     end
     dir = dir:match("(.*"..sep..").+$") -- "(.*/).+$"
