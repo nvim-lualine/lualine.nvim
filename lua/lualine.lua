@@ -105,11 +105,9 @@ end
 
 local function exec_autocommands()
   _G.set_lualine_theme = set_lualine_theme
-  _G.lualine_statusline = status_dispatch
   vim.api.nvim_exec([[
     augroup lualine
     autocmd!
-    autocmd VimEnter * set statusline=%!v:lua.lualine_statusline()
     autocmd ColorScheme * call v:lua.set_lualine_theme()
     augroup END
   ]], false)
@@ -120,6 +118,8 @@ function M.status()
   load_extensions()
   set_lualine_theme()
   exec_autocommands()
+  _G.lualine_statusline = status_dispatch
+  vim.o.statusline = '%!v:lua.lualine_statusline()'
 end
 
 return M
