@@ -39,3 +39,10 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![visual](https://user-images.githubusercontent.com/13149513/103506318-a40f9180-4e86-11eb-85fd-153d6de2a62f.jpg)
 ![command](https://user-images.githubusercontent.com/13149513/103506333-aa057280-4e86-11eb-8098-422eca99c23a.jpg)
 ![replace](https://user-images.githubusercontent.com/13149513/103506349-af62bd00-4e86-11eb-9f11-bd6a56214fa3.jpg)
+
+### night_owl
+![normal](https://user-images.githubusercontent.com/6837979/105975661-4f58e280-60e3-11eb-857d-a1a9fdff7acd.png)
+![insert](https://user-images.githubusercontent.com/6837979/105974349-eae95380-60e1-11eb-9faa-28ed3feba7ec.png)
+![visual](https://user-images.githubusercontent.com/6837979/105974454-094f4f00-60e2-11eb-80d1-07787c0fde43.png)
+![command](https://user-images.githubusercontent.com/6837979/105974541-1f5d0f80-60e2-11eb-961b-e69fd4b79820.png)
+![replace](https://user-images.githubusercontent.com/6837979/105974602-2dab2b80-60e2-11eb-9db9-fcbb0a400a98.png)
