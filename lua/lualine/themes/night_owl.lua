@@ -43,9 +43,9 @@ night_owl.command = {
 }
 
 night_owl.inactive = {
-  a = { bg = colors.grey_2, fg = colors.white, gui = 'bold', },
-  b = { bg = colors.grey_2, fg = colors.white, },
-  c = { bg = colors.grey_2, fg = colors.white, },
+  a = { bg = colors.black, fg = colors.white, gui = 'bold', },
+  b = { bg = colors.black, fg = colors.white, },
+  c = { bg = colors.black, fg = colors.white, },
 }
 
 return night_owl
