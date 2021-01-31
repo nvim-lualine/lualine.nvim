@@ -15,7 +15,7 @@ local function signify()
    }
    for range=1,3 do
      if data[range] ~= nil and data[range] > 0
-       then table.insert(result,symbols[range]..blank..data[range]..blank)
+       then table.insert(result,symbols[range]..' '..data[range]..' ')
      end
    end
 
