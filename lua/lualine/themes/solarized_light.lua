@@ -25,12 +25,6 @@ local colors = {
   cyan    =  '#2aa198',
   green   =  '#859900',
 }
-if vim.o.background == 'light' then
-  colors.base03, colors.base3  =  colors.base3, colors.base03
-  colors.base02, colors.base2  =  colors.base2, colors.base02
-  colors.base01, colors.base1  =  colors.base1, colors.base01
-  colors.base00, colors.base0  =  colors.base0, colors.base00
-end
 
 M.normal = {
   a = { fg = colors.base03, bg = colors.blue , gui = 'bold', },
