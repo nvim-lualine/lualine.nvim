@@ -6,6 +6,5 @@
 -- =============================================================================
 
 local background = vim.o.background
-print(background)
 
 return require("lualine.themes.papercolor_"..background)
