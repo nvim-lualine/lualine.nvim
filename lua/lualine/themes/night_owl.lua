@@ -3,6 +3,7 @@ local night_owl = {}
 local colors = {
   blue       = {"#82aaff", 111},
   black      = {"#011627", 233},
+  black_1    = {"#000e1a", 233},
   white      = {"#d6deeb", 253},
   grey_1     = {"#1d3b53", 222},
   grey_2     = {"#1a2b4a", 235},
@@ -43,9 +44,9 @@ night_owl.command = {
 }
 
 night_owl.inactive = {
-  a = { bg = colors.grey_2, fg = colors.white, gui = 'bold', },
-  b = { bg = colors.grey_2, fg = colors.white, },
-  c = { bg = colors.grey_2, fg = colors.white, },
+  a = { bg = colors.black_1, fg = colors.white, gui = 'bold', },
+  b = { bg = colors.black_1, fg = colors.white, },
+  c = { bg = colors.black_1, fg = colors.white, },
 }
 
 return night_owl
