@@ -1,6 +1,6 @@
 -- =============================================================================
 -- Filename: lua/lualine/themes/16color.lua
--- Author: shadman 
+-- Author: shadman
 -- Credit itchyny, jackno (lightline)
 -- License: MIT License
 -- =============================================================================
