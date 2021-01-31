@@ -39,3 +39,9 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![visual](https://user-images.githubusercontent.com/13149513/103506318-a40f9180-4e86-11eb-85fd-153d6de2a62f.jpg)
 ![command](https://user-images.githubusercontent.com/13149513/103506333-aa057280-4e86-11eb-8098-422eca99c23a.jpg)
 ![replace](https://user-images.githubusercontent.com/13149513/103506349-af62bd00-4e86-11eb-9f11-bd6a56214fa3.jpg)
+
+### solarized
+![normal](https://user-images.githubusercontent.com/13149513/104330979-c2c1f800-5518-11eb-83b8-70128d808111.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104330996-c5245200-5518-11eb-96a6-78d6679c59c0.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104331081-dec59980-5518-11eb-9577-616d891be64e.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104331086-e08f5d00-5518-11eb-90eb-955e83bc17b9.jpg)
