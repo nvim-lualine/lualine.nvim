@@ -39,6 +39,12 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![visual](https://user-images.githubusercontent.com/13149513/104329313-fc91ff00-5516-11eb-810b-5cf377e26830.jpg)
 ![replace](https://user-images.githubusercontent.com/13149513/104329415-10d5fc00-5517-11eb-9312-f494adafe874.jpg)
 
+### nightfly
+![normal](https://user-images.githubusercontent.com/13149513/104553790-7b954d80-5665-11eb-8d57-070fb650d16a.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104553800-7df7a780-5665-11eb-921f-aaa6db2cd95d.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104553818-7fc16b00-5665-11eb-8dde-ca25bf500005.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104553829-8223c500-5665-11eb-99c1-7b939c846cf2.jpg)
+
 ### nord
 ![normal](https://user-images.githubusercontent.com/13149513/103517642-ad0b5d80-4e9c-11eb-84fd-71541a50abaa.jpg)
 ![insert](https://user-images.githubusercontent.com/13149513/103517655-b268a800-4e9c-11eb-8bd6-e2808d940779.jpg)
