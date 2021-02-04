@@ -2,6 +2,12 @@
 
 All available themes are only best effort ports by myself/ other users. If you find a theme to be weird/ wrong please open an issue/ pr.
 
+### 16color
+![normal](https://user-images.githubusercontent.com/13149513/104338605-e2f5b500-5520-11eb-9f6a-5e039025182e.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104338620-e5580f00-5520-11eb-9593-b59769d738a4.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104338631-e852ff80-5520-11eb-9341-0ecd87aed656.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104338654-eee17700-5520-11eb-9ff3-d2308d1243e5.jpg)
+
 ### dracula
 ![normal](https://user-images.githubusercontent.com/41551030/103468233-2d27ab00-4d57-11eb-8f3c-36426dd2f053.png)
 ![insert](https://user-images.githubusercontent.com/41551030/103468255-49c3e300-4d57-11eb-9e7a-2df1bf047465.png)
