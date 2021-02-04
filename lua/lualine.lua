@@ -109,12 +109,14 @@ end
 local function exec_autocommands()
   _G.set_lualine_theme = set_lualine_theme
   _G.set_active_statusline = statusline
-  vim.cmd([[augroup lualine]])
-  vim.cmd([[autocmd!]])
-  vim.cmd([[autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.set_active_statusline(1)]])
-  vim.cmd([[autocmd WinLeave,BufLeave * lua require('lualine').set_inactive_statusline()]])
-  vim.cmd([[autocmd ColorScheme * call v:lua.set_lualine_theme()]])
-  vim.cmd([[augroup END]])
+  vim.api.nvim_exec([[
+    augroup lualine
+    autocmd!
+    autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.set_active_statusline(1)
+    autocmd WinLeave,BufLeave * lua require('lualine').set_inactive_statusline()
+    autocmd ColorScheme * call v:lua.set_lualine_theme()
+    augroup END
+  ]], false)
 end
 
 function M.status()
