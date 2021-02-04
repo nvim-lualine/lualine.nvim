@@ -8,6 +8,12 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![visual](https://user-images.githubusercontent.com/13149513/104338631-e852ff80-5520-11eb-9341-0ecd87aed656.jpg)
 ![replace](https://user-images.githubusercontent.com/13149513/104338654-eee17700-5520-11eb-9ff3-d2308d1243e5.jpg)
 
+### codedark
+![normal](https://user-images.githubusercontent.com/22453358/106365012-66920d00-633b-11eb-97a2-a10a0c48b1dc.png)
+![insert](https://user-images.githubusercontent.com/22453358/106365022-7b6ea080-633b-11eb-92ef-57254fe1df1a.png)
+![visual](https://user-images.githubusercontent.com/22453358/106365017-6f82de80-633b-11eb-864b-490bfac0af05.png)
+![replace](https://user-images.githubusercontent.com/22453358/106365034-904b3400-633b-11eb-8677-7c6ace953bb0.png)
+
 ### dracula
 ![normal](https://user-images.githubusercontent.com/41551030/103468233-2d27ab00-4d57-11eb-8f3c-36426dd2f053.png)
 ![insert](https://user-images.githubusercontent.com/41551030/103468255-49c3e300-4d57-11eb-9e7a-2df1bf047465.png)
