@@ -21,6 +21,12 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![command](https://user-images.githubusercontent.com/41551030/103467919-2ba8b380-4d54-11eb-8585-6c667fd5082e.png)
 ![replace](https://user-images.githubusercontent.com/41551030/103467925-32372b00-4d54-11eb-88d6-6d39c46854d8.png)
 
+### material
+![normal](https://user-images.githubusercontent.com/13149513/104335816-f3f0f700-551d-11eb-8919-96cee2bea2a0.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104335824-f5222400-551d-11eb-9c22-7eeeed129e93.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104335868-01a67c80-551e-11eb-8b8f-df450280a48d.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104335877-0408d680-551e-11eb-8d11-06fe1937062e.jpg)
+
 ### molokai
 ![normal](https://user-images.githubusercontent.com/13149513/104329284-f69c1e00-5516-11eb-9c35-4b7f4baebe47.jpg)
 ![insert](https://user-images.githubusercontent.com/13149513/104329303-fac83b80-5516-11eb-96fd-fc30eaab8244.jpg)
