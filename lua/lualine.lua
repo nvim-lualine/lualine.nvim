@@ -37,8 +37,12 @@ local function load_components()
           local ok,loaded_component = pcall(require, 'lualine.components.' .. component)
           if not ok then
             -- vim veriable component
-            if component:sub(1,2) == 'g:' then
-              component = component:sub(3,#component)
+            -- accepts g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo:
+            if component:find('[gvtwb]?o?:') == 1 then
+              -- filters g portion from g:var
+              local scope = component:match('[gvtwb]?o?')
+              -- filters var portion from g:var
+              component = component:sub(#scope + 2, #component)
               loaded_component = function()
                 -- Displays nothing when veriablea aren't present
                 local ok, value = pcall(function() return vim[scope][component] end)
