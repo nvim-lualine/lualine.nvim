@@ -27,6 +27,12 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![visual](https://user-images.githubusercontent.com/13149513/104335868-01a67c80-551e-11eb-8b8f-df450280a48d.jpg)
 ![replace](https://user-images.githubusercontent.com/13149513/104335877-0408d680-551e-11eb-8d11-06fe1937062e.jpg)
 
+### molokai
+![normal](https://user-images.githubusercontent.com/13149513/104329284-f69c1e00-5516-11eb-9c35-4b7f4baebe47.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104329303-fac83b80-5516-11eb-96fd-fc30eaab8244.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104329313-fc91ff00-5516-11eb-810b-5cf377e26830.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104329415-10d5fc00-5517-11eb-9312-f494adafe874.jpg)
+
 ### nord
 ![normal](https://user-images.githubusercontent.com/13149513/103517642-ad0b5d80-4e9c-11eb-84fd-71541a50abaa.jpg)
 ![insert](https://user-images.githubusercontent.com/13149513/103517655-b268a800-4e9c-11eb-8bd6-e2808d940779.jpg)
@@ -45,3 +51,15 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![visual](https://user-images.githubusercontent.com/13149513/103506318-a40f9180-4e86-11eb-85fd-153d6de2a62f.jpg)
 ![command](https://user-images.githubusercontent.com/13149513/103506333-aa057280-4e86-11eb-8098-422eca99c23a.jpg)
 ![replace](https://user-images.githubusercontent.com/13149513/103506349-af62bd00-4e86-11eb-9f11-bd6a56214fa3.jpg)
+
+### solarized
+![normal](https://user-images.githubusercontent.com/13149513/104330979-c2c1f800-5518-11eb-83b8-70128d808111.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104330996-c5245200-5518-11eb-96a6-78d6679c59c0.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104331081-dec59980-5518-11eb-9577-616d891be64e.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104331086-e08f5d00-5518-11eb-90eb-955e83bc17b9.jpg)
+
+### wombat
+![normal](https://user-images.githubusercontent.com/13149513/104332798-c0f93400-551a-11eb-8f8d-02e17ab6c8b3.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104332760-b9d22600-551a-11eb-9331-3410ae9d97cc.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104332820-c9ea0580-551a-11eb-8771-2764eec506ed.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104332921-e128f300-551a-11eb-8eb3-a8f8567a3dca.jpg)
