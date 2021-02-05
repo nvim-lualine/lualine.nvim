@@ -1,44 +1,48 @@
-local onedark = {}
+-- =============================================================================
+-- Filename: lua/lualine/themes/onedark.lua
+-- Author: shadman
+-- Credit: Zoltan Dalmadi(lightline)
+-- License: MIT License
+-- =============================================================================
+
+local M = {}
 
 local colors = {
-  red            = {"#E06C75", 168},
-  dark_red       = {"#BE5046", 131},
-  green          = {"#98C379", 114},
-  blue           = {"#61AFEF", 75 },
-  purple         = {"#C678DD", 176},
-  white          = {"#ABB2BF", 249},
-  black          = {"#282C34", 236},
-  visual_grey    = {"#3E4452", 238},
+  blue   = { '#61afef', 75 },
+  green  = { '#98c379', 76 },
+  purple = { '#c678dd', 176 },
+  red1   = { '#e06c75', 168 },
+  red2   = { '#be5046', 168 },
+  yellow = { '#e5c07b', 180 },
+  fg    = { '#abb2bf', 145 },
+  bg    = { '#282c34', 235 },
+  gray1 = { '#5c6370', 241 },
+  gray2 = { '#2c323d', 235 },
+  gray3 = { '#3e4452', 240 },
 }
 
-onedark.normal = {
-  a = { fg = colors.black, bg = colors.green, gui = 'bold', },
-  b = { fg = colors.white, bg = colors.visual_grey, },
-  c = { fg = colors.green, bg = colors.black, },
+M.normal = {
+  a = { fg = colors.bg, bg = colors.green , gui = 'bold', },
+  b = { fg = colors.fg, bg = colors.gray3 , },
+  c = { fg = colors.fg, bg = colors.gray2 , }
 }
 
-onedark.insert = {
-  a = { fg = colors.black, bg = colors.blue, gui = 'bold', },
-  b = { fg = colors.white, bg = colors.visual_grey, },
-  c = { fg = colors.blue, bg = colors.black, },
+M.insert = {
+  a = { fg = colors.bg, bg = colors.blue , gui = 'bold', },
 }
 
-onedark.visual = {
-  a = { fg = colors.black, bg = colors.purple, gui = 'bold', },
-  b = { fg = colors.white, bg = colors.visual_grey, },
-  c = { fg = colors.purple, bg = colors.black, },
+M.visual = {
+  a = { fg = colors.bg, bg = colors.purple , gui = 'bold', },
 }
 
-onedark.replace = {
-  a = { fg = colors.black, bg = colors.red, gui = 'bold', },
-  b = { fg = colors.white, bg = colors.visual_grey, },
-  c = { fg = colors.red, bg = colors.black, },
+M.replace = {
+  a = { fg = colors.bg, bg = colors.red1 , gui = 'bold', },
 }
 
-onedark.inactive = {
-  a = { fg = colors.black, bg = colors.white, gui = 'bold', },
-  b = { fg = colors.white, bg = colors.visual_grey, },
-  c = { fg = colors.white, bg = colors.visual_grey, },
+M.inactive = {
+  a = { fg = colors.gray1,  bg = colors.bg , gui = 'bold', },
+  b = { fg = colors.gray1, bg = colors.bg , },
+  c = { fg = colors.gray1, bg = colors.gray2 , },
 }
 
-return onedark
+return M

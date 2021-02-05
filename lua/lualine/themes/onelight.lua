@@ -1,5 +1,5 @@
 -- =============================================================================
--- Filename: lua/lualine/themes/vimone_light.lua
+-- Filename: lua/lualine/themes/onelight.lua
 -- Author: shadman
 -- Credit: Zoltan Dalmadi(lightline)
 -- License: MIT License
