@@ -64,10 +64,16 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![replace](https://user-images.githubusercontent.com/13149513/103517682-ba284c80-4e9c-11eb-9210-d3e28a05f4a2.jpg)
 
 ### onedark
-![normal](https://user-images.githubusercontent.com/41551030/103468158-a83c9180-4d56-11eb-89cb-28d802f02341.png)
-![insert](https://user-images.githubusercontent.com/41551030/103468174-cdc99b00-4d56-11eb-8723-fd817ff06404.png)
-![visual](https://user-images.githubusercontent.com/41551030/103468184-ea65d300-4d56-11eb-99e2-73cb649ab679.png)
-![replace](https://user-images.githubusercontent.com/41551030/103468213-07020b00-4d57-11eb-9b66-5061de556f44.png)
+![normal](https://user-images.githubusercontent.com/13149513/104421215-4295a400-55a5-11eb-9b81-5f02889e1309.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104421219-44f7fe00-55a5-11eb-8c8f-be111732cdbb.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104421227-475a5800-55a5-11eb-8025-4607b24cb7ba.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104421235-49bcb200-55a5-11eb-9351-7a6d63e89a13.jpg)
+
+### onelight
+![normal](https://user-images.githubusercontent.com/13149513/104421482-999b7900-55a5-11eb-9fe1-7a10b3914e84.jpg)
+![insert](https://user-images.githubusercontent.com/13149513/104421489-9c966980-55a5-11eb-97ee-2073e019f9f4.jpg)
+![visual](https://user-images.githubusercontent.com/13149513/104421509-a0c28700-55a5-11eb-9c46-8b841a8cbb01.jpg)
+![replace](https://user-images.githubusercontent.com/13149513/104421519-a324e100-55a5-11eb-89d1-ae690509d295.jpg)
 
 ### papercolor_dark
 ![normal](https://user-images.githubusercontent.com/13149513/104417232-3e668800-559f-11eb-8b85-9a09ed3078f6.jpg)
