@@ -32,8 +32,16 @@ local function mode()
   }
   local function get_mode()
     local mode_code = vim.api.nvim_get_mode().mode
-    if mode_map[mode_code] == nil then return mode_code end
-    return mode_map[mode_code]
+    local paste_mode = vim.o.paste
+    if mode_map[mode_code] == nil
+    then
+      return mode_code
+    elseif paste_mode
+    then
+      return mode_map[mode_code] .. ' PASTE'
+    else
+      return mode_map[mode_code]
+    end
   end
   return get_mode()
 end
