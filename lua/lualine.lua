@@ -36,9 +36,15 @@ local function load_components()
         if type(component) == 'string' then
           local ok,loaded_component = pcall(require, 'lualine.components.' .. component)
           if not ok then
+            -- lua veriable component
+            if loadstring(string.format([[return %s ~= nil]], component))() then
+              loaded_component = loadstring(string.format(
+                [[local ok, rt_val = pcall(tostring, %s)
+                  if ok then return rt_val
+                  else return '' end]], component))
             -- vim veriable component
             -- accepts g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo:
-            if component:find('[gvtwb]?o?:') == 1 then
+            elseif component:find('[gvtwb]?o?:') == 1 then
               -- filters g portion from g:var
               local scope = component:match('[gvtwb]?o?')
               -- filters var portion from g:var

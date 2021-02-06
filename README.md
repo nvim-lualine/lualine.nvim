@@ -169,9 +169,9 @@ lualine.sections.lualine_b = { 'FugitiveHead' }
 </details>
 
 <details>
-<summary><b>Using vim variables as lualine component</b></summary>
+<summary><b>Using variables as lualine component</b></summary>
 
-You can use variables from vim as a lualine component
+You can use variables from vim and lua globals as a lualine component
 Variables from g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo: scopes
 can be used. Scopes ending with o are options usualy accessed with `&` in vimscript
 
