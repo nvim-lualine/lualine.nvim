@@ -44,6 +44,8 @@ function M.format_highlight(is_focused, highlight_group)
   if not is_focused then
     highlight_group = highlight_group .. [[_inactive]]
   else
+    -- compatability for paste mode
+    mode = mode:gsub(" PASTE", "")
     if mode == 'VISUAL' or mode == 'V-BLOCK' or mode == 'V-LINE'
       or mode == 'SELECT' or mode == 'S-LINE' or mode == 'S-BLOCK'then
       highlight_group = highlight_group .. '_visual'
