@@ -138,7 +138,6 @@ lualine.inactive_sections = {
   * location
   * mode
   * progress
-* plugin
   * signify
 
 </details>

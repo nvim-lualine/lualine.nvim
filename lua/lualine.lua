@@ -114,10 +114,10 @@ local function exec_autocommands()
 end
 
 function M.status()
-  load_components()
-  load_extensions()
   set_lualine_theme()
   exec_autocommands()
+  load_components()
+  load_extensions()
   _G.lualine_statusline = status_dispatch
   vim.o.statusline = '%!v:lua.lualine_statusline()'
 end
