@@ -29,6 +29,41 @@ M.inactive_sections = {
 M.extensions = {
 }
 
+local function load_special_components(component)
+  return function()
+    -- precedence lualine_component > vim_var > lua_var > vim_function
+    if component:find('[gvtwb]?o?:') == 1 then
+      -- vim veriable component
+      -- accepts g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo:
+      -- filters g portion from g:var
+      local scope = component:match('[gvtwb]?o?')
+      -- filters var portion from g:var
+      local component = component:sub(#scope + 2, #component)
+      -- Displays nothing when veriablea aren't present
+      local ok, value = pcall(function() return vim[scope][component] end)
+      if not ok then return '' end
+      local return_val
+      ok, return_val =  pcall(tostring, value)
+      if ok then return return_val end
+      return ''
+    elseif loadstring(string.format('return %s ~= nil', component)) and
+       loadstring(string.format([[return %s ~= nil]], component))() then
+      -- lua veriable component
+      return loadstring(string.format([[
+        local ok, rt_val = pcall(tostring, %s)
+        if ok then return rt_val end
+        return '']], component))()
+    else
+      -- vim function component
+      local ok, return_val = pcall(vim.fn[component])
+      if not ok then return '' end -- function call failed
+      local return_str
+      ok, return_str =  pcall(tostring, return_val)
+      if ok then return return_str else return '' end
+    end
+  end
+end
+
 local function load_components()
   local function load_sections(sections)
     for _, section in pairs(sections) do
@@ -36,37 +71,7 @@ local function load_components()
         if type(component) == 'string' then
           local ok,loaded_component = pcall(require, 'lualine.components.' .. component)
           if not ok then
-            -- lua veriable component
-            if loadstring(string.format([[return %s ~= nil]], component))() then
-              loaded_component = loadstring(string.format(
-                [[local ok, rt_val = pcall(tostring, %s)
-                  if ok then return rt_val
-                  else return '' end]], component))
-            -- vim veriable component
-            -- accepts g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo:
-            elseif component:find('[gvtwb]?o?:') == 1 then
-              -- filters g portion from g:var
-              local scope = component:match('[gvtwb]?o?')
-              -- filters var portion from g:var
-              component = component:sub(#scope + 2, #component)
-              loaded_component = function()
-                -- Displays nothing when veriablea aren't present
-                local ok, value = pcall(function() return vim[scope][component] end)
-                if ok then
-                  local ok, return_val =  pcall(tostring, value)
-                  if ok then return return_val end
-                end
-                return ''
-              end
-            else
-              -- vim function component
-              loaded_component = function()
-                local ok, return_val = pcall(vim.fn[component])
-                if not ok then return '' end -- function call failed
-                local ok, return_str =  pcall(tostring, return_val)
-                if ok then return return_str else return '' end
-              end
-            end
+            loaded_component = load_special_components(component)
           end
           section[index] = loaded_component
         end
