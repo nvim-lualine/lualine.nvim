@@ -1,5 +1,5 @@
-local utils = require('lualine.utils')
-local highlight = require('lualine.highlight')
+local utils
+local highlight
 
 local M = { }
 
@@ -114,12 +114,19 @@ local function exec_autocommands()
 end
 
 function M.status()
-  load_components()
-  load_extensions()
-  set_lualine_theme()
-  exec_autocommands()
-  _G.lualine_statusline = status_dispatch
-  vim.o.statusline = '%!v:lua.lualine_statusline()'
+  local async_loader
+  async_loader = vim.loop.new_async(vim.schedule_wrap(function()
+    utils = require('lualine.utils')
+    highlight = require('lualine.highlight')
+    exec_autocommands()
+    set_lualine_theme()
+    load_components()
+    load_extensions()
+    _G.lualine_statusline = status_dispatch
+    vim.o.statusline = '%!v:lua.lualine_statusline()'
+    async_loader:close()
+  end))
+  async_loader:send()
 end
 
 return M
