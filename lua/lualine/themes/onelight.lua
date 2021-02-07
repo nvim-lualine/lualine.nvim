@@ -1,5 +1,5 @@
 -- =============================================================================
--- Filename: lua/lualine/themes/onedark.lua
+-- Filename: lua/lualine/themes/onelight.lua
 -- Author: shadman
 -- Credit: Zoltan Dalmadi(lightline)
 -- License: MIT License
@@ -9,16 +9,16 @@ local M = {}
 
 local colors = {
   blue   = { '#61afef', 75 },
-  green  = { '#98c379', 76 },
+  green  = { '#98c379', 35 },
   purple = { '#c678dd', 176 },
   red1   = { '#e06c75', 168 },
   red2   = { '#be5046', 168 },
   yellow = { '#e5c07b', 180 },
-  fg    = { '#abb2bf', 145 },
-  bg    = { '#282c34', 235 },
-  gray1 = { '#5c6370', 241 },
-  gray2 = { '#2c323d', 235 },
-  gray3 = { '#3e4452', 240 },
+  fg    = { '#494b53', 238 },
+  bg    = { '#fafafa', 255 },
+  gray1 = { '#494b53', 238 },
+  gray2 = { '#f0f0f0', 255 },
+  gray3 = { '#d0d0d0', 250 },
 }
 
 M.normal = {
@@ -40,9 +40,9 @@ M.replace = {
 }
 
 M.inactive = {
-  a = { fg = colors.gray1,  bg = colors.bg , gui = 'bold', },
-  b = { fg = colors.gray1, bg = colors.bg , },
-  c = { fg = colors.gray1, bg = colors.gray2 , },
+  a = { fg = colors.bg,  bg = colors.gray3 , gui = 'bold', },
+  b = { fg = colors.bg, bg = colors.gray3 , },
+  c = { fg = colors.gray3, bg = colors.gray2 , },
 }
 
 return M

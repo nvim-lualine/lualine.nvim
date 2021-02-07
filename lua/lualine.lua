@@ -65,14 +65,7 @@ local function set_lualine_theme()
   theme_set = M.theme
 end
 
-local function statusline(is_focused)
-  local sections = M.sections
-  if not is_focused then
-    sections = M.inactive_sections
-  end
-  if M.theme ~= theme_set then
-    set_lualine_theme()
-  end
+local function statusline(sections, is_focused)
   local status = {}
   if sections.lualine_a then
     table.insert(status, highlight.format_highlight(is_focused, 'lualine_a'))
@@ -102,18 +95,19 @@ local function statusline(is_focused)
   return table.concat(status)
 end
 
-function M.set_inactive_statusline()
-  vim.wo.statusline = statusline()
+local function status_dispatch()
+  if vim.g.statusline_winid == vim.fn.win_getid() then
+    return statusline(M.sections, true)
+  else
+    return statusline(M.inactive_sections, false)
+  end
 end
 
 local function exec_autocommands()
   _G.set_lualine_theme = set_lualine_theme
-  _G.set_active_statusline = statusline
   vim.api.nvim_exec([[
     augroup lualine
     autocmd!
-    autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.set_active_statusline(1)
-    autocmd WinLeave,BufLeave * lua require('lualine').set_inactive_statusline()
     autocmd ColorScheme * call v:lua.set_lualine_theme()
     augroup END
   ]], false)
@@ -124,6 +118,8 @@ function M.status()
   load_extensions()
   set_lualine_theme()
   exec_autocommands()
+  _G.lualine_statusline = status_dispatch
+  vim.o.statusline = '%!v:lua.lualine_statusline()'
 end
 
 return M
