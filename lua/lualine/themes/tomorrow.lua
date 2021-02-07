@@ -18,7 +18,7 @@ local colors = {
   color11  = "#f5871f",
 }
 
-local Tomorrow = {
+local tomorrow = {
   inactive = {
     a = { fg = colors.color0, bg = colors.color1, gui = "bold" },
     b = { fg = colors.color2, bg = colors.color3 },
@@ -43,4 +43,4 @@ local Tomorrow = {
   },
 }
 
-return Tomorrow
+return tomorrow

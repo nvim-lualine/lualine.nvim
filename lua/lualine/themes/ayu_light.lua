@@ -5,10 +5,10 @@
 -- =============================================================================
 
 local colors = {
-  color2   = "#FAFAFA",
+  color2   = "#f3f3f3",
   color3   = "#A37ACC",
   color4   = "#5C6773",
-  color5   = "#FFFFFF",
+  color5   = "#d3d3d3",
   color13  = "#86B300",
   color10  = "#59c2ff",
   color8   = "#f07178",
