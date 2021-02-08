@@ -157,6 +157,100 @@ lualine.sections.lualine_a = { hello }
 
 </details>
 
+<details>
+<summary><b>Options for components</b></summary>
+
+### Available options:
+
+#### Global Default options
+
+Default options act as default for all components
+- icons_enabled (Default: true)
+  Displays icons on components
+  You should have powerline supported fonts to see
+  icons properly.\
+  *Suported by branch, fileformat, filetype, location*\
+  Example:
+  ```lua
+  lualine.opt.icons_enabled = true
+
+  ```
+
+#### Genaral options
+  These options are available for all components.\
+    option&nbsp; &nbsp; &nbsp;(default_value)\
+    ----------&nbsp; &nbsp; &nbsp; &nbsp;----------------------
+- padding       (1)\
+  spaces on left and right
+- left_padding  (1)\
+  spaces on left
+- right_padding (1)\
+  spaces on right
+- upper         (false)\
+  Displayed in upper case
+- lower         (false)\
+  Displayed in lower case
+- format        (nil)\
+  Takes a function . The funtion gets the result of component
+  as argument and it's return value is displayed. So this function
+  can parse and format the output as user wants.
+- color         (Theme colors)\
+  color option can be used to set custom color to a component\
+  **Color format:**\
+  `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`\
+  the members of color table are optional and default to theme
+
+#### Component specific options
+  These options are available for specific components only.\
+  List of options are given below.
+- branch
+  - icon          ('')
+  icon is displayed before branch name
+- filename
+  - modify        (true)\
+   Whether to display filemodified status in filename
+  - full_name     (false)\
+   Whether to display full/ relative path with filename
+  - relative      (true)\
+   Whether to display relative path with filename
+- fileformat
+  - icons_enabled (true)\
+   Whether to displays icon before component
+- filetype
+  - icons_enabled (true)\
+   Whether to displays icon before component
+  - icon          (Retrived from WebDevIcons)\
+   Whether to displays icon before component
+- location
+  - icons_enabled (true)\
+   Whether to displays icon before component
+  - icon          ({'', ''})\
+   Whether to displays icon before component
+
+**Example:**
+```lua
+lualine.sections.lualine_b = {
+  {
+    'branch',
+    icon = '',
+    upper = true,
+    color = { fg = '#00aa22' }
+  },
+  {
+    'filename',
+    full_name = true,
+    relative = true,
+    format = function(name)
+      -- Capitalize first charecter of filename to capital.
+      local path, fname = name:match('(.*/)(.*)')
+      rerurn path .. fname[1, 1]:upper() .. fname[2, #fname]
+    end
+  }
+}
+```
+
+</details>
+
 ### Loading plugin extensions
 Lualine extensions change statusline appearance for a window/buffer with a plugin loaded e.g. [junegunn/fzf.vim](https://github.com/junegunn/fzf.vim)
 

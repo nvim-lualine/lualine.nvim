@@ -1,21 +1,58 @@
 local M = {  }
 
-function M.draw_section(section, separator)
+local function set_case(status, settings)
+  if status:find('%%') and not status:find('%%%%') then return status end
+  if settings.upper == true then
+    return status:upper()
+  elseif settings.lower == true then
+    return status:lower()
+  end
+  return status
+end
+
+local function set_padding(status, settings)
+  local l_padding = (settings.left_padding  or settings.padding or 1)
+  local r_padding = (settings.right_padding or settings.padding or 1)
+  if l_padding then status = string.rep(' ', l_padding)..status end
+  if r_padding then status = status..string.rep(' ', r_padding) end
+  return status
+end
+
+local function set_highlights(status, settings)
+  if settings.color then
+    status = settings.self.highlight.component_format_highlight(settings.color) .. status
+  end
+  return status
+end
+
+function M.draw_section(section, separator, highlight)
   local status = {}
-  for _, status_function in pairs(section) do
-    local localstatus = status_function()
+  for _, component in pairs(section) do
+    local localstatus = component[1]()
     if #localstatus > 0 then
+      if component.format then localstatus = component.format(localstatus) end
+      localstatus = set_case(localstatus, component)
+      localstatus = set_padding(localstatus, component)
+      localstatus = set_highlights(localstatus, component)
       table.insert(status, localstatus)
     end
   end
   if #status == 0 then
     return ''
   end
-  local sep = ' '
+  local sep = highlight
   if #separator > 0 then
-    sep = ' ' .. separator .. ' '
+    sep = highlight .. separator
   end
-  return ' ' .. table.concat(status, sep) .. ' '
+  return highlight .. table.concat(status, sep)
+end
+
+function M.expand_set_theme(func)
+  local set_theme = _G.set_lualine_theme
+  _G.set_lualine_theme = function()
+    set_theme()
+    func()
+  end
 end
 
 -- color conversion

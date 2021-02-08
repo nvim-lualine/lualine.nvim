@@ -59,31 +59,29 @@ local function watch_head()
   end
 end
 
--- returns the git_branch value to be shown on statusline
-local function branch()
-  if not git_branch or #git_branch == 0 then return '' end
-  local ok,devicons = pcall(require,'nvim-web-devicons')
-  if ok then
-    local icon = devicons.get_icon('git')
-    if icon ~= nil then
-      return icon .. ' ' .. git_branch
+local function branch(args)
+  local icon = '' -- e0a0
+  -- set global default
+  local icons_enabled = args.icons_enabled
+  -- set when user wants to set a custom icon
+  if args.icon then icon = args.icon end
+
+  return function()
+    if not git_branch or #git_branch == 0 then return '' end
+    if icons_enabled then
+        return icon .. ' ' .. git_branch
     end
     return git_branch
   end
-  ok = vim.fn.exists("*WebDevIconsGetFileTypeSymbol")
-  if ok ~= 0 then
-    local icon =  ''
-    return icon .. ' ' .. git_branch
-  end
-  return git_branch
 end
 
 -- run watch head on load so branch is present when component is loaded
 watch_head()
 
--- TODO Don't export as a global function
-_G.lualine_branch_update = watch_head
 -- update branch state of BufEnter as different Buffer may be on different repos
-vim.cmd[[autocmd BufEnter * call v:lua.lualine_branch_update()]]
+vim.cmd[[autocmd BufEnter * lua require'lualine.components.branch'.lualine_branch_update()]]
 
-return branch
+return {
+  init = function(args) return branch(args) end,
+  lualine_branch_update = watch_head
+  }
