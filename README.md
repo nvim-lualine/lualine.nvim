@@ -86,17 +86,19 @@ All available themes are listed in [THEMES.md](./THEMES.md)
 Please create a pr if you managed to port a popular theme before me, [here is how to do it](./CONTRIBUTING.md).
 
 ### Changing separator in section
-Lualine defines a separator between components in given section, the default
-separator is `|`. You can change the separator this way:
+Lualine defines two kinds of seperators. One is for sections and other is for components. Default section seperators are '', '' and component separators are '', ''.
+They require powerline patched fonts. But you can easily change yours to something else like below
 
 ```lua
-lualine.options.separator = '|'
+lualine.section_separators = {'', ''}
+lualine.component_separators = {'', ''}
 ```
 
 or disable it
 
 ```lua
-lualine.options.separator = ''
+lualine.section_separators = {'', ''}
+lualine.component_separators = {'', ''}
 ```
 
 ### Changing components in lualine sections
@@ -292,7 +294,8 @@ All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
       local lualine = require('lualine')
       lualine.options = {
         theme = 'gruvbox',
-        separator = '|',
+        section_separators = {'', ''},
+        component_separators = {'', ''},
         icons_enabled = true,
       }
       lualine.sections = {
@@ -329,7 +332,8 @@ lua << EOF
 local lualine = require('lualine')
     lualine.options = {
       theme = 'gruvbox',
-      separator = '|',
+      section_separators = {'', ''},
+      component_separators = {'', ''},
       icons_enabled = true,
     }
     lualine.sections = {
