@@ -15,7 +15,12 @@ local function highlight (name, foreground, background, gui)
 end
 
 local function apply_defaults_to_theme(theme)
-  local modes = {'insert', 'visual', 'replace', 'command', 'terminal', 'inactive'}
+  local modes = {'normal', 'insert', 'visual', 'replace', 'command', 'terminal', 'inactive'}
+
+  local add_transitioning_sections = function(mode, from, to)
+    theme[mode][from..'_'..to] = {fg = theme[mode][from].bg, bg = theme[mode][to].bg}
+  end
+
   for _, mode in ipairs(modes) do
     if not theme[mode] then
       theme[mode] = theme['normal']
@@ -24,6 +29,12 @@ local function apply_defaults_to_theme(theme)
         theme[mode][section_name] = (theme[mode][section_name] or section)
       end
     end
+    -- special highlight groups for transitioning sections
+    -- {a,b,c} every element in this list needs to know
+    -- to get to all the elements in right of it
+    add_transitioning_sections(mode, 'a', 'b')
+    add_transitioning_sections(mode, 'a', 'c')
+    add_transitioning_sections(mode, 'b', 'c')
   end
   return theme
 end
