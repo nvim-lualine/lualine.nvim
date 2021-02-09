@@ -26,6 +26,8 @@ M.inactive_sections = {
   lualine_z = {  }
 }
 
+M.tabline = {}
+
 M.extensions = {
 }
 
@@ -41,6 +43,7 @@ local function load_components()
   end
   load_sections(M.sections)
   load_sections(M.inactive_sections)
+  load_sections(M.tabline)
 end
 
 local function  load_extensions()
@@ -103,6 +106,10 @@ local function status_dispatch()
   end
 end
 
+local function tabline()
+  return statusline(M.tabline, true)
+end
+
 local function exec_autocommands()
   _G.set_lualine_theme = set_lualine_theme
   vim.api.nvim_exec([[
@@ -120,6 +127,11 @@ function M.status()
   exec_autocommands()
   _G.lualine_statusline = status_dispatch
   vim.o.statusline = '%!v:lua.lualine_statusline()'
+  if next(M.tabline) ~= nil then
+    _G.lualine_tabline = tabline
+    vim.o.tabline = '%!v:lua.lualine_tabline()'
+    vim.o.showtabline = 2
+  end
 end
 
 return M
