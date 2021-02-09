@@ -1,0 +1,289 @@
+lualine.txt			    	             *lualine-nvim*   *lualine*
+
+Author: hoob3rt (https://github.com/hoob3rt)
+License: MIT License
+Repository: https://github.com/hoob3rt/lualine.nvim
+
+===============================================================================
+LUALINE.NVIM                                              *lualine-lualine.nvim*
+
+
+   __         __  __     ______     __         __     __   __     ______    
+  /\ \       /\ \/\ \   /\  __ \   /\ \       /\ \   /\ "-.\ \   /\  ___\   
+  \ \ \____  \ \ \_\ \  \ \  __ \  \ \ \____  \ \ \  \ \ \-.  \  \ \  __\   
+   \ \_____\  \ \_____\  \ \_\ \_\  \ \_____\  \ \_\  \ \_\\"\_\  \ \_____\ 
+    \/_____/   \/_____/   \/_/\/_/   \/_____/   \/_/   \/_/ \/_/   \/_____/ 
+                                                                          
+
+
+
+A blazing fast and easy to configure neovim statusline written in pure lua.
+
+`lualine.nvim` requires neovim 0.5
+
+================================================================================
+CONTENTS                                                     *lualline-contents*
+
+1. lualine.nvim...........................................|lualine-lualine.nvim|
+    1.1. Performance comparism...................|lualine-performance_comparism|
+    1.2. Installation.....................................|lualine-installation|
+        1.2.1. vim-plug.......................................|lualine-vim-plug|
+        1.2.2.packer.nvim..................................|lualine-packer.nvim|
+    1.3. Usage and customization...............|lualine-usage_and_customization|
+        1.3.1. Starting lualine.......................|lualine-starting_lualine|
+        1.3.2. Setting a theme.........................|lualine-setting_a_theme|
+        1.3.3. Changing separator...................|lualine-changing_separator|
+        1.3.4. Changing components.................|lualine-changing_components|
+        1.3.5. Loading plugin extensions.....|lualine-loading_plugin_extensions|
+	1.3.6  Config examples.........................|lualine-config_examples|
+	    1.3.6.1. Packer.nvim......|lualine-config_example_using_packer.nvim|
+            1.3.6.2 VIML example.......|lualine-full_config_example_inside_viml|
+    1.4. Contributing.....................................|lualine-contributing|
+    1.5. Screenshots.......................................|lualine-screenshots|
+
+================================================================================
+PERFORMANCE COMPARISM	 			 *lualine-performance_comparism*
+
+Unlike other statusline plugins lualine loads only defined components, nothing else.
+
+Startup time performance measured with an amazing plugin
+tweekmonster/startuptime.vim (https://github.com/tweekmonster/startuptime.vim)
+
+All times are measured with only `startuptime.vim` and given statusline plugin
+installed
+
+| clean vimrc    | lualine      | lightline    |  airline     |
+| :------------: | :----------: | :----------: | :----------: |
+|  8.943 ms      | 9.034 ms     |  11.463 ms   | 13.425 ms    |
+
+--------------------------------------------------------------------------------
+INSTALLATION                                              *lualine-installation*
+
+VIM-PLUG					 	      *lualine-vim-plug*
+>
+    Plug 'hoob3rt/lualine.nvim'
+    " If you want to have icons in your statusline choose one of these
+    Plug 'kyazdani42/nvim-web-devicons'
+    Plug 'ryanoasis/vim-devicons'
+<
+
+PACKER.NVIM			                           *lualine-packer.nvim*
+>
+    use {
+      'hoob3rt/lualine.nvim',
+      requires = {'kyazdani42/nvim-web-devicons', opt = true}
+    }
+<
+
+--------------------------------------------------------------------------------
+USAGE AND CUSTOMIZATION                        *lualine-usage_and_customization*
+
+Lualine has sections as shown below.
+>
+    +-------------------------------------------------+
+    | A | B | C                            X | Y | Z |
+    +-------------------------------------------------+
+<
+
+Each sections holds it's components e.g. current vim's mode.
+Colorscheme of sections is mirrored, meaning section `A` will have the same
+colorscheme as section `Z` etc.
+
+Configuration is currently limited to lua, please use lua block or a separate
+lua file to configure lualine.
+
+STARTING LUALINE                                      *lualine-starting_lualine*
+>
+    local lualine = require('lualine')
+    lualine.status()
+<
+
+SETTING A THEME                                        *lualine-setting_a_theme*
+>
+    lualine.theme = 'gruvbox'
+<
+
+All available themes are listed in THEMES.md (./THEMES.md)
+
+Please create a pr if you managed to port a popular theme before me, here is
+how to do it (./CONTRIBUTING.md).
+
+CHANGING SEPARATOR IN SECTION			    *lualine-changing_separator*
+
+Lualine defines a separator between components in given section, the default
+separator is `|`. You can change the separator this way:
+>
+    lualine.separator = '|'
+<
+
+or disable it
+>
+    lualine.separator = ''
+<
+
+CHANGING COMPONENTS IN LUALINE SECTIONS            *lualine-changing_components*
+
+
+Lualine defaults~
+>
+    lualine.sections = {
+      lualine_a = { 'mode' },
+      lualine_b = { 'branch' },
+      lualine_c = { 'filename' },
+      lualine_x = { 'encoding', 'fileformat', 'filetype' },
+      lualine_y = { 'progress' },
+      lualine_z = { 'location'  },
+    }
+    lualine.inactive_sections = {
+      lualine_a = {  },
+      lualine_b = {  },
+      lualine_c = { 'filename' },
+      lualine_x = { 'location' },
+      lualine_y = {  },
+      lualine_z = {   }
+    }
+<
+
+
+
+
+Available components~
+
+    general~
+        *   branch
+        *   encoding
+        *   fileformat
+        *   filename
+        *   filetype
+        *   location
+        *   mode
+        *   progress
+    plugin~
+        *   signify
+
+
+
+
+Using custom functions as lualine component~
+
+You can define a custom function as a lualine component
+>
+    local function hello()
+      return [[hello world]]
+    end
+    lualine.sections.lualine_a = { hello }
+<
+
+--------------------------------------------------------------------------------
+LOADING PLUGIN EXTENSIONS                    *lualine-loading_plugin_extensions*
+
+Lualine extensions change statusline appearance for a window/buffer with
+a plugin loaded e.g. junegunn/fzf.vim (https://github.com/junegunn/fzf.vim)
+
+By default no plugin extension are loaded to improve performance. If you are
+using a plugin which is supported you can load it this way:
+>
+    lualine.extensions = { 'fzf' }
+<
+
+All available extensions are listed in EXTENSIONS.md (./EXTENSIONS.md)
+
+--------------------------------------------------------------------------------
+CONGIG EXAMPLES				   	       *lualine-config_examples*
+
+FULL CONFIG EXAMPLE USING PACKER.NVIM *lualine-config_example_using_packer.nvim*
+
+
+packer config
+>
+      use {
+        'hoob3rt/lualine.nvim',
+        requires = {'kyazdani42/nvim-web-devicons', opt = true},
+        config = function()
+          local lualine = require('lualine')
+          lualine.theme = 'gruvbox'
+          lualine.separator = '|'
+          lualine.sections = {
+            lualine_a = { 'mode' },
+            lualine_b = { 'branch' },
+            lualine_c = { 'filename' },
+            lualine_x = { 'encoding', 'fileformat', 'filetype' },
+            lualine_y = { 'progress' },
+            lualine_z = { 'location'  },
+          }
+          lualine.inactive_sections = {
+            lualine_a = {  },
+            lualine_b = {  },
+            lualine_c = { 'filename' },
+            lualine_x = { 'location' },
+            lualine_y = {  },
+            lualine_z = {   }
+          }
+          lualine.extensions = { 'fzf' }
+          lualine.status()
+        end
+      }
+<
+
+
+--------------------------------------------------------------------------------
+FULL CONFIG EXAMPLE INSIDE VIML        *lualine-full_config_example_inside_viml*
+
+
+vimrc config
+>
+    lua << EOF
+    local lualine = require('lualine')
+        lualine.theme = 'gruvbox'
+        lualine.separator = '|'
+        lualine.sections = {
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch' },
+          lualine_c = { 'filename' },
+          lualine_x = { 'encoding', 'fileformat', 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location'  },
+        }
+        lualine.inactive_sections = {
+          lualine_a = {  },
+          lualine_b = {  },
+          lualine_c = { 'filename' },
+          lualine_x = { 'location' },
+          lualine_y = {  },
+          lualine_z = {   }
+        }
+        lualine.extensions = { 'fzf' }
+        lualine.status()
+    EOF
+<
+
+--------------------------------------------------------------------------------
+CONTRIBUTING                                              *lualine-contributing*
+
+Please read CONTRIBUTING.md (./CONTRIBUTING.md) before contributing.
+
+You can check this (https://github.com/hoob3rt/lualine.nvim/projects/3) out if you want to see what is currently being worked on.
+
+Feel free to create an issue/pr if you want to see anything else implemented.
+
+--------------------------------------------------------------------------------
+SCREENSHOTS                                                *lualine-screenshots*
+
+Here is a preview of how lualine can look like.
+
+- normal:
+  https://user-images.githubusercontent.com/41551030/103467902-06b44080-4d54-11eb-89db-6d3bebf449fa.png
+- insert:
+  https://user-images.githubusercontent.com/41551030/103467914-1764b680-4d54-11eb-9e3d-528d3568dce7.png
+- visual:
+  https://user-images.githubusercontent.com/41551030/103467916-23507880-4d54-11eb-804e-5b1c4d6e3db3.png
+- command:
+  https://user-images.githubusercontent.com/41551030/103467919-2ba8b380-4d54-11eb-8585-6c667fd5082e.png
+- replace:
+  https://user-images.githubusercontent.com/41551030/103467925-32372b00-4d54-11eb-88d6-6d39c46854d8.png
+
+Screenshots of all available themes are listed in THEMES.md (./THEMES.md)
+
+
+-------------------------------------------------------------------------------
+vim:tw=80:sw=4:ts=8:noet:ft=help:norl:noet:
