@@ -37,7 +37,7 @@ local function update_git_diff_getter()
   -- stop older function properly before overwritting it
   if get_git_diff then get_git_diff:stop() end
   -- Donn't show git diff when current buffer doesn't have a filename
-  if #vim.fn.expand('%') == 0 then get_git_diff = nil; return end
+  if #vim.fn.expand('%') == 0 then get_git_diff = nil; git_diff=nil; return end
   get_git_diff = async:new({
     cmd = string.format([[git -C %s --no-pager diff --no-color --no-ext-diff -U0 -- %s]]
     ,vim.fn.expand('%:h'), vim.fn.expand('%:t')),
@@ -58,6 +58,7 @@ local function update_git_diff_getter()
         -- updated not set means git exited without emmiting anything on stdout
         -- or stderr means file is unchanged
         git_diff = {0, 0, 0}
+        updated = true
       end
     end
   })
