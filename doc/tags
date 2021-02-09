@@ -15,4 +15,6 @@ lualine-setting_a_theme	lualine.txt	/*lualine-setting_a_theme*
 lualine-starting_lualine	lualine.txt	/*lualine-starting_lualine*
 lualine-usage_and_customization	lualine.txt	/*lualine-usage_and_customization*
 lualine-vim-plug	lualine.txt	/*lualine-vim-plug*
+lualine.nvim	lualine.txt	/*lualine.nvim*
+lualine.txt	lualine.txt	/*lualine.txt*
 lualline-contents	lualine.txt	/*lualline-contents*
