@@ -1,11 +1,11 @@
-lualine.txt							       *lualine*
+lualine.txt			    	             *lualine-nvim*   *lualine*
 
 Author: hoob3rt (https://github.com/hoob3rt)
 License: MIT License
 Repository: https://github.com/hoob3rt/lualine.nvim
 
 ===============================================================================
-LUALINE.NVIM                                                *lualine-lualine.nvim*
+LUALINE.NVIM                                              *lualine-lualine.nvim*
 
 
    __         __  __     ______     __         __     __   __     ______    
@@ -22,7 +22,7 @@ A blazing fast and easy to configure neovim statusline written in pure lua.
 `lualine.nvim` requires neovim 0.5
 
 ================================================================================
-CONTENTS                                                        *lualline-contents*
+CONTENTS                                                     *lualline-contents*
 
 1. lualine.nvim...........................................|lualine-lualine.nvim|
     1.1. Performance comparism...................|lualine-performance_comparism|
@@ -42,7 +42,7 @@ CONTENTS                                                        *lualline-conten
     1.5. Screenshots.......................................|lualine-screenshots|
 
 ================================================================================
-PERFORMANCE COMPARISM				*lualine-performance_comparism*
+PERFORMANCE COMPARISM	 			 *lualine-performance_comparism*
 
 Unlike other statusline plugins lualine loads only defined components, nothing else.
 
@@ -57,9 +57,9 @@ installed
 |  8.943 ms      | 9.034 ms     |  11.463 ms   | 13.425 ms    |
 
 --------------------------------------------------------------------------------
-INSTALLATION                                                *lualine-installation*
+INSTALLATION                                              *lualine-installation*
 
-VIM-PLUG						    *lualine-vim-plug*
+VIM-PLUG					 	      *lualine-vim-plug*
 >
     Plug 'hoob3rt/lualine.nvim'
     " If you want to have icons in your statusline choose one of these
@@ -67,7 +67,7 @@ VIM-PLUG						    *lualine-vim-plug*
     Plug 'ryanoasis/vim-devicons'
 <
 
-PACKER.NVIM			                            *lualine-packer.nvim*
+PACKER.NVIM			                           *lualine-packer.nvim*
 >
     use {
       'hoob3rt/lualine.nvim',
@@ -76,7 +76,7 @@ PACKER.NVIM			                            *lualine-packer.nvim*
 <
 
 --------------------------------------------------------------------------------
-USAGE AND CUSTOMIZATION                          *lualine-usage_and_customization*
+USAGE AND CUSTOMIZATION                        *lualine-usage_and_customization*
 
 Lualine has sections as shown below.
 >
@@ -92,13 +92,13 @@ colorscheme as section `Z` etc.
 Configuration is currently limited to lua, please use lua block or a separate
 lua file to configure lualine.
 
-STARTING LUALINE                                        *lualine-starting_lualine*
+STARTING LUALINE                                      *lualine-starting_lualine*
 >
     local lualine = require('lualine')
     lualine.status()
 <
 
-SETTING A THEME                                          *lualine-setting_a_theme*
+SETTING A THEME                                        *lualine-setting_a_theme*
 >
     lualine.theme = 'gruvbox'
 <
@@ -108,7 +108,7 @@ All available themes are listed in THEMES.md (./THEMES.md)
 Please create a pr if you managed to port a popular theme before me, here is
 how to do it (./CONTRIBUTING.md).
 
-CHANGING SEPARATOR IN SECTION			   *lualine-changing_separator*
+CHANGING SEPARATOR IN SECTION			    *lualine-changing_separator*
 
 Lualine defines a separator between components in given section, the default
 separator is `|`. You can change the separator this way:
@@ -121,7 +121,7 @@ or disable it
     lualine.separator = ''
 <
 
-CHANGING COMPONENTS IN LUALINE SECTIONS           *lualine-changing_components*
+CHANGING COMPONENTS IN LUALINE SECTIONS            *lualine-changing_components*
 
 
 Lualine defaults~
@@ -175,7 +175,7 @@ You can define a custom function as a lualine component
 <
 
 --------------------------------------------------------------------------------
-LOADING PLUGIN EXTENSIONS                      *lualine-loading_plugin_extensions*
+LOADING PLUGIN EXTENSIONS                    *lualine-loading_plugin_extensions*
 
 Lualine extensions change statusline appearance for a window/buffer with
 a plugin loaded e.g. junegunn/fzf.vim (https://github.com/junegunn/fzf.vim)
@@ -189,9 +189,9 @@ using a plugin which is supported you can load it this way:
 All available extensions are listed in EXTENSIONS.md (./EXTENSIONS.md)
 
 --------------------------------------------------------------------------------
-CONGIG EXAMPLES						*lualine-config_examples*
+CONGIG EXAMPLES				   	       *lualine-config_examples*
 
-FULL CONFIG EXAMPLE USING PACKER.NVIM  *lualine-config_example_using_packer.nvim*
+FULL CONFIG EXAMPLE USING PACKER.NVIM *lualine-config_example_using_packer.nvim*
 
 
 packer config
@@ -227,7 +227,7 @@ packer config
 
 
 --------------------------------------------------------------------------------
-FULL CONFIG EXAMPLE INSIDE VIML       *lualine-full_config_example_inside_viml*
+FULL CONFIG EXAMPLE INSIDE VIML        *lualine-full_config_example_inside_viml*
 
 
 vimrc config
@@ -258,7 +258,7 @@ vimrc config
 <
 
 --------------------------------------------------------------------------------
-CONTRIBUTING                                                *lualine-contributing*
+CONTRIBUTING                                              *lualine-contributing*
 
 Please read CONTRIBUTING.md (./CONTRIBUTING.md) before contributing.
 
@@ -267,7 +267,7 @@ You can check this (https://github.com/hoob3rt/lualine.nvim/projects/3) out if y
 Feel free to create an issue/pr if you want to see anything else implemented.
 
 --------------------------------------------------------------------------------
-SCREENSHOTS                                                  *lualine-screenshots*
+SCREENSHOTS                                                *lualine-screenshots*
 
 Here is a preview of how lualine can look like.
 
