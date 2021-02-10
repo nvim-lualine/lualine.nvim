@@ -29,12 +29,52 @@ M.inactive_sections = {
 M.extensions = {
 }
 
+local function load_special_components(component)
+  return function()
+    -- precedence lualine_component > vim_var > lua_var > vim_function
+    if component:find('[gvtwb]?o?:') == 1 then
+      -- vim veriable component
+      -- accepts g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo:
+      -- filters g portion from g:var
+      local scope = component:match('[gvtwb]?o?')
+      -- filters var portion from g:var
+      -- For some reason overwriting component var from outer scope causes the
+      -- component not to work . So creating a new local name component to use:/
+      local component = component:sub(#scope + 2, #component)
+      -- Displays nothing when veriable aren't present
+      local return_val = vim[scope][component]
+      if return_val == nil then return '' end
+      local ok
+      ok, return_val =  pcall(tostring, return_val)
+      if ok then return return_val end
+      return ''
+    elseif loadstring(string.format('return %s ~= nil', component)) and
+       loadstring(string.format([[return %s ~= nil]], component))() then
+      -- lua veriable component
+      return loadstring(string.format([[
+        local ok, return_val = pcall(tostring, %s)
+        if ok then return return_val end
+        return '']], component))()
+    else
+      -- vim function component
+      local ok, return_val = pcall(vim.fn[component])
+      if not ok then return '' end -- function call failed
+      ok, return_val =  pcall(tostring, return_val)
+      if ok then return return_val else return '' end
+    end
+  end
+end
+
 local function load_components()
   local function load_sections(sections)
     for _, section in pairs(sections) do
       for index, component in pairs(section) do
         if type(component) == 'string' then
-          section[index] = require('lualine.components.' .. component)
+          local ok,loaded_component = pcall(require, 'lualine.components.' .. component)
+          if not ok then
+            loaded_component = load_special_components(component)
+          end
+          section[index] = loaded_component
         end
       end
     end
