@@ -38,28 +38,29 @@ local function load_special_components(component)
       -- filters g portion from g:var
       local scope = component:match('[gvtwb]?o?')
       -- filters var portion from g:var
+      -- For some reason overwriting component var from outer scope causes the
+      -- component not to work . So creating a new local name component to use:/
       local component = component:sub(#scope + 2, #component)
-      -- Displays nothing when veriablea aren't present
-      local ok, value = pcall(function() return vim[scope][component] end)
-      if not ok or value == nil then return '' end
-      local return_val
-      ok, return_val =  pcall(tostring, value)
+      -- Displays nothing when veriable aren't present
+      local return_val = vim[scope][component]
+      if return_val == nil then return '' end
+      local ok
+      ok, return_val =  pcall(tostring, return_val)
       if ok then return return_val end
       return ''
     elseif loadstring(string.format('return %s ~= nil', component)) and
        loadstring(string.format([[return %s ~= nil]], component))() then
       -- lua veriable component
       return loadstring(string.format([[
-        local ok, rt_val = pcall(tostring, %s)
-        if ok then return rt_val end
+        local ok, return_val = pcall(tostring, %s)
+        if ok then return return_val end
         return '']], component))()
     else
       -- vim function component
       local ok, return_val = pcall(vim.fn[component])
       if not ok then return '' end -- function call failed
-      local return_str
-      ok, return_str =  pcall(tostring, return_val)
-      if ok then return return_str else return '' end
+      ok, return_val =  pcall(tostring, return_val)
+      if ok then return return_val else return '' end
     end
   end
 end
