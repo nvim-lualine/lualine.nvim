@@ -41,7 +41,7 @@ local function load_special_components(component)
       local component = component:sub(#scope + 2, #component)
       -- Displays nothing when veriablea aren't present
       local ok, value = pcall(function() return vim[scope][component] end)
-      if not ok then return '' end
+      if not ok or value == nil then return '' end
       local return_val
       ok, return_val =  pcall(tostring, value)
       if ok then return return_val end
