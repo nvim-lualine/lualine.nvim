@@ -4,6 +4,7 @@ lualine-changing_separator	lualine.txt	/*lualine-changing_separator*
 lualine-config_example_using_packer.nvim	lualine.txt	/*lualine-config_example_using_packer.nvim*
 lualine-config_examples	lualine.txt	/*lualine-config_examples*
 lualine-contributing	lualine.txt	/*lualine-contributing*
+lualine-custom_components	lualine.txt	/*lualine-custom_components*
 lualine-custom_options	lualine.txt	/*lualine-custom_options*
 lualine-full_config_example_inside_viml	lualine.txt	/*lualine-full_config_example_inside_viml*
 lualine-installation	lualine.txt	/*lualine-installation*
