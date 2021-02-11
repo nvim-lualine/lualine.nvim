@@ -209,6 +209,10 @@ Default options act as default for all components
   spaces on left and right
 - left_padding  (1)\
   spaces on left
+- icon          (depends on component)
+  displays an icon infront of component
+- icons_enabled (true)
+  whether to show icon(if available)
 - right_padding (1)\
   spaces on right
 - upper         (false)\
@@ -228,9 +232,6 @@ Default options act as default for all components
 #### Component specific options
   These options are available for specific components only.\
   List of options are given below.
-- branch
-  - icon          ('')
-  icon is displayed before branch name
 - filename
   - file_status        (true)\
    Whether to display filemodified status in filename
@@ -240,11 +241,6 @@ Default options act as default for all components
    Whether to display relative path with filename
 - fileformat
   - icons_enabled (true)\
-   Whether to displays icon before component
-- filetype
-  - icons_enabled (true)\
-   Whether to displays icon before component
-  - icon          (Retrived from WebDevIcons)\
    Whether to displays icon before component
 - location
   - icons_enabled (true)\

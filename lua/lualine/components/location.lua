@@ -27,4 +27,4 @@ local function location(args)
   end
 end
 
-return {init = function(args) return location(args) end,}
+return {init = function(args) return location(args) end}

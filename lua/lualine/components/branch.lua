@@ -60,17 +60,12 @@ local function watch_head()
 end
 
 local function branch(options)
-  local icon = '' -- e0a0
-  -- set global default
-  local icons_enabled = options.icons_enabled
-  -- set when user wants to set a custom icon
-  if options.icon then icon = options.icon end
+  if not options.icon then
+    options.icon = '' -- e0a0
+  end
 
   return function()
     if not git_branch or #git_branch == 0 then return '' end
-    if icons_enabled then
-        return icon .. ' ' .. git_branch
-    end
     return git_branch
   end
 end

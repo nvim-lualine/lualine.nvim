@@ -28,4 +28,4 @@ local function filename(options)
   end
 end
 
-return { init = function(options) return filename(options) end, }
+return { init = function(options) return filename(options) end }

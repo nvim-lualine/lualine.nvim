@@ -1,27 +1,34 @@
 local M = {  }
 
-local function set_case(status, settings)
+local function set_case(status, options)
   if status:find('%%') and not status:find('%%%%') then return status end
-  if settings.upper == true then
+  if options.upper == true then
     return status:upper()
-  elseif settings.lower == true then
+  elseif options.lower == true then
     return status:lower()
   end
   return status
 end
 
-local function set_padding(status, settings)
-  local l_padding = (settings.left_padding  or settings.padding or 1)
-  local r_padding = (settings.right_padding or settings.padding or 1)
+local function set_padding(status, options)
+  local l_padding = (options.left_padding  or options.padding or 1)
+  local r_padding = (options.right_padding or options.padding or 1)
   if l_padding then status = string.rep(' ', l_padding)..status end
   if r_padding then status = status..string.rep(' ', r_padding) end
   return status
 end
 
-local function set_highlights(status, settings)
-  if settings.color then
-    status = settings.self.highlight.component_format_highlight(settings.color) .. status
+local function set_highlights(status, options)
+  if options.color then
+    status = options.self.highlight.component_format_highlight(options.color) .. status
   end
+  return status
+end
+
+local function set_icon(status, options)
+  if options.icons_enabled and options.icon then
+    status = options.icon .. ' ' .. status
+  end 
   return status
 end
 
@@ -31,6 +38,7 @@ function M.draw_section(section, separator, highlight)
     local localstatus = component[1]()
     if #localstatus > 0 then
       if component.format then localstatus = component.format(localstatus) end
+      localstatus = set_icon(localstatus, component)
       localstatus = set_case(localstatus, component)
       localstatus = set_padding(localstatus, component)
       localstatus = set_highlights(localstatus, component)
