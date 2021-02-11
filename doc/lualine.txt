@@ -264,11 +264,6 @@ List of options are given below.
 * fileformat
   * icons_enabled (true)
       Whether to displays icon before component
-* location
-  * icons_enabled (true)
-      Whether to displays icon before component
-  * icon          ({'', ''})
-      Whether to displays icon before component
 
 Example:~
 >

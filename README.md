@@ -242,11 +242,6 @@ Default options act as default for all components
 - fileformat
   - icons_enabled (true)\
    Whether to displays icon before component
-- location
-  - icons_enabled (true)\
-   Whether to displays icon before component
-  - icon          ({'', ''})\
-   Whether to displays icon before component
 
 **Example:**
 ```lua
