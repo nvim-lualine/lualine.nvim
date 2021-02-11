@@ -80,15 +80,6 @@ local function component_loader(component)
         component[opt_name] = opt_val
       end
     end
-    -- set custom highlights
-    if component.color then
-      local function update_color()
-        component.color_highlight = highlight.create_component_highlight_group(
-        component.color, component.component_name, component)
-      end
-      update_color()
-      utils.expand_set_theme(update_color)
-    end
     -- load the component
     local ok, loaded_component = pcall(require, 'lualine.components.' .. component.component_name)
     if not ok then
@@ -97,6 +88,15 @@ local function component_loader(component)
     component[1] = loaded_component
     if type(component[1]) == 'table' then
       component[1] = component[1].init(component)
+    end
+    -- set custom highlights
+    if component.color then
+      local function update_color()
+        component.color_highlight = highlight.create_component_highlight_group(
+        component.color, component.component_name, component)
+      end
+      update_color()
+      utils.expand_set_theme(update_color)
     end
   end
 end
