@@ -59,12 +59,12 @@ local function watch_head()
   end
 end
 
-local function branch(args)
+local function branch(options)
   local icon = '' -- e0a0
   -- set global default
-  local icons_enabled = args.icons_enabled
+  local icons_enabled = options.icons_enabled
   -- set when user wants to set a custom icon
-  if args.icon then icon = args.icon end
+  if options.icon then icon = options.icon end
 
   return function()
     if not git_branch or #git_branch == 0 then return '' end
@@ -82,6 +82,6 @@ watch_head()
 vim.cmd[[autocmd BufEnter * lua require'lualine.components.branch'.lualine_branch_update()]]
 
 return {
-  init = function(args) return branch(args) end,
+  init = function(options) return branch(options) end,
   lualine_branch_update = watch_head
   }

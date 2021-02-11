@@ -1,13 +1,13 @@
-local function filetype(args)
+local function filetype(options)
   -- set when user wants to set a custom icon
-  local icons_enabled = args.icons_enabled
+  local icons_enabled = options.icons_enabled
 
   return function()
     local data = vim.bo.filetype
     if #data > 0 then
       if not icons_enabled then return data end
-      if args.icon then
-        return string.format('%s %s', args.icon, data)
+      if options.icon then
+        return string.format('%s %s', options.icon, data)
       end
       local ok,devicons = pcall(require,'nvim-web-devicons')
       if ok then
@@ -29,4 +29,4 @@ local function filetype(args)
   end
 end
 
-return { init = function(args) return filetype(args) end, }
+return { init = function(options) return filetype(options) end, }

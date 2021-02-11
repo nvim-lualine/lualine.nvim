@@ -1,6 +1,6 @@
-local function fileformat(args)
+local function fileformat(options)
   -- set when user wants to set a custom icon
-  local icons_enabled = args.icons_enabled
+  local icons_enabled = options.icons_enabled
 
   local icon_linux  = "" -- e712
   local icon_windos = "" -- e70f
@@ -16,4 +16,4 @@ local function fileformat(args)
   end
 end
 
-return { init = function(args) return fileformat(args) end }
+return { init = function(options) return fileformat(options) end }

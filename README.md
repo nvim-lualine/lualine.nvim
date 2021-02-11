@@ -78,7 +78,7 @@ lualine.status()
 ```
 ### Setting a theme
 ```lua
-lualine.theme = 'gruvbox'
+lualine.options.theme = 'gruvbox'
 ```
 
 All available themes are listed in [THEMES.md](./THEMES.md)
@@ -90,13 +90,13 @@ Lualine defines a separator between components in given section, the default
 separator is `|`. You can change the separator this way:
 
 ```lua
-lualine.separator = '|'
+lualine.options.separator = '|'
 ```
 
 or disable it
 
 ```lua
-lualine.separator = ''
+lualine.options.separator = ''
 ```
 
 ### Changing components in lualine sections
@@ -120,7 +120,7 @@ lualine.inactive_sections = {
   lualine_c = { 'filename' },
   lualine_x = { 'location' },
   lualine_y = {  },
-  lualine_z = {   }
+  lualine_z = {  }
 }
 ```
 
@@ -197,7 +197,7 @@ Default options act as default for all components
   *Suported by branch, fileformat, filetype, location*\
   Example:
   ```lua
-  lualine.opt.icons_enabled = true
+  lualine.options.icons_enabled = true
 
   ```
 
@@ -232,9 +232,9 @@ Default options act as default for all components
   - icon          ('')
   icon is displayed before branch name
 - filename
-  - modify        (true)\
+  - file_status        (true)\
    Whether to display filemodified status in filename
-  - full_name     (false)\
+  - full_path     (false)\
    Whether to display full/ relative path with filename
   - relative      (true)\
    Whether to display relative path with filename
@@ -297,8 +297,11 @@ All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
       local lualine = require('lualine')
-      lualine.theme = 'gruvbox'
-      lualine.separator = '|'
+      lualine.options = {
+        theme = 'gruvbox',
+        separator = '|',
+        icons_enabled = true,
+      }
       lualine.sections = {
         lualine_a = { 'mode' },
         lualine_b = { 'branch' },
@@ -331,8 +334,11 @@ All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
 ```vim
 lua << EOF
 local lualine = require('lualine')
-    lualine.theme = 'gruvbox'
-    lualine.separator = '|'
+    lualine.options = {
+      theme = 'gruvbox',
+      separator = '|',
+      icons_enabled = true,
+    }
     lualine.sections = {
       lualine_a = { 'mode' },
       lualine_b = { 'branch' },

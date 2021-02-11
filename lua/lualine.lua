@@ -3,13 +3,12 @@ local highlight = require('lualine.highlight')
 
 local M = { }
 
-M.theme = 'gruvbox'
 local theme_set = {}
 
-M.separator = '|'
-
-M.opt = {
+M.options = {
   icons_enabled = true,
+  theme = 'gruvbox',
+  separator = '|',
 }
 
 M.sections = {
@@ -72,7 +71,7 @@ end
 local function component_loader(component)
   if type(component[1]) == 'function' then return component end
   -- apply default args
-  for opt_name, opt_val in pairs(M.opt) do
+  for opt_name, opt_val in pairs(M.options) do
     if component[opt_name] == nil then
       component[opt_name] = opt_val
     end
@@ -107,14 +106,11 @@ local function load_components()
           component = {component}
         end
         component.self = {}
-        -- used to provide default for bg and fg for custom highlights
-        component.self.theme = theme_set
         -- setting highlight because utils need highlight but cann't require
         -- it as it creates circular dependency . It's a workaround for now
         -- Should look for a better solution.
         component.self.highlight = highlight
-        -- convert lualine_section -> section before setting section
-        component.self.section = section_name:sub(9,10)
+        component.self.section = section_name
         component_loader(component)
         section[index] = component
       end
@@ -139,39 +135,39 @@ local function  load_extensions()
 end
 
 local function set_lualine_theme()
-  if type(M.theme) == 'string' then
-    M.theme = require('lualine.themes.'.. M.theme)
+  if type(M.options.theme) == 'string' then
+    M.options.theme = require('lualine.themes.'.. M.options.theme)
   end
-  highlight.create_highlight_groups(M.theme)
-  theme_set = M.theme
+  highlight.create_highlight_groups(M.options.theme)
+  theme_set = M.options.theme
 end
 
 local function statusline(sections, is_focused)
   local status = {}
   if sections.lualine_a then
     local hl = highlight.format_highlight(is_focused, 'lualine_a')
-    table.insert(status, utils.draw_section(sections.lualine_a, M.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_a, M.options.separator, hl))
   end
   if sections.lualine_b then
     local hl = highlight.format_highlight(is_focused, 'lualine_b')
-    table.insert(status, utils.draw_section(sections.lualine_b, M.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_b, M.options.separator, hl))
   end
   if sections.lualine_c then
     local hl = highlight.format_highlight(is_focused, 'lualine_c')
-    table.insert(status, utils.draw_section(sections.lualine_c, M.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_c, M.options.separator, hl))
   end
   table.insert(status, "%=")
   if sections.lualine_x then
     local hl = highlight.format_highlight(is_focused, 'lualine_c')
-    table.insert(status, utils.draw_section(sections.lualine_x, M.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_x, M.options.separator, hl))
   end
   if sections.lualine_y then
     local hl = highlight.format_highlight(is_focused, 'lualine_b')
-    table.insert(status, utils.draw_section(sections.lualine_y, M.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_y, M.options.separator, hl))
   end
   if sections.lualine_z then
     local hl = highlight.format_highlight(is_focused, 'lualine_a')
-    table.insert(status, utils.draw_section(sections.lualine_z, M.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_z, M.options.separator, hl))
   end
   return table.concat(status)
 end

@@ -1,13 +1,13 @@
-local function filename(args)
+local function filename(options)
   -- setting defaults
-  local modified, full_name, relative = true, false, true
-  if args.modified ~= nil then modified = args.modified end
-  if args.full_name ~= nil then full_name = args.full_name end
-  if args.relative ~= nil then relative = args.relative end
+  local file_status, full_path, relative = true, false, true
+  if options.file_status  ~= nil then file_status = options.file_status end
+  if options.full_path ~= nil then full_path = options.full_path end
+  if options.relative  ~= nil then relative = options.relative end
 
   return function()
     local data
-    if not full_name then
+    if not full_path then
       data = vim.fn.expand('%:t')
     elseif relative then
       data = vim.fn.expand('%')
@@ -20,7 +20,7 @@ local function filename(args)
       data = vim.fn.pathshorten(data)
     end
 
-    if modified then
+    if file_status then
       if vim.bo.modified then data = data .. "[+]"
       elseif vim.bo.modifiable == false then data = data .. "[-]" end
     end
@@ -28,4 +28,4 @@ local function filename(args)
   end
 end
 
-return { init = function(args) return filename(args) end, }
+return { init = function(options) return filename(options) end, }

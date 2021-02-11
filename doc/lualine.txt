@@ -31,7 +31,7 @@ CONTENTS                                                     *lualline-contents*
         1.2.2.packer.nvim..................................|lualine-packer.nvim|
     1.3. Usage and customization...............|lualine-usage_and_customization|
         1.3.1. Starting lualine.......................|lualine-starting_lualine|
-        1.3.2. Setting a theme.........................|lualine-setting_a_theme|
+        1.3.2. Setting theme.............................|lualine-setting_theme|
         1.3.3. Changing separator...................|lualine-changing_separator|
         1.3.4. Changing components.................|lualine-changing_components|
         1.3.5. Building Custom components............|lualine-custom_components|
@@ -100,9 +100,9 @@ STARTING LUALINE                                      *lualine-starting_lualine*
     lualine.status()
 <
 
-SETTING A THEME                                        *lualine-setting_a_theme*
+SETTING THEME                                          *lualine-setting_theme*
 >
-    lualine.theme = 'gruvbox'
+    lualine.options.theme = 'gruvbox'
 <
 
 All available themes are listed in THEMES.md (./THEMES.md)
@@ -115,12 +115,12 @@ CHANGING SEPARATOR IN SECTION			    *lualine-changing_separator*
 Lualine defines a separator between components in given section, the default
 separator is `|`. You can change the separator this way:
 >
-    lualine.separator = '|'
+    lualine.options.separator = '|'
 <
 
 or disable it
 >
-    lualine.separator = ''
+    lualine.options.separator = ''
 <
 
 CHANGING COMPONENTS IN LUALINE SECTIONS            *lualine-changing_components*
@@ -216,7 +216,7 @@ icons_enabled (Default: true)
   Suported by branch, fileformat, filetype, location
 
   Example:
-    `lualine.opt.icons_enabled = true`
+    `lualine.options.icons_enabled = true`
 
 Genaral options~
 ---------------
@@ -254,9 +254,9 @@ List of options are given below.
   * icon          ('')
       icon is displayed before branch name
 * filename
-  * modify        (true)
+  * file_status        (true)
       Whether to display filemodified status in filename
-  * full_name     (false)
+  * full_path     (false)
       Whether to display full/relative path with filename
   * relative      (true)
       Whether to display relative path with filename
@@ -323,8 +323,11 @@ packer config
         requires = {'kyazdani42/nvim-web-devicons', opt = true},
         config = function()
           local lualine = require('lualine')
-          lualine.theme = 'gruvbox'
-          lualine.separator = '|'
+	  lualine.options = {
+	    theme = 'gruvbox',
+	    separator = '|',
+	    icons_enabled = true,
+	  }
           lualine.sections = {
             lualine_a = { 'mode' },
             lualine_b = { 'branch' },
@@ -356,8 +359,11 @@ vimrc config
 >
     lua << EOF
     local lualine = require('lualine')
-        lualine.theme = 'gruvbox'
-        lualine.separator = '|'
+        lualine.options = {
+          theme = 'gruvbox',
+          separator = '|',
+          icons_enabled = true,
+        }
         lualine.sections = {
           lualine_a = { 'mode' },
           lualine_b = { 'branch' },
