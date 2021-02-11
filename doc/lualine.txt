@@ -234,6 +234,8 @@ option       (default_value)
     whether to show icon(if available)
 * right_padding (1)
     spaces on right
+* separator ('|')
+  which separator to use at end of component
 * upper         (false)
     Displayed in upper case
 * lower         (false)

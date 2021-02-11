@@ -209,12 +209,14 @@ Default options act as default for all components
   spaces on left and right
 - left_padding  (1)\
   spaces on left
+- right_padding (1)\
+  spaces on right
 - icon          (depends on component)
   displays an icon infront of component
 - icons_enabled (true)
   whether to show icon(if available)
-- right_padding (1)\
-  spaces on right
+- separator ('|')
+  which separator to use at end of component
 - upper         (false)\
   Displayed in upper case
 - lower         (false)\

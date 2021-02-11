@@ -70,30 +70,34 @@ end
 
 local function component_loader(component)
   if type(component[1]) == 'function' then return component end
-  -- apply default args
-  for opt_name, opt_val in pairs(M.options) do
-    if component[opt_name] == nil then
-      component[opt_name] = opt_val
+  if type(component[1]) == 'string' then
+    -- Keep component name for later use as component[1] will be overwritten
+    -- With component function
+    component.component_name = component[1]
+    -- apply default args
+    for opt_name, opt_val in pairs(M.options) do
+      if component[opt_name] == nil then
+        component[opt_name] = opt_val
+      end
     end
-  end
-  -- set custom highlights
-  if component.color then
-    local component_name = component[1]
-    local color = component.color
-    local function update_color()
-      component.color = highlight.create_component_highlight_group(color, component_name, component)
+    -- set custom highlights
+    if component.color then
+      local function update_color()
+        component.color_highlight = highlight.create_component_highlight_group(
+        component.color, component.component_name, component)
+      end
+      update_color()
+      utils.expand_set_theme(update_color)
     end
-    update_color()
-    utils.expand_set_theme(update_color)
-  end
-  -- load the component
-  local ok, loaded_component = pcall(require, 'lualine.components.' .. component[1])
-  if not ok then
-    loaded_component = load_special_components(component[1])
-  end
-  component[1] = loaded_component
-  if type(component[1]) == 'table' then
-    component[1] = component[1].init(component)
+    -- load the component
+    local ok, loaded_component = pcall(require, 'lualine.components.' .. component.component_name)
+    if not ok then
+      loaded_component = load_special_components(component.component_name)
+    end
+    component[1] = loaded_component
+    if type(component[1]) == 'table' then
+      component[1] = component[1].init(component)
+    end
   end
 end
 
@@ -146,28 +150,28 @@ local function statusline(sections, is_focused)
   local status = {}
   if sections.lualine_a then
     local hl = highlight.format_highlight(is_focused, 'lualine_a')
-    table.insert(status, utils.draw_section(sections.lualine_a, M.options.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_a,  hl))
   end
   if sections.lualine_b then
     local hl = highlight.format_highlight(is_focused, 'lualine_b')
-    table.insert(status, utils.draw_section(sections.lualine_b, M.options.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_b,  hl))
   end
   if sections.lualine_c then
     local hl = highlight.format_highlight(is_focused, 'lualine_c')
-    table.insert(status, utils.draw_section(sections.lualine_c, M.options.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_c,  hl))
   end
   table.insert(status, "%=")
   if sections.lualine_x then
     local hl = highlight.format_highlight(is_focused, 'lualine_c')
-    table.insert(status, utils.draw_section(sections.lualine_x, M.options.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_x,  hl))
   end
   if sections.lualine_y then
     local hl = highlight.format_highlight(is_focused, 'lualine_b')
-    table.insert(status, utils.draw_section(sections.lualine_y, M.options.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_y,  hl))
   end
   if sections.lualine_z then
     local hl = highlight.format_highlight(is_focused, 'lualine_a')
-    table.insert(status, utils.draw_section(sections.lualine_z, M.options.separator, hl))
+    table.insert(status, utils.draw_section(sections.lualine_z,  hl))
   end
   return table.concat(status)
 end
