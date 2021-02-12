@@ -1,4 +1,5 @@
-local utils = require('lualine.utils')
+local utils_component = require('lualine.utils.component')
+local utils = require('lualine.utils.utils')
 local highlight = require('lualine.highlight')
 
 local M = { }
@@ -110,10 +111,6 @@ local function load_components()
           component = {component}
         end
         component.self = {}
-        -- setting highlight because utils need highlight but cann't require
-        -- it as it creates circular dependency . It's a workaround for now
-        -- Should look for a better solution.
-        component.self.highlight = highlight
         component.self.section = section_name
         component_loader(component)
         section[index] = component
@@ -150,28 +147,28 @@ local function statusline(sections, is_focused)
   local status = {}
   if sections.lualine_a then
     local hl = highlight.format_highlight(is_focused, 'lualine_a')
-    table.insert(status, utils.draw_section(sections.lualine_a,  hl))
+    table.insert(status, utils_component.draw_section(sections.lualine_a,  hl))
   end
   if sections.lualine_b then
     local hl = highlight.format_highlight(is_focused, 'lualine_b')
-    table.insert(status, utils.draw_section(sections.lualine_b,  hl))
+    table.insert(status, utils_component.draw_section(sections.lualine_b,  hl))
   end
   if sections.lualine_c then
     local hl = highlight.format_highlight(is_focused, 'lualine_c')
-    table.insert(status, utils.draw_section(sections.lualine_c,  hl))
+    table.insert(status, utils_component.draw_section(sections.lualine_c,  hl))
   end
   table.insert(status, "%=")
   if sections.lualine_x then
     local hl = highlight.format_highlight(is_focused, 'lualine_c')
-    table.insert(status, utils.draw_section(sections.lualine_x,  hl))
+    table.insert(status, utils_component.draw_section(sections.lualine_x,  hl))
   end
   if sections.lualine_y then
     local hl = highlight.format_highlight(is_focused, 'lualine_b')
-    table.insert(status, utils.draw_section(sections.lualine_y,  hl))
+    table.insert(status, utils_component.draw_section(sections.lualine_y,  hl))
   end
   if sections.lualine_z then
     local hl = highlight.format_highlight(is_focused, 'lualine_a')
-    table.insert(status, utils.draw_section(sections.lualine_z,  hl))
+    table.insert(status, utils_component.draw_section(sections.lualine_z,  hl))
   end
   return table.concat(status)
 end

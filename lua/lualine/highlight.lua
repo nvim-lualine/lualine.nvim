@@ -1,11 +1,11 @@
 local M = {  }
-local utils = require "lualine.utils"
+local utils_hl = require "lualine.utils.highlight"
 
 local function highlight (name, foreground, background, gui)
   local command = {
       'highlight', name,
-      'ctermfg=' .. (foreground[2] or utils.get_cterm_color(foreground)),
-      'ctermbg=' .. (background[2] or utils.get_cterm_color(background)),
+      'ctermfg=' .. (foreground[2] or utils_hl.get_cterm_color(foreground)),
+      'ctermbg=' .. (background[2] or utils_hl.get_cterm_color(background)),
       'cterm=' .. (gui or 'none'),
       'guifg=' .. (foreground[1] or foreground),
       'guibg=' .. (background[1] or background),
