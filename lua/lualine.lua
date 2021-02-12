@@ -106,6 +106,9 @@ local function set_lualine_theme()
 end
 
 local function statusline(sections, is_focused)
+  if M.theme ~= theme_set then
+    set_lualine_theme()
+  end
   local status = {}
   if sections.lualine_a then
     table.insert(status, highlight.format_highlight(is_focused, 'lualine_a'))
