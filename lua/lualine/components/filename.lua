@@ -3,19 +3,19 @@
 
 local function filename(options)
   -- setting defaults
-  local file_status, full_path, relative = true, false, true
+  local file_status, shorten, full_path = true, true, false
   if options.file_status  ~= nil then file_status = options.file_status end
-  if options.full_path ~= nil then full_path = options.full_path end
-  if options.relative  ~= nil then relative = options.relative end
+  if options.shorten ~= nil then shorten = options.shorten end
+  if options.full_path  ~= nil then full_path = options.full_path end
 
   return function()
     local data
-    if not full_path then
+    if shorten then
       data = vim.fn.expand('%:t')
-    elseif relative then
-      data = vim.fn.expand('%')
-    else
+    elseif full_path then
       data = vim.fn.expand('%:p')
+    else
+      data = vim.fn.expand('%')
     end
     if data == '' then
       data = '[No Name]'

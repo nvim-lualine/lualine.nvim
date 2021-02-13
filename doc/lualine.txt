@@ -224,47 +224,60 @@ These options are available for all components.
 
 option       (default_value)
 ------       ---------------
-* padding       (1)
+
+  • padding       (1)
     spaces on left and right
-* left_padding  (1)
+
+  • left_padding  (1)
     spaces on left
-* icon          (depends on component)
+
+  • icon          (depends on component)
     displays an icon infront of a component
-* icons_enabled (true)
+
+  • icons_enabled (true)
     whether to show icon(if available)
-* right_padding (1)
+
+  • right_padding (1)
     spaces on right
-* separator ('|')
-  which separator to use at end of component
-* upper         (false)
+
+  • separator ('|')
+    which separator to use at end of component
+
+  • upper         (false)
     Displayed in upper case
-* lower         (false)
+
+  • lower         (false)
     Displayed in lower case
-* format        (nil)
+
+  • format        (nil)
     Takes a function . The funtion gets the result of component
     as argument and it's return value is displayed. So this function
     can parse and format the output as user wants.
-* color         (Theme colors)
-    color option can be used to set custom color to a component
 
+  • color         (Theme colors)
+    color option can be used to set custom color to a component
     Color format:
     `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`
     the members of color table are optional and default to theme
+
 
 Component specific options~
 --------------------------
 These options are available for specific components only.
 List of options are given below.
 
-* filename
-  * file_status        (true)
+  • filename~
+    • file_status        (true)
       Whether to display filemodified status in filename
-  * full_path     (false)
+
+    • shorten      (true)
       Whether to display full/relative path with filename
-  * relative      (true)
-      Whether to display relative path with filename
-* fileformat
-  * icons_enabled (true)
+
+    • full_path     (false)
+      Whether to display full path when shorten is false
+
+  • fileformat~
+    • icons_enabled (true)
       Whether to displays icon before component
 
 Example:~

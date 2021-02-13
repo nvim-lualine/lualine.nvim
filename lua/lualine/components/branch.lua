@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 hoob3rt
+-- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 
 local git_branch

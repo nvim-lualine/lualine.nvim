@@ -237,10 +237,10 @@ Default options act as default for all components
 - filename
   - file_status        (true)\
    Whether to display filemodified status in filename
+  - shorten      (true)\
+   Whether to display full/relative path with filename
   - full_path     (false)\
-   Whether to display full/ relative path with filename
-  - relative      (true)\
-   Whether to display relative path with filename
+   Whether to display full path when shorten is false
 - fileformat
   - icons_enabled (true)\
    Whether to displays icon before component
