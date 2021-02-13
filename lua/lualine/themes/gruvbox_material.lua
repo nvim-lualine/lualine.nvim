@@ -1,8 +1,5 @@
--- =============================================================================
--- Filename: lua/lualine/themes/gruvbox_material.lua
--- Author: shadman
--- License: MIT License
--- =============================================================================
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
 
 local colors = {
   fg1 = "#282828",

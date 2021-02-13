@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 gnuyent
+-- MIT license, see LICENSE for more details.
+
 local forest_night = {}
 
 local colors = {

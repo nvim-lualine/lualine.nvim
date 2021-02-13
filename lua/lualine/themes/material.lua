@@ -1,9 +1,6 @@
--- =============================================================================
--- Filename: lua/lightline/themes/material.lua
--- Author: shadman
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
 -- Credit: Lokesh Krishna(lightline)
--- License: MIT License
--- =============================================================================
 
 local M = {}
 

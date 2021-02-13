@@ -1,3 +1,7 @@
+-- Copyright (c) 2020-2021 Shatur95
+-- MIT license, see LICENSE for more details.
+
+
 local codedark = {}
 
 local colors = {

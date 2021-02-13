@@ -156,6 +156,30 @@ lualine.sections.lualine_a = { hello }
 
 </details>
 
+<details>
+<summary><b>Using vim functions as lualine component</b></summary>
+
+You can use vim functions as a lualine component
+
+```
+lualine.sections.lualine_b = { 'FugitiveHead' }
+```
+
+</details>
+
+<details>
+<summary><b>Using variables as lualine component</b></summary>
+
+You can use variables from vim and lua globals as a lualine component
+Variables from g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo: scopes
+can be used. Scopes ending with o are options usualy accessed with `&` in vimscript
+
+```
+lualine.sections.lualine_b = { 'g:coc_status', 'bo:filetype' }
+```
+
+</details>
+
 ### Loading plugin extensions
 Lualine extensions change statusline appearance for a window/buffer with a plugin loaded e.g. [junegunn/fzf.vim](https://github.com/junegunn/fzf.vim)
 
