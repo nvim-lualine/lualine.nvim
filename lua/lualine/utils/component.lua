@@ -38,15 +38,15 @@ end
 local function apply_icon(status, options)
   if options.icons_enabled and options.icon then
     status = options.icon .. ' ' .. status
-  end 
+  end
   return status
 end
 
--- Apply separator at end of component only when 
+-- Apply separator at end of component only when
 -- custom highlights haven't affected background
 local function apply_spearator(status, options)
   if options.separator and #options.separator > 0 and
-     not options.color or not options.color.bg then
+     (not options.color or not options.color.bg) then
     status = status .. options.separator
     options.separator_applied = true
   end
@@ -59,7 +59,7 @@ function M.draw_section(section, highlight)
   for _, component in pairs(section) do
     -- Reset flags
     component.drawn = false -- Flag to check if a component was drawn or not
-    component.separator_applied = false -- Flag to check if separator was applied 
+    component.separator_applied = false -- Flag to check if separator was applied
     local localstatus = component[1]()
     if #localstatus > 0 then
       -- Apply modifier functions for options
