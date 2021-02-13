@@ -1,9 +1,6 @@
--- =============================================================================
--- Filename: lua/lualine/themes/solarized_dark.lua
--- Author: shadman
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
 -- Credit: itchyny(lightline)
--- License: MIT License
--- =============================================================================
 
 local M = {}
 

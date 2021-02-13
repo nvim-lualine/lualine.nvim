@@ -1,5 +1,7 @@
-local M = {}
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
 
+local M = {}
 
 -- Works as a decorator to expand set_lualine_theme functions
 -- functionality at runtime .

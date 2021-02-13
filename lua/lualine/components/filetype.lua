@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 hoob3rt
+-- MIT license, see LICENSE for more details.
+
 local function filetype(options)
   return function()
     local data = vim.bo.filetype

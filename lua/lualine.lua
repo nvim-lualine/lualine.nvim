@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 hoob3rt
+-- MIT license, see LICENSE for more details.
+
 local utils_component = require('lualine.utils.component')
 local utils = require('lualine.utils.utils')
 local highlight = require('lualine.highlight')
@@ -144,6 +147,9 @@ local function set_lualine_theme()
 end
 
 local function statusline(sections, is_focused)
+  if M.theme ~= theme_set then
+    set_lualine_theme()
+  end
   local status = {}
   if sections.lualine_a then
     local hl = highlight.format_highlight(is_focused, 'lualine_a')

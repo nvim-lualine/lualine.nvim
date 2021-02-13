@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
+
 local function filename(options)
   -- setting defaults
   local file_status, full_path, relative = true, false, true

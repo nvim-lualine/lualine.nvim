@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
+
 local function fileformat(options)
   local icon_linux  = "" -- e712
   local icon_windos = "" -- e70f

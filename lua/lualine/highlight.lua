@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 hoob3rt
+-- MIT license, see LICENSE for more details.
+
 local M = {  }
 local utils_hl = require "lualine.utils.highlight"
 

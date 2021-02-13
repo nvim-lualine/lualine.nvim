@@ -1,8 +1,7 @@
--- =============================================================================
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
 -- Genarated by lightline to lualine theme converter
---   https://gist.github.com/shadmansaleh/000871c9a608a012721c6acc6d7a19b9
--- License: MIT License
--- =============================================================================
+-- https://gist.github.com/shadmansaleh/000871c9a608a012721c6acc6d7a19b9
 
 local colors = {
   color2   = "#f3f3f3",
