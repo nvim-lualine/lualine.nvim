@@ -78,7 +78,7 @@ lualine.status()
 ```
 ### Setting a theme
 ```lua
-lualine.theme = 'gruvbox'
+lualine.options.theme = 'gruvbox'
 ```
 
 All available themes are listed in [THEMES.md](./THEMES.md)
@@ -90,13 +90,13 @@ Lualine defines a separator between components in given section, the default
 separator is `|`. You can change the separator this way:
 
 ```lua
-lualine.separator = '|'
+lualine.options.separator = '|'
 ```
 
 or disable it
 
 ```lua
-lualine.separator = ''
+lualine.options.separator = ''
 ```
 
 ### Changing components in lualine sections
@@ -120,7 +120,7 @@ lualine.inactive_sections = {
   lualine_c = { 'filename' },
   lualine_x = { 'location' },
   lualine_y = {  },
-  lualine_z = {   }
+  lualine_z = {  }
 }
 ```
 
@@ -158,6 +158,7 @@ lualine.sections.lualine_a = { hello }
 </details>
 
 <details>
+
 <summary><b>Using vim functions as lualine component</b></summary>
 
 You can use vim functions as a lualine component
@@ -177,6 +178,93 @@ can be used. Scopes ending with o are options usualy accessed with `&` in vimscr
 
 ```
 lualine.sections.lualine_b = { 'g:coc_status', 'bo:filetype' }
+```
+
+</details>
+
+<details>
+<summary><b>Options for components</b></summary>
+
+### Available options:
+
+#### Global Default options
+
+Default options act as default for all components
+- icons_enabled (Default: true)
+  Displays icons on components
+  You should have powerline supported fonts to see
+  icons properly.\
+  *Suported by branch, fileformat, filetype, location*\
+  Example:
+  ```lua
+  lualine.options.icons_enabled = true
+
+  ```
+
+#### Genaral options
+  These options are available for all components.\
+    option&nbsp; &nbsp; &nbsp;(default_value)\
+    ----------&nbsp; &nbsp; &nbsp; &nbsp;----------------------
+- padding       (1)\
+  spaces on left and right
+- left_padding  (1)\
+  spaces on left
+- right_padding (1)\
+  spaces on right
+- icon          (depends on component)
+  displays an icon infront of component
+- icons_enabled (true)
+  whether to show icon(if available)
+- separator ('|')
+  which separator to use at end of component
+- upper         (false)\
+  Displayed in upper case
+- lower         (false)\
+  Displayed in lower case
+- format        (nil)\
+  Takes a function . The funtion gets the result of component
+  as argument and it's return value is displayed. So this function
+  can parse and format the output as user wants.
+- color         (Theme colors)\
+  color option can be used to set custom color to a component\
+  **Color format:**\
+  `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`\
+  the members of color table are optional and default to theme
+
+#### Component specific options
+  These options are available for specific components only.\
+  List of options are given below.
+- filename
+  - file_status        (true)\
+   Whether to display filemodified status in filename
+  - shorten      (true)\
+   Whether to display full/relative path with filename
+  - full_path     (false)\
+   Whether to display full path when shorten is false
+- fileformat
+  - icons_enabled (true)\
+   Whether to displays icon before component
+
+**Example:**
+```lua
+lualine.sections.lualine_b = {
+  {
+    'branch',
+    icon = '',
+    upper = true,
+    color = { fg = '#00aa22' }
+  },
+  {
+    'filename',
+    full_name = true,
+    relative = true,
+    format = function(name)
+      -- Capitalize first charecter of filename to capital.
+      local path, fname = name:match('(.*/)(.*)')
+      rerurn path .. fname[1, 1]:upper() .. fname[2, #fname]
+    end
+  }
+}
 ```
 
 </details>
@@ -202,8 +290,11 @@ All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
       local lualine = require('lualine')
-      lualine.theme = 'gruvbox'
-      lualine.separator = '|'
+      lualine.options = {
+        theme = 'gruvbox',
+        separator = '|',
+        icons_enabled = true,
+      }
       lualine.sections = {
         lualine_a = { 'mode' },
         lualine_b = { 'branch' },
@@ -236,8 +327,11 @@ All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
 ```vim
 lua << EOF
 local lualine = require('lualine')
-    lualine.theme = 'gruvbox'
-    lualine.separator = '|'
+    lualine.options = {
+      theme = 'gruvbox',
+      separator = '|',
+      icons_enabled = true,
+    }
     lualine.sections = {
       lualine_a = { 'mode' },
       lualine_b = { 'branch' },
