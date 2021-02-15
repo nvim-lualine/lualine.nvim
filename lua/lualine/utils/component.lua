@@ -3,7 +3,7 @@
 
 local M = {  }
 
-local utils_hl = require'lualine.utils.highlight'
+local highlight = require'lualine.highlight'
 
 -- set upper or lower case
 local function apply_case(status, options)
@@ -29,7 +29,7 @@ end
 -- Applies custom highlights for component
 local function apply_highlights(status, options)
   if options.color_highlight then
-    status = utils_hl.component_format_highlight(options.color_highlight) .. status
+    status = highlight.component_format_highlight(options.color_highlight) .. status
   end
   return status
 end
