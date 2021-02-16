@@ -257,11 +257,12 @@ lualine.sections.lualine_b = {
   {
     'filename',
     full_name = true,
-    relative = true,
+    shorten = true,
     format = function(name)
       -- Capitalize first charecter of filename to capital.
       local path, fname = name:match('(.*/)(.*)')
-      rerurn path .. fname[1, 1]:upper() .. fname[2, #fname]
+				if not path then path = ''; fname = name end
+        return path .. fname:sub(1, 1):upper() .. fname:sub(2, #fname)
     end
   }
 }
