@@ -162,7 +162,10 @@ local function statusline(sections, is_focused)
       -- insert highlight+components of this section to status_builder
       local highlight = highlight.format_highlight(is_focused,
                    'lualine_'..sec)
-      table.insert(status_builder, {sec, utils_component.draw_section(sections['lualine_'..sec], highlight)})
+			local section = utils_component.draw_section(sections['lualine_'..sec], highlight)
+			if #section > 0 then
+				table.insert(status_builder, {sec, section})
+			end
     end
   end
 
