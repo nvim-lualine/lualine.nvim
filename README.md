@@ -244,6 +244,15 @@ Default options act as default for all components
 - fileformat
   - icons_enabled (true)\
    Whether to displays icon before component
+- signify
+  - colored        (true)\
+    Whether to show colors
+  - color_added    ('#90ee90')\
+    Foreground color of added section
+  - color_modified ('#f0e130')\
+    Foreground color of modified section
+  - color_removed  ('#ff0038')\
+    Foreground color of removed section
 
 **Example:**
 ```lua
