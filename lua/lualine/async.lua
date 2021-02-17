@@ -63,10 +63,10 @@ function M.stop(code, signal)
   if M.on_exit then
     M.on_exit(code, signal)
   end
-  if M.on_stdout then
+  if M.on_stdout and M.stdout then
       M.stdout:read_stop()
   end
-  if M.on_stderr then
+  if M.on_stderr and M.stderr then
       M.stderr:read_stop()
   end
   M.close_all()
