@@ -4,10 +4,13 @@ lualine-changing_separator	lualine.txt	/*lualine-changing_separator*
 lualine-config_example_using_packer.nvim	lualine.txt	/*lualine-config_example_using_packer.nvim*
 lualine-config_examples	lualine.txt	/*lualine-config_examples*
 lualine-contributing	lualine.txt	/*lualine-contributing*
+lualine-custom_components	lualine.txt	/*lualine-custom_components*
+lualine-custom_options	lualine.txt	/*lualine-custom_options*
 lualine-full_config_example_inside_viml	lualine.txt	/*lualine-full_config_example_inside_viml*
 lualine-installation	lualine.txt	/*lualine-installation*
 lualine-loading_plugin_extensions	lualine.txt	/*lualine-loading_plugin_extensions*
 lualine-lualine.nvim	lualine.txt	/*lualine-lualine.nvim*
+lualine-nvim	lualine.txt	/*lualine-nvim*
 lualine-packer.nvim	lualine.txt	/*lualine-packer.nvim*
 lualine-performance_comparism	lualine.txt	/*lualine-performance_comparism*
 lualine-screenshots	lualine.txt	/*lualine-screenshots*
@@ -15,4 +18,6 @@ lualine-setting_a_theme	lualine.txt	/*lualine-setting_a_theme*
 lualine-starting_lualine	lualine.txt	/*lualine-starting_lualine*
 lualine-usage_and_customization	lualine.txt	/*lualine-usage_and_customization*
 lualine-vim-plug	lualine.txt	/*lualine-vim-plug*
+lualine.nvim	lualine.txt	/*lualine.nvim*
+lualine.txt	lualine.txt	/*lualine.txt*
 lualline-contents	lualine.txt	/*lualline-contents*

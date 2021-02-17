@@ -1,8 +1,5 @@
--- =============================================================================
--- lightline to lualine theme converter
--- Author: shadman
--- License: MIT License
--- =============================================================================
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
 
 local colors = {
   color3   = "#2c3043",

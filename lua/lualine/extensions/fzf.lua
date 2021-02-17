@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 hoob3rt
+-- MIT license, see LICENSE for more details.
+
 local function fzf_statusline()
   vim.cmd([[hi clear fzf1]])
   vim.cmd([[hi link fzf1 lualine_a_normal]])
