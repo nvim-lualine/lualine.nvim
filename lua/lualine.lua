@@ -194,8 +194,8 @@ local function exec_autocommands()
     augroup lualine
     autocmd!
     autocmd ColorScheme * call v:lua.set_lualine_theme()
-    autocmd BufLeave * lua vim.wo.statusline=lualine_statusline()
-    autocmd BufEnter * setlocal statusline=%!v:lua.lualine_statusline()
+    autocmd WinLeave,BufLeave * lua vim.wo.statusline=lualine_statusline()
+    autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.lualine_statusline()
     augroup END
   ]], false)
 end
