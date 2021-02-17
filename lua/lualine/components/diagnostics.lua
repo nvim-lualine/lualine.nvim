@@ -1,37 +1,85 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
+local highlight = require('lualine.highlight')
+local utils = require('lualine.utils.utils')
+
+local diagnostic_sources = {
+	nvim_lsp = function()
+    local error_count = vim.lsp.diagnostic.get_count(0, 'Error')
+    local warning_count = vim.lsp.diagnostic.get_count(0, 'Warning')
+    local info_count = vim.lsp.diagnostic.get_count(0, 'Information')
+		return error_count, warning_count, info_count
+	end
+}
 
 local function diagnostics(options)
+	local symbols
+	if options.icons_enabled then
+		symbols = {
+			'', -- xf659
+			'', -- xf529
+			'', -- xf7fc
+		}
+	else
+		symbols = { 'E', 'W', 'I' }
+	end
+	if options.colored = nil then options.colored = true end
+
+	local color_error = { fg = '' }
+	local color_warn  = { fg = '' }
+	local color_info  = { fg = '' }
+
+	if options.color_error ~= nil then color_error = options.color_error end
+	if options.color_warn ~= nil then color_warn = options.color_warn end
+	if options.color_info ~= nil then color_info = options.color_info end
+
+	local highlight_groups = {}
+	local function add_highlights()
+		highlight_groups = {
+			highlight.create_component_highlight_group(color_error, 'diagnostics_error', options),
+			highlight.create_component_highlight_group(color_warn, 'diagnostics_warn', options),
+			highlight.create_component_highlight_group(color_info, 'diagnostics_info', options),
+		}
+	end
+
+	if options.colored then
+		add_highlights()
+		utils.expand_set_theme(add_highlights)
+	end
+
   return function()
     local error_count, warning_count, info_count = 0,0,0
     if options.sources~=nil then
       for _, source in ipairs(options.sources) do
-        if source == 'lsp' then
-          error_count = error_count +  vim.lsp.diagnostic.get_count(0, 'Error')
-          warning_count = warning_count +  vim.lsp.diagnostic.get_count(0, 'Warning')
-          -- info_count = info_count +  vim.lsp.diagnostic.get_count(0, 'Info')
-        end
+				local E, W, I = diagnostic_sources[source]()
+				error_count   = error_count   + E
+				warning_count = warning_count + W
+				info_count    = info_count    + I
       end
-    end print(error_count)
+    end
     local result = {}
-    local symbols = {
-      'E',
-      'W',
-      'I'
-    }
     local data = {
       error_count,
       warning_count,
       info_count
     }
+		local colors = {}
+		if options.colored then
+			for _, hl in pairs(highlight_groups) do
+				table.insert(highlight.component_format_highlight(hl))
+			end
+		end
     for range=1,3 do
       if data[range] ~= nil and data[range] > 0 then
-      table.insert(result,symbols[range]..':'..data[range]..' ')
+				if options.colored then
+					table.insert(result,colors[range]..symbols[range]..':'..data[range])
+				else
+					table.insert(result,symbols[range]..':'..data[range])
+				end
       end
     end
-    print(result[1])
     if result[1] ~= nil then
-      return table.concat(result, '')
+      return table.concat(result, ' ')
     else
       return ''
     end
