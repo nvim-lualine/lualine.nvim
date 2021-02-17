@@ -9,14 +9,16 @@ local function filename(options)
   if options.full_path  ~= nil then full_path = options.full_path end
 
   return function()
-    local data
-    if not full_path then
-      data = vim.fn.expand('%:t')
-    elseif shorten then
-      data = vim.fn.expand('%')
-    else
-      data = vim.fn.expand('%:p')
-    end
+    local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+    local data = vim.api.nvim_buf_call(bufnr, function()
+      if not full_path then
+        return vim.fn.expand('%:t')
+      elseif shorten then
+        return vim.fn.expand('%')
+      else
+        return vim.fn.expand('%:p')
+      end
+    end)
     if data == '' then
       data = '[No Name]'
     elseif vim.fn.winwidth(0) <= 84 or #data > 40 then
@@ -24,8 +26,8 @@ local function filename(options)
     end
 
     if file_status then
-      if vim.bo.modified then data = data .. "[+]"
-      elseif vim.bo.modifiable == false then data = data .. "[-]" end
+      if vim.bo[bufnr].modified then data = data .. "[+]"
+      elseif not vim.bo[bufnr].modifiable then data = data .. "[-]" end
     end
     return data
   end
