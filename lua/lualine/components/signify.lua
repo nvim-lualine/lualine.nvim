@@ -8,40 +8,28 @@ local default_color_removed  = "#90ee90"
 local default_color_modified = "#ff0038"
 
 local function get_highlight(scope, color_group)
-  local color = vim.api.nvim_command_output([[ execute 'hi ]] .. color_group .. [[']])
-  if color:match([[links to]]) then
-    local last
-    for w in  string.gmatch (color, "%w+") do
-      last = w
-    end
-    if last then return get_highlight(scope, last) end
-  end
-  if color:match( [[gui=reverse]] ) then
-    if scope == 'guifg' then scope = 'guibg' else scope = 'guifg' end
-  end
-  color = color:match( scope .. [[=(#?%w+)]]) or nil
+  local color = string.format('#%06x', vim.api.nvim_get_hl_by_name(color_group, true)[scope])
   return color or nil
 end
 
 local function signify(options)
-  local colored = true
-  if options.colored ~= nil then colored = options.colored end
+  if options.colored == nil then options.colored = true end
   local color_added, color_modified, color_removed
   -- apply colors
   if options.color_added then
     color_added = options.color_added
   else
-    color_added = get_highlight('guifg', 'diffAdded') or default_color_added
+    color_added = get_highlight('foreground', 'diffAdded') or default_color_added
   end
   if options.color_modified then
     color_modified = options.color_modified
   else
-    color_modified = get_highlight('guifg', 'diffChanged') or default_color_modified
+    color_modified = get_highlight('foreground', 'diffChanged') or default_color_modified
   end
   if options.color_removed then
     color_removed  = options.color_removed
   else
-    color_removed = get_highlight('guifg', 'diffRemoved') or default_color_removed
+    color_removed = get_highlight('foreground', 'diffRemoved') or default_color_removed
   end
 
   local hl = require"lualine.highlight"
@@ -57,7 +45,7 @@ local function signify(options)
   end
 
   -- create highlights
-  if colored then
+  if options.colored then
     create_highlights()
     utils.expand_set_theme(create_highlights)
     options.custom_highlight = true
@@ -72,7 +60,7 @@ local function signify(options)
 
     local symbols = {'+', '~', '-'}
     local colors = {}
-    if colored then
+    if options.colored then
       -- load the highlights and store them in colors table
       for _, highlight_name in ipairs(highlights) do
         table.insert(colors, hl.component_format_highlight(highlight_name))
@@ -83,7 +71,7 @@ local function signify(options)
     -- loop though data and load available sections in result table
     for range=1,3 do
       if data[range] ~= nil and data[range] > 0 then
-        if colored then
+        if options.colored then
           table.insert(result,colors[range]..symbols[range]..data[range])
         else
           table.insert(result,symbols[range]..data[range])
