@@ -1,4 +1,5 @@
-lualine.txt			    	             *lualine-nvim*   *lualine*
+*lualine.txt*
+						        *lualine* *lualine.nvim*
 
 Author: hoob3rt (https://github.com/hoob3rt)
 License: MIT License
@@ -31,14 +32,15 @@ CONTENTS                                                     *lualline-contents*
         1.2.2.packer.nvim..................................|lualine-packer.nvim|
     1.3. Usage and customization...............|lualine-usage_and_customization|
         1.3.1. Starting lualine.......................|lualine-starting_lualine|
-        1.3.2. Setting a theme.........................|lualine-setting_a_theme|
+        1.3.2. Setting theme.............................|lualine-setting_theme|
         1.3.3. Changing separator...................|lualine-changing_separator|
         1.3.4. Changing components.................|lualine-changing_components|
         1.3.5. Building Custom components............|lualine-custom_components|
-        1.3.6. Loading plugin extensions.....|lualine-loading_plugin_extensions|
-	1.3.7  Config examples.........................|lualine-config_examples|
-	    1.3.7.1. Packer.nvim......|lualine-config_example_using_packer.nvim|
-            1.3.7.2 VIML example.......|lualine-full_config_example_inside_viml|
+        1.3.6. Custom options...........................|lualine-custom_options|
+        1.3.7. Loading plugin extensions.....|lualine-loading_plugin_extensions|
+	1.3.8  Config examples.........................|lualine-config_examples|
+	    1.3.8.1. Packer.nvim......|lualine-config_example_using_packer.nvim|
+            1.3.8.2 VIML example.......|lualine-full_config_example_inside_viml|
     1.4. Contributing.....................................|lualine-contributing|
     1.5. Screenshots.......................................|lualine-screenshots|
 
@@ -99,9 +101,9 @@ STARTING LUALINE                                      *lualine-starting_lualine*
     lualine.status()
 <
 
-SETTING A THEME                                        *lualine-setting_a_theme*
+SETTING THEME                                          *lualine-setting_theme*
 >
-    lualine.theme = 'gruvbox'
+    lualine.options.theme = 'gruvbox'
 <
 
 All available themes are listed in THEMES.md (./THEMES.md)
@@ -114,12 +116,12 @@ CHANGING SEPARATOR IN SECTION			    *lualine-changing_separator*
 Lualine defines a separator between components in given section, the default
 separator is `|`. You can change the separator this way:
 >
-    lualine.separator = '|'
+    lualine.options.separator = '|'
 <
 
 or disable it
 >
-    lualine.separator = ''
+    lualine.options.separator = ''
 <
 
 CHANGING COMPONENTS IN LUALINE SECTIONS            *lualine-changing_components*
@@ -194,6 +196,112 @@ can be used. Scopes ending with o are options usualy accessed with `&` in vimscr
     lualine.sections.lualine_x = { 'vim.bo.fileencoding' }
 <
 
+--------------------------------------------------------------------------------
+CUSTOM OPTIONS FOR COMPONENTS                        *lualine-custom_options*
+
+
+Options for components~
+======================
+
+Global Default options~
+----------------------
+
+Default options act as default for all components
+
+icons_enabled (Default: true)
+
+  Displays icons on components
+  You should have powerline supported fonts to see
+  icons properly.
+  Suported by branch, fileformat, filetype, location
+
+  Example:
+    `lualine.options.icons_enabled = true`
+
+Genaral options~
+---------------
+These options are available for all components.
+
+option       (default_value)
+------       ---------------
+
+  • padding       (1)
+    spaces on left and right
+
+  • left_padding  (1)
+    spaces on left
+
+  • icon          (depends on component)
+    displays an icon infront of a component
+
+  • icons_enabled (true)
+    whether to show icon(if available)
+
+  • right_padding (1)
+    spaces on right
+
+  • separator ('|')
+    which separator to use at end of component
+
+  • upper         (false)
+    Displayed in upper case
+
+  • lower         (false)
+    Displayed in lower case
+
+  • format        (nil)
+    Takes a function . The funtion gets the result of component
+    as argument and it's return value is displayed. So this function
+    can parse and format the output as user wants.
+
+  • color         (Theme colors)
+    color option can be used to set custom color to a component
+    Color format:
+    `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`
+    the members of color table are optional and default to theme
+
+
+Component specific options~
+--------------------------
+These options are available for specific components only.
+List of options are given below.
+
+  • filename~
+    • file_status        (true)
+      Whether to display filemodified status in filename
+
+    • shorten      (true)
+      Whether to display full/relative path with filename
+
+    • full_path     (false)
+      Whether to display full path when shorten is false
+
+  • fileformat~
+    • icons_enabled (true)
+      Whether to displays icon before component
+
+Example:~
+>
+  lualine.sections.lualine_b = {
+    {
+      'branch',
+      icon = '',
+      upper = true,
+      color = { fg = '#00aa22' }
+    },
+    {
+      'filename',
+      full_name = true,
+      shorten = true,
+      format = function(name)
+        -- Capitalize first charecter of filename to capital.
+        local path, fname = name:match('(.*/)(.*)')
+	if not path then path = ''; fname = name end
+        return path .. fname:sub(1, 1):upper() .. fname:sub(2, #fname)
+      end
+    }
+  }
+<
 
 --------------------------------------------------------------------------------
 LOADING PLUGIN EXTENSIONS                    *lualine-loading_plugin_extensions*
@@ -222,8 +330,11 @@ packer config
         requires = {'kyazdani42/nvim-web-devicons', opt = true},
         config = function()
           local lualine = require('lualine')
-          lualine.theme = 'gruvbox'
-          lualine.separator = '|'
+	  lualine.options = {
+	    theme = 'gruvbox',
+	    separator = '|',
+	    icons_enabled = true,
+	  }
           lualine.sections = {
             lualine_a = { 'mode' },
             lualine_b = { 'branch' },
@@ -255,8 +366,11 @@ vimrc config
 >
     lua << EOF
     local lualine = require('lualine')
-        lualine.theme = 'gruvbox'
-        lualine.separator = '|'
+        lualine.options = {
+          theme = 'gruvbox',
+          separator = '|',
+          icons_enabled = true,
+        }
         lualine.sections = {
           lualine_a = { 'mode' },
           lualine_b = { 'branch' },
