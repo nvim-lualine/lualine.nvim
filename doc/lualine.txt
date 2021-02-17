@@ -278,7 +278,10 @@ List of options are given below.
 
   • fileformat~
     • icons_enabled (true)
-      Whether to displays icon before component
+      Whether to displays icon before component. Colors
+      are automaticaly extracted from colorscheme . If you
+      want to change any of those you can use options given below.
+
 
   • signify~
     • colored (true)

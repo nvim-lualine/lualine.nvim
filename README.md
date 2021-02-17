@@ -246,7 +246,9 @@ Default options act as default for all components
    Whether to displays icon before component
 - signify
   - colored        (true)\
-    Whether to show colors
+    Whether to show colors. Colors are automaticaly
+		extracted from colorscheme . If you want to change
+		any of those you can use options given below.
   - color_added    ('#90ee90')\
     Foreground color of added section
   - color_modified ('#f0e130')\

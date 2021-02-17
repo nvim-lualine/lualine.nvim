@@ -2,38 +2,33 @@
 -- MIT license, see LICENSE for more details.
 
 local utils = require'lualine.utils.utils'
+local highlight = require"lualine.highlight"
 
 local default_color_added    = "#f0e130"
 local default_color_removed  = "#90ee90"
 local default_color_modified = "#ff0038"
 
-local function get_highlight(scope, color_group)
-  local color = string.format('#%06x', vim.api.nvim_get_hl_by_name(color_group, true)[scope])
-  return color or nil
-end
-
 local function signify(options)
   if options.colored == nil then options.colored = true end
   -- apply colors
   if not options.color_added then
-    options.color_added = get_highlight('foreground', 'diffAdded') or default_color_added
+    options.color_added = utils.extract_highlight_colors('diffAdded', 'foreground') or default_color_added
   end
   if not options.color_modified then
-    options.color_modified = get_highlight('foreground', 'diffChanged') or default_color_modified
+    options.color_modified = utils.extract_highlight_colors('diffChanged', 'foreground') or default_color_modified
   end
   if not options.color_removed then
-    options.color_removed = get_highlight('foreground', 'diffRemoved') or default_color_removed
+    options.color_removed = utils.extract_highlight_colors('diffRemoved', 'foreground') or default_color_removed
   end
 
-  local hl = require"lualine.highlight"
   local highlights = {}
 
   -- create highlights and save highlight_name in highlights table
   local function create_highlights()
     highlights = {
-      hl.create_component_highlight_group({fg = options.color_added}, 'signify_added', options),
-      hl.create_component_highlight_group({fg = options.color_modified}, 'signify_modified', options),
-      hl.create_component_highlight_group({fg = options.color_removed}, 'signify_removed', options),
+      highlight.create_component_highlight_group({fg = options.color_added}, 'signify_added', options),
+      highlight.create_component_highlight_group({fg = options.color_modified}, 'signify_modified', options),
+      highlight.create_component_highlight_group({fg = options.color_removed}, 'signify_removed', options),
     }
   end
 
@@ -56,7 +51,7 @@ local function signify(options)
     if options.colored then
       -- load the highlights and store them in colors table
       for _, highlight_name in ipairs(highlights) do
-        table.insert(colors, hl.component_format_highlight(highlight_name))
+        table.insert(colors, highlight.component_format_highlight(highlight_name))
       end
     end
 
