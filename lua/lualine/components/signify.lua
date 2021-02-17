@@ -3,18 +3,46 @@
 
 local utils = require'lualine.utils.utils'
 
+local default_color_added    = "#f0e130"
+local default_color_removed  = "#90ee90"
+local default_color_modified = "#ff0038"
+
+local function get_highlight(scope, color_group)
+  local color = vim.api.nvim_command_output([[ execute 'hi ]] .. color_group .. [[']])
+  if color:match([[links to]]) then
+    local last
+    for w in  string.gmatch (color, "%w+") do
+      last = w
+    end
+    if last then return get_highlight(scope, last) end
+  end
+  if color:match( [[gui=reverse]] ) then
+    if scope == 'guifg' then scope = 'guibg' else scope = 'guifg' end
+  end
+  color = color:match( scope .. [[=(#?%w+)]]) or nil
+  return color or nil
+end
+
 local function signify(options)
   local colored = true
   if options.colored ~= nil then colored = options.colored end
-
-  -- apply defaults
-  local color_modified = "#f0e130"
-  local color_added    = "#90ee90"
-  local color_removed  = "#ff0038"
-  -- parse options
-  if options.color_added    then color_added    = options.color_added    end
-  if options.color_modified then color_modified = options.color_modified end
-  if options.color_removed  then color_removed  = options.color_removed  end
+  local color_added, color_modified, color_removed
+  -- apply colors
+  if options.color_added then
+    color_added = options.color_added
+  else
+    color_added = get_highlight('guifg', 'diffAdded') or default_color_added
+  end
+  if options.color_modified then
+    color_modified = options.color_modified
+  else
+    color_modified = get_highlight('guifg', 'diffChanged') or default_color_modified
+  end
+  if options.color_removed then
+    color_removed  = options.color_removed
+  else
+    color_removed = get_highlight('guifg', 'diffRemoved') or default_color_removed
+  end
 
   local hl = require"lualine.highlight"
   local highlights = {}
@@ -32,7 +60,7 @@ local function signify(options)
   if colored then
     create_highlights()
     utils.expand_set_theme(create_highlights)
-		options.custom_highlight = true
+    options.custom_highlight = true
   end
 
   -- Function that runs everytime statusline is updated
