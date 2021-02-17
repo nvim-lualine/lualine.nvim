@@ -14,22 +14,15 @@ end
 
 local function signify(options)
   if options.colored == nil then options.colored = true end
-  local color_added, color_modified, color_removed
   -- apply colors
-  if options.color_added then
-    color_added = options.color_added
-  else
-    color_added = get_highlight('foreground', 'diffAdded') or default_color_added
+  if not options.color_added then
+    options.color_added = get_highlight('foreground', 'diffAdded') or default_color_added
   end
-  if options.color_modified then
-    color_modified = options.color_modified
-  else
-    color_modified = get_highlight('foreground', 'diffChanged') or default_color_modified
+  if not options.color_modified then
+    options.color_modified = get_highlight('foreground', 'diffChanged') or default_color_modified
   end
-  if options.color_removed then
-    color_removed  = options.color_removed
-  else
-    color_removed = get_highlight('foreground', 'diffRemoved') or default_color_removed
+  if not options.color_removed then
+    options.color_removed = get_highlight('foreground', 'diffRemoved') or default_color_removed
   end
 
   local hl = require"lualine.highlight"
@@ -38,9 +31,9 @@ local function signify(options)
   -- create highlights and save highlight_name in highlights table
   local function create_highlights()
     highlights = {
-      hl.create_component_highlight_group({fg = color_added}, 'signify_added', options),
-      hl.create_component_highlight_group({fg = color_modified}, 'signify_modified', options),
-      hl.create_component_highlight_group({fg = color_removed}, 'signify_removed', options),
+      hl.create_component_highlight_group({fg = options.color_added}, 'signify_added', options),
+      hl.create_component_highlight_group({fg = options.color_modified}, 'signify_modified', options),
+      hl.create_component_highlight_group({fg = options.color_removed}, 'signify_removed', options),
     }
   end
 
