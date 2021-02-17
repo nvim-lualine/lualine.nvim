@@ -160,9 +160,9 @@ local function statusline(sections, is_focused)
   for _, sec in ipairs(section_sequence) do
     if sections['lualine_'..sec] then
       -- insert highlight+components of this section to status_builder
-      local highlight = highlight.format_highlight(is_focused,
+      local hl = highlight.format_highlight(is_focused,
                    'lualine_'..sec)
-			local section = utils_component.draw_section(sections['lualine_'..sec], highlight)
+			local section = utils_component.draw_section(sections['lualine_'..sec], hl)
 			if #section > 0 then
 				table.insert(status_builder, {sec, section})
 			end
@@ -182,9 +182,9 @@ local function statusline(sections, is_focused)
     if is_focused then
       -- component separator needs to have fg = current_section.bg
       -- and bg = adjacent_section.bg
-      local prev_section = status_builder[i-1] and status_builder[i-1] or {[2] = nil}
+      local prev_section = status_builder[i-1] and status_builder[i-1] or {nil, nil}
       local cur_section = status_builder[i]
-      local next_section = status_builder[i+1] and status_builder[i+1] or {[2] = nil}
+      local next_section = status_builder[i+1] and status_builder[i+1] or {nil, nil}
       -- For 2nd half we need to show separator before section
       if cur_section[1] > 'x' then
         local hl = highlight.get_transitional_highlights(prev_section[2], cur_section[2], true)
