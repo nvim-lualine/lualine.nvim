@@ -1,7 +1,9 @@
--- Copyright (c) 2020-2021 hoob3rt
+-- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 
-local async = require('lualine.async')
+local async = require'lualine.async'
+local utils = require'lualine.utils.utils'
+local highlight = require"lualine.highlight"
 
 -- variable to store git diff stats
 local git_diff = nil
@@ -27,7 +29,7 @@ local function process_diff(data)
       end
     end
   end
-  git_diff = { added,  removed, modified }
+  git_diff = { added,  modified, removed }
 end
 
 -- variable to store git_diff getter async function
@@ -77,35 +79,103 @@ local function update_git_diff()
   end)()
 end
 
-_G.lualine_update_git_diff = update_git_diff
-_G.lualine_update_git_diff_getter = update_git_diff_getter
-
 vim.api.nvim_exec([[
-  autocmd lualine BufEnter     * call v:lua.lualine_update_git_diff_getter()
-  autocmd lualine BufEnter     * call v:lua.lualine_update_git_diff()
-  autocmd lualine BufWritePost * call v:lua.lualine_update_git_diff()
+  autocmd lualine BufEnter     * lua require'lualine.components.signify'.update_git_diff_getter()
+  autocmd lualine BufEnter     * lua require'lualine.components.signify'.update_git_diff()
+  autocmd lualine BufWritePost * lua require'lualine.components.signify'.update_git_diff()
   ]], false)
 
-local function signify()
-   if git_diff == nil then return '' end
-   local symbols = {
-     '+',
-     '-',
-     '~',
-   }
-   local result = {}
-   for range=1,3 do
-     if git_diff[range] ~= nil and git_diff[range] > 0
-       then table.insert(result,symbols[range]..''..git_diff[range])
-     end
-   end
+local default_color_added    = "#f0e130"
+local default_color_removed  = "#90ee90"
+local default_color_modified = "#ff0038"
 
-   if result[1] ~= nil then
-       return table.concat(result, ' ')
-   else
-       return ''
-   end
+local function signify(options)
+  if options.colored == nil then options.colored = true end
+  -- apply colors
+  if not options.color_added then
+    options.color_added = utils.extract_highlight_colors('diffAdded', 'foreground') or default_color_added
+  end
+  if not options.color_modified then
+    options.color_modified = utils.extract_highlight_colors('diffChanged', 'foreground') or default_color_modified
+  end
+  if not options.color_removed then
+    options.color_removed = utils.extract_highlight_colors('diffRemoved', 'foreground') or default_color_removed
+  end
+
+  local highlights = {}
+
+  -- create highlights and save highlight_name in highlights table
+  local function create_highlights()
+    highlights = {
+      highlight.create_component_highlight_group({fg = options.color_added}, 'signify_added', options),
+      highlight.create_component_highlight_group({fg = options.color_modified}, 'signify_modified', options),
+      highlight.create_component_highlight_group({fg = options.color_removed}, 'signify_removed', options),
+    }
+  end
+
+  -- create highlights
+  if options.colored then
+    create_highlights()
+    utils.expand_set_theme(create_highlights)
+    options.custom_highlight = true
+  end
+
+  -- Function that runs everytime statusline is updated
+  return function()
+    if git_diff == nil then return '' end
+
+    local symbols = {'+', '~', '-'}
+    local colors = {}
+    if options.colored then
+      -- load the highlights and store them in colors table
+      for _, highlight_name in ipairs(highlights) do
+        table.insert(colors, highlight.component_format_highlight(highlight_name))
+      end
+    end
+
+    local result = {}
+    -- loop though data and load available sections in result table
+    for range=1,3 do
+      if git_diff[range] ~= nil and git_diff[range] > 0 then
+        if options.colored then
+          table.insert(result,colors[range]..symbols[range]..git_diff[range])
+        else
+          table.insert(result,symbols[range]..git_diff[range])
+        end
+      end
+    end
+    if result[1] ~= nil then
+      return table.concat(result, ' ')
+    else
+      return ''
+    end
+  end
 end
 
+-- Api to get git sign count
+-- scheme :
+-- {
+--    added = added_count,
+--    modified = modified_count,
+--    removed = removed_count,
+-- }
+-- error_code = { -1, -1, -1 }
+local function get_sign_count()
+  update_git_diff_getter()
+  update_git_diff()
+  if git_diff then
+    return{
+      added = git_diff[1],
+      modified = git_diff[2],
+      removed = git_diff[3]
+    }
+  end
+  return {-1, -1, -1}
+end
 
-return signify
+return {
+  init = function(options) return signify(options) end,
+  update_git_diff = update_git_diff,
+  update_git_diff_getter = update_git_diff_getter,
+  get_sign_count = get_sign_count,
+}

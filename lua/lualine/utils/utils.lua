@@ -14,4 +14,10 @@ function M.expand_set_theme(func)
   end
 end
 
+-- Note for now only works for termguicolors scope can be background or foreground
+function M.extract_highlight_colors(color_group, scope)
+  local color = string.format('#%06x', vim.api.nvim_get_hl_by_name(color_group, true)[scope])
+  return color or nil
+end
+
 return M
