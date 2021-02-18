@@ -1,5 +1,4 @@
-*lualine.txt*
-						        *lualine* *lualine.nvim*
+lualine.txt			    	             *lualine-nvim*   *lualine*
 
 Author: hoob3rt (https://github.com/hoob3rt)
 License: MIT License
@@ -279,7 +278,23 @@ List of options are given below.
 
   • fileformat~
     • icons_enabled (true)
-      Whether to displays icon before component
+      Whether to displays icon before component. Colors
+      are automaticaly extracted from colorscheme . If you
+      want to change any of those you can use options given below.
+
+
+  • signify~
+    • colored (true)
+      Whether to show colors
+
+    • color_added ('#90ee90')
+      Foreground color of added section
+
+    • color_modified ('#f0e130')
+      Foreground color of modified section
+
+    • color_removed ('#ff0038')
+      Foreground color of removed section
 
 Example:~
 >
@@ -293,11 +308,12 @@ Example:~
     {
       'filename',
       full_name = true,
-      relative = true,
+      shorten = true,
       format = function(name)
         -- Capitalize first charecter of filename to capital.
         local path, fname = name:match('(.*/)(.*)')
-        rerurn path .. fname[1, 1]:upper() .. fname[2, #fname]
+	if not path then path = ''; fname = name end
+        return path .. fname:sub(1, 1):upper() .. fname:sub(2, #fname)
       end
     }
   }

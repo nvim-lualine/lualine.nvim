@@ -244,6 +244,17 @@ Default options act as default for all components
 - fileformat
   - icons_enabled (true)\
    Whether to displays icon before component
+- signify
+  - colored        (true)\
+    Whether to show colors. Colors are automaticaly
+		extracted from colorscheme . If you want to change
+		any of those you can use options given below.
+  - color_added    ('#90ee90')\
+    Foreground color of added section
+  - color_modified ('#f0e130')\
+    Foreground color of modified section
+  - color_removed  ('#ff0038')\
+    Foreground color of removed section
 
 **Example:**
 ```lua
@@ -257,11 +268,12 @@ lualine.sections.lualine_b = {
   {
     'filename',
     full_name = true,
-    relative = true,
+    shorten = true,
     format = function(name)
       -- Capitalize first charecter of filename to capital.
       local path, fname = name:match('(.*/)(.*)')
-      rerurn path .. fname[1, 1]:upper() .. fname[2, #fname]
+				if not path then path = ''; fname = name end
+        return path .. fname:sub(1, 1):upper() .. fname:sub(2, #fname)
     end
   }
 }

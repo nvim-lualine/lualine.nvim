@@ -10,12 +10,12 @@ local function filename(options)
 
   return function()
     local data
-    if shorten then
+    if not full_path then
       data = vim.fn.expand('%:t')
-    elseif full_path then
-      data = vim.fn.expand('%:p')
-    else
+    elseif shorten then
       data = vim.fn.expand('%')
+    else
+      data = vim.fn.expand('%:p')
     end
     if data == '' then
       data = '[No Name]'
