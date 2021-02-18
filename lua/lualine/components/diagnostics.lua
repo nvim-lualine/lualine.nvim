@@ -3,6 +3,10 @@
 local highlight = require('lualine.highlight')
 local utils = require('lualine.utils.utils')
 
+local default_color_error = '#e32636'
+local default_color_warn  = '#ffdf00'
+local default_color_info  = '#ffffff'
+
 local diagnostic_sources = {
 	nvim_lsp = function()
     local error_count = vim.lsp.diagnostic.get_count(0, 'Error')
@@ -35,8 +39,8 @@ local diagnostic_sources = {
 local function get_diagnostics(sources)
   local result = {}
   for _, source in ipairs(sources) do
-    local E, W, I = diagnostic_sources[source]()
-    result[source] = {error = E, warn = W, info = I}
+    local error, warn, info = diagnostic_sources[source]()
+    result[source] = {error = error, warn = warn, info = info}
   end
   return result
 end
@@ -56,17 +60,24 @@ local function diagnostics(options)
       info  = 'I:'
     }
 	end
-  if options.sources == nil then options.sources = {'nvim_lsp'} end
+  if options.sources == nil then
+    print('no sources for diagnostics configured')
+    return ''
+  end
   if options.sections == nil then options.sections = {'error', 'warn', 'info'} end
 	if options.colored == nil then options.colored = true end
 
-	local default_color_error = '#e32636'
-	local default_color_warn  = '#ffdf00'
-	local default_color_info  = '#ffffff'
-
-	if options.color_error == nil then options.color_error = default_color_error end
-	if options.color_warn == nil then options.color_warn = default_color_warn end
-	if options.color_info == nil then options.color_info = default_color_info end
+  if options.colored == nil then options.colored = true end
+  -- apply colors
+  if not options.color_warn then
+    options.color_warn = utils.extract_highlight_colors('diffNewFile', 'foreground') or default_color_warn
+  end
+  if not options.color_info then
+    options.color_info = utils.extract_highlight_colors('Normal', 'foreground') or default_color_info
+  end
+  if not options.color_error then
+    options.color_error = utils.extract_highlight_colors('diffRemoved', 'foreground') or default_color_error
+  end
 
 	local highlight_groups = {}
 	local function add_highlights()
