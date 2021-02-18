@@ -157,14 +157,14 @@ local function statusline(sections, is_focused)
   -- The sequence sections should maintain
   local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
 
-  for _, sec in ipairs(section_sequence) do
-    if sections['lualine_'..sec] then
+  for _, section_name in ipairs(section_sequence) do
+    if sections['lualine_'..section_name] then
       -- insert highlight+components of this section to status_builder
-      local hl = highlight.format_highlight(is_focused,
-                   'lualine_'..sec)
-			local section = utils_component.draw_section(sections['lualine_'..sec], hl)
-			if #section > 0 then
-				table.insert(status_builder, {sec, section})
+      local section_highlight = highlight.format_highlight(is_focused,
+                   'lualine_'..section_name)
+			local section_data = utils_component.draw_section(sections['lualine_'..section_name], section_highlight)
+			if #section_data > 0 then
+				table.insert(status_builder, {section_name, section_data})
 			end
     end
   end
@@ -182,22 +182,26 @@ local function statusline(sections, is_focused)
     if is_focused then
       -- component separator needs to have fg = current_section.bg
       -- and bg = adjacent_section.bg
-      local prev_section = status_builder[i-1] and status_builder[i-1] or {nil, nil}
-      local cur_section = status_builder[i]
-      local next_section = status_builder[i+1] and status_builder[i+1] or {nil, nil}
+      local previous_section = status_builder[i-1] and status_builder[i-1] or {}
+      local current_section = status_builder[i]
+      local next_section = status_builder[i+1] and status_builder[i+1] or {}
       -- For 2nd half we need to show separator before section
-      if cur_section[1] > 'x' then
-        local hl = highlight.get_transitional_highlights(prev_section[2], cur_section[2], true)
-        if hl then table.insert(status, hl .. M.options.section_separators[2]) end
+      if current_section[1] > 'x' then
+        local transitional_highlight = highlight.get_transitional_highlights(previous_section[2], current_section[2], true)
+        if transitional_highlight and M.options.section_separators and M.options.section_separators[2] then
+          table.insert(status, transitional_highlight .. M.options.section_separators[2])
+        end
       end
 
       -- **( insert the actual section in the middle )** --
       table.insert(status, status_builder[i][2])
 
       -- For 1st half we need to show separator after section
-      if cur_section[1] < 'c' then
-        local hl = highlight.get_transitional_highlights(cur_section[2], next_section[2])
-        if hl then table.insert(status, hl .. M.options.section_separators[1]) end
+      if current_section[1] < 'c' then
+        local transitional_highlight = highlight.get_transitional_highlights(current_section[2], next_section[2])
+        if transitional_highlight and M.options.section_separators and M.options.section_separators[1] then
+          table.insert(status, transitional_highlight .. M.options.section_separators[1])
+        end
       end
     else -- when not in focus
       table.insert(status, status_builder[i][2])

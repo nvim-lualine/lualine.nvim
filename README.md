@@ -97,8 +97,8 @@ lualine.component_separators = {'', ''}
 or disable it
 
 ```lua
-lualine.section_separators = {'', ''}
-lualine.component_separators = {'', ''}
+lualine.section_separators = nil
+lualine.component_separators = nil
 ```
 
 ### Changing components in lualine sections

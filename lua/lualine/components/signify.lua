@@ -36,7 +36,6 @@ local function signify(options)
   if options.colored then
     create_highlights()
     utils.expand_set_theme(create_highlights)
-    options.custom_highlight = true
   end
 
   -- Function that runs everytime statusline is updated

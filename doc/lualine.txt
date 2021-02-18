@@ -123,8 +123,8 @@ easily change yours to something else like below.
 
 or disable it
 >
-    lualine.section_separators = {'', ''}
-    lualine.component_separators = {'', ''}
+    lualine.section_separators = nil
+    lualine.component_separators = nil
 <
 
 CHANGING COMPONENTS IN LUALINE SECTIONS            *lualine-changing_components*

@@ -145,6 +145,12 @@ function M.get_transitional_highlights(left_section, right_section, reverse )
   if left_section then
     -- extract highlight_name from .....%#highlight_name#
     left_highlight_name = left_section:match('.*%%#(.*)#')
+  else
+    -- When right section us unavailable default to lualine_c
+    left_highlight_name = append_mode('lualine_c')
+    if vim.fn.hlexists(left_highlight_name) == 0 then
+      left_highlight_name = 'lualine_c_normal'
+    end
   end
   if right_section then
     -- using vim-regex cause lua-paterns don't have non-greedy matching
@@ -174,8 +180,8 @@ function M.get_transitional_highlights(left_section, right_section, reverse )
     local function set_transitional_highlights()
       -- Get colors from highlights
       -- using string.format to convert decimal to hexadecimal
-      local fg = string.format('#%06x', vim.api.nvim_get_hl_by_name(left_highlight_name, true).background)
-      local bg = string.format('#%06x', vim.api.nvim_get_hl_by_name(right_highlight_name, true).background)
+      local fg = utils.extract_highlight_colors(left_highlight_name, 'background')
+      local bg = utils.extract_highlight_colors(right_highlight_name, 'background')
 			-- swap the bg and fg when reverse is true. As in that case highlight will
 			-- be placed before section
 			if reverse then fg, bg = bg, fg end

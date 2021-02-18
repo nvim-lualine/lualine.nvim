@@ -44,23 +44,25 @@ end
 
 -- Apply separator at end of component only when
 -- custom highlights haven't affected background
-local function apply_spearator(status, options)
-    local sep
+local function apply_spearator(status, options, highlight_name)
+    local separator
     if options.separator and #options.separator > 0 then
-      sep = options.separator
+      separator = options.separator
     elseif options.component_separators then
-      if options.self.section < 'lualine_x' then sep = options.component_separators[1]
-      else sep = options.component_separators[2] end
-      options.separator = sep
+      if options.self.section < 'lualine_x' then separator = options.component_separators[1]
+      else separator = options.component_separators[2] end
+      if not separator then return status end
+      options.separator = separator
     else
       return status
     end
-    status = status .. sep
-    options.separator_applied = sep
+    separator = highlight_name .. separator
+    status = status .. separator
+    options.separator_applied = separator
   return status
 end
 
-function strip_separator(status, options)
+local function strip_separator(status, options)
   if options.separator_applied then
     status = status:sub(1, #status - #options.separator_applied)
     options.separator_applied = nil
@@ -69,7 +71,7 @@ function strip_separator(status, options)
 end
 
 -- Returns formated string for a section
-function M.draw_section(section, highlight)
+function M.draw_section(section, highlight_name)
   local status = {}
   local drawn_components = {}
   for _, component in pairs(section) do
@@ -82,9 +84,9 @@ function M.draw_section(section, highlight)
       localstatus = apply_case(localstatus, component)
       localstatus = apply_padding(localstatus, component)
       localstatus = apply_highlights(localstatus, component)
-      localstatus = apply_spearator(localstatus, component)
+      localstatus = apply_spearator(localstatus, component, highlight_name)
       if custom_hl then table.insert(status, localstatus)
-      else table.insert(status, highlight .. localstatus) end
+      else table.insert(status, highlight_name .. localstatus) end
       table.insert(drawn_components, component)
     end
   end
