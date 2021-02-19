@@ -12,8 +12,8 @@ local theme_set = {}
 M.options = {
   icons_enabled = true,
   theme = 'gruvbox',
-	component_separators = {'', ''},
-	section_separators = {'', ''},
+  component_separators = {'', ''},
+  section_separators = {'', ''},
 }
 
 
@@ -69,12 +69,12 @@ local function load_special_components(component)
       if ok then return return_val end
       return ''
     elseif loadstring(string.format('return %s ~= nil', component)) and
-       loadstring(string.format([[return %s ~= nil]], component))() then
+      loadstring(string.format([[return %s ~= nil]], component))() then
       -- lua veriable component
       return loadstring(string.format([[
-        local ok, return_val = pcall(tostring, %s)
-        if ok then return return_val end
-        return '']], component))()
+      local ok, return_val = pcall(tostring, %s)
+      if ok then return return_val end
+      return '']], component))()
     else
       -- vim function component
       local ok, return_val = pcall(vim.fn[component])
@@ -175,22 +175,25 @@ local function statusline(sections, is_focused)
   if M.options.theme ~= theme_set then
     _G.lualine_set_theme()
   end
-  -- status_builder stores statusline without section_separators
-  local status_builder = {}
-  -- The sequence sections should maintain
-  local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
-
-  for _, section_name in ipairs(section_sequence) do
-    if sections['lualine_'..section_name] then
-      -- insert highlight+components of this section to status_builder
-      local section_highlight = highlight.format_highlight(is_focused,
-                   'lualine_'..section_name)
-			local section_data = utils_component.draw_section(sections['lualine_'..section_name], section_highlight)
-			if #section_data > 0 then
-				table.insert(status_builder, {name = section_name, data = section_data,})
-			end
+  local function create_status_builder()
+    -- The sequence sections should maintain
+    local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
+    local status_builder = {}
+    for _, section_name in ipairs(section_sequence) do
+      if sections['lualine_'..section_name] then
+        -- insert highlight+components of this section to status_builder
+        local section_highlight = highlight.format_highlight(is_focused,
+        'lualine_'..section_name)
+        local section_data = utils_component.draw_section(sections['lualine_'..section_name], section_highlight)
+        if #section_data > 0 then
+          table.insert(status_builder, {name = section_name, data = section_data,})
+        end
+      end
     end
+    return status_builder
   end
+  -- status_builder stores statusline without section_separators
+  local status_builder = create_status_builder()
 
   -- Actual statusline
   local status = {}
@@ -233,36 +236,36 @@ local function statusline(sections, is_focused)
   -- incase none of x,y,z was configured lets not fill whole statusline with a,b,c section
   if not half_passed then
     table.insert(status, highlight.format_highlight(is_focused,'lualine_c').."%=") end
-  return table.concat(status)
-end
-
-local function status_dispatch()
-  if vim.g.statusline_winid == vim.fn.win_getid() then
-    return statusline(M.sections, true)
-  else
-    return statusline(M.inactive_sections, false)
+    return table.concat(status)
   end
-end
 
-local function exec_autocommands()
-  _G.lualine_set_theme = lualine_set_theme
-  _G.lualine_statusline = status_dispatch
-  vim.api.nvim_exec([[
+  local function status_dispatch()
+    if vim.g.statusline_winid == vim.fn.win_getid() then
+      return statusline(M.sections, true)
+    else
+      return statusline(M.inactive_sections, false)
+    end
+  end
+
+  local function exec_autocommands()
+    _G.lualine_set_theme = lualine_set_theme
+    _G.lualine_statusline = status_dispatch
+    vim.api.nvim_exec([[
     augroup lualine
     autocmd!
     autocmd ColorScheme * call v:lua.lualine_set_theme()
     autocmd WinLeave,BufLeave * lua vim.wo.statusline=lualine_statusline()
     autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.lualine_statusline()
     augroup END
-  ]], false)
-end
+    ]], false)
+  end
 
-function M.status()
-  check_single_separator()
-  lualine_set_theme()
-  exec_autocommands()
-  load_components()
-  load_extensions()
-end
+  function M.status()
+    check_single_separator()
+    lualine_set_theme()
+    exec_autocommands()
+    load_components()
+    load_extensions()
+  end
 
-return M
+  return M
