@@ -235,37 +235,38 @@ local function statusline(sections, is_focused)
   end
   -- incase none of x,y,z was configured lets not fill whole statusline with a,b,c section
   if not half_passed then
-    table.insert(status, highlight.format_highlight(is_focused,'lualine_c').."%=") end
-    return table.concat(status)
+    table.insert(status, highlight.format_highlight(is_focused,'lualine_c').."%=")
   end
+  return table.concat(status)
+end
 
-  local function status_dispatch()
-    if vim.g.statusline_winid == vim.fn.win_getid() then
-      return statusline(M.sections, true)
-    else
-      return statusline(M.inactive_sections, false)
-    end
+local function status_dispatch()
+  if vim.g.statusline_winid == vim.fn.win_getid() then
+    return statusline(M.sections, true)
+  else
+    return statusline(M.inactive_sections, false)
   end
+end
 
-  local function exec_autocommands()
-    _G.lualine_set_theme = lualine_set_theme
-    _G.lualine_statusline = status_dispatch
-    vim.api.nvim_exec([[
-    augroup lualine
-    autocmd!
-    autocmd ColorScheme * call v:lua.lualine_set_theme()
-    autocmd WinLeave,BufLeave * lua vim.wo.statusline=lualine_statusline()
-    autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.lualine_statusline()
-    augroup END
-    ]], false)
-  end
+local function exec_autocommands()
+  _G.lualine_set_theme = lualine_set_theme
+  _G.lualine_statusline = status_dispatch
+  vim.api.nvim_exec([[
+  augroup lualine
+  autocmd!
+  autocmd ColorScheme * call v:lua.lualine_set_theme()
+  autocmd WinLeave,BufLeave * lua vim.wo.statusline=lualine_statusline()
+  autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.lualine_statusline()
+  augroup END
+  ]], false)
+end
 
-  function M.status()
-    check_single_separator()
-    lualine_set_theme()
-    exec_autocommands()
-    load_components()
-    load_extensions()
-  end
+function M.status()
+  check_single_separator()
+  lualine_set_theme()
+  exec_autocommands()
+  load_components()
+  load_extensions()
+end
 
-  return M
+return M
