@@ -140,7 +140,7 @@ local function  load_extensions()
   end
 end
 
-local function set_lualine_theme()
+local function lualine_set_theme()
   if type(M.options.theme) == 'string' then
     M.options.theme = require('lualine.themes.'.. M.options.theme)
   end
@@ -150,7 +150,7 @@ end
 
 local function statusline(sections, is_focused)
   if M.theme ~= theme_set then
-    set_lualine_theme()
+    _G.lualine_set_theme()
   end
   -- status_builder stores statusline without section_separators
   local status_builder = {}
@@ -222,12 +222,12 @@ local function status_dispatch()
 end
 
 local function exec_autocommands()
-  _G.set_lualine_theme = set_lualine_theme
+  _G.lualine_set_theme = lualine_set_theme
   _G.lualine_statusline = status_dispatch
   vim.api.nvim_exec([[
     augroup lualine
     autocmd!
-    autocmd ColorScheme * call v:lua.set_lualine_theme()
+    autocmd ColorScheme * call v:lua.lualine_set_theme()
     autocmd WinLeave,BufLeave * lua vim.wo.statusline=lualine_statusline()
     autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.lualine_statusline()
     augroup END
@@ -235,7 +235,7 @@ local function exec_autocommands()
 end
 
 function M.status()
-  set_lualine_theme()
+  lualine_set_theme()
   exec_autocommands()
   load_components()
   load_extensions()

@@ -7,8 +7,8 @@ local M = {}
 -- functionality at runtime .
 function M.expand_set_theme(func)
   -- execute a local version of global function to not get in a inf recurtion
-  local set_theme = _G.set_lualine_theme
-  _G.set_lualine_theme = function()
+  local set_theme = _G.lualine_set_theme
+  _G.lualine_set_theme = function()
     set_theme()
     func()
   end

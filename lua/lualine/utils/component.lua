@@ -51,9 +51,13 @@ local function apply_spearator(status, options, highlight_name)
     elseif options.component_separators then
       if options.self.section < 'lualine_x' then separator = options.component_separators[1]
       else separator = options.component_separators[2] end
-      if not separator then return status end
+      if not separator then
+        options.separator_applied = nil
+        return status
+      end
       options.separator = separator
     else
+      options.separator_applied = nil
       return status
     end
     separator = highlight_name .. separator
@@ -77,7 +81,7 @@ function M.draw_section(section, highlight_name)
   for _, component in pairs(section) do
     local localstatus = component[1]()
     if #localstatus > 0 then
-      local custom_hl = localstatus:find('%%#.*#') == 1 or component.color ~= nil
+      local custom_highlight_at_begining = localstatus:find('%%#.*#') == 1 or component.color ~= nil
       -- Apply modifier functions for options
       if component.format then localstatus = component.format(localstatus) end
       localstatus = apply_icon(localstatus, component)
@@ -85,8 +89,14 @@ function M.draw_section(section, highlight_name)
       localstatus = apply_padding(localstatus, component)
       localstatus = apply_highlights(localstatus, component)
       localstatus = apply_spearator(localstatus, component, highlight_name)
-      if custom_hl then table.insert(status, localstatus)
-      else table.insert(status, highlight_name .. localstatus) end
+      if custom_highlight_at_begining or
+        (#drawn_components > 0 and not drawn_components[#drawn_components].separator_applied)then
+        -- Don't prepend with old highlight when the component changes it imidiately
+        -- Or when it was already applied with separator
+        table.insert(status, localstatus)
+      else
+        table.insert(status, highlight_name .. localstatus)
+      end
       table.insert(drawn_components, component)
     end
   end
