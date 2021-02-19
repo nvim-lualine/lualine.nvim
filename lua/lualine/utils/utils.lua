@@ -42,8 +42,7 @@ end
 function M.highlight_exists(highlight_name)
   local ok, result = pcall(vim.api.nvim_exec, 'highlight '..highlight_name, true)
   if not ok then return false end
-  local return_val = result:find('xxx cleared') == nil
-  return return_val
+  return result:find('xxx cleared') == nil
 end
 
 return M
