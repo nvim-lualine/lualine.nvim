@@ -60,7 +60,7 @@ local function load_special_components(component)
       -- filters var portion from g:var
       -- For some reason overwriting component var from outer scope causes the
       -- component not to work . So creating a new local name component to use:/
-      local component = component:sub(#scope + 2, #component)
+      component = component:sub(#scope + 2, #component)
       -- Displays nothing when veriable aren't present
       local return_val = vim[scope][component]
       if return_val == nil then return '' end
