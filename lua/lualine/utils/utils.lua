@@ -16,7 +16,7 @@ end
 
 -- Note for now only works for termguicolors scope can be background or foreground
 function M.extract_highlight_colors(color_group, scope)
-  if vim.fn.hlexists(color_group) == 0 then return nil end
+  if not M.highlight_exists(color_group) then return nil end
   local gui_colors = vim.api.nvim_get_hl_by_name(color_group, true)
   local cterm_colors = vim.api.nvim_get_hl_by_name(color_group, false)
   local color = {
@@ -36,6 +36,13 @@ function M.extract_highlight_colors(color_group, scope)
   color = vim.tbl_extend('keep', color, gui_colors, cterm_colors)
   if scope then return color[scope] end
   return color
+end
+
+-- determine if an highlight exist and isn't cleared
+function M.highlight_exists(highlight_name)
+  local ok, result = pcall(vim.api.nvim_exec, 'highlight '..highlight_name, true)
+  if not ok then return false end
+  return result:find('xxx cleared') == nil
 end
 
 return M

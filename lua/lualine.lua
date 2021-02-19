@@ -143,13 +143,25 @@ end
 local function lualine_set_theme()
   if type(M.options.theme) == 'string' then
     M.options.theme = require('lualine.themes.'.. M.options.theme)
+    local function reset_component_theme(sections)
+      for _, section in pairs(sections)do
+        for _, component in pairs(section) do
+          if type(component) == 'table' then
+            component.theme = M.options.theme
+          end
+        end
+      end
+    end
+    reset_component_theme(M.sections)
+    reset_component_theme(M.inactive_sections)
   end
+  highlight.clear_highlights()
   highlight.create_highlight_groups(M.options.theme)
   theme_set = M.options.theme
 end
 
 local function statusline(sections, is_focused)
-  if M.theme ~= theme_set then
+  if M.options.theme ~= theme_set then
     _G.lualine_set_theme()
   end
   -- status_builder stores statusline without section_separators

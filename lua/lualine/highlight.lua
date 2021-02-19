@@ -5,18 +5,36 @@ local M = {  }
 local utils_colors = require "lualine.utils.cterm_colors"
 local utils = require 'lualine.utils.utils'
 local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
+local loaded_highlights = {}
+
+-- @description: clears Highlights in loaded_highlights
+function M.clear_highlights()
+  for no, highlight_name in ipairs(loaded_highlights)do
+    if highlight_name and #highlight_name > 0 and utils.highlight_exists(highlight_name) then
+      vim.cmd('highlight clear ' .. highlight_name)
+    end
+    loaded_highlights[no] = nil
+  end
+end
 
 local function highlight (name, foreground, background, gui)
-  local command = {
-      'highlight', name,
-      'ctermfg=' .. (foreground[2] or utils_colors.get_cterm_color(foreground)),
-      'ctermbg=' .. (background[2] or utils_colors.get_cterm_color(background)),
-      'cterm=' .. (gui or 'none'),
-      'guifg=' .. (foreground[1] or foreground),
-      'guibg=' .. (background[1] or background),
-      'gui=' .. (gui or 'none'),
-    }
+  local command = { 'highlight', name, }
+  if foreground then
+    table.insert(command, 'ctermfg=' .. (foreground[2] or
+      (foreground ~= 'none' and utils_colors.get_cterm_color(foreground)) or 'none'))
+    table.insert(command, 'guifg=' .. (foreground[1] or foreground))
+  end
+  if background then
+    table.insert(command, 'ctermbg=' .. (background[2] or
+      (background ~= 'none' and utils_colors.get_cterm_color(background)) or 'none'))
+    table.insert(command, 'guibg=' .. (background[1] or background))
+  end
+  if gui then
+    table.insert(command, 'cterm=' .. (gui or 'none'))
+    table.insert(command, 'gui=' .. (gui or 'none'))
+  end
   vim.cmd(table.concat(command, ' '))
+  table.insert(loaded_highlights, name)
 end
 
 function M.create_highlight_groups(theme)
@@ -78,7 +96,8 @@ function M.create_component_highlight_group(color , highlight_tag, options)
   end
   for _, mode in ipairs(modes) do
     local highlight_group_name = { options.self.section, highlight_tag, mode }
-    local default_color_table = options.theme[mode] and options.theme[mode][section] or options.theme.normal[section]
+    local default_color_table = options.theme[mode] and
+      options.theme[mode][section] or options.theme.normal[section]
     local bg = (color.bg or default_color_table.bg)
     local fg = (color.fg or default_color_table.fg)
     -- Check if it's same as normal mode if it is no need to create aditional highlight
@@ -109,7 +128,7 @@ function M.component_format_highlight(highlight_name)
   else
     highlight_group = highlight_group..'_inactive'
   end
-  if vim.fn.hlexists(highlight_group) ~= 0 then
+  if utils.highlight_exists(highlight_group)then
     return '%#'..highlight_group..'#'
   else
     return '%#'..highlight_name..'_normal#'
@@ -126,7 +145,7 @@ function M.format_highlight(is_focused, highlight_group)
   else
     highlight_name = append_mode(highlight_group)
   end
-  if vim.fn.hlexists(highlight_name) ~= 0 then
+  if utils.highlight_exists(highlight_name) then
     return '%#' .. highlight_name ..'#'
   else
     return '%#' .. highlight_group .. '_normal#'
@@ -148,7 +167,7 @@ function M.get_transitional_highlights(left_section, right_section, reverse )
   else
     -- When right section us unavailable default to lualine_c
     left_highlight_name = append_mode('lualine_c')
-    if vim.fn.hlexists(left_highlight_name) == 0 then
+    if not utils.highlight_exists(left_highlight_name) then
       left_highlight_name = 'lualine_c_normal'
     end
   end
@@ -159,7 +178,7 @@ function M.get_transitional_highlights(left_section, right_section, reverse )
   else
     -- When right section us unavailable default to lualine_c
     right_highlight_name = append_mode('lualine_c')
-    if vim.fn.hlexists(right_highlight_name) == 0 then
+    if not utils.highlight_exists(right_highlight_name) then
       right_highlight_name = 'lualine_c_normal'
     end
   end
@@ -174,14 +193,15 @@ function M.get_transitional_highlights(left_section, right_section, reverse )
 		highlight_name = 'lualine_' .. left_highlight_name .. '_to_' .. right_highlight_name
 	end
 
-  if vim.fn.hlexists(highlight_name) == 0 then
+  if not utils.highlight_exists(highlight_name) then
     -- Create the highlight_group if needed
-    -- print(highlight_name)
     local function set_transitional_highlights()
       -- Get colors from highlights
       -- using string.format to convert decimal to hexadecimal
       local fg = utils.extract_highlight_colors(left_highlight_name, 'guibg')
       local bg = utils.extract_highlight_colors(right_highlight_name, 'guibg')
+      if not fg then fg = 'none' end
+      if not bg then bg = 'none' end
 			-- swap the bg and fg when reverse is true. As in that case highlight will
 			-- be placed before section
 			if reverse then fg, bg = bg, fg end
