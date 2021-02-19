@@ -17,8 +17,25 @@ end
 -- Note for now only works for termguicolors scope can be background or foreground
 function M.extract_highlight_colors(color_group, scope)
   if vim.fn.hlexists(color_group) == 0 then return nil end
-  local color = string.format('#%06x', vim.api.nvim_get_hl_by_name(color_group, true)[scope])
-  return color or nil
+  local gui_colors = vim.api.nvim_get_hl_by_name(color_group, true)
+  local cterm_colors = vim.api.nvim_get_hl_by_name(color_group, false)
+  local color = {
+    ctermfg = cterm_colors.foreground,
+    ctermbg = cterm_colors.background,
+  }
+  if gui_colors.background then
+    color.guibg = string.format('#%06x', gui_colors.background)
+    gui_colors.background = nil
+  end
+  if gui_colors.foreground then
+    color.guifg = string.format('#%06x', gui_colors.foreground)
+    gui_colors.foreground = nil
+  end
+  cterm_colors.background = nil
+  cterm_colors.foreground = nil
+  color = vim.tbl_extend('keep', color, gui_colors, cterm_colors)
+  if scope then return color[scope] end
+  return color
 end
 
 return M

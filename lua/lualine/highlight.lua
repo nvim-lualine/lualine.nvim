@@ -180,8 +180,8 @@ function M.get_transitional_highlights(left_section, right_section, reverse )
     local function set_transitional_highlights()
       -- Get colors from highlights
       -- using string.format to convert decimal to hexadecimal
-      local fg = utils.extract_highlight_colors(left_highlight_name, 'background')
-      local bg = utils.extract_highlight_colors(right_highlight_name, 'background')
+      local fg = utils.extract_highlight_colors(left_highlight_name, 'guibg')
+      local bg = utils.extract_highlight_colors(right_highlight_name, 'guibg')
 			-- swap the bg and fg when reverse is true. As in that case highlight will
 			-- be placed before section
 			if reverse then fg, bg = bg, fg end
