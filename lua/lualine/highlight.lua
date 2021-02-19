@@ -153,17 +153,17 @@ function M.format_highlight(is_focused, highlight_group)
 end
 
 -- @description : Provides transitional highlights for section separators.
--- @param left_section :(string) section before separator
--- @param right_section:(string) section after separator
+-- @param left_section_data :(string) section before separator
+-- @param right_section_data:(string) section after separator
 -- @param reverse      :(string) Whether it's a left separator or right separator
 --		'▶️' and '◀️' needs reverse colors so this parameter needs to be set true.
 -- @return: (string) formated highlight group name
-function M.get_transitional_highlights(left_section, right_section, reverse )
+function M.get_transitional_highlights(left_section_data, right_section_data, reverse )
   local left_highlight_name, right_highlight_name
   -- Grab the last highlighter of left section
-  if left_section then
+  if left_section_data then
     -- extract highlight_name from .....%#highlight_name#
-    left_highlight_name = left_section:match('.*%%#(.*)#')
+    left_highlight_name = left_section_data:match('.*%%#(.*)#')
   else
     -- When right section us unavailable default to lualine_c
     left_highlight_name = append_mode('lualine_c')
@@ -171,10 +171,10 @@ function M.get_transitional_highlights(left_section, right_section, reverse )
       left_highlight_name = 'lualine_c_normal'
     end
   end
-  if right_section then
+  if right_section_data then
     -- using vim-regex cause lua-paterns don't have non-greedy matching
     -- extract highlight_name from %#highlight_name#....
-    right_highlight_name = vim.fn.matchlist(right_section, [[%#\(.\{-\}\)#]])[2]
+    right_highlight_name = vim.fn.matchlist(right_section_data, [[%#\(.\{-\}\)#]])[2]
   else
     -- When right section us unavailable default to lualine_c
     right_highlight_name = append_mode('lualine_c')

@@ -38,6 +38,17 @@ M.inactive_sections = {
 M.extensions = {
 }
 
+local function check_single_separator()
+  local compoennt_separator = M.options.component_separators
+  local section_separator = M.options.section_separators
+  if type(M.options.component_separators) == 'string' then
+    M.options.component_separators = {compoennt_separator, compoennt_separator}
+  end
+  if type(M.options.section_separators) == 'string' then
+    M.options.section_separators = {section_separator, section_separator}
+  end
+end
+
 local function load_special_components(component)
   return function()
     -- precedence lualine_component > vim_var > lua_var > vim_function
@@ -176,7 +187,7 @@ local function statusline(sections, is_focused)
                    'lualine_'..section_name)
 			local section_data = utils_component.draw_section(sections['lualine_'..section_name], section_highlight)
 			if #section_data > 0 then
-				table.insert(status_builder, {section_name, section_data})
+				table.insert(status_builder, {name = section_name, data = section_data,})
 			end
     end
   end
@@ -186,7 +197,7 @@ local function statusline(sections, is_focused)
   local half_passed = false
   for i=1,#status_builder do
     -- midsection divider
-    if not half_passed and status_builder[i][1] > 'c' then
+    if not half_passed and status_builder[i].name > 'c' then
       table.insert(status, highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
       half_passed = true
     end
@@ -194,29 +205,29 @@ local function statusline(sections, is_focused)
     if is_focused then
       -- component separator needs to have fg = current_section.bg
       -- and bg = adjacent_section.bg
-      local previous_section = status_builder[i-1] and status_builder[i-1] or {}
+      local previous_section = status_builder[i-1] or {}
       local current_section = status_builder[i]
-      local next_section = status_builder[i+1] and status_builder[i+1] or {}
+      local next_section = status_builder[i+1] or {}
       -- For 2nd half we need to show separator before section
-      if current_section[1] > 'x' then
-        local transitional_highlight = highlight.get_transitional_highlights(previous_section[2], current_section[2], true)
+      if current_section.name > 'x' then
+        local transitional_highlight = highlight.get_transitional_highlights(previous_section.data, current_section.data, true)
         if transitional_highlight and M.options.section_separators and M.options.section_separators[2] then
           table.insert(status, transitional_highlight .. M.options.section_separators[2])
         end
       end
 
       -- **( insert the actual section in the middle )** --
-      table.insert(status, status_builder[i][2])
+      table.insert(status, status_builder[i].data)
 
       -- For 1st half we need to show separator after section
-      if current_section[1] < 'c' then
-        local transitional_highlight = highlight.get_transitional_highlights(current_section[2], next_section[2])
+      if current_section.name < 'c' then
+        local transitional_highlight = highlight.get_transitional_highlights(current_section.data, next_section.data)
         if transitional_highlight and M.options.section_separators and M.options.section_separators[1] then
           table.insert(status, transitional_highlight .. M.options.section_separators[1])
         end
       end
     else -- when not in focus
-      table.insert(status, status_builder[i][2])
+      table.insert(status, status_builder[i].data)
     end
   end
   -- incase none of x,y,z was configured lets not fill whole statusline with a,b,c section
@@ -247,6 +258,7 @@ local function exec_autocommands()
 end
 
 function M.status()
+  check_single_separator()
   lualine_set_theme()
   exec_autocommands()
   load_components()
