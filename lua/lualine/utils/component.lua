@@ -44,51 +44,76 @@ end
 
 -- Apply separator at end of component only when
 -- custom highlights haven't affected background
-local function apply_spearator(status, options)
-  if options.separator and #options.separator > 0 and
-     (not options.color or not options.color.bg) then
-    status = status .. options.separator
-    options.separator_applied = true
+local function apply_spearator(status, options, highlight_name)
+    local separator
+    if options.separator and #options.separator > 0 then
+      separator = options.separator
+    elseif options.component_separators then
+      if options.self.section < 'lualine_x' then separator = options.component_separators[1]
+      else separator = options.component_separators[2] end
+      if not separator then
+        options.separator_applied = nil
+        return status
+      end
+      options.separator = separator
+    else
+      options.separator_applied = nil
+      return status
+    end
+    separator = highlight_name .. separator
+    status = status .. separator
+    options.separator_applied = separator
+  return status
+end
+
+local function strip_separator(status, options)
+  if options.separator_applied then
+    status = status:sub(1, #status - #options.separator_applied)
+    options.separator_applied = nil
   end
   return status
 end
 
 -- Returns formated string for a section
-function M.draw_section(section, highlight)
+function M.draw_section(section, highlight_name)
   local status = {}
+  local drawn_components = {}
   for _, component in pairs(section) do
-    -- Reset flags
-    component.drawn = false -- Flag to check if a component was drawn or not
-    component.separator_applied = false -- Flag to check if separator was applied
     local localstatus = component[1]()
     if #localstatus > 0 then
+      local custom_highlight_at_begining = localstatus:find('%%#.*#') == 1 or component.color ~= nil
       -- Apply modifier functions for options
       if component.format then localstatus = component.format(localstatus) end
       localstatus = apply_icon(localstatus, component)
       localstatus = apply_case(localstatus, component)
       localstatus = apply_padding(localstatus, component)
       localstatus = apply_highlights(localstatus, component)
-      localstatus = apply_spearator(localstatus, component)
-      table.insert(status, localstatus)
-      component.drawn = true
+      localstatus = apply_spearator(localstatus, component, highlight_name)
+      if custom_highlight_at_begining or
+        (#drawn_components > 0 and not drawn_components[#drawn_components].separator_applied)then
+        -- Don't prepend with old highlight when the component changes it imidiately
+        -- Or when it was already applied with separator
+        table.insert(status, localstatus)
+      else
+        table.insert(status, highlight_name .. localstatus)
+      end
+      table.insert(drawn_components, component)
     end
   end
   -- Draw nothing when all the components were empty
   if #status == 0 then return '' end
-  -- convert to single string
-  -- highlight is used as separator so custom highlights don't affect
-  -- later components
-  local status_str = highlight .. table.concat(status, highlight)
-  -- Remove separator from last drawn component if available
-  for last_component = #section, 1, -1 do
-    if section[last_component].drawn then
-      if section[last_component].separator_applied then
-        status_str = status_str:sub(1, #status_str - #section[last_component].separator)
+  -- Remove separators sorounding custom highlighted component
+  for i=1,#status do
+    if (drawn_components[i].color and drawn_components[i].color.bg)
+      or drawn_components[i].custom_highlight then
+      status[i] = strip_separator(status[i], drawn_components[i])
+      if i > 1 then
+        status[i - 1] = strip_separator(status[i - 1], drawn_components[i - 1])
       end
-      break
     end
   end
-  return status_str
+  status[#status] = strip_separator(status[#status], drawn_components[#status])
+  return table.concat(status)
 end
 
 
