@@ -90,15 +90,15 @@ Lualine defines two kinds of seperators. One is for sections and other is for co
 They require powerline patched fonts. But you can easily change yours to something else like below
 
 ```lua
-lualine.section_separators = {'', ''}
-lualine.component_separators = {'', ''}
+lualine.options.section_separators = {'', ''}
+lualine.options.component_separators = {'', ''}
 ```
 
 or disable it
 
 ```lua
-lualine.section_separators = nil
-lualine.component_separators = nil
+lualine.options.section_separators = nil
+lualine.options.component_separators = nil
 ```
 
 ### Changing components in lualine sections
@@ -228,7 +228,7 @@ full_path | false | Displays relative path if set to `true`, absolute path if se
 shorten | true | if `full_path` is true and `shorten` is `false` it shortens absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
 
 * `signify` component options
- 
+
 Option   | Default | Behaviour
 :------: | :------: | :----:
 colored | true | displays signify status in color if set to `true`
