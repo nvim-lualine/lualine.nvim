@@ -102,9 +102,8 @@ local colors = {
 
 -- Change brightness of colors
 -- darken incase of light theme lighten incase of dark theme
-local make_brighter = get_color_brightness(utils.extract_highlight_colors('Normal', 'guibg')) < 0.5
 
-if not make_brighter then
+if get_color_brightness(utils.extract_highlight_colors('Normal', 'guibg')) > 0.5 then
   brightness_modifier_parameter = -brightness_modifier_parameter
 end
 
