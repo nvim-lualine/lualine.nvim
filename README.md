@@ -204,7 +204,7 @@ right_padding | 1 | Adds padding to the right of components | all
 upper | false | Changes components to be uppercase | all
 lower | false | Changes components to be lowercase | all
 format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | all
-##### Global options example:
+##### Global options example
 ```lua
 lualine.options.icons_enabled = true
 ```
@@ -237,7 +237,7 @@ color_modified | `diffChange` foreground color | changes signify's changed secti
 color_removed | `diffDelete` foreground color | changes signify's removed section foreground color
 
 
-**Example:**
+##### Component options example
 ```lua
 lualine.sections.lualine_b = {
   {
