@@ -12,13 +12,13 @@ local function signify(options)
   if options.colored == nil then options.colored = true end
   -- apply colors
   if not options.color_added then
-    options.color_added = utils.extract_highlight_colors('diffAdded', 'guifg') or default_color_added
+    options.color_added = utils.extract_highlight_colors('DiffAdd', 'guifg') or default_color_added
   end
   if not options.color_modified then
-    options.color_modified = utils.extract_highlight_colors('diffChanged', 'guifg') or default_color_modified
+    options.color_modified = utils.extract_highlight_colors('DiffChange', 'guifg') or default_color_modified
   end
   if not options.color_removed then
-    options.color_removed = utils.extract_highlight_colors('diffRemoved', 'guifg') or default_color_removed
+    options.color_removed = utils.extract_highlight_colors('DiffDelete', 'guifg') or default_color_removed
   end
 
   local highlights = {}
