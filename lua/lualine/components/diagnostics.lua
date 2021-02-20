@@ -70,13 +70,13 @@ local function diagnostics(options)
   if options.colored == nil then options.colored = true end
   -- apply colors
   if not options.color_warn then
-    options.color_warn = utils.extract_highlight_colors('diffNewFile', 'foreground') or default_color_warn
+    options.color_warn = utils.extract_highlight_colors('DiffText', 'foreground') or default_color_warn
   end
   if not options.color_info then
     options.color_info = utils.extract_highlight_colors('Normal', 'foreground') or default_color_info
   end
   if not options.color_error then
-    options.color_error = utils.extract_highlight_colors('diffRemoved', 'foreground') or default_color_error
+    options.color_error = utils.extract_highlight_colors('DiffDelete', 'foreground') or default_color_error
   end
 
 	local highlight_groups = {}
