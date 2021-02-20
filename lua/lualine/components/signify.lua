@@ -12,13 +12,13 @@ local function signify(options)
   if options.colored == nil then options.colored = true end
   -- apply colors
   if not options.color_added then
-    options.color_added = utils.extract_highlight_colors('diffAdded', 'foreground') or default_color_added
+    options.color_added = utils.extract_highlight_colors('diffAdded', 'guifg') or default_color_added
   end
   if not options.color_modified then
-    options.color_modified = utils.extract_highlight_colors('diffChanged', 'foreground') or default_color_modified
+    options.color_modified = utils.extract_highlight_colors('diffChanged', 'guifg') or default_color_modified
   end
   if not options.color_removed then
-    options.color_removed = utils.extract_highlight_colors('diffRemoved', 'foreground') or default_color_removed
+    options.color_removed = utils.extract_highlight_colors('diffRemoved', 'guifg') or default_color_removed
   end
 
   local highlights = {}
@@ -36,7 +36,6 @@ local function signify(options)
   if options.colored then
     create_highlights()
     utils.expand_set_theme(create_highlights)
-    options.custom_highlight = true
   end
 
   -- Function that runs everytime statusline is updated
