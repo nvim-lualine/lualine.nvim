@@ -74,6 +74,7 @@ end
 -- without changing the color
 local function apply_contrast(highlight)
   local hightlight_bg_avg = get_color_avg(highlight.bg)
+  local contrast_threshold_config = clamp(contrast_threshold, 0, 0.5)
   local contranst_change_step = 5
   if hightlight_bg_avg > .5 then
     contranst_change_step = -contranst_change_step
@@ -81,7 +82,7 @@ local function apply_contrast(highlight)
 
   -- donn't waste too much time here max 20 interation should be more than enough
   local iteration_count = 1
-  while (math.abs(get_color_avg(highlight.fg) - hightlight_bg_avg) < contrast_threshold and iteration_count < 20) do
+  while (math.abs(get_color_avg(highlight.fg) - hightlight_bg_avg) < contrast_threshold_config and iteration_count < 20) do
     highlight.fg = brightness_modifier(highlight.fg, contranst_change_step)
     iteration_count = iteration_count + 1
   end
