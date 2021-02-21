@@ -16,7 +16,7 @@ end
 
 -- Note for now only works for termguicolors scope can be background or foreground
 function M.extract_highlight_colors(color_group, scope)
-  if not M.highlight_exists(color_group) then return nil end
+  if vim.fn.hlexists(color_group) == 0 then return nil end
   local gui_colors = vim.api.nvim_get_hl_by_name(color_group, true)
   local cterm_colors = vim.api.nvim_get_hl_by_name(color_group, false)
   local color = {
@@ -38,11 +38,25 @@ function M.extract_highlight_colors(color_group, scope)
   return color
 end
 
+-- table to store the highlight names created by lualine
+M.loaded_highlights = {}
+
+-- sets loaded_highlights table
+function M.save_highlight(highlight_name)
+  M.loaded_highlights[highlight_name] = true
+end
+
+-- clears loaded_highlights table and highlights
+function M.clear_highlights()
+  for highlight_name, _ in pairs(M.loaded_highlights)do
+    vim.cmd('highlight clear ' .. highlight_name)
+    M.loaded_highlights[highlight_name] = nil
+  end
+end
+
 -- determine if an highlight exist and isn't cleared
 function M.highlight_exists(highlight_name)
-  local ok, result = pcall(vim.api.nvim_exec, 'highlight '..highlight_name, true)
-  if not ok then return false end
-  return result:find('xxx cleared') == nil
+  return M.loaded_highlights[highlight_name] and true or false
 end
 
 return M

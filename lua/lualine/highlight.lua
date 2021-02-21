@@ -5,17 +5,6 @@ local M = {  }
 local utils_colors = require "lualine.utils.cterm_colors"
 local utils = require 'lualine.utils.utils'
 local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
-local loaded_highlights = {}
-
--- @description: clears Highlights in loaded_highlights
-function M.clear_highlights()
-  for no, highlight_name in ipairs(loaded_highlights)do
-    if highlight_name and #highlight_name > 0 and utils.highlight_exists(highlight_name) then
-      vim.cmd('highlight clear ' .. highlight_name)
-    end
-    loaded_highlights[no] = nil
-  end
-end
 
 local function highlight (name, foreground, background, gui)
   local command = { 'highlight', name, }
@@ -34,25 +23,10 @@ local function highlight (name, foreground, background, gui)
     table.insert(command, 'gui=' .. (gui or 'none'))
   end
   vim.cmd(table.concat(command, ' '))
-  table.insert(loaded_highlights, name)
-end
-
-local function apply_defaults_to_theme(theme)
-  local modes = {'insert', 'visual', 'replace', 'command', 'terminal', 'inactive'}
-  for _, mode in ipairs(modes) do
-    if not theme[mode] then
-      theme[mode] = theme['normal']
-    else
-      for section_name, section in pairs(theme['normal']) do
-        theme[mode][section_name] = (theme[mode][section_name] or section)
-      end
-    end
-  end
-  return theme
+  utils.save_highlight(name)
 end
 
 function M.create_highlight_groups(theme)
-  apply_defaults_to_theme(theme)
   for mode, sections in pairs(theme) do
     for section, colorscheme in pairs(sections) do
       local highlight_group_name = { 'lualine', section, mode }
@@ -156,11 +130,14 @@ function M.format_highlight(is_focused, highlight_group)
   end
   local highlight_name = highlight_group
   if not is_focused then
-    return '%#' .. highlight_group .. [[_inactive#]]
+    highlight_name =  highlight_group .. [[_inactive]]
   else
     highlight_name = append_mode(highlight_group)
   end
-  return '%#' .. highlight_name ..'#'
+  if utils.highlight_exists(highlight_name) then
+    return '%#' .. highlight_name .. '#'
+  end
+  return '%#' .. highlight_group ..'_normal#'
 end
 
 -- @description : Provides transitional highlights for section separators.
