@@ -21,7 +21,17 @@ end
 local function apply_padding(status, options)
   local l_padding = (options.left_padding  or options.padding or 1)
   local r_padding = (options.right_padding or options.padding or 1)
-  if l_padding then status = string.rep(' ', l_padding)..status end
+  if l_padding then
+    if status:find('%%#.*#') == 1 then
+      -- When component has changed the highlight at begining
+      -- we will add the padding after the highlight
+      local pre_highlight = vim.fn.matchlist(status, [[\(%#.\{-\}#\)]])[2]
+      status = pre_highlight .. string.rep(' ', l_padding)..
+        status:sub(#pre_highlight + 1, #status)
+    else
+      status = string.rep(' ', l_padding)..status
+    end
+  end
   if r_padding then status = status..string.rep(' ', r_padding) end
   return status
 end
