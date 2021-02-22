@@ -19,11 +19,6 @@
 
 To create a custom theme you need to define a colorscheme for each of vim's modes. Each mode has a `fg` and `bg` field for every lualine section.
 You can add special effects with `gui`.
-You can provide colors in two ways
-  1. As a table like `{'hexcode', 256_color_code}`
-  2. As a String like `'hexcode'`
-Note : You can use `lualine.util.get_cterm_color(hex_color)` function to genarate 256_color_codes from hex_codes.
-  When method 2 is used 256_color_codes are genarated with that .
 
 Adding theme is really easy in lua. Here is and example of a gruvbox theme.
 
@@ -31,15 +26,12 @@ Adding theme is really easy in lua. Here is and example of a gruvbox theme.
 local gruvbox = {  }
 
 local colors = {
- -- color format { hex_color, 256_color_code}
-  black        = {"#282828", 235},
-  white        = {'#ebdbb2', 223},
-  red          = {'#fb4934', 203},
-  green        = {'#b8bb26', 143},
-  blue         = {'#83a598', 108},
-  yellow       = {'#fe8019', 209},
-
-  -- color format 'hex_color'
+  black        = "#282828",
+  white        = '#ebdbb2',
+  red          = '#fb4934',
+  green        = '#b8bb26',
+  blue         = '#83a598',
+  yellow       = '#fe8019',
   gray         = '#a89984',
   darkgray     = '#3c3836',
   lightgray    = '#504945',

@@ -5,22 +5,22 @@
 local M = {}
 
 local colors = {
-  black   = { '#000000', 0 },
-  maroon  = { '#800000', 1 },
-  green   = { '#008000', 2 },
-  olive   = { '#808000', 3 },
-  navy    = { '#000080', 4 },
-  purple  = { '#800080', 5 },
-  teal    = { '#008080', 6 },
-  silver  = { '#c0c0c0', 7 },
-  gray    = { '#808080', 8},
-  red     = { '#ff0000', 9 },
-  lime    = { '#00ff00', 10 },
-  yellow  = { '#ffff00', 11 },
-  blue    = { '#0000ff', 12 },
-  fuchsia = { '#ff00ff', 13 },
-  aqua    = { '#00ffff', 14 },
-  white   = { '#ffffff', 15 },
+  black   = '#000000',
+  maroon  = '#800000',
+  green   = '#008000',
+  olive   = '#808000',
+  navy    = '#000080',
+  purple  = '#800080',
+  teal    = '#008080',
+  silver  = '#c0c0c0',
+  gray    = '#808080',
+  red     = '#ff0000',
+  lime    = '#00ff00',
+  yellow  = '#ffff00',
+  blue    = '#0000ff',
+  fuchsia = '#ff00ff',
+  aqua    = '#00ffff',
+  white   = '#ffffff',
 }
 
 M.normal = {

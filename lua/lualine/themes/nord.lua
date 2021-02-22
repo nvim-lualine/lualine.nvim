@@ -4,13 +4,13 @@
 local nord = {}
 
 local colors = {
-  nord1  = {"#3B4252", 237},
-  nord3  = {"#4C566A", 240},
-  nord5  = {"#E5E9F0", 254},
-  nord6  = {"#ECEFF4", 255},
-  nord7  = {"#8FBCBB", 158},
-  nord8  = {"#88C0D0", 159},
-  nord13 = {"#EBCB8B", 221},
+  nord1  = "#3B4252",
+  nord3  = "#4C566A",
+  nord5  = "#E5E9F0",
+  nord6  = "#ECEFF4",
+  nord7  = "#8FBCBB",
+  nord8  = "#88C0D0",
+  nord13 = "#EBCB8B",
 }
 
 nord.normal = {
