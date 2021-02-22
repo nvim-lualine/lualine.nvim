@@ -141,7 +141,7 @@ lualine.inactive_sections = {
   * location (location in file in line:column format)
   * mode (vim mode)
   * progress (%progress in file)
-  * signify (signify status)
+  * diff (signify status)
 
 </details>
 
@@ -237,7 +237,7 @@ file_status | true | Displays file status (readonly status, modified status)
 full_path | false | Displays relative path if set to `true`, absolute path if set to `false`
 shorten | true | if `full_path` is true and `shorten` is `false` it shortens absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
 
-* `signify` component options
+* `diff` component options
 
 Option   | Default | Behaviour | Format
 :------: | :------: | :----: | :---:
