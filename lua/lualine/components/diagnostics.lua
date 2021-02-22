@@ -8,90 +8,85 @@ local default_color_warn  = '#ffdf00'
 local default_color_info  = '#ffffff'
 
 local diagnostic_sources = {
-	nvim_lsp = function()
+  nvim_lsp = function()
     local error_count = vim.lsp.diagnostic.get_count(0, 'Error')
     local warning_count = vim.lsp.diagnostic.get_count(0, 'Warning')
-    local info_count = vim.lsp.diagnostic.get_count(0, 'Information')
-		return error_count, warning_count, info_count
-	end,
-	coc = function()
+    local info_count = vim.lsp.diagnostic.get_count(0, 'Information') +
+    vim.lsp.diagnostic.get_count(0, 'Hint')
+    return error_count, warning_count, info_count
+  end,
+  coc = function()
     local data = vim.b.coc_diagnostic_info
-		if not data then return 0, 0, 0 end
-		return data.error, data.warning, data.information
-	end,
-	ale = function()
-		local ok, data = pcall(vim.fn['ale#statusline#Count'], vim.fn.bufnr())
-    if ok then return data.error, data.warning, data.info end
-		return 0, 0, 0
-	end,
+    if data then
+      return data.error, data.warning, data.information
+    else
+      return 0, 0, 0
+    end
+  end,
+  ale = function()
+    local ok, data = pcall(vim.fn['ale#statusline#Count'], vim.fn.bufnr())
+    if ok then
+      return data.error, data.warning, data.info
+    else
+      return 0, 0, 0
+    end
+  end,
 }
 
--- Returns diagnostics for sources
--- Scheme:
--- {
---   source_name = {
---     error = error_count,
---     warn = warning_count,
---     info = information_count,
---   },
---   ......................
--- }
 local function get_diagnostics(sources)
   local result = {}
-  for _, source in ipairs(sources) do
-    local error, warn, info = diagnostic_sources[source]()
-    result[source] = {error = error, warn = warn, info = info}
+  for index, source in ipairs(sources) do
+    local error_count, warning_count, info_count = diagnostic_sources[source]()
+    result[index] = {error = error_count, warn = warning_count, info = info_count}
   end
   return result
 end
 
 local function diagnostics(options)
-	local symbols
-	if options.icons_enabled then
-		symbols = {
-			error = ' ', -- xf659
-			warn  = ' ', -- xf529
-			info  = ' ', -- xf7fc
-		}
-	else
-		symbols = {
+  local symbols
+  if options.icons_enabled then
+    symbols = {
+      error = ' ', -- xf659
+      warn  = ' ', -- xf529
+      info  = ' ', -- xf7fc
+    }
+  else
+    symbols = {
       error = 'E:',
       warn  = 'W:',
       info  = 'I:'
     }
-	end
+  end
   if options.sources == nil then
     print('no sources for diagnostics configured')
     return ''
   end
   if options.sections == nil then options.sections = {'error', 'warn', 'info'} end
-	if options.colored == nil then options.colored = true end
-
   if options.colored == nil then options.colored = true end
   -- apply colors
+  if not options.color_error then
+    options.color_error = utils.extract_highlight_colors('DiffDelete', 'foreground') or default_color_error
+  end
   if not options.color_warn then
     options.color_warn = utils.extract_highlight_colors('DiffText', 'foreground') or default_color_warn
   end
   if not options.color_info then
     options.color_info = utils.extract_highlight_colors('Normal', 'foreground') or default_color_info
   end
-  if not options.color_error then
-    options.color_error = utils.extract_highlight_colors('DiffDelete', 'foreground') or default_color_error
+
+  local highlight_groups = {}
+  local function add_highlights()
+    highlight_groups = {
+      error = highlight.create_component_highlight_group({ fg = options.color_error }, 'diagnostics_error', options),
+      warn  = highlight.create_component_highlight_group({ fg = options.color_warn }, 'diagnostics_warn', options),
+      info  = highlight.create_component_highlight_group({ fg = options.color_info }, 'diagnostics_info', options),
+    }
   end
 
-	local highlight_groups = {}
-	local function add_highlights()
-		highlight_groups = {
-			error = highlight.create_component_highlight_group({ fg = options.color_error }, 'diagnostics_error', options),
-			warn  = highlight.create_component_highlight_group({ fg = options.color_warn }, 'diagnostics_warn', options),
-			info  = highlight.create_component_highlight_group({ fg = options.color_info }, 'diagnostics_info', options),
-		}
-	end
-
-	if options.colored then
-		add_highlights()
-		utils.expand_set_theme(add_highlights)
-	end
+  if options.colored then
+    add_highlights()
+    utils.expand_set_theme(add_highlights)
+  end
 
   return function()
     local error_count, warning_count, info_count = 0,0,0
@@ -107,19 +102,21 @@ local function diagnostics(options)
       warn  = warning_count,
       info  = info_count,
     }
-		local colors = {}
-		if options.colored then
-			for name, hl in pairs(highlight_groups) do
-				colors[name] = highlight.component_format_highlight(hl)
-			end
-		end
-    for _, section in ipairs(options.sections) do
-      if data[section] ~= nil and data[section] > 0 then
-				if options.colored then
-					table.insert(result, colors[section]..symbols[section]..data[section])
-				else
-					table.insert(result,symbols[section]..data[section])
-				end
+    if options.colored then
+      local colors = {}
+      for name, hl in pairs(highlight_groups) do
+        colors[name] = highlight.component_format_highlight(hl)
+      end
+      for _, section in ipairs(options.sections) do
+        if data[section] ~= nil and data[section] > 0 then
+          table.insert(result, colors[section]..symbols[section]..data[section])
+        end
+      end
+    else
+      for _, section in ipairs(options.sections) do
+        if data[section] ~= nil and data[section] > 0 then
+          table.insert(result,symbols[section]..data[section])
+        end
       end
     end
     if result[1] ~= nil then
