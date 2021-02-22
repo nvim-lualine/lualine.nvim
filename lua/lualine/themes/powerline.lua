@@ -4,21 +4,21 @@
 local powerline = {  }
 
 local Colors = {
-  white          = {'#ffffff', 231},
-  darkestgreen   = {'#005f00', 22 },
-  brightgreen    = {'#afdf00', 148},
-  darkestcyan    = {'#005f5f', 23 },
-  mediumcyan     = {'#87dfff', 117},
-  darkestblue    = {'#005f87', 24 },
-  darkred        = {'#870000', 88 },
-  brightred      = {'#df0000', 160},
-  brightorange   = {'#ff8700', 214},
-  gray1          = {'#262626', 235},
-  gray2          = {'#303030', 236},
-  gray4          = {'#585858', 240},
-  gray5          = {'#606060', 241},
-  gray7          = {'#9e9e9e', 245},
-  gray10         = {'#f0f0f0', 252},
+  white          = '#ffffff',
+  darkestgreen   = '#005f00',
+  brightgreen    = '#afdf00',
+  darkestcyan    = '#005f5f',
+  mediumcyan     = '#87dfff',
+  darkestblue    = '#005f87',
+  darkred        = '#870000',
+  brightred      = '#df0000',
+  brightorange   = '#ff8700',
+  gray1          = '#262626',
+  gray2          = '#303030',
+  gray4          = '#585858',
+  gray5          = '#606060',
+  gray7          = '#9e9e9e',
+  gray10         = '#f0f0f0',
 }
 
 powerline.normal = {

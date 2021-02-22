@@ -8,19 +8,17 @@ local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
 
 local function highlight (name, foreground, background, gui)
   local command = { 'highlight', name, }
-  if foreground then
-    table.insert(command, 'ctermfg=' .. (foreground[2] or
-      (foreground ~= 'none' and utils_colors.get_cterm_color(foreground)) or 'none'))
-    table.insert(command, 'guifg=' .. (foreground[1] or foreground))
+  if foreground and foreground ~= 'none' then
+    table.insert(command, 'ctermfg=' .. utils_colors.get_cterm_color(foreground))
+    table.insert(command, 'guifg=' .. foreground)
   end
-  if background then
-    table.insert(command, 'ctermbg=' .. (background[2] or
-      (background ~= 'none' and utils_colors.get_cterm_color(background)) or 'none'))
-    table.insert(command, 'guibg=' .. (background[1] or background))
+  if background and background ~= 'none' then
+    table.insert(command, 'ctermbg=' .. utils_colors.get_cterm_color(background))
+    table.insert(command, 'guibg=' .. background)
   end
   if gui then
-    table.insert(command, 'cterm=' .. (gui or 'none'))
-    table.insert(command, 'gui=' .. (gui or 'none'))
+    table.insert(command, 'cterm=' .. gui )
+    table.insert(command, 'gui=' .. gui )
   end
   vim.cmd(table.concat(command, ' '))
   utils.save_highlight(name)
