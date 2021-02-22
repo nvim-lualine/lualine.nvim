@@ -70,6 +70,15 @@ local function brightness_modifier(rgb_color, parcentage)
 	return rgb_num2str(color)
 end
 
+-- changes contrast of rgb_color by amount
+local function contrast_modifier(rgb_color, amount)
+	local color = rgb_str2num(rgb_color)
+	color.red = clamp(color.red + amount, 0, 255)
+	color.green = clamp(color.green + amount, 0, 255)
+	color.blue = clamp(color.blue + amount, 0, 255)
+	return rgb_num2str(color)
+end
+
 -- Changes brightness of foreground color to achive contrast
 -- without changing the color
 local function apply_contrast(highlight)
@@ -80,10 +89,10 @@ local function apply_contrast(highlight)
     contranst_change_step = -contranst_change_step
   end
 
-  -- donn't waste too much time here max 20 interation should be more than enough
+  -- donn't waste too much time here max 25 interation should be more than enough
   local iteration_count = 1
-  while (math.abs(get_color_avg(highlight.fg) - hightlight_bg_avg) < contrast_threshold_config and iteration_count < 20) do
-    highlight.fg = brightness_modifier(highlight.fg, contranst_change_step)
+  while (math.abs(get_color_avg(highlight.fg) - hightlight_bg_avg) < contrast_threshold_config and iteration_count < 25) do
+    highlight.fg = contrast_modifier(highlight.fg, contranst_change_step)
     iteration_count = iteration_count + 1
   end
 end
