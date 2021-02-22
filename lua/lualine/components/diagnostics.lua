@@ -43,19 +43,20 @@ local function get_diagnostics(sources)
 end
 
 local function diagnostics(options)
-  local symbols
-  if options.icons_enabled then
-    symbols = {
-      error = ' ', -- xf659
-      warn  = ' ', -- xf529
-      info  = ' ', -- xf7fc
-    }
-  else
-    symbols = {
-      error = 'E:',
-      warn  = 'W:',
-      info  = 'I:'
-    }
+  if options.symbols == nil then
+    if options.icons_enabled then
+      options.symbols = {
+        error = ' ', -- xf659
+        warn  = ' ', -- xf529
+        info  = ' ', -- xf7fc
+      }
+    else
+      options.symbols = {
+        error = 'E:',
+        warn  = 'W:',
+        info  = 'I:'
+      }
+    end
   end
   if options.sources == nil then
     print('no sources for diagnostics configured')
@@ -109,13 +110,13 @@ local function diagnostics(options)
       end
       for _, section in ipairs(options.sections) do
         if data[section] ~= nil and data[section] > 0 then
-          table.insert(result, colors[section]..symbols[section]..data[section])
+          table.insert(result, colors[section]..options.symbols[section]..data[section])
         end
       end
     else
       for _, section in ipairs(options.sections) do
         if data[section] ~= nil and data[section] > 0 then
-          table.insert(result,symbols[section]..data[section])
+          table.insert(result,options.symbols[section]..data[section])
         end
       end
     end
