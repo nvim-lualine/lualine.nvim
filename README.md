@@ -132,16 +132,17 @@ lualine.inactive_sections = {
 <summary><b>Available components</b></summary>
 
 * general
-  * branch
-  * encoding
-  * fileformat
+  * branch (git branch)
+  * diagnostics (diagnostics count from your prefered source)
+  * encoding (file encoding)
+  * fileformat (file format)
   * filename
   * filetype
-  * location
-  * mode
-  * progress
+  * location (location in file in line:column format)
+  * mode (vim mode)
+  * progress (%progress in file)
 * plugin
-  * signify
+  * signify (signify status)
 
 </details>
 
@@ -219,6 +220,16 @@ color | nil | Sets custom color for the component in this format<br></br>`color 
 
 In addition, some components have unique options.
 
+* `diagnostics` component options
+
+Option   | Default | Behaviour | Format
+:------: | :------: | :----: | :---:
+sources | `nil` | displays diagnostic count from defined source | array containing one or many string from set `{'nvim_lsp', 'coc', 'ale'}`
+sections | `{'error', 'warn', 'info'}` | displays diagnostics of defined severity | array containing one or many string from set `{'error', 'warn', 'info'}`
+color_error | `DiffDelete` foreground color | changes diagnostic's error section foreground color | color in `#rrggbb` format
+color_warn | `DiffText` foreground color | changes diagnostic's warn section foreground color | color in `#rrggbb` format
+color_info | `Normal` foreground color | changes diagnostic's info section foreground color | color in `#rrggbb` format
+
 * `filename` component options
 
 Option   | Default | Behaviour
@@ -229,12 +240,12 @@ shorten | true | if `full_path` is true and `shorten` is `false` it shortens abs
 
 * `signify` component options
 
-Option   | Default | Behaviour
-:------: | :------: | :----:
-colored | true | displays signify status in color if set to `true`
-color_added | `diffAdd` foreground color | changes signify's added section foreground color
-color_modified | `diffChange` foreground color | changes signify's changed section foreground color
-color_removed | `diffDelete` foreground color | changes signify's removed section foreground color
+Option   | Default | Behaviour | Format
+:------: | :------: | :----: | :---:
+colored | true | displays signify status in color if set to `true` |
+color_added | `DiffAdd` foreground color | changes signify's added section foreground color | color in `#rrggbb` format
+color_modified | `DiffChange` foreground color | changes signify's changed section foreground color | color in `#rrggbb` format
+color_removed | `DiffDelete` foreground color | changes signify's removed section foreground color | color in `#rrggbb` format
 
 
 ##### Component options example
