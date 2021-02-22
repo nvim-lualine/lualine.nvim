@@ -198,7 +198,7 @@ All of these options can also be specifically set to all supported components, f
 ##### Available global options
 Option   | Default | Behaviour  | Supported components
 :------: | :------: | :----------: | :-----:
-icons_enabled      | true     |  Displays icons on components You should have powerline supported fonts to see icons properly. | branch, fileformat, filetype, location
+icons_enabled      | true     |  Displays icons on components You should have nerd-fonts supported fonts to see icons properly. | branch, fileformat, filetype, location, diagnostics
 padding | 1 | Adds padding to the left and right of components | all
 left_padding | 1 | Adds padding to the left of components | all
 right_padding | 1 | Adds padding to the right of components | all
@@ -229,6 +229,7 @@ sections | `{'error', 'warn', 'info'}` | displays diagnostics of defined severit
 color_error | `DiffDelete` foreground color | changes diagnostic's error section foreground color | color in `#rrggbb` format
 color_warn | `DiffText` foreground color | changes diagnostic's warn section foreground color | color in `#rrggbb` format
 color_info | `Normal` foreground color | changes diagnostic's info section foreground color | color in `#rrggbb` format
+symbols | `{error = ' ', warn = ' ', info = ' '}` or `{error = 'E:', warn = 'W:', info = 'I:'}` | changes diagnostic's info section foreground color | table containing one or more symbols for levels |
 
 * `filename` component options
 

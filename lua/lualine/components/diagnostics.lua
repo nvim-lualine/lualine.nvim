@@ -43,20 +43,16 @@ local function get_diagnostics(sources)
 end
 
 local function diagnostics(options)
-  local symbols
-  if options.icons_enabled then
-    symbols = {
-      error = ' ', -- xf659
-      warn  = ' ', -- xf529
-      info  = ' ', -- xf7fc
-    }
-  else
-    symbols = {
-      error = 'E:',
-      warn  = 'W:',
-      info  = 'I:'
-    }
-  end
+  local default_symbols = options.icons_enabled and {
+    error = ' ', -- xf659
+    warn  = ' ', -- xf529
+    info  = ' ', -- xf7fc
+  } or {
+    error = 'E:',
+    warn  = 'W:',
+    info  = 'I:'
+  }
+  options.symbols = vim.tbl_extend('force', default_symbols, options.symbols or {})
   if options.sources == nil then
     print('no sources for diagnostics configured')
     return ''
@@ -109,13 +105,13 @@ local function diagnostics(options)
       end
       for _, section in ipairs(options.sections) do
         if data[section] ~= nil and data[section] > 0 then
-          table.insert(result, colors[section]..symbols[section]..data[section])
+          table.insert(result, colors[section]..options.symbols[section]..data[section])
         end
       end
     else
       for _, section in ipairs(options.sections) do
         if data[section] ~= nil and data[section] > 0 then
-          table.insert(result,symbols[section]..data[section])
+          table.insert(result,options.symbols[section]..data[section])
         end
       end
     end
