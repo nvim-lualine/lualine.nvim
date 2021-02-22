@@ -207,16 +207,20 @@ local function exec_autocommands()
   ]], false)
 end
 
-function M.status()
-  set_lualine_theme()
-  exec_autocommands()
-  load_components()
-  load_extensions()
+local function set_tabline()
   if next(M.tabline) ~= nil then
     _G.lualine_tabline = tabline
     vim.o.tabline = '%!v:lua.lualine_tabline()'
     vim.o.showtabline = 2
   end
+end
+
+function M.status()
+  set_lualine_theme()
+  exec_autocommands()
+  load_components()
+  load_extensions()
+	set_tabline()
 end
 
 return M
