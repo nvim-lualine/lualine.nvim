@@ -229,7 +229,7 @@ sections | `{'error', 'warn', 'info'}` | displays diagnostics of defined severit
 color_error | `DiffDelete` foreground color | changes diagnostic's error section foreground color | color in `#rrggbb` format
 color_warn | `DiffText` foreground color | changes diagnostic's warn section foreground color | color in `#rrggbb` format
 color_info | `Normal` foreground color | changes diagnostic's info section foreground color | color in `#rrggbb` format
-symbols | `{error = ' ', warn = ' ', info = ' '}` or `{error = 'E:', warn = 'W:', info = 'I:'}` | changes diagnostic's info section foreground color | color in `#rrggbb` format
+symbols | `{error = ' ', warn = ' ', info = ' '}` or `{error = 'E:', warn = 'W:', info = 'I:'}` | changes diagnostic's info section foreground color | table containing one or more symbols for levels |
 
 * `filename` component options
 

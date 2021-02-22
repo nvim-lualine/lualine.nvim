@@ -299,7 +299,17 @@ List of options are given below.
     • symbols
       (icons_enabled: true  -> {error = ' ', warn = ' ', info = ' '})
       (icons_enabled: false -> {error = 'E:', warn = 'W:', info = 'I:'})
-      changes diagnostic's symbol characters
+      changes diagnostic's symbol characters. You can set one or more symbols
+      for each level.
+      >
+	  {
+	    'diagnostics',
+	    symbols = {
+	      -- set the error symbol and use defaults for warn and info.
+	      error = '!!',
+	    },
+	  }
+<
 
   • filename~
     • file_status  (true)

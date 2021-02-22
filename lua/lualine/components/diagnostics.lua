@@ -43,21 +43,16 @@ local function get_diagnostics(sources)
 end
 
 local function diagnostics(options)
-  if options.symbols == nil then
-    if options.icons_enabled then
-      options.symbols = {
-        error = ' ', -- xf659
-        warn  = ' ', -- xf529
-        info  = ' ', -- xf7fc
-      }
-    else
-      options.symbols = {
-        error = 'E:',
-        warn  = 'W:',
-        info  = 'I:'
-      }
-    end
-  end
+  local default_symbols = options.icons_enabled and {
+    error = ' ', -- xf659
+    warn  = ' ', -- xf529
+    info  = ' ', -- xf7fc
+  } or {
+    error = 'E:',
+    warn  = 'W:',
+    info  = 'I:'
+  }
+  options.symbols = vim.tbl_extend('force', default_symbols, options.symbols or {})
   if options.sources == nil then
     print('no sources for diagnostics configured')
     return ''
