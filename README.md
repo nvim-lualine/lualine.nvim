@@ -354,7 +354,7 @@ let g:lualine = {
     \  'lualine_z' : [  ],
     \},
     \'extensions' : [ 'fzf' ],
-		\}
-call luaeval('require("lualine").status()')
+    \}
+lua require("lualine").status()
 ```
 </details>
