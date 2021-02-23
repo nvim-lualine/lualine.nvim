@@ -220,7 +220,7 @@ function M.status()
   exec_autocommands()
   load_components()
   load_extensions()
-	set_tabline()
+  set_tabline()
 end
 
 return M
