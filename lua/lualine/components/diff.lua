@@ -110,11 +110,11 @@ local function diff(options)
     }
   end
 
-	vim.api.nvim_exec([[
-		autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff_getter()
-		autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff()
-		autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
-		]], false)
+  vim.api.nvim_exec([[
+    autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff_getter()
+    autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff()
+    autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
+    ]], false)
 
   -- create highlights
   if options.colored then
