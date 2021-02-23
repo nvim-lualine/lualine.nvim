@@ -38,15 +38,15 @@ M.inactive_sections = {
 M.extensions = { }
 
 function apply_viml_configuration()
-	if not vim.g.lualine then return end
-	local function parse_sections(section_name)
-		if not vim.g.lualine[section_name] then return end
-		M[section_name] = vim.tbl_extend('force', M[section_name], vim.g.lualine[section_name])
-	end
-	parse_sections('options')
-	parse_sections('sections')
-	parse_sections('inactive_sections')
-	if vim.g.lualine.extensions then M.extensions = vim.g.lualine.extensions end
+  if not vim.g.lualine then return end
+  local function parse_sections(section_name)
+    if not vim.g.lualine[section_name] then return end
+    M[section_name] = vim.tbl_extend('force', M[section_name], vim.g.lualine[section_name])
+  end
+  parse_sections('options')
+  parse_sections('sections')
+  parse_sections('inactive_sections')
+  if vim.g.lualine.extensions then M.extensions = vim.g.lualine.extensions end
 end
 
 
@@ -276,7 +276,7 @@ local function exec_autocommands()
 end
 
 function M.status()
-	apply_viml_configuration()
+  apply_viml_configuration()
   check_single_separator()
   lualine_set_theme()
   exec_autocommands()

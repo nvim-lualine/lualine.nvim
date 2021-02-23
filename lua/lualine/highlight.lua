@@ -144,7 +144,7 @@ end
 -- @param left_section_data :(string) section before separator
 -- @param right_section_data:(string) section after separator
 -- @param reverse      :(string) Whether it's a left separator or right separator
---		'▶️' and '◀️' needs reverse colors so this parameter needs to be set true.
+--    '▶️' and '◀️' needs reverse colors so this parameter needs to be set true.
 -- @return: (string) formated highlight group name
 function M.get_transitional_highlights(left_section_data, right_section_data, reverse )
   local left_highlight_name, right_highlight_name
@@ -170,16 +170,16 @@ function M.get_transitional_highlights(left_section_data, right_section_data, re
       right_highlight_name = 'lualine_c_normal'
     end
   end
-	-- When both left and right highlights are same nothing to transition to
+  -- When both left and right highlights are same nothing to transition to
   if left_highlight_name == right_highlight_name then return end
 
-	-- construct the name of hightlight group
+  -- construct the name of hightlight group
   local highlight_name
-	if left_highlight_name:find('lualine_') == 1 then
-		highlight_name = left_highlight_name .. '_to_' .. right_highlight_name
-	else
-		highlight_name = 'lualine_' .. left_highlight_name .. '_to_' .. right_highlight_name
-	end
+  if left_highlight_name:find('lualine_') == 1 then
+    highlight_name = left_highlight_name .. '_to_' .. right_highlight_name
+  else
+    highlight_name = 'lualine_' .. left_highlight_name .. '_to_' .. right_highlight_name
+  end
 
   if not utils.highlight_exists(highlight_name) then
     -- Create the highlight_group if needed
@@ -190,12 +190,12 @@ function M.get_transitional_highlights(left_section_data, right_section_data, re
       local bg = utils.extract_highlight_colors(right_highlight_name, 'guibg')
       if not fg then fg = 'none' end
       if not bg then bg = 'none' end
-			-- swap the bg and fg when reverse is true. As in that case highlight will
-			-- be placed before section
-			if reverse then fg, bg = bg, fg end
+      -- swap the bg and fg when reverse is true. As in that case highlight will
+      -- be placed before section
+      if reverse then fg, bg = bg, fg end
       highlight(highlight_name, fg, bg)
     end
-		-- Create highlights and setup to survive colorscheme changes
+    -- Create highlights and setup to survive colorscheme changes
     set_transitional_highlights()
     utils.expand_set_theme(set_transitional_highlights)
   end
