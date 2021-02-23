@@ -166,8 +166,7 @@ Available components~
         *   location (location in file in line:column format)
         *   mode (vim mode)
         *   progress (%progress in file)
-    plugin~
-        *   signify (signify status)
+        *   diff (git diff status)
 
 
 --------------------------------------------------------------------------------
@@ -327,7 +326,7 @@ List of options are given below.
       are automaticaly extracted from colorscheme . If you
       want to change any of those you can use options given below.
 
-  • signify~
+  • diff~
     • colored (true)
       Whether to show colors
 
