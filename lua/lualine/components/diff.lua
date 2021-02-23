@@ -82,17 +82,11 @@ local function update_git_diff()
   end)()
 end
 
-vim.api.nvim_exec([[
-  autocmd lualine BufEnter     * lua require'lualine.components.signify'.update_git_diff_getter()
-  autocmd lualine BufEnter     * lua require'lualine.components.signify'.update_git_diff()
-  autocmd lualine BufWritePost * lua require'lualine.components.signify'.update_git_diff()
-  ]], false)
-
 local default_color_added    = "#f0e130"
 local default_color_removed  = "#90ee90"
 local default_color_modified = "#ff0038"
 
-local function signify(options)
+local function diff(options)
   if options.colored == nil then options.colored = true end
   -- apply colors
   if not options.color_added then
@@ -110,11 +104,17 @@ local function signify(options)
   -- create highlights and save highlight_name in highlights table
   local function create_highlights()
     highlights = {
-      highlight.create_component_highlight_group({fg = options.color_added}, 'signify_added', options),
-      highlight.create_component_highlight_group({fg = options.color_modified}, 'signify_modified', options),
-      highlight.create_component_highlight_group({fg = options.color_removed}, 'signify_removed', options),
+      highlight.create_component_highlight_group({fg = options.color_added}, 'diff_added', options),
+      highlight.create_component_highlight_group({fg = options.color_modified}, 'diff_modified', options),
+      highlight.create_component_highlight_group({fg = options.color_removed}, 'diff_removed', options),
     }
   end
+
+	vim.api.nvim_exec([[
+		autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff_getter()
+		autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff()
+		autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
+		]], false)
 
   -- create highlights
   if options.colored then
@@ -176,7 +176,7 @@ local function get_sign_count()
 end
 
 return {
-  init = function(options) return signify(options) end,
+  init = function(options) return diff(options) end,
   update_git_diff = update_git_diff,
   update_git_diff_getter = update_git_diff_getter,
   get_sign_count = get_sign_count,

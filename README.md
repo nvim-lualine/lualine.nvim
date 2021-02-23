@@ -23,7 +23,7 @@ Here is a preview of how lualine can look like.
 
 ![normal_cropped](https://user-images.githubusercontent.com/41551030/108650373-bb025580-74bf-11eb-8682-2c09321dd18e.png)
 ![powerline_cropped](https://user-images.githubusercontent.com/41551030/108650377-bd64af80-74bf-11eb-9c55-fbfc51b39fe8.png)
-![signify_cropped](https://user-images.githubusercontent.com/41551030/108650378-be95dc80-74bf-11eb-9718-82b242ecdd54.png)
+![diff_croped](https://user-images.githubusercontent.com/41551030/108650378-be95dc80-74bf-11eb-9718-82b242ecdd54.png)
 ![diagnostics_cropped](https://user-images.githubusercontent.com/41551030/108650381-bfc70980-74bf-11eb-9245-85c48f0f154a.png)
 ![replace](https://user-images.githubusercontent.com/41551030/103467925-32372b00-4d54-11eb-88d6-6d39c46854d8.png)
 
@@ -141,7 +141,7 @@ lualine.inactive_sections = {
   * location (location in file in line:column format)
   * mode (vim mode)
   * progress (%progress in file)
-  * diff (signify status)
+  * diff (git diff status)
 
 </details>
 
@@ -241,10 +241,10 @@ shorten | true | if `full_path` is true and `shorten` is `false` it shortens abs
 
 Option   | Default | Behaviour | Format
 :------: | :------: | :----: | :---:
-colored | true | displays signify status in color if set to `true` |
-color_added | `DiffAdd` foreground color | changes signify's added section foreground color | color in `#rrggbb` format
-color_modified | `DiffChange` foreground color | changes signify's changed section foreground color | color in `#rrggbb` format
-color_removed | `DiffDelete` foreground color | changes signify's removed section foreground color | color in `#rrggbb` format
+colored | true | displays diff status in color if set to `true` |
+color_added | `DiffAdd` foreground color | changes diff's added section foreground color | color in `#rrggbb` format
+color_modified | `DiffChange` foreground color | changes diff's changed section foreground color | color in `#rrggbb` format
+color_removed | `DiffDelete` foreground color | changes diff's removed section foreground color | color in `#rrggbb` format
 
 
 ##### Component options example

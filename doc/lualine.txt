@@ -166,7 +166,7 @@ Available components~
         *   location (location in file in line:column format)
         *   mode (vim mode)
         *   progress (%progress in file)
-        *   diff (signify status)
+        *   diff (git diff status)
 
 
 --------------------------------------------------------------------------------
