@@ -217,7 +217,7 @@ Default options act as default for all components
 icons_enabled (Default: true)
 
   Displays icons on components
-  You should have powerline supported fonts to see
+  You should have nerd-fonts supported fonts to see
   icons properly.
   Suported by branch, fileformat, filetype, location
 
@@ -295,6 +295,21 @@ List of options are given below.
     • color_info (Normal foreground color)
       changes diagnostic's info section foreground color
       color in #rrggbb format
+
+    • symbols
+      (icons_enabled: true  -> {error = ' ', warn = ' ', info = ' '})
+      (icons_enabled: false -> {error = 'E:', warn = 'W:', info = 'I:'})
+      changes diagnostic's symbol characters. You can set one or more symbols
+      for each level.
+      >
+	  {
+	    'diagnostics',
+	    symbols = {
+	      -- set the error symbol and use defaults for warn and info.
+	      error = '!!',
+	    },
+	  }
+<
 
   • filename~
     • file_status  (true)
