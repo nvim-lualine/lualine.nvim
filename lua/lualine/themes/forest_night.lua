@@ -4,16 +4,16 @@
 local forest_night = {}
 
 local colors = {
-  bg0    = {"#323d43", 237},
-  bg1    = {"#3c474d", 238},
-  bg3    = {"#505a60", 240},
-  fg     = {"#d8caac", 187},
-  aqua   = {"#87c095", 108},
-  green  = {"#a7c080", 144},
-  orange = {"#e39b7b", 180},
-  purple = {"#d39bb6", 181},
-  red    = {"#e68183", 174},
-  grey1  = {"#868d80", 102},
+  bg0    = "#323d43",
+  bg1    = "#3c474d",
+  bg3    = "#505a60",
+  fg     = "#d8caac",
+  aqua   = "#87c095",
+  green  = "#a7c080",
+  orange = "#e39b7b",
+  purple = "#d39bb6",
+  red    = "#e68183",
+  grey1  = "#868d80",
 }
 
 forest_night.normal = {

@@ -53,11 +53,19 @@ end
 local function check_single_separator()
   local compoennt_separator = M.options.component_separators
   local section_separator = M.options.section_separators
-  if type(M.options.component_separators) == 'string' then
-    M.options.component_separators = {compoennt_separator, compoennt_separator}
+  if M.options.component_separators ~=nil then
+    if type(M.options.component_separators) == 'string' then
+      M.options.component_separators = {compoennt_separator, compoennt_separator}
+    elseif #M.options.component_separators == 1 then
+      M.options.component_separators = {M.options.component_separators[1], M.options.component_separators[1]}
+    end
   end
-  if type(M.options.section_separators) == 'string' then
-    M.options.section_separators = {section_separator, section_separator}
+  if M.options.section_separators ~=nil then
+    if type(M.options.section_separators) == 'string' then
+      M.options.section_separators = {section_separator, section_separator}
+    elseif #M.options.section_separators == 1 then
+      M.options.section_separators = {M.options.section_separators[1], M.options.section_separators[1]}
+    end
   end
 end
 
