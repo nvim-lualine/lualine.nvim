@@ -7,6 +7,8 @@ local highlight = require"lualine.highlight"
 
 -- variable to store git diff stats
 local git_diff = nil
+-- accumulates async output to process in the end
+local diff_data = ''
 
 -- process diff data and update git_diff{ added, removed, modified}
 local function process_diff(data)
@@ -37,8 +39,6 @@ end
 
 -- variable to store git_diff getter async function
 local get_git_diff = nil
--- flag to see if async job exited before updating git_diff
-local updated = false
 
 -- Updates the async function for current file
 local function update_git_diff_getter()
@@ -51,22 +51,20 @@ local function update_git_diff_getter()
     ,vim.fn.expand('%:h'), vim.fn.expand('%:t')),
     on_stdout = function(_, data)
       if data then
-        process_diff(data)
-        updated = true
+        diff_data = diff_data .. data
       end
     end,
     on_stderr = function (_, data)
       if data then
         git_diff = nil
-        updated = true
+        diff_data = ''
       end
     end,
     on_exit = function()
-      if not updated then
-        -- updated not set means git exited without emmiting anything on stdout
-        -- or stderr means file is unchanged
+      if diff_data ~= ''  then
+        process_diff(diff_data)
+      else
         git_diff = {0, 0, 0}
-        updated = true
       end
     end
   })
@@ -76,7 +74,7 @@ end
 local function update_git_diff()
   vim.schedule_wrap(function()
     if get_git_diff then
-      updated = false
+      diff_data = ''
       get_git_diff:start()
     end
   end)()
