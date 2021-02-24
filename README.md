@@ -301,9 +301,9 @@ All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
         icons_enabled = true,
       }
       lualine.sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'branch' },
-        lualine_c = { 'filename' },
+        lualine_a = { {'mode', upper = true} },
+        lualine_b = { {'branch', icon = ''} },
+        lualine_c = { {'filename', file_status = true} },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location'  },
@@ -338,9 +338,9 @@ let g:lualine = {
     \  'icons_enabled' : v:true,
     \},
     \'sections' : {
-    \  'lualine_a' : [ 'mode' ],
-    \  'lualine_b' : [ 'branch' ],
-    \  'lualine_c' : [ 'filename' ],
+    \  'lualine_a' : [ {'provider': 'mode', 'upper': v:true,}, ],
+    \  'lualine_b' : [ {'provider': 'branch', 'icon': '',}, ],
+    \  'lualine_c' : [ {'provider': 'filename', 'file_status': v:true,}, ],
     \  'lualine_x' : [ 'encoding', 'fileformat', 'filetype' ],
     \  'lualine_y' : [ 'progress' ],
     \  'lualine_z' : [ 'location'  ],

@@ -39,9 +39,19 @@ M.extensions = { }
 
 local function apply_viml_configuration()
   if not vim.g.lualine then return end
-  local function parse_sections(section_name)
-    if not vim.g.lualine[section_name] then return end
-    M[section_name] = vim.tbl_extend('force', M[section_name], vim.g.lualine[section_name])
+  local function parse_sections(section_group_name)
+    if not vim.g.lualine[section_group_name] then return end
+    for section_name, section in pairs(vim.g.lualine[section_group_name]) do
+      M[section_group_name][section_name] = vim.g.lualine[section_group_name][section_name]
+      if type(section) == 'table' then
+        for component_id, component in pairs(section) do
+          if type(component) == 'table' and component['provider'] ~= nil then
+            M[section_group_name][section_name][component_id][1] = component['provider']
+            M[section_group_name][section_name][component_id]['provider'] = nil
+          end
+        end
+      end
+    end
   end
   parse_sections('options')
   parse_sections('sections')
