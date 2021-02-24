@@ -246,6 +246,7 @@ colored | true | displays diff status in color if set to `true` |
 color_added | `DiffAdd` foreground color | changes diff's added section foreground color | color in `#rrggbb` format
 color_modified | `DiffChange` foreground color | changes diff's changed section foreground color | color in `#rrggbb` format
 color_removed | `DiffDelete` foreground color | changes diff's removed section foreground color | color in `#rrggbb` format
+symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbols | table containing on or more symbols |
 
 
 ##### Component options example

@@ -332,12 +332,28 @@ List of options are given below.
 
     • color_added (DiffAdd foreground color)
       Foreground color of added section
+      Color in #rrggbb format
 
     • color_modified (DiffChange foreground color)
       Foreground color of modified section
+      Color in #rrggbb format
 
     • color_removed (DiffDelete foreground color)
       Foreground color of removed section
+      Color in #rrggbb format
+
+    • symbols ({added = '+', modified = '~', removed = '-'})
+      Changes diff's symbol characters. You can set some symbols partly.
+      Color in #rrggbb format
+      >
+	  {
+	    'diff',
+	    -- set the added symbol and use defaults for modified and removed.
+	    symbols = {
+	      added = 'A',
+	    },
+	  }
+<
 
 Example:~
 >
