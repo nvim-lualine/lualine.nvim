@@ -37,7 +37,7 @@ M.inactive_sections = {
 
 M.extensions = { }
 
-function apply_viml_configuration()
+local function apply_viml_configuration()
   if not vim.g.lualine then return end
   local function parse_sections(section_name)
     if not vim.g.lualine[section_name] then return end
