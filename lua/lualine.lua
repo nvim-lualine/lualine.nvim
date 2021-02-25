@@ -37,12 +37,12 @@ M.inactive_sections = {
 
 M.extensions = { }
 
-local function apply_viml_configuration()
-  if not vim.g.lualine then return end
+local function apply_configuration(config_table)
+  if not config_table then return end
   local function parse_sections(section_group_name)
-    if not vim.g.lualine[section_group_name] then return end
-    for section_name, section in pairs(vim.g.lualine[section_group_name]) do
-      M[section_group_name][section_name] = vim.g.lualine[section_group_name][section_name]
+    if not config_table[section_group_name] then return end
+    for section_name, section in pairs(config_table[section_group_name]) do
+      M[section_group_name][section_name] = config_table[section_group_name][section_name]
       if type(section) == 'table' then
         for component_id, component in pairs(section) do
           if type(component) == 'table' and component['provider'] ~= nil then
@@ -56,7 +56,7 @@ local function apply_viml_configuration()
   parse_sections('options')
   parse_sections('sections')
   parse_sections('inactive_sections')
-  if vim.g.lualine.extensions then M.extensions = vim.g.lualine.extensions end
+  if config_table.extensions then M.extensions = config_table.extensions end
 end
 
 
@@ -293,8 +293,9 @@ local function exec_autocommands()
   ]], false)
 end
 
-function M.status()
-  apply_viml_configuration()
+function M.status(config)
+  apply_configuration(vim.g.lualine)
+  apply_configuration(config)
   check_single_separator()
   lualine_set_theme()
   exec_autocommands()
