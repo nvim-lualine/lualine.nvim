@@ -5,8 +5,8 @@
 local dracula = {}
 
 local colors = {
-  grey       = "#44475a",
-  light_gray = "#5f6a8e",
+  gray       = "#44475a",
+  lightgray  = "#5f6a8e",
   orange     = "#ffb86c",
   purple     = "#bd93f9",
   red        = "#ff5555",
@@ -18,38 +18,39 @@ local colors = {
 
 dracula.normal = {
   a = { bg = colors.purple, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.light_gray, fg  = colors.white, },
-  c = { bg = colors.grey, fg = colors.white, }
+  b = { bg = colors.lightgray, fg  = colors.white, },
+  c = { bg = colors.gray, fg = colors.white }
 }
 
 dracula.insert = {
   a = { bg = colors.green, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.light_gray, fg = colors.white, },
-  c = { bg = colors.grey, fg = colors.white, }
+  b = { bg = colors.lightgray, fg = colors.white, },
+  c = { bg = colors.gray, fg = colors.white }
 }
+
 
 dracula.visual = {
   a = { bg = colors.yellow, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.light_gray, fg = colors.white, },
-  c = { bg = colors.grey, fg = colors.white, },
+  b = { bg = colors.lightgray, fg = colors.white, },
+  c = { bg = colors.gray, fg = colors.white },
 }
 
 dracula.replace = {
   a = { bg = colors.red, fg = colors.black, gui = 'bold', },
-  b = { bg = colors.light_gray, fg = colors.white, },
-  c = { bg = colors.grey, fg = colors.white, },
+  b = { bg = colors.lightgray, fg = colors.white, },
+  c = { bg = colors.gray, fg = colors.white },
 }
 
 dracula.command = {
-  a = { bg = colors.grey, fg = colors.white, gui = 'bold', },
-  b = { bg = colors.light_gray, fg = colors.white, },
-  c = { bg = colors.purple, fg = colors.white },
+  a = { bg = colors.orange, fg = colors.black, gui = 'bold', },
+  b = { bg = colors.lightgray, fg = colors.white, },
+  c = { bg = colors.gray, fg = colors.white },
 }
 
 dracula.inactive = {
-  a = { bg = colors.white, fg = colors.purple, gui = 'bold', },
-  b = { bg = colors.grey, fg = colors.purple, },
-  c = { bg = colors.purple, fg = colors.purple, },
+  a = { bg = colors.gray, fg = colors.white, gui = 'bold', },
+  b = { bg = colors.lightgray, fg = colors.white, },
+  c = { bg = colors.gray, fg = colors.white },
 }
 
 return dracula
