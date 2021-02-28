@@ -117,6 +117,12 @@ All available themes are only best effort ports by myself/ other users. If you f
 ![onelightvisual_cropped](https://user-images.githubusercontent.com/41551030/108649095-f3546480-74bc-11eb-8ea3-9a5b7ff3c3c1.png)
 ![onelightreplace_cropped](https://user-images.githubusercontent.com/41551030/108649096-f4859180-74bc-11eb-8aec-217cd5053537.png)
 
+### palenight
+![palenightnormal_cropped](https://user-images.githubusercontent.com/7190144/109406548-3e1d2300-797a-11eb-8fdb-c3882ae08625.png)
+![palenightinsert_cropped](https://user-images.githubusercontent.com/7190144/109406547-3e1d2300-797a-11eb-9b72-43ba7145355d.png)
+![palenightvisual_cropped](https://user-images.githubusercontent.com/7190144/109406545-3cebf600-797a-11eb-8e2e-992e98d8120e.png)
+![palenightreplace_cropped](https://user-images.githubusercontent.com/7190144/109406546-3d848c80-797a-11eb-9069-04caf383275d.png)
+
 ### papercolor_dark
 ![paperdarknormal_cropped](https://user-images.githubusercontent.com/41551030/108649104-fd766300-74bc-11eb-8c5c-40e7191a81f7.png)
 ![paperdarkinsert_cropped](https://user-images.githubusercontent.com/41551030/108649106-fe0ef980-74bc-11eb-93f7-f98e0b89d5c9.png)
