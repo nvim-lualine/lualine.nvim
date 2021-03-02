@@ -58,6 +58,9 @@ use {
 ```
 
 ## Usage and customization
+Lualine can be configured with both lua and vimscript.
+Click [here](#lua-config-example) if you want to see a config example in lua and [here](#vimscript-config-example) if you want to see a config example in vimscript.
+
 Lualine has sections as shown below.
 
 ```
@@ -68,8 +71,6 @@ Lualine has sections as shown below.
 
 Each sections holds it's components e.g. current vim's mode.
 Colorscheme of sections is mirrored, meaning section `A` will have the same colorscheme as section `Z` etc.
-
-Configuration is currently limited to lua, please use lua block or a separate lua file to configure lualine.
 
 ### Starting lualine
 ```lua
@@ -283,7 +284,7 @@ lualine.extensions = { 'fzf' }
 
 All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
 
-### Full config example using [packer.nvim](https://github.com/wbthomason/packer.nvim)
+### Lua config example
 
 <details>
 <summary><b>packer config</b></summary>
@@ -324,7 +325,7 @@ All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
 
 </details>
 
-### Full config example inside `.vimrc`/`init.vim`
+### Vimscript config example
 
 <details>
 <summary><b>vimrc config</b></summary>
