@@ -44,10 +44,13 @@ local function apply_configuration(config_table)
     for section_name, section in pairs(config_table[section_group_name]) do
       M[section_group_name][section_name] = config_table[section_group_name][section_name]
       if type(section) == 'table' then
-        for component_id, component in pairs(section) do
-          if type(component) == 'table' and component['provider'] ~= nil then
-            M[section_group_name][section_name][component_id][1] = component['provider']
-            M[section_group_name][section_name][component_id]['provider'] = nil
+        for _, component in pairs(section) do
+          if type(component) == 'table' and type(component[2]) == 'table' then
+            local options = component[2]
+            component[2] = nil
+            for key, val in pairs(options) do
+              component[key] = val
+            end
           end
         end
       end

@@ -338,9 +338,9 @@ let g:lualine = {
     \  'icons_enabled' : v:true,
     \},
     \'sections' : {
-    \  'lualine_a' : [ {'provider': 'mode', 'upper': v:true,}, ],
-    \  'lualine_b' : [ {'provider': 'branch', 'icon': '',}, ],
-    \  'lualine_c' : [ {'provider': 'filename', 'file_status': v:true,}, ],
+    \  'lualine_a' : [ ['mode', {'upper': v:true,},], ],
+    \  'lualine_b' : [ ['branch', {'icon': '',}, ], ],
+    \  'lualine_c' : [ ['filename', {'file_status': v:true,},], ],
     \  'lualine_x' : [ 'encoding', 'fileformat', 'filetype' ],
     \  'lualine_y' : [ 'progress' ],
     \  'lualine_z' : [ 'location'  ],
