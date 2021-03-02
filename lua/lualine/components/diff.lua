@@ -10,7 +10,7 @@ local git_diff = nil
 -- accumulates async output to process in the end
 local diff_data = ''
 
--- process diff data and update git_diff{ added, removed, modified}
+-- process diff data and update git_diff{ added, removed, modified }
 local function process_diff(data)
   -- Adapted from https://github.com/wbthomason/nvim-vcs.lua
   local added, removed, modified = 0, 0, 0
@@ -34,7 +34,7 @@ local function process_diff(data)
       end
     end
   end
-  git_diff = { added,  modified, removed }
+  git_diff = { added = added,  modified = modified, removed = removed }
 end
 
 -- variable to store git_diff getter async function
@@ -64,7 +64,7 @@ local function update_git_diff_getter()
       if diff_data ~= ''  then
         process_diff(diff_data)
       else
-        git_diff = {0, 0, 0}
+        git_diff = { added = 0, modified = 0, removed = 0}
       end
     end
   })
@@ -102,9 +102,9 @@ local function diff(options)
   -- create highlights and save highlight_name in highlights table
   local function create_highlights()
     highlights = {
-      highlight.create_component_highlight_group({fg = options.color_added}, 'diff_added', options),
-      highlight.create_component_highlight_group({fg = options.color_modified}, 'diff_modified', options),
-      highlight.create_component_highlight_group({fg = options.color_removed}, 'diff_removed', options),
+      added = highlight.create_component_highlight_group({fg = options.color_added}, 'diff_added', options),
+      modified = highlight.create_component_highlight_group({fg = options.color_modified}, 'diff_modified', options),
+      removed = highlight.create_component_highlight_group({fg = options.color_removed}, 'diff_removed', options),
     }
   end
 
@@ -124,27 +124,32 @@ local function diff(options)
   return function()
     if git_diff == nil then return '' end
 
-    local symbols = {'+', '~', '-'}
+    local default_symbols = {
+      added = '+',
+      modified = '~',
+      removed = '-',
+    }
+    options.symbols = vim.tbl_extend('force', default_symbols, options.symbols or {})
     local colors = {}
     if options.colored then
       -- load the highlights and store them in colors table
-      for _, highlight_name in ipairs(highlights) do
-        table.insert(colors, highlight.component_format_highlight(highlight_name))
+      for name, highlight_name in pairs(highlights) do
+        colors[name] = highlight.component_format_highlight(highlight_name)
       end
     end
 
     local result = {}
     -- loop though data and load available sections in result table
-    for range=1,3 do
-      if git_diff[range] ~= nil and git_diff[range] > 0 then
+    for _, name in ipairs{'added', 'modified', 'removed'} do
+      if git_diff[name] and git_diff[name] > 0 then
         if options.colored then
-          table.insert(result,colors[range]..symbols[range]..git_diff[range])
+          table.insert(result,colors[name]..options.symbols[name]..git_diff[name])
         else
-          table.insert(result,symbols[range]..git_diff[range])
+          table.insert(result,options.symbols[name]..git_diff[name])
         end
       end
     end
-    if result[1] ~= nil then
+    if #result > 0 then
       return table.concat(result, ' ')
     else
       return ''
@@ -159,18 +164,11 @@ end
 --    modified = modified_count,
 --    removed = removed_count,
 -- }
--- error_code = { -1, -1, -1 }
+-- error_code = { added = -1, modified = -1, removed = -1 }
 local function get_sign_count()
   update_git_diff_getter()
   update_git_diff()
-  if git_diff then
-    return{
-      added = git_diff[1],
-      modified = git_diff[2],
-      removed = git_diff[3]
-    }
-  end
-  return {-1, -1, -1}
+  return git_diff or { added = -1, modified = -1, removed = -1 }
 end
 
 return {
