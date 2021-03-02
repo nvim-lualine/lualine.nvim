@@ -58,6 +58,9 @@ use {
 ```
 
 ## Usage and customization
+Lualine can be configured with both lua and vimscript.
+Click [here](#lua-config-example) if you want to see a config example in lua and [here](#vimscript-config-example) if you want to see a config example in vimscript.
+
 Lualine has sections as shown below.
 
 ```
@@ -68,8 +71,6 @@ Lualine has sections as shown below.
 
 Each sections holds it's components e.g. current vim's mode.
 Colorscheme of sections is mirrored, meaning section `A` will have the same colorscheme as section `Z` etc.
-
-Configuration is currently limited to lua, please use lua block or a separate lua file to configure lualine.
 
 ### Starting lualine
 ```lua
@@ -246,6 +247,7 @@ colored | true | displays diff status in color if set to `true` |
 color_added | `DiffAdd` foreground color | changes diff's added section foreground color | color in `#rrggbb` format
 color_modified | `DiffChange` foreground color | changes diff's changed section foreground color | color in `#rrggbb` format
 color_removed | `DiffDelete` foreground color | changes diff's removed section foreground color | color in `#rrggbb` format
+symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbols | table containing on or more symbols |
 
 
 ##### Component options example
@@ -264,7 +266,7 @@ lualine.sections.lualine_b = {
     format = function(name)
       -- Capitalize first charecter of filename to capital.
       local path, fname = name:match('(.*/)(.*)')
-				if not path then path = ''; fname = name end
+        if not path then path = ''; fname = name end
         return path .. fname:sub(1, 1):upper() .. fname:sub(2, #fname)
     end
   }
@@ -310,7 +312,7 @@ lualine.extensions = { 'fzf' }
 
 All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
 
-### Full config example using [packer.nvim](https://github.com/wbthomason/packer.nvim)
+### Lua config example
 
 <details>
 <summary><b>packer config</b></summary>
@@ -320,69 +322,68 @@ All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
     'hoob3rt/lualine.nvim',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
-      local lualine = require('lualine')
-      lualine.options = {
-        theme = 'gruvbox',
-        section_separators = {'', ''},
-        component_separators = {'', ''},
-        icons_enabled = true,
+      require('lualine').status{
+        options = {
+          theme = 'gruvbox',
+          section_separators = {'', ''},
+          component_separators = {'', ''},
+          icons_enabled = true,
+        },
+        sections = {
+          lualine_a = { {'mode', upper = true} },
+          lualine_b = { {'branch', icon = ''} },
+          lualine_c = { {'filename', file_status = true} },
+          lualine_x = { 'encoding', 'fileformat', 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location'  },
+        },
+        inactive_sections = {
+          lualine_a = {  },
+          lualine_b = {  },
+          lualine_c = { 'filename' },
+          lualine_x = { 'location' },
+          lualine_y = {  },
+          lualine_z = {   }
+        },
+        extensions = { 'fzf' }
       }
-      lualine.sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'branch' },
-        lualine_c = { 'filename' },
-        lualine_x = { 'encoding', 'fileformat', 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = { 'location'  },
-      }
-      lualine.inactive_sections = {
-        lualine_a = {  },
-        lualine_b = {  },
-        lualine_c = { 'filename' },
-        lualine_x = { 'location' },
-        lualine_y = {  },
-        lualine_z = {   }
-      }
-      lualine.extensions = { 'fzf' }
-      lualine.status()
     end
   }
 ```
 
 </details>
 
-### Full config example inside `.vimrc`/`init.vim`
+### Vimscript config example
 
 <details>
 <summary><b>vimrc config</b></summary>
 
 ```vim
-lua << EOF
-local lualine = require('lualine')
-    lualine.options = {
-      theme = 'gruvbox',
-      section_separators = {'', ''},
-      component_separators = {'', ''},
-      icons_enabled = true,
-    }
-    lualine.sections = {
-      lualine_a = { 'mode' },
-      lualine_b = { 'branch' },
-      lualine_c = { 'filename' },
-      lualine_x = { 'encoding', 'fileformat', 'filetype' },
-      lualine_y = { 'progress' },
-      lualine_z = { 'location'  },
-    }
-    lualine.inactive_sections = {
-      lualine_a = {  },
-      lualine_b = {  },
-      lualine_c = { 'filename' },
-      lualine_x = { 'location' },
-      lualine_y = {  },
-      lualine_z = {   }
-    }
-    lualine.extensions = { 'fzf' }
-    lualine.status()
-EOF
+let g:lualine = {
+    \'options' : {
+    \  'theme' : 'gruvbox',
+    \  'section_separators' : ['', ''],
+    \  'component_separators' : ['', ''],
+    \  'icons_enabled' : v:true,
+    \},
+    \'sections' : {
+    \  'lualine_a' : [ ['mode', {'upper': v:true,},], ],
+    \  'lualine_b' : [ ['branch', {'icon': '',}, ], ],
+    \  'lualine_c' : [ ['filename', {'file_status': v:true,},], ],
+    \  'lualine_x' : [ 'encoding', 'fileformat', 'filetype' ],
+    \  'lualine_y' : [ 'progress' ],
+    \  'lualine_z' : [ 'location'  ],
+    \},
+    \'inactive_sections' : {
+    \  'lualine_a' : [  ],
+    \  'lualine_b' : [  ],
+    \  'lualine_c' : [ 'filename' ],
+    \  'lualine_x' : [ 'location' ],
+    \  'lualine_y' : [  ],
+    \  'lualine_z' : [  ],
+    \},
+    \'extensions' : [ 'fzf' ],
+    \}
+lua require("lualine").status()
 ```
 </details>

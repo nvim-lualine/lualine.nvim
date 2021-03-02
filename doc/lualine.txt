@@ -1,5 +1,5 @@
 *lualine.txt*                A blazing fast and easy to configure statusline
-						      *lualine_nvim*   *lualine*
+                                                      *lualine_nvim*   *lualine*
 
 Author: hoob3rt (https://github.com/hoob3rt)
 License: MIT License
@@ -46,7 +46,7 @@ CONTENTS                                                     *lualine_contents*
     1.5. Screenshots.......................................|lualine_screenshots|
 
 ================================================================================
-PERFORMANCE COMPARISM	 			 *lualine_performance_comparism*
+PERFORMANCE COMPARISM                            *lualine_performance_comparism*
 
 Unlike other statusline plugins lualine loads only defined components, nothing else.
 
@@ -63,7 +63,7 @@ installed
 --------------------------------------------------------------------------------
 INSTALLATION                                              *lualine_installation*
 
-VIM-PLUG					 	      *lualine_vim-plug*
+VIM-PLUG                                                      *lualine_vim-plug*
 >
     Plug 'hoob3rt/lualine.nvim'
     " If you want to have icons in your statusline choose one of these
@@ -71,7 +71,7 @@ VIM-PLUG					 	      *lualine_vim-plug*
     Plug 'ryanoasis/vim-devicons'
 <
 
-PACKER.NVIM			                           *lualine_packer.nvim*
+PACKER.NVIM                                                *lualine_packer.nvim*
 >
     use {
       'hoob3rt/lualine.nvim',
@@ -112,7 +112,7 @@ All available themes are listed in THEMES.md (./THEMES.md)
 Please create a pr if you managed to port a popular theme before me, here is
 how to do it (./CONTRIBUTING.md).
 
-CHANGING SEPARATOR IN SECTION			    *lualine_changing_separator*
+CHANGING SEPARATOR IN SECTION                       *lualine_changing_separator*
 
 Lualine defines two kinds of seperators. One is for sections and other is
 for components. Default section seperators are '', '' and component
@@ -158,10 +158,10 @@ Lualine defaults~
 Available components~
 
     general~
-	*   branch (git branch)
-	*   diagnostics (diagnostics count from your prefered source)
-	*   encoding (file encoding)
-	*   fileformat (file format)
+        *   branch (git branch)
+        *   diagnostics (diagnostics count from your prefered source)
+        *   encoding (file encoding)
+        *   fileformat (file format)
         *   filename
         *   filetype
         *   location (location in file in line:column format)
@@ -171,7 +171,7 @@ Available components~
 
 
 --------------------------------------------------------------------------------
-BUILDING YOUR COMPONENTS			   *lualine_custom_components*
+BUILDING YOUR COMPONENTS                           *lualine_custom_components*
 
 
 Using custom functions as lualine component~
@@ -302,13 +302,13 @@ List of options are given below.
       changes diagnostic's symbol characters. You can set one or more symbols
       for each level.
       >
-	  {
-	    'diagnostics',
-	    symbols = {
-	      -- set the error symbol and use defaults for warn and info.
-	      error = '!!',
-	    },
-	  }
+          {
+            'diagnostics',
+            symbols = {
+              -- set the error symbol and use defaults for warn and info.
+              error = '!!',
+            },
+          }
 <
 
   • filename~
@@ -333,12 +333,28 @@ List of options are given below.
 
     • color_added (DiffAdd foreground color)
       Foreground color of added section
+      Color in #rrggbb format
 
     • color_modified (DiffChange foreground color)
       Foreground color of modified section
+      Color in #rrggbb format
 
     • color_removed (DiffDelete foreground color)
       Foreground color of removed section
+      Color in #rrggbb format
+
+    • symbols ({added = '+', modified = '~', removed = '-'})
+      Changes diff's symbol characters. You can set some symbols partly.
+      Color in #rrggbb format
+      >
+	  {
+	    'diff',
+	    -- set the added symbol and use defaults for modified and removed.
+	    symbols = {
+	      added = 'A',
+	    },
+	  }
+<
 
 Example:~
 >
@@ -356,7 +372,7 @@ Example:~
       format = function(name)
         -- Capitalize first charecter of filename to capital.
         local path, fname = name:match('(.*/)(.*)')
-	if not path then path = ''; fname = name end
+        if not path then path = ''; fname = name end
         return path .. fname:sub(1, 1):upper() .. fname:sub(2, #fname)
       end
     }
@@ -405,7 +421,7 @@ using a plugin which is supported you can load it this way:
 All available extensions are listed in EXTENSIONS.md (./EXTENSIONS.md)
 
 --------------------------------------------------------------------------------
-CONGIG EXAMPLES				   	       *lualine_config_examples*
+CONGIG EXAMPLES                                        *lualine_config_examples*
 
 FULL CONFIG EXAMPLE USING PACKER.NVIM *lualine_config_example_using_packer.nvim*
 
@@ -416,31 +432,31 @@ packer config
         'hoob3rt/lualine.nvim',
         requires = {'kyazdani42/nvim-web-devicons', opt = true},
         config = function()
-          local lualine = require('lualine')
-	  lualine.options = {
-	    theme = 'gruvbox',
-	    section_separators = {'', ''},
-	    component_separators = {'', ''},
-	    icons_enabled = true,
-	  }
-          lualine.sections = {
-            lualine_a = { 'mode' },
-            lualine_b = { 'branch' },
-            lualine_c = { 'filename' },
-            lualine_x = { 'encoding', 'fileformat', 'filetype' },
-            lualine_y = { 'progress' },
-            lualine_z = { 'location'  },
+        require('lualine').status{
+            options = {
+              theme = 'gruvbox',
+              section_separators = {'', ''},
+              component_separators = {'', ''},
+              icons_enabled = true,
+            },
+            sections = {
+              lualine_a = { {'mode', upper = true} },
+              lualine_b = { {'branch', icon = ''} },
+              lualine_c = { {'filename', file_status = true} },
+              lualine_x = { 'encoding', 'fileformat', 'filetype' },
+              lualine_y = { 'progress' },
+              lualine_z = { 'location'  },
+            },
+            inactive_sections = {
+              lualine_a = {  },
+              lualine_b = {  },
+              lualine_c = { 'filename' },
+              lualine_x = { 'location' },
+              lualine_y = {  },
+              lualine_z = {   }
+            },
+            extensions = { 'fzf' }
           }
-          lualine.inactive_sections = {
-            lualine_a = {  },
-            lualine_b = {  },
-            lualine_c = { 'filename' },
-            lualine_x = { 'location' },
-            lualine_y = {  },
-            lualine_z = {   }
-          }
-          lualine.extensions = { 'fzf' }
-          lualine.status()
         end
       }
 <
@@ -452,33 +468,32 @@ FULL CONFIG EXAMPLE INSIDE VIML        *lualine_full_config_example_inside_viml*
 
 vimrc config
 >
-    lua << EOF
-    local lualine = require('lualine')
-        lualine.options = {
-          theme = 'gruvbox',
-	    section_separators = {'', ''},
-	    component_separators = {'', ''},
-	    icons_enabled = true,
-	  }
-        lualine.sections = {
-          lualine_a = { 'mode' },
-          lualine_b = { 'branch' },
-          lualine_c = { 'filename' },
-          lualine_x = { 'encoding', 'fileformat', 'filetype' },
-          lualine_y = { 'progress' },
-          lualine_z = { 'location'  },
-        }
-        lualine.inactive_sections = {
-          lualine_a = {  },
-          lualine_b = {  },
-          lualine_c = { 'filename' },
-          lualine_x = { 'location' },
-          lualine_y = {  },
-          lualine_z = {   }
-        }
-        lualine.extensions = { 'fzf' }
-        lualine.status()
-    EOF
+    let g:lualine = {
+	\'options' : {
+	\  'theme' : 'gruvbox',
+	\  'section_separators' : ['', ''],
+	\  'component_separators' : ['', ''],
+	\  'icons_enabled' : v:true,
+	\},
+	\'sections' : {
+	\  'lualine_a' : [ ['mode', {'upper': v:true,},], ],
+	\  'lualine_b' : [ ['branch', {'icon': '',}, ], ],
+	\  'lualine_c' : [ ['filename', {'file_status': v:true,},], ],
+	\  'lualine_x' : [ 'encoding', 'fileformat', 'filetype' ],
+	\  'lualine_y' : [ 'progress' ],
+	\  'lualine_z' : [ 'location'  ],
+	\},
+	\'inactive_sections' : {
+	\  'lualine_a' : [  ],
+	\  'lualine_b' : [  ],
+	\  'lualine_c' : [ 'filename' ],
+	\  'lualine_x' : [ 'location' ],
+	\  'lualine_y' : [  ],
+	\  'lualine_z' : [  ],
+	\},
+	\'extensions' : [ 'fzf' ],
+	\}
+    lua require("lualine").status()
 <
 
 --------------------------------------------------------------------------------
