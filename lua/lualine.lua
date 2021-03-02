@@ -35,8 +35,33 @@ M.inactive_sections = {
   lualine_z = {  }
 }
 
-M.extensions = {
-}
+M.extensions = { }
+
+local function apply_configuration(config_table)
+  if not config_table then return end
+  local function parse_sections(section_group_name)
+    if not config_table[section_group_name] then return end
+    for section_name, section in pairs(config_table[section_group_name]) do
+      M[section_group_name][section_name] = config_table[section_group_name][section_name]
+      if type(section) == 'table' then
+        for _, component in pairs(section) do
+          if type(component) == 'table' and type(component[2]) == 'table' then
+            local options = component[2]
+            component[2] = nil
+            for key, val in pairs(options) do
+              component[key] = val
+            end
+          end
+        end
+      end
+    end
+  end
+  parse_sections('options')
+  parse_sections('sections')
+  parse_sections('inactive_sections')
+  if config_table.extensions then M.extensions = config_table.extensions end
+end
+
 
 local function check_single_separator()
   local compoennt_separator = M.options.component_separators
@@ -271,7 +296,9 @@ local function exec_autocommands()
   ]], false)
 end
 
-function M.status()
+function M.status(config)
+  apply_configuration(vim.g.lualine)
+  apply_configuration(config)
   check_single_separator()
   lualine_set_theme()
   exec_autocommands()
