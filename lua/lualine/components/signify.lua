@@ -1,33 +1,8 @@
--- Copyright (c) 2020-2021 hoob3rt
--- MIT license, see LICENSE for more details.
-
-local function signify()
-   if vim.fn.exists('*sy#repo#get_stats') == 0 then return '' end
-   local added, modified, removed = unpack(vim.fn['sy#repo#get_stats']())
-   if added == -1 then return '' end
-   local symbols = {
-     '+',
-     '-',
-     '~',
-   }
-   local result = {}
-   local data = {
-    added,
-    removed,
-    modified,
-   }
-   for range=1,3 do
-     if data[range] ~= nil and data[range] > 0
-       then table.insert(result,symbols[range]..''..data[range]..' ')
-     end
-   end
-
-   if result[1] ~= nil then
-       return table.concat(result, '')
-   else
-       return ''
-   end
+vim.fn.timer_start(3000, function()
+if vim.api.nvim_echo then
+  vim.api.nvim_echo({{'lualine.nvim: Signify component has been renamed to diff please change it in your configuration.', 'WarningMsg'}}, true, {})
+else
+  print('lualine.nvim: Signify component has been renamed to diff please change it in your configuration.', 'ErrorMsg')
 end
-
-
-return signify
+end)
+return require'lualine.components.diff'

@@ -5,17 +5,17 @@
 local M = {}
 
 local colors = {
-  blue   = { '#61afef', 75 },
-  green  = { '#98c379', 76 },
-  purple = { '#c678dd', 176 },
-  red1   = { '#e06c75', 168 },
-  red2   = { '#be5046', 168 },
-  yellow = { '#e5c07b', 180 },
-  fg    = { '#abb2bf', 145 },
-  bg    = { '#282c34', 235 },
-  gray1 = { '#5c6370', 241 },
-  gray2 = { '#2c323d', 235 },
-  gray3 = { '#3e4452', 240 },
+  blue   = '#61afef',
+  green  = '#98c379',
+  purple = '#c678dd',
+  red1   = '#e06c75',
+  red2   = '#be5046',
+  yellow = '#e5c07b',
+  fg     = '#abb2bf',
+  bg     = '#282c34',
+  gray1  = '#5c6370',
+  gray2  = '#2c323d',
+  gray3  = '#3e4452',
 }
 
 M.normal = {

@@ -21,10 +21,10 @@ Feel free to create an issue/pr if you want to see anything else implemented.
 ## Screenshots
 Here is a preview of how lualine can look like.
 
-![normal](https://user-images.githubusercontent.com/41551030/103467902-06b44080-4d54-11eb-89db-6d3bebf449fa.png)
-![insert](https://user-images.githubusercontent.com/41551030/103467914-1764b680-4d54-11eb-9e3d-528d3568dce7.png)
-![visual](https://user-images.githubusercontent.com/41551030/103467916-23507880-4d54-11eb-804e-5b1c4d6e3db3.png)
-![command](https://user-images.githubusercontent.com/41551030/103467919-2ba8b380-4d54-11eb-8585-6c667fd5082e.png)
+![normal_cropped](https://user-images.githubusercontent.com/41551030/108650373-bb025580-74bf-11eb-8682-2c09321dd18e.png)
+![powerline_cropped](https://user-images.githubusercontent.com/41551030/108650377-bd64af80-74bf-11eb-9c55-fbfc51b39fe8.png)
+![diff_croped](https://user-images.githubusercontent.com/41551030/108650378-be95dc80-74bf-11eb-9718-82b242ecdd54.png)
+![diagnostics_cropped](https://user-images.githubusercontent.com/41551030/108650381-bfc70980-74bf-11eb-9245-85c48f0f154a.png)
 ![replace](https://user-images.githubusercontent.com/41551030/103467925-32372b00-4d54-11eb-88d6-6d39c46854d8.png)
 
 Screenshots of all available themes are listed in [THEMES.md](./THEMES.md)
@@ -86,17 +86,19 @@ All available themes are listed in [THEMES.md](./THEMES.md)
 Please create a pr if you managed to port a popular theme before me, [here is how to do it](./CONTRIBUTING.md).
 
 ### Changing separator in section
-Lualine defines a separator between components in given section, the default
-separator is `|`. You can change the separator this way:
+Lualine defines two kinds of seperators. One is for sections and other is for components. Default section seperators are '', '' and component separators are '', ''.
+They require powerline patched fonts. But you can easily change yours to something else like below
 
 ```lua
-lualine.options.separator = '|'
+lualine.options.section_separators = {'', ''}
+lualine.options.component_separators = {'', ''}
 ```
 
 or disable it
 
 ```lua
-lualine.options.separator = ''
+lualine.options.section_separators = nil
+lualine.options.component_separators = nil
 ```
 
 ### Changing components in lualine sections
@@ -130,16 +132,16 @@ lualine.inactive_sections = {
 <summary><b>Available components</b></summary>
 
 * general
-  * branch
-  * encoding
-  * fileformat
+  * branch (git branch)
+  * diagnostics (diagnostics count from your prefered source)
+  * encoding (file encoding)
+  * fileformat (file format)
   * filename
   * filetype
-  * location
-  * mode
-  * progress
-* plugin
-  * signify
+  * location (location in file in line:column format)
+  * mode (vim mode)
+  * progress (%progress in file)
+  * diff (git diff status)
 
 </details>
 
@@ -187,65 +189,66 @@ lualine.sections.lualine_b = { 'g:coc_status', 'bo:filetype' }
 
 ### Available options:
 
-#### Global Default options
+#### Global options
 
-Default options act as default for all components
-- icons_enabled (Default: true)
-  Displays icons on components
-  You should have powerline supported fonts to see
-  icons properly.\
-  *Suported by branch, fileformat, filetype, location*\
-  Example:
-  ```lua
-  lualine.options.icons_enabled = true
+Global options chnge behaviour of all suported components.
+All of these options can also be specifically set to all supported components, full example below.
 
-  ```
-
-#### Genaral options
-  These options are available for all components.\
-    option&nbsp; &nbsp; &nbsp;(default_value)\
-    ----------&nbsp; &nbsp; &nbsp; &nbsp;----------------------
-- padding       (1)\
-  spaces on left and right
-- left_padding  (1)\
-  spaces on left
-- right_padding (1)\
-  spaces on right
-- icon          (depends on component)
-  displays an icon infront of component
-- icons_enabled (true)
-  whether to show icon(if available)
-- separator ('|')
-  which separator to use at end of component
-- upper         (false)\
-  Displayed in upper case
-- lower         (false)\
-  Displayed in lower case
-- format        (nil)\
-  Takes a function . The funtion gets the result of component
-  as argument and it's return value is displayed. So this function
-  can parse and format the output as user wants.
-- color         (Theme colors)\
-  color option can be used to set custom color to a component\
-  **Color format:**\
-  `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`\
-  the members of color table are optional and default to theme
+##### Available global options
+Option   | Default | Behaviour  | Supported components
+:------: | :------: | :----------: | :-----:
+icons_enabled      | true     |  Displays icons on components You should have nerd-fonts supported fonts to see icons properly. | branch, fileformat, filetype, location, diagnostics
+padding | 1 | Adds padding to the left and right of components | all
+left_padding | 1 | Adds padding to the left of components | all
+right_padding | 1 | Adds padding to the right of components | all
+upper | false | Changes components to be uppercase | all
+lower | false | Changes components to be lowercase | all
+format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | all
+##### Global options example
+```lua
+lualine.options.icons_enabled = true
+```
 
 #### Component specific options
-  These options are available for specific components only.\
-  List of options are given below.
-- filename
-  - file_status        (true)\
-   Whether to display filemodified status in filename
-  - shorten      (true)\
-   Whether to display full/relative path with filename
-  - full_path     (false)\
-   Whether to display full path when shorten is false
-- fileformat
-  - icons_enabled (true)\
-   Whether to displays icon before component
+As mentioned above, all global options can be applied to specific components.
+However there are some options which are component-only (you cannot set them as globals)
+Option   | Default | Behaviour
+:------: | :------: | :----:
+icon | Differs for each component | Displays an icon in front of the component
+color | nil | Sets custom color for the component in this format<br></br>`color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`<br></br>The fields of color table are optional and default to theme
 
-**Example:**
+In addition, some components have unique options.
+
+* `diagnostics` component options
+
+Option   | Default | Behaviour | Format
+:------: | :------: | :----: | :---:
+sources | `nil` | displays diagnostic count from defined source | array containing one or many string from set `{'nvim_lsp', 'coc', 'ale'}`
+sections | `{'error', 'warn', 'info'}` | displays diagnostics of defined severity | array containing one or many string from set `{'error', 'warn', 'info'}`
+color_error | `DiffDelete` foreground color | changes diagnostic's error section foreground color | color in `#rrggbb` format
+color_warn | `DiffText` foreground color | changes diagnostic's warn section foreground color | color in `#rrggbb` format
+color_info | `Normal` foreground color | changes diagnostic's info section foreground color | color in `#rrggbb` format
+symbols | `{error = ' ', warn = ' ', info = ' '}` or `{error = 'E:', warn = 'W:', info = 'I:'}` | changes diagnostic's info section foreground color | table containing one or more symbols for levels |
+
+* `filename` component options
+
+Option   | Default | Behaviour
+:------: | :------: | :----:
+file_status | true | Displays file status (readonly status, modified status)
+full_path | false | Displays relative path if set to `true`, absolute path if set to `false`
+shorten | true | if `full_path` is true and `shorten` is `false` it shortens absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
+
+* `diff` component options
+
+Option   | Default | Behaviour | Format
+:------: | :------: | :----: | :---:
+colored | true | displays diff status in color if set to `true` |
+color_added | `DiffAdd` foreground color | changes diff's added section foreground color | color in `#rrggbb` format
+color_modified | `DiffChange` foreground color | changes diff's changed section foreground color | color in `#rrggbb` format
+color_removed | `DiffDelete` foreground color | changes diff's removed section foreground color | color in `#rrggbb` format
+
+
+##### Component options example
 ```lua
 lualine.sections.lualine_b = {
   {
@@ -320,7 +323,8 @@ All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
       local lualine = require('lualine')
       lualine.options = {
         theme = 'gruvbox',
-        separator = '|',
+        section_separators = {'', ''},
+        component_separators = {'', ''},
         icons_enabled = true,
       }
       lualine.sections = {
@@ -357,7 +361,8 @@ lua << EOF
 local lualine = require('lualine')
     lualine.options = {
       theme = 'gruvbox',
-      separator = '|',
+      section_separators = {'', ''},
+      component_separators = {'', ''},
       icons_enabled = true,
     }
     lualine.sections = {

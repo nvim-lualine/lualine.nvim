@@ -5,15 +5,15 @@
 local molokai = {}
 
 local colors = {
-  black  = { '#232526', 233 },
-  gray   = { '#808080', 244 },
-  white  = { '#f8f8f2', 234 },
-  cyan   = { '#66d9ef', 81  },
-  green  = { '#a6e22e', 118 },
-  orange = { '#ef5939', 166 },
-  pink   = { '#f92672', 161 },
-  red    = { '#ff0000', 160 },
-  yellow = { '#e6db74', 229 },
+  black  = '#232526',
+  gray   = '#808080',
+  white  = '#f8f8f2',
+  cyan   = '#66d9ef',
+  green  = '#a6e22e',
+  orange = '#ef5939',
+  pink   = '#f92672',
+  red    = '#ff0000',
+  yellow = '#e6db74',
 }
 
 molokai.normal = {

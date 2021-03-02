@@ -5,14 +5,14 @@
 local M = {}
 
 local colors = {
-  base3  =  '#002b36',
-  base2  =  '#073642',
-  base1  =  '#586e75',
-  base0  =  '#657b83',
-  base00   =  '#839496',
-  base01   =  '#93a1a1',
-  base02   =  '#eee8d5',
-  base03   =  '#fdf6e3',
+  base3   =  '#002b36',
+  base2   =  '#073642',
+  base1   =  '#586e75',
+  base0   =  '#657b83',
+  base00  =  '#839496',
+  base01  =  '#93a1a1',
+  base02  =  '#eee8d5',
+  base03  =  '#fdf6e3',
   yellow  =  '#b58900',
   orange  =  '#cb4b16',
   red     =  '#dc322f',
