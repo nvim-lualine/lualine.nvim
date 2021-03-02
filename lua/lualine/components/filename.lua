@@ -3,16 +3,15 @@
 
 local function filename(options)
   -- setting defaults
-  local file_status, shorten, full_path = true, true, false
-  if options.file_status  ~= nil then file_status = options.file_status end
-  if options.shorten ~= nil then shorten = options.shorten end
-  if options.full_path  ~= nil then full_path = options.full_path end
+  if options.file_status == nil then options.file_status = true end
+  if options.shorten == nil then options.shorten = true end
+  if options.full_path == nil then options.full_path = false end
 
   return function()
     local data
-    if not full_path then
+    if not options.full_path then
       data = vim.fn.expand('%:t')
-    elseif shorten then
+    elseif options.shorten then
       data = vim.fn.expand('%')
     else
       data = vim.fn.expand('%:p')
@@ -23,7 +22,7 @@ local function filename(options)
       data = vim.fn.pathshorten(data)
     end
 
-    if file_status then
+    if options.file_status then
       if vim.bo.modified then data = data .. "[+]"
       elseif vim.bo.modifiable == false then data = data .. "[-]" end
     end

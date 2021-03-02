@@ -41,11 +41,19 @@ M.extensions = {
 local function check_single_separator()
   local compoennt_separator = M.options.component_separators
   local section_separator = M.options.section_separators
-  if type(M.options.component_separators) == 'string' then
-    M.options.component_separators = {compoennt_separator, compoennt_separator}
+  if M.options.component_separators ~=nil then
+    if type(M.options.component_separators) == 'string' then
+      M.options.component_separators = {compoennt_separator, compoennt_separator}
+    elseif #M.options.component_separators == 1 then
+      M.options.component_separators = {M.options.component_separators[1], M.options.component_separators[1]}
+    end
   end
-  if type(M.options.section_separators) == 'string' then
-    M.options.section_separators = {section_separator, section_separator}
+  if M.options.section_separators ~=nil then
+    if type(M.options.section_separators) == 'string' then
+      M.options.section_separators = {section_separator, section_separator}
+    elseif #M.options.section_separators == 1 then
+      M.options.section_separators = {M.options.section_separators[1], M.options.section_separators[1]}
+    end
   end
 end
 
@@ -154,6 +162,8 @@ end
 local function lualine_set_theme()
   if type(M.options.theme) == 'string' then
     M.options.theme = require('lualine.themes.'.. M.options.theme)
+    -- change the theme table in component so their custom
+    -- highlights can reflect theme change
     local function reset_component_theme(sections)
       for _, section in pairs(sections)do
         for _, component in pairs(section) do
@@ -166,7 +176,7 @@ local function lualine_set_theme()
     reset_component_theme(M.sections)
     reset_component_theme(M.inactive_sections)
   end
-  highlight.clear_highlights()
+  utils.clear_highlights()
   highlight.create_highlight_groups(M.options.theme)
   theme_set = M.options.theme
 end

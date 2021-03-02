@@ -2,7 +2,7 @@
 -- MIT license, see LICENSE for more details.
 
 local colors = {
-  fg1 = "#282828",
+  fg1    = "#282828",
   color2 = "#504945",
   fg2    = "#ddc7a1",
   color3 = "#32302f",

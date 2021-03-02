@@ -157,16 +157,16 @@ Lualine defaults~
 Available components~
 
     general~
-        *   branch
-        *   encoding
-        *   fileformat
+	*   branch (git branch)
+	*   diagnostics (diagnostics count from your prefered source)
+	*   encoding (file encoding)
+	*   fileformat (file format)
         *   filename
         *   filetype
-        *   location
-        *   mode
-        *   progress
-    plugin~
-        *   signify
+        *   location (location in file in line:column format)
+        *   mode (vim mode)
+        *   progress (%progress in file)
+        *   diff (git diff status)
 
 
 --------------------------------------------------------------------------------
@@ -216,7 +216,7 @@ Default options act as default for all components
 icons_enabled (Default: true)
 
   Displays icons on components
-  You should have powerline supported fonts to see
+  You should have nerd-fonts supported fonts to see
   icons properly.
   Suported by branch, fileformat, filetype, location
 
@@ -271,14 +271,53 @@ Component specific options~
 These options are available for specific components only.
 List of options are given below.
 
+
+  • diagnostics~
+    • sources  (nil)
+      displays diagnostic count from defined source.
+      array containing one or many string from set
+      {'nvim_lsp', 'coc', 'ale'}
+
+    • sections  ({'error', 'warn', 'info'})
+      displays diagnostics of defined severity.
+      array containing one or many string from set
+      {'error', 'warn', 'info'}
+
+    • color_error (DiffDelete foreground color)
+      changes diagnostic's error section foreground color.
+      color in #rrggbb format
+
+    • color_warn (DiffText foreground color)
+      changes diagnostic's warn section foreground color
+      color in #rrggbb format
+
+    • color_info (Normal foreground color)
+      changes diagnostic's info section foreground color
+      color in #rrggbb format
+
+    • symbols
+      (icons_enabled: true  -> {error = ' ', warn = ' ', info = ' '})
+      (icons_enabled: false -> {error = 'E:', warn = 'W:', info = 'I:'})
+      changes diagnostic's symbol characters. You can set one or more symbols
+      for each level.
+      >
+	  {
+	    'diagnostics',
+	    symbols = {
+	      -- set the error symbol and use defaults for warn and info.
+	      error = '!!',
+	    },
+	  }
+<
+
   • filename~
-    • file_status        (true)
+    • file_status  (true)
       Whether to display filemodified status in filename
 
     • shorten      (true)
       Whether to display full/relative path with filename
 
-    • full_path     (false)
+    • full_path  (false)
       Whether to display full path when shorten is false
 
   • fileformat~
@@ -287,18 +326,17 @@ List of options are given below.
       are automaticaly extracted from colorscheme . If you
       want to change any of those you can use options given below.
 
-
-  • signify~
+  • diff~
     • colored (true)
       Whether to show colors
 
-    • color_added ('#90ee90')
+    • color_added (DiffAdd foreground color)
       Foreground color of added section
 
-    • color_modified ('#f0e130')
+    • color_modified (DiffChange foreground color)
       Foreground color of modified section
 
-    • color_removed ('#ff0038')
+    • color_removed (DiffDelete foreground color)
       Foreground color of removed section
 
 Example:~
