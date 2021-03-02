@@ -2,6 +2,9 @@
 
 All available themes are only best effort ports by myself/ other users. If you find a theme to be weird/ wrong please open an issue/ pr.
 
+### auto
+if your favourite colorcheme is not yet supported you can use `auto` to make
+lualine try to match your colorscheme.
 ### 16color
 ![normal](https://user-images.githubusercontent.com/13149513/104338605-e2f5b500-5520-11eb-9f6a-5e039025182e.jpg)
 ![insert](https://user-images.githubusercontent.com/13149513/104338620-e5580f00-5520-11eb-9593-b59769d738a4.jpg)
