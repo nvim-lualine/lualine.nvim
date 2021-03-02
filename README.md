@@ -132,17 +132,16 @@ lualine.inactive_sections = {
 <details>
 <summary><b>Available components</b></summary>
 
-* general
-  * branch (git branch)
-  * diagnostics (diagnostics count from your prefered source)
-  * encoding (file encoding)
-  * fileformat (file format)
-  * filename
-  * filetype
-  * location (location in file in line:column format)
-  * mode (vim mode)
-  * progress (%progress in file)
-  * diff (git diff status)
+* branch (git branch)
+* diagnostics (diagnostics count from your prefered source)
+* encoding (file encoding)
+* fileformat (file format)
+* filename
+* filetype
+* location (location in file in line:column format)
+* mode (vim mode)
+* progress (%progress in file)
+* diff (git diff status)
 
 </details>
 
@@ -166,7 +165,7 @@ lualine.sections.lualine_a = { hello }
 
 You can use vim functions as a lualine component
 
-```
+```lua
 lualine.sections.lualine_b = { 'FugitiveHead' }
 ```
 
@@ -179,7 +178,7 @@ You can use variables from vim and lua globals as a lualine component
 Variables from g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo: scopes
 can be used. Scopes ending with o are options usualy accessed with `&` in vimscript
 
-```
+```lua
 lualine.sections.lualine_b = { 'g:coc_status', 'bo:filetype' }
 ```
 
