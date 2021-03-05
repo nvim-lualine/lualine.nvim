@@ -37,10 +37,10 @@ CONTENTS                                                     *lualine_contents*
         1.3.4. Changing components.................|lualine_changing_components|
         1.3.5. Building Custom components............|lualine_custom_components|
         1.3.6. Custom options...........................|lualine_custom_options|
-	1.3.7. Using tabline as statusline...............|lualine_using_tabline|
+        1.3.7. Using tabline as statusline...............|lualine_using_tabline|
         1.3.8. Loading plugin extensions.....|lualine_loading_plugin_extensions|
-	1.3.9  Config examples.........................|lualine_config_examples|
-	    1.3.9.1. Packer.nvim......|lualine_config_example_using_packer.nvim|
+        1.3.9  Config examples.........................|lualine_config_examples|
+            1.3.9.1. Packer.nvim......|lualine_config_example_using_packer.nvim|
             1.3.9.2 VIML example.......|lualine_full_config_example_inside_viml|
     1.4. Contributing.....................................|lualine_contributing|
     1.5. Screenshots.......................................|lualine_screenshots|
@@ -347,13 +347,13 @@ List of options are given below.
       Changes diff's symbol characters. You can set some symbols partly.
       Color in #rrggbb format
       >
-	  {
-	    'diff',
-	    -- set the added symbol and use defaults for modified and removed.
-	    symbols = {
-	      added = 'A',
-	    },
-	  }
+          {
+            'diff',
+            -- set the added symbol and use defaults for modified and removed.
+            symbols = {
+              added = 'A',
+            },
+          }
 <
 
 Example:~
@@ -469,30 +469,30 @@ FULL CONFIG EXAMPLE INSIDE VIML        *lualine_full_config_example_inside_viml*
 vimrc config
 >
     let g:lualine = {
-	\'options' : {
-	\  'theme' : 'gruvbox',
-	\  'section_separators' : ['', ''],
-	\  'component_separators' : ['', ''],
-	\  'icons_enabled' : v:true,
-	\},
-	\'sections' : {
-	\  'lualine_a' : [ ['mode', {'upper': v:true,},], ],
-	\  'lualine_b' : [ ['branch', {'icon': '',}, ], ],
-	\  'lualine_c' : [ ['filename', {'file_status': v:true,},], ],
-	\  'lualine_x' : [ 'encoding', 'fileformat', 'filetype' ],
-	\  'lualine_y' : [ 'progress' ],
-	\  'lualine_z' : [ 'location'  ],
-	\},
-	\'inactive_sections' : {
-	\  'lualine_a' : [  ],
-	\  'lualine_b' : [  ],
-	\  'lualine_c' : [ 'filename' ],
-	\  'lualine_x' : [ 'location' ],
-	\  'lualine_y' : [  ],
-	\  'lualine_z' : [  ],
-	\},
-	\'extensions' : [ 'fzf' ],
-	\}
+        \'options' : {
+        \  'theme' : 'gruvbox',
+        \  'section_separators' : ['', ''],
+        \  'component_separators' : ['', ''],
+        \  'icons_enabled' : v:true,
+        \},
+        \'sections' : {
+        \  'lualine_a' : [ ['mode', {'upper': v:true,},], ],
+        \  'lualine_b' : [ ['branch', {'icon': '',}, ], ],
+        \  'lualine_c' : [ ['filename', {'file_status': v:true,},], ],
+        \  'lualine_x' : [ 'encoding', 'fileformat', 'filetype' ],
+        \  'lualine_y' : [ 'progress' ],
+        \  'lualine_z' : [ 'location'  ],
+        \},
+        \'inactive_sections' : {
+        \  'lualine_a' : [  ],
+        \  'lualine_b' : [  ],
+        \  'lualine_c' : [ 'filename' ],
+        \  'lualine_x' : [ 'location' ],
+        \  'lualine_y' : [  ],
+        \  'lualine_z' : [  ],
+        \},
+        \'extensions' : [ 'fzf' ],
+        \}
     lua require("lualine").status()
 <
 
