@@ -35,6 +35,8 @@ M.inactive_sections = {
   lualine_z = {  }
 }
 
+M.tabline = {}
+
 M.extensions = { }
 
 local function apply_configuration(config_table)
@@ -59,6 +61,7 @@ local function apply_configuration(config_table)
   parse_sections('options')
   parse_sections('sections')
   parse_sections('inactive_sections')
+  parse_sections('tabline')
   if config_table.extensions then M.extensions = config_table.extensions end
 end
 
@@ -168,6 +171,7 @@ local function load_components()
   end
   load_sections(M.sections)
   load_sections(M.inactive_sections)
+  load_sections(M.tabline)
 end
 
 local function  load_extensions()
@@ -283,27 +287,49 @@ local function status_dispatch()
   end
 end
 
-local function exec_autocommands()
+local function tabline()
+  return statusline(M.tabline, true)
+end
+
+local function setup_theme()
+  lualine_set_theme()
   _G.lualine_set_theme = lualine_set_theme
-  _G.lualine_statusline = status_dispatch
   vim.api.nvim_exec([[
   augroup lualine
   autocmd!
   autocmd ColorScheme * call v:lua.lualine_set_theme()
-  autocmd WinLeave,BufLeave * lua vim.wo.statusline=lualine_statusline()
-  autocmd WinEnter,BufEnter * setlocal statusline=%!v:lua.lualine_statusline()
   augroup END
   ]], false)
+end
+
+local function set_tabline()
+  if next(M.tabline) ~= nil then
+    _G.lualine_tabline = tabline
+    vim.o.tabline = '%!v:lua.lualine_tabline()'
+    vim.o.showtabline = 2
+  end
+end
+
+local function set_statusline()
+  if next(M.sections) ~= nil or next(M.inactive_sections) ~= nil then
+    _G.lualine_statusline = status_dispatch
+    vim.o.statusline = '%!v:lua.lualine_statusline()'
+    vim.api.nvim_exec([[
+    autocmd lualine WinLeave,BufLeave * lua vim.wo.statusline=lualine_statusline()
+    autocmd lualine WinEnter,BufEnter * setlocal statusline=%!v:lua.lualine_statusline()
+    ]], false)
+  end
 end
 
 function M.status(config)
   apply_configuration(vim.g.lualine)
   apply_configuration(config)
   check_single_separator()
-  lualine_set_theme()
-  exec_autocommands()
+  setup_theme()
   load_components()
   load_extensions()
+  set_statusline()
+  set_tabline()
 end
 
 return M

@@ -274,6 +274,33 @@ lualine.sections.lualine_b = {
 
 </details>
 
+### Using tabline as statusline
+You can use lualine to display components in tabline . 
+The sections, configurations and highlights are same as statusline.
+
+```
+lualine.tabline = {
+  lualine_a = { },
+  lualine_b = { 'branch' },
+  lualine_c = { 'filename' },
+  lualine_x = { },
+  lualine_y = { },
+  lualine_z = { },
+}
+```
+This will show branch and filename component in top of neovim inside tabline .
+
+
+You can also completely move your statuline to tabline by configuring lualine.tabline
+instead of lualine.sections & lualine.inactive_sections and setting them to empty
+```
+lualine.tabline = {
+......
+  }
+lualine.sections = {}
+lualine.inactive_sections = {}
+```
+
 ### Loading plugin extensions
 Lualine extensions change statusline appearance for a window/buffer with a plugin loaded e.g. [junegunn/fzf.vim](https://github.com/junegunn/fzf.vim)
 
