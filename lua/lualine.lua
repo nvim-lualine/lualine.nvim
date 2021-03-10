@@ -37,7 +37,7 @@ M.inactive_sections = {
 
 M.tabline = {}
 
-M.extensions = {'nerdtree'}
+M.extensions = {}
 
 local function apply_configuration(config_table)
   if not config_table then return end
