@@ -296,7 +296,7 @@ lualine.tabline = {
 lualine.sections = {}
 lualine.inactive_sections = {}
 ```
-</detils>
+</details>
 
 ### Loading plugin extensions
 Lualine extensions change statusline appearance for a window/buffer with a plugin loaded e.g. [junegunn/fzf.vim](https://github.com/junegunn/fzf.vim)
