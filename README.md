@@ -60,7 +60,7 @@ Lualine has sections as shown below.
 
 ```
 +-------------------------------------------------+
-| A | B | C                            X | Y | Z |
+| A | B | C                             X | Y | Z |
 +-------------------------------------------------+
 ```
 
@@ -274,7 +274,7 @@ lualine.sections.lualine_b = {
 You can use lualine to display components in tabline.
 The sections, configurations and highlights are same as statusline.
 
-```
+```lua
 lualine.tabline = {
   lualine_a = { },
   lualine_b = { 'branch' },
@@ -289,7 +289,7 @@ This will show branch and filename component in top of neovim inside tabline .
 
 You can also completely move your statuline to tabline by configuring lualine.tabline
 instead of lualine.sections & lualine.inactive_sections and setting them to empty
-```
+```lua
 lualine.tabline = {
 ......
   }
