@@ -2,19 +2,19 @@
 -- MIT license, see LICENSE for more details.
 
 local function fzf_statusline()
-  vim.cmd([[hi clear fzf1]])
-  vim.cmd([[hi link fzf1 lualine_a_normal]])
-  vim.cmd([[hi clear fzf2]])
-  vim.cmd([[hi link fzf2 lualine_c_normal]])
-  return ([[%#fzf1# FZF %#fzf2#]])
-
+  return 'FZF'
 end
 
-local function load_extension()
-  _G.fzf_statusline = fzf_statusline
-  vim.cmd(([[autocmd! User FzfStatusLine setlocal statusline=%!v:lua.fzf_statusline()]]))
-end
+local M = {}
 
-return {
-  load_extension = load_extension
+M.sections = {
+  lualine_a = { fzf_statusline },
 }
+
+M.inactive_sections = {
+  lualine_a = { fzf_statusline },
+}
+
+M.filetypes = { 'fzf' }
+
+return M
