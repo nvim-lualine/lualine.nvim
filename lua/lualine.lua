@@ -204,27 +204,8 @@ local function lualine_set_theme()
   theme_set = M.options.theme
 end
 
-local function statusline(is_focused)
-  local sections = nil
-  for _, extension in ipairs(M.extensions) do
-    for _, filetype in ipairs(extension.filetypes) do
-      if vim.bo.filetype == filetype then
-        if is_focused then
-          sections = extension.sections
-        else
-          sections = extension.inactive_sections
-        end
-        break
-      end
-    end
-  end
-  if sections == nil then
-    if is_focused then
-      sections = M.sections
-    else
-      sections = M.inactive_sections
-    end
-  end
+
+local function statusline(sections, is_focused)
   if M.options.theme ~= theme_set then
     _G.lualine_set_theme()
   end
@@ -293,16 +274,45 @@ local function statusline(is_focused)
   return table.concat(status)
 end
 
+-- check if any extension matches the filetype and return proper sections
+local function get_extension_sections()
+  local sections, inactive_sections = nil, nil
+  for _, extension in ipairs(M.extensions) do
+    for _, filetype in ipairs(extension.filetypes) do
+      if vim.bo.filetype == filetype then
+        sections = extension.sections
+        inactive_sections = extension.inactive_sections
+        break
+      end
+    end
+  end
+  return {sections = sections, inactive_sections = inactive_sections}
+end
+
 local function status_dispatch()
+  local extension_sections = get_extension_sections()
   if vim.g.statusline_winid == vim.fn.win_getid() then
-    return statusline(true)
+    local sections = extension_sections.sections
+    if sections == nil then
+      sections = M.sections
+    end
+    return statusline(sections, true)
   else
-    return statusline(false)
+    local inactive_sections = extension_sections.inactive_sections
+    if inactive_sections == nil then
+      inactive_sections = M.inactive_sections
+    end
+    return statusline(inactive_sections, false)
   end
 end
 
 local function tabline()
-  return statusline(M.tabline, true)
+  local extension_sections = get_extension_sections()
+  local sections = extension_sections.sections
+  if sections == nil then
+    sections = M.tabline
+  end
+  return statusline(sections, true)
 end
 
 local function setup_theme()
