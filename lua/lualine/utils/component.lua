@@ -37,11 +37,11 @@ local function apply_padding(status, options)
 end
 
 -- Applies custom highlights for component
-local function apply_highlights(status, options)
+local function apply_highlights(status, options, default_hl)
   if options.color_highlight then
     status = highlight.component_format_highlight(options.color_highlight) .. status
   end
-  return status
+  return status .. default_hl
 end
 
 -- Apply icon in front of component
@@ -54,24 +54,16 @@ end
 
 -- Apply separator at end of component only when
 -- custom highlights haven't affected background
-local function apply_spearator(status, options, highlight_name)
+local function apply_spearator(status, options)
     local separator
     if options.separator and #options.separator > 0 then
       separator = options.separator
     elseif options.component_separators then
       if options.self.section < 'lualine_x' then separator = options.component_separators[1]
       else separator = options.component_separators[2] end
-      if not separator then
-        options.separator_applied = nil
-        return status
-      end
       options.separator = separator
-    else
-      options.separator_applied = nil
-      return status
     end
-    separator = highlight_name .. separator
-    status = status .. separator
+    if separator then status = status .. separator end
     options.separator_applied = separator
   return status
 end
@@ -97,8 +89,8 @@ function M.draw_section(section, highlight_name)
       localstatus = apply_icon(localstatus, component)
       localstatus = apply_case(localstatus, component)
       localstatus = apply_padding(localstatus, component)
-      localstatus = apply_highlights(localstatus, component)
-      localstatus = apply_spearator(localstatus, component, highlight_name)
+      localstatus = apply_highlights(localstatus, component, highlight_name)
+      localstatus = apply_spearator(localstatus, component)
       if custom_highlight_at_begining or
         (#drawn_components > 0 and not drawn_components[#drawn_components].separator_applied)then
         -- Don't prepend with old highlight when the component changes it imidiately
