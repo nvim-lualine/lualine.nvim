@@ -81,7 +81,6 @@ local function diagnostics(options)
 
   if options.colored then
     add_highlights()
-    utils.expand_set_theme(add_highlights)
   end
 
   return function()

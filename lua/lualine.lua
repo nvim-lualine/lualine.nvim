@@ -2,12 +2,9 @@
 -- MIT license, see LICENSE for more details.
 
 local utils_component = require('lualine.utils.component')
-local utils = require('lualine.utils.utils')
 local highlight = require('lualine.highlight')
 
 local M = { }
-
-local theme_set = {}
 
 M.options = {
   icons_enabled = true,
@@ -149,7 +146,6 @@ local function component_loader(component)
         component.color, component.component_name, component)
       end
       update_color()
-      utils.expand_set_theme(update_color)
     end
   end
 end
@@ -191,29 +187,11 @@ end
 local function lualine_set_theme()
   if type(M.options.theme) == 'string' then
     M.options.theme = require('lualine.themes.'.. M.options.theme)
-    -- change the theme table in component so their custom
-    -- highlights can reflect theme change
-    local function reset_component_theme(sections)
-      for _, section in pairs(sections)do
-        for _, component in pairs(section) do
-          if type(component) == 'table' then
-            component.theme = M.options.theme
-          end
-        end
-      end
-    end
-    reset_component_theme(M.sections)
-    reset_component_theme(M.inactive_sections)
   end
-  utils.clear_highlights()
   highlight.create_highlight_groups(M.options.theme)
-  theme_set = M.options.theme
 end
 
 local function statusline(sections, is_focused)
-  if M.options.theme ~= theme_set then
-    _G.lualine_set_theme()
-  end
   local function create_status_builder()
     -- The sequence sections should maintain
     local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
