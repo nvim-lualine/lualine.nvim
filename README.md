@@ -306,7 +306,14 @@ By default no plugin extension are loaded to improve performance. If you are usi
 lualine.extensions = { 'fzf' }
 ```
 
-All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
+<details>
+<summary><b>Available components</b></summary>
+
+* fugitive
+* fzf
+* nerdtree
+
+</details>
 
 ### Lua config example
 
