@@ -117,6 +117,7 @@ local function diff(options)
   -- create highlights
   if options.colored then
     create_highlights()
+    utils.expand_set_theme(create_highlights)
   end
 
   -- Function that runs everytime statusline is updated

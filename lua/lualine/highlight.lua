@@ -195,6 +195,7 @@ function M.get_transitional_highlights(left_section_data, right_section_data, re
     end
     -- Create highlights and setup to survive colorscheme changes
     set_transitional_highlights()
+    utils.expand_set_theme(set_transitional_highlights)
   end
   return '%#' .. highlight_name .. '#'
 end

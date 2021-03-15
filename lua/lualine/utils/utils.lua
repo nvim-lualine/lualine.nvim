@@ -3,6 +3,17 @@
 
 local M = {}
 
+-- Works as a decorator to expand set_lualine_theme functions
+-- functionality at runtime .
+function M.expand_set_theme(func)
+  -- execute a local version of global function to not get in a inf recurtion
+  local set_theme = _G.lualine_set_theme
+  _G.lualine_set_theme = function()
+    set_theme()
+    func()
+  end
+end
+
 -- Note for now only works for termguicolors scope can be background or foreground
 function M.extract_highlight_colors(color_group, scope)
   if vim.fn.hlexists(color_group) == 0 then return nil end
