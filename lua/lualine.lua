@@ -7,15 +7,12 @@ local highlight = require('lualine.highlight')
 
 local M = { }
 
-local theme_set = {}
-
 M.options = {
   icons_enabled = true,
   theme = 'gruvbox',
   component_separators = {'', ''},
   section_separators = {'', ''},
 }
-
 
 M.sections = {
   lualine_a = { 'mode' },
@@ -201,14 +198,10 @@ local function lualine_set_theme()
   end
   utils.clear_highlights()
   highlight.create_highlight_groups(M.options.theme)
-  theme_set = M.options.theme
 end
 
 
 local function statusline(sections, is_focused)
-  if M.options.theme ~= theme_set then
-    _G.lualine_set_theme()
-  end
   local function create_status_builder()
     -- The sequence sections should maintain
     local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
