@@ -11,9 +11,7 @@ M.sections = {
   lualine_a = { fzf_statusline },
 }
 
-M.inactive_sections = {
-  lualine_a = { fzf_statusline },
-}
+M.inactive_sections = M.sections
 
 M.filetypes = { 'fzf' }
 

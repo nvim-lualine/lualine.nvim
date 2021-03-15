@@ -5,11 +5,10 @@ local M = {}
 
 M.sections = {
   lualine_a = { 'FugitiveHead' },
+  lualine_z = { 'location' },
 }
 
-M.inactive_sections = {
-  lualine_a = { 'FugitiveHead' },
-}
+M.inactive_sections = M.sections
 
 M.filetypes = { 'fugitive' }
 

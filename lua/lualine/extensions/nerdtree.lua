@@ -7,9 +7,7 @@ M.sections = {
   lualine_a = { vim.fn.getcwd },
 }
 
-M.inactive_sections = {
-  lualine_a = { vim.fn.getcwd },
-}
+M.inactive_sections = M.sections
 
 M.filetypes = { 'nerdtree' }
 
