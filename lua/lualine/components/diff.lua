@@ -1,9 +1,8 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-
-local async = require'lualine.async'
-local utils = require'lualine.utils.utils'
-local highlight = require"lualine.highlight"
+local async = require 'lualine.async'
+local utils = require 'lualine.utils.utils'
+local highlight = require 'lualine.highlight'
 
 -- variable to store git diff stats
 local git_diff = nil
@@ -16,7 +15,8 @@ local function process_diff(data)
   local added, removed, modified = 0, 0, 0
   for line in vim.gsplit(data, '\n') do
     if string.find(line, [[^@@ ]]) then
-      local tokens = vim.fn.matchlist(line, [[^@@ -\v(\d+),?(\d*) \+(\d+),?(\d*)]])
+      local tokens = vim.fn.matchlist(line,
+                                      [[^@@ -\v(\d+),?(\d*) \+(\d+),?(\d*)]])
       local line_stats = {
         mod_count = tokens[3] == '' and 1 or tonumber(tokens[3]),
         new_count = tokens[5] == '' and 1 or tonumber(tokens[5])
@@ -29,12 +29,12 @@ local function process_diff(data)
       else
         local min = math.min(line_stats.mod_count, line_stats.new_count)
         modified = modified + min
-        added  = added + line_stats.new_count - min
+        added = added + line_stats.new_count - min
         removed = removed + line_stats.mod_count - min
       end
     end
   end
-  git_diff = { added = added,  modified = modified, removed = removed }
+  git_diff = {added = added, modified = modified, removed = removed}
 end
 
 -- variable to store git_diff getter async function
@@ -45,26 +45,29 @@ local function update_git_diff_getter()
   -- stop older function properly before overwritting it
   if get_git_diff then get_git_diff:stop() end
   -- Donn't show git diff when current buffer doesn't have a filename
-  if #vim.fn.expand('%') == 0 then get_git_diff = nil; git_diff=nil; return end
+  if #vim.fn.expand('%') == 0 then
+    get_git_diff = nil;
+    git_diff = nil;
+    return
+  end
   get_git_diff = async:new({
-    cmd = string.format([[git -C %s --no-pager diff --no-color --no-ext-diff -U0 -- %s]]
-    ,vim.fn.expand('%:h'), vim.fn.expand('%:t')),
+    cmd = string.format(
+        [[git -C %s --no-pager diff --no-color --no-ext-diff -U0 -- %s]],
+        vim.fn.expand('%:h'), vim.fn.expand('%:t')),
     on_stdout = function(_, data)
-      if data then
-        diff_data = diff_data .. data
-      end
+      if data then diff_data = diff_data .. data end
     end,
-    on_stderr = function (_, data)
+    on_stderr = function(_, data)
       if data then
         git_diff = nil
         diff_data = ''
       end
     end,
     on_exit = function()
-      if diff_data ~= ''  then
+      if diff_data ~= '' then
         process_diff(diff_data)
       else
-        git_diff = { added = 0, modified = 0, removed = 0}
+        git_diff = {added = 0, modified = 0, removed = 0}
       end
     end
   })
@@ -80,21 +83,26 @@ local function update_git_diff()
   end)()
 end
 
-local default_color_added    = "#f0e130"
-local default_color_removed  = "#90ee90"
-local default_color_modified = "#ff0038"
+local default_color_added = '#f0e130'
+local default_color_removed = '#90ee90'
+local default_color_modified = '#ff0038'
 
 local function diff(options)
   if options.colored == nil then options.colored = true end
   -- apply colors
   if not options.color_added then
-    options.color_added = utils.extract_highlight_colors('DiffAdd', 'guifg') or default_color_added
+    options.color_added = utils.extract_highlight_colors('DiffAdd', 'guifg') or
+                              default_color_added
   end
   if not options.color_modified then
-    options.color_modified = utils.extract_highlight_colors('DiffChange', 'guifg') or default_color_modified
+    options.color_modified = utils.extract_highlight_colors('DiffChange',
+                                                            'guifg') or
+                                 default_color_modified
   end
   if not options.color_removed then
-    options.color_removed = utils.extract_highlight_colors('DiffDelete', 'guifg') or default_color_removed
+    options.color_removed =
+        utils.extract_highlight_colors('DiffDelete', 'guifg') or
+            default_color_removed
   end
 
   local highlights = {}
@@ -102,9 +110,12 @@ local function diff(options)
   -- create highlights and save highlight_name in highlights table
   local function create_highlights()
     highlights = {
-      added = highlight.create_component_highlight_group({fg = options.color_added}, 'diff_added', options),
-      modified = highlight.create_component_highlight_group({fg = options.color_modified}, 'diff_modified', options),
-      removed = highlight.create_component_highlight_group({fg = options.color_removed}, 'diff_removed', options),
+      added = highlight.create_component_highlight_group(
+          {fg = options.color_added}, 'diff_added', options),
+      modified = highlight.create_component_highlight_group(
+          {fg = options.color_modified}, 'diff_modified', options),
+      removed = highlight.create_component_highlight_group(
+          {fg = options.color_removed}, 'diff_removed', options)
     }
   end
 
@@ -124,12 +135,9 @@ local function diff(options)
   return function()
     if git_diff == nil then return '' end
 
-    local default_symbols = {
-      added = '+',
-      modified = '~',
-      removed = '-',
-    }
-    options.symbols = vim.tbl_extend('force', default_symbols, options.symbols or {})
+    local default_symbols = {added = '+', modified = '~', removed = '-'}
+    options.symbols = vim.tbl_extend('force', default_symbols,
+                                     options.symbols or {})
     local colors = {}
     if options.colored then
       -- load the highlights and store them in colors table
@@ -140,12 +148,13 @@ local function diff(options)
 
     local result = {}
     -- loop though data and load available sections in result table
-    for _, name in ipairs{'added', 'modified', 'removed'} do
+    for _, name in ipairs {'added', 'modified', 'removed'} do
       if git_diff[name] and git_diff[name] > 0 then
         if options.colored then
-          table.insert(result,colors[name]..options.symbols[name]..git_diff[name])
+          table.insert(result,
+                       colors[name] .. options.symbols[name] .. git_diff[name])
         else
-          table.insert(result,options.symbols[name]..git_diff[name])
+          table.insert(result, options.symbols[name] .. git_diff[name])
         end
       end
     end
@@ -168,12 +177,12 @@ end
 local function get_sign_count()
   update_git_diff_getter()
   update_git_diff()
-  return git_diff or { added = -1, modified = -1, removed = -1 }
+  return git_diff or {added = -1, modified = -1, removed = -1}
 end
 
 return {
   init = function(options) return diff(options) end,
   update_git_diff = update_git_diff,
   update_git_diff_getter = update_git_diff_getter,
-  get_sign_count = get_sign_count,
+  get_sign_count = get_sign_count
 }

@@ -1,9 +1,8 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 -- Credit itchyny, jackno (lightline)
-
 local M = {}
-
+-- LuaFormatter off
 local colors = {
   black   = '#000000',
   maroon  = '#800000',
@@ -22,29 +21,24 @@ local colors = {
   aqua    = '#00ffff',
   white   = '#ffffff',
 }
+-- LuaFormatter on
 
 M.normal = {
-  a = { fg = colors.white, bg = colors.blue , gui = 'bold', },
-  b = { fg = colors.white, bg = colors.gray , },
-  c = { fg = colors.silver, bg = colors.black , }
+  a = {fg = colors.white, bg = colors.blue, gui = 'bold'},
+  b = {fg = colors.white, bg = colors.gray},
+  c = {fg = colors.silver, bg = colors.black}
 }
 
-M.insert = {
-  a = { fg = colors.white, bg = colors.green , gui = 'bold', },
-}
+M.insert = {a = {fg = colors.white, bg = colors.green, gui = 'bold'}}
 
-M.visual = {
-  a = { fg = colors.white, bg = colors.purple , gui = 'bold', },
-}
+M.visual = {a = {fg = colors.white, bg = colors.purple, gui = 'bold'}}
 
-M.replace = {
-  a = { fg = colors.white, bg = colors.red , gui = 'bold', },
-}
+M.replace = {a = {fg = colors.white, bg = colors.red, gui = 'bold'}}
 
 M.inactive = {
-  a = { fg = colors.silver, bg = colors.gray , gui = 'bold', },
-  b = { fg = colors.gray, bg = colors.black , },
-  c = { fg = colors.silver, bg = colors.black , },
+  a = {fg = colors.silver, bg = colors.gray, gui = 'bold'},
+  b = {fg = colors.gray, bg = colors.black},
+  c = {fg = colors.silver, bg = colors.black}
 }
 
 return M

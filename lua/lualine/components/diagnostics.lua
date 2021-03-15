@@ -3,16 +3,18 @@
 local highlight = require('lualine.highlight')
 local utils = require('lualine.utils.utils')
 
+-- LuaFormatter off
 local default_color_error = '#e32636'
 local default_color_warn  = '#ffdf00'
 local default_color_info  = '#ffffff'
+-- LuaFormatter on
 
 local diagnostic_sources = {
   nvim_lsp = function()
     local error_count = vim.lsp.diagnostic.get_count(0, 'Error')
     local warning_count = vim.lsp.diagnostic.get_count(0, 'Warning')
     local info_count = vim.lsp.diagnostic.get_count(0, 'Information') +
-    vim.lsp.diagnostic.get_count(0, 'Hint')
+                           vim.lsp.diagnostic.get_count(0, 'Hint')
     return error_count, warning_count, info_count
   end,
   coc = function()
@@ -30,14 +32,18 @@ local diagnostic_sources = {
     else
       return 0, 0, 0
     end
-  end,
+  end
 }
 
 local function get_diagnostics(sources)
   local result = {}
   for index, source in ipairs(sources) do
     local error_count, warning_count, info_count = diagnostic_sources[source]()
-    result[index] = {error = error_count, warn = warning_count, info = info_count}
+    result[index] = {
+      error = error_count,
+      warn = warning_count,
+      info = info_count
+    }
   end
   return result
 end
@@ -45,14 +51,11 @@ end
 local function diagnostics(options)
   local default_symbols = options.icons_enabled and {
     error = ' ', -- xf659
-    warn  = ' ', -- xf529
-    info  = ' ', -- xf7fc
-  } or {
-    error = 'E:',
-    warn  = 'W:',
-    info  = 'I:'
-  }
-  options.symbols = vim.tbl_extend('force', default_symbols, options.symbols or {})
+    warn = ' ', -- xf529
+    info = ' ' -- xf7fc
+  } or {error = 'E:', warn = 'W:', info = 'I:'}
+  options.symbols = vim.tbl_extend('force', default_symbols,
+                                   options.symbols or {})
   if options.sources == nil then
     print('no sources for diagnostics configured')
     return ''
@@ -61,21 +64,30 @@ local function diagnostics(options)
   if options.colored == nil then options.colored = true end
   -- apply colors
   if not options.color_error then
-    options.color_error = utils.extract_highlight_colors('DiffDelete', 'foreground') or default_color_error
+    options.color_error = utils.extract_highlight_colors('DiffDelete',
+                                                         'foreground') or
+                              default_color_error
   end
   if not options.color_warn then
-    options.color_warn = utils.extract_highlight_colors('DiffText', 'foreground') or default_color_warn
+    options.color_warn =
+        utils.extract_highlight_colors('DiffText', 'foreground') or
+            default_color_warn
   end
   if not options.color_info then
-    options.color_info = utils.extract_highlight_colors('Normal', 'foreground') or default_color_info
+    options.color_info =
+        utils.extract_highlight_colors('Normal', 'foreground') or
+            default_color_info
   end
 
   local highlight_groups = {}
   local function add_highlights()
     highlight_groups = {
-      error = highlight.create_component_highlight_group({ fg = options.color_error }, 'diagnostics_error', options),
-      warn  = highlight.create_component_highlight_group({ fg = options.color_warn }, 'diagnostics_warn', options),
-      info  = highlight.create_component_highlight_group({ fg = options.color_info }, 'diagnostics_info', options),
+      error = highlight.create_component_highlight_group(
+          {fg = options.color_error}, 'diagnostics_error', options),
+      warn = highlight.create_component_highlight_group(
+          {fg = options.color_warn}, 'diagnostics_warn', options),
+      info = highlight.create_component_highlight_group(
+          {fg = options.color_info}, 'diagnostics_info', options)
     }
   end
 
@@ -85,19 +97,15 @@ local function diagnostics(options)
   end
 
   return function()
-    local error_count, warning_count, info_count = 0,0,0
+    local error_count, warning_count, info_count = 0, 0, 0
     local diagnostic_data = get_diagnostics(options.sources)
     for _, data in pairs(diagnostic_data) do
-      error_count   = error_count   + data.error
+      error_count = error_count + data.error
       warning_count = warning_count + data.warn
-      info_count    = info_count    + data.info
+      info_count = info_count + data.info
     end
     local result = {}
-    local data = {
-      error = error_count,
-      warn  = warning_count,
-      info  = info_count,
-    }
+    local data = {error = error_count, warn = warning_count, info = info_count}
     if options.colored then
       local colors = {}
       for name, hl in pairs(highlight_groups) do
@@ -105,13 +113,14 @@ local function diagnostics(options)
       end
       for _, section in ipairs(options.sections) do
         if data[section] ~= nil and data[section] > 0 then
-          table.insert(result, colors[section]..options.symbols[section]..data[section])
+          table.insert(result, colors[section] .. options.symbols[section] ..
+                           data[section])
         end
       end
     else
       for _, section in ipairs(options.sections) do
         if data[section] ~= nil and data[section] > 0 then
-          table.insert(result,options.symbols[section]..data[section])
+          table.insert(result, options.symbols[section] .. data[section])
         end
       end
     end
@@ -125,5 +134,5 @@ end
 
 return {
   init = function(options) return diagnostics(options) end,
-  get_diagnostics = get_diagnostics,
+  get_diagnostics = get_diagnostics
 }

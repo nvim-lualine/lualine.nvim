@@ -1,35 +1,34 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-
 local utils_component = require('lualine.utils.component')
 local utils = require('lualine.utils.utils')
 local highlight = require('lualine.highlight')
 
-local M = { }
+local M = {}
 
 M.options = {
   icons_enabled = true,
   theme = 'gruvbox',
   component_separators = {'', ''},
-  section_separators = {'', ''},
+  section_separators = {'', ''}
 }
 
 M.sections = {
-  lualine_a = { 'mode' },
-  lualine_b = { 'branch' },
-  lualine_c = { 'filename' },
-  lualine_x = { 'encoding', 'fileformat', 'filetype' },
-  lualine_y = { 'progress' },
-  lualine_z = { 'location'  },
+  lualine_a = {'mode'},
+  lualine_b = {'branch'},
+  lualine_c = {'filename'},
+  lualine_x = {'encoding', 'fileformat', 'filetype'},
+  lualine_y = {'progress'},
+  lualine_z = {'location'}
 }
 
 M.inactive_sections = {
-  lualine_a = {  },
-  lualine_b = {  },
-  lualine_c = { 'filename' },
-  lualine_x = { 'location' },
-  lualine_y = {  },
-  lualine_z = {  }
+  lualine_a = {},
+  lualine_b = {},
+  lualine_c = {'filename'},
+  lualine_x = {'location'},
+  lualine_y = {},
+  lualine_z = {}
 }
 
 M.tabline = {}
@@ -41,15 +40,14 @@ local function apply_configuration(config_table)
   local function parse_sections(section_group_name)
     if not config_table[section_group_name] then return end
     for section_name, section in pairs(config_table[section_group_name]) do
-      M[section_group_name][section_name] = config_table[section_group_name][section_name]
+      M[section_group_name][section_name] =
+          config_table[section_group_name][section_name]
       if type(section) == 'table' then
         for _, component in pairs(section) do
           if type(component) == 'table' and type(component[2]) == 'table' then
             local options = component[2]
             component[2] = nil
-            for key, val in pairs(options) do
-              component[key] = val
-            end
+            for key, val in pairs(options) do component[key] = val end
           end
         end
       end
@@ -65,18 +63,24 @@ end
 local function check_single_separator()
   local compoennt_separator = M.options.component_separators
   local section_separator = M.options.section_separators
-  if M.options.component_separators ~=nil then
+  if M.options.component_separators ~= nil then
     if type(M.options.component_separators) == 'string' then
-      M.options.component_separators = {compoennt_separator, compoennt_separator}
+      M.options.component_separators = {
+        compoennt_separator, compoennt_separator
+      }
     elseif #M.options.component_separators == 1 then
-      M.options.component_separators = {M.options.component_separators[1], M.options.component_separators[1]}
+      M.options.component_separators = {
+        M.options.component_separators[1], M.options.component_separators[1]
+      }
     end
   end
-  if M.options.section_separators ~=nil then
+  if M.options.section_separators ~= nil then
     if type(M.options.section_separators) == 'string' then
       M.options.section_separators = {section_separator, section_separator}
     elseif #M.options.section_separators == 1 then
-      M.options.section_separators = {M.options.section_separators[1], M.options.section_separators[1]}
+      M.options.section_separators = {
+        M.options.section_separators[1], M.options.section_separators[1]
+      }
     end
   end
 end
@@ -97,11 +101,11 @@ local function load_special_components(component)
       local return_val = vim[scope][component]
       if return_val == nil then return '' end
       local ok
-      ok, return_val =  pcall(tostring, return_val)
+      ok, return_val = pcall(tostring, return_val)
       if ok then return return_val end
       return ''
     elseif loadstring(string.format('return %s ~= nil', component)) and
-      loadstring(string.format([[return %s ~= nil]], component))() then
+        loadstring(string.format([[return %s ~= nil]], component))() then
       -- lua veriable component
       return loadstring(string.format([[
       local ok, return_val = pcall(tostring, %s)
@@ -111,8 +115,12 @@ local function load_special_components(component)
       -- vim function component
       local ok, return_val = pcall(vim.fn[component])
       if not ok then return '' end -- function call failed
-      ok, return_val =  pcall(tostring, return_val)
-      if ok then return return_val else return '' end
+      ok, return_val = pcall(tostring, return_val)
+      if ok then
+        return return_val
+      else
+        return ''
+      end
     end
   end
 end
@@ -125,12 +133,11 @@ local function component_loader(component)
     component.component_name = component[1]
     -- apply default args
     for opt_name, opt_val in pairs(M.options) do
-      if component[opt_name] == nil then
-        component[opt_name] = opt_val
-      end
+      if component[opt_name] == nil then component[opt_name] = opt_val end
     end
     -- load the component
-    local ok, loaded_component = pcall(require, 'lualine.components.' .. component.component_name)
+    local ok, loaded_component = pcall(require, 'lualine.components.' ..
+                                           component.component_name)
     if not ok then
       loaded_component = load_special_components(component.component_name)
     end
@@ -142,7 +149,8 @@ local function component_loader(component)
     if component.color then
       local function update_color()
         component.color_highlight = highlight.create_component_highlight_group(
-        component.color, component.component_name, component)
+                                        component.color,
+                                        component.component_name, component)
       end
       update_color()
       utils.expand_set_theme(update_color)
@@ -170,7 +178,7 @@ local function load_components()
   load_sections(M.tabline)
 end
 
-local function  load_extensions()
+local function load_extensions()
   for index, extension in pairs(M.extensions) do
     local local_extension = require('lualine.extensions.' .. extension)
     load_sections(local_extension.sections)
@@ -181,11 +189,11 @@ end
 
 local function lualine_set_theme()
   if type(M.options.theme) == 'string' then
-    M.options.theme = require('lualine.themes.'.. M.options.theme)
+    M.options.theme = require('lualine.themes.' .. M.options.theme)
     -- change the theme table in component so their custom
     -- highlights can reflect theme change
     local function reset_component_theme(sections)
-      for _, section in pairs(sections)do
+      for _, section in pairs(sections) do
         for _, component in pairs(section) do
           if type(component) == 'table' then
             component.theme = M.options.theme
@@ -200,20 +208,23 @@ local function lualine_set_theme()
   highlight.create_highlight_groups(M.options.theme)
 end
 
-
 local function statusline(sections, is_focused)
   local function create_status_builder()
     -- The sequence sections should maintain
     local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
     local status_builder = {}
     for _, section_name in ipairs(section_sequence) do
-      if sections['lualine_'..section_name] then
+      if sections['lualine_' .. section_name] then
         -- insert highlight+components of this section to status_builder
         local section_highlight = highlight.format_highlight(is_focused,
-        'lualine_'..section_name)
-        local section_data = utils_component.draw_section(sections['lualine_'..section_name], section_highlight)
+                                                             'lualine_' ..
+                                                                 section_name)
+        local section_data = utils_component.draw_section(
+                                 sections['lualine_' .. section_name],
+                                 section_highlight)
         if #section_data > 0 then
-          table.insert(status_builder, {name = section_name, data = section_data,})
+          table.insert(status_builder,
+                       {name = section_name, data = section_data})
         end
       end
     end
@@ -225,24 +236,29 @@ local function statusline(sections, is_focused)
   -- Actual statusline
   local status = {}
   local half_passed = false
-  for i=1,#status_builder do
+  for i = 1, #status_builder do
     -- midsection divider
     if not half_passed and status_builder[i].name > 'c' then
-      table.insert(status, highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
+      table.insert(status,
+                   highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
       half_passed = true
     end
     -- provide section_separators when statusline is in focus
     if is_focused then
       -- component separator needs to have fg = current_section.bg
       -- and bg = adjacent_section.bg
-      local previous_section = status_builder[i-1] or {}
+      local previous_section = status_builder[i - 1] or {}
       local current_section = status_builder[i]
-      local next_section = status_builder[i+1] or {}
+      local next_section = status_builder[i + 1] or {}
       -- For 2nd half we need to show separator before section
       if current_section.name > 'x' then
-        local transitional_highlight = highlight.get_transitional_highlights(previous_section.data, current_section.data, true)
-        if transitional_highlight and M.options.section_separators and M.options.section_separators[2] then
-          table.insert(status, transitional_highlight .. M.options.section_separators[2])
+        local transitional_highlight = highlight.get_transitional_highlights(
+                                           previous_section.data,
+                                           current_section.data, true)
+        if transitional_highlight and M.options.section_separators and
+            M.options.section_separators[2] then
+          table.insert(status, transitional_highlight ..
+                           M.options.section_separators[2])
         end
       end
 
@@ -251,9 +267,13 @@ local function statusline(sections, is_focused)
 
       -- For 1st half we need to show separator after section
       if current_section.name < 'c' then
-        local transitional_highlight = highlight.get_transitional_highlights(current_section.data, next_section.data)
-        if transitional_highlight and M.options.section_separators and M.options.section_separators[1] then
-          table.insert(status, transitional_highlight .. M.options.section_separators[1])
+        local transitional_highlight = highlight.get_transitional_highlights(
+                                           current_section.data,
+                                           next_section.data)
+        if transitional_highlight and M.options.section_separators and
+            M.options.section_separators[1] then
+          table.insert(status, transitional_highlight ..
+                           M.options.section_separators[1])
         end
       end
     else -- when not in focus
@@ -262,7 +282,8 @@ local function statusline(sections, is_focused)
   end
   -- incase none of x,y,z was configured lets not fill whole statusline with a,b,c section
   if not half_passed then
-    table.insert(status, highlight.format_highlight(is_focused,'lualine_c').."%=")
+    table.insert(status,
+                 highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
   end
   return table.concat(status)
 end
@@ -286,22 +307,16 @@ local function status_dispatch()
   local extension_sections = get_extension_sections()
   if vim.g.statusline_winid == vim.fn.win_getid() then
     local sections = extension_sections.sections
-    if sections == nil then
-      sections = M.sections
-    end
+    if sections == nil then sections = M.sections end
     return statusline(sections, true)
   else
     local inactive_sections = extension_sections.inactive_sections
-    if inactive_sections == nil then
-      inactive_sections = M.inactive_sections
-    end
+    if inactive_sections == nil then inactive_sections = M.inactive_sections end
     return statusline(inactive_sections, false)
   end
 end
 
-local function tabline()
-  return statusline(M.tabline, true)
-end
+local function tabline() return statusline(M.tabline, true) end
 
 local function setup_theme()
   lualine_set_theme()

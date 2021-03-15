@@ -1,8 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-
-local powerline = {  }
-
+local powerline = {}
+-- LuaFormatter off
 local Colors = {
   white          = '#ffffff',
   darkestgreen   = '#005f00',
@@ -20,32 +19,32 @@ local Colors = {
   gray7          = '#9e9e9e',
   gray10         = '#f0f0f0',
 }
+-- LuaFormatter on
 
 powerline.normal = {
-  a = { fg = Colors.darkestgreen, bg = Colors.brightgreen, gui = 'bold', },
-  b = { fg = Colors.gray10, bg = Colors.gray5, },
-  c = { fg = Colors.gray7, bg = Colors.gray2, },
+  a = {fg = Colors.darkestgreen, bg = Colors.brightgreen, gui = 'bold'},
+  b = {fg = Colors.gray10, bg = Colors.gray5},
+  c = {fg = Colors.gray7, bg = Colors.gray2}
 }
 
 powerline.insert = {
-  a = { fg = Colors.darkestcyan, bg = Colors.white, gui = 'bold', },
-  b = { fg = Colors.darkestcyan, bg = Colors.mediumcyan, },
-  c = { fg = Colors.mediumcyan, bg = Colors.darkestblue, },
+  a = {fg = Colors.darkestcyan, bg = Colors.white, gui = 'bold'},
+  b = {fg = Colors.darkestcyan, bg = Colors.mediumcyan},
+  c = {fg = Colors.mediumcyan, bg = Colors.darkestblue}
 }
 
-
 powerline.visual = {
-  a = { fg = Colors.darkred, bg = Colors.brightorange, gui = 'bold', },
+  a = {fg = Colors.darkred, bg = Colors.brightorange, gui = 'bold'}
 }
 
 powerline.replace = {
-  a = { fg = Colors.white, bg = Colors.brightred, gui = 'bold', },
+  a = {fg = Colors.white, bg = Colors.brightred, gui = 'bold'}
 }
 
 powerline.inactive = {
-  a = { fg = Colors.gray1, bg = Colors.gray5, gui = 'bold', },
-  b = { fg = Colors.gray1, bg = Colors.gray5, },
-  c = { bg = Colors.gray1, fg = Colors.gray5, },
+  a = {fg = Colors.gray1, bg = Colors.gray5, gui = 'bold'},
+  b = {fg = Colors.gray1, bg = Colors.gray5},
+  c = {bg = Colors.gray1, fg = Colors.gray5}
 }
 
 return powerline

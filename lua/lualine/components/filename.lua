@@ -1,6 +1,5 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-
 local function filename(options)
   -- setting defaults
   if options.file_status == nil then options.file_status = true end
@@ -23,11 +22,14 @@ local function filename(options)
     end
 
     if options.file_status then
-      if vim.bo.modified then data = data .. "[+]"
-      elseif vim.bo.modifiable == false then data = data .. "[-]" end
+      if vim.bo.modified then
+        data = data .. '[+]'
+      elseif vim.bo.modifiable == false then
+        data = data .. '[-]'
+      end
     end
     return data
   end
 end
 
-return { init = function(options) return filename(options) end }
+return {init = function(options) return filename(options) end}

@@ -1,6 +1,5 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-
 local M = {}
 
 -- Works as a decorator to expand set_lualine_theme functions
@@ -21,7 +20,7 @@ function M.extract_highlight_colors(color_group, scope)
   local cterm_colors = vim.api.nvim_get_hl_by_name(color_group, false)
   local color = {
     ctermfg = cterm_colors.foreground,
-    ctermbg = cterm_colors.background,
+    ctermbg = cterm_colors.background
   }
   if gui_colors.background then
     color.guibg = string.format('#%06x', gui_colors.background)
@@ -48,7 +47,7 @@ end
 
 -- clears loaded_highlights table and highlights
 function M.clear_highlights()
-  for highlight_name, _ in pairs(M.loaded_highlights)do
+  for highlight_name, _ in pairs(M.loaded_highlights) do
     vim.cmd('highlight clear ' .. highlight_name)
     M.loaded_highlights[highlight_name] = nil
   end

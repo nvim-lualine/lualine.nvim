@@ -1,9 +1,8 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 -- Credit: TKNGUE(lightline)
-
 local M = {}
-
+-- LuaFormatter off
 local colors = {
   red                    = '#df0000',
   green                  = '#008700',
@@ -26,29 +25,24 @@ local colors = {
   visual_fg              = '#000000',
   visual_bg              = '#8787af',
 }
+-- LuaFormatter on
 
 M.normal = {
-  a = { fg = colors.foreground, bg = colors.background , gui = 'bold', },
-  b = { fg = colors.statusline_active_fg, bg = colors.status , },
-  c = { fg = colors.statusline_active_fg, bg = colors.statusline_active_bg , }
+  a = {fg = colors.foreground, bg = colors.background, gui = 'bold'},
+  b = {fg = colors.statusline_active_fg, bg = colors.status},
+  c = {fg = colors.statusline_active_fg, bg = colors.statusline_active_bg}
 }
 
-M.insert = {
-  a = { fg = colors.background, bg = colors.blue, gui = 'bold', },
-}
+M.insert = {a = {fg = colors.background, bg = colors.blue, gui = 'bold'}}
 
-M.visual = {
-  a = { fg = colors.visual_fg, bg = colors.visual_bg , gui = 'bold', },
-}
+M.visual = {a = {fg = colors.visual_fg, bg = colors.visual_bg, gui = 'bold'}}
 
-M.replace = {
-  a = { fg = colors.background, bg = colors.pink , gui = 'bold', },
-}
+M.replace = {a = {fg = colors.background, bg = colors.pink, gui = 'bold'}}
 
 M.inactive = {
-  a = { fg = colors.foreground, bg = colors.background , gui = 'bold', },
-  b = { fg = colors.foreground, bg = colors.background , },
-  c = { fg = colors.foreground, bg = colors.background , },
+  a = {fg = colors.foreground, bg = colors.background, gui = 'bold'},
+  b = {fg = colors.foreground, bg = colors.background},
+  c = {fg = colors.foreground, bg = colors.background}
 }
 
 return M

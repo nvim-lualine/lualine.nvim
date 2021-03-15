@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-
+-- LuaFormatter off
 local mode_map = {
   ['n']    = 'NORMAL',
   ['no']   = 'O-PENDING',
@@ -32,6 +32,7 @@ local mode_map = {
   ['!']    = 'SHELL',
   ['t']    = 'TERMINAL',
 }
+-- LuaFormatter on
 local function mode()
   local mode_code = vim.api.nvim_get_mode().mode
   if mode_map[mode_code] == nil then return mode_code end
