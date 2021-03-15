@@ -307,7 +307,7 @@ lualine.extensions = { 'fzf' }
 ```
 
 <details>
-<summary><b>Available components</b></summary>
+<summary><b>Available extensions</b></summary>
 
 * fugitive
 * fzf
