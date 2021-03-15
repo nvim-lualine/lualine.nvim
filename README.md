@@ -2,11 +2,6 @@
 ![code size](https://img.shields.io/github/languages/code-size/hoob3rt/lualine.nvim?style=flat-square)
 ![license](https://img.shields.io/github/license/hoob3rt/lualine.nvim?style=flat-square)
 
-![last commit](https://img.shields.io/github/last-commit/hoob3rt/lualine.nvim?style=flat-square)
-![contributions](https://img.shields.io/github/contributors/hoob3rt/lualine.nvim?style=flat-square)
-![issues](https://img.shields.io/github/issues-raw/hoob3rt/lualine.nvim?style=flat-square)
-![prs](https://img.shields.io/github/issues-pr-raw/hoob3rt/lualine.nvim?style=flat-square)
-
 A blazing fast and easy to configure neovim statusline written in pure lua.
 
 `lualine.nvim` requires neovim 0.5
@@ -65,7 +60,7 @@ Lualine has sections as shown below.
 
 ```
 +-------------------------------------------------+
-| A | B | C                            X | Y | Z |
+| A | B | C                             X | Y | Z |
 +-------------------------------------------------+
 ```
 
@@ -274,11 +269,12 @@ lualine.sections.lualine_b = {
 
 </details>
 
-### Using tabline as statusline
-You can use lualine to display components in tabline . 
+<details>
+<summary><b>Using tabline as statusline (statusline on top)</b></summary>
+You can use lualine to display components in tabline.
 The sections, configurations and highlights are same as statusline.
 
-```
+```lua
 lualine.tabline = {
   lualine_a = { },
   lualine_b = { 'branch' },
@@ -293,13 +289,14 @@ This will show branch and filename component in top of neovim inside tabline .
 
 You can also completely move your statuline to tabline by configuring lualine.tabline
 instead of lualine.sections & lualine.inactive_sections and setting them to empty
-```
+```lua
 lualine.tabline = {
 ......
   }
 lualine.sections = {}
 lualine.inactive_sections = {}
 ```
+</details>
 
 ### Loading plugin extensions
 Lualine extensions change statusline appearance for a window/buffer with a plugin loaded e.g. [junegunn/fzf.vim](https://github.com/junegunn/fzf.vim)
@@ -309,7 +306,14 @@ By default no plugin extension are loaded to improve performance. If you are usi
 lualine.extensions = { 'fzf' }
 ```
 
-All available extensions are listed in [EXTENSIONS.md](./EXTENSIONS.md)
+<details>
+<summary><b>Available extensions</b></summary>
+
+* fugitive
+* fzf
+* nerdtree
+
+</details>
 
 ### Lua config example
 
