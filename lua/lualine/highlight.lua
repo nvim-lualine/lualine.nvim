@@ -89,7 +89,7 @@ function M.create_component_highlight_group(color , highlight_tag, options)
     local fg = (color.fg or default_color_table.fg)
     -- Check if it's same as normal mode if it is no need to create aditional highlight
     if mode ~= 'normal' then
-      if bg ~= normal_hl.bg and fg ~= normal_hl.fg then
+      if bg ~= normal_hl.bg or fg ~= normal_hl.fg then
         highlight(table.concat(highlight_group_name, '_'), fg, bg, color.gui)
       end
     else

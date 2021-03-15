@@ -80,7 +80,7 @@ gruvbox.inactive = {
   c = { bg = colors.darkgray, fg = colors.gray },
 }
 
-lualine.theme = gruvbox
+lualine.options.theme = gruvbox
 ```
 
 </details>
