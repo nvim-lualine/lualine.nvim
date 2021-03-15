@@ -307,12 +307,7 @@ local function status_dispatch()
 end
 
 local function tabline()
-  local extension_sections = get_extension_sections()
-  local sections = extension_sections.sections
-  if sections == nil then
-    sections = M.tabline
-  end
-  return statusline(sections, true)
+  return statusline(M.tabline, true)
 end
 
 local function setup_theme()
