@@ -1,11 +1,9 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local utils_component = require('lualine.utils.component')
-local utils = require('lualine.utils.utils')
-local highlight = require('lualine.highlight')
 local config = require('lualine.config')
-
-local M = {}
+local highlight = require('lualine.highlight')
+local utils = require('lualine.utils.utils')
+local utils_component = require('lualine.utils.component')
 
 local function apply_configuration(config_table)
   if not config_table then return end
@@ -325,36 +323,7 @@ local function set_statusline()
   end
 end
 
-function M.setup(user_config)
-  if M.options ~= nil or M.sections ~= nil or M.inactive_sections ~= nil or
-      M.tabline ~= nil or M.extensions ~= nil then
-    if vim.api.nvim_echo then
-      vim.api.nvim_echo({
-        {
-          'lualine.nvim: lualine is moving to setup function to be consistent with other lua plugins, all other configuration options will be removed by 24.03.2021, please change your configuration(example in readme)',
-          'WarningMsg'
-        }
-      }, true, {})
-    else
-      print(
-          'lualine.nvim: lualine is moving to setup function to be consistent with other lua plugins, all other configuration options will be removed by 24.03.2021, please change your configuration(example in readme)')
-    end
-    if M.options ~=nil then
-      user_config.options = M.options
-    end
-    if M.sections ~=nil then
-      user_config.sections = M.sections
-    end
-    if M.inactive_sections ~=nil then
-      user_config.inactive_sections = M.inactive_sections
-    end
-    if M.tabline ~=nil then
-      user_config.tabline = M.tabline
-    end
-    if M.extensions ~=nil then
-      user_config.extensions = M.extensions
-    end
-  end
+local function setup(user_config)
   apply_configuration(vim.g.lualine)
   apply_configuration(user_config)
   check_single_separator()
@@ -365,19 +334,4 @@ function M.setup(user_config)
   set_tabline()
 end
 
-function M.status(user_config)
-  if vim.api.nvim_echo then
-    vim.api.nvim_echo({
-      {
-        'lualine.nvim: status function has been ranamed to setup and will be removed by 24.03.2021, please change your configuration',
-        'WarningMsg'
-      }
-    }, true, {})
-  else
-    print(
-        'lualine.nvim: status function has been ranamed to setup and will be removed by 24.03.2021, please change your configuration')
-  end
-  return M.setup(user_config)
-end
-
-return M
+return {setup = setup}
