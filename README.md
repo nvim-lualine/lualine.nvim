@@ -68,33 +68,34 @@ Each sections holds it's components e.g. current vim's mode.
 Colorscheme of sections is mirrored, meaning section `A` will have the same colorscheme as section `Z` etc.
 
 ### Starting lualine
+All configurations happens in the setup function
 ```lua
-local lualine = require('lualine')
-lualine.status()
+require('lualine').setup{}
 ```
 ### Setting a theme
 ```lua
-lualine.options.theme = 'gruvbox'
+options = {theme = 'gruvbox'}
 ```
 
 All available themes are listed in [THEMES.md](./THEMES.md)
 
 Please create a pr if you managed to port a popular theme before me, [here is how to do it](./CONTRIBUTING.md).
 
-### Changing separator in section
+### Changing separators
 Lualine defines two kinds of seperators. One is for sections and other is for components. Default section seperators are '', '' and component separators are '', ''.
 They require powerline patched fonts. But you can easily change yours to something else like below
 
 ```lua
-lualine.options.section_separators = {'', ''}
-lualine.options.component_separators = {'', ''}
+options = {
+  section_separators = {'', ''},
+  component_separators = {'', ''}
+}
 ```
 
 or disable it
 
 ```lua
-lualine.options.section_separators = nil
-lualine.options.component_separators = nil
+options = {section_separators = nil, component_separators = nil}
 ```
 
 ### Changing components in lualine sections
@@ -103,22 +104,21 @@ lualine.options.component_separators = nil
 <summary><b>Lualine defaults</b></summary>
 
 ```lua
-lualine.sections = {
-  lualine_a = { 'mode' },
-  lualine_b = { 'branch' },
-  lualine_c = { 'filename' },
-  lualine_x = { 'encoding', 'fileformat', 'filetype' },
-  lualine_y = { 'progress' },
-  lualine_z = { 'location'  },
-}
-
-lualine.inactive_sections = {
-  lualine_a = {  },
-  lualine_b = {  },
-  lualine_c = { 'filename' },
-  lualine_x = { 'location' },
-  lualine_y = {  },
-  lualine_z = {  }
+sections = {
+  lualine_a = {'mode'},
+  lualine_b = {'branch'},
+  lualine_c = {'filename'},
+  lualine_x = {'encoding', 'fileformat', 'filetype'},
+  lualine_y = {'progress'},
+  lualine_z = {'location'}
+},
+inactive_sections = {
+  lualine_a = {},
+  lualine_b = {},
+  lualine_c = {'filename'},
+  lualine_x = {'location'},
+  lualine_y = {},
+  lualine_z = {}
 }
 ```
 
@@ -149,7 +149,7 @@ You can define a custom function as a lualine component
 local function hello()
   return [[hello world]]
 end
-lualine.sections.lualine_a = { hello }
+sections = {lualine_a = {'hello'}}
 ```
 
 </details>
@@ -161,7 +161,7 @@ lualine.sections.lualine_a = { hello }
 You can use vim functions as a lualine component
 
 ```lua
-lualine.sections.lualine_b = { 'FugitiveHead' }
+sections = {lualine_a = {'FugitiveHead'}}
 ```
 
 </details>
@@ -174,7 +174,7 @@ Variables from g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo: scopes
 can be used. Scopes ending with o are options usualy accessed with `&` in vimscript
 
 ```lua
-lualine.sections.lualine_b = { 'g:coc_status', 'bo:filetype' }
+sections = {lualine_a = {'g:coc_status', 'bo:filetype'}}
 ```
 
 </details>
@@ -201,7 +201,7 @@ lower | false | Changes components to be lowercase | all
 format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | all
 ##### Global options example
 ```lua
-lualine.options.icons_enabled = true
+options = {icons_enabled = true}
 ```
 
 #### Component specific options
@@ -246,23 +246,22 @@ symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbol
 
 ##### Component options example
 ```lua
-lualine.sections.lualine_b = {
-  {
-    'branch',
-    icon = '',
-    upper = true,
-    color = { fg = '#00aa22' }
-  },
-  {
-    'filename',
-    full_name = true,
-    shorten = true,
-    format = function(name)
-      -- Capitalize first charecter of filename to capital.
-      local path, fname = name:match('(.*/)(.*)')
-        if not path then path = ''; fname = name end
+sections = {
+  lualine_b = {
+    {'branch', icon = '', upper = true, color = {fg = '#00aa22'}}, {
+      'filename',
+      full_name = true,
+      shorten = true,
+      format = function(name)
+        -- Capitalize first charecter of filename to capital.
+        local path, fname = name:match('(.*/)(.*)')
+        if not path then
+          path = '';
+          fname = name
+        end
         return path .. fname:sub(1, 1):upper() .. fname:sub(2, #fname)
-    end
+      end
+    }
   }
 }
 ```
@@ -275,13 +274,13 @@ You can use lualine to display components in tabline.
 The sections, configurations and highlights are same as statusline.
 
 ```lua
-lualine.tabline = {
-  lualine_a = { },
-  lualine_b = { 'branch' },
-  lualine_c = { 'filename' },
-  lualine_x = { },
-  lualine_y = { },
-  lualine_z = { },
+tabline = {
+  lualine_a = {},
+  lualine_b = {'branch'},
+  lualine_c = {'filename'},
+  lualine_x = {},
+  lualine_y = {},
+  lualine_z = {}
 }
 ```
 This will show branch and filename component in top of neovim inside tabline .
@@ -290,11 +289,11 @@ This will show branch and filename component in top of neovim inside tabline .
 You can also completely move your statuline to tabline by configuring lualine.tabline
 instead of lualine.sections & lualine.inactive_sections and setting them to empty
 ```lua
-lualine.tabline = {
+tabline = {
 ......
-  }
-lualine.sections = {}
-lualine.inactive_sections = {}
+  },
+sections = {},
+inactive_sections = {},
 ```
 </details>
 
@@ -303,7 +302,7 @@ Lualine extensions change statusline appearance for a window/buffer with a plugi
 
 By default no plugin extension are loaded to improve performance. If you are using a plugin which is supported you can load it this way:
 ```lua
-lualine.extensions = { 'fzf' }
+extensions = { 'fzf' }
 ```
 
 <details>
@@ -325,7 +324,7 @@ lualine.extensions = { 'fzf' }
     'hoob3rt/lualine.nvim',
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
-      require('lualine').status{
+      require('lualine').setup{
         options = {
           theme = 'gruvbox',
           section_separators = {'', ''},
@@ -387,6 +386,6 @@ let g:lualine = {
     \},
     \'extensions' : [ 'fzf' ],
     \}
-lua require("lualine").status()
+lua require("lualine").setup()
 ```
 </details>
