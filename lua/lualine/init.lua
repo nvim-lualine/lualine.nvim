@@ -3,44 +3,16 @@
 local utils_component = require('lualine.utils.component')
 local utils = require('lualine.utils.utils')
 local highlight = require('lualine.highlight')
+local config = require('lualine.config')
 
 local M = {}
-
-M.options = {
-  icons_enabled = true,
-  theme = 'gruvbox',
-  component_separators = {'', ''},
-  section_separators = {'', ''}
-}
-
-M.sections = {
-  lualine_a = {'mode'},
-  lualine_b = {'branch'},
-  lualine_c = {'filename'},
-  lualine_x = {'encoding', 'fileformat', 'filetype'},
-  lualine_y = {'progress'},
-  lualine_z = {'location'}
-}
-
-M.inactive_sections = {
-  lualine_a = {},
-  lualine_b = {},
-  lualine_c = {'filename'},
-  lualine_x = {'location'},
-  lualine_y = {},
-  lualine_z = {}
-}
-
-M.tabline = {}
-
-M.extensions = {}
 
 local function apply_configuration(config_table)
   if not config_table then return end
   local function parse_sections(section_group_name)
     if not config_table[section_group_name] then return end
     for section_name, section in pairs(config_table[section_group_name]) do
-      M[section_group_name][section_name] =
+      config[section_group_name][section_name] =
           config_table[section_group_name][section_name]
       if type(section) == 'table' then
         for _, component in pairs(section) do
@@ -57,30 +29,33 @@ local function apply_configuration(config_table)
   parse_sections('sections')
   parse_sections('inactive_sections')
   parse_sections('tabline')
-  if config_table.extensions then M.extensions = config_table.extensions end
+  if config_table.extensions then config.extensions = config_table.extensions end
 end
 
 local function check_single_separator()
-  local compoennt_separator = M.options.component_separators
-  local section_separator = M.options.section_separators
-  if M.options.component_separators ~= nil then
-    if type(M.options.component_separators) == 'string' then
-      M.options.component_separators = {
-        compoennt_separator, compoennt_separator
-      }
-    elseif #M.options.component_separators == 1 then
-      M.options.component_separators = {
-        M.options.component_separators[1], M.options.component_separators[1]
-      }
+  local compoennt_separator = config.options.component_separators
+  local section_separator = config.options.section_separators
+  if config.options.component_separators ~= nil then
+    if type(config.options.component_separators) == 'string' then
+      config.options.component_separators =
+          {compoennt_separator, compoennt_separator}
+    elseif #config.options.component_separators == 1 then
+      config.options.component_separators =
+          {
+            config.options.component_separators[1],
+            config.options.component_separators[1]
+          }
     end
   end
-  if M.options.section_separators ~= nil then
-    if type(M.options.section_separators) == 'string' then
-      M.options.section_separators = {section_separator, section_separator}
-    elseif #M.options.section_separators == 1 then
-      M.options.section_separators = {
-        M.options.section_separators[1], M.options.section_separators[1]
-      }
+  if config.options.section_separators ~= nil then
+    if type(config.options.section_separators) == 'string' then
+      config.options.section_separators = {section_separator, section_separator}
+    elseif #config.options.section_separators == 1 then
+      config.options.section_separators =
+          {
+            config.options.section_separators[1],
+            config.options.section_separators[1]
+          }
     end
   end
 end
@@ -132,7 +107,7 @@ local function component_loader(component)
     -- With component function
     component.component_name = component[1]
     -- apply default args
-    for opt_name, opt_val in pairs(M.options) do
+    for opt_name, opt_val in pairs(config.options) do
       if component[opt_name] == nil then component[opt_name] = opt_val end
     end
     -- load the component
@@ -173,39 +148,39 @@ local function load_sections(sections)
 end
 
 local function load_components()
-  load_sections(M.sections)
-  load_sections(M.inactive_sections)
-  load_sections(M.tabline)
+  load_sections(config.sections)
+  load_sections(config.inactive_sections)
+  load_sections(config.tabline)
 end
 
 local function load_extensions()
-  for index, extension in pairs(M.extensions) do
+  for index, extension in pairs(config.extensions) do
     local local_extension = require('lualine.extensions.' .. extension)
     load_sections(local_extension.sections)
     load_sections(local_extension.inactive_sections)
-    M.extensions[index] = local_extension
+    config.extensions[index] = local_extension
   end
 end
 
 local function lualine_set_theme()
-  if type(M.options.theme) == 'string' then
-    M.options.theme = require('lualine.themes.' .. M.options.theme)
+  if type(config.options.theme) == 'string' then
+    config.options.theme = require('lualine.themes.' .. config.options.theme)
     -- change the theme table in component so their custom
     -- highlights can reflect theme change
     local function reset_component_theme(sections)
       for _, section in pairs(sections) do
         for _, component in pairs(section) do
           if type(component) == 'table' then
-            component.theme = M.options.theme
+            component.theme = config.options.theme
           end
         end
       end
     end
-    reset_component_theme(M.sections)
-    reset_component_theme(M.inactive_sections)
+    reset_component_theme(config.sections)
+    reset_component_theme(config.inactive_sections)
   end
   utils.clear_highlights()
-  highlight.create_highlight_groups(M.options.theme)
+  highlight.create_highlight_groups(config.options.theme)
 end
 
 local function statusline(sections, is_focused)
@@ -255,10 +230,10 @@ local function statusline(sections, is_focused)
         local transitional_highlight = highlight.get_transitional_highlights(
                                            previous_section.data,
                                            current_section.data, true)
-        if transitional_highlight and M.options.section_separators and
-            M.options.section_separators[2] then
+        if transitional_highlight and config.options.section_separators and
+            config.options.section_separators[2] then
           table.insert(status, transitional_highlight ..
-                           M.options.section_separators[2])
+                           config.options.section_separators[2])
         end
       end
 
@@ -270,10 +245,10 @@ local function statusline(sections, is_focused)
         local transitional_highlight = highlight.get_transitional_highlights(
                                            current_section.data,
                                            next_section.data)
-        if transitional_highlight and M.options.section_separators and
-            M.options.section_separators[1] then
+        if transitional_highlight and config.options.section_separators and
+            config.options.section_separators[1] then
           table.insert(status, transitional_highlight ..
-                           M.options.section_separators[1])
+                           config.options.section_separators[1])
         end
       end
     else -- when not in focus
@@ -291,7 +266,7 @@ end
 -- check if any extension matches the filetype and return proper sections
 local function get_extension_sections()
   local sections, inactive_sections = nil, nil
-  for _, extension in ipairs(M.extensions) do
+  for _, extension in ipairs(config.extensions) do
     for _, filetype in ipairs(extension.filetypes) do
       if vim.bo.filetype == filetype then
         sections = extension.sections
@@ -307,16 +282,18 @@ local function status_dispatch()
   local extension_sections = get_extension_sections()
   if vim.g.statusline_winid == vim.fn.win_getid() then
     local sections = extension_sections.sections
-    if sections == nil then sections = M.sections end
+    if sections == nil then sections = config.sections end
     return statusline(sections, true)
   else
     local inactive_sections = extension_sections.inactive_sections
-    if inactive_sections == nil then inactive_sections = M.inactive_sections end
+    if inactive_sections == nil then
+      inactive_sections = config.inactive_sections
+    end
     return statusline(inactive_sections, false)
   end
 end
 
-local function tabline() return statusline(M.tabline, true) end
+local function tabline() return statusline(config.tabline, true) end
 
 local function setup_theme()
   lualine_set_theme()
@@ -330,7 +307,7 @@ local function setup_theme()
 end
 
 local function set_tabline()
-  if next(M.tabline) ~= nil then
+  if next(config.tabline) ~= nil then
     _G.lualine_tabline = tabline
     vim.o.tabline = '%!v:lua.lualine_tabline()'
     vim.o.showtabline = 2
@@ -338,7 +315,7 @@ local function set_tabline()
 end
 
 local function set_statusline()
-  if next(M.sections) ~= nil or next(M.inactive_sections) ~= nil then
+  if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     _G.lualine_statusline = status_dispatch
     vim.o.statusline = '%!v:lua.lualine_statusline()'
     vim.api.nvim_exec([[
@@ -348,15 +325,59 @@ local function set_statusline()
   end
 end
 
-function M.status(config)
+function M.setup(user_config)
+  if M.options ~= nil or M.sections ~= nil or M.inactive_sections ~= nil or
+      M.tabline ~= nil or M.extensions ~= nil then
+    if vim.api.nvim_echo then
+      vim.api.nvim_echo({
+        {
+          'lualine.nvim: lualine is moving to setup function to be consistent with other lua plugins, all other configuration options will be removed by 24.03.2021, please change your configuration(example in readme)',
+          'WarningMsg'
+        }
+      }, true, {})
+    else
+      print(
+          'lualine.nvim: lualine is moving to setup function to be consistent with other lua plugins, all other configuration options will be removed by 24.03.2021, please change your configuration(example in readme)')
+    end
+    if M.options ~=nil then
+      user_config.options = M.options
+    end
+    if M.sections ~=nil then
+      user_config.sections = M.sections
+    end
+    if M.inactive_sections ~=nil then
+      user_config.inactive_sections = M.inactive_sections
+    end
+    if M.tabline ~=nil then
+      user_config.tabline = M.tabline
+    end
+    if M.extensions ~=nil then
+      user_config.extensions = M.extensions
+    end
+  end
   apply_configuration(vim.g.lualine)
-  apply_configuration(config)
+  apply_configuration(user_config)
   check_single_separator()
   setup_theme()
   load_components()
   load_extensions()
   set_statusline()
   set_tabline()
+end
+
+function M.status(user_config)
+  if vim.api.nvim_echo then
+    vim.api.nvim_echo({
+      {
+        'lualine.nvim: status function has been ranamed to setup and will be removed by 24.03.2021, please change your configuration',
+        'WarningMsg'
+      }
+    }, true, {})
+  else
+    print(
+        'lualine.nvim: status function has been ranamed to setup and will be removed by 24.03.2021, please change your configuration')
+  end
+  return M.setup(user_config)
 end
 
 return M
