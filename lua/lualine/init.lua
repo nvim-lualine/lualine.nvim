@@ -3,7 +3,7 @@
 local utils = require('lualine.utils.utils')
 local utils_section = require('lualine.utils.section')
 local highlight = require('lualine.highlight')
-local config = require('lualine.config')
+local config = require('lualine.defaults')
 
 local M = {}
 
@@ -339,21 +339,13 @@ function M.setup(user_config)
       print(
           'lualine.nvim: lualine is moving to setup function to be consistent with other lua plugins, all other configuration options will be removed by 24.03.2021, please change your configuration(example in readme)')
     end
-    if M.options ~=nil then
-      user_config.options = M.options
-    end
-    if M.sections ~=nil then
-      user_config.sections = M.sections
-    end
-    if M.inactive_sections ~=nil then
+    if M.options ~= nil then user_config.options = M.options end
+    if M.sections ~= nil then user_config.sections = M.sections end
+    if M.inactive_sections ~= nil then
       user_config.inactive_sections = M.inactive_sections
     end
-    if M.tabline ~=nil then
-      user_config.tabline = M.tabline
-    end
-    if M.extensions ~=nil then
-      user_config.extensions = M.extensions
-    end
+    if M.tabline ~= nil then user_config.tabline = M.tabline end
+    if M.extensions ~= nil then user_config.extensions = M.extensions end
   end
   apply_configuration(vim.g.lualine)
   apply_configuration(user_config)
