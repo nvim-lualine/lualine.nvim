@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local async = require 'lualine.async'
+local async = require 'lualine.utils.async'
 local utils = require 'lualine.utils.utils'
 local highlight = require 'lualine.highlight'
 
