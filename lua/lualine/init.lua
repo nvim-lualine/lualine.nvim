@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local utils_component = require('lualine.utils.component')
 local utils = require('lualine.utils.utils')
+local utils_section = require('lualine.utils.section')
 local highlight = require('lualine.highlight')
 local config = require('lualine.config')
 
@@ -194,7 +194,7 @@ local function statusline(sections, is_focused)
         local section_highlight = highlight.format_highlight(is_focused,
                                                              'lualine_' ..
                                                                  section_name)
-        local section_data = utils_component.draw_section(
+        local section_data = utils_section.draw_section(
                                  sections['lualine_' .. section_name],
                                  section_highlight)
         if #section_data > 0 then
