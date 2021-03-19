@@ -125,8 +125,8 @@ easily change yours to something else like below.
 
 or disable it
 >
-    lualine.section_separators = nil
-    lualine.component_separators = nil
+    lualine.section_separators = ''
+    lualine.component_separators = ''
 <
 
 CHANGING COMPONENTS IN LUALINE SECTIONS            *lualine_changing_components*
