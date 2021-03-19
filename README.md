@@ -95,7 +95,7 @@ options = {
 or disable it
 
 ```lua
-options = {section_separators = nil, component_separators = nil}
+options = {section_separators = '', component_separators = ''}
 ```
 
 ### Changing components in lualine sections
