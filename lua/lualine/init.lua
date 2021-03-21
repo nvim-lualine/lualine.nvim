@@ -68,11 +68,9 @@ local function load_special_components(component)
       -- filters g portion from g:var
       local scope = component:match('[gvtwb]?o?')
       -- filters var portion from g:var
-      -- For some reason overwriting component var from outer scope causes the
-      -- component not to work . So creating a new local name component to use:/
-      local component = component:sub(#scope + 2, #component)
+      local var_name = component:sub(#scope + 2, #component)
       -- Displays nothing when veriable aren't present
-      local return_val = vim[scope][component]
+      local return_val = vim[scope][var_name]
       if return_val == nil then return '' end
       local ok
       ok, return_val = pcall(tostring, return_val)
