@@ -149,7 +149,7 @@ You can define a custom function as a lualine component
 local function hello()
   return [[hello world]]
 end
-sections = {lualine_a = {'hello'}}
+sections = {lualine_a = {hello}}
 ```
 
 </details>
