@@ -133,6 +133,7 @@ inactive_sections = {
 * fileformat (file format)
 * filename
 * filetype
+* hostname
 * location (location in file in line:column format)
 * mode (vim mode)
 * progress (%progress in file)
