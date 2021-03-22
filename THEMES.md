@@ -162,6 +162,12 @@ lualine try to match your colorscheme.
 ![solarizedlightvisual_cropped](https://user-images.githubusercontent.com/41551030/108649255-475f4900-74bd-11eb-8a75-7ca266d56009.png)
 ![solarizedlightreplace_cropped](https://user-images.githubusercontent.com/41551030/108649258-48907600-74bd-11eb-9bba-8e82b56777d9.png)
 
+### spaceduck
+![spaceducknormal_cropped](https://user-images.githubusercontent.com/32819563/111934957-16f0d780-8a88-11eb-9f33-f02c9ba364c1.png)
+![spaceduckinsert_cropped](https://user-images.githubusercontent.com/32819563/111934981-21ab6c80-8a88-11eb-8118-dfbc2dc3bddf.png)
+![spaceduckvisual_cropped](https://user-images.githubusercontent.com/32819563/111935019-325be280-8a88-11eb-9846-a2d7bfec226c.png)
+![spaceduckreplace_cropped](https://user-images.githubusercontent.com/32819563/111935037-3ab41d80-8a88-11eb-8797-2b6db14cbff8.png)
+
 ### tomorrow
 ![tomorrownormal_cropped](https://user-images.githubusercontent.com/41551030/108649275-51814780-74bd-11eb-881b-1e137a0cbfe0.png)
 ![tomorrowinsert_cropped](https://user-images.githubusercontent.com/41551030/108649297-59d98280-74bd-11eb-92a5-a8c4af150106.png)
