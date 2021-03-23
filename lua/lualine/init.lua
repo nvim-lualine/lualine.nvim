@@ -335,13 +335,13 @@ function M.status(user_config)
   if vim.api.nvim_echo then
     vim.api.nvim_echo({
       {
-        'lualine.nvim: status function has been ranamed to setup and will be removed by 24.03.2021, please change your configuration',
+        'lualine.nvim: status function has been renamed to setup and will be removed by 24.03.2021, please change your configuration',
         'WarningMsg'
       }
     }, true, {})
   else
     print(
-        'lualine.nvim: status function has been ranamed to setup and will be removed by 24.03.2021, please change your configuration')
+        'lualine.nvim: status function has been renamed to setup and will be removed by 24.03.2021, please change your configuration')
   end
   return M.setup(user_config)
 end
