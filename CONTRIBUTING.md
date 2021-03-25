@@ -3,10 +3,9 @@
 
 ### General
 
-* 2 spaces
-* snake_case
+please use lua-format before creating a pr :smile:
 
-### All contributions are very welcome but themes/ extensions require a lot of work on my part if not done properly so here's a guide on how to do them.
+### All contributions are very welcome but themes require a lot of work on my part if not done properly so here's a guide on how to do them.
 
 ### Adding a theme
 
@@ -80,11 +79,7 @@ gruvbox.inactive = {
   c = { bg = colors.darkgray, fg = colors.gray },
 }
 
-lualine.options.theme = gruvbox
+require('lualine').setup {options = {theme = gruvbox}}
 ```
 
 </details>
-
-### Adding an extension
-
-* add your extension with screenshots attached to [EXTENSIONS.md](./EXTENSIONS.md) while maintaining alphabetical order

@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local async = require 'lualine.async'
+local async = require 'lualine.utils.async'
 local utils = require 'lualine.utils.utils'
 local highlight = require 'lualine.highlight'
 
@@ -108,7 +108,7 @@ local function diff(options)
   local highlights = {}
 
   -- create highlights and save highlight_name in highlights table
-  local function create_highlights()
+  if options.colored then
     highlights = {
       added = highlight.create_component_highlight_group(
           {fg = options.color_added}, 'diff_added', options),
@@ -124,12 +124,6 @@ local function diff(options)
     autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff()
     autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
     ]], false)
-
-  -- create highlights
-  if options.colored then
-    create_highlights()
-    utils.expand_set_theme(create_highlights)
-  end
 
   -- Function that runs everytime statusline is updated
   return function()

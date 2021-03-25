@@ -1,9 +1,10 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local config = require('lualine.config')
+local utils_section = require('lualine.utils.section')
 local highlight = require('lualine.highlight')
-local utils = require('lualine.utils.utils')
-local utils_component = require('lualine.utils.component')
+local config = require('lualine.defaults')
+
+local M = {}
 
 local function apply_configuration(config_table)
   if not config_table then return end
@@ -67,11 +68,9 @@ local function load_special_components(component)
       -- filters g portion from g:var
       local scope = component:match('[gvtwb]?o?')
       -- filters var portion from g:var
-      -- For some reason overwriting component var from outer scope causes the
-      -- component not to work . So creating a new local name component to use:/
-      local component = component:sub(#scope + 2, #component)
+      local var_name = component:sub(#scope + 2, #component)
       -- Displays nothing when veriable aren't present
-      local return_val = vim[scope][component]
+      local return_val = vim[scope][var_name]
       if return_val == nil then return '' end
       local ok
       ok, return_val = pcall(tostring, return_val)
@@ -120,13 +119,9 @@ local function component_loader(component)
     end
     -- set custom highlights
     if component.color then
-      local function update_color()
-        component.color_highlight = highlight.create_component_highlight_group(
-                                        component.color,
-                                        component.component_name, component)
-      end
-      update_color()
-      utils.expand_set_theme(update_color)
+      component.color_highlight = highlight.create_component_highlight_group(
+                                      component.color, component.component_name,
+                                      component)
     end
   end
 end
@@ -160,27 +155,6 @@ local function load_extensions()
   end
 end
 
-local function lualine_set_theme()
-  if type(config.options.theme) == 'string' then
-    config.options.theme = require('lualine.themes.' .. config.options.theme)
-    -- change the theme table in component so their custom
-    -- highlights can reflect theme change
-    local function reset_component_theme(sections)
-      for _, section in pairs(sections) do
-        for _, component in pairs(section) do
-          if type(component) == 'table' then
-            component.theme = config.options.theme
-          end
-        end
-      end
-    end
-    reset_component_theme(config.sections)
-    reset_component_theme(config.inactive_sections)
-  end
-  utils.clear_highlights()
-  highlight.create_highlight_groups(config.options.theme)
-end
-
 local function statusline(sections, is_focused)
   local function create_status_builder()
     -- The sequence sections should maintain
@@ -192,7 +166,7 @@ local function statusline(sections, is_focused)
         local section_highlight = highlight.format_highlight(is_focused,
                                                              'lualine_' ..
                                                                  section_name)
-        local section_data = utils_component.draw_section(
+        local section_data = utils_section.draw_section(
                                  sections['lualine_' .. section_name],
                                  section_highlight)
         if #section_data > 0 then
@@ -294,12 +268,14 @@ end
 local function tabline() return statusline(config.tabline, true) end
 
 local function setup_theme()
-  lualine_set_theme()
-  _G.lualine_set_theme = lualine_set_theme
+  if type(config.options.theme) == 'string' then
+    config.options.theme = require('lualine.themes.' .. config.options.theme)
+  end
+  highlight.create_highlight_groups(config.options.theme)
   vim.api.nvim_exec([[
   augroup lualine
   autocmd!
-  autocmd ColorScheme * call v:lua.lualine_set_theme()
+  autocmd ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
   augroup END
   ]], false)
 end

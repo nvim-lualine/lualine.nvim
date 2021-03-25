@@ -2,17 +2,6 @@
 -- MIT license, see LICENSE for more details.
 local M = {}
 
--- Works as a decorator to expand set_lualine_theme functions
--- functionality at runtime .
-function M.expand_set_theme(func)
-  -- execute a local version of global function to not get in a inf recurtion
-  local set_theme = _G.lualine_set_theme
-  _G.lualine_set_theme = function()
-    set_theme()
-    func()
-  end
-end
-
 -- Note for now only works for termguicolors scope can be background or foreground
 function M.extract_highlight_colors(color_group, scope)
   if vim.fn.hlexists(color_group) == 0 then return nil end
@@ -41,15 +30,14 @@ end
 M.loaded_highlights = {}
 
 -- sets loaded_highlights table
-function M.save_highlight(highlight_name)
-  M.loaded_highlights[highlight_name] = true
+function M.save_highlight(highlight_name, highlight_args)
+  M.loaded_highlights[highlight_name] = highlight_args
 end
 
--- clears loaded_highlights table and highlights
-function M.clear_highlights()
-  for highlight_name, _ in pairs(M.loaded_highlights) do
-    vim.cmd('highlight clear ' .. highlight_name)
-    M.loaded_highlights[highlight_name] = nil
+function M.reload_highlights()
+  local highlight = require('lualine.highlight')
+  for _, highlight_args in pairs(M.loaded_highlights) do
+     highlight.highlight(unpack(highlight_args))
   end
 end
 

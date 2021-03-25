@@ -5,7 +5,7 @@ local utils_colors = require 'lualine.utils.cterm_colors'
 local utils = require 'lualine.utils.utils'
 local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
 
-local function highlight(name, foreground, background, gui)
+function M.highlight(name, foreground, background, gui, reload)
   local command = {'highlight', name}
   if foreground and foreground ~= 'none' then
     table.insert(command, 'ctermfg=' .. utils_colors.get_cterm_color(foreground))
@@ -20,14 +20,16 @@ local function highlight(name, foreground, background, gui)
     table.insert(command, 'gui=' .. gui)
   end
   vim.cmd(table.concat(command, ' '))
-  utils.save_highlight(name)
+  if not reload then
+    utils.save_highlight(name, {name, foreground, background, gui, true})
+  end
 end
 
 function M.create_highlight_groups(theme)
   for mode, sections in pairs(theme) do
     for section, colorscheme in pairs(sections) do
       local highlight_group_name = {'lualine', section, mode}
-      highlight(table.concat(highlight_group_name, '_'), colorscheme.fg,
+      M.highlight(table.concat(highlight_group_name, '_'), colorscheme.fg,
                 colorscheme.bg, colorscheme.gui)
     end
   end
@@ -72,7 +74,7 @@ function M.create_component_highlight_group(color, highlight_tag, options)
     -- each mode as they will surely look the same. So we can work without options
     local highlight_group_name = table.concat(
                                      {'lualine', highlight_tag, 'no_mode'}, '_')
-    highlight(highlight_group_name, color.fg, color.bg, color.gui)
+    M.highlight(highlight_group_name, color.fg, color.bg, color.gui)
     return highlight_group_name
   end
 
@@ -93,11 +95,11 @@ function M.create_component_highlight_group(color, highlight_tag, options)
     -- Check if it's same as normal mode if it is no need to create aditional highlight
     if mode ~= 'normal' then
       if bg ~= normal_hl.bg or fg ~= normal_hl.fg then
-        highlight(table.concat(highlight_group_name, '_'), fg, bg, color.gui)
+        M.highlight(table.concat(highlight_group_name, '_'), fg, bg, color.gui)
       end
     else
       normal_hl = {bg = bg, fg = fg}
-      highlight(table.concat(highlight_group_name, '_'), fg, bg, color.gui)
+      M.highlight(table.concat(highlight_group_name, '_'), fg, bg, color.gui)
     end
   end
   return options.self.section .. '_' .. highlight_tag
@@ -189,21 +191,16 @@ function M.get_transitional_highlights(left_section_data, right_section_data,
 
   if not utils.highlight_exists(highlight_name) then
     -- Create the highlight_group if needed
-    local function set_transitional_highlights()
-      -- Get colors from highlights
-      -- using string.format to convert decimal to hexadecimal
-      local fg = utils.extract_highlight_colors(left_highlight_name, 'guibg')
-      local bg = utils.extract_highlight_colors(right_highlight_name, 'guibg')
-      if not fg then fg = 'none' end
-      if not bg then bg = 'none' end
-      -- swap the bg and fg when reverse is true. As in that case highlight will
-      -- be placed before section
-      if reverse then fg, bg = bg, fg end
-      highlight(highlight_name, fg, bg)
-    end
-    -- Create highlights and setup to survive colorscheme changes
-    set_transitional_highlights()
-    utils.expand_set_theme(set_transitional_highlights)
+    -- Get colors from highlights
+    -- using string.format to convert decimal to hexadecimal
+    local fg = utils.extract_highlight_colors(left_highlight_name, 'guibg')
+    local bg = utils.extract_highlight_colors(right_highlight_name, 'guibg')
+    if not fg then fg = 'none' end
+    if not bg then bg = 'none' end
+    -- swap the bg and fg when reverse is true. As in that case highlight will
+    -- be placed before section
+    if reverse then fg, bg = bg, fg end
+    M.highlight(highlight_name, fg, bg)
   end
   return '%#' .. highlight_name .. '#'
 end

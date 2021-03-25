@@ -80,7 +80,7 @@ local function diagnostics(options)
   end
 
   local highlight_groups = {}
-  local function add_highlights()
+  if options.colored then
     highlight_groups = {
       error = highlight.create_component_highlight_group(
           {fg = options.color_error}, 'diagnostics_error', options),
@@ -89,11 +89,6 @@ local function diagnostics(options)
       info = highlight.create_component_highlight_group(
           {fg = options.color_info}, 'diagnostics_info', options)
     }
-  end
-
-  if options.colored then
-    add_highlights()
-    utils.expand_set_theme(add_highlights)
   end
 
   return function()
