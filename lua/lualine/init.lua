@@ -266,10 +266,11 @@ end
 local function tabline() return statusline(config.tabline, true) end
 
 local function setup_theme()
-  if type(config.options.theme) == 'string' then
-    config.options.theme = require('lualine.themes.' .. config.options.theme)
+  local theme = config.options.theme
+  if type(theme) == 'string' then
+    theme = require('lualine.themes.' .. theme)
   end
-  highlight.create_highlight_groups(config.options.theme)
+  highlight.create_highlight_groups(theme)
   vim.api.nvim_exec([[
   augroup lualine
   autocmd!
