@@ -65,17 +65,17 @@ local function diagnostics(options)
   -- apply colors
   if not options.color_error then
     options.color_error = utils.extract_highlight_colors('DiffDelete',
-                                                         'foreground') or
+                                                         'guifg') or
                               default_color_error
   end
   if not options.color_warn then
     options.color_warn =
-        utils.extract_highlight_colors('DiffText', 'foreground') or
+        utils.extract_highlight_colors('DiffText', 'guifg') or
             default_color_warn
   end
   if not options.color_info then
     options.color_info =
-        utils.extract_highlight_colors('Normal', 'foreground') or
+        utils.extract_highlight_colors('Normal', 'guifg') or
             default_color_info
   end
 
