@@ -24,7 +24,7 @@ local function filename(options)
     if options.file_status then
       if vim.bo.modified then
         data = data .. '[+]'
-      elseif vim.bo.modifiable == false then
+      elseif vim.bo.modifiable == false or vim.bo.readonly == true then
         data = data .. '[-]'
       end
     end
