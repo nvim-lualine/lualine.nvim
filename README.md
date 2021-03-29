@@ -219,7 +219,7 @@ In addition, some components have unique options.
 
 Option   | Default | Behaviour | Format
 :------: | :------: | :----: | :---:
-sources | `nil` | displays diagnostic count from defined source | array containing one or many string from set `{'nvim_lsp', 'coc', 'ale'}`
+sources | `nil` | displays diagnostic count from defined source | array containing one or many string from set `{'nvim_lsp', 'coc', 'ale', 'vim_lsp'}`
 sections | `{'error', 'warn', 'info'}` | displays diagnostics of defined severity | array containing one or many string from set `{'error', 'warn', 'info'}`
 color_error | `DiffDelete` foreground color | changes diagnostic's error section foreground color | color in `#rrggbb` format
 color_warn | `DiffText` foreground color | changes diagnostic's warn section foreground color | color in `#rrggbb` format
