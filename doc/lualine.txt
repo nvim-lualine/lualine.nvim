@@ -277,7 +277,7 @@ List of options are given below.
     • sources  (nil)
       displays diagnostic count from defined source.
       array containing one or many string from set
-      {'nvim_lsp', 'coc', 'ale'}
+      {'nvim_lsp', 'coc', 'ale', 'vim_lsp'}
 
     • sections  ({'error', 'warn', 'info'})
       displays diagnostics of defined severity.

@@ -32,6 +32,14 @@ local diagnostic_sources = {
     else
       return 0, 0, 0
     end
+  end,
+  vim_lsp = function()
+    local ok, data = pcall(vim.fn['lsp#get_buffer_diagnostics_counts'])
+    if ok then
+      return data.error, data.warning, data.information
+    else
+      return 0, 0, 0
+    end
   end
 }
 
