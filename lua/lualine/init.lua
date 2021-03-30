@@ -4,8 +4,6 @@ local utils_section = require('lualine.utils.section')
 local highlight = require('lualine.highlight')
 local config = require('lualine.defaults')
 
-local M = {}
-
 local function apply_configuration(config_table)
   if not config_table then return end
   local function parse_sections(section_group_name)
