@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 gnuyent
 -- MIT license, see LICENSE for more details.
-local forest_night = {}
+local everforest = {}
 -- LuaFormatter off
 local colors = {
   bg0    = '#323d43',
@@ -16,46 +16,46 @@ local colors = {
 }
 -- LuaFormatter on
 
-forest_night.normal = {
+everforest.normal = {
   a = {bg = colors.green, fg = colors.bg0, gui = 'bold'},
   b = {bg = colors.bg3, fg = colors.fg},
   c = {bg = colors.bg1, fg = colors.fg}
 }
 
-forest_night.insert = {
+everforest.insert = {
   a = {bg = colors.fg, fg = colors.bg0, gui = 'bold'},
   b = {bg = colors.bg3, fg = colors.fg},
   c = {bg = colors.bg1, fg = colors.fg}
 }
 
-forest_night.visual = {
+everforest.visual = {
   a = {bg = colors.red, fg = colors.bg0, gui = 'bold'},
   b = {bg = colors.bg3, fg = colors.fg},
   c = {bg = colors.bg1, fg = colors.fg}
 }
 
-forest_night.replace = {
+everforest.replace = {
   a = {bg = colors.orange, fg = colors.bg0, gui = 'bold'},
   b = {bg = colors.bg3, fg = colors.fg},
   c = {bg = colors.bg1, fg = colors.fg}
 }
 
-forest_night.command = {
+everforest.command = {
   a = {bg = colors.aqua, fg = colors.bg0, gui = 'bold'},
   b = {bg = colors.bg3, fg = colors.fg},
   c = {bg = colors.bg1, fg = colors.fg}
 }
 
-forest_night.terminal = {
+everforest.terminal = {
   a = {bg = colors.purple, fg = colors.bg0, gui = 'bold'},
   b = {bg = colors.bg3, fg = colors.fg},
   c = {bg = colors.bg1, fg = colors.fg}
 }
 
-forest_night.inactive = {
+everforest.inactive = {
   a = {bg = colors.bg1, fg = colors.grey1, gui = 'bold'},
   b = {bg = colors.bg1, fg = colors.grey1},
   c = {bg = colors.bg1, fg = colors.grey1}
 }
 
-return forest_night
+return everforest
