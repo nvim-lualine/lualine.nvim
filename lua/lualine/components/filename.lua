@@ -11,7 +11,7 @@ local function filename(options)
     if not options.full_path then
       data = vim.fn.expand('%:t')
     elseif options.shorten then
-      data = vim.fn.expand('%')
+      data = vim.fn.expand('%:~:.')
     else
       data = vim.fn.expand('%:p')
     end
