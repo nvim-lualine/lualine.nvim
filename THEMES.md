@@ -41,11 +41,11 @@ lualine try to match your colorscheme.
 ![draculavisual_cropped](https://user-images.githubusercontent.com/41551030/108648606-f4d15d00-74bb-11eb-8327-a35e97533617.png)
 ![draculareplace_cropped](https://user-images.githubusercontent.com/41551030/108648619-fe5ac500-74bb-11eb-8952-cc5c81fd0b2b.png)
 
-### forest_night
-![forestnightnormal_cropped](https://user-images.githubusercontent.com/41551030/108648663-1cc0c080-74bc-11eb-8cc1-36266a0385e3.png)
-![forestnightinsert_cropped](https://user-images.githubusercontent.com/41551030/108648667-1df1ed80-74bc-11eb-9ef8-dfd2e8401f0c.png)
-![forestnightvisual_cropped](https://user-images.githubusercontent.com/41551030/108648671-21857480-74bc-11eb-996e-a5cf212e98bd.png)
-![forestnightreplace_cropped](https://user-images.githubusercontent.com/41551030/108648675-22b6a180-74bc-11eb-9b8e-45e64a03e062.png)
+### everforest
+![everforestnormal_cropped](https://user-images.githubusercontent.com/41551030/108648663-1cc0c080-74bc-11eb-8cc1-36266a0385e3.png)
+![everforestinsert_cropped](https://user-images.githubusercontent.com/41551030/108648667-1df1ed80-74bc-11eb-9ef8-dfd2e8401f0c.png)
+![everforestvisual_cropped](https://user-images.githubusercontent.com/41551030/108648671-21857480-74bc-11eb-996e-a5cf212e98bd.png)
+![everforestreplace_cropped](https://user-images.githubusercontent.com/41551030/108648675-22b6a180-74bc-11eb-9b8e-45e64a03e062.png)
 
 ### gruvbox
 ![gruvboxnormal_cropped](https://user-images.githubusercontent.com/41551030/108648685-2b0edc80-74bc-11eb-9ec9-9aac3677df43.png)
