@@ -267,9 +267,8 @@ local function tabline() return statusline(config.tabline, true) end
 
 local function setup_theme()
   local theme_name = config.options.theme
-  local theme
+  local ok, theme
   if type(theme_name) == 'string' then
-    local ok
     ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
     if not ok then
       vim.api.nvim_echo({
