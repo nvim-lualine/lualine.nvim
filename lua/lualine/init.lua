@@ -272,8 +272,13 @@ local function setup_theme()
     local ok
     ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
     if not ok then
-      vim.api.nvim_echo({{'theme ' .. theme_name .. ' not found defaulting to gruvbox', 'ErrorMsg'}}, true, {})
-      theme = require'lualine.themes.gruvbox'
+      vim.api.nvim_echo({
+        {
+          'theme ' .. theme_name .. ' not found defaulting to gruvbox',
+          'ErrorMsg'
+        }
+      }, true, {})
+      theme = require 'lualine.themes.gruvbox'
     end
   end
   highlight.create_highlight_groups(theme)

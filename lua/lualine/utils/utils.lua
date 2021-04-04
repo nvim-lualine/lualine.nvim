@@ -37,7 +37,7 @@ end
 function M.reload_highlights()
   local highlight = require('lualine.highlight')
   for _, highlight_args in pairs(M.loaded_highlights) do
-     highlight.highlight(unpack(highlight_args))
+    highlight.highlight(unpack(highlight_args))
   end
 end
 

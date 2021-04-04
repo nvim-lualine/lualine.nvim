@@ -33,7 +33,7 @@ function M.create_highlight_groups(theme)
     for section, colorscheme in pairs(sections) do
       local highlight_group_name = {'lualine', section, mode}
       M.highlight(table.concat(highlight_group_name, '_'), colorscheme.fg,
-                colorscheme.bg, colorscheme.gui)
+                  colorscheme.bg, colorscheme.gui)
     end
   end
 end
