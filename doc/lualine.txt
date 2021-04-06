@@ -263,7 +263,12 @@ option       (default_value)
   • icon          (differs for each component)
     displays an icon infront of a component
 
-  • color         (nil)
+  • condition     (nil)
+    Takes a function. The component is loaded if the function
+    returns true otherwise not. It can be used to load some
+    comoonents on specific cases.
+
+  • color         (Theme colors)
     color option can be used to set custom color to a component
     Color format:
     `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`

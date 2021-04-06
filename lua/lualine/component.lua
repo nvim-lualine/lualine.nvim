@@ -118,6 +118,9 @@ local Component = {
   -- Driver code of the class
   draw = function(self, default_highlight)
     self.status = ''
+    if self.options.condition ~= nil and self.options.condition() ~= true then 
+      return self.status
+    end
     local status = self:update_status()
     if self.options.format then status = self.options.format(status or '') end
     if type(status) == 'string' and #status > 0 then

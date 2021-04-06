@@ -200,6 +200,7 @@ right_padding | 1 | Adds padding to the right of components | all
 upper | false | Changes components to be uppercase | all
 lower | false | Changes components to be lowercase | all
 format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | all
+condition | nil | Takes a function. The component is loaded if the function returns true otherwise not. It can be used to load some comoonents on specific cases. | all
 ##### Global options example
 ```lua
 options = {icons_enabled = true}
