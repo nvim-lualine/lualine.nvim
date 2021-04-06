@@ -287,7 +287,11 @@ option       (default_value)
     Color format:
     `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`
     the members of color table are optional and default to theme
-
+    Color option can also be a string containing highlight group name >
+    color = "WarningMsg"` 
+<    One neat trick set the color to highlight group name then change
+    that highlight with :hi command to change color of that component
+    at runtime.
 
 Using global options~
 
@@ -536,4 +540,4 @@ Vimscript config example
     lua require("lualine").setup()
 <
 -------------------------------------------------------------------------------
-vim:tw=80:sw=4:ts=8:noet:ft=help:norl:noet:
+vim:tw=80:sw=4:ts=8:noet:ft=help:norl:et:
