@@ -1,8 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local function encoding()
-  local data = [[%{strlen(&fenc)?&fenc:&enc}]]
-  return data
-end
+local Encoding = require('lualine.component'):new()
 
-return encoding
+Encoding.update_status = function() return [[%{strlen(&fenc)?&fenc:&enc}]] end
+
+return Encoding

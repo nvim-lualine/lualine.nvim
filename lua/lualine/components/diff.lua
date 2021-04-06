@@ -4,13 +4,120 @@ local async = require 'lualine.utils.async'
 local utils = require 'lualine.utils.utils'
 local highlight = require 'lualine.highlight'
 
+local Diff = require('lualine.component'):new()
+
+-- Vars
 -- variable to store git diff stats
-local git_diff = nil
+Diff.git_diff = nil
 -- accumulates async output to process in the end
-local diff_data = ''
+Diff.diff_data = ''
+-- variable to store git_diff getter async function
+Diff.get_git_diff = nil
+-- default colors
+Diff.default_colors = {
+  added = '#f0e130',
+  removed = '#90ee90',
+  modified = '#ff0038'
+}
+
+-- Initializer
+Diff.new = function(self, options, child)
+  local new_instence = self._parent:new(options, child or Diff)
+  local default_symbols = {added = '+', modified = '~', removed = '-'}
+  new_instence.options.symbols = vim.tbl_extend('force', default_symbols,
+                                                new_instence.options.symbols or
+                                                    {})
+  if new_instence.options.colored == nil then
+    new_instence.options.colored = true
+  end
+  -- apply colors
+  if not new_instence.options.color_added then
+    new_instence.options.color_added = utils.extract_highlight_colors('DiffAdd',
+                                                                      'guifg') or
+                                           Diff.default_colors.added
+  end
+  if not new_instence.options.color_modified then
+    new_instence.options.color_modified =
+        utils.extract_highlight_colors('DiffChange', 'guifg') or
+            Diff.default_colors.modified
+  end
+  if not new_instence.options.color_removed then
+    new_instence.options.color_removed =
+        utils.extract_highlight_colors('DiffDelete', 'guifg') or
+            Diff.default_colors.removed
+  end
+
+  -- create highlights and save highlight_name in highlights table
+  if new_instence.options.colored then
+    new_instence.highlights = {
+      added = highlight.create_component_highlight_group(
+          {fg = new_instence.options.color_added}, 'diff_added',
+          new_instence.options),
+      modified = highlight.create_component_highlight_group(
+          {fg = new_instence.options.color_modified}, 'diff_modified',
+          new_instence.options),
+      removed = highlight.create_component_highlight_group(
+          {fg = new_instence.options.color_removed}, 'diff_removed',
+          new_instence.options)
+    }
+  end
+
+  vim.api.nvim_exec([[
+  autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff_getter()
+  autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff()
+  autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
+  ]], false)
+
+  return new_instence
+end
+
+-- Function that runs everytime statusline is updated
+Diff.update_status = function(self)
+  if Diff.git_diff == nil then return '' end
+
+  local colors = {}
+  if self.options.colored then
+    -- load the highlights and store them in colors table
+    for name, highlight_name in pairs(self.highlights) do
+      colors[name] = highlight.component_format_highlight(highlight_name)
+    end
+  end
+
+  local result = {}
+  -- loop though data and load available sections in result table
+  for _, name in ipairs {'added', 'modified', 'removed'} do
+    if Diff.git_diff[name] and Diff.git_diff[name] > 0 then
+      if self.options.colored then
+        table.insert(result, colors[name] .. self.options.symbols[name] ..
+                         Diff.git_diff[name])
+      else
+        table.insert(result, self.options.symbols[name] .. Diff.git_diff[name])
+      end
+    end
+  end
+  if #result > 0 then
+    return table.concat(result, ' ')
+  else
+    return ''
+  end
+end
+
+-- Api to get git sign count
+-- scheme :
+-- {
+--    added = added_count,
+--    modified = modified_count,
+--    removed = removed_count,
+-- }
+-- error_code = { added = -1, modified = -1, removed = -1 }
+function Diff.get_sign_count()
+  Diff.update_git_diff_getter()
+  Diff.update_git_diff()
+  return Diff.git_diff or {added = -1, modified = -1, removed = -1}
+end
 
 -- process diff data and update git_diff{ added, removed, modified }
-local function process_diff(data)
+function Diff.process_diff(data)
   -- Adapted from https://github.com/wbthomason/nvim-vcs.lua
   local added, removed, modified = 0, 0, 0
   for line in vim.gsplit(data, '\n') do
@@ -34,149 +141,50 @@ local function process_diff(data)
       end
     end
   end
-  git_diff = {added = added, modified = modified, removed = removed}
+  Diff.git_diff = {added = added, modified = modified, removed = removed}
 end
 
--- variable to store git_diff getter async function
-local get_git_diff = nil
-
 -- Updates the async function for current file
-local function update_git_diff_getter()
+function Diff.update_git_diff_getter()
   -- stop older function properly before overwritting it
-  if get_git_diff then get_git_diff:stop() end
+  if Diff.get_git_diff then Diff.get_git_diff:stop() end
   -- Donn't show git diff when current buffer doesn't have a filename
   if #vim.fn.expand('%') == 0 then
-    get_git_diff = nil;
-    git_diff = nil;
+    Diff.get_git_diff = nil;
+    Diff.git_diff = nil;
     return
   end
-  get_git_diff = async:new({
+  Diff.get_git_diff = async:new({
     cmd = string.format(
         [[git -C %s --no-pager diff --no-color --no-ext-diff -U0 -- %s]],
         vim.fn.expand('%:h'), vim.fn.expand('%:t')),
     on_stdout = function(_, data)
-      if data then diff_data = diff_data .. data end
+      if data then Diff.diff_data = Diff.diff_data .. data end
     end,
     on_stderr = function(_, data)
       if data then
-        git_diff = nil
-        diff_data = ''
+        Diff.git_diff = nil
+        Diff.diff_data = ''
       end
     end,
     on_exit = function()
-      if diff_data ~= '' then
-        process_diff(diff_data)
+      if Diff.diff_data ~= '' then
+        Diff.process_diff(Diff.diff_data)
       else
-        git_diff = {added = 0, modified = 0, removed = 0}
+        Diff.git_diff = {added = 0, modified = 0, removed = 0}
       end
     end
   })
 end
 
 -- Update git_diff veriable
-local function update_git_diff()
+function Diff.update_git_diff()
   vim.schedule_wrap(function()
-    if get_git_diff then
-      diff_data = ''
-      get_git_diff:start()
+    if Diff.get_git_diff then
+      Diff.diff_data = ''
+      Diff.get_git_diff:start()
     end
   end)()
 end
 
-local default_color_added = '#f0e130'
-local default_color_removed = '#90ee90'
-local default_color_modified = '#ff0038'
-
-local function diff(options)
-  if options.colored == nil then options.colored = true end
-  -- apply colors
-  if not options.color_added then
-    options.color_added = utils.extract_highlight_colors('DiffAdd', 'guifg') or
-                              default_color_added
-  end
-  if not options.color_modified then
-    options.color_modified = utils.extract_highlight_colors('DiffChange',
-                                                            'guifg') or
-                                 default_color_modified
-  end
-  if not options.color_removed then
-    options.color_removed =
-        utils.extract_highlight_colors('DiffDelete', 'guifg') or
-            default_color_removed
-  end
-
-  local highlights = {}
-
-  -- create highlights and save highlight_name in highlights table
-  if options.colored then
-    highlights = {
-      added = highlight.create_component_highlight_group(
-          {fg = options.color_added}, 'diff_added', options),
-      modified = highlight.create_component_highlight_group(
-          {fg = options.color_modified}, 'diff_modified', options),
-      removed = highlight.create_component_highlight_group(
-          {fg = options.color_removed}, 'diff_removed', options)
-    }
-  end
-
-  vim.api.nvim_exec([[
-    autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff_getter()
-    autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff()
-    autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
-    ]], false)
-
-  -- Function that runs everytime statusline is updated
-  return function()
-    if git_diff == nil then return '' end
-
-    local default_symbols = {added = '+', modified = '~', removed = '-'}
-    options.symbols = vim.tbl_extend('force', default_symbols,
-                                     options.symbols or {})
-    local colors = {}
-    if options.colored then
-      -- load the highlights and store them in colors table
-      for name, highlight_name in pairs(highlights) do
-        colors[name] = highlight.component_format_highlight(highlight_name)
-      end
-    end
-
-    local result = {}
-    -- loop though data and load available sections in result table
-    for _, name in ipairs {'added', 'modified', 'removed'} do
-      if git_diff[name] and git_diff[name] > 0 then
-        if options.colored then
-          table.insert(result,
-                       colors[name] .. options.symbols[name] .. git_diff[name])
-        else
-          table.insert(result, options.symbols[name] .. git_diff[name])
-        end
-      end
-    end
-    if #result > 0 then
-      return table.concat(result, ' ')
-    else
-      return ''
-    end
-  end
-end
-
--- Api to get git sign count
--- scheme :
--- {
---    added = added_count,
---    modified = modified_count,
---    removed = removed_count,
--- }
--- error_code = { added = -1, modified = -1, removed = -1 }
-local function get_sign_count()
-  update_git_diff_getter()
-  update_git_diff()
-  return git_diff or {added = -1, modified = -1, removed = -1}
-end
-
-return {
-  init = function(options) return diff(options) end,
-  update_git_diff = update_git_diff,
-  update_git_diff_getter = update_git_diff_getter,
-  get_sign_count = get_sign_count
-}
+return Diff

@@ -1,12 +1,31 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local git_branch
+local Branch = require('lualine.component'):new()
 
+-- vars
+Branch.git_branch = ''
 -- os specific path separator
-local sep = package.config:sub(1, 1)
+Branch.sep = package.config:sub(1, 1)
+-- event watcher to watch head file
+Branch.file_changed = vim.loop.new_fs_event()
+
+-- Initilizer
+Branch.new = function(self, options, child)
+  local new_branch = self._parent:new(options, child or Branch)
+  if not new_branch.options.icon then
+    new_branch.options.icon = '' -- e0a0
+  end
+  -- run watch head on load so branch is present when component is loaded
+  Branch.update_branch()
+  -- update branch state of BufEnter as different Buffer may be on different repos
+  vim.cmd [[autocmd BufEnter * lua require'lualine.components.branch'.update_branch()]]
+  return new_branch
+end
+
+Branch.update_status = function() return Branch.git_branch end
 
 -- returns full path to git directory for current directory
-local function find_git_dir()
+function Branch.find_git_dir()
   -- get file dir so we can search from that dir
   local file_dir = vim.fn.expand('%:p:h') .. ';'
   -- find .git/ folder genaral case
@@ -23,7 +42,7 @@ local function find_git_dir()
     git_dir = git_dir:match('gitdir: (.+)$')
     file:close()
     -- submodule / relative file path
-    if git_dir:sub(1, 1) ~= sep and not git_dir:match('^%a:.*$') then
+    if git_dir:sub(1, 1) ~= Branch.sep and not git_dir:match('^%a:.*$') then
       git_dir = git_file:match('(.*).git') .. git_dir
     end
   end
@@ -31,58 +50,37 @@ local function find_git_dir()
 end
 
 -- sets git_branch veriable to branch name or commit hash if not on branch
-local function get_git_head(head_file)
+function Branch.get_git_head(head_file)
   local f_head = io.open(head_file)
   if f_head then
     local HEAD = f_head:read()
     f_head:close()
     local branch = HEAD:match('ref: refs/heads/(.+)$')
     if branch then
-      git_branch = branch
+      Branch.git_branch = branch
     else
-      git_branch = HEAD:sub(1, 6)
+      Branch.git_branch = HEAD:sub(1, 6)
     end
   end
   return nil
 end
 
--- event watcher to watch head file
-local file_changed = vim.loop.new_fs_event()
-local function watch_head()
-  file_changed:stop()
-  local git_dir = find_git_dir()
+-- Update branch
+function Branch.update_branch()
+  Branch.file_changed:stop()
+  local git_dir = Branch.find_git_dir()
   if #git_dir > 0 then
-    local head_file = git_dir .. sep .. 'HEAD'
-    get_git_head(head_file)
-    file_changed:start(head_file, {}, vim.schedule_wrap(
-                           function()
+    local head_file = git_dir .. Branch.sep .. 'HEAD'
+    Branch.get_git_head(head_file)
+    Branch.file_changed:start(head_file, {}, vim.schedule_wrap(
+                                  function()
           -- reset file-watch
-          watch_head()
+          Branch.update_branch()
         end))
   else
-    -- set to nil when git dir was not found
-    git_branch = nil
+    -- set to '' when git dir was not found
+    Branch.git_branch = ''
   end
 end
 
-local function branch(options)
-  if not options.icon then
-    options.icon = '' -- e0a0
-  end
-
-  return function()
-    if not git_branch or #git_branch == 0 then return '' end
-    return git_branch
-  end
-end
-
--- run watch head on load so branch is present when component is loaded
-watch_head()
-
--- update branch state of BufEnter as different Buffer may be on different repos
-vim.cmd [[autocmd BufEnter * lua require'lualine.components.branch'.lualine_branch_update()]]
-
-return {
-  init = function(options) return branch(options) end,
-  lualine_branch_update = watch_head
-}
+return Branch

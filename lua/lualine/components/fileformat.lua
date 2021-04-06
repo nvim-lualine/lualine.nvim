@@ -1,22 +1,19 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local function fileformat(options)
-  local icon_linux = '' -- e712
-  local icon_windos = '' -- e70f
-  local icon_mac = '' -- e711
-  return function()
-    if options.icons_enabled and not options.icon then
-      local format = vim.bo.fileformat
-      if format == 'unix' then
-        return icon_linux
-      elseif format == 'dos' then
-        return icon_windos
-      elseif format == 'mac' then
-        return icon_mac
-      end
-    end
-    return vim.bo.fileformat
+local FileFormat = require('lualine.component'):new()
+
+FileFormat.icon = {
+  unix = '', -- e712
+  dos = '', -- e70f
+  mac = '' -- e711
+}
+
+FileFormat.update_status = function(self)
+  if self.options.icons_enabled and not self.options.icon then
+    local format = vim.bo.fileformat
+    return FileFormat.icon[format] or format
   end
+  return vim.bo.fileformat
 end
 
-return {init = function(options) return fileformat(options) end}
+return FileFormat
