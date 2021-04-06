@@ -185,35 +185,58 @@ sections = {lualine_a = {'g:coc_status', 'bo:filetype'}}
 
 ### Available options:
 
+Options can change the way a component behave.
+There are two kinds of options some that work on every kind of component.
+Even the ones you create like custom function component . And some that only
+work on specific component.
+Detailed list of available options are given below.
+
 #### Global options
+These options are available for all components.
 
-Global options change behaviour of all suported components.
-All of these options can also be specifically set to all supported components, full example below.
-
-##### Available global options
-Option   | Default | Behaviour  | Supported components
-:------: | :------: | :----------: | :-----:
+Option   | Default | Behaviour | Supported components
+:------: | :------: | :------: | :--------:
 icons_enabled      | true     |  Displays icons on components You should have nerd-fonts supported fonts to see icons properly. | branch, fileformat, filetype, location, diagnostics
-padding | 1 | Adds padding to the left and right of components | all
-left_padding | 1 | Adds padding to the left of components | all
-right_padding | 1 | Adds padding to the right of components | all
-upper | false | Changes components to be uppercase | all
-lower | false | Changes components to be lowercase | all
-format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | all
-condition | nil | Takes a function. The component is loaded if the function returns true otherwise not. It can be used to load some comoonents on specific cases. | all
-##### Global options example
+icon | Differs for each component | Displays an icon in front of the component | All
+padding | 1 | Adds padding to the left and right of components | All
+left_padding | 1 | Adds padding to the left of components | All
+right_padding | 1 | Adds padding to the right of components | All
+separator | (component_separators) | which separator to use at end of component | all
+upper | false | Changes components to be uppercase | All
+lower | false | Changes components to be lowercase | All
+format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | All
+condition | nil | Takes a function. The component is loaded if the function returns true otherwise not. It can be used to load some comoonents on specific cases. | All
+color | nil | Sets custom color for the component in this format<br></br>`color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`<br></br>The fields of color table are optional and default to theme | All
+
+#### Using global options
+Global options can be set in two ways. One is as part of options table in setup.
+
 ```lua
-options = {icons_enabled = true}
+require'lualine'.setup{
+  options = {
+    icons_enabled = true,
+    padding = 2,
+  }
+}
+```
+When set this way these values work as default for all component.
+These defaults can be overwritten by setting option as part of component
+configuration like following.
+
+```lua
+lualine_a = {
+  -- Displays only first char of mode name
+  {'mode', format=function(mode_name) return mode_name:sub(1,1) end},
+  -- Disables icon for branch component
+  {'branch', icons_enabled=false},
+},
+lualine_c = {
+  -- Displays filename only when window is wider then 80
+  {'filename', condition=function() return vim.fn.winwidth(0) > 80 end},
+}
 ```
 
 #### Component specific options
-As mentioned above, all global options can be applied to specific components.
-However there are some options which are component-only (you cannot set them as globals)
-Option   | Default | Behaviour
-:------: | :------: | :----:
-icon | Differs for each component | Displays an icon in front of the component
-color | nil | Sets custom color for the component in this format<br></br>`color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`<br></br>The fields of color table are optional and default to theme
-
 In addition, some components have unique options.
 
 * `diagnostics` component options
@@ -245,6 +268,8 @@ color_modified | `DiffChange` foreground color | changes diff's changed section 
 color_removed | `DiffDelete` foreground color | changes diff's removed section foreground color | color in `#rrggbb` format
 symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbols | table containing on or more symbols |
 
+
+Component specific options can only be set with component configs.
 
 ##### Component options example
 ```lua
