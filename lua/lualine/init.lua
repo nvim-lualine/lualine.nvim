@@ -279,6 +279,8 @@ local function setup_theme()
       }, true, {})
       theme = require 'lualine.themes.gruvbox'
     end
+  else
+    theme = config.options.theme
   end
   highlight.create_highlight_groups(theme)
   vim.api.nvim_exec([[
