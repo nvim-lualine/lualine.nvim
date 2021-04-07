@@ -26,7 +26,7 @@ A blazing fast and easy to configure neovim statusline written in pure lua.
 CONTENTS                                                     *lualine_contents*
 
 1. lualine.nvim...........................................|lualine_lualine.nvim|
-    1.1. Performance comparism...................|lualine_performance_comparism|
+    1.1. Performance comparison.................|lualine_performance_comparison|
     1.2. Installation.....................................|lualine_installation|
         1.2.1. vim-plug.......................................|lualine_vim-plug|
         1.2.2.packer.nvim..................................|lualine_packer.nvim|
@@ -46,7 +46,7 @@ CONTENTS                                                     *lualine_contents*
     1.5. Screenshots.......................................|lualine_screenshots|
 
 ================================================================================
-PERFORMANCE COMPARISM                            *lualine_performance_comparism*
+PERFORMANCE COMPARISON                          *lualine_performance_comparison*
 
 Unlike other statusline plugins lualine loads only defined components, nothing else.
 
