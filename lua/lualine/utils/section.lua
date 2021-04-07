@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local utils_component = require('lualine.utils.component')
-local M ={}
+local M = {}
 -- Returns formated string for a section
 function M.draw_section(section, highlight_name)
   local status = {}
@@ -16,7 +16,8 @@ function M.draw_section(section, highlight_name)
       localstatus = utils_component.apply_icon(localstatus, component)
       localstatus = utils_component.apply_case(localstatus, component)
       localstatus = utils_component.apply_padding(localstatus, component)
-      localstatus = utils_component.apply_highlights(localstatus, component, highlight_name)
+      localstatus = utils_component.apply_highlights(localstatus, component,
+                                                     highlight_name)
       localstatus = utils_component.apply_spearator(localstatus, component)
       if custom_highlight_at_begining or (#drawn_components > 0 and
           not drawn_components[#drawn_components].separator_applied) then
@@ -35,13 +36,16 @@ function M.draw_section(section, highlight_name)
   for i = 1, #status do
     if (drawn_components[i].color and drawn_components[i].color.bg) or
         drawn_components[i].custom_highlight then
-      status[i] = utils_component.strip_separator(status[i], drawn_components[i])
+      status[i] =
+          utils_component.strip_separator(status[i], drawn_components[i])
       if i > 1 then
-        status[i - 1] = utils_component.strip_separator(status[i - 1], drawn_components[i - 1])
+        status[i - 1] = utils_component.strip_separator(status[i - 1],
+                                                        drawn_components[i - 1])
       end
     end
   end
-  status[#status] = utils_component.strip_separator(status[#status], drawn_components[#status])
+  status[#status] = utils_component.strip_separator(status[#status],
+                                                    drawn_components[#status])
   return table.concat(status)
 end
 

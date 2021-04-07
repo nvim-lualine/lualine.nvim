@@ -37,13 +37,21 @@ end
 function M.reload_highlights()
   local highlight = require('lualine.highlight')
   for _, highlight_args in pairs(M.loaded_highlights) do
-     highlight.highlight(unpack(highlight_args))
+    highlight.highlight(unpack(highlight_args))
   end
 end
 
 -- determine if an highlight exist and isn't cleared
 function M.highlight_exists(highlight_name)
   return M.loaded_highlights[highlight_name] and true or false
+end
+
+-- clears loaded_highlights table and highlights
+function M.clear_highlights()
+  for highlight_name, _ in pairs(M.loaded_highlights) do
+    vim.cmd('highlight clear ' .. highlight_name)
+    M.loaded_highlights[highlight_name] = nil
+  end
 end
 
 return M

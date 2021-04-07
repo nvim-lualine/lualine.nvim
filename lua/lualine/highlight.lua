@@ -4,6 +4,7 @@ local M = {}
 local utils_colors = require 'lualine.utils.cterm_colors'
 local utils = require 'lualine.utils.utils'
 local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
+local active_theme = nil
 
 function M.highlight(name, foreground, background, gui, reload)
   local command = {'highlight', name}
@@ -26,11 +27,13 @@ function M.highlight(name, foreground, background, gui, reload)
 end
 
 function M.create_highlight_groups(theme)
+  utils.clear_highlights()
+  active_theme = theme
   for mode, sections in pairs(theme) do
     for section, colorscheme in pairs(sections) do
       local highlight_group_name = {'lualine', section, mode}
       M.highlight(table.concat(highlight_group_name, '_'), colorscheme.fg,
-                colorscheme.bg, colorscheme.gui)
+                  colorscheme.bg, colorscheme.gui)
     end
   end
 end
@@ -59,13 +62,12 @@ local function append_mode(highlight_group)
 end
 
 -- Create highlight group with fg bg and gui from theme
--- section and theme are extracted from @options.self table
--- @@color has to be { fg = "#rrggbb", bg="#rrggbb" gui = "effect" }
+-- @color has to be { fg = "#rrggbb", bg="#rrggbb" gui = "effect" }
 -- all the color elements are optional if fg or bg is not given options must be provided
 -- So fg and bg can default the themes colors
--- @@highlight_tag is unique tag for highlight group
+-- @highlight_tag is unique tag for highlight group
 -- returns the name of highlight group
--- @@options is parameter of component.init() function
+-- @options is parameter of component.init() function
 -- @return: (string) unique name that can be used by component_format_highlight
 --   to retrive highlight group
 function M.create_component_highlight_group(color, highlight_tag, options)
@@ -87,9 +89,9 @@ function M.create_component_highlight_group(color, highlight_tag, options)
   if section > 'c' then section = section_highlight_map[section] end
   for _, mode in ipairs(modes) do
     local highlight_group_name = {options.self.section, highlight_tag, mode}
-    local default_color_table = options.theme[mode] and
-                                    options.theme[mode][section] or
-                                    options.theme.normal[section]
+    local default_color_table = active_theme[mode] and
+                                    active_theme[mode][section] or
+                                    active_theme.normal[section]
     local bg = (color.bg or default_color_table.bg)
     local fg = (color.fg or default_color_table.fg)
     -- Check if it's same as normal mode if it is no need to create aditional highlight
