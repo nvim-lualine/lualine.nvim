@@ -266,22 +266,29 @@ end
 local function tabline() return statusline(config.tabline, true) end
 
 local function setup_theme()
-  local theme_name = config.options.theme
+  local theme_config = config.options.theme
   local ok, theme
-  if type(theme_name) == 'string' then
-    ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
+  if type(theme_config) == 'string' then
+    ok, theme = pcall(require, 'lualine.themes.' .. theme_config)
     if not ok then
       vim.api.nvim_echo({
         {
-          'theme ' .. theme_name .. ' not found defaulting to gruvbox',
+          'theme ' .. theme_config .. ' not found defaulting to gruvbox',
           'ErrorMsg'
         }
       }, true, {})
       theme = require 'lualine.themes.gruvbox'
     end
+  elseif type(theme_config) == 'table' then
+    theme = theme_config
   else
-    -- use the provided theme as-is, assuming it's a dictionary
-    theme = config.options.theme
+    vim.api.nvim_echo({
+      {
+        type(theme_config)..' is not a valid type of theme defaulting to gruvbox',
+        'ErrorMsg'
+      }
+    }, true, {})
+    theme = require 'lualine.themes.gruvbox'
   end
   highlight.create_highlight_groups(theme)
   vim.api.nvim_exec([[
