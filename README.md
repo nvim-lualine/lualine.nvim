@@ -312,6 +312,8 @@ extensions = { 'fzf' }
 * fugitive
 * fzf
 * nerdtree
+* chadtree
+* nvim-tree
 
 </details>
 
