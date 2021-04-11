@@ -57,70 +57,25 @@ local function check_single_separator()
   end
 end
 
-local function load_special_components(component)
-  return function()
-    -- precedence lualine_component > vim_var > lua_var > vim_function
-    if component:find('[gvtwb]?o?:') == 1 then
-      -- vim veriable component
-      -- accepts g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo:
-      -- filters g portion from g:var
-      local scope = component:match('[gvtwb]?o?')
-      -- filters var portion from g:var
-      local var_name = component:sub(#scope + 2, #component)
-      -- Displays nothing when veriable aren't present
-      local return_val = vim[scope][var_name]
-      if return_val == nil then return '' end
-      local ok
-      ok, return_val = pcall(tostring, return_val)
-      if ok then return return_val end
-      return ''
-    elseif loadstring(string.format('return %s ~= nil', component)) and
-        loadstring(string.format([[return %s ~= nil]], component))() then
-      -- lua veriable component
-      return loadstring(string.format([[
-      local ok, return_val = pcall(tostring, %s)
-      if ok then return return_val end
-      return '']], component))()
-    else
-      -- vim function component
-      local ok, return_val = pcall(vim.fn[component])
-      if not ok then return '' end -- function call failed
-      ok, return_val = pcall(tostring, return_val)
-      if ok then
-        return return_val
-      else
-        return ''
-      end
-    end
-  end
-end
-
 local function component_loader(component)
-  if type(component[1]) == 'function' then return component end
+  if type(component[1]) == 'function' then
+    return require 'lualine.components.special.functon_component':new(component)
+  end
   if type(component[1]) == 'string' then
-    -- Keep component name for later use as component[1] will be overwritten
-    -- With component function
-    component.component_name = component[1]
-    -- apply default args
-    for opt_name, opt_val in pairs(config.options) do
-      if component[opt_name] == nil then component[opt_name] = opt_val end
-    end
     -- load the component
-    local ok, loaded_component = pcall(require, 'lualine.components.' ..
-                                           component.component_name)
-    if not ok then
-      loaded_component = load_special_components(component.component_name)
+    local ok, loaded_component = pcall(require,
+                                       'lualine.components.' .. component[1])
+    if ok then
+      component.component_name = component[1]
+      loaded_component = loaded_component:new(component)
+    elseif component[1]:find('[gvtwb]?o?:') == 1 then
+      loaded_component =
+          require 'lualine.components.special.vim_var_component':new(component)
+    else
+      loaded_component =
+          require 'lualine.components.special.eval_func_component':new(component)
     end
-    component[1] = loaded_component
-    if type(component[1]) == 'table' then
-      component[1] = component[1].init(component)
-    end
-    -- set custom highlights
-    if component.color then
-      component.color_highlight = highlight.create_component_highlight_group(
-                                      component.color, component.component_name,
-                                      component)
-    end
+    return loaded_component
   end
 end
 
@@ -132,8 +87,9 @@ local function load_sections(sections)
       end
       component.self = {}
       component.self.section = section_name
-      component_loader(component)
-      section[index] = component
+      -- apply default args
+      component = vim.tbl_extend('keep', component, config.options)
+      section[index] = component_loader(component)
     end
   end
 end

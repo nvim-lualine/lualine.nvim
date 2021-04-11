@@ -1,42 +1,8 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
--- LuaFormatter off
-local mode_map = {
-  ['n']    = 'NORMAL',
-  ['no']   = 'O-PENDING',
-  ['nov']  = 'O-PENDING',
-  ['noV']  = 'O-PENDING',
-  ['no'] = 'O-PENDING',
-  ['niI']  = 'NORMAL',
-  ['niR']  = 'NORMAL',
-  ['niV']  = 'NORMAL',
-  ['v']    = 'VISUAL',
-  ['V']    = 'V-LINE',
-  ['']   = 'V-BLOCK',
-  ['s']    = 'SELECT',
-  ['S']    = 'S-LINE',
-  ['']   = 'S-BLOCK',
-  ['i']    = 'INSERT',
-  ['ic']   = 'INSERT',
-  ['ix']   = 'INSERT',
-  ['R']    = 'REPLACE',
-  ['Rc']   = 'REPLACE',
-  ['Rv']   = 'V-REPLACE',
-  ['Rx']   = 'REPLACE',
-  ['c']    = 'COMMAND',
-  ['cv']   = 'EX',
-  ['ce']   = 'EX',
-  ['r']    = 'REPLACE',
-  ['rm']   = 'MORE',
-  ['r?']   = 'CONFIRM',
-  ['!']    = 'SHELL',
-  ['t']    = 'TERMINAL',
-}
--- LuaFormatter on
-local function mode()
-  local mode_code = vim.api.nvim_get_mode().mode
-  if mode_map[mode_code] == nil then return mode_code end
-  return mode_map[mode_code]
-end
+local Mode = require('lualine.component'):new()
+local get_mode = require('lualine.utils.mode').get_mode
 
-return mode
+Mode.update_status = get_mode
+
+return Mode

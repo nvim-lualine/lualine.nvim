@@ -54,4 +54,13 @@ function M.clear_highlights()
   end
 end
 
+-- remove empty strings from list
+function M.list_shrink(list)
+  local new_list = {}
+  for i = 1, #list do
+    if list[i] and #list[i] > 0 then table.insert(new_list, list[i]) end
+  end
+  return new_list
+end
+
 return M

@@ -42,7 +42,7 @@ end
 -- @param highlight_group:(string) name of highlight group
 -- @return: (string) highlight group name with mode
 local function append_mode(highlight_group)
-  local mode = require('lualine.components.mode')()
+  local mode = require('lualine.utils.mode').get_mode()
   if mode == 'VISUAL' or mode == 'V-BLOCK' or mode == 'V-LINE' or mode ==
       'SELECT' or mode == 'S-LINE' or mode == 'S-BLOCK' then
     highlight_group = highlight_group .. '_visual'
@@ -159,7 +159,7 @@ function M.get_transitional_highlights(left_section_data, right_section_data,
   -- Grab the last highlighter of left section
   if left_section_data then
     -- extract highlight_name from .....%#highlight_name#
-    left_highlight_name = left_section_data:match('.*%%#(.*)#')
+    left_highlight_name = left_section_data:match('.*%%#(.-)#')
   else
     -- When right section us unavailable default to lualine_c
     left_highlight_name = append_mode('lualine_c')
@@ -168,10 +168,8 @@ function M.get_transitional_highlights(left_section_data, right_section_data,
     end
   end
   if right_section_data then
-    -- using vim-regex cause lua-paterns don't have non-greedy matching
     -- extract highlight_name from %#highlight_name#....
-    right_highlight_name = vim.fn.matchlist(right_section_data,
-                                            [[%#\(.\{-\}\)#]])[2]
+    right_highlight_name = right_section_data:match('%%#(.-)#.*')
   else
     -- When right section us unavailable default to lualine_c
     right_highlight_name = append_mode('lualine_c')
