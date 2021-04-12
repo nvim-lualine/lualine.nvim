@@ -177,12 +177,28 @@ sections = {lualine_a = {'FugitiveHead'}}
 <details>
 <summary><b>Using variables as lualine component</b></summary>
 
-You can use variables from vim and lua globals as a lualine component
+You can use variables from vim a lualine component
 Variables from g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo: scopes
 can be used. Scopes ending with o are options usualy accessed with `&` in vimscript
 
 ```lua
 sections = {lualine_a = {'g:coc_status', 'bo:filetype'}}
+```
+
+</details>
+
+<details>
+<summary><b>Using lua expressions as lualine component</b></summary>
+
+You can use any valid lua expression as a component . This allows global
+variables to be used as  a component too. Even require statements can be used to access values returned by specific scripts.
+One liner functions can be inlined by utilizeing this .
+
+For exmaple this will show day of the week.
+And 2nd one will display current value of global variabke data.
+
+```lua
+sections = {lualine_c = {"os.data('%a')", 'data'}}
 ```
 
 </details>
