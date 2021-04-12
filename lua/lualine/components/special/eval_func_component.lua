@@ -2,22 +2,13 @@ local EvalFuncComponent = require('lualine.component'):new()
 
 EvalFuncComponent.update_status = function(self)
   local component = self.options[1]
-  local ok, status = EvalFuncComponent.evallua(component)
+  local ok, status = pcall(EvalFuncComponent.eval_lua, component)
   if not ok then status = EvalFuncComponent.vim_function(component) end
   return status
 end
 
-EvalFuncComponent.evallua = function(code)
-  if loadstring(string.format('return %s ~= nil', code)) and
-      loadstring(string.format([[return %s ~= nil]], code))() then
-    -- lua veriable component
-    return true, loadstring(string.format(
-                                [[
-    local ok, return_val = pcall(tostring, %s)
-    if ok then return return_val end
-    return '']], code))()
-  end
-  return false, ''
+EvalFuncComponent.eval_lua = function(code)
+  return tostring(loadstring('return '..code)())
 end
 
 EvalFuncComponent.vim_function = function(name)

@@ -111,6 +111,25 @@ All available themes are listed in THEMES.md (./THEMES.md)
 Please create a pr if you managed to port a popular theme before me, here is
 how to do it (./CONTRIBUTING.md).
 
+Tweeking themes~
+
+You like a theme but would like to tweek some colors.
+You can do that in your config easily.
+
+Example:
+>
+    local custom_gruvbox = require'lualine.themes.gruvbox'
+
+    -- Chnage the background of lualine_c section for normal mode
+    custom_gruvbox.normal.c.bg = '#112233' -- rgb colors are supported
+
+    require'lualine'.setup{
+      options = { theme  = custom_gruvbox },
+      ...
+    }
+<
+You can checkout structure of a lualine theme [here](https://github.com/hoob3rt/lualine.nvim/blob/master/CONTRIBUTING.md#adding-a-theme)
+
 CHANGING SEPARATOR IN SECTION                       *lualine_changing_separator*
 
 Lualine defines two kinds of seperators. One is for sections and other is
@@ -163,7 +182,7 @@ Available components~
         *   fileformat (file format)
         *   filename
         *   filetype
-	*   hostname
+        *   hostname
         *   location (location in file in line:column format)
         *   mode (vim mode)
         *   progress (%progress in file)
@@ -193,12 +212,26 @@ You can use vim functions as a lualine component
 
 Using variables as lualine component~
 
-You can use variables from vim and lua globals as a lualine component
-Variables from g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo: scopes
-can be used. Scopes ending with o are options usualy accessed with `&` in vimscript
+You can use variables from vim. Variables from g:, v:, t:,
+w:, b:, o, go:, vo:, to:, wo:, bo: scopes can be used.
+Scopes ending with o are options usualy accessed with `&` in
+vimscript
 
 >
     sections = {lualine_a = {'g:coc_status', 'bo:filetype'}}
+<
+Using lua expressions as lualine component~
+
+You can use any valid lua expression as a component . This
+allows global variables to be used as  a component too. Even
+require statements can be used to access values returned by
+specific scripts.  One liner functions can be inlined by
+utilizeing this .
+
+For exmaple this will show day of the week.  And 2nd one
+will display current value of global variabke data.
+>
+    sections = {lualine_c = {"os.data('%a')", 'data'}}
 <
 
 --------------------------------------------------------------------------------
@@ -208,11 +241,17 @@ CUSTOM OPTIONS FOR COMPONENTS                        *lualine_custom_options*
 Options for components~
 ======================
 
-Global options~
-----------------------
+Available options:~
 
-Global options change behaviour of all suported components.
-All of these options can also be specifically set to all supported components.
+Options can change the way a component behave.
+There are two kinds of options some that work on every kind of component.
+Even the ones you create like custom function component . And some that only
+work on specific component.
+Detailed list of available options are given below.
+
+Global options~
+
+These options are available for all components.
 
 option       (default_value)
 ------       ---------------
@@ -221,6 +260,10 @@ option       (default_value)
     Displays icons on components
     You should have nerd-fonts supported fonts to see icons properly.
     Supported components: branch, fileformat, filetype, location, diagnostics
+
+  • icon          (depends on component)
+    displays an icon infront of a component
+    Supported components: all
 
   • padding       (1)
     spaces on left and right
@@ -232,6 +275,10 @@ option       (default_value)
 
   • right_padding (1)
     spaces on right
+    Supported components: all
+
+  • separator (component_separators)
+    which separator to use at end of component
     Supported components: all
 
   • upper         (false)
@@ -263,12 +310,53 @@ option       (default_value)
   • icon          (differs for each component)
     displays an icon infront of a component
 
-  • color         (nil)
+  • condition     (nil)
+    Takes a function. The component is loaded if the function
+    returns true otherwise not. It can be used to load some
+    comoonents on specific cases.
+
+  • color         (Theme colors)
     color option can be used to set custom color to a component
     Color format:
     `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`
     the members of color table are optional and default to theme
+    Color option can also be a string containing highlight group name >
+    color = "WarningMsg"` 
+<    One neat trick set the color to highlight group name then change
+    that highlight with :hi command to change color of that component
+    at runtime.
 
+Using global options~
+
+Global options can be set in two ways. One is as part of options table in setup.
+
+>
+    require'lualine'.setup{
+      options = {
+        icons_enabled = true,
+        padding = 2,
+      }
+    }
+<
+When set this way these values work as default for all component.
+These defaults can be overwritten by setting option as part of component
+configuration like following.
+
+>
+    lualine_a = {
+      -- Displays only first char of mode name
+      {'mode', format=function(mode_name) return mode_name:sub(1,1) end},
+      -- Disables icon for branch component
+      {'branch', icons_enabled=false},
+    },
+    lualine_c = {
+      -- Displays filename only when window is wider then 80
+      {'filename', condition=function() return vim.fn.winwidth(0) > 80 end},
+    }
+<
+
+
+Component specific options~
 
 In addition, some components have unique options.
 
@@ -347,25 +435,26 @@ In addition, some components have unique options.
       changes diff's symbols
       Color in `#rrggbb` format
 <
+Component specific options can only be set with component configs.
 
 Example:~
 >
     sections = {
       lualine_b = {
-	{'branch', icon = '', upper = true, color = {fg = '#00aa22'}}, {
-	  'filename',
-	  full_name = true,
-	  shorten = true,
-	  format = function(name)
-	    -- Capitalize first charecter of filename to capital.
-	    local path, fname = name:match('(.*/)(.*)')
-	    if not path then
-	      path = '';
-	      fname = name
-	    end
-	    return path .. fname:sub(1, 1):upper() .. fname:sub(2, #fname)
-	  end
-	}
+        {'branch', icon = '', upper = true, color = {fg = '#00aa22'}}, {
+          'filename',
+          full_name = true,
+          shorten = true,
+          format = function(name)
+            -- Capitalize first charecter of filename to capital.
+            local path, fname = name:match('(.*/)(.*)')
+            if not path then
+              path = '';
+              fname = name
+            end
+            return path .. fname:sub(1, 1):upper() .. fname:sub(2, #fname)
+          end
+        }
       }
     }
 -------------------------------------------------------------------------------
@@ -426,29 +515,29 @@ Lua config example
     requires = {'kyazdani42/nvim-web-devicons', opt = true},
     config = function()
       require('lualine').setup{
-	options = {
-	  theme = 'gruvbox',
-	  section_separators = {'', ''},
-	  component_separators = {'', ''},
-	  icons_enabled = true,
-	},
-	sections = {
-	  lualine_a = { {'mode', upper = true} },
-	  lualine_b = { {'branch', icon = ''} },
-	  lualine_c = { {'filename', file_status = true} },
-	  lualine_x = { 'encoding', 'fileformat', 'filetype' },
-	  lualine_y = { 'progress' },
-	  lualine_z = { 'location'  },
-	},
-	inactive_sections = {
-	  lualine_a = {  },
-	  lualine_b = {  },
-	  lualine_c = { 'filename' },
-	  lualine_x = { 'location' },
-	  lualine_y = {  },
-	  lualine_z = {   }
-	},
-	extensions = { 'fzf' }
+        options = {
+          theme = 'gruvbox',
+          section_separators = {'', ''},
+          component_separators = {'', ''},
+          icons_enabled = true,
+        },
+        sections = {
+          lualine_a = { {'mode', upper = true} },
+          lualine_b = { {'branch', icon = ''} },
+          lualine_c = { {'filename', file_status = true} },
+          lualine_x = { 'encoding', 'fileformat', 'filetype' },
+          lualine_y = { 'progress' },
+          lualine_z = { 'location'  },
+        },
+        inactive_sections = {
+          lualine_a = {  },
+          lualine_b = {  },
+          lualine_c = { 'filename' },
+          lualine_x = { 'location' },
+          lualine_y = {  },
+          lualine_z = {   }
+        },
+        extensions = { 'fzf' }
       }
     end
     }
@@ -457,31 +546,31 @@ Lua config example
 Vimscript config example
 >
     let g:lualine = {
-	\'options' : {
-	\  'theme' : 'gruvbox',
-	\  'section_separators' : ['', ''],
-	\  'component_separators' : ['', ''],
-	\  'icons_enabled' : v:true,
-	\},
-	\'sections' : {
-	\  'lualine_a' : [ ['mode', {'upper': v:true,},], ],
-	\  'lualine_b' : [ ['branch', {'icon': '',}, ], ],
-	\  'lualine_c' : [ ['filename', {'file_status': v:true,},], ],
-	\  'lualine_x' : [ 'encoding', 'fileformat', 'filetype' ],
-	\  'lualine_y' : [ 'progress' ],
-	\  'lualine_z' : [ 'location'  ],
-	\},
-	\'inactive_sections' : {
-	\  'lualine_a' : [  ],
-	\  'lualine_b' : [  ],
-	\  'lualine_c' : [ 'filename' ],
-	\  'lualine_x' : [ 'location' ],
-	\  'lualine_y' : [  ],
-	\  'lualine_z' : [  ],
-	\},
-	\'extensions' : [ 'fzf' ],
-	\}
+        \'options' : {
+        \  'theme' : 'gruvbox',
+        \  'section_separators' : ['', ''],
+        \  'component_separators' : ['', ''],
+        \  'icons_enabled' : v:true,
+        \},
+        \'sections' : {
+        \  'lualine_a' : [ ['mode', {'upper': v:true,},], ],
+        \  'lualine_b' : [ ['branch', {'icon': '',}, ], ],
+        \  'lualine_c' : [ ['filename', {'file_status': v:true,},], ],
+        \  'lualine_x' : [ 'encoding', 'fileformat', 'filetype' ],
+        \  'lualine_y' : [ 'progress' ],
+        \  'lualine_z' : [ 'location'  ],
+        \},
+        \'inactive_sections' : {
+        \  'lualine_a' : [  ],
+        \  'lualine_b' : [  ],
+        \  'lualine_c' : [ 'filename' ],
+        \  'lualine_x' : [ 'location' ],
+        \  'lualine_y' : [  ],
+        \  'lualine_z' : [  ],
+        \},
+        \'extensions' : [ 'fzf' ],
+        \}
     lua require("lualine").setup()
 <
 -------------------------------------------------------------------------------
-vim:tw=80:sw=4:ts=8:noet:ft=help:norl:noet:
+vim:tw=80:sw=4:ts=8:noet:ft=help:norl:et:

@@ -24,6 +24,13 @@ Here is a preview of how lualine can look like.
 
 Screenshots of all available themes are listed in [THEMES.md](./THEMES.md)
 
+For those who want to break the norms. You can create custom looks in lualine .
+
+**Example** :
+
+- [evil_lualine](https://gist.github.com/shadmansaleh/cd526bc166237a5cbd51429cc1f6291b)
+![evil_lualine_image](https://user-images.githubusercontent.com/13149513/113875129-4453ba00-97d8-11eb-8f21-94a9ef565db3.png)
+
 ## Performance compared to other plugins
 Unlike other statusline plugins lualine loads only defined components, nothing else.
 
@@ -80,6 +87,28 @@ options = {theme = 'gruvbox'}
 All available themes are listed in [THEMES.md](./THEMES.md)
 
 Please create a pr if you managed to port a popular theme before me, [here is how to do it](./CONTRIBUTING.md).
+
+<details>
+<summary>Tweeking themes</summary>
+
+You like a theme but would like to tweek some colors.
+You can do that in your config easily.
+
+Example:
+```lua
+local custom_gruvbox = require'lualine.themes.gruvbox'
+
+-- Chnage the background of lualine_c section for normal mode
+custom_gruvbox.normal.c.bg = '#112233' -- rgb colors are supported
+
+require'lualine'.setup{
+  options = { theme  = custom_gruvbox },
+  ...
+}
+```
+You can checkout structure of a lualine theme [here](https://github.com/hoob3rt/lualine.nvim/blob/master/CONTRIBUTING.md#adding-a-theme)
+
+</details>
 
 ### Changing separators
 Lualine defines two kinds of seperators. One is for sections and other is for components. Default section seperators are '', '' and component separators are '', ''.
@@ -170,7 +199,7 @@ sections = {lualine_a = {'FugitiveHead'}}
 <details>
 <summary><b>Using variables as lualine component</b></summary>
 
-You can use variables from vim and lua globals as a lualine component
+You can use variables from vim a lualine component
 Variables from g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo: scopes
 can be used. Scopes ending with o are options usualy accessed with `&` in vimscript
 
@@ -181,38 +210,78 @@ sections = {lualine_a = {'g:coc_status', 'bo:filetype'}}
 </details>
 
 <details>
+<summary><b>Using lua expressions as lualine component</b></summary>
+
+You can use any valid lua expression as a component . This allows global
+variables to be used as  a component too. Even require statements can be used to access values returned by specific scripts.
+One liner functions can be inlined by utilizeing this .
+
+For exmaple this will show day of the week.
+And 2nd one will display current value of global variabke data.
+
+```lua
+sections = {lualine_c = {"os.data('%a')", 'data'}}
+```
+
+</details>
+
+<details>
 <summary><b>Options for components</b></summary>
 
 ### Available options:
 
+Options can change the way a component behave.
+There are two kinds of options some that work on every kind of component.
+Even the ones you create like custom function component . And some that only
+work on specific component.
+Detailed list of available options are given below.
+
 #### Global options
+These options are available for all components.
 
-Global options change behaviour of all suported components.
-All of these options can also be specifically set to all supported components, full example below.
-
-##### Available global options
-Option   | Default | Behaviour  | Supported components
-:------: | :------: | :----------: | :-----:
+Option   | Default | Behaviour | Supported components
+:------: | :------: | :------: | :--------:
 icons_enabled      | true     |  Displays icons on components You should have nerd-fonts supported fonts to see icons properly. | branch, fileformat, filetype, location, diagnostics
-padding | 1 | Adds padding to the left and right of components | all
-left_padding | 1 | Adds padding to the left of components | all
-right_padding | 1 | Adds padding to the right of components | all
-upper | false | Changes components to be uppercase | all
-lower | false | Changes components to be lowercase | all
-format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | all
-##### Global options example
+icon | Differs for each component | Displays an icon in front of the component | All
+padding | 1 | Adds padding to the left and right of components | All
+left_padding | 1 | Adds padding to the left of components | All
+right_padding | 1 | Adds padding to the right of components | All
+separator | (component_separators) | which separator to use at end of component | all
+upper | false | Changes components to be uppercase | All
+lower | false | Changes components to be lowercase | All
+format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | All
+condition | nil | Takes a function. The component is loaded if the function returns true otherwise not. It can be used to load some comoonents on specific cases. | All
+color | nil | Sets custom color for the component in this format<br></br>`color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`<br></br>The fields of color table are optional and default to theme <br></br>Color option can also be a string containing highlight group name `color = "WarningMsg"`. One neat trick set the color to highlight group name then change that highlight with :hi command to change color of that component at runtime. | All
+
+#### Using global options
+Global options can be set in two ways. One is as part of options table in setup.
+
 ```lua
-options = {icons_enabled = true}
+require'lualine'.setup{
+  options = {
+    icons_enabled = true,
+    padding = 2,
+  }
+}
+```
+When set this way these values work as default for all component.
+These defaults can be overwritten by setting option as part of component
+configuration like following.
+
+```lua
+lualine_a = {
+  -- Displays only first char of mode name
+  {'mode', format=function(mode_name) return mode_name:sub(1,1) end},
+  -- Disables icon for branch component
+  {'branch', icons_enabled=false},
+},
+lualine_c = {
+  -- Displays filename only when window is wider then 80
+  {'filename', condition=function() return vim.fn.winwidth(0) > 80 end},
+}
 ```
 
 #### Component specific options
-As mentioned above, all global options can be applied to specific components.
-However there are some options which are component-only (you cannot set them as globals)
-Option   | Default | Behaviour
-:------: | :------: | :----:
-icon | Differs for each component | Displays an icon in front of the component
-color | nil | Sets custom color for the component in this format<br></br>`color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`<br></br>The fields of color table are optional and default to theme
-
 In addition, some components have unique options.
 
 * `diagnostics` component options
@@ -244,6 +313,8 @@ color_modified | `DiffChange` foreground color | changes diff's changed section 
 color_removed | `DiffDelete` foreground color | changes diff's removed section foreground color | color in `#rrggbb` format
 symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbols | table containing on or more symbols |
 
+
+Component specific options can only be set with component configs.
 
 ##### Component options example
 ```lua

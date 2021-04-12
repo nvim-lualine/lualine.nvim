@@ -12,6 +12,11 @@ please use lua-format before creating a pr :smile:
 * refer to example below to see how themes are defined
 * take 4 screenshots showing a different vim modes (normal, insert, visual, replace)
 * add your theme with screenshots attached to [THEMES.md](./THEMES.md) while maintaining alphabetical order
+* If the colorscheme you're trying to add already support lightline. You can use
+[lightline2lualine theme converter](https://gist.github.com/shadmansaleh/000871c9a608a012721c6acc6d7a19b9) to easily port the theme to lualine.
+
+**Note to colorscheme authors** : If you want to support lualine. You can put your
+lualine theme at lua/lualine/themes/{your_colorscheme}.lua in you repo.
 
 <details>
 <summary><b>theme example</b></summary>
