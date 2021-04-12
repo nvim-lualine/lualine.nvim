@@ -55,10 +55,7 @@ function M.clear_highlights()
 end
 
 function M.get_short_cwd()
-  if os.getenv('HOME') == os.getenv('PWD') then
-    return '~/'
-  end
-  return os.getenv('PWD'):gsub(os.getenv('HOME'), '~')
+  return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
 end
 
 return M
