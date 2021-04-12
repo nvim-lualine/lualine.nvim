@@ -90,6 +90,12 @@ lualine try to match your colorscheme.
 ![molokaivisual_cropped](https://user-images.githubusercontent.com/41551030/108648953-af615f80-74bc-11eb-8897-f2945fc34c09.png)
 ![molokaireplace_cropped](https://user-images.githubusercontent.com/41551030/108648958-b12b2300-74bc-11eb-8232-550949cbbfb3.png)
 
+### modus_vivendi
+![modus_vivendinormal cropped](https://user-images.githubusercontent.com/9327361/114384708-c147b080-9b97-11eb-8141-136367e0feaf.png)
+![modus_vivendiinsert cropped](https://user-images.githubusercontent.com/9327361/114384816-e3d9c980-9b97-11eb-9c23-4e0e29181427.png)
+![modus_vivendivisual cropped](https://user-images.githubusercontent.com/9327361/114384886-f7853000-9b97-11eb-9fed-e8f66770d0a1.png)
+![modus_vivendireplace cropped](https://user-images.githubusercontent.com/9327361/114384926-0370f200-9b98-11eb-80d1-043d21c2fa2e.png)
+
 ### nightfly
 ![nightflynormal_cropped](https://user-images.githubusercontent.com/41551030/108648974-b9835e00-74bc-11eb-9c52-c5187aa3ff2c.png)
 ![nightflyinsert_cropped](https://user-images.githubusercontent.com/41551030/108648977-bab48b00-74bc-11eb-96b3-7f51fc73d8e8.png)
