@@ -1,8 +1,8 @@
 ---
 name: Feature Resuest
 about: Request a feature for lualine
-title: 'Feature: '
-labels: mew feature
+title: 'Feat: '
+labels: new feature
 
 ---
 

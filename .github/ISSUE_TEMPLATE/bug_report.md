@@ -8,9 +8,11 @@ labels: bug
 
 <!-- Before reporting: search existing issues and ensure you are running the latest nightly of neovim and the latest version of lualine.-->
 
+### Self Checks
+
 <!-- Check these boxes by placeing an X in the middle -->
-- [ ] I'm useing latest lualine and neovim nightly.
-- [ ] I Didn't find the issue in exsisting issues or prs.
+- [ ] I'm using the latest lualine and neovim nightly.
+- [ ] I didn't find the issue in exsisting issues or prs.
 
 ### How to reproduce the problem
 
@@ -20,7 +22,7 @@ labels: bug
 
 ### Aditional information
 
-### Your lualine config
+### Minimal config to reproduce the issue
 
 <details>
 <summary>Config</summary>
