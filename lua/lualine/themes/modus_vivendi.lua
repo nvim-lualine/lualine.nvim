@@ -21,31 +21,29 @@ modus_vivendi.normal = {
 }
 
 modus_vivendi.insert = {
-    a = {bg = colors.cyan, fg = colors.black, gui = 'bold'},
+    a = {bg = colors.cyan, fg = colors.lightgray, gui = 'bold'},
     b = {bg = colors.lightgray, fg = colors.cyan},
     c = {bg = colors.gray, fg = colors.white}
 }
 
 modus_vivendi.visual = {
-    a = {bg = colors.magenta, fg = colors.black, gui = 'bold'},
+    a = {bg = colors.magenta, fg = colors.lightgray, gui = 'bold'},
     b = {bg = colors.lightgray, fg = colors.magenta},
     c = {bg = colors.gray, fg = colors.white}
 }
 
 modus_vivendi.replace = {
-    a = {bg = colors.red, fg = colors.black, gui = 'bold'},
+    a = {bg = colors.red, fg = colors.lightgray, gui = 'bold'},
     b = {bg = colors.lightgray, fg = colors.red},
     c = {bg = colors.gray, fg = colors.white}
 }
 
 modus_vivendi.command = {
-    a = {bg = colors.green, fg = colors.black, gui = 'bold'},
+    a = {bg = colors.green, fg = colors.lightgray, gui = 'bold'},
     b = {bg = colors.lightgray, fg = colors.green},
     c = {bg = colors.gray, fg = colors.white}
 }
 
--- you can assign one colorscheme to another, if a colorscheme is
--- undefined it falls back to normal
 modus_vivendi.terminal = modus_vivendi.normal
 
 modus_vivendi.inactive = {
