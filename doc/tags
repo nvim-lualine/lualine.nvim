@@ -14,7 +14,7 @@ lualine_loading_plugin_extensions	lualine.txt	/*lualine_loading_plugin_extension
 lualine_lualine.nvim	lualine.txt	/*lualine_lualine.nvim*
 lualine_nvim	lualine.txt	/*lualine_nvim*
 lualine_packer.nvim	lualine.txt	/*lualine_packer.nvim*
-lualine_performance_comparism	lualine.txt	/*lualine_performance_comparism*
+lualine_performance_comparison	lualine.txt	/*lualine_performance_comparison*
 lualine_screenshots	lualine.txt	/*lualine_screenshots*
 lualine_setting_theme	lualine.txt	/*lualine_setting_theme*
 lualine_starting_lualine	lualine.txt	/*lualine_starting_lualine*
