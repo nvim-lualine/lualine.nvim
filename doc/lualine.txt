@@ -211,7 +211,7 @@ Options for components~
 Global options~
 ----------------------
 
-Global options chnge behaviour of all suported components.
+Global options change behaviour of all suported components.
 All of these options can also be specifically set to all supported components.
 
 option       (default_value)
