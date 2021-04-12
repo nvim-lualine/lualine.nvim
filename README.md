@@ -88,6 +88,28 @@ All available themes are listed in [THEMES.md](./THEMES.md)
 
 Please create a pr if you managed to port a popular theme before me, [here is how to do it](./CONTRIBUTING.md).
 
+<details>
+<summary>Tweeking themes</summary>
+
+You like a theme but would like to tweek some colors.
+You can do that in your config easily.
+
+Example:
+```lua
+local custom_gruvbox = require'lualine.themes.gruvbox'
+
+-- Chnage the background of lualine_c section for normal mode
+custom_gruvbox.normal.c.bg = '#112233' -- rgb colors are supported
+
+require'lualine'.setup{
+  options = { theme  = custom_gruvbox },
+  ...
+}
+```
+You can checkout structure of a lualine theme [here](https://github.com/hoob3rt/lualine.nvim/blob/master/CONTRIBUTING.md#adding-a-theme)
+
+</details>
+
 ### Changing separators
 Lualine defines two kinds of seperators. One is for sections and other is for components. Default section seperators are '', '' and component separators are '', ''.
 They require powerline patched fonts. But you can easily change yours to something else like below
