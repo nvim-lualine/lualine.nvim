@@ -6,7 +6,7 @@ local M = {}
 
 M.sections = nerdtree.sections
 
-M.inactive_sections = M.inactive_sections
+M.inactive_sections = nerdtree.inactive_sections
 
 M.filetypes = {'NvimTree'}
 

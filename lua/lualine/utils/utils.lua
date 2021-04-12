@@ -54,8 +54,4 @@ function M.clear_highlights()
   end
 end
 
-function M.get_short_cwd()
-  return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
-end
-
 return M
