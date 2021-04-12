@@ -83,18 +83,17 @@ lualine try to match your colorscheme.
 ![materialvisual_cropped](https://user-images.githubusercontent.com/41551030/108648930-a1134380-74bc-11eb-8a24-f203bf05cfb3.png)
 ![materialreplace_cropped](https://user-images.githubusercontent.com/41551030/108648935-a2dd0700-74bc-11eb-9a4b-72eb1e2ab79e.png)
 
+### modus_vivendi
+![modus_vivendinormal cropped](https://user-images.githubusercontent.com/9327361/114384708-c147b080-9b97-11eb-8141-136367e0feaf.png)
+![modus_vivendiinsert cropped](https://user-images.githubusercontent.com/9327361/114384816-e3d9c980-9b97-11eb-9c23-4e0e29181427.png)
+![modus_vivendivisual cropped](https://user-images.githubusercontent.com/9327361/114384886-f7853000-9b97-11eb-9fed-e8f66770d0a1.png)
+![modus_vivendireplace cropped](https://user-images.githubusercontent.com/9327361/114384926-0370f200-9b98-11eb-80d1-043d21c2fa2e.png)
 
 ### molokai
 ![molokainormal_cropped](https://user-images.githubusercontent.com/41551030/108648944-ab354200-74bc-11eb-85fd-71a40102384b.png)
 ![molokaiinsert_cropped](https://user-images.githubusercontent.com/41551030/108648946-acff0580-74bc-11eb-9aae-36a869b855e5.png)
 ![molokaivisual_cropped](https://user-images.githubusercontent.com/41551030/108648953-af615f80-74bc-11eb-8897-f2945fc34c09.png)
 ![molokaireplace_cropped](https://user-images.githubusercontent.com/41551030/108648958-b12b2300-74bc-11eb-8232-550949cbbfb3.png)
-
-### modus_vivendi
-![modus_vivendinormal cropped](https://user-images.githubusercontent.com/9327361/114384708-c147b080-9b97-11eb-8141-136367e0feaf.png)
-![modus_vivendiinsert cropped](https://user-images.githubusercontent.com/9327361/114384816-e3d9c980-9b97-11eb-9c23-4e0e29181427.png)
-![modus_vivendivisual cropped](https://user-images.githubusercontent.com/9327361/114384886-f7853000-9b97-11eb-9fed-e8f66770d0a1.png)
-![modus_vivendireplace cropped](https://user-images.githubusercontent.com/9327361/114384926-0370f200-9b98-11eb-80d1-043d21c2fa2e.png)
 
 ### nightfly
 ![nightflynormal_cropped](https://user-images.githubusercontent.com/41551030/108648974-b9835e00-74bc-11eb-9c52-c5187aa3ff2c.png)
