@@ -187,7 +187,7 @@ sections = {lualine_a = {'g:coc_status', 'bo:filetype'}}
 
 #### Global options
 
-Global options chnge behaviour of all suported components.
+Global options change behaviour of all suported components.
 All of these options can also be specifically set to all supported components, full example below.
 
 ##### Available global options
