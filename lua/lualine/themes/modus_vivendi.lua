@@ -1,5 +1,7 @@
+-- Copyright (c) 2020-2021 ronniedroid
+-- MIT license, see LICENSE for more details.
 local modus_vivendi = {}
-
+-- LuaFormatter off
 local colors = {
     black = '#000000',
     white = '#eeeeee',
@@ -12,9 +14,9 @@ local colors = {
     darkgray = '#202020',
     lightgray = '#434343'
 }
+-- LuaFormatter on
 
 modus_vivendi.normal = {
-    -- gui parameter is optional and behaves the same way as in vim's highlight command
     a = {bg = colors.blue, fg = colors.lightgray, gui = 'bold'},
     b = {bg = colors.lightgray, fg = colors.blue},
     c = {bg = colors.gray, fg = colors.white}
