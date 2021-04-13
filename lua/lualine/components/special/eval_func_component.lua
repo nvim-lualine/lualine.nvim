@@ -8,7 +8,7 @@ EvalFuncComponent.update_status = function(self)
 end
 
 EvalFuncComponent.eval_lua = function(code)
-  return tostring(loadstring('return '..code)())
+  return tostring(loadstring('return ' .. code)())
 end
 
 EvalFuncComponent.vim_function = function(name)

@@ -33,17 +33,17 @@ Diff.new = function(self, options, child)
   -- apply colors
   if not new_instence.options.color_added then
     new_instence.options.color_added = utils.extract_highlight_colors('DiffAdd',
-                                                                      'guifg') or
+                                                                      'fg') or
                                            Diff.default_colors.added
   end
   if not new_instence.options.color_modified then
     new_instence.options.color_modified =
-        utils.extract_highlight_colors('DiffChange', 'guifg') or
+        utils.extract_highlight_colors('DiffChange', 'fg') or
             Diff.default_colors.modified
   end
   if not new_instence.options.color_removed then
     new_instence.options.color_removed =
-        utils.extract_highlight_colors('DiffDelete', 'guifg') or
+        utils.extract_highlight_colors('DiffDelete', 'fg') or
             Diff.default_colors.removed
   end
 

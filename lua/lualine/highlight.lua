@@ -12,13 +12,15 @@ function M.highlight(name, foreground, background, gui, reload)
   if foreground and foreground ~= 'none' then
     table.insert(command, 'guifg=' .. foreground)
     if cterm_colors then
-      table.insert(command, 'ctermfg=' .. utils_colors.get_cterm_color(foreground))
+      table.insert(command,
+                   'ctermfg=' .. utils_colors.get_cterm_color(foreground))
     end
   end
   if background and background ~= 'none' then
     table.insert(command, 'guibg=' .. background)
     if cterm_colors then
-      table.insert(command, 'ctermbg=' .. utils_colors.get_cterm_color(background))
+      table.insert(command,
+                   'ctermbg=' .. utils_colors.get_cterm_color(background))
     end
   end
   if gui then
@@ -141,7 +143,7 @@ function M.format_highlight(is_focused, highlight_group)
                           section_highlight_map[highlight_group:match(
                               'lualine_(.)')]
   end
-  local highlight_name = highlight_group
+  local highlight_name
   if not is_focused then
     highlight_name = highlight_group .. [[_inactive]]
   else
@@ -199,8 +201,8 @@ function M.get_transitional_highlights(left_section_data, right_section_data,
     -- Create the highlight_group if needed
     -- Get colors from highlights
     -- using string.format to convert decimal to hexadecimal
-    local fg = utils.extract_highlight_colors(left_highlight_name, 'guibg')
-    local bg = utils.extract_highlight_colors(right_highlight_name, 'guibg')
+    local fg = utils.extract_highlight_colors(left_highlight_name, 'bg')
+    local bg = utils.extract_highlight_colors(right_highlight_name, 'bg')
     if not fg then fg = 'none' end
     if not bg then bg = 'none' end
     -- swap the bg and fg when reverse is true. As in that case highlight will
