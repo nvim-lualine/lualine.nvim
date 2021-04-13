@@ -251,14 +251,14 @@ end
 
 local function set_tabline()
   if next(config.tabline) ~= nil then
-    vim.o.tabline = "%!v:lua.require'lualine'.tabline()"
+    vim.o.tabline = '%!v:lua.require\'lualine\'.tabline()'
     vim.o.showtabline = 2
   end
 end
 
 local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
-    vim.o.statusline = "%!v:lua.require'lualine'.statusline()"
+    vim.o.statusline = '%!v:lua.require\'lualine\'.statusline()'
     vim.api.nvim_exec([[
     autocmd lualine WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
     autocmd lualine WinEnter,BufEnter * set statusline<
@@ -277,8 +277,4 @@ local function setup(user_config)
   set_tabline()
 end
 
-return {
-  setup = setup,
-  statusline = status_dispatch,
-  tabline = tabline,
-}
+return {setup = setup, statusline = status_dispatch, tabline = tabline}

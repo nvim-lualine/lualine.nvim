@@ -83,7 +83,8 @@ local Component = {
       self.status = highlight.component_format_highlight(
                         self.options.color_highlight) .. self.status
     elseif self.options.color_highlight_link then
-      self.status = '%#' .. self.options.color_highlight_link ..'#'.. self.status
+      self.status = '%#' .. self.options.color_highlight_link .. '#' ..
+                        self.status
     end
     self.status = self.status .. default_highlight
   end,
@@ -117,12 +118,14 @@ local Component = {
   -- variable to store component output for manupulation
   status = '',
   -- Actual function the updates a component . Must be overwritten with component functionality
+  -- luacheck: push no unused args
   update_status = function(self) end,
+  -- luacheck: pop
 
   -- Driver code of the class
   draw = function(self, default_highlight)
     self.status = ''
-    if self.options.condition ~= nil and self.options.condition() ~= true then 
+    if self.options.condition ~= nil and self.options.condition() ~= true then
       return self.status
     end
     local status = self:update_status()

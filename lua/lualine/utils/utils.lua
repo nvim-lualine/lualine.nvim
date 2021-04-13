@@ -2,26 +2,19 @@
 -- MIT license, see LICENSE for more details.
 local M = {}
 
--- Note for now only works for termguicolors scope can be background or foreground
+-- Note for now only works for termguicolors scope can be bg or fg or any other
+-- attr parameter like bold/italic/reverse
 function M.extract_highlight_colors(color_group, scope)
   if vim.fn.hlexists(color_group) == 0 then return nil end
-  local gui_colors = vim.api.nvim_get_hl_by_name(color_group, true)
-  local cterm_colors = vim.api.nvim_get_hl_by_name(color_group, false)
-  local color = {
-    ctermfg = cterm_colors.foreground,
-    ctermbg = cterm_colors.background
-  }
-  if gui_colors.background then
-    color.guibg = string.format('#%06x', gui_colors.background)
-    gui_colors.background = nil
+  local color = vim.api.nvim_get_hl_by_name(color_group, true)
+  if color.background ~= nil then
+    color.bg = string.format('#%06x', color.background)
+    color.background = nil
   end
-  if gui_colors.foreground then
-    color.guifg = string.format('#%06x', gui_colors.foreground)
-    gui_colors.foreground = nil
+  if color.foreground ~= nil then
+    color.fg = string.format('#%06x', color.foreground)
+    color.foreground = nil
   end
-  cterm_colors.background = nil
-  cterm_colors.foreground = nil
-  color = vim.tbl_extend('keep', color, gui_colors, cterm_colors)
   if scope then return color[scope] end
   return color
 end

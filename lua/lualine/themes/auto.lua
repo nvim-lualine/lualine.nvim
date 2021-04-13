@@ -15,10 +15,10 @@ local function getHi(scope, syntaxlist)
     if vim.fn.hlexists(highlight_name) ~= 0 then
       local color = utils.extract_highlight_colors(highlight_name)
       if color.reverse then
-        if scope == 'guibg' then
-          scope = 'guifg'
+        if scope == 'bg' then
+          scope = 'fg'
         else
-          scope = 'guibg'
+          scope = 'bg'
         end
       end
       if color[scope] then return color[scope] end
@@ -104,20 +104,20 @@ end
 
 -- Get the colors to create theme
 local colors = {
-  normal = getHi('guibg', {'PmenuSel', 'PmenuThumb', 'TabLineSel'}),
-  insert = getHi('guifg', {'String', 'MoreMsg'}),
-  replace = getHi('guifg', {'Number', 'Type'}),
-  visual = getHi('guifg', {'Special', 'Boolean', 'Constant'}),
-  command = getHi('guifg', {'Identifier'}),
-  back1 = getHi('guibg', {'Normal', 'StatusLineNC'}),
-  fore = getHi('guifg', {'Normal', 'StatusLine'}),
-  back2 = getHi('guibg', {'StatusLine'})
+  normal = getHi('bg', {'PmenuSel', 'PmenuThumb', 'TabLineSel'}),
+  insert = getHi('fg', {'String', 'MoreMsg'}),
+  replace = getHi('fg', {'Number', 'Type'}),
+  visual = getHi('fg', {'Special', 'Boolean', 'Constant'}),
+  command = getHi('fg', {'Identifier'}),
+  back1 = getHi('bg', {'Normal', 'StatusLineNC'}),
+  fore = getHi('fg', {'Normal', 'StatusLine'}),
+  back2 = getHi('bg', {'StatusLine'})
 }
 
 -- Change brightness of colors
 -- darken incase of light theme lighten incase of dark theme
 
-if get_color_brightness(utils.extract_highlight_colors('Normal', 'guibg')) > 0.5 then
+if get_color_brightness(utils.extract_highlight_colors('Normal', 'bg')) > 0.5 then
   brightness_modifier_parameter = -brightness_modifier_parameter
 end
 
