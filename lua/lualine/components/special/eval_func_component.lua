@@ -3,7 +3,9 @@ local EvalFuncComponent = require('lualine.component'):new()
 EvalFuncComponent.update_status = function(self)
   local component = self.options[1]
   local ok, status = pcall(EvalFuncComponent.eval_lua, component)
-  if not ok then status = EvalFuncComponent.vim_function(component) end
+  if not ok or status == 'nil' then
+    status = EvalFuncComponent.vim_function(component)
+  end
   return status
 end
 
