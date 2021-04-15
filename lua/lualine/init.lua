@@ -1,8 +1,9 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local utils_section = require('lualine.utils.section')
-local highlight = require('lualine.highlight')
 local config = require('lualine.defaults')
+local highlight = require('lualine.highlight')
+local loader = require('lualine.utils.loader')
+local utils_section = require('lualine.utils.section')
 
 local function apply_configuration(config_table)
   if not config_table then return end
@@ -54,58 +55,6 @@ local function check_single_separator()
             config.options.section_separators[1]
           }
     end
-  end
-end
-
-local function component_loader(component)
-  if type(component[1]) == 'function' then
-    return require 'lualine.components.special.functon_component':new(component)
-  end
-  if type(component[1]) == 'string' then
-    -- load the component
-    local ok, loaded_component = pcall(require,
-                                       'lualine.components.' .. component[1])
-    if ok then
-      component.component_name = component[1]
-      loaded_component = loaded_component:new(component)
-    elseif component[1]:find('[gvtwb]?o?:') == 1 then
-      loaded_component =
-          require 'lualine.components.special.vim_var_component':new(component)
-    else
-      loaded_component =
-          require 'lualine.components.special.eval_func_component':new(component)
-    end
-    return loaded_component
-  end
-end
-
-local function load_sections(sections)
-  for section_name, section in pairs(sections) do
-    for index, component in pairs(section) do
-      if type(component) == 'string' or type(component) == 'function' then
-        component = {component}
-      end
-      component.self = {}
-      component.self.section = section_name
-      -- apply default args
-      component = vim.tbl_extend('keep', component, config.options)
-      section[index] = component_loader(component)
-    end
-  end
-end
-
-local function load_components()
-  load_sections(config.sections)
-  load_sections(config.inactive_sections)
-  load_sections(config.tabline)
-end
-
-local function load_extensions()
-  for index, extension in pairs(config.extensions) do
-    local local_extension = require('lualine.extensions.' .. extension)
-    load_sections(local_extension.sections)
-    load_sections(local_extension.inactive_sections)
-    config.extensions[index] = local_extension
   end
 end
 
@@ -271,8 +220,8 @@ local function setup(user_config)
   apply_configuration(user_config)
   check_single_separator()
   setup_theme()
-  load_components()
-  load_extensions()
+  loader.load_components(config)
+  loader.load_extensions(config)
   set_statusline()
   set_tabline()
 end
