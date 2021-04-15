@@ -83,6 +83,11 @@ lualine try to match your colorscheme.
 ![materialvisual_cropped](https://user-images.githubusercontent.com/41551030/108648930-a1134380-74bc-11eb-8a24-f203bf05cfb3.png)
 ![materialreplace_cropped](https://user-images.githubusercontent.com/41551030/108648935-a2dd0700-74bc-11eb-9a4b-72eb1e2ab79e.png)
 
+### modus_vivendi
+![modus_vivendinormal cropped](https://user-images.githubusercontent.com/9327361/114389966-58176b80-9b9e-11eb-944e-1e0079527d74.png)
+![modus_vivendiinsert cropped](https://user-images.githubusercontent.com/9327361/114390000-606fa680-9b9e-11eb-97dd-ef5bbc23049a.png)
+![modus_vivendivisual cropped](https://user-images.githubusercontent.com/9327361/114390024-6796b480-9b9e-11eb-8be2-ca4cc893fbb2.png)
+![modus_vivendireplace cropped](https://user-images.githubusercontent.com/9327361/114390052-6d8c9580-9b9e-11eb-8dcb-469290a4c655.png)
 
 ### molokai
 ![molokainormal_cropped](https://user-images.githubusercontent.com/41551030/108648944-ab354200-74bc-11eb-85fd-71a40102384b.png)
