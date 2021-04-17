@@ -203,10 +203,10 @@ local function set_statusline()
 end
 
 local function setup(user_config)
-  if vim.g.lualine then
-    apply_configuration(vim.g.lualine)
-  elseif user_config then
+  if user_config then
     apply_configuration(user_config)
+  elseif vim.g.lualine then
+    apply_configuration(vim.g.lualine)
   end
   setup_theme()
   loader.load_components(config)
