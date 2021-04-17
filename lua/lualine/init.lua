@@ -5,8 +5,19 @@ local highlight = require('lualine.highlight')
 local loader = require('lualine.utils.loader')
 local utils_section = require('lualine.utils.section')
 
+-- change separator format 'x' or {'x'} to {'x', 'x'}
+local function fix_separators(separators)
+  if separators ~= nil then
+    if type(separators) == 'string' then
+      return {separators, separators}
+    elseif #separators == 1 then
+      return {separators[1], separators[1]}
+    end
+  end
+  return separators
+end
+
 local function apply_configuration(config_table)
-  if not config_table then return end
   local function parse_sections(section_group_name)
     if not config_table[section_group_name] then return end
     for section_name, section in pairs(config_table[section_group_name]) do
@@ -28,19 +39,6 @@ local function apply_configuration(config_table)
   parse_sections('inactive_sections')
   parse_sections('tabline')
   if config_table.extensions then config.extensions = config_table.extensions end
-end
-
-local function check_single_separator()
-  local function fix_separators(separators)
-    if separators ~= nil then
-      if type(separators) == 'string' then
-        return {separators, separators}
-      elseif #separators == 1 then
-        return {separators[1], separators[1]}
-      end
-    end
-    return separators
-  end
   config.options.section_separators = fix_separators(
                                           config.options.section_separators)
   config.options.component_separators = fix_separators(
@@ -205,9 +203,11 @@ local function set_statusline()
 end
 
 local function setup(user_config)
-  apply_configuration(vim.g.lualine)
-  apply_configuration(user_config)
-  check_single_separator()
+  if vim.g.lualine then
+    apply_configuration(vim.g.lualine)
+  elseif user_config then
+    apply_configuration(user_config)
+  end
   setup_theme()
   loader.load_components(config)
   loader.load_extensions(config)
