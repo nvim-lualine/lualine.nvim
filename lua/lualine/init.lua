@@ -31,31 +31,20 @@ local function apply_configuration(config_table)
 end
 
 local function check_single_separator()
-  local compoennt_separator = config.options.component_separators
-  local section_separator = config.options.section_separators
-  if config.options.component_separators ~= nil then
-    if type(config.options.component_separators) == 'string' then
-      config.options.component_separators =
-          {compoennt_separator, compoennt_separator}
-    elseif #config.options.component_separators == 1 then
-      config.options.component_separators =
-          {
-            config.options.component_separators[1],
-            config.options.component_separators[1]
-          }
+  local function fix_separators(separators)
+    if separators ~= nil then
+      if type(separators) == 'string' then
+        return {separators, separators}
+      elseif #separators == 1 then
+        return {separators[1], separators[1]}
+      end
     end
+    return separators
   end
-  if config.options.section_separators ~= nil then
-    if type(config.options.section_separators) == 'string' then
-      config.options.section_separators = {section_separator, section_separator}
-    elseif #config.options.section_separators == 1 then
-      config.options.section_separators =
-          {
-            config.options.section_separators[1],
-            config.options.section_separators[1]
-          }
-    end
-  end
+  config.options.section_separators = fix_separators(
+                                          config.options.section_separators)
+  config.options.component_separators = fix_separators(
+                                            config.options.component_separators)
 end
 
 local function statusline(sections, is_focused)
