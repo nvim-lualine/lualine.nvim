@@ -302,6 +302,7 @@ Option   | Default | Behaviour
 file_status | true | Displays file status (readonly status, modified status)
 full_path | false | Displays relative path if set to `true`, absolute path if set to `false`
 shorten | true | if `full_path` is true and `shorten` is `false` it shortens absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
+symbols | `{modified = '[+]', readonly = '[-]'}` | changes status symbols | table containing one or more symbols |
 
 * `diff` component options
 
@@ -311,7 +312,7 @@ colored | true | displays diff status in color if set to `true` |
 color_added | `DiffAdd` foreground color | changes diff's added section foreground color | color in `#rrggbb` format
 color_modified | `DiffChange` foreground color | changes diff's changed section foreground color | color in `#rrggbb` format
 color_removed | `DiffDelete` foreground color | changes diff's removed section foreground color | color in `#rrggbb` format
-symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbols | table containing on or more symbols |
+symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbols | table containing one or more symbols |
 
 
 Component specific options can only be set with component configs.
