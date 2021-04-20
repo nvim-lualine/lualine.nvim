@@ -409,6 +409,9 @@ In addition, some components have unique options.
       if `full_path` is `true` and `shorten` is `false` it shortens 
       absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
 
+    • symbols (`{modified = '[+]', readonly = '[-]'}`)
+      changes status symbols
+
   • fileformat~
     • icons_enabled (true)
       Whether to displays icon before component. Colors
