@@ -3,20 +3,20 @@
 local FileName = require('lualine.component'):new()
 
 FileName.new = function(self, options, child)
-  local new_instence = self._parent:new(options, child or FileName)
+  local new_instance = self._parent:new(options, child or FileName)
 
   -- setting defaults
-  if new_instence.options.file_status == nil then
-    new_instence.options.file_status = true
+  if new_instance.options.file_status == nil then
+    new_instance.options.file_status = true
   end
-  if new_instence.options.shorten == nil then
-    new_instence.options.shorten = true
+  if new_instance.options.shorten == nil then
+    new_instance.options.shorten = true
   end
-  if new_instence.options.full_path == nil then
-    new_instence.options.full_path = false
+  if new_instance.options.full_path == nil then
+    new_instance.options.full_path = false
   end
 
-  return new_instence
+  return new_instance
 end
 
 FileName.update_status = function(self)

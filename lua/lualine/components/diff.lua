@@ -22,43 +22,43 @@ Diff.default_colors = {
 
 -- Initializer
 Diff.new = function(self, options, child)
-  local new_instence = self._parent:new(options, child or Diff)
+  local new_instance = self._parent:new(options, child or Diff)
   local default_symbols = {added = '+', modified = '~', removed = '-'}
-  new_instence.options.symbols = vim.tbl_extend('force', default_symbols,
-                                                new_instence.options.symbols or
+  new_instance.options.symbols = vim.tbl_extend('force', default_symbols,
+                                                new_instance.options.symbols or
                                                     {})
-  if new_instence.options.colored == nil then
-    new_instence.options.colored = true
+  if new_instance.options.colored == nil then
+    new_instance.options.colored = true
   end
   -- apply colors
-  if not new_instence.options.color_added then
-    new_instence.options.color_added = utils.extract_highlight_colors('DiffAdd',
+  if not new_instance.options.color_added then
+    new_instance.options.color_added = utils.extract_highlight_colors('DiffAdd',
                                                                       'fg') or
                                            Diff.default_colors.added
   end
-  if not new_instence.options.color_modified then
-    new_instence.options.color_modified =
+  if not new_instance.options.color_modified then
+    new_instance.options.color_modified =
         utils.extract_highlight_colors('DiffChange', 'fg') or
             Diff.default_colors.modified
   end
-  if not new_instence.options.color_removed then
-    new_instence.options.color_removed =
+  if not new_instance.options.color_removed then
+    new_instance.options.color_removed =
         utils.extract_highlight_colors('DiffDelete', 'fg') or
             Diff.default_colors.removed
   end
 
   -- create highlights and save highlight_name in highlights table
-  if new_instence.options.colored then
-    new_instence.highlights = {
+  if new_instance.options.colored then
+    new_instance.highlights = {
       added = highlight.create_component_highlight_group(
-          {fg = new_instence.options.color_added}, 'diff_added',
-          new_instence.options),
+          {fg = new_instance.options.color_added}, 'diff_added',
+          new_instance.options),
       modified = highlight.create_component_highlight_group(
-          {fg = new_instence.options.color_modified}, 'diff_modified',
-          new_instence.options),
+          {fg = new_instance.options.color_modified}, 'diff_modified',
+          new_instance.options),
       removed = highlight.create_component_highlight_group(
-          {fg = new_instence.options.color_removed}, 'diff_removed',
-          new_instence.options)
+          {fg = new_instance.options.color_removed}, 'diff_removed',
+          new_instance.options)
     }
   end
 
@@ -68,7 +68,7 @@ Diff.new = function(self, options, child)
   autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
   ]], false)
 
-  return new_instence
+  return new_instance
 end
 
 -- Function that runs everytime statusline is updated
