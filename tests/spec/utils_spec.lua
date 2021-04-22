@@ -1,5 +1,7 @@
-local eq = assert.are.same
-local api = vim.api
+local helpers = require 'helpers'
+
+local eq = helpers.eq
+local meths = helpers.meths
 
 describe('utils', function()
   local utils = require('lualine.utils.utils')
@@ -14,11 +16,11 @@ describe('utils', function()
     eq(utils.highlight_exists('hl2'), false)
     -- highlights can be restored
     -- hl doesn't exist
-    assert.has_error(function() api.nvim_get_hl_by_name('hl1', true) end,
+    assert.has_error(function() meths.get_hl_by_name('hl1', true) end,
                      'Invalid highlight name: hl1')
     utils.reload_highlights()
     -- Now hl1 is created
-    eq(api.nvim_get_hl_by_name('hl1', true), {
+    eq(meths.get_hl_by_name('hl1', true), {
       foreground = tonumber(hl1[2]:sub(2, #hl1[2]), 16), -- convert rgb -> int
       background = tonumber(hl1[3]:sub(2, #hl1[3]), 16), -- convert rgb -> int
       italic = true
@@ -27,7 +29,7 @@ describe('utils', function()
     utils.clear_highlights()
     eq(utils.highlight_exists('hl1'), false)
     -- highlight group has been cleared
-    eq(api.nvim_get_hl_by_name('hl1', true), {[true] = 6})
+    eq(meths.get_hl_by_name('hl1', true), {[true] = 6})
   end)
 
   it('can retrive highlight groups', function()
@@ -55,14 +57,10 @@ describe('utils', function()
 end)
 
 describe('Cterm genarator', function()
-  local cterm = require'lualine.utils.cterm_colors'
+  local cterm = require 'lualine.utils.cterm_colors'
 
   it('can convert rgb to cterm', function()
-    local colors = {
-      ['#112233'] = 235,
-      ['#7928ae'] = 97,
-      ['#017bdc'] = 68,
-    }
+    local colors = {['#112233'] = 235, ['#7928ae'] = 97, ['#017bdc'] = 68}
     for rgb, ct in pairs(colors) do
       eq(cterm.get_cterm_color(rgb), tostring(ct))
     end
