@@ -1,4 +1,4 @@
-local helpers = require 'helpers'
+local helpers = require 'tests.helpers'
 
 local eq = helpers.eq
 local meths = helpers.meths
