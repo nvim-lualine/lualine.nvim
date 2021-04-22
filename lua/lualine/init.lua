@@ -4,6 +4,9 @@ local utils_section = require('lualine.utils.section')
 local highlight = require('lualine.highlight')
 local config = require('lualine.defaults')
 
+-- status of lualine
+local lualine_enabled
+
 local function apply_configuration(config_table)
   if not config_table then return end
   local function parse_sections(section_group_name)
@@ -275,6 +278,35 @@ local function setup(user_config)
   load_extensions()
   set_statusline()
   set_tabline()
+  lualine_enabled = true
 end
 
-return {setup = setup, statusline = status_dispatch, tabline = tabline}
+-- toggles lualine
+-- @param ensure boolean
+--     ensure == true ensures lualine is enabled
+--     ensure == false ensures lualine is disabled
+local function toggle(ensure)
+  if lualine_enabled then
+    if ensure == true then return end
+    -- clear active statusline
+    vim.o.statusline = ''
+    -- clear inactive statusline
+    for _, win in pairs(vim.api.nvim_list_wins()) do
+      vim.api.nvim_win_set_option(win, 'statusline', '')
+    end
+    -- clear tabline
+    if next(config.tabline) ~= nil then
+      vim.o.tabline = ''
+    end
+    -- clear auto commands
+    vim.cmd"autocmd! lualine"
+    lualine_enabled = false
+  else
+    if ensure == false then return end
+    set_statusline()
+    set_tabline()
+    lualine_enabled = true
+  end
+end
+
+return {setup = setup, statusline = status_dispatch, tabline = tabline, toggle=toggle}
