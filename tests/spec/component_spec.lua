@@ -207,7 +207,7 @@ describe('Component:', function()
 end)
 
 describe('Encoding component', function()
-  it ('works', function()
+  it('works', function()
     local opts = build_component_opts({
       component_separators = {'', ''},
       padding = 0
@@ -217,7 +217,7 @@ describe('Encoding component', function()
 end)
 
 describe('Fileformat component', function()
-  it ('works with icons', function()
+  it('works with icons', function()
     local opts = build_component_opts({
       component_separators = {'', ''},
       padding = 0
@@ -231,7 +231,7 @@ describe('Fileformat component', function()
     assert_component('fileformat', opts, '')
     vim.bo.fileformat = fmt
   end)
-  it ('works without icons', function()
+  it('works without icons', function()
     local opts = build_component_opts({
       component_separators = {'', ''},
       padding = 0,
@@ -247,7 +247,7 @@ describe('Hostname component', function()
     vim.loop.os_gethostname.returns('localhost')
     local opts = build_component_opts({
       component_separators = {'', ''},
-      padding = 0,
+      padding = 0
     })
     assert_component('hostname', opts, 'localhost')
     vim.loop.os_gethostname:revert()
@@ -258,7 +258,7 @@ describe('Location component', function()
   it('works', function()
     local opts = build_component_opts({
       component_separators = {'', ''},
-      padding = 0,
+      padding = 0
     })
     assert_component('location', opts, '%3l:%-2c')
   end)
@@ -268,7 +268,7 @@ describe('Progress component', function()
   it('works', function()
     local opts = build_component_opts({
       component_separators = {'', ''},
-      padding = 0,
+      padding = 0
     })
     assert_component('progress', opts, '%3P')
   end)
@@ -277,10 +277,10 @@ end)
 describe('Mode component', function()
   it('works', function()
     stub(vim.api, 'nvim_get_mode')
-    vim.api.nvim_get_mode.returns({mode='n', blocking=false})
+    vim.api.nvim_get_mode.returns({mode = 'n', blocking = false})
     local opts = build_component_opts({
       component_separators = {'', ''},
-      padding = 0,
+      padding = 0
     })
     assert_component('mode', opts, 'NORMAL')
     vim.api.nvim_get_mode:revert()
