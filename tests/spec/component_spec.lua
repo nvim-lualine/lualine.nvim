@@ -4,6 +4,7 @@ local eq = helpers.eq
 local neq = helpers.neq
 local assert_component = helpers.assert_component
 local build_component_opts = helpers.build_component_opts
+local stub = require 'luassert.stub'
 
 describe('Component:', function()
   it('can select separators', function()
@@ -33,7 +34,6 @@ describe('Component:', function()
     local color = {fg = '#224532', bg = '#892345'}
     local opts1 = build_component_opts({color = color})
     local hl = require 'lualine.highlight'
-    local stub = require 'luassert.stub'
     stub(hl, 'create_component_highlight_group')
     hl.create_component_highlight_group.returns('MyCompHl')
     local comp1 =
@@ -194,7 +194,6 @@ describe('Component:', function()
             color = {bg = '#230055', fg = '#223344'}
           })
       local hl = require 'lualine.highlight'
-      local stub = require 'luassert.stub'
       stub(hl, 'component_format_highlight')
       hl.component_format_highlight.returns('%#MyCompHl#')
       local comp2 =
@@ -207,3 +206,83 @@ describe('Component:', function()
   end)
 end)
 
+describe('Encoding component', function()
+  it ('works', function()
+    local opts = build_component_opts({
+      component_separators = {'', ''},
+      padding = 0
+    })
+    assert_component('encoding', opts, '%{strlen(&fenc)?&fenc:&enc}')
+  end)
+end)
+
+describe('Fileformat component', function()
+  it ('works with icons', function()
+    local opts = build_component_opts({
+      component_separators = {'', ''},
+      padding = 0
+    })
+    local fmt = vim.bo.fileformat
+    vim.bo.fileformat = 'unix'
+    assert_component('fileformat', opts, '')
+    vim.bo.fileformat = 'dos'
+    assert_component('fileformat', opts, '')
+    vim.bo.fileformat = 'mac'
+    assert_component('fileformat', opts, '')
+    vim.bo.fileformat = fmt
+  end)
+  it ('works without icons', function()
+    local opts = build_component_opts({
+      component_separators = {'', ''},
+      padding = 0,
+      icons_enabled = false
+    })
+    assert_component('fileformat', opts, vim.bo.fileformat)
+  end)
+end)
+
+describe('Hostname component', function()
+  it('works', function()
+    stub(vim.loop, 'os_gethostname')
+    vim.loop.os_gethostname.returns('localhost')
+    local opts = build_component_opts({
+      component_separators = {'', ''},
+      padding = 0,
+    })
+    assert_component('hostname', opts, 'localhost')
+    vim.loop.os_gethostname:revert()
+  end)
+end)
+
+describe('Location component', function()
+  it('works', function()
+    local opts = build_component_opts({
+      component_separators = {'', ''},
+      padding = 0,
+    })
+    assert_component('location', opts, '%3l:%-2c')
+  end)
+end)
+
+describe('Progress component', function()
+  it('works', function()
+    local opts = build_component_opts({
+      component_separators = {'', ''},
+      padding = 0,
+    })
+    assert_component('progress', opts, '%3P')
+  end)
+end)
+
+describe('Mode component', function()
+  it('works', function()
+    stub(vim.api, 'nvim_get_mode')
+    vim.api.nvim_get_mode.returns({mode='n', blocking=false})
+    local opts = build_component_opts({
+      component_separators = {'', ''},
+      padding = 0,
+    })
+    assert_component('mode', opts, 'NORMAL')
+    vim.api.nvim_get_mode:revert()
+  end)
+end)
