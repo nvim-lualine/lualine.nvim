@@ -28,8 +28,9 @@ function M.draw_section(section, highlight_name)
       status[component_no] = section[component_no]:strip_separator()
     end
     -- Remove component separator when color option is used to color background
-    if section[component_no].options.color and
-        section[component_no].options.color.bg then
+    if (type(section[component_no].options.color) == 'table' and
+        section[component_no].options.color.bg) or
+        type(section[component_no].options.color)  == 'string' then
       next_component_colored = true
       status[component_no] = section[component_no]:strip_separator()
     end
