@@ -23,7 +23,8 @@ FileName.new = function(self, options, child)
 end
 
 FileName.update_status = function(self)
-  local data = vim.fn.expand('%:p')
+  local data = vim.fn.expand('%')
+
   if not self.options.full_path then
     data = vim.fn.expand('%:t')
   elseif self.options.shorten then
