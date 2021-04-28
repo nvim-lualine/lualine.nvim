@@ -301,6 +301,7 @@ Option   | Default | Behaviour
 :------: | :------: | :----:
 file_status | true | Displays file status (readonly status, modified status)
 full_path | false | Displays relative path if set to `true`, absolute path if set to `false`
+max_chars | 40 | limits how many characters the path may use
 shorten | true | if `full_path` is true and `shorten` is `false` it shortens absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
 symbols | `{modified = '[+]', readonly = '[-]'}` | changes status symbols | table containing one or more symbols |
 

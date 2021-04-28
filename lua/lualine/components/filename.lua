@@ -18,6 +18,9 @@ FileName.new = function(self, options, child)
   if new_instance.options.full_path == nil then
     new_instance.options.full_path = false
   end
+  if new_instance.options.max_chars == nil then
+    new_instance.options.max_chars = 40
+  end
 
   return new_instance
 end
@@ -32,7 +35,7 @@ FileName.update_status = function(self)
 
   if data == '' then
     data = '[No Name]'
-  elseif vim.fn.winwidth(0) <= 84 or #data > 40 then
+  elseif vim.fn.winwidth(0) <= 84 or #data > self.options.max_chars then
     data = vim.fn.pathshorten(data)
   end
 
