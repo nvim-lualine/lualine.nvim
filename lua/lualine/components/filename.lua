@@ -2,6 +2,10 @@
 -- MIT license, see LICENSE for more details.
 local FileName = require('lualine.component'):new()
 
+function count(base, pattern)
+  return select(2, string.gsub(base, pattern, ""))
+end
+
 FileName.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or FileName)
   local default_symbols = {modified = '[+]', readonly = '[-]'}
@@ -24,6 +28,9 @@ end
 
 FileName.update_status = function(self)
   local data = vim.fn.expand('%:p')
+  local winW = vim.fn.winwidth(0)
+  local estimatedSpaceAvailable = winW - 40
+
   if not self.options.full_path then
     data = vim.fn.expand('%:t')
   elseif self.options.shorten then
@@ -32,8 +39,12 @@ FileName.update_status = function(self)
 
   if data == '' then
     data = '[No Name]'
-  elseif vim.fn.winwidth(0) <= 84 or #data > 40 then
-    data = vim.fn.pathshorten(data)
+  end
+
+  for i = 0, count(data, "/"), 1 do
+    if winW <= 84 or #data > estimatedSpaceAvailable then
+      data = data:gsub("([^/])[^/]+%/", "%1/", 1)
+    end
   end
 
   if self.options.file_status then
