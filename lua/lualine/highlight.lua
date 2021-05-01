@@ -203,11 +203,10 @@ function M.get_transitional_highlights(left_section_data, right_section_data,
     -- using string.format to convert decimal to hexadecimal
     local fg = utils.extract_highlight_colors(left_highlight_name, 'bg')
     local bg = utils.extract_highlight_colors(right_highlight_name, 'bg')
-    if not fg then fg = 'none' end
-    if not bg then bg = 'none' end
     -- swap the bg and fg when reverse is true. As in that case highlight will
     -- be placed before section
     if reverse then fg, bg = bg, fg end
+    if not fg or not bg then return '' end -- Color retrieval failed
     M.highlight(highlight_name, fg, bg)
   end
   return '%#' .. highlight_name .. '#'

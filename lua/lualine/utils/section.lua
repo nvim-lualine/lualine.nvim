@@ -39,7 +39,7 @@ function M.draw_section(section, highlight_name)
   -- Remove empty strings from status
   status = utils.list_shrink(status)
   local status_str = table.concat(status)
-  if status_str:find('%%#.*#') == 1 then
+  if status_str:find('%%#.*#') == 1 or #status_str == 0 then
     -- Don't prepend with old highlight when the component changes it imidiately
     return status_str
   else

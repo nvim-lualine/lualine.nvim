@@ -152,7 +152,7 @@ local function statusline(sections, is_focused)
       local current_section = status_builder[i]
       local next_section = status_builder[i + 1] or {}
       -- For 2nd half we need to show separator before section
-      if current_section.name > 'x' then
+      if current_section.name > 'x' and config.options.section_separators[2] ~= '' then
         local transitional_highlight = highlight.get_transitional_highlights(
                                            previous_section.data,
                                            current_section.data, true)
@@ -167,7 +167,7 @@ local function statusline(sections, is_focused)
       table.insert(status, status_builder[i].data)
 
       -- For 1st half we need to show separator after section
-      if current_section.name < 'c' then
+      if current_section.name < 'c' and config.options.section_separators[1] ~= ''  then
         local transitional_highlight = highlight.get_transitional_highlights(
                                            current_section.data,
                                            next_section.data)
