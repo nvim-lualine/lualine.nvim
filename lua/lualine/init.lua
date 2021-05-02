@@ -65,7 +65,8 @@ end
 
 local function component_loader(component)
   if type(component[1]) == 'function' then
-    return require 'lualine.components.special.function_component':new(component)
+    return
+        require 'lualine.components.special.function_component':new(component)
   end
   if type(component[1]) == 'string' then
     -- load the component
@@ -158,7 +159,8 @@ local function statusline(sections, is_focused)
       local current_section = status_builder[i]
       local next_section = status_builder[i + 1] or {}
       -- For 2nd half we need to show separator before section
-      if current_section.name > 'x' and config.options.section_separators[2] ~= '' then
+      if current_section.name > 'x' and config.options.section_separators[2] ~=
+          '' then
         local transitional_highlight = highlight.get_transitional_highlights(
                                            previous_section.data,
                                            current_section.data, true)
@@ -173,7 +175,8 @@ local function statusline(sections, is_focused)
       table.insert(status, status_builder[i].data)
 
       -- For 1st half we need to show separator after section
-      if current_section.name < 'c' and config.options.section_separators[1] ~= ''  then
+      if current_section.name < 'c' and config.options.section_separators[1] ~=
+          '' then
         local transitional_highlight = highlight.get_transitional_highlights(
                                            current_section.data,
                                            next_section.data)
@@ -211,6 +214,15 @@ local function get_extension_sections()
 end
 
 local function status_dispatch()
+  -- disable on specific filetypes
+  local current_ft = vim.api.nvim_buf_get_option(
+                         vim.fn.winbufnr(vim.g.statusline_winid), 'filetype')
+  for _, ft in pairs(config.options.disabled_filetypes) do
+    if ft == current_ft then
+      vim.wo.statusline = ''
+      return ''
+    end
+  end
   local extension_sections = get_extension_sections()
   if vim.g.statusline_winid == vim.fn.win_getid() then
     local sections = extension_sections.sections
@@ -273,9 +285,7 @@ local function set_statusline()
 end
 
 local function setup(user_config)
-  if not user_config then
-    apply_configuration(vim.g.lualine)
-  end
+  if not user_config then apply_configuration(vim.g.lualine) end
   apply_configuration(user_config)
   check_single_separator()
   setup_theme()
