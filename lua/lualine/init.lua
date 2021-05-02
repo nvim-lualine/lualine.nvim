@@ -2,10 +2,9 @@
 -- MIT license, see LICENSE for more details.
 local utils_section = require('lualine.utils.section')
 local highlight = require('lualine.highlight')
-local config = vim.deepcopy(require('lualine.defaults'))
+local config = {}
 
 local function apply_configuration(config_table)
-  if not config_table then return end
   local function parse_sections(section_group_name)
     if section_group_name ~= 'options' then
       config[section_group_name] = {} -- clear old config
@@ -273,10 +272,13 @@ local function set_statusline()
 end
 
 local function setup(user_config)
-  if not user_config then
+  if user_config then
+    apply_configuration(user_config)
+  elseif vim.g.lualine then
     apply_configuration(vim.g.lualine)
+  else
+    config =  vim.deepcopy(require('lualine.defaults'))
   end
-  apply_configuration(user_config)
   check_single_separator()
   setup_theme()
   load_components()
