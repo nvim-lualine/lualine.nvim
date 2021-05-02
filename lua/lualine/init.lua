@@ -273,7 +273,9 @@ local function set_statusline()
 end
 
 local function setup(user_config)
-  apply_configuration(vim.g.lualine)
+  if not user_config then
+    apply_configuration(vim.g.lualine)
+  end
   apply_configuration(user_config)
   check_single_separator()
   setup_theme()
