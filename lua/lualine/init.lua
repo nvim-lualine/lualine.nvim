@@ -85,18 +85,23 @@ local function component_loader(component)
 end
 
 local function load_sections(sections)
-  for section_name, section in pairs(sections) do
-    for index, component in pairs(section) do
-      if type(component) == 'string' or type(component) == 'function' then
-        component = {component}
+  local async_loader
+  async_loader = vim.loop.new_async(vim.schedule_wrap(function()
+    for section_name, section in pairs(sections) do
+      for index, component in pairs(section) do
+        if type(component) == 'string' or type(component) == 'function' then
+          component = {component}
+        end
+        component.self = {}
+        component.self.section = section_name
+        -- apply default args
+        component = vim.tbl_extend('keep', component, config.options)
+        section[index] = component_loader(component)
       end
-      component.self = {}
-      component.self.section = section_name
-      -- apply default args
-      component = vim.tbl_extend('keep', component, config.options)
-      section[index] = component_loader(component)
     end
-  end
+    async_loader:close()
+  end))
+  async_loader:send()
 end
 
 local function load_components()
@@ -227,31 +232,36 @@ end
 local function tabline() return statusline(config.tabline, true) end
 
 local function setup_theme()
-  local function get_theme_from_config()
-    local theme_name = config.options.theme
-    if type(theme_name) == 'string' then
-      local ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
-      if ok then return theme end
-    elseif type(theme_name) == 'table' then
-      -- use the provided theme as-is
-      return config.options.theme
+  local async_loader
+  async_loader = vim.loop.new_async(vim.schedule_wrap(function()
+    local function get_theme_from_config()
+      local theme_name = config.options.theme
+      if type(theme_name) == 'string' then
+        local ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
+        if ok then return theme end
+      elseif type(theme_name) == 'table' then
+        -- use the provided theme as-is
+        return config.options.theme
+      end
+      vim.api.nvim_echo({
+        {
+          'theme ' .. tostring(theme_name) .. ' not found, defaulting to gruvbox',
+          'ErrorMsg'
+        }
+      }, true, {})
+      return require 'lualine.themes.gruvbox'
     end
-    vim.api.nvim_echo({
-      {
-        'theme ' .. tostring(theme_name) .. ' not found, defaulting to gruvbox',
-        'ErrorMsg'
-      }
-    }, true, {})
-    return require 'lualine.themes.gruvbox'
-  end
-  local theme = get_theme_from_config()
-  highlight.create_highlight_groups(theme)
-  vim.api.nvim_exec([[
-  augroup lualine
-  autocmd!
-  autocmd ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
-  augroup END
-  ]], false)
+    local theme = get_theme_from_config()
+    highlight.create_highlight_groups(theme)
+    vim.api.nvim_exec([[
+    augroup lualine
+    autocmd!
+    autocmd ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
+    augroup END
+    ]], false)
+    async_loader:close()
+  end))
+  async_loader:send()
 end
 
 local function set_tabline()
@@ -265,8 +275,10 @@ local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     vim.o.statusline = '%!v:lua.require\'lualine\'.statusline()'
     vim.api.nvim_exec([[
-    autocmd lualine WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
-    autocmd lualine WinEnter,BufEnter * set statusline<
+  augroup lualine
+    autocmd WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
+    autocmd WinEnter,BufEnter * set statusline<
+  augroup END
     ]], false)
   end
 end
