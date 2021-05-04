@@ -3,6 +3,14 @@ local highlight = require 'lualine.highlight'
 -- Used to provide a unique id for each component
 local component_no = 1
 
+-- Here we're manupulation the require() cache so when we
+-- require('lualine.component.components') it will return this table
+-- It's hacky but package.loaded is documented in lua docs so from
+-- standereds point of view we're good ]. I think it's better than
+-- modifiying global state
+package.loaded['lualine.component.components'] = {}
+local components = package.loaded['lualine.component.components']
+
 local Component = {
   -- Creates a new component
   new = function(self, options, child)
@@ -17,6 +25,7 @@ local Component = {
         new_component.options.component_name = tostring(component_no)
       end
       new_component.component_no = component_no
+      components[component_no] = new_component
       new_component:set_separator()
       new_component:create_option_highlights()
     end
@@ -106,6 +115,7 @@ local Component = {
   end,
 
   strip_separator = function(self, default_highlight)
+    if self.status:find('%%{') == 1 then default_highlight = '' end
     if not default_highlight then default_highlight = '' end
     if not self.applied_separator then self.applied_separator = '' end
     self.status = self.status:sub(1, (#self.status -
@@ -123,7 +133,20 @@ local Component = {
   -- luacheck: pop
 
   -- Driver code of the class
-  draw = function(self, default_highlight)
+  draw = function(self, default_highlight, statusline_inactive)
+    -- Check if we are in in inactive state and need to enable inactive_eval
+    -- for this compoennt
+    if self.inactive_eval and not statusline_inactive and vim.g.statusline_winid ~=
+        vim.fn.win_getid() then
+      -- In that case we'll return a evaluator
+      self.status = '%' .. string.format(
+                        '{v:lua.require\'lualine.utils.utils\'.lualine_eval(%s,\'\',v:true)}',
+                        tostring(self.component_no))
+      -- Need to apply the highlights early as %{} escapes % :(
+      -- I'm not sure if it's a good idea. But don't have an option.
+      self:apply_highlights(default_highlight)
+      return self.status
+    end
     self.status = ''
     if self.options.condition ~= nil and self.options.condition() ~= true then
       return self.status
@@ -135,8 +158,13 @@ local Component = {
       self:apply_icon()
       self:apply_case()
       self:apply_padding()
-      self:apply_highlights(default_highlight)
-      self:apply_separator()
+      if not statusline_inactive then
+        -- incase of inactive eval highlight hasbeen pre applied
+        self:apply_highlights(default_highlight)
+      end
+      if not (statusline_inactive and self.last_conponent) then
+        self:apply_separator()
+      end
     end
     return self.status
   end

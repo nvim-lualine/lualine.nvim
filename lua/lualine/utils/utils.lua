@@ -56,4 +56,14 @@ function M.list_shrink(list)
   return new_list
 end
 
+-- Wvaluate a component
+function M.lualine_eval(id, ...)
+  local ok, components = pcall(require, 'lualine.component.components')
+  if ok and components then
+    return components[id]:draw(...)
+  else
+    return ''
+  end
+end
+
 return M

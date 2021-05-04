@@ -25,6 +25,7 @@ function M.draw_section(section, highlight_name)
       last_component_found = true
       status[component_no] = section[component_no]:strip_separator(
                                  highlight_name)
+      section[component_no].last_conponent = true
     end
     -- Remove component separator when color option is used in next component
     if next_component_colored then
