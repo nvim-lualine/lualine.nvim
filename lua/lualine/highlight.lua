@@ -1,11 +1,10 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local M = {}
-local utils_colors = require 'lualine.utils.cterm_colors'
+local cterm_colors
 local utils = require 'lualine.utils.utils'
 local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
 local active_theme = nil
-local cterm_colors = false
 
 function M.highlight(name, foreground, background, gui, reload)
   local command = {'highlight', name}
@@ -13,14 +12,14 @@ function M.highlight(name, foreground, background, gui, reload)
     table.insert(command, 'guifg=' .. foreground)
     if cterm_colors then
       table.insert(command,
-                   'ctermfg=' .. utils_colors.get_cterm_color(foreground))
+                   'ctermfg=' .. cterm_colors.get_cterm_color(foreground))
     end
   end
   if background and background ~= 'none' then
     table.insert(command, 'guibg=' .. background)
     if cterm_colors then
       table.insert(command,
-                   'ctermbg=' .. utils_colors.get_cterm_color(background))
+                   'ctermbg=' .. cterm_colors.get_cterm_color(background))
     end
   end
   if gui then
@@ -36,7 +35,9 @@ end
 function M.create_highlight_groups(theme)
   utils.clear_highlights()
   active_theme = theme
-  cterm_colors = not vim.o.termguicolors
+  if not vim.o.termguicolors then
+    cterm_colors = require 'lualine.utils.cterm_colors'
+  end
   for mode, sections in pairs(theme) do
     for section, colorscheme in pairs(sections) do
       local highlight_group_name = {'lualine', section, mode}
