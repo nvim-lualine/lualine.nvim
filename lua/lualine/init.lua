@@ -6,12 +6,6 @@ local config = {}
 
 local function apply_configuration(config_table)
   local function parse_sections(section_group_name)
-    if section_group_name ~= 'options' then
-      config[section_group_name] = {} -- clear old config
-    else
-      -- reset options
-      config.options = vim.deepcopy(require'lualine.defaults'.options)
-    end
     if not config_table[section_group_name] then return end
     for section_name, section in pairs(config_table[section_group_name]) do
       config[section_group_name][section_name] =
@@ -31,7 +25,7 @@ local function apply_configuration(config_table)
   parse_sections('sections')
   parse_sections('inactive_sections')
   parse_sections('tabline')
-  config.extensions = config_table.extensions or {}
+  if config_table.extensions then config.extensions = config_table.extensions end
 end
 
 local function check_single_separator()
@@ -296,13 +290,9 @@ local function set_statusline()
 end
 
 local function setup(user_config)
-  if user_config then
-    apply_configuration(user_config)
-  elseif vim.g.lualine then
-    apply_configuration(vim.g.lualine)
-  else
-    config =  vim.deepcopy(require('lualine.defaults'))
-  end
+  config = vim.deepcopy(require'lualine.defaults')
+  if user_config then apply_configuration(user_config)
+  elseif vim.g.lualine then apply_configuration(vim.g.lualine) end
   check_single_separator()
   setup_theme()
   load_components()
