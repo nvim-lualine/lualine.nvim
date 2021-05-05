@@ -1,4 +1,4 @@
-name: Lint Code Base
+name: CI
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Lint Code Base
+    name: CI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,4 +19,6 @@ jobs:
           sudo apt-get install luarocks
           sudo luarocks install luacheck
       - name: Lint
-        run: luacheck lua/
+        run: make lint
+      - name: Run test
+        run: make test
