@@ -4,7 +4,7 @@ local eq = helpers.eq
 local meths = helpers.meths
 local build_component_opts = helpers.build_component_opts
 
-describe('utils', function()
+describe('Utils', function()
   local utils = require('lualine.utils.utils')
 
   it('can save and restore highlights', function()
@@ -79,7 +79,7 @@ describe('Section genarator', function()
     eq('%#MyHl# test %#MyHl# test ', sec.draw_section(section, '%#MyHl#'))
   end)
 
-  it('can remove separators from component with custon colors', function()
+  it('can remove separators from component with custom colors', function()
     local opts = build_component_opts()
     local opts_colored = build_component_opts({color = 'MyColor'})
     local opts_colored2 = build_component_opts({color = {bg = '#223344'}})
