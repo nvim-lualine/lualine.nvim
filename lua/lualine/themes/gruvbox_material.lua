@@ -17,15 +17,15 @@ local colors = {
 
 local M = {
   normal = {
-    a = {fg = colors.fg1, bg = colors.color4, 'bold'},
+    a = {fg = colors.fg1, bg = colors.color4, gui = 'bold'},
     b = {fg = colors.fg2, bg = colors.color2},
     c = {fg = colors.fg2, bg = colors.color3}
   },
-  command = {a = {fg = colors.fg1, bg = colors.color5, 'bold'}},
+  command = {a = {fg = colors.fg1, bg = colors.color5, gui = 'bold'}},
   inactive = {a = {fg = colors.fg2, bg = colors.color2}},
-  insert = {a = {fg = colors.fg1, bg = colors.color6, 'bold'}},
-  replace = {a = {fg = colors.fg1, bg = colors.color7, 'bold'}},
-  terminal = {a = {fg = colors.fg1, bg = colors.color8, 'bold'}},
-  visual = {a = {fg = colors.fg1, bg = colors.color9, 'bold'}}
+  insert = {a = {fg = colors.fg1, bg = colors.color6, gui = 'bold'}},
+  replace = {a = {fg = colors.fg1, bg = colors.color7, gui = 'bold'}},
+  terminal = {a = {fg = colors.fg1, bg = colors.color8, gui = 'bold'}},
+  visual = {a = {fg = colors.fg1, bg = colors.color9, gui = 'bold'}}
 }
 return M
