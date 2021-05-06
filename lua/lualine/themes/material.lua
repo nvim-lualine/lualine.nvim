@@ -25,12 +25,12 @@ M.normal = {
 }
 
 M.insert = {
-  a = {fg = colors.bg, bg = colors.green, 'bold', gui = 'bold'},
+  a = {fg = colors.bg, bg = colors.green, gui = 'bold'},
   b = {fg = colors.fg, bg = colors.gray3}
 }
 
 M.visual = {
-  a = {fg = colors.bg, bg = colors.purple, 'bold', gui = 'bold'},
+  a = {fg = colors.bg, bg = colors.purple, gui = 'bold'},
   b = {fg = colors.fg, bg = colors.gray3}
 }
 

@@ -17,27 +17,27 @@ local colors = {
 
 local oceanicnext = {
   insert = {
-    a = {fg = colors.color0, bg = colors.color1, 'bold'},
+    a = {fg = colors.color0, bg = colors.color1, gui = 'bold'},
     b = {fg = colors.color0, bg = colors.color2},
     c = {fg = colors.color0, bg = colors.color3}
   },
   normal = {
-    a = {fg = colors.color0, bg = colors.color4, 'bold'},
+    a = {fg = colors.color0, bg = colors.color4, gui = 'bold'},
     b = {fg = colors.color0, bg = colors.color2},
     c = {fg = colors.color0, bg = colors.color3}
   },
   inactive = {
-    a = {fg = colors.color5, bg = colors.color2, 'bold'},
+    a = {fg = colors.color5, bg = colors.color2, gui = 'bold'},
     b = {fg = colors.color5, bg = colors.color3},
     c = {fg = colors.color2, bg = colors.color3}
   },
   visual = {
-    a = {fg = colors.color0, bg = colors.color6, 'bold'},
+    a = {fg = colors.color0, bg = colors.color6, gui = 'bold'},
     b = {fg = colors.color0, bg = colors.color2},
     c = {fg = colors.color0, bg = colors.color3}
   },
   replace = {
-    a = {fg = colors.color0, bg = colors.color7, 'bold'},
+    a = {fg = colors.color0, bg = colors.color7, gui = 'bold'},
     b = {fg = colors.color0, bg = colors.color2},
     c = {fg = colors.color0, bg = colors.color3}
   }

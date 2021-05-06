@@ -252,6 +252,7 @@ lower | false | Changes components to be lowercase | All
 format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | All
 condition | nil | Takes a function. The component is loaded if the function returns true otherwise not. It can be used to load some comoonents on specific cases. | All
 color | nil | Sets custom color for the component in this format<br></br>`color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`<br></br>The fields of color table are optional and default to theme <br></br>Color option can also be a string containing highlight group name `color = "WarningMsg"`. One neat trick set the color to highlight group name then change that highlight with :hi command to change color of that component at runtime. | All
+disabled_filetypes | {} | Disables lualine for specific filetypes | It works on entire statusline instead of on a single component
 
 #### Using global options
 Global options can be set in two ways. One is as part of options table in setup.
@@ -302,6 +303,7 @@ Option   | Default | Behaviour
 file_status | true | Displays file status (readonly status, modified status)
 full_path | false | Displays relative path if set to `true`, absolute path if set to `false`
 shorten | true | if `full_path` is true and `shorten` is `false` it shortens absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
+symbols | `{modified = '[+]', readonly = '[-]'}` | changes status symbols | table containing one or more symbols |
 
 * `diff` component options
 
@@ -311,7 +313,7 @@ colored | true | displays diff status in color if set to `true` |
 color_added | `DiffAdd` foreground color | changes diff's added section foreground color | color in `#rrggbb` format
 color_modified | `DiffChange` foreground color | changes diff's changed section foreground color | color in `#rrggbb` format
 color_removed | `DiffDelete` foreground color | changes diff's removed section foreground color | color in `#rrggbb` format
-symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbols | table containing on or more symbols |
+symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbols | table containing one or more symbols |
 
 
 Component specific options can only be set with component configs.
@@ -403,6 +405,7 @@ extensions = { 'fzf' }
           theme = 'gruvbox',
           section_separators = {'', ''},
           component_separators = {'', ''},
+          disabled_filetypes = {},
           icons_enabled = true,
         },
         sections = {
@@ -440,6 +443,7 @@ let g:lualine = {
     \  'theme' : 'gruvbox',
     \  'section_separators' : ['', ''],
     \  'component_separators' : ['', ''],
+    \  'disabled_filetypes' : [],
     \  'icons_enabled' : v:true,
     \},
     \'sections' : {

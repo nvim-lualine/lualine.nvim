@@ -295,6 +295,10 @@ option       (default_value)
     can parse and format the output as user wants.
     Supported components: all
 
+  • disabled_filetypes   ({})
+    Disables lualine for specific filetypes. It works on entire 
+    statusline instead of on a single component.
+
   Example:
     `lualine.options.icons_enabled = true`
 
@@ -409,6 +413,9 @@ In addition, some components have unique options.
       if `full_path` is `true` and `shorten` is `false` it shortens 
       absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
 
+    • symbols (`{modified = '[+]', readonly = '[-]'}`)
+      changes status symbols
+
   • fileformat~
     • icons_enabled (true)
       Whether to displays icon before component. Colors
@@ -519,6 +526,7 @@ Lua config example
           theme = 'gruvbox',
           section_separators = {'', ''},
           component_separators = {'', ''},
+          disabled_filetypes = {},
           icons_enabled = true,
         },
         sections = {
@@ -550,6 +558,7 @@ Vimscript config example
         \  'theme' : 'gruvbox',
         \  'section_separators' : ['', ''],
         \  'component_separators' : ['', ''],
+        \  'disabled_filetypes' : [],
         \  'icons_enabled' : v:true,
         \},
         \'sections' : {

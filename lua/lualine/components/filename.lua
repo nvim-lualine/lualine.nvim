@@ -3,20 +3,23 @@
 local FileName = require('lualine.component'):new()
 
 FileName.new = function(self, options, child)
-  local new_instence = self._parent:new(options, child or FileName)
+  local new_instance = self._parent:new(options, child or FileName)
+  local default_symbols = {modified = '[+]', readonly = '[-]'}
+  new_instance.options.symbols =
+    vim.tbl_extend('force', default_symbols, new_instance.options.symbols or {})
 
   -- setting defaults
-  if new_instence.options.file_status == nil then
-    new_instence.options.file_status = true
+  if new_instance.options.file_status == nil then
+    new_instance.options.file_status = true
   end
-  if new_instence.options.shorten == nil then
-    new_instence.options.shorten = true
+  if new_instance.options.shorten == nil then
+    new_instance.options.shorten = true
   end
-  if new_instence.options.full_path == nil then
-    new_instence.options.full_path = false
+  if new_instance.options.full_path == nil then
+    new_instance.options.full_path = false
   end
 
-  return new_instence
+  return new_instance
 end
 
 FileName.update_status = function(self)
@@ -35,9 +38,9 @@ FileName.update_status = function(self)
 
   if self.options.file_status then
     if vim.bo.modified then
-      data = data .. '[+]'
+      data = data .. self.options.symbols.modified
     elseif vim.bo.modifiable == false or vim.bo.readonly == true then
-      data = data .. '[-]'
+      data = data .. self.options.symbols.readonly
     end
   end
   return data
