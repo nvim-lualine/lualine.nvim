@@ -7,9 +7,6 @@ function M.draw_section(section, highlight_name)
   local status = {}
   for _, component in pairs(section) do
     -- load components into status table
-    if type(component) ~= 'table' or (type(component) == 'table' and not component.component_no) then
-      return '' -- unknown element in section. section posibly not yet loaded
-    end
     table.insert(status, component:draw(highlight_name))
   end
 
