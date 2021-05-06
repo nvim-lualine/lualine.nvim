@@ -3,48 +3,9 @@
 local highlight = require('lualine.highlight')
 local loader = require('lualine.utils.loader')
 local utils_section = require('lualine.utils.section')
+local config_module = require('lualine.config')
 
 local config = {}
-
--- change separator format 'x' or {'x'} to {'x', 'x'}
-local function fix_separators(separators)
-  if separators ~= nil then
-    if type(separators) == 'string' then
-      return {separators, separators}
-    elseif #separators == 1 then
-      return {separators[1], separators[1]}
-    end
-  end
-  return separators
-end
-
-local function apply_configuration(config_table)
-  local function parse_sections(section_group_name)
-    if not config_table[section_group_name] then return end
-    for section_name, section in pairs(config_table[section_group_name]) do
-      config[section_group_name][section_name] =
-          config_table[section_group_name][section_name]
-      if type(section) == 'table' then
-        for _, component in pairs(section) do
-          if type(component) == 'table' and type(component[2]) == 'table' then
-            local options = component[2]
-            component[2] = nil
-            for key, val in pairs(options) do component[key] = val end
-          end
-        end
-      end
-    end
-  end
-  parse_sections('options')
-  parse_sections('sections')
-  parse_sections('inactive_sections')
-  parse_sections('abline')
-  if config_table.extensions then config.extensions = config_table.extensions end
-  config.options.section_separators = fix_separators(
-                                          config.options.section_separators)
-  config.options.component_separators = fix_separators(
-                                            config.options.component_separators)
-end
 
 local function statusline(sections, is_focused)
   local function create_status_builder()
@@ -169,18 +130,18 @@ end
 
 local function tabline() return statusline(config.tabline, true) end
 
-local function setup_theme()
+local function setup_theme(_config)
   local async_loader
   async_loader = vim.loop.new_async(vim.schedule_wrap(
                                         function()
         local function get_theme_from_config()
-          local theme_name = config.options.theme
+          local theme_name = _config.options.theme
           if type(theme_name) == 'string' then
             local ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
             if ok then return theme end
           elseif type(theme_name) == 'table' then
             -- use the provided theme as-is
-            return config.options.theme
+            return _config.options.theme
           end
           vim.api.nvim_echo({
             {
@@ -223,13 +184,12 @@ local function set_statusline()
 end
 
 local function setup(user_config)
-  config = vim.deepcopy(require 'lualine.defaults')
   if user_config then
-    apply_configuration(user_config)
+    config = config_module.apply_configuration(user_config)
   elseif vim.g.lualine then
-    apply_configuration(vim.g.lualine)
+    config = config_module.apply_configuration(vim.g.lualine)
   end
-  setup_theme()
+  setup_theme(config)
   loader.load_components(config)
   loader.load_extensions(config)
   set_statusline()

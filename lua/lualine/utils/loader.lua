@@ -2,7 +2,8 @@
 -- MIT license, see LICENSE for more details.
 local function component_loader(component)
   if type(component[1]) == 'function' then
-    return require 'lualine.components.special.function_component':new(component)
+    return
+        require 'lualine.components.special.function_component':new(component)
   end
   if type(component[1]) == 'string' then
     -- load the component
