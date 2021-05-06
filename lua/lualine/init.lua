@@ -261,7 +261,6 @@ local function setup_theme()
     highlight.create_highlight_groups(theme)
     vim.api.nvim_exec([[
     augroup lualine
-    autocmd!
     autocmd ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
     augroup END
     ]], false)
@@ -282,6 +281,7 @@ local function set_statusline()
     vim.o.statusline = '%!v:lua.require\'lualine\'.statusline()'
     vim.api.nvim_exec([[
   augroup lualine
+    autocmd!
     autocmd WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
     autocmd WinEnter,BufEnter * set statusline<
   augroup END
