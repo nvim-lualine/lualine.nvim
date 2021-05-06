@@ -66,7 +66,6 @@ local function apply_configuration(config_table)
                                           config.options.section_separators)
   config.options.component_separators = fix_separators(
                                             config.options.component_separators)
-  return config
 end
 
-return {apply_configuration = apply_configuration}
+return {config = config, apply_configuration = apply_configuration}

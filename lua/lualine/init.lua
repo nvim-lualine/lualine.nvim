@@ -5,7 +5,7 @@ local loader = require('lualine.utils.loader')
 local utils_section = require('lualine.utils.section')
 local config_module = require('lualine.config')
 
-local config = {}
+local config = config_module.config
 
 local function statusline(sections, is_focused)
   local function create_status_builder()
@@ -185,9 +185,9 @@ end
 
 local function setup(user_config)
   if user_config then
-    config = config_module.apply_configuration(user_config)
+    config_module.apply_configuration(user_config)
   elseif vim.g.lualine then
-    config = config_module.apply_configuration(vim.g.lualine)
+    config_module.apply_configuration(vim.g.lualine)
   end
   setup_theme(config)
   loader.load_components(config)
