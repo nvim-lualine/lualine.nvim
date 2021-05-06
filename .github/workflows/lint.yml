@@ -2,9 +2,8 @@ name: Linting
 
 on: 
   push:
-    branches-ignore: [master]
+    branches: [master]
   pull_request:
-    types: [opened, reopened]
 
 jobs:
   build:
