@@ -154,10 +154,10 @@ local function setup_theme()
         local theme = get_theme_from_config()
         highlight.create_highlight_groups(theme)
         vim.api.nvim_exec([[
-    augroup lualine
-    autocmd ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
-    augroup END
-    ]], false)
+          augroup lualine
+            autocmd ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
+          augroup END
+          ]], false)
         async_loader:close()
       end))
   async_loader:send()
@@ -174,11 +174,11 @@ local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     vim.o.statusline = '%!v:lua.require\'lualine\'.statusline()'
     vim.api.nvim_exec([[
-  augroup lualine
-    autocmd!
-    autocmd WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
-    autocmd WinEnter,BufEnter * set statusline<
-  augroup END
+      augroup lualine
+        autocmd!
+        autocmd WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
+        autocmd WinEnter,BufEnter * set statusline<
+      augroup END
     ]], false)
   end
 end

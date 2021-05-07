@@ -88,24 +88,21 @@ describe('Section genarator', function()
         require 'lualine.themes.gruvbox')
     local section = {
       require('lualine.components.special.function_component'):new(opts),
-      require('lualine.components.special.function_component'):new(
-          opts_colored),
+      require('lualine.components.special.function_component'):new(opts_colored),
       require('lualine.components.special.function_component'):new(opts)
     }
     -- Removes separator on string color
     eq('%#MyHl# test %#MyHl#%#MyColor# test %#MyHl# test ',
        sec.draw_section(section, '%#MyHl#'))
-    section[2] =
-        require('lualine.components.special.function_component'):new(
-            opts_colored2)
+    section[2] = require('lualine.components.special.function_component'):new(
+                     opts_colored2)
     local highlight_name =
         '%#lualine_c_' .. section[2].options.component_name .. '_normal#'
     -- Removes separator on color with bg
     eq('%#MyHl# test %#MyHl#' .. highlight_name .. ' test %#MyHl# test ',
        sec.draw_section(section, '%#MyHl#'))
-    section[2] =
-        require('lualine.components.special.function_component'):new(
-            opts_colored3)
+    section[2] = require('lualine.components.special.function_component'):new(
+                     opts_colored3)
     local highlight_name2 =
         '%#lualine_c_' .. section[2].options.component_name .. '_normal#'
     -- Doesn't remove separator on color without bg
