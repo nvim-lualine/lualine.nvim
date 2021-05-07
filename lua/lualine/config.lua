@@ -33,7 +33,7 @@ local function fix_separators(separators)
   if separators ~= nil then
     if type(separators) == 'string' then
       return {separators, separators}
-    elseif #separators == 1 then
+    elseif type(separators) == 'table' and #separators == 1 then
       return {separators[1], separators[1]}
     end
   end
