@@ -170,7 +170,7 @@ function M.get_transitional_highlights(left_section_data, right_section_data,
   -- Grab the last highlighter of left section
   if left_section_data then
     -- extract highlight_name from .....%#highlight_name#
-    left_highlight_name = left_section_data:match('.*%%#(.-)#')
+    left_highlight_name = left_section_data:match('.*%%#(.-)#.-')
   else
     -- When right section us unavailable default to lualine_c
     left_highlight_name = append_mode('lualine_c')
@@ -180,7 +180,7 @@ function M.get_transitional_highlights(left_section_data, right_section_data,
   end
   if right_section_data then
     -- extract highlight_name from %#highlight_name#....
-    right_highlight_name = right_section_data:match('%%#(.-)#.*')
+    right_highlight_name = right_section_data:match('.-%%#(.-)#.*')
   else
     -- When right section us unavailable default to lualine_c
     right_highlight_name = append_mode('lualine_c')
@@ -210,6 +210,7 @@ function M.get_transitional_highlights(left_section_data, right_section_data,
     -- be placed before section
     if reverse then fg, bg = bg, fg end
     if not fg or not bg then return '' end -- Color retrieval failed
+    if bg == fg then return '' end -- Separatoe won't be visible anyway
     M.highlight(highlight_name, fg, bg)
   end
   return '%#' .. highlight_name .. '#'
