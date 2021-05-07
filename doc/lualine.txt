@@ -296,7 +296,7 @@ option       (default_value)
     Supported components: all
 
   • disabled_filetypes   ({})
-    Disables lualine for specific filetypes. It works on entire 
+    Disables lualine for specific filetypes. It works on entire
     statusline instead of on a single component.
 
   Example:
@@ -325,7 +325,7 @@ option       (default_value)
     `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`
     the members of color table are optional and default to theme
     Color option can also be a string containing highlight group name >
-    color = "WarningMsg"` 
+    color = "WarningMsg"`
 <    One neat trick set the color to highlight group name then change
     that highlight with :hi command to change color of that component
     at runtime.
@@ -410,7 +410,7 @@ In addition, some components have unique options.
       Displays relative path if set to `true`, absolute path if set to `false`
 
     • shorten  (true)
-      if `full_path` is `true` and `shorten` is `false` it shortens 
+      if `full_path` is `true` and `shorten` is `false` it shortens
       absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
 
     • symbols (`{modified = '[+]', readonly = '[-]'}`)
