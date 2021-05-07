@@ -6,7 +6,7 @@ local highlight = require('lualine.highlight')
 -- Returns formated string for a section
 function M.draw_section(section, section_name, is_focused)
   local highlight_name = highlight.format_highlight(is_focused,
-                                                              'lualine_'..section_name)
+                                                    'lualine_' .. section_name)
 
   local status = {}
   for _, component in pairs(section) do
@@ -25,18 +25,17 @@ function M.draw_section(section, section_name, is_focused)
 
   -- Check through components to see when component separator need to be removed
   for component_no = #section, 1, -1 do
-    if #status[component_no] > 0 then
-      first_component_no = component_no
-    end
+    if #status[component_no] > 0 then first_component_no = component_no end
     -- Remove component separator with highlight for last component
     if not last_component_found and #status[component_no] > 0 then
       last_component_found = true
       status[component_no] = section[component_no]:strip_separator()
       if section_name < 'c' then
         if type(section[first_component_no].options.separator) ~= 'table' and
-          section[1].options.section_separators[1] ~= '' then
-          status[component_no] = string.format('%s%%S{%s}',status[component_no], 
-            section[1].options.section_separators[1])
+            section[1].options.section_separators[1] ~= '' then
+          status[component_no] = string.format('%s%%S{%s}',
+                                               status[component_no], section[1]
+                                                   .options.section_separators[1])
         end
       end
     end

@@ -7,40 +7,97 @@ local config_module = require('lualine.config')
 
 local config = config_module.config
 
-local function statusline(sections, is_focused)
-  local function create_status_builder()
-    -- The sequence sections should maintain
-    local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
-    local status_builder = {}
-    for _, section_name in ipairs(section_sequence) do
-      if sections['lualine_' .. section_name] then
-        -- insert highlight+components of this section to status_builder
-        local section_data = utils_section.draw_section(
-                                 sections['lualine_' .. section_name],
-                                 section_name, is_focused)
-        if #section_data > 0 then
-          table.insert(status_builder,
-                       {name = section_name, data = section_data})
-        end
-      end
-    end
-    return status_builder
-  end
+local function apply_transitional_separators(previous_section, current_section,
+                                             next_section)
 
   local function fill_section_separator(prev, next, sep, reverse)
     if #sep == 0 then return 0 end
-    local transitional_highlight = highlight.get_transitional_highlights(
-                                       prev, next, reverse)
-    -- if not transitional_highlight or #transitional_highlight == 0 then
-    -- end
+    local transitional_highlight = highlight.get_transitional_highlights(prev,
+                                                                         next,
+                                                                         reverse)
     if transitional_highlight and #transitional_highlight > 0 then
-      return transitional_highlight..sep
+      return transitional_highlight .. sep
     else
       return ''
     end
   end
+
+  -- variable to track separators position
+  local sep_pos = 1
+
+  -- %s{sep} is marker for left separator and
+  -- %S{sep} is marker for right separator
+  -- Apply left separator
+  while sep_pos do
+    -- get what the separator char
+    local sep = current_section.data:match('%%s{(.-)}', sep_pos)
+    -- Get where separator starts from
+    sep_pos = current_section.data:find('%%s{.-}', sep_pos)
+    if not sep or not sep_pos then break end
+    -- part of section before separator . -1 since we don't want the %
+    local prev = current_section.data:sub(1, sep_pos - 1)
+    -- part of section after separator. 4 is length of "%s{}"
+    local nxt = current_section.data:sub(sep_pos + 4 + #sep)
+    -- prev might not exist when separator is the first element of section
+    -- use previous section as prev
+    if not prev or #prev == 0 or sep_pos == 1 then
+      prev = previous_section.data
+    end
+    if prev ~= previous_section.data then
+      -- Since the section isn't suppose to be highlighted with separators
+      -- separators highlight extract the last highlight and place it between
+      -- separator and section
+      local last_hl = prev:match('.*%#(.-)#.-')
+      current_section.data = prev ..
+                                 fill_section_separator(prev, nxt, sep, false) ..
+                                 '%#' .. last_hl .. '#' .. nxt
+    else
+      current_section.data = fill_section_separator(prev, nxt, sep, true) .. nxt
+    end
+  end
+
+  -- Reset pos for right separator
+  sep_pos = 1
+  -- Apply right separator
+  while sep_pos do
+    local sep = current_section.data:match('%%S{(.-)}', sep_pos)
+    sep_pos = current_section.data:find('%%S{.-}', sep_pos)
+    if not sep or not sep_pos then break end
+    local prev = current_section.data:sub(1, sep_pos - 1)
+    local nxt = current_section.data:sub(sep_pos + 4 + #sep)
+    if not nxt or #nxt == 0 or sep_pos == #current_section.data then
+      nxt = next_section.data
+    end
+    if nxt ~= next_section.data then
+      current_section.data = prev ..
+                                 fill_section_separator(prev, nxt, sep, false) ..
+                                 nxt
+    else
+      current_section.data = prev ..
+                                 fill_section_separator(prev, nxt, sep, false)
+    end
+    sep_pos = sep_pos + 4 + #sep
+  end
+  return current_section.data
+end
+
+local function statusline(sections, is_focused)
+
   -- status_builder stores statusline without section_separators
-  local status_builder = create_status_builder()
+  -- The sequence sections should maintain
+  local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
+  local status_builder = {}
+  for _, section_name in ipairs(section_sequence) do
+    if sections['lualine_' .. section_name] then
+      -- insert highlight+components of this section to status_builder
+      local section_data = utils_section.draw_section(
+                               sections['lualine_' .. section_name],
+                               section_name, is_focused)
+      if #section_data > 0 then
+        table.insert(status_builder, {name = section_name, data = section_data})
+      end
+    end
+  end
 
   -- Actual statusline
   local status = {}
@@ -52,47 +109,16 @@ local function statusline(sections, is_focused)
                    highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
       half_passed = true
     end
-      -- component separator needs to have fg = current_section.bg
-      -- and bg = adjacent_section.bg
-      local previous_section = status_builder[i - 1] or {}
-      local current_section = status_builder[i]
-      local next_section = status_builder[i + 1] or {}
+    -- component separator needs to have fg = current_section.bg
+    -- and bg = adjacent_section.bg
+    local previous_section = status_builder[i - 1] or {}
+    local current_section = status_builder[i]
+    local next_section = status_builder[i + 1] or {}
 
-      -- local splited_section = vim.split(current_section.data, '%%s{.-}')
-      -- if splited_section[1] == '' then table.remove(splited_section, 1) end
-      local count = 1
-      while count do
-        local sep = current_section.data:match('%%s{(.-)}', count)
-        if not sep then break end
-        count = current_section.data:find('%%s{.-}', count)
-        if not count then break end
-        local prev = current_section.data:sub(1, count - 1)
-        local nxt = current_section.data:sub(count+4+#sep)
-        if not prev or #prev == 0 or count == 1 then prev = previous_section.data end
-        if prev ~= previous_section.data then
-          local last_hl = prev:match('.*%#(.-)#.-')
-          current_section.data = prev .. fill_section_separator(prev, nxt, sep, false)..'%#'..last_hl..'#'..nxt
-        else
-          current_section.data = fill_section_separator(prev, nxt, sep, true)..nxt
-        end
-      end
-      count = 1
-     while count do
-       local sep = current_section.data:match('%%S{(.-)}', count)
-       if not sep then break end
-       count = current_section.data:find('%%S{.-}', count)
-       if not count then break end
-       local prev = current_section.data:sub(1, count - 1)
-       local nxt = current_section.data:sub(count+4+#sep)
-       if not nxt or #nxt == 0 or count == #current_section.data then nxt = next_section.data end
-       if nxt ~= next_section.data then
-         current_section.data = prev .. fill_section_separator(prev, nxt, sep, false)..nxt
-       else
-         current_section.data = prev .. fill_section_separator(prev, nxt, sep, false)
-       end
-       count = count+4+#sep
-     end
-    table.insert(status, current_section.data)
+    local section = apply_transitional_separators(previous_section,
+                                                  current_section, next_section)
+
+    table.insert(status, section)
   end
   -- incase none of x,y,z was configured lets not fill whole statusline with a,b,c section
   if not half_passed then
