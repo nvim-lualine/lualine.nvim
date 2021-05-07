@@ -190,8 +190,7 @@ local function setup(user_config)
     config_module.apply_configuration(vim.g.lualine)
   end
   setup_theme()
-  loader.load_components(config)
-  loader.load_extensions(config)
+  loader.load_all(config)
   set_statusline()
   set_tabline()
 end

@@ -59,4 +59,9 @@ local function load_extensions(config)
   end
 end
 
-return {load_components = load_components, load_extensions = load_extensions}
+local function load_all(config)
+  load_components(config)
+  load_extensions(config)
+end
+
+return {load_all = load_all}
