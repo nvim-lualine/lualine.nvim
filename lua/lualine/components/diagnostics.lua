@@ -36,17 +36,20 @@ Diagnostics.new = function(self, options, child)
   -- apply colors
   if not new_diagnostics.options.color_error then
     new_diagnostics.options.color_error =
-        utils.extract_highlight_colors('DiffDelete', 'fg') or
+        utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg') or
+            utils.extract_highlight_colors('DiffDelete', 'fg') or
             Diagnostics.default_colors.error
   end
   if not new_diagnostics.options.color_warn then
     new_diagnostics.options.color_warn =
-        utils.extract_highlight_colors('DiffText', 'fg') or
+        utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg') or
+            utils.extract_highlight_colors('DiffText', 'fg') or
             Diagnostics.default_colors.warn
   end
   if not new_diagnostics.options.color_info then
     new_diagnostics.options.color_info =
-        utils.extract_highlight_colors('Normal', 'fg') or
+        utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg') or
+            utils.extract_highlight_colors('Normal', 'fg') or
             Diagnostics.default_colors.info
   end
 
