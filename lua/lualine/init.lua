@@ -130,18 +130,18 @@ end
 
 local function tabline() return statusline(config.tabline, true) end
 
-local function setup_theme(_config)
+local function setup_theme()
   local async_loader
   async_loader = vim.loop.new_async(vim.schedule_wrap(
                                         function()
         local function get_theme_from_config()
-          local theme_name = _config.options.theme
+          local theme_name = config.options.theme
           if type(theme_name) == 'string' then
             local ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
             if ok then return theme end
           elseif type(theme_name) == 'table' then
             -- use the provided theme as-is
-            return _config.options.theme
+            return config.options.theme
           end
           vim.api.nvim_echo({
             {
@@ -189,7 +189,7 @@ local function setup(user_config)
   elseif vim.g.lualine then
     config_module.apply_configuration(vim.g.lualine)
   end
-  setup_theme(config)
+  setup_theme()
   loader.load_components(config)
   loader.load_extensions(config)
   set_statusline()
