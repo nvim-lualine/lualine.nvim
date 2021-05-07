@@ -73,8 +73,8 @@ describe('Section genarator', function()
   it('can draw', function()
     local opts = build_component_opts()
     local section = {
-      require('lua.lualine.components.special.function_component'):new(opts),
-      require('lua.lualine.components.special.function_component'):new(opts)
+      require('lualine.components.special.function_component'):new(opts),
+      require('lualine.components.special.function_component'):new(opts)
     }
     eq('%#MyHl# test %#MyHl# test ', sec.draw_section(section, '%#MyHl#'))
   end)
@@ -87,16 +87,16 @@ describe('Section genarator', function()
     require'lualine.highlight'.create_highlight_groups(
         require 'lualine.themes.gruvbox')
     local section = {
-      require('lua.lualine.components.special.function_component'):new(opts),
-      require('lua.lualine.components.special.function_component'):new(
+      require('lualine.components.special.function_component'):new(opts),
+      require('lualine.components.special.function_component'):new(
           opts_colored),
-      require('lua.lualine.components.special.function_component'):new(opts)
+      require('lualine.components.special.function_component'):new(opts)
     }
     -- Removes separator on string color
     eq('%#MyHl# test %#MyHl#%#MyColor# test %#MyHl# test ',
        sec.draw_section(section, '%#MyHl#'))
     section[2] =
-        require('lua.lualine.components.special.function_component'):new(
+        require('lualine.components.special.function_component'):new(
             opts_colored2)
     local highlight_name =
         '%#lualine_c_' .. section[2].options.component_name .. '_normal#'
@@ -104,7 +104,7 @@ describe('Section genarator', function()
     eq('%#MyHl# test %#MyHl#' .. highlight_name .. ' test %#MyHl# test ',
        sec.draw_section(section, '%#MyHl#'))
     section[2] =
-        require('lua.lualine.components.special.function_component'):new(
+        require('lualine.components.special.function_component'):new(
             opts_colored3)
     local highlight_name2 =
         '%#lualine_c_' .. section[2].options.component_name .. '_normal#'
