@@ -102,4 +102,78 @@ describe('config parsing', function()
       end)
     end)
   end)
+
+  describe('sections', function()
+    it('default', function()
+      local config = {}
+      config_module.apply_configuration(config)
+      local lualine_default_sections = {
+        lualine_a = {'mode'},
+        lualine_b = {'branch'},
+        lualine_c = {'filename'},
+        lualine_x = {'encoding', 'fileformat', 'filetype'},
+        lualine_y = {'progress'},
+        lualine_z = {'location'}
+      }
+      eq(config_module.config.sections, lualine_default_sections)
+    end)
+    it('custom', function()
+      local custom_sections = {
+        lualine_a = {{'mode', lower = true}},
+        lualine_b = {'branch', {'branch', lower = true}},
+        lualine_c = nil,
+        lualine_x = {}
+      }
+      local expected_sections = {
+        lualine_a = {{'mode', lower = true}},
+        lualine_b = {'branch', {'branch', lower = true}},
+        lualine_c = {'filename'},
+        lualine_x = {},
+        lualine_y = {'progress'},
+        lualine_z = {'location'}
+      }
+      local config = {sections = custom_sections}
+      config_module.apply_configuration(config)
+      eq(config_module.config.sections, expected_sections)
+    end)
+  end)
+
+  describe('inactive_sections', function() end)
+
+  describe('tabline', function()
+    it('default', function()
+      local config = {}
+      config_module.apply_configuration(config)
+      eq(config_module.config.tabline, {})
+    end)
+    it('custom', function()
+      local custom_sections = {
+        lualine_a = {{'mode', lower = true}},
+        lualine_b = {'branch', {'branch', lower = true}},
+        lualine_c = nil,
+        lualine_x = {}
+      }
+      local expected_sections = {
+        lualine_a = {{'mode', lower = true}},
+        lualine_b = {'branch', {'branch', lower = true}},
+        lualine_x = {}
+      }
+      local config = {tabline = custom_sections}
+      config_module.apply_configuration(config)
+      eq(config_module.config.tabline, expected_sections)
+    end)
+  end)
+
+  describe('extensions', function()
+    it('default', function()
+      local config = {options = {}}
+      config_module.apply_configuration(config)
+      eq(config_module.config.extensions, {})
+    end)
+    it('custom', function()
+      local config = {extensions = {'fugitive'}}
+      config_module.apply_configuration(config)
+      eq(config_module.config.extensions, {'fugitive'})
+    end)
+  end)
 end)

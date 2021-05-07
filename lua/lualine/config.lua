@@ -60,7 +60,7 @@ local function apply_configuration(config_table)
   parse_sections('options')
   parse_sections('sections')
   parse_sections('inactive_sections')
-  parse_sections('abline')
+  parse_sections('tabline')
   if config_table.extensions then config.extensions = config_table.extensions end
   config.options.section_separators = fix_separators(
                                           config.options.section_separators)
