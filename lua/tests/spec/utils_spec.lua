@@ -1,6 +1,6 @@
 local helpers = require 'tests.helpers'
 
-local eq = helpers.eq
+local eq = assert.are.same
 local meths = helpers.meths
 local build_component_opts = helpers.build_component_opts
 
