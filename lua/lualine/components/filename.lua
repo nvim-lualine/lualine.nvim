@@ -5,8 +5,9 @@ local FileName = require('lualine.component'):new()
 FileName.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or FileName)
   local default_symbols = {modified = '[+]', readonly = '[-]'}
-  new_instance.options.symbols =
-    vim.tbl_extend('force', default_symbols, new_instance.options.symbols or {})
+  new_instance.options.symbols = vim.tbl_extend('force', default_symbols,
+                                                new_instance.options.symbols or
+                                                    {})
 
   -- setting defaults
   if new_instance.options.file_status == nil then

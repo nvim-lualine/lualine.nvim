@@ -1,8 +1,7 @@
-local luassert = require 'luassert'
+local eq = assert.are.same
+
 local M = {}
 
-M.eq = luassert.are.same
-M.neq = luassert.are_not.same
 M.meths = setmetatable({}, {
   __index = function(_, key) return vim.api['nvim_' .. key] end
 })
@@ -12,7 +11,7 @@ M.assert_component = function(component, opts, result)
   -- for testing global options
   if component == nil then component = 'special.function_component' end
   local comp = require('lualine.components.' .. component):new(opts)
-  M.eq(result, comp:draw(opts.hl))
+  eq(result, comp:draw(opts.hl))
 end
 
 -- sets defaults for component options

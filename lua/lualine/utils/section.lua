@@ -7,7 +7,8 @@ function M.draw_section(section, highlight_name)
   local status = {}
   for _, component in pairs(section) do
     -- load components into status table
-    if type(component) ~= 'table' or (type(component) == 'table' and not component.component_no) then
+    if type(component) ~= 'table' or
+        (type(component) == 'table' and not component.component_no) then
       return '' -- unknown element in section. section posibly not yet loaded
     end
     table.insert(status, component:draw(highlight_name))
@@ -33,7 +34,7 @@ function M.draw_section(section, highlight_name)
     -- Remove component separator when color option is used to color background
     if (type(section[component_no].options.color) == 'table' and
         section[component_no].options.color.bg) or
-        type(section[component_no].options.color)  == 'string' then
+        type(section[component_no].options.color) == 'string' then
       next_component_colored = true
       status[component_no] = section[component_no]:strip_separator()
     end
