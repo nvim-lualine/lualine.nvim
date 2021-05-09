@@ -89,7 +89,7 @@ All available themes are listed in [THEMES.md](./THEMES.md)
 Please create a pr if you managed to port a popular theme before me, [here is how to do it](./CONTRIBUTING.md).
 
 <details>
-<summary>Tweeking themes</summary>
+<summary>Tweaking themes</summary>
 
 You like a theme but would like to tweek some colors.
 You can do that in your config easily.
@@ -217,7 +217,7 @@ variables to be used as  a component too. Even require statements can be used to
 One liner functions can be inlined by utilizeing this .
 
 For exmaple this will show day of the week.
-And 2nd one will display current value of global variabke data.
+And 2nd one will display current value of global variable data.
 
 ```lua
 sections = {lualine_c = {"os.data('%a')", 'data'}}
