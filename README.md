@@ -305,6 +305,12 @@ full_path | false | Displays relative path if set to `true`, absolute path if se
 shorten | true | if `full_path` is true and `shorten` is `false` it shortens absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
 symbols | `{modified = '[+]', readonly = '[-]'}` | changes status symbols | table containing one or more symbols |
 
+* `filetype` component options
+
+Option   | Default | Behaviour
+:------: | :------: | :----:
+colored | true | Displays filetype icon in color if set to `true`
+
 * `diff` component options
 
 Option   | Default | Behaviour | Format
@@ -414,7 +420,7 @@ extensions = { 'fzf' }
           lualine_c = { {'filename', file_status = true} },
           lualine_x = { 'encoding', 'fileformat', 'filetype' },
           lualine_y = { 'progress' },
-          lualine_z = { 'location'  },
+          lualine_z = { 'location' },
         },
         inactive_sections = {
           lualine_a = {  },
@@ -422,7 +428,7 @@ extensions = { 'fzf' }
           lualine_c = { 'filename' },
           lualine_x = { 'location' },
           lualine_y = {  },
-          lualine_z = {   }
+          lualine_z = {  }
         },
         extensions = { 'fzf' }
       }

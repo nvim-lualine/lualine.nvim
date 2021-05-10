@@ -241,6 +241,55 @@ describe('Fileformat component', function()
   end)
 end)
 
+describe('Filetype component', function()
+  local filetype
+
+  before_each(function()
+    filetype = vim.bo.filetype
+    vim.bo.filetype = 'lua'
+  end)
+
+  after_each(function()
+    vim.bo.filetype = filetype
+  end)
+
+  it('does not add icon when library unavailable', function()
+    local opts = build_component_opts({
+      component_separators = {'', ''},
+      padding = 0
+    })
+    assert_component('filetype', opts, 'lua')
+  end)
+
+  it('colors nvim-web-devicons icons', function()
+    package.loaded['nvim-web-devicons'] = {
+      get_icon = function()
+        return '*', 'test_highlight_group'
+      end
+    }
+
+    local hl = require 'lualine.highlight'
+    local utils = require 'lualine.utils.utils'
+    stub(hl, 'create_component_highlight_group')
+    stub(utils, 'extract_highlight_colors')
+    hl.create_component_highlight_group.returns('MyCompHl')
+    utils.extract_highlight_colors.returns('#000')
+
+    local opts = build_component_opts({
+      component_separators = {'', ''},
+      padding = 0
+    })
+    assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# lua')
+    assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
+    opts.icon = '*'
+    assert.stub(hl.create_component_highlight_group).was_called_with(
+      {fg = '#000'}, 'test_highlight_group', opts
+    )
+    hl.create_component_highlight_group:revert()
+    utils.extract_highlight_colors:revert()
+  end)
+end)
+
 describe('Hostname component', function()
   it('works', function()
     stub(vim.loop, 'os_gethostname')
