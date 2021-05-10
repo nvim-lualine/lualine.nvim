@@ -59,7 +59,8 @@ end
 
 local function component_loader(component)
   if type(component[1]) == 'function' then
-    return require 'lualine.components.special.function_component':new(component)
+    return
+        require 'lualine.components.special.function_component':new(component)
   end
   if type(component[1]) == 'string' then
     -- load the component
@@ -260,8 +261,8 @@ local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     vim.o.statusline = '%!v:lua.require\'lualine\'.statusline()'
     vim.api.nvim_exec([[
-    autocmd lualine WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
-    autocmd lualine WinEnter,BufEnter * set statusline<
+    autocmd lualine VimResized, WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
+    autocmd lualine VimResized, WinEnter,BufEnter * set statusline<
     ]], false)
   end
 end
