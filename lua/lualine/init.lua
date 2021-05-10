@@ -261,8 +261,9 @@ local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     vim.o.statusline = '%!v:lua.require\'lualine\'.statusline()'
     vim.api.nvim_exec([[
-    autocmd lualine VimResized, WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
-    autocmd lualine VimResized, WinEnter,BufEnter * set statusline<
+    autocmd lualine WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
+    autocmd lualine WinEnter,BufEnter * set statusline<
+    autocmd lualine VimResized * redrawstatus
     ]], false)
   end
 end
