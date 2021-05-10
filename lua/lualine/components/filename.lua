@@ -2,48 +2,49 @@
 -- MIT license, see LICENSE for more details.
 local FileName = require('lualine.component'):new()
 
-function count(base, pattern)
-  return select(2, string.gsub(base, pattern, ""))
+local function count(base, pattern)
+  return select(2, string.gsub(base, pattern, ''))
 end
 
 FileName.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or FileName)
   local default_symbols = {modified = '[+]', readonly = '[-]'}
-  new_instance.options.symbols =
-    vim.tbl_extend('force', default_symbols, new_instance.options.symbols or {})
+  new_instance.options.symbols = vim.tbl_extend('force', default_symbols,
+                                                new_instance.options.symbols or
+                                                    {})
 
   -- setting defaults
   if new_instance.options.file_status == nil then
     new_instance.options.file_status = true
   end
-  if new_instance.options.shorten == nil then
-    new_instance.options.shorten = true
-  end
-  if new_instance.options.full_path == nil then
-    new_instance.options.full_path = false
+  if new_instance.options.path == nil then new_instance.options.path = 0 end
+  if new_instance.options.full_path or new_instance.options.shorten then
+    vim.api.nvim_err_writeln(
+        [[ filetype component configuration changed, see :h lualine_custom_options ]])
   end
 
   return new_instance
 end
 
 FileName.update_status = function(self)
-  local data = vim.fn.expand('%:p')
-  local winW = vim.fn.winwidth(0)
-  local estimatedSpaceAvailable = winW - 40
-
-  if not self.options.full_path then
-    data = vim.fn.expand('%:t')
-  elseif self.options.shorten then
+  -- just filename
+  local data = vim.fn.expand('%:t')
+  -- relative path
+  if self.options.path and self.options.path == 1 then
     data = vim.fn.expand('%:~:.')
   end
-
-  if data == '' then
-    data = '[No Name]'
+  -- absolute path
+  if self.options.path and self.options.path == 2 then
+    data = vim.fn.expand('%:p')
   end
+  if data == '' then data = '[No Name]' end
 
-  for i = 0, count(data, "/"), 1 do
-    if winW <= 84 or #data > estimatedSpaceAvailable then
-      data = data:gsub("([^/])[^/]+%/", "%1/", 1)
+  local windwidth = vim.fn.winwidth(0)
+  local estimated_space_available = 40
+  local path_separator = package.config:sub(1, 1)
+  for _ = 0, count(data, path_separator), 1 do
+    if windwidth <= 84 or #data > estimated_space_available then
+      data = data:gsub('([^/])[^/]+%/', '%1/', 1)
     end
   end
 
