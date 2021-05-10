@@ -6,6 +6,13 @@ local function count(base, pattern)
   return select(2, string.gsub(base, pattern, ''))
 end
 
+local function shorten_path(path, path_separator)
+  -- ('([^/])[^/]+%/', '%1/', 1)
+  return path:gsub(
+             '([^' .. path_separator .. '])[^' .. path_separator .. ']+%' ..
+                 path_separator, '%1' .. path_separator, 1)
+end
+
 FileName.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or FileName)
   local default_symbols = {modified = '[+]', readonly = '[-]'}
@@ -44,7 +51,7 @@ FileName.update_status = function(self)
   local path_separator = package.config:sub(1, 1)
   for _ = 0, count(data, path_separator), 1 do
     if windwidth <= 84 or #data > estimated_space_available then
-      data = data:gsub('([^/])[^/]+%/', '%1/', 1)
+      data = shorten_path(data, path_separator)
     end
   end
 
