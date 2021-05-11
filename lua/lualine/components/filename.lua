@@ -33,16 +33,18 @@ FileName.new = function(self, options, child)
 end
 
 FileName.update_status = function(self)
-  -- just filename
-  local data = vim.fn.expand('%:t')
-  -- relative path
-  if self.options.path and self.options.path == 1 then
+  local data
+  if self.options.path == 1 then
+    -- relative path
     data = vim.fn.expand('%:~:.')
-  end
-  -- absolute path
-  if self.options.path and self.options.path == 2 then
+  elseif self.options.path == 2 then
+    -- absolute path
     data = vim.fn.expand('%:p')
+  else
+    -- just filename
+    data = vim.fn.expand('%:t')
   end
+
   if data == '' then data = '[No Name]' end
 
   local windwidth = vim.fn.winwidth(0)
