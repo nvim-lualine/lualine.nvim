@@ -144,7 +144,7 @@ local function setup_theme()
             return config.options.theme
           end
           vim.api.nvim_err_writeln('theme ' .. tostring(theme_name) ..
-                                ' not found, defaulting to gruvbox')
+                                       ' not found, defaulting to gruvbox')
           return require 'lualine.themes.gruvbox'
         end
         local theme = get_theme_from_config()
