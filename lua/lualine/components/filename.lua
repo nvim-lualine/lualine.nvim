@@ -2,6 +2,16 @@
 -- MIT license, see LICENSE for more details.
 local FileName = require('lualine.component'):new()
 
+local function count(base, pattern)
+  return select(2, string.gsub(base, pattern, ''))
+end
+
+local function shorten_path(path, sep)
+  -- ('([^/])[^/]+%/', '%1/', 1)
+  return path:gsub(
+             string.format('([^%s])[^%s]+%%%s', sep, sep, sep), '%1' .. sep, 1)
+end
+
 FileName.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or FileName)
   local default_symbols = {modified = '[+]', readonly = '[-]'}
@@ -13,28 +23,37 @@ FileName.new = function(self, options, child)
   if new_instance.options.file_status == nil then
     new_instance.options.file_status = true
   end
-  if new_instance.options.shorten == nil then
-    new_instance.options.shorten = true
-  end
-  if new_instance.options.full_path == nil then
-    new_instance.options.full_path = false
+  if new_instance.options.path == nil then new_instance.options.path = 0 end
+  if new_instance.options.full_path or new_instance.options.shorten then
+    vim.api.nvim_err_writeln(
+        [[ filetype component configuration changed, see :h lualine_custom_options ]])
   end
 
   return new_instance
 end
 
 FileName.update_status = function(self)
-  local data = vim.fn.expand('%:p')
-  if not self.options.full_path then
-    data = vim.fn.expand('%:t')
-  elseif self.options.shorten then
+  local data
+  if self.options.path == 1 then
+    -- relative path
     data = vim.fn.expand('%:~:.')
+  elseif self.options.path == 2 then
+    -- absolute path
+    data = vim.fn.expand('%:p')
+  else
+    -- just filename
+    data = vim.fn.expand('%:t')
   end
 
-  if data == '' then
-    data = '[No Name]'
-  elseif vim.fn.winwidth(0) <= 84 or #data > 40 then
-    data = vim.fn.pathshorten(data)
+  if data == '' then data = '[No Name]' end
+
+  local windwidth = vim.fn.winwidth(0)
+  local estimated_space_available = 40
+  local path_separator = package.config:sub(1, 1)
+  for _ = 0, count(data, path_separator) do
+    if windwidth <= 84 or #data > estimated_space_available then
+      data = shorten_path(data, path_separator)
+    end
   end
 
   if self.options.file_status then
