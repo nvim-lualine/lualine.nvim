@@ -300,8 +300,7 @@ symbols | `{error = ' ', warn = ' ', info = ' '}` or `{error = 'E:', wa
 Option   | Default | Behaviour
 :------: | :------: | :----:
 file_status | true | Displays file status (readonly status, modified status)
-full_path | false | Displays relative path if set to `true`, absolute path if set to `false`
-shorten | true | if `full_path` is true and `shorten` is `false` it shortens absolute path `aaa/bbb/ccc/file` to `a/b/c/file`
+path | 0 | filename `path` option: 0 = just filename, 1 = relative path, 2 = absolute path
 symbols | `{modified = '[+]', readonly = '[-]'}` | changes status symbols | table containing one or more symbols |
 
 * `diff` component options
