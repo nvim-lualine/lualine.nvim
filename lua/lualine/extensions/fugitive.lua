@@ -9,8 +9,6 @@ end
 
 M.sections = {lualine_a = {fugitive_branch}, lualine_z = {'location'}}
 
-M.inactive_sections = vim.deepcopy(M.sections)
-
 M.filetypes = {'fugitive'}
 
 return M

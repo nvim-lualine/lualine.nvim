@@ -91,17 +91,14 @@ end
 
 -- check if any extension matches the filetype and return proper sections
 local function get_extension_sections()
-  local sections, inactive_sections = nil, nil
   for _, extension in ipairs(config.extensions) do
     for _, filetype in ipairs(extension.filetypes) do
-      if vim.bo.filetype == filetype then
-        sections = extension.sections
-        inactive_sections = extension.inactive_sections
-        break
-      end
+      local current_ft = vim.api.nvim_buf_get_option(
+                             vim.fn.winbufnr(vim.g.statusline_winid), 'filetype')
+      if current_ft == filetype then return extension.sections end
     end
   end
-  return {sections = sections, inactive_sections = inactive_sections}
+  return nil
 end
 
 local function status_dispatch()
@@ -116,15 +113,15 @@ local function status_dispatch()
   end
   local extension_sections = get_extension_sections()
   if vim.g.statusline_winid == vim.fn.win_getid() then
-    local sections = extension_sections.sections
-    if sections == nil then sections = config.sections end
-    return statusline(sections, true)
-  else
-    local inactive_sections = extension_sections.inactive_sections
-    if inactive_sections == nil then
-      inactive_sections = config.inactive_sections
+    if extension_sections ~= nil then
+      return statusline(extension_sections, true)
     end
-    return statusline(inactive_sections, false)
+    return statusline(config.sections, true)
+  else
+    if extension_sections ~= nil then
+      return statusline(extension_sections, false)
+    end
+    return statusline(config.inactive_sections, false)
   end
 end
 
@@ -173,7 +170,7 @@ local function set_statusline()
       augroup lualine
         autocmd!
         autocmd WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
-        autocmd WinEnter,BufEnter * set statusline<
+        autocmd BufWinEnter,WinEnter,BufEnter * set statusline<
         autocmd VimResized * redrawstatus
       augroup END
     ]], false)

@@ -54,7 +54,6 @@ local function load_extensions(config)
   for index, extension in pairs(config.extensions) do
     local local_extension = require('lualine.extensions.' .. extension)
     load_sections(local_extension.sections, config.options)
-    load_sections(local_extension.inactive_sections, config.options)
     config.extensions[index] = local_extension
   end
 end
