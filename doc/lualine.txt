@@ -295,6 +295,10 @@ option       (default_value)
     can parse and format the output as user wants.
     Supported components: all
 
+  • disabled_filetypes   ({})
+    Disables lualine for specific filetypes. It works on entire
+    statusline instead of on a single component.
+
   Example:
     `lualine.options.icons_enabled = true`
 
@@ -321,7 +325,7 @@ option       (default_value)
     `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`
     the members of color table are optional and default to theme
     Color option can also be a string containing highlight group name >
-    color = "WarningMsg"` 
+    color = "WarningMsg"`
 <    One neat trick set the color to highlight group name then change
     that highlight with :hi command to change color of that component
     at runtime.
@@ -518,6 +522,7 @@ Lua config example
           theme = 'gruvbox',
           section_separators = {'', ''},
           component_separators = {'', ''},
+          disabled_filetypes = {},
           icons_enabled = true,
         },
         sections = {
@@ -549,6 +554,7 @@ Vimscript config example
         \  'theme' : 'gruvbox',
         \  'section_separators' : ['', ''],
         \  'component_separators' : ['', ''],
+        \  'disabled_filetypes' : [],
         \  'icons_enabled' : v:true,
         \},
         \'sections' : {

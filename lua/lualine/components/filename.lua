@@ -6,11 +6,10 @@ local function count(base, pattern)
   return select(2, string.gsub(base, pattern, ''))
 end
 
-local function shorten_path(path, path_separator)
+local function shorten_path(path, sep)
   -- ('([^/])[^/]+%/', '%1/', 1)
   return path:gsub(
-             '([^' .. path_separator .. '])[^' .. path_separator .. ']+%' ..
-                 path_separator, '%1' .. path_separator, 1)
+             string.format('([^%s])[^%s]+%%%s', sep, sep, sep), '%1' .. sep, 1)
 end
 
 FileName.new = function(self, options, child)
@@ -34,22 +33,24 @@ FileName.new = function(self, options, child)
 end
 
 FileName.update_status = function(self)
-  -- just filename
-  local data = vim.fn.expand('%:t')
-  -- relative path
-  if self.options.path and self.options.path == 1 then
+  local data
+  if self.options.path == 1 then
+    -- relative path
     data = vim.fn.expand('%:~:.')
-  end
-  -- absolute path
-  if self.options.path and self.options.path == 2 then
+  elseif self.options.path == 2 then
+    -- absolute path
     data = vim.fn.expand('%:p')
+  else
+    -- just filename
+    data = vim.fn.expand('%:t')
   end
+
   if data == '' then data = '[No Name]' end
 
   local windwidth = vim.fn.winwidth(0)
   local estimated_space_available = 40
   local path_separator = package.config:sub(1, 1)
-  for _ = 0, count(data, path_separator), 1 do
+  for _ = 0, count(data, path_separator) do
     if windwidth <= 84 or #data > estimated_space_available then
       data = shorten_path(data, path_separator)
     end

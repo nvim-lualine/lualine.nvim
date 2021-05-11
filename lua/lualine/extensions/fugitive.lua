@@ -2,9 +2,14 @@
 -- MIT license, see LICENSE for more details.
 local M = {}
 
-M.sections = {lualine_a = {'FugitiveHead'}, lualine_z = {'location'}}
+local function fugitive_branch()
+    local icon = '' -- e0a0
+    return icon .. ' ' .. vim.fn.FugitiveHead()
+end
 
-M.inactive_sections = M.sections
+M.sections = {lualine_a = {fugitive_branch}, lualine_z = {'location'}}
+
+M.inactive_sections = vim.deepcopy(M.sections)
 
 M.filetypes = {'fugitive'}
 

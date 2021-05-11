@@ -7,6 +7,10 @@ function M.draw_section(section, highlight_name)
   local status = {}
   for _, component in pairs(section) do
     -- load components into status table
+    if type(component) ~= 'table' or
+        (type(component) == 'table' and not component.component_no) then
+      return '' -- unknown element in section. section posibly not yet loaded
+    end
     table.insert(status, component:draw(highlight_name))
   end
 
@@ -30,7 +34,7 @@ function M.draw_section(section, highlight_name)
     -- Remove component separator when color option is used to color background
     if (type(section[component_no].options.color) == 'table' and
         section[component_no].options.color.bg) or
-        type(section[component_no].options.color)  == 'string' then
+        type(section[component_no].options.color) == 'string' then
       next_component_colored = true
       status[component_no] = section[component_no]:strip_separator()
     end
@@ -39,7 +43,7 @@ function M.draw_section(section, highlight_name)
   -- Remove empty strings from status
   status = utils.list_shrink(status)
   local status_str = table.concat(status)
-  if status_str:find('%%#.*#') == 1 then
+  if status_str:find('%%#.*#') == 1 or #status_str == 0 then
     -- Don't prepend with old highlight when the component changes it imidiately
     return status_str
   else

@@ -89,7 +89,7 @@ All available themes are listed in [THEMES.md](./THEMES.md)
 Please create a pr if you managed to port a popular theme before me, [here is how to do it](./CONTRIBUTING.md).
 
 <details>
-<summary>Tweeking themes</summary>
+<summary>Tweaking themes</summary>
 
 You like a theme but would like to tweek some colors.
 You can do that in your config easily.
@@ -217,7 +217,7 @@ variables to be used as  a component too. Even require statements can be used to
 One liner functions can be inlined by utilizeing this .
 
 For exmaple this will show day of the week.
-And 2nd one will display current value of global variabke data.
+And 2nd one will display current value of global variable data.
 
 ```lua
 sections = {lualine_c = {"os.data('%a')", 'data'}}
@@ -252,6 +252,7 @@ lower | false | Changes components to be lowercase | All
 format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | All
 condition | nil | Takes a function. The component is loaded if the function returns true otherwise not. It can be used to load some comoonents on specific cases. | All
 color | nil | Sets custom color for the component in this format<br></br>`color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`<br></br>The fields of color table are optional and default to theme <br></br>Color option can also be a string containing highlight group name `color = "WarningMsg"`. One neat trick set the color to highlight group name then change that highlight with :hi command to change color of that component at runtime. | All
+disabled_filetypes | {} | Disables lualine for specific filetypes | It works on entire statusline instead of on a single component
 
 #### Using global options
 Global options can be set in two ways. One is as part of options table in setup.
@@ -403,6 +404,7 @@ extensions = { 'fzf' }
           theme = 'gruvbox',
           section_separators = {'', ''},
           component_separators = {'', ''},
+          disabled_filetypes = {},
           icons_enabled = true,
         },
         sections = {
@@ -440,6 +442,7 @@ let g:lualine = {
     \  'theme' : 'gruvbox',
     \  'section_separators' : ['', ''],
     \  'component_separators' : ['', ''],
+    \  'disabled_filetypes' : [],
     \  'icons_enabled' : v:true,
     \},
     \'sections' : {

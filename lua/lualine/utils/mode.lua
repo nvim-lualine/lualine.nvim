@@ -1,9 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
--- LuaFormatter off
-
 local Mode = {}
-
+-- LuaFormatter off
 Mode.map = {
   ['n']    = 'NORMAL',
   ['no']   = 'O-PENDING',
