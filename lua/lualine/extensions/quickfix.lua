@@ -12,8 +12,6 @@ M.sections = {
   lualine_z = {'location'}
 }
 
-M.inactive_sections = vim.deepcopy(M.sections)
-
 M.filetypes = {'qf'}
 
 return M

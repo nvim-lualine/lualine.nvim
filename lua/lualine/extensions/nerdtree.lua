@@ -6,8 +6,6 @@ local M = {}
 
 M.sections = {lualine_a = {get_short_cwd}}
 
-M.inactive_sections = vim.deepcopy(M.sections)
-
 M.filetypes = {'nerdtree'}
 
 return M

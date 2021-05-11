@@ -96,7 +96,7 @@ local function get_extension_sections()
     for _, filetype in ipairs(extension.filetypes) do
       if vim.bo.filetype == filetype then
         sections = extension.sections
-        inactive_sections = extension.inactive_sections
+        inactive_sections = extension.sections
         break
       end
     end

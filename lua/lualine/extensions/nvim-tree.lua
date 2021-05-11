@@ -6,8 +6,6 @@ local M = {}
 
 M.sections = vim.deepcopy(nerdtree.inactive_sections)
 
-M.inactive_sections = vim.deepcopy(nerdtree.inactive_sections)
-
 M.filetypes = {'NvimTree'}
 
 return M
