@@ -6,7 +6,7 @@ local M = {}
 
 M.sections = {lualine_a = {fzf_statusline}}
 
-M.inactive_sections = M.sections
+M.inactive_sections = vim.deepcopy(M.sections)
 
 M.filetypes = {'fzf'}
 
