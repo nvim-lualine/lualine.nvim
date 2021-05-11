@@ -18,25 +18,25 @@ local colors = {
 
 local jellybeans = {
   visual = {
-    a = {fg = colors.color2, bg = colors.color3, gui = 'bold'},
+    a = {fg = colors.color2, bg = colors.color3},
     b = {fg = colors.color4, bg = colors.color5}
   },
   replace = {
-    a = {fg = colors.color2, bg = colors.color8, gui = 'bold'},
+    a = {fg = colors.color2, bg = colors.color8},
     b = {fg = colors.color4, bg = colors.color5}
   },
   inactive = {
     c = {fg = colors.color9, bg = colors.color2},
-    a = {fg = colors.color10, bg = colors.color2, gui = 'bold'},
+    a = {fg = colors.color10, bg = colors.color2},
     b = {fg = colors.color9, bg = colors.color2}
   },
   normal = {
     c = {fg = colors.color10, bg = colors.color2},
-    a = {fg = colors.color2, bg = colors.color11, gui = 'bold'},
+    a = {fg = colors.color2, bg = colors.color11},
     b = {fg = colors.color4, bg = colors.color5}
   },
   insert = {
-    a = {fg = colors.color2, bg = colors.color14, gui = 'bold'},
+    a = {fg = colors.color2, bg = colors.color14},
     b = {fg = colors.color4, bg = colors.color5}
   }
 }
