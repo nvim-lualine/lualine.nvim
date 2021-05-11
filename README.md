@@ -387,11 +387,12 @@ extensions = { 'fzf' }
 <details>
 <summary><b>Available extensions</b></summary>
 
+* chadtree
 * fugitive
 * fzf
 * nerdtree
-* chadtree
 * nvim-tree
+* quickfix
 
 </details>
 
