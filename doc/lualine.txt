@@ -506,11 +506,12 @@ using a plugin which is supported you can load it this way:
 <
 
 Available extensions
+    * chadtree
     * fugitive
     * fzf
     * nerdtree
-    * chadtree
     * nvim-tree
+    * quickfix
 
 --------------------------------------------------------------------------------
 CONGIG EXAMPLES                                        *lualine_config_examples*
