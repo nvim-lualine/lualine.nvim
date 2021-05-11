@@ -2,10 +2,9 @@
 -- MIT license, see LICENSE for more details.
 local utils_section = require('lualine.utils.section')
 local highlight = require('lualine.highlight')
-local config = require('lualine.defaults')
+local config = {}
 
 local function apply_configuration(config_table)
-  if not config_table then return end
   local function parse_sections(section_group_name)
     if not config_table[section_group_name] then return end
     for section_name, section in pairs(config_table[section_group_name]) do
@@ -81,18 +80,23 @@ local function component_loader(component)
 end
 
 local function load_sections(sections)
-  for section_name, section in pairs(sections) do
-    for index, component in pairs(section) do
-      if type(component) == 'string' or type(component) == 'function' then
-        component = {component}
+  local async_loader
+  async_loader = vim.loop.new_async(vim.schedule_wrap(function()
+    for section_name, section in pairs(sections) do
+      for index, component in pairs(section) do
+        if type(component) == 'string' or type(component) == 'function' then
+          component = {component}
+        end
+        component.self = {}
+        component.self.section = section_name
+        -- apply default args
+        component = vim.tbl_extend('keep', component, config.options)
+        section[index] = component_loader(component)
       end
-      component.self = {}
-      component.self.section = section_name
-      -- apply default args
-      component = vim.tbl_extend('keep', component, config.options)
-      section[index] = component_loader(component)
     end
-  end
+    async_loader:close()
+  end))
+  async_loader:send()
 end
 
 local function load_components()
@@ -153,7 +157,8 @@ local function statusline(sections, is_focused)
       local current_section = status_builder[i]
       local next_section = status_builder[i + 1] or {}
       -- For 2nd half we need to show separator before section
-      if current_section.name > 'x' then
+      if current_section.name > 'x' and config.options.section_separators[2] ~=
+          '' then
         local transitional_highlight = highlight.get_transitional_highlights(
                                            previous_section.data,
                                            current_section.data, true)
@@ -168,7 +173,8 @@ local function statusline(sections, is_focused)
       table.insert(status, status_builder[i].data)
 
       -- For 1st half we need to show separator after section
-      if current_section.name < 'c' then
+      if current_section.name < 'c' and config.options.section_separators[1] ~=
+          '' then
         local transitional_highlight = highlight.get_transitional_highlights(
                                            current_section.data,
                                            next_section.data)
@@ -206,6 +212,15 @@ local function get_extension_sections()
 end
 
 local function status_dispatch()
+  -- disable on specific filetypes
+  local current_ft = vim.api.nvim_buf_get_option(
+                         vim.fn.winbufnr(vim.g.statusline_winid), 'filetype')
+  for _, ft in pairs(config.options.disabled_filetypes) do
+    if ft == current_ft then
+      vim.wo.statusline = ''
+      return ''
+    end
+  end
   local extension_sections = get_extension_sections()
   if vim.g.statusline_winid == vim.fn.win_getid() then
     local sections = extension_sections.sections
@@ -223,31 +238,35 @@ end
 local function tabline() return statusline(config.tabline, true) end
 
 local function setup_theme()
-  local function get_theme_from_config()
-    local theme_name = config.options.theme
-    if type(theme_name) == 'string' then
-      local ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
-      if ok then return theme end
-    elseif type(theme_name) == 'table' then
-      -- use the provided theme as-is
-      return config.options.theme
+  local async_loader
+  async_loader = vim.loop.new_async(vim.schedule_wrap(function()
+    local function get_theme_from_config()
+      local theme_name = config.options.theme
+      if type(theme_name) == 'string' then
+        local ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
+        if ok then return theme end
+      elseif type(theme_name) == 'table' then
+        -- use the provided theme as-is
+        return config.options.theme
+      end
+      vim.api.nvim_echo({
+        {
+          'theme ' .. tostring(theme_name) .. ' not found, defaulting to gruvbox',
+          'ErrorMsg'
+        }
+      }, true, {})
+      return require 'lualine.themes.gruvbox'
     end
-    vim.api.nvim_echo({
-      {
-        'theme ' .. tostring(theme_name) .. ' not found, defaulting to gruvbox',
-        'ErrorMsg'
-      }
-    }, true, {})
-    return require 'lualine.themes.gruvbox'
-  end
-  local theme = get_theme_from_config()
-  highlight.create_highlight_groups(theme)
-  vim.api.nvim_exec([[
-  augroup lualine
-  autocmd!
-  autocmd ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
-  augroup END
-  ]], false)
+    local theme = get_theme_from_config()
+    highlight.create_highlight_groups(theme)
+    vim.api.nvim_exec([[
+    augroup lualine
+    autocmd ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
+    augroup END
+    ]], false)
+    async_loader:close()
+  end))
+  async_loader:send()
 end
 
 local function set_tabline()
@@ -261,16 +280,20 @@ local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     vim.o.statusline = '%!v:lua.require\'lualine\'.statusline()'
     vim.api.nvim_exec([[
-    autocmd lualine WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
-    autocmd lualine WinEnter,BufEnter * set statusline<
-    autocmd lualine VimResized * redrawstatus
+    augroup lualine
+      autocmd!
+      autocmd WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
+      autocmd WinEnter,BufEnter * set statusline<
+      autocmd VimResized * redrawstatus
+    augroup END
     ]], false)
   end
 end
 
 local function setup(user_config)
-  apply_configuration(vim.g.lualine)
-  apply_configuration(user_config)
+  config = vim.deepcopy(require'lualine.defaults')
+  if user_config then apply_configuration(user_config)
+  elseif vim.g.lualine then apply_configuration(vim.g.lualine) end
   check_single_separator()
   setup_theme()
   load_components()
