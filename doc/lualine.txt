@@ -255,10 +255,12 @@ Component specific local options~
     lualine_a = {
       {
         'filetype',
-        colored = true -- displays filetype icon in color if set to `true`
+        colored = true, -- displays filetype icon in color if set to `true`
+        disable_text = false -- Display only icon for filetype
       }
     }
   }
+<
 
 * diff~
 >
@@ -337,4 +339,4 @@ You can disable lualine for specific filetypes
 
 `options = {disabled_filetypes = {'lua'}}`
 ------------------------------------------------------------------------------
-vim:tw=80:sw=4:ts=8:noet:ft=help:norl:et:
+vim:tw=80:sw=4:ts=8:et:ft=help:norl:et:
