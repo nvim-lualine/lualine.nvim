@@ -47,10 +47,10 @@ local function apply_transitional_separators(previous_section, current_section,
       -- Since the section isn't suppose to be highlighted with separators
       -- separators highlight extract the last highlight and place it between
       -- separator and section
-      local last_hl = prev:match('.*%#(.-)#.-')
+      local last_hl = prev:match('.*(%%#.-#).-')
       current_section.data = prev ..
                                  fill_section_separator(prev, nxt, sep, false) ..
-                                 '%#' .. last_hl .. '#' .. nxt
+                                 last_hl .. nxt
     else
       current_section.data = fill_section_separator(prev, nxt, sep, true) .. nxt
     end
