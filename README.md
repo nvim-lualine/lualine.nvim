@@ -247,8 +247,8 @@ Global option used locally overwrites the global, for example:
 options = {
   icons_enabled = 1, -- displays icons in alongside component
   padding = 1, -- adds padding to the left and right of components
-  left_padding = 1, -- adds padding to the right of components
-  right_padding =1, -- overwrites component_separators
+  left_padding = 1, -- adds padding to the left of components
+  right_padding =1, -- adds padding to the right of components
   upper = false, -- displays components in uppercase
   lower = false, -- displays components in lowercase
   format = nil -- format function, formats component's output
