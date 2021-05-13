@@ -37,8 +37,6 @@ Lualine has sections as shown below.
     +-------------------------------------------------+
 
 Each sections holds it's components e.g. current vim's mode.
-Colorscheme of sections is mirrored, meaning section `A` will have the same
-colorscheme as section `Z` etc.
 
 ------------------------------------------------------------------------------
 STARTING LUALINE                      *lualine_starting_lualine* *lualine.setup()*
@@ -95,7 +93,7 @@ Customizing themes~
       ...
     }
 <
-The theme structure is available here:
+Theme structure is available here:
 https://github.com/hoob3rt/lualine.nvim/blob/master/CONTRIBUTING.md#adding-a-theme
 
 ------------------------------------------------------------------------------

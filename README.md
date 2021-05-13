@@ -7,11 +7,9 @@ A blazing fast and easy to configure neovim statusline written in pure lua.
 `lualine.nvim` requires neovim 0.5
 
 ## Contributing
-Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before contributing.
-
-You can check [this](https://github.com/hoob3rt/lualine.nvim/projects/3) out if you want to see what is currently being worked on.
-
 Feel free to create an issue/pr if you want to see anything else implemented.
+
+Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pr.
 
 ## Screenshots
 Here is a preview of how lualine can look like.
@@ -72,7 +70,6 @@ Lualine has sections as shown below.
 ```
 
 Each sections holds it's components e.g. current vim's mode.
-Colorscheme of sections is mirrored, meaning section `A` will have the same colorscheme as section `Z` etc.
 
 ---
 ### Starting lualine
@@ -136,12 +133,12 @@ require'lualine'.setup{
   ...
 }
 ```
-You can checkout structure of a lualine theme [here](https://github.com/hoob3rt/lualine.nvim/blob/master/CONTRIBUTING.md#adding-a-theme)
+Theme structure is available [here](https://github.com/hoob3rt/lualine.nvim/blob/master/CONTRIBUTING.md#adding-a-theme)
 
 </details>
 
 ---
-### Changing separators
+### Separators
 Lualine defines two kinds of seperators:
   * `section_separators` - separators between sections
   * `components_separators` - separators between components in sections
@@ -240,6 +237,7 @@ Global option used locally overwrites the global, for example:
 
 `mode` will be displayed with `lower = false` and `branch` will be displayed with `lower = true`
 
+#### Available options
 <details>
 <summary><b>Global options</b></summary>
 
