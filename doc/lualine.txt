@@ -84,8 +84,6 @@ Available themes are listed here:
 https://github.com/hoob3rt/lualine.nvim/blob/master/THEMES.md
 
 Customizing themes~
-
-Example:
 >
     local custom_gruvbox = require'lualine.themes.gruvbox'
 
@@ -373,7 +371,7 @@ specified filetypes.
 By default no plugin extension are loaded to improve performance. 
 You can load extensions with:
 >
-    extensions = { 'quickfix' }
+    extensions = {'quickfix'}
 <
 Available extensions
     * |chadtree|
