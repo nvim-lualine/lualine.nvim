@@ -74,6 +74,7 @@ Lualine has sections as shown below.
 Each sections holds it's components e.g. current vim's mode.
 Colorscheme of sections is mirrored, meaning section `A` will have the same colorscheme as section `Z` etc.
 
+---
 ### Starting lualine
 ```lua
 require('lualine').setup()
@@ -113,6 +114,7 @@ require'lualine'.setup {
 
 </details>
 
+---
 ### Setting a theme
 ```lua
 options = {theme = 'gruvbox'}
@@ -138,6 +140,7 @@ You can checkout structure of a lualine theme [here](https://github.com/hoob3rt/
 
 </details>
 
+---
 ### Changing separators
 Lualine defines two kinds of seperators:
   * `section_separators` - separators between sections
@@ -158,6 +161,7 @@ options = {section_separators = '', component_separators = ''}
 
 </details>
 
+---
 ### Changing components in lualine sections
 
 ```lua
@@ -217,6 +221,7 @@ sections = {lualine_c = {"os.data('%a')", 'data', require'lsp-status'.status}}
 ```
 `data` is a global variable in this example.
 
+---
 ### Component options
 Component options can change the way a component behave.
 There are two kinds of options:
@@ -303,6 +308,7 @@ symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbol
 
 </details>
 
+---
 ### Tabline
 You can use lualine to display components in tabline.
 The configuration for tabline sections is exactly the same as for statusline.
@@ -329,11 +335,12 @@ sections = {},
 inactive_sections = {},
 ```
 
+---
 ### Extensions
 Lualine extensions change statusline appearance for a window/buffer with
 specified filetypes.
 
-By default no plugin extension are loaded to improve performance. 
+By default no extension are loaded to improve performance. 
 You can load extensions with:
 ```lua
 extensions = {'quickfix'}
@@ -351,12 +358,14 @@ extensions = {'quickfix'}
 
 </details>
 
+---
 ### Disabling lualine
 You can disable lualine for specific filetypes
 ```lua
 options = {disabled_filetypes = {'lua'}}
 ```
 
+---
 ### Lua config example
 
 <details>

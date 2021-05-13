@@ -211,10 +211,6 @@ option       (default_value)
     Padding on right side of component/components
     Supported components: all
 
-  • |separator| (component_separators)
-    Overwrites |component_separators|
-    Supported components: all
-
   • |upper|         (false)
     Display component/components in uppercase
     Supported components: all
@@ -259,6 +255,11 @@ option       (default_value)
 <    One neat trick is  to set the color to highlight group name then change
     that highlight with the `:hi` command to change color of that component
     at runtime.
+
+  • |separator| (component_separators)
+    Overwrites |component_separators|
+    Supported components: all
+
 
 Component specific local options~
 ---------------
@@ -368,7 +369,7 @@ EXTENSIONS                                                  *lualine_extensions*
 Lualine extensions change statusline appearance for a window/buffer with
 specified filetypes.
 
-By default no plugin extension are loaded to improve performance. 
+By default no extension are loaded to improve performance. 
 You can load extensions with:
 >
     extensions = {'quickfix'}
