@@ -16,11 +16,11 @@ CONTENTS                                                      *lualine_contents*
 1. lualine.nvim..........................................|lualine_lualine.nvim|
     1.1. Usage and customization..............|lualine_usage_and_customization|
       1.1.1 Starting lualine.........................|lualine_starting_lualine|
-      1.1.2 Setting a theme.............................|lualine_setting_theme|
-      1.1.3 Changing separators....................|lualine_changing_separator|
-      1.1.4 Changing components...................|lualine_changing_components|
+      1.1.2 Setting a theme.....................................|lualine_theme|
+      1.1.3 Separators.....................................|lualine_separators|
+      1.1.4 Changing components............................|lualine_components|
       1.1.5 Custom components.......................|lualine_custom_components|
-      1.1.6 Component options..........................|lualine_custom_options|
+      1.1.6 Component options.......................|lualine_component_options|
       1.1.7 Tabline...........................................|lualine_tabline|
       1.1.8 Extensions.....................................|lualine_extensions|
     1.2  Config examples..............................|lualine_config_examples|
@@ -339,7 +339,7 @@ Some components have unique options.
       Color in `#rrggbb` format
 
 ------------------------------------------------------------------------------
-TABLINE                                                  *lualine_using_tabline*
+TABLINE                                                        *lualine_tabline*
 
 You can use lualine to display components in tabline.
 The configuration for tabline sections is exactly the same as for statusline.
