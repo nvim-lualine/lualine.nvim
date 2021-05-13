@@ -23,9 +23,7 @@ CONTENTS                                                      *lualine-contents*
       1.1.6 Component options.......................|lualine-component_options|
       1.1.7 Tabline...........................................|lualine-tabline|
       1.1.8 Extensions.....................................|lualine-extensions|
-    1.2  Config examples..............................|lualine-config_examples|
-        1.2.1 Lua config example...................|lualine-lua_config_example|
-        1.2.2 Vimscript config example.......|lualine-vimscript_config_example|
+      1.1.8 Disabling lualine.................................|lualine-disable|
 
 ==============================================================================
 USAGE AND CUSTOMIZATION                        *lualine-usage_and_customization*
@@ -37,11 +35,6 @@ Lualine has sections as shown below.
     +-------------------------------------------------+
 
 Each sections holds it's components e.g. current vim's mode.
-
-------------------------------------------------------------------------------
-STARTING LUALINE                      *lualine-starting_lualine* *lualine.setup()*
->
-    require('lualine').setup()
 
 Default config~
 >
@@ -72,6 +65,11 @@ Default config~
       tabline = {},
       extensions = {}
     }
+
+------------------------------------------------------------------------------
+STARTING LUALINE                      *lualine-starting_lualine* *lualine.setup()*
+>
+    require('lualine').setup()
 
 ------------------------------------------------------------------------------
 SETTING A THEME                                                  *lualine-theme*
@@ -323,83 +321,11 @@ Available extensions
     * |nvim-tree|
     * |quickfix|
 
-==============================================================================
+------------------------------------------------------------------------------
 DISABLING LUALINE                                              *lualine-disable*
 
 You can disable lualine for specific filetypes
 
 `options = {disabled_filetypes = {'lua'}}`
-
-==============================================================================
-
-CONGIG EXAMPLES                                        *lualine-config_examples*
-
 ------------------------------------------------------------------------------
-LUA CONFIG EXAMPLE                                  *lualine-lua_config_example*
->
-    use {
-    'hoob3rt/lualine.nvim',
-    requires = {'kyazdani42/nvim-web-devicons', opt = true},
-    config = function()
-      require('lualine').setup{
-        options = {
-          theme = 'gruvbox',
-          section_separators = {'', ''},
-          component_separators = {'', ''},
-          disabled_filetypes = {},
-          icons_enabled = true,
-        },
-        sections = {
-          lualine_a = { {'mode', upper = true} },
-          lualine_b = { {'branch', icon = ''} },
-          lualine_c = { {'filename', file_status = true} },
-          lualine_x = { 'encoding', 'fileformat', 'filetype' },
-          lualine_y = { 'progress' },
-          lualine_z = { 'location'  },
-        },
-        inactive_sections = {
-          lualine_a = {  },
-          lualine_b = {  },
-          lualine_c = { 'filename' },
-          lualine_x = { 'location' },
-          lualine_y = {  },
-          lualine_z = {   }
-        },
-        extensions = { 'fzf' }
-      }
-    end
-    }
-<
-------------------------------------------------------------------------------
-VIMSCRIPT CONFIG EXAMPLE                      *lualine-vimscript_config_example*
->
-    let g:lualine = {
-        \'options' : {
-        \  'theme' : 'gruvbox',
-        \  'section_separators' : ['', ''],
-        \  'component_separators' : ['', ''],
-        \  'disabled_filetypes' : [],
-        \  'icons_enabled' : v:true,
-        \},
-        \'sections' : {
-        \  'lualine_a' : [ ['mode', {'upper': v:true,},], ],
-        \  'lualine_b' : [ ['branch', {'icon': '',}, ], ],
-        \  'lualine_c' : [ ['filename', {'file_status': v:true,},], ],
-        \  'lualine_x' : [ 'encoding', 'fileformat', 'filetype' ],
-        \  'lualine_y' : [ 'progress' ],
-        \  'lualine_z' : [ 'location'  ],
-        \},
-        \'inactive_sections' : {
-        \  'lualine_a' : [  ],
-        \  'lualine_b' : [  ],
-        \  'lualine_c' : [ 'filename' ],
-        \  'lualine_x' : [ 'location' ],
-        \  'lualine_y' : [  ],
-        \  'lualine_z' : [  ],
-        \},
-        \'extensions' : [ 'fzf' ],
-        \}
-    lua require("lualine").setup()
-<
------------------------------------------------------------------------------
 vim:tw=80:sw=4:ts=8:noet:ft=help:norl:et:
