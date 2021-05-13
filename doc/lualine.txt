@@ -11,24 +11,24 @@ License: MIT License
 Repository: https://github.com/hoob3rt/lualine.nvim
 
 ==============================================================================
-CONTENTS                                                      *lualine_contents*
+CONTENTS                                                      *lualine-contents*
 
-1. lualine.nvim..........................................|lualine_lualine.nvim|
-    1.1. Usage and customization..............|lualine_usage_and_customization|
+1. lualine.nvim..........................................|lualine-lualine.nvim|
+    1.1. Usage and customization..............|lualine-usage_and_customization|
       1.1.1 Starting lualine.........................|lualine-starting_lualine|
-      1.1.2 Setting a theme.....................................|lualine_theme|
-      1.1.3 Separators.....................................|lualine_separators|
-      1.1.4 Changing components............................|lualine_components|
-      1.1.5 Custom components.......................|lualine_custom_components|
-      1.1.6 Component options.......................|lualine_component_options|
-      1.1.7 Tabline...........................................|lualine_tabline|
-      1.1.8 Extensions.....................................|lualine_extensions|
-    1.2  Config examples..............................|lualine_config_examples|
-        1.2.1 Lua config example...................|lualine_lua_config_example|
-        1.2.2 Vimscript config example.......|lualine_vimscript_config_example|
+      1.1.2 Setting a theme.....................................|lualine-theme|
+      1.1.3 Separators.....................................|lualine-separators|
+      1.1.4 Changing components............................|lualine-components|
+      1.1.5 Custom components.......................|lualine-custom_components|
+      1.1.6 Component options.......................|lualine-component_options|
+      1.1.7 Tabline...........................................|lualine-tabline|
+      1.1.8 Extensions.....................................|lualine-extensions|
+    1.2  Config examples..............................|lualine-config_examples|
+        1.2.1 Lua config example...................|lualine-lua_config_example|
+        1.2.2 Vimscript config example.......|lualine-vimscript_config_example|
 
 ==============================================================================
-USAGE AND CUSTOMIZATION                        *lualine_usage_and_customization*
+USAGE AND CUSTOMIZATION                        *lualine-usage_and_customization*
 
 Lualine has sections as shown below.
 >
@@ -39,7 +39,7 @@ Lualine has sections as shown below.
 Each sections holds it's components e.g. current vim's mode.
 
 ------------------------------------------------------------------------------
-STARTING LUALINE                      *lualine_starting_lualine* *lualine.setup()*
+STARTING LUALINE                      *lualine-starting_lualine* *lualine.setup()*
 >
     require('lualine').setup()
 
@@ -74,7 +74,7 @@ Default config~
     }
 
 ------------------------------------------------------------------------------
-SETTING A THEME                                                  *lualine_theme*
+SETTING A THEME                                                  *lualine-theme*
 >
     options = {theme = 'gruvbox'}
 
@@ -97,7 +97,7 @@ Theme structure is available here:
 https://github.com/hoob3rt/lualine.nvim/blob/master/CONTRIBUTING.md#adding-a-theme
 
 ------------------------------------------------------------------------------
-SEPARATORS                                                  *lualine_separators*
+SEPARATORS                                                  *lualine-separators*
 
 Lualine defines two kinds of seperators:
     *   |section_separators| - separators between sections
@@ -113,7 +113,7 @@ Disabling separators~
     options = {section_separators = '', component_separators = ''}
 
 ------------------------------------------------------------------------------
-CHANGING COMPONENTS IN LUALINE SECTIONS                     *lualine_components*
+CHANGING COMPONENTS IN LUALINE SECTIONS                     *lualine-components*
 
     `sections = {lualine_a = {'mode'}}`
 
@@ -132,7 +132,7 @@ Available components~
         *   |diff| (git diff status)
 
 ------------------------------------------------------------------------------
-CUSTOM COMPONENTS                                    *lualine_custom_components*
+CUSTOM COMPONENTS                                    *lualine-custom_components*
 
 Lua functions as lualine component~
 >
@@ -164,7 +164,7 @@ You can use any valid lua expression as a component including
 `data` is a global variable in this example.
 
 ------------------------------------------------------------------------------
-COMPONENT OPTIONS                                    *lualine_component_options*
+COMPONENT OPTIONS                                    *lualine-component_options*
 
 Component options can change the way a component behave.
 There are two kinds of options:
@@ -279,7 +279,7 @@ Component specific local options~
   }
 
 ------------------------------------------------------------------------------
-TABLINE                                                        *lualine_tabline*
+TABLINE                                                        *lualine-tabline*
 
 You can use lualine to display components in tabline.
 The configuration for tabline sections is exactly the same as for statusline.
@@ -305,7 +305,7 @@ You can also completely move your statuline to tabline by configuring
     inactive_sections = {}
 
 ------------------------------------------------------------------------------
-EXTENSIONS                                                  *lualine_extensions*
+EXTENSIONS                                                  *lualine-extensions*
 
 Lualine extensions change statusline appearance for a window/buffer with
 specified filetypes.
@@ -324,7 +324,7 @@ Available extensions
     * |quickfix|
 
 ==============================================================================
-DISABLING LUALINE                                              *lualine_disable*
+DISABLING LUALINE                                              *lualine-disable*
 
 You can disable lualine for specific filetypes
 
@@ -332,10 +332,10 @@ You can disable lualine for specific filetypes
 
 ==============================================================================
 
-CONGIG EXAMPLES                                        *lualine_config_examples*
+CONGIG EXAMPLES                                        *lualine-config_examples*
 
 ------------------------------------------------------------------------------
-LUA CONFIG EXAMPLE                                  *lualine_lua_config_example*
+LUA CONFIG EXAMPLE                                  *lualine-lua_config_example*
 >
     use {
     'hoob3rt/lualine.nvim',
@@ -371,7 +371,7 @@ LUA CONFIG EXAMPLE                                  *lualine_lua_config_example*
     }
 <
 ------------------------------------------------------------------------------
-VIMSCRIPT CONFIG EXAMPLE                      *lualine_vimscript_config_example*
+VIMSCRIPT CONFIG EXAMPLE                      *lualine-vimscript_config_example*
 >
     let g:lualine = {
         \'options' : {
