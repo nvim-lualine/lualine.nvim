@@ -18,13 +18,13 @@ Here is a preview of how lualine can look like.
 
 ![normal_cropped](https://user-images.githubusercontent.com/41551030/108650373-bb025580-74bf-11eb-8682-2c09321dd18e.png)
 ![powerline_cropped](https://user-images.githubusercontent.com/41551030/108650377-bd64af80-74bf-11eb-9c55-fbfc51b39fe8.png)
-![diff_croped](https://user-images.githubusercontent.com/41551030/108650378-be95dc80-74bf-11eb-9718-82b242ecdd54.png)
+![diff_cropped](https://user-images.githubusercontent.com/41551030/108650378-be95dc80-74bf-11eb-9718-82b242ecdd54.png)
 ![diagnostics_cropped](https://user-images.githubusercontent.com/41551030/108650381-bfc70980-74bf-11eb-9245-85c48f0f154a.png)
 ![replace](https://user-images.githubusercontent.com/41551030/103467925-32372b00-4d54-11eb-88d6-6d39c46854d8.png)
 
 Screenshots of all available themes are listed in [THEMES.md](./THEMES.md)
 
-For those who want to break the norms. You can create custom looks in lualine .
+For those who want to break the norms. You can create custom looks in lualine.
 
 **Example** :
 
@@ -243,27 +243,40 @@ Global option used locally overwrites the global, for example:
 <details>
 <summary><b>Global options</b></summary>
 
-Option   | Default | Behaviour | Format
-:------: | :------: | :----: | :---:
-icons_enabled      | true     |  Displays icons on components You should have nerd-fonts supported fonts to see icons properly. | branch, fileformat, filetype, location, diagnostics
-padding | 1 | Adds padding to the left and right of components | All
-left_padding | 1 | Adds padding to the left of components | All
-right_padding | 1 | Adds padding to the right of components | All
-separator | (component_separators) | which separator to use at end of component | all
-upper | false | Changes components to be uppercase | All
-lower | false | Changes components to be lowercase | All
-format | nil | Takes a function . The funtion gets the result of component as argument and it's return value is displayed. So this function can parse and format the output as user wants. | All
+```lua
+options = {
+  icons_enabled = 1, -- displays icons in alongside component
+  padding = 1, -- adds padding to the left and right of components
+  left_padding = 1, -- adds padding to the right of components
+  right_padding =1, -- overwrites component_separators
+  upper = false, -- displays components in uppercase
+  lower = false, -- displays components in lowercase
+  format = nil -- format function, formats component's output
+}
+```
 
 </details>
 
 <details>
 <summary><b>Local options</b></summary>
 
-Option   | Default | Behaviour | Supported components
-:------: | :------: | :------: | :--------:
-icon | Differs for each component | Displays an icon in front of the component | All
-condition | nil | Takes a function. The component is loaded if the function returns true otherwise not. It can be used to load some comoonents on specific cases. | All
-color | nil | Sets custom color for the component in this format<br></br>`color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`<br></br>The fields of color table are optional and default to theme <br></br>Color option can also be a string containing highlight group name `color = "WarningMsg"`. One neat trick set the color to highlight group name then change that highlight with :hi command to change color of that component at runtime. | All
+```lua
+sections = {
+  lualine_a = {
+    {
+      'mode',
+      icon = nil, -- displays icon in front of the component
+      separator = nil, -- overwrites component_separators for component
+      condition = nil, -- condition function, component is loaded when function returns true
+      -- custom color for component in format
+      -- color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}
+      -- or highlight group
+      -- color = "WarningMsg"
+      color = nil
+    }
+  }
+}
+```
 
 </details>
 
@@ -272,39 +285,70 @@ color | nil | Sets custom color for the component in this format<br></br>`color 
 
 #### `diagnostics` component options
 
-Option   | Default | Behaviour | Format
-:------: | :------: | :----: | :---:
-sources | `nil` | displays diagnostic count from defined source | array containing one or many string from set `{'nvim_lsp', 'coc', 'ale', 'vim_lsp'}`
-sections | `{'error', 'warn', 'info'}` | displays diagnostics of defined severity | array containing one or many string from set `{'error', 'warn', 'info'}`
-color_error | `DiffDelete` foreground color | changes diagnostic's error section foreground color | color in `#rrggbb` format
-color_warn | `DiffText` foreground color | changes diagnostic's warn section foreground color | color in `#rrggbb` format
-color_info | `Normal` foreground color | changes diagnostic's info section foreground color | color in `#rrggbb` format
-symbols | `{error = ' ', warn = ' ', info = ' '}` or `{error = 'E:', warn = 'W:', info = 'I:'}` | changes diagnostic's info section foreground color | table containing one or more symbols for levels |
+```lua
+sections = {
+  lualine_a = {
+    {
+      'diagnostics',
+      -- table of diagnostic sources, available sources:
+      -- nvim_lsp, coc, ale, vim_lsp
+      sources = nil,
+      -- displays diagnostics from defined severity
+      sections = {'error', 'warn', 'info'},
+      -- all colors are in format #rrggbb
+      color_error = nil, -- changes diagnostic's error foreground color
+      color_warn = nil, -- changes diagnostic's warn foreground color
+      color_info = nil, -- Changes diagnostic's info foreground color
+      symbols = {error = 'E', warn = 'W', info = 'I'}
+    }
+  }
+}
+```
 
 #### `filename` component options
 
-Option   | Default | Behaviour
-:------: | :------: | :----:
-file_status | true | Displays file status (readonly status, modified status)
-path | 0 | filename `path` option: 0 = just filename, 1 = relative path, 2 = absolute path
-symbols | `{modified = '[+]', readonly = '[-]'}` | changes status symbols | table containing one or more symbols |
+```lua
+sections = {
+  lualine_a = {
+    {
+      'filename',
+      file_status = true, -- displays file status (readonly status, modified status)
+      path = 0 -- 0 = just filename, 1 = relative path, 2 = absolute path
+    }
+  }
+}
+```
 
 #### `filetype` component options
 
-Option   | Default | Behaviour
-:------: | :------: | :----:
-colored | true | Displays filetype icon in color if set to `true`
+```lua
+sections = {
+  lualine_a = {
+    {
+      'filetype',
+      colored = true -- displays filetype icon in color if set to `true`
+    }
+  }
+}
+```
 
 #### `diff` component options
 
-Option   | Default | Behaviour | Format
-:------: | :------: | :----: | :---:
-colored | true | displays diff status in color if set to `true` |
-color_added | `DiffAdd` foreground color | changes diff's added section foreground color | color in `#rrggbb` format
-color_modified | `DiffChange` foreground color | changes diff's changed section foreground color | color in `#rrggbb` format
-color_removed | `DiffDelete` foreground color | changes diff's removed section foreground color | color in `#rrggbb` format
-symbols | `{added = '+', modified = '~', removed = '-'}` | changes diff's symbols | table containing one or more symbols |
-
+```lua
+sections = {
+  lualine_a = {
+    {
+      'diff',
+      colored = true, -- displays diff status in color if set to true
+      -- all colors are in format #rrggbb
+      color_added = nil, -- changes diff's added foreground color
+      color_modified = nil, -- changes diff's modified foreground color
+      color_removed = nil, -- changes diff's removed foreground color
+      symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
+    }
+  }
+}
+```
 
 </details>
 
