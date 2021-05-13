@@ -25,8 +25,10 @@ FileName.new = function(self, options, child)
   end
   if new_instance.options.path == nil then new_instance.options.path = 0 end
   if new_instance.options.full_path or new_instance.options.shorten then
-    vim.api.nvim_err_writeln(
-        [[ filetype component configuration changed, see :h lualine_custom_options ]])
+    vim.schedule(function()
+      vim.api.nvim_err_writeln(
+        [[Lualine: filename component configuration changed, see :h lualine_custom_options ]])
+    end)
   end
 
   return new_instance
