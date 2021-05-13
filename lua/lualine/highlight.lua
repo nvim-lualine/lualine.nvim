@@ -95,7 +95,8 @@ function M.create_component_highlight_group(color, highlight_tag, options)
   local normal_hl
   -- convert lualine_a -> a before setting section
   local section = options.self.section:match('lualine_(.*)')
-  if section > 'c' then section = section_highlight_map[section] end
+  if section > 'c' and not active_theme.normal[section] then
+    section = section_highlight_map[section] end
   for _, mode in ipairs(modes) do
     local highlight_group_name = {options.self.section, highlight_tag, mode}
     local default_color_table = active_theme[mode] and
@@ -139,7 +140,8 @@ function M.component_format_highlight(highlight_name)
 end
 
 function M.format_highlight(is_focused, highlight_group)
-  if highlight_group > 'lualine_c' then
+  if highlight_group > 'lualine_c'
+    and not utils.highlight_exists(highlight_group .. '_normal') then
     highlight_group = 'lualine_' ..
                           section_highlight_map[highlight_group:match(
                               'lualine_(.)')]
