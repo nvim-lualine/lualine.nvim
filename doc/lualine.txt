@@ -15,7 +15,7 @@ CONTENTS                                                      *lualine_contents*
 
 1. lualine.nvim..........................................|lualine_lualine.nvim|
     1.1. Usage and customization..............|lualine_usage_and_customization|
-      1.1.1 Starting lualine.........................|lualine_starting_lualine|
+      1.1.1 Starting lualine.........................|lualine-starting_lualine|
       1.1.2 Setting a theme.....................................|lualine_theme|
       1.1.3 Separators.....................................|lualine_separators|
       1.1.4 Changing components............................|lualine_components|
@@ -188,154 +188,97 @@ Available options:~
 
 Global options~
 ---------------
-option       (default_value)
-------       ---------------
-
- • |icons_enabled|       (true)
-    Displays icons on components
-    Supported components: |branch|, |fileformat|, |filetype|, |location|, |diagnostics|
-
-  • |icon|          (depends on component)
-    Displays an icon in front of a component
-    Supported components: all
-
-  • |padding|       (1)
-    Padding on left and right side of component/components
-    Supported components: all
-
-  • |left_padding|  (1)
-    Padding on left side of component/components
-    Supported components: all
-
-  • |right_padding| (1)
-    Padding on right side of component/components
-    Supported components: all
-
-  • |upper|         (false)
-    Display component/components in uppercase
-    Supported components: all
-
-  • |lower|         (false)
-    Display component/components in lowercase
-    Supported components: all
-
-  • |format|        (nil)
-    Takes a function, the function gets the result of component
-    as argument and it's return value is displayed which enables users to 
-    format component output to their liking.
-    Supported components: all
-
-  Example:
 >
-    options = {
-      icons_enabled = true,
-      format = function(data) return data:sub(1, 1) end
-    }
+  options = {
+    icons_enabled = 1, -- displays icons in alongside component
+    padding = 1, -- adds padding to the left and right of components
+    left_padding = 1, -- adds padding to the left of components
+    right_padding =1, -- adds padding to the right of components
+    upper = false, -- displays components in uppercase
+    lower = false, -- displays components in lowercase
+    format = nil -- format function, formats component's output
+  }
 
 Local options~
 ---------------
-option       (default_value)
-------       ---------------
-
-  • |icon|          (differs for each component)
-    Displays an icon in front of a component
-
-  • |condition|     (nil)
-    Takes a function. The component is loaded if the function
-    returns true otherwise not. It can be used to load some
-    components on specific cases.
-
-  • |color|         (Theme colors)
-    Sets custom color for a component.
-    Color format:
-    `lua color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}`
-    The members of color table are optional and default to theme
-    Color option can also be a string containing highlight group name >
-    color = "WarningMsg"`
-<    One neat trick is  to set the color to highlight group name then change
-    that highlight with the `:hi` command to change color of that component
-    at runtime.
-
-  • |separator| (component_separators)
-    Overwrites |component_separators|
-    Supported components: all
-
+>
+  sections = {
+    lualine_a = {
+      {
+        'mode',
+        icon = nil, -- displays icon in front of the component
+        separator = nil, -- overwrites component_separators for component
+        condition = nil, -- condition function, component is loaded when function returns true
+        -- custom color for component in format
+        -- color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}
+        -- or highlight group
+        -- color = "WarningMsg"
+        color = nil
+      }
+    }
+  }
 
 Component specific local options~
 ---------------
-Some components have unique options.
 
-  • diagnostics~
-    • |sources|  (nil)
-      Displays diagnostic count from defined source
-      array containing one or many string from set
-      {'nvim_lsp', 'coc', 'ale', 'vim_lsp'}
+* diagnostics~
+  >
+  sections = {
+    lualine_a = {
+      {
+        'diagnostics',
+        -- table of diagnostic sources, available sources:
+        -- nvim_lsp, coc, ale, vim_lsp
+        sources = nil,
+        -- displays diagnostics from defined severity
+        sections = {'error', 'warn', 'info'},
+        -- all colors are in format #rrggbb
+        color_error = nil, -- changes diagnostic's error foreground color
+        color_warn = nil, -- changes diagnostic's warn foreground color
+        color_info = nil, -- Changes diagnostic's info foreground color
+        symbols = {error = 'E', warn = 'W', info = 'I'}
+      }
+    }
+  }
 
-    • |sections|  ({'error', 'warn', 'info'})
-      Displays diagnostics of defined severity
-      array containing one or many string from set
-      {'error', 'warn', 'info'}
+* filename~
+>
+  sections = {
+    lualine_a = {
+      {
+        'filename',
+        file_status = true, -- displays file status (readonly status, modified status)
+        path = 0 -- 0 = just filename, 1 = relative path, 2 = absolute path
+      }
+    }
+  }
 
-    • |color_error| (DiffDelete foreground color)
-      Changes diagnostic's error section foreground color
-      color in #rrggbb format
+* filetype~
+>
+  sections = {
+    lualine_a = {
+      {
+        'filetype',
+        colored = true -- displays filetype icon in color if set to `true`
+      }
+    }
+  }
 
-    • |color_warn| (DiffText foreground color)
-      Changes diagnostic's warn section foreground color
-      color in #rrggbb format
-
-    • |color_info| (Normal foreground color)
-      Changes diagnostic's info section foreground color
-      color in #rrggbb format
-
-    • |symbols| (icons_enabled: true  -> {error = ' ', warn = ' ', info = ' '})
-              (icons_enabled: false -> {error = 'E:', warn = 'W:', info = 'I:'})
-      Changes diagnostic's symbol characters. You can set one or more symbols
-      for each level.
-      >
-          {
-            'diagnostics',
-            symbols = {
-              -- set the error symbol and use defaults for warn and info.
-              error = '!!',
-            },
-          }
-<
-  • filename~
-    • |file_status| (true)
-      Displays file status (readonly status, modified status)
-
-    • |path| (0)
-      Filename `path` option: 0 = just filename
-                            1 = relative path
-                            2 = absolute path
-
-    • |symbols| (`{modified = '[+]', readonly = '[-]'}`)
-      Changes status symbols
-
-  • filetype~
-    • |colored|  (true)
-      Displays filetype icon in color if set to `true`
-
-  • diff~
-    • |colored| (true)
-      Displays diff status in color if set to `true`
-
-    • |color_added| (DiffAdd foreground color)
-      Changes diff's added section foreground color
-      Color in `#rrggbb` format
-
-    • |color_modified| (DiffChange foreground color)
-      Changes diff's changed section foreground color
-      Color in `#rrggbb` format
-
-    • |color_removed| (DiffDelete foreground color)
-      Changes diff's removed section foreground color
-      Color in `#rrggbb` format
-
-    • |symbols| (`{added = '+', modified = '~', removed = '-'}`)
-      Changes diff's symbols
-      Color in `#rrggbb` format
+* diff~
+>
+  sections = {
+    lualine_a = {
+      {
+        'diff',
+        colored = true, -- displays diff status in color if set to true
+        -- all colors are in format #rrggbb
+        color_added = nil, -- changes diff's added foreground color
+        color_modified = nil, -- changes diff's modified foreground color
+        color_removed = nil, -- changes diff's removed foreground color
+        symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
+      }
+    }
+  }
 
 ------------------------------------------------------------------------------
 TABLINE                                                        *lualine_tabline*
