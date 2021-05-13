@@ -62,6 +62,10 @@ Diff.new = function(self, options, child)
     }
   end
 
+  -- call update functions so git diff is present when component is loaded
+  Diff.update_git_diff_getter()
+  Diff.update_git_diff()
+
   vim.api.nvim_exec([[
   autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff_getter()
   autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff()
