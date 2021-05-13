@@ -58,8 +58,6 @@ use {
 ```
 
 ## Usage and customization
-Lualine can be configured with both lua and vimscript.
-Click [here](#lua-config-example) if you want to see a config example in lua and [here](#vimscript-config-example) if you want to see a config example in vimscript.
 
 Lualine has sections as shown below.
 
@@ -70,12 +68,6 @@ Lualine has sections as shown below.
 ```
 
 Each sections holds it's components e.g. current vim's mode.
-
----
-### Starting lualine
-```lua
-require('lualine').setup()
-```
 
 <details><summary>Default config</summary>
 
@@ -110,6 +102,12 @@ require'lualine'.setup {
 ```
 
 </details>
+
+---
+### Starting lualine
+```lua
+require('lualine').setup()
+```
 
 ---
 ### Setting a theme
@@ -406,82 +404,3 @@ You can disable lualine for specific filetypes
 ```lua
 options = {disabled_filetypes = {'lua'}}
 ```
-
----
-### Lua config example
-
-<details>
-<summary><b>packer config</b></summary>
-
-```lua
-  use {
-    'hoob3rt/lualine.nvim',
-    requires = {'kyazdani42/nvim-web-devicons', opt = true},
-    config = function()
-      require('lualine').setup{
-        options = {
-          theme = 'gruvbox',
-          section_separators = {'', ''},
-          component_separators = {'', ''},
-          disabled_filetypes = {},
-          icons_enabled = true,
-        },
-        sections = {
-          lualine_a = { {'mode', upper = true} },
-          lualine_b = { {'branch', icon = ''} },
-          lualine_c = { {'filename', file_status = true} },
-          lualine_x = { 'encoding', 'fileformat', 'filetype' },
-          lualine_y = { 'progress' },
-          lualine_z = { 'location' },
-        },
-        inactive_sections = {
-          lualine_a = {  },
-          lualine_b = {  },
-          lualine_c = { 'filename' },
-          lualine_x = { 'location' },
-          lualine_y = {  },
-          lualine_z = {  }
-        },
-        extensions = { 'fzf' }
-      }
-    end
-  }
-```
-
-</details>
-
-### Vimscript config example
-
-<details>
-<summary><b>vimrc config</b></summary>
-
-```vim
-let g:lualine = {
-    \'options' : {
-    \  'theme' : 'gruvbox',
-    \  'section_separators' : ['', ''],
-    \  'component_separators' : ['', ''],
-    \  'disabled_filetypes' : [],
-    \  'icons_enabled' : v:true,
-    \},
-    \'sections' : {
-    \  'lualine_a' : [ ['mode', {'upper': v:true,},], ],
-    \  'lualine_b' : [ ['branch', {'icon': '',}, ], ],
-    \  'lualine_c' : [ ['filename', {'file_status': v:true,},], ],
-    \  'lualine_x' : [ 'encoding', 'fileformat', 'filetype' ],
-    \  'lualine_y' : [ 'progress' ],
-    \  'lualine_z' : [ 'location'  ],
-    \},
-    \'inactive_sections' : {
-    \  'lualine_a' : [  ],
-    \  'lualine_b' : [  ],
-    \  'lualine_c' : [ 'filename' ],
-    \  'lualine_x' : [ 'location' ],
-    \  'lualine_y' : [  ],
-    \  'lualine_z' : [  ],
-    \},
-    \'extensions' : [ 'fzf' ],
-    \}
-lua require("lualine").setup()
-```
-</details>

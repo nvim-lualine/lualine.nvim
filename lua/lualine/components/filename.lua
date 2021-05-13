@@ -27,7 +27,7 @@ FileName.new = function(self, options, child)
   if new_instance.options.full_path or new_instance.options.shorten then
     vim.schedule(function()
       vim.api.nvim_err_writeln(
-        [[Lualine: filename component configuration changed, see :h lualine_custom_options ]])
+        [[Lualine: filename component configuration changed, see :h lualine-component_options ]])
     end)
   end
 
