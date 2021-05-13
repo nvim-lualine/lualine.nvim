@@ -24,8 +24,11 @@ lualine theme at lua/lualine/themes/{your_colorscheme}.lua in you repo.
 To create a custom theme you need to define a colorscheme for each of vim's modes. Each mode has a `fg` and `bg` field for every lualine section.
 You can add special effects with `gui`.
 
-Adding theme is really easy in lua. Here is and example of a gruvbox theme.
+Though the example shows a,b,c being set you can specify theme for x, y, z too.
+But if unspecified then they default to c, b, a sections theme respectively .
+ Also all modes theme defaults to normal modes theme.
 
+Adding theme is really easy in lua. Here is and example of a gruvbox theme.
 ```lua
 local gruvbox = {  }
 
