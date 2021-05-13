@@ -222,8 +222,8 @@ sections = {lualine_c = {"os.data('%a')", 'data', require'lsp-status'.status}}
 ### Component options
 Component options can change the way a component behave.
 There are two kinds of options:
-    *   global options affecting all components
-    *   local options affecting specific
+  * global options affecting all components
+  * local options affecting specific
 
 Global options can be used as local options (can be applied to specific components)
 but you cannot use local options as global.
