@@ -14,8 +14,7 @@ local colors = {
   color2   = '#c57339',
 }
 -- LuaFormatter on
-
-local iceberg = {
+return {
   replace = {
     b = {fg = colors.color0, bg = colors.color1},
     a = {fg = colors.color0, bg = colors.color2, gui = 'bold'}
@@ -39,5 +38,3 @@ local iceberg = {
     a = {fg = colors.color0, bg = colors.color11, gui = 'bold'}
   }
 }
-
-return iceberg

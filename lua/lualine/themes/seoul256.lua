@@ -15,8 +15,7 @@ local colors = {
   color4   = '#30302c',
 }
 -- LuaFormatter on
-
-local seoul256 = {
+return {
   visual = {
     b = {fg = colors.color0, bg = colors.color1},
     a = {fg = colors.color4, bg = colors.color5, gui = 'bold'}
@@ -40,5 +39,3 @@ local seoul256 = {
     a = {fg = colors.color4, bg = colors.color14, gui = 'bold'}
   }
 }
-
-return seoul256

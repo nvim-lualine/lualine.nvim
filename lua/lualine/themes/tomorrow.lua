@@ -17,8 +17,7 @@ local colors = {
   color11  = '#f5871f',
 }
 -- LuaFormatter on
-
-local tomorrow = {
+return {
   inactive = {
     a = {fg = colors.color0, bg = colors.color1, gui = 'bold'},
     b = {fg = colors.color2, bg = colors.color3},
@@ -42,5 +41,3 @@ local tomorrow = {
     b = {fg = colors.color5, bg = colors.color6}
   }
 }
-
-return tomorrow

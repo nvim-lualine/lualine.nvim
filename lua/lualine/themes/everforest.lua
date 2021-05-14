@@ -1,6 +1,5 @@
 -- Copyright (c) 2020-2021 gnuyent
 -- MIT license, see LICENSE for more details.
-local everforest = {}
 -- LuaFormatter off
 local colors = {
   bg0    = '#323d43',
@@ -15,47 +14,40 @@ local colors = {
   grey1  = '#868d80',
 }
 -- LuaFormatter on
-
-everforest.normal = {
-  a = {bg = colors.green, fg = colors.bg0, gui = 'bold'},
-  b = {bg = colors.bg3, fg = colors.fg},
-  c = {bg = colors.bg1, fg = colors.fg}
+return {
+  normal = {
+    a = {bg = colors.green, fg = colors.bg0, gui = 'bold'},
+    b = {bg = colors.bg3, fg = colors.fg},
+    c = {bg = colors.bg1, fg = colors.fg}
+  },
+  insert = {
+    a = {bg = colors.fg, fg = colors.bg0, gui = 'bold'},
+    b = {bg = colors.bg3, fg = colors.fg},
+    c = {bg = colors.bg1, fg = colors.fg}
+  },
+  visual = {
+    a = {bg = colors.red, fg = colors.bg0, gui = 'bold'},
+    b = {bg = colors.bg3, fg = colors.fg},
+    c = {bg = colors.bg1, fg = colors.fg}
+  },
+  replace = {
+    a = {bg = colors.orange, fg = colors.bg0, gui = 'bold'},
+    b = {bg = colors.bg3, fg = colors.fg},
+    c = {bg = colors.bg1, fg = colors.fg}
+  },
+  command = {
+    a = {bg = colors.aqua, fg = colors.bg0, gui = 'bold'},
+    b = {bg = colors.bg3, fg = colors.fg},
+    c = {bg = colors.bg1, fg = colors.fg}
+  },
+  terminal = {
+    a = {bg = colors.purple, fg = colors.bg0, gui = 'bold'},
+    b = {bg = colors.bg3, fg = colors.fg},
+    c = {bg = colors.bg1, fg = colors.fg}
+  },
+  inactive = {
+    a = {bg = colors.bg1, fg = colors.grey1, gui = 'bold'},
+    b = {bg = colors.bg1, fg = colors.grey1},
+    c = {bg = colors.bg1, fg = colors.grey1}
+  }
 }
-
-everforest.insert = {
-  a = {bg = colors.fg, fg = colors.bg0, gui = 'bold'},
-  b = {bg = colors.bg3, fg = colors.fg},
-  c = {bg = colors.bg1, fg = colors.fg}
-}
-
-everforest.visual = {
-  a = {bg = colors.red, fg = colors.bg0, gui = 'bold'},
-  b = {bg = colors.bg3, fg = colors.fg},
-  c = {bg = colors.bg1, fg = colors.fg}
-}
-
-everforest.replace = {
-  a = {bg = colors.orange, fg = colors.bg0, gui = 'bold'},
-  b = {bg = colors.bg3, fg = colors.fg},
-  c = {bg = colors.bg1, fg = colors.fg}
-}
-
-everforest.command = {
-  a = {bg = colors.aqua, fg = colors.bg0, gui = 'bold'},
-  b = {bg = colors.bg3, fg = colors.fg},
-  c = {bg = colors.bg1, fg = colors.fg}
-}
-
-everforest.terminal = {
-  a = {bg = colors.purple, fg = colors.bg0, gui = 'bold'},
-  b = {bg = colors.bg3, fg = colors.fg},
-  c = {bg = colors.bg1, fg = colors.fg}
-}
-
-everforest.inactive = {
-  a = {bg = colors.bg1, fg = colors.grey1, gui = 'bold'},
-  b = {bg = colors.bg1, fg = colors.grey1},
-  c = {bg = colors.bg1, fg = colors.grey1}
-}
-
-return everforest

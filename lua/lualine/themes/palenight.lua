@@ -21,7 +21,6 @@ local colors = {
   black          = '#292D3E',
 }
 -- LuaFormatter on
-
 return {
   normal = {
     a = {fg = colors.black, bg = colors.purple, gui = 'bold'},
