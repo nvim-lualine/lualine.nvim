@@ -52,9 +52,14 @@ end
 
 local function load_extensions(config)
   for index, extension in pairs(config.extensions) do
-    local local_extension = require('lualine.extensions.' .. extension)
-    load_sections(local_extension.sections, config.options)
-    config.extensions[index] = local_extension
+    if type(extension) == 'string' then
+      local local_extension = require('lualine.extensions.' .. extension)
+      load_sections(local_extension.sections, config.options)
+      config.extensions[index] = local_extension
+    elseif type(extension) == 'table' then
+      load_sections(extension.sections, config.options)
+      config.extensions[index] = extension
+    end
   end
 end
 

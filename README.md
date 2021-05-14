@@ -398,6 +398,17 @@ extensions = {'quickfix'}
 
 </details>
 
+<details>
+<summary><b>Custom extensions</b></summary>
+
+You can define your own extensions. If you think an extension might be useful for others then please submit a pr.
+```lua
+local my_extension = {sections = {lualine_a = 'mode'}, filetypes = {'lua'}}
+require'lualine'.setup {extensions = {my_extension}}
+```
+
+</details>
+
 ---
 ### Disabling lualine
 You can disable lualine for specific filetypes

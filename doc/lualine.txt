@@ -313,13 +313,22 @@ You can load extensions with:
 >
     extensions = {'quickfix'}
 <
-Available extensions
+Available extensions~
     * |chadtree|
     * |fugitive|
     * |fzf|
     * |nerdtree|
     * |nvim-tree|
     * |quickfix|
+    *
+
+Custom extensions~
+
+You can define your own extensions.
+If you think an extension might be useful for others then please submit a pr.
+>
+    local my_extension = {sections = {lualine_a = 'mode'}, filetypes = {'lua'}}
+    require'lualine'.setup {extensions = {my_extension}}
 
 ------------------------------------------------------------------------------
 DISABLING LUALINE                                              *lualine-disable*
