@@ -1,6 +1,5 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local gruvbox = {}
 -- LuaFormatter off
 local colors = {
   black        = '#282828',
@@ -15,41 +14,35 @@ local colors = {
   inactivegray = '#7c6f64',
 }
 -- LuaFormatter on
-
-gruvbox.normal = {
-  a = {bg = colors.gray, fg = colors.black, gui = 'bold'},
-  b = {bg = colors.lightgray, fg = colors.white},
-  c = {bg = colors.darkgray, fg = colors.gray}
+return {
+  normal = {
+    a = {bg = colors.gray, fg = colors.black, gui = 'bold'},
+    b = {bg = colors.lightgray, fg = colors.white},
+    c = {bg = colors.darkgray, fg = colors.gray}
+  },
+  insert = {
+    a = {bg = colors.blue, fg = colors.black, gui = 'bold'},
+    b = {bg = colors.lightgray, fg = colors.white},
+    c = {bg = colors.lightgray, fg = colors.white}
+  },
+  visual = {
+    a = {bg = colors.yellow, fg = colors.black, gui = 'bold'},
+    b = {bg = colors.lightgray, fg = colors.white},
+    c = {bg = colors.inactivegray, fg = colors.black}
+  },
+  replace = {
+    a = {bg = colors.red, fg = colors.black, gui = 'bold'},
+    b = {bg = colors.lightgray, fg = colors.white},
+    c = {bg = colors.black, fg = colors.white}
+  },
+  command = {
+    a = {bg = colors.green, fg = colors.black, gui = 'bold'},
+    b = {bg = colors.lightgray, fg = colors.white},
+    c = {bg = colors.inactivegray, fg = colors.black}
+  },
+  inactive = {
+    a = {bg = colors.darkgray, fg = colors.gray, gui = 'bold'},
+    b = {bg = colors.darkgray, fg = colors.gray},
+    c = {bg = colors.darkgray, fg = colors.gray}
+  }
 }
-
-gruvbox.insert = {
-  a = {bg = colors.blue, fg = colors.black, gui = 'bold'},
-  b = {bg = colors.lightgray, fg = colors.white},
-  c = {bg = colors.lightgray, fg = colors.white}
-}
-
-gruvbox.visual = {
-  a = {bg = colors.yellow, fg = colors.black, gui = 'bold'},
-  b = {bg = colors.lightgray, fg = colors.white},
-  c = {bg = colors.inactivegray, fg = colors.black}
-}
-
-gruvbox.replace = {
-  a = {bg = colors.red, fg = colors.black, gui = 'bold'},
-  b = {bg = colors.lightgray, fg = colors.white},
-  c = {bg = colors.black, fg = colors.white}
-}
-
-gruvbox.command = {
-  a = {bg = colors.green, fg = colors.black, gui = 'bold'},
-  b = {bg = colors.lightgray, fg = colors.white},
-  c = {bg = colors.inactivegray, fg = colors.black}
-}
-
-gruvbox.inactive = {
-  a = {bg = colors.darkgray, fg = colors.gray, gui = 'bold'},
-  b = {bg = colors.darkgray, fg = colors.gray},
-  c = {bg = colors.darkgray, fg = colors.gray}
-}
-
-return gruvbox

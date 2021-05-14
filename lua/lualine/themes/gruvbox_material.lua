@@ -14,8 +14,7 @@ local colors = {
   color9 = '#ea6962',
 }
 -- LuaFormatter on
-
-local M = {
+return {
   normal = {
     a = {fg = colors.fg1, bg = colors.color4, gui = 'bold'},
     b = {fg = colors.fg2, bg = colors.color2},
@@ -28,4 +27,3 @@ local M = {
   terminal = {a = {fg = colors.fg1, bg = colors.color8, gui = 'bold'}},
   visual = {a = {fg = colors.fg1, bg = colors.color9, gui = 'bold'}}
 }
-return M

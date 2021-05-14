@@ -11,8 +11,7 @@ local colors = {
   color2   = '#c3ccdc',
 }
 -- LuaFormatter on
-
-local nightfly = {
+return {
   replace = {
     a = {fg = colors.color0, bg = colors.color1, gui = 'bold'},
     b = {fg = colors.color2, bg = colors.color3}
@@ -36,5 +35,3 @@ local nightfly = {
     b = {fg = colors.color2, bg = colors.color3}
   }
 }
-
-return nightfly
