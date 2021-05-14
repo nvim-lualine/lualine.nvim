@@ -26,7 +26,7 @@ For those who want to break the norms. You can create custom looks in lualine.
 
 **Example** :
 
-- [evil_lualine](https://gist.github.com/shadmansaleh/cd526bc166237a5cbd51429cc1f6291b)
+- [evil_lualine](https://gist.github.com/hoob3rt/b200435a765ca18f09f83580a606b878)
 ![evil_lualine_image](https://user-images.githubusercontent.com/13149513/113875129-4453ba00-97d8-11eb-8f21-94a9ef565db3.png)
 
 ## Performance compared to other plugins
