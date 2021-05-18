@@ -14,8 +14,7 @@ local colors = {
   color9   = '#607080',
 }
 -- LuaFormatter on
-
-local ayu_mirage = {
+return {
   visual = {
     a = {fg = colors.color2, bg = colors.color3, gui = 'bold'},
     b = {fg = colors.color4, bg = colors.color5}
@@ -39,5 +38,3 @@ local ayu_mirage = {
     b = {fg = colors.color4, bg = colors.color5}
   }
 }
-
-return ayu_mirage

@@ -14,8 +14,7 @@ local colors = {
   color9   = '#828C99',
 }
 -- LuaFormatter on
-
-local ayu_light = {
+return {
   visual = {
     a = {fg = colors.color2, bg = colors.color3, gui = 'bold'},
     b = {fg = colors.color4, bg = colors.color5}
@@ -39,5 +38,3 @@ local ayu_light = {
     b = {fg = colors.color4, bg = colors.color5}
   }
 }
-
-return ayu_light

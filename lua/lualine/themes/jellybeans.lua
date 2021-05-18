@@ -15,8 +15,7 @@ local colors = {
   color14  = '#99ad6a',
 }
 -- LuaFormatter on
-
-local jellybeans = {
+return {
   visual = {
     a = {fg = colors.color2, bg = colors.color3, gui = 'bold'},
     b = {fg = colors.color4, bg = colors.color5}
@@ -40,5 +39,3 @@ local jellybeans = {
     b = {fg = colors.color4, bg = colors.color5}
   }
 }
-
-return jellybeans

@@ -1,7 +1,6 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 -- Credit: Zoltan Dalmadi(lightline)
-local M = {}
 -- LuaFormatter off
 local colors = {
   blue   = '#61afef',
@@ -17,23 +16,18 @@ local colors = {
   gray3  = '#3e4452',
 }
 -- LuaFormatter on
-
-M.normal = {
-  a = {fg = colors.bg, bg = colors.green, gui = 'bold'},
-  b = {fg = colors.fg, bg = colors.gray3},
-  c = {fg = colors.fg, bg = colors.gray2}
+return {
+  normal = {
+    a = {fg = colors.bg, bg = colors.green, gui = 'bold'},
+    b = {fg = colors.fg, bg = colors.gray3},
+    c = {fg = colors.fg, bg = colors.gray2}
+  },
+  insert = {a = {fg = colors.bg, bg = colors.blue, gui = 'bold'}},
+  visual = {a = {fg = colors.bg, bg = colors.purple, gui = 'bold'}},
+  replace = {a = {fg = colors.bg, bg = colors.red1, gui = 'bold'}},
+  inactive = {
+    a = {fg = colors.gray1, bg = colors.bg, gui = 'bold'},
+    b = {fg = colors.gray1, bg = colors.bg},
+    c = {fg = colors.gray1, bg = colors.gray2}
+  }
 }
-
-M.insert = {a = {fg = colors.bg, bg = colors.blue, gui = 'bold'}}
-
-M.visual = {a = {fg = colors.bg, bg = colors.purple, gui = 'bold'}}
-
-M.replace = {a = {fg = colors.bg, bg = colors.red1, gui = 'bold'}}
-
-M.inactive = {
-  a = {fg = colors.gray1, bg = colors.bg, gui = 'bold'},
-  b = {fg = colors.gray1, bg = colors.bg},
-  c = {fg = colors.gray1, bg = colors.gray2}
-}
-
-return M
