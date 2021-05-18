@@ -14,48 +14,30 @@ return {
     a = {bg = colors.darkgray, fg = colors.white, gui = 'bold'},
     b = {bg = colors.gray, fg = colors.darkgray},
     c = {bg = colors.lightgray, fg = colors.darkgray},
-    x = {bg = colors.lightgray, fg = colors.darkgray},
-    y = {bg = colors.gray, fg = colors.darkgray},
-    z = {bg = colors.darkgray, fg = colors.white, gui = 'bold'}
   },
   insert = {
     a = {bg = colors.blue, fg = colors.white, gui = 'bold'},
     b = {bg = colors.gray, fg = colors.darkgray},
     c = {bg = colors.gray, fg = colors.black},
-    x = {bg = colors.gray, fg = colors.black},
-    y = {bg = colors.gray, fg = colors.darkgray},
-    z = {bg = colors.blue, fg = colors.white, gui = 'bold'}
   },
   visual = {
     a = {bg = colors.orange, fg = colors.white, gui = 'bold'},
     b = {bg = colors.gray, fg = colors.darkgray},
     c = {bg = colors.darkgray, fg = colors.white},
-    x = {bg = colors.darkgray, fg = colors.white},
-    y = {bg = colors.gray, fg = colors.darkgray},
-    z = {bg = colors.orange, fg = colors.white, gui = 'bold'}
   },
   replace = {
     a = {bg = colors.green, fg = colors.white, gui = 'bold'},
     b = {bg = colors.gray, fg = colors.darkgray},
     c = {bg = colors.gray, fg = colors.black},
-    x = {bg = colors.gray, fg = colors.black},
-    y = {bg = colors.gray, fg = colors.darkgray},
-    z = {bg = colors.green, fg = colors.white, gui = 'bold'}
   },
   command = {
     a = {bg = colors.darkgray, fg = colors.white, gui = 'bold'},
     b = {bg = colors.gray, fg = colors.darkgray},
     c = {bg = colors.lightgray, fg = colors.darkgray},
-    x = {bg = colors.lightgray, fg = colors.darkgray},
-    y = {bg = colors.gray, fg = colors.darkgray},
-    z = {bg = colors.darkgray, fg = colors.white, gui = 'bold'}
   },
   inactive = {
     a = {bg = colors.lightgray, fg = colors.inactivegray},
     b = {bg = colors.lightgray, fg = colors.inactivegray},
     c = {bg = colors.lightgray, fg = colors.inactivegray},
-    x = {bg = colors.lightgray, fg = colors.inactivegray},
-    y = {bg = colors.lightgray, fg = colors.inactivegray},
-    z = {bg = colors.lightgray, fg = colors.inactivegray}
   }
 }
