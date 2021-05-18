@@ -53,6 +53,13 @@ lualine try to match your colorscheme.
 ![gruvboxvisual_cropped](https://user-images.githubusercontent.com/41551030/108648700-319d5400-74bc-11eb-90fa-72eccbda8242.png)
 ![gruvboxreplace_cropped](https://user-images.githubusercontent.com/41551030/108648716-382bcb80-74bc-11eb-824a-aaca67035073.png)
 
+### gruvbox_light
+![gruvboxlightnormal_cropped](https://user-images.githubusercontent.com/34294427/118676013-42dccf00-b825-11eb-9019-9efadbeac025.png)
+![gruvboxlightinsert_cropped](https://user-images.githubusercontent.com/34294427/118676027-453f2900-b825-11eb-82da-2e4ccb7f09f7.png)
+![gruvboxlightvisual_cropped](https://user-images.githubusercontent.com/34294427/118676054-4a9c7380-b825-11eb-881e-d5761681d90c.png)
+![gruvboxlightreplace_cropped](https://user-images.githubusercontent.com/34294427/118676061-4cfecd80-b825-11eb-8584-a402bdbf8bc8.png)
+
+
 ### gruvbox_material
 ![gruvboxmaterialnormal_cropped](https://user-images.githubusercontent.com/41551030/108648725-3f52d980-74bc-11eb-8fa5-a77b0a21cdea.png)
 ![gruvboxmaterialinsert_cropped](https://user-images.githubusercontent.com/41551030/108648728-41b53380-74bc-11eb-99cf-001eab6cc51b.png)
