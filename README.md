@@ -14,11 +14,13 @@ Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pr.
 ## Screenshots
 Here is a preview of how lualine can look like.
 
-![normal_cropped](https://user-images.githubusercontent.com/41551030/108650373-bb025580-74bf-11eb-8682-2c09321dd18e.png)
-![powerline_cropped](https://user-images.githubusercontent.com/41551030/108650377-bd64af80-74bf-11eb-9c55-fbfc51b39fe8.png)
-![diff_cropped](https://user-images.githubusercontent.com/41551030/108650378-be95dc80-74bf-11eb-9718-82b242ecdd54.png)
-![diagnostics_cropped](https://user-images.githubusercontent.com/41551030/108650381-bfc70980-74bf-11eb-9245-85c48f0f154a.png)
-![replace](https://user-images.githubusercontent.com/41551030/103467925-32372b00-4d54-11eb-88d6-6d39c46854d8.png)
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/41551030/108650373-bb025580-74bf-11eb-8682-2c09321dd18e.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/41551030/108650377-bd64af80-74bf-11eb-9c55-fbfc51b39fe8.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/41551030/108650378-be95dc80-74bf-11eb-9718-82b242ecdd54.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/41551030/108650381-bfc70980-74bf-11eb-9245-85c48f0f154a.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/41551030/103467925-32372b00-4d54-11eb-88d6-6d39c46854d8.png'/>
+</p>
 
 Screenshots of all available themes are listed in [THEMES.md](./THEMES.md)
 
@@ -27,7 +29,7 @@ For those who want to break the norms. You can create custom looks in lualine.
 **Example** :
 
 - [evil_lualine](https://gist.github.com/hoob3rt/b200435a765ca18f09f83580a606b878)
-![evil_lualine_image](https://user-images.githubusercontent.com/13149513/113875129-4453ba00-97d8-11eb-8f21-94a9ef565db3.png)
+<img width='700' src='https://user-images.githubusercontent.com/13149513/113875129-4453ba00-97d8-11eb-8f21-94a9ef565db3.png'/>
 
 ## Performance compared to other plugins
 Unlike other statusline plugins lualine loads only defined components, nothing else.
