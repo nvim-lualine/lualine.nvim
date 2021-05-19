@@ -6,7 +6,7 @@ All available themes are only best effort ports by myself/ other users. If you f
 if your favourite colorcheme is not yet supported you can use `auto` to make
 lualine try to match your colorscheme.
 ### 16color
-<p align='center'>
+<p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648240-02d2ae00-74bb-11eb-9ac1-495849621366.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648219-f77f8280-74ba-11eb-84e4-978bf918c21f.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648263-141bba80-74bb-11eb-84e0-ff48ae6f927a.png'/>
