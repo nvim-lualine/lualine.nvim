@@ -5,14 +5,14 @@ local colors = {
   green        = '#09F7A0',
   blue         = '#25B2BC',
   yellow       = '#F09383',
-  gray         = '#232530',
+  gray         = '#E95678',
   darkgray     = '#1A1C23',
   lightgray    = '#2E303E',
   inactivegray = '#1C1E26',
 }
 return {
   normal = {
-    a = {bg = colors.yellow, fg = colors.black, gui = 'bold'},
+    a = {bg = colors.gray, fg = colors.black, gui = 'bold'},
     b = {bg = colors.lightgray, fg = colors.white},
     c = {bg = colors.darkgray, fg = colors.white},
   },
