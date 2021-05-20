@@ -1,4 +1,4 @@
--- Copyright (c) 2021 Jnhtr 
+-- Copyright (c) 2021 Jnhtr
 -- MIT license, see LICENSE for more details.
 -- LuaFormatter off
 local colors = {
