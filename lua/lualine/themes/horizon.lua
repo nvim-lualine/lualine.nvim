@@ -1,3 +1,6 @@
+-- Copyright (c) 2021 Jnhtr 
+-- MIT license, see LICENSE for more details.
+-- LuaFormatter off
 local colors = {
   black        = '#1c1e26',
   white        = '#6C6F93',
@@ -10,6 +13,7 @@ local colors = {
   lightgray    = '#2E303E',
   inactivegray = '#1C1E26',
 }
+--LuaFormatter on
 return {
   normal = {
     a = {bg = colors.gray, fg = colors.black, gui = 'bold'},

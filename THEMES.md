@@ -85,7 +85,7 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648744-4d085f00-74bc-11eb-8aaa-05a7ca46adec.png'/>
 </p>
 
-### Horizon
+### horizon
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/69089176/118903813-70527700-b910-11eb-9d45-1785790ce8e8.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/69089176/118902058-bc9bb800-b90c-11eb-99b8-3b98cbdd01d7.png'/>
