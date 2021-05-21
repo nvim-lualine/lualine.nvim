@@ -140,11 +140,8 @@ local Component = {
         vim.fn.win_getid() then
       -- In that case we'll return a evaluator
       self.status = '%' .. string.format(
-                        '{v:lua.require\'lualine.utils.utils\'.lualine_eval(%s,\'\',v:true)}',
+                        '{%%v:lua.require\'lualine.utils.utils\'.lualine_eval(%s,\'\',v:true)%%}',
                         tostring(self.component_no))
-      -- Need to apply the highlights early as %{} escapes % :(
-      -- I'm not sure if it's a good idea. But don't have an option.
-      self:apply_highlights(default_highlight)
       return self.status
     end
     self.status = ''
@@ -158,10 +155,7 @@ local Component = {
       self:apply_icon()
       self:apply_case()
       self:apply_padding()
-      if not statusline_inactive then
-        -- incase of inactive eval highlight hasbeen pre applied
-        self:apply_highlights(default_highlight)
-      end
+      self:apply_highlights(default_highlight)
       if not (statusline_inactive and self.last_conponent) then
         self:apply_separator()
       end
