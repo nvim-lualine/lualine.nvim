@@ -21,7 +21,7 @@ Diagnostics.new = function(self, options, child)
     error = ' ', -- xf659
     warn = ' ', -- xf529
     info = ' ', -- xf7fc
-    hint = '? ' -- x003f
+    hint = ' ' -- xf838
   } or {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'}
   new_diagnostics.symbols = vim.tbl_extend('force', default_symbols,
                                            new_diagnostics.options.symbols or {})
