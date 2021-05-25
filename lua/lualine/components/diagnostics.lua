@@ -10,6 +10,7 @@ Diagnostics.default_colors = {
   error = '#e32636',
   warn  = '#ffdf00',
   info  = '#ffffff',
+  hint  = '#d7afaf',
 }
 -- LuaFormatter on
 
@@ -19,8 +20,9 @@ Diagnostics.new = function(self, options, child)
   local default_symbols = new_diagnostics.options.icons_enabled and {
     error = ' ', -- xf659
     warn = ' ', -- xf529
-    info = ' ' -- xf7fc
-  } or {error = 'E:', warn = 'W:', info = 'I:'}
+    info = ' ', -- xf7fc
+    hint = ' ' -- xf838
+  } or {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'}
   new_diagnostics.symbols = vim.tbl_extend('force', default_symbols,
                                            new_diagnostics.options.symbols or {})
   if new_diagnostics.options.sources == nil then
@@ -28,7 +30,7 @@ Diagnostics.new = function(self, options, child)
     return ''
   end
   if new_diagnostics.options.sections == nil then
-    new_diagnostics.options.sections = {'error', 'warn', 'info'}
+    new_diagnostics.options.sections = {'error', 'warn', 'info', 'hint'}
   end
   if new_diagnostics.options.colored == nil then
     new_diagnostics.options.colored = true
@@ -52,6 +54,12 @@ Diagnostics.new = function(self, options, child)
             utils.extract_highlight_colors('Normal', 'fg') or
             Diagnostics.default_colors.info
   end
+  if not new_diagnostics.options.color_hint then
+    new_diagnostics.options.color_hint =
+        utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg') or
+            utils.extract_highlight_colors('DiffChange', 'fg') or
+            Diagnostics.default_colors.hint
+  end
 
   if new_diagnostics.options.colored then
     new_diagnostics.highlight_groups = {
@@ -63,6 +71,9 @@ Diagnostics.new = function(self, options, child)
           new_diagnostics.options),
       info = highlight.create_component_highlight_group(
           {fg = new_diagnostics.options.color_info}, 'diagnostics_info',
+          new_diagnostics.options),
+      hint = highlight.create_component_highlight_group(
+          {fg = new_diagnostics.options.color_hint}, 'diagnostics_hint',
           new_diagnostics.options)
     }
   end
@@ -71,15 +82,21 @@ Diagnostics.new = function(self, options, child)
 end
 
 Diagnostics.update_status = function(self)
-  local error_count, warning_count, info_count = 0, 0, 0
+  local error_count, warning_count, info_count, hint_count = 0, 0, 0, 0
   local diagnostic_data = self.get_diagnostics(self.options.sources)
   for _, data in pairs(diagnostic_data) do
     error_count = error_count + data.error
     warning_count = warning_count + data.warn
     info_count = info_count + data.info
+    hint_count = hint_count + data.hint
   end
   local result = {}
-  local data = {error = error_count, warn = warning_count, info = info_count}
+  local data = {
+    error = error_count,
+    warn = warning_count,
+    info = info_count,
+    hint = hint_count
+  }
   if self.options.colored then
     local colors = {}
     for name, hl in pairs(self.highlight_groups) do
@@ -109,24 +126,24 @@ Diagnostics.diagnostic_sources = {
   nvim_lsp = function()
     local error_count = vim.lsp.diagnostic.get_count(0, 'Error')
     local warning_count = vim.lsp.diagnostic.get_count(0, 'Warning')
-    local info_count = vim.lsp.diagnostic.get_count(0, 'Information') +
-                           vim.lsp.diagnostic.get_count(0, 'Hint')
-    return error_count, warning_count, info_count
+    local info_count = vim.lsp.diagnostic.get_count(0, 'Information')
+    local hint_count = vim.lsp.diagnostic.get_count(0, 'Hint')
+    return error_count, warning_count, info_count, hint_count
   end,
   coc = function()
     local data = vim.b.coc_diagnostic_info
     if data then
-      return data.error, data.warning, data.information
+      return data.error, data.warning, data.information, data.hint
     else
-      return 0, 0, 0
+      return 0, 0, 0, 0
     end
   end,
   ale = function()
     local ok, data = pcall(vim.fn['ale#statusline#Count'], vim.fn.bufnr())
     if ok then
-      return data.error, data.warning, data.info
+      return data.error + data.style_error, data.warning + data.style_warning, data.info, 0
     else
-      return 0, 0, 0
+      return 0, 0, 0, 0
     end
   end
 }
@@ -134,12 +151,13 @@ Diagnostics.diagnostic_sources = {
 Diagnostics.get_diagnostics = function(sources)
   local result = {}
   for index, source in ipairs(sources) do
-    local error_count, warning_count, info_count =
+    local error_count, warning_count, info_count, hint_count =
         Diagnostics.diagnostic_sources[source]()
     result[index] = {
       error = error_count,
       warn = warning_count,
-      info = info_count
+      info = info_count,
+      hint = hint_count
     }
   end
   return result
