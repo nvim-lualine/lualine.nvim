@@ -126,7 +126,7 @@ Please create a pr if you managed to port a popular theme before me, [here is ho
 
 ```lua
 local custom_gruvbox = require'lualine.themes.gruvbox'
--- Chnage the background of lualine_c section for normal mode
+-- Change the background of lualine_c section for normal mode
 custom_gruvbox.normal.c.bg = '#112233' -- rgb colors are supported
 require'lualine'.setup{
   options = { theme  = custom_gruvbox },
