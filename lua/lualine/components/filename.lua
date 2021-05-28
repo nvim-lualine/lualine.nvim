@@ -1,6 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local FileName = require('lualine.component'):new()
+local estimated_total_width_of_decorations = 40
 
 local function count(base, pattern)
   return select(2, string.gsub(base, pattern, ''))
@@ -44,7 +45,7 @@ FileName.update_status = function(self)
   if data == '' then data = '[No Name]' end
 
   local windwidth = vim.fn.winwidth(0)
-  local estimated_space_available = windwidth - 40
+  local estimated_space_available = windwidth - estimated_total_width_of_decorations
   local path_separator = package.config:sub(1, 1)
   for _ = 0, count(data, path_separator) do
     if windwidth <= 84 or #data > estimated_space_available then
