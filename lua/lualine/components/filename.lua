@@ -24,6 +24,9 @@ FileName.new = function(self, options, child)
     new_instance.options.file_status = true
   end
   if new_instance.options.path == nil then new_instance.options.path = 0 end
+  if new_instance.options.shorting_target == nil then
+    new_instance.options.shorting_target = 40
+  end
 
   return new_instance
 end
@@ -43,12 +46,15 @@ FileName.update_status = function(self)
 
   if data == '' then data = '[No Name]' end
 
-  local windwidth = vim.fn.winwidth(0)
-  local estimated_space_available = 40
-  local path_separator = package.config:sub(1, 1)
-  for _ = 0, count(data, path_separator) do
-    if windwidth <= 84 or #data > estimated_space_available then
-      data = shorten_path(data, path_separator)
+  if self.options.shorting_target ~= 0 then
+    local windwidth = vim.fn.winwidth(0)
+    local estimated_space_available = windwidth - self.options.shorting_target
+
+    local path_separator = package.config:sub(1, 1)
+    for _ = 0, count(data, path_separator) do
+      if windwidth <= 84 or #data > estimated_space_available then
+        data = shorten_path(data, path_separator)
+      end
     end
   end
 
