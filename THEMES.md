@@ -53,6 +53,14 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648619-fe5ac500-74bb-11eb-8952-cc5c81fd0b2b.png'/>
 </p>
 
+### embark
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/23151917/120066387-5f270a00-c076-11eb-94c8-833fba47204d.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/23151917/120066399-6ea65300-c076-11eb-8267-a3af0695419e.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/23151917/120066402-71a14380-c076-11eb-8c8c-b517ed0bd981.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/23151917/120066405-749c3400-c076-11eb-9eb2-16f11ca1623a.png'/>
+</p>
+
 ### everforest
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648663-1cc0c080-74bc-11eb-8cc1-36266a0385e3.png'/>
