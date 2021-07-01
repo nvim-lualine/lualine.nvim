@@ -44,7 +44,17 @@ FileName.update_status = function(self)
   if data == '' then data = '[No Name]' end
 
   local windwidth = vim.fn.winwidth(0)
-  local estimated_space_available = 40
+  local estimated_space_available
+  if self.options.truncate == 1 then
+    -- still not much space available
+    estimated_space_available = 55
+  elseif self.options.truncate == 2 then
+    -- a lot of space available
+    estimated_space_available = 80
+  else
+    -- default value
+    estimated_space_available = 40
+  end
   local path_separator = package.config:sub(1, 1)
   for _ = 0, count(data, path_separator) do
     if windwidth <= 84 or #data > estimated_space_available then
