@@ -221,6 +221,13 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649205-2f87c500-74bd-11eb-9da6-5253dcff2c82.png'/>
 </p>
 
+### shadoline
+<p>
+<img width='700' src='screenshots/shadoline_normal_mode.png'/>
+<img width='700' src='screenshots/shadoline_insert_mode.png'/>
+<img width='700' src='screenshots/shadoline_visual_mode.png'/>
+<img width='700' src='screenshots/shadoline_replace_mode.png'/>
+
 ### solarized_dark
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649216-37476980-74bd-11eb-8f3b-2a7fc368388d.png'/>
