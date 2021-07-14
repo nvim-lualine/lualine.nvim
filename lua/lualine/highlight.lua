@@ -6,22 +6,28 @@ local utils = require 'lualine.utils.utils'
 local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
 local active_theme = nil
 
+local function context_hl(command, color_value, context)
+  if not color_value or color_value == 'none' then return end
+
+  if type(color_value) == 'string' then
+    table.insert(command, 'gui' .. context .. '=' .. color_value)
+    if cterm_colors then
+      table.insert(command,
+	   'cterm' .. context..  '=' .. cterm_colors.get_cterm_color(color_value))
+    end
+  else
+    table.insert(command, 'cterm' .. context .. '='..color_value)
+  end
+
+  return command
+end
+
 function M.highlight(name, foreground, background, gui, reload)
   local command = {'highlight', name}
-  if foreground and foreground ~= 'none' then
-    table.insert(command, 'guifg=' .. foreground)
-    if cterm_colors then
-      table.insert(command,
-                   'ctermfg=' .. cterm_colors.get_cterm_color(foreground))
-    end
-  end
-  if background and background ~= 'none' then
-    table.insert(command, 'guibg=' .. background)
-    if cterm_colors then
-      table.insert(command,
-                   'ctermbg=' .. cterm_colors.get_cterm_color(background))
-    end
-  end
+
+  context_hl(command, foreground, "fg")
+  context_hl(command, background, "bg")
+
   if gui then
     table.insert(command, 'cterm=' .. gui)
     table.insert(command, 'gui=' .. gui)
