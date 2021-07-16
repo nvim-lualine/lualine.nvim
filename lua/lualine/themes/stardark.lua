@@ -18,12 +18,12 @@ local colors = {
 -- LuaFormatter on
 return {
 	normal = {
-		a = { bg = colors.inactivegray, fg = colors.white, gui = "bold" },
+		a = { bg = colors.inactivegray, fg = colors.dark, gui = "bold" },
 		b = { bg = colors.lightgray, fg = colors.white },
 		c = { bg = colors.darkgray, fg = colors.white },
 	},
 	insert = {
-		a = { bg = colors.blue, fg = colors.white, gui = "bold" },
+		a = { bg = colors.blue, fg = colors.dark, gui = "bold" },
 		b = { bg = colors.gray, fg = colors.white },
 		c = { bg = colors.lightgray, fg = colors.white },
 	},
@@ -33,12 +33,12 @@ return {
 		c = { bg = colors.gray, fg = colors.white },
 	},
 	replace = {
-		a = { bg = colors.red, fg = colors.white, gui = "bold" },
+		a = { bg = colors.red, fg = colors.dark, gui = "bold" },
 		b = { bg = colors.lightgray, fg = colors.white },
 		c = { bg = colors.black, fg = colors.white },
 	},
 	command = {
-		a = { bg = colors.green, fg = colors.white, gui = "bold" },
+		a = { bg = colors.green, fg = colors.dark, gui = "bold" },
 		b = { bg = colors.darkgray, fg = colors.white },
 		c = { bg = colors.lightgray, fg = colors.white },
 	},
