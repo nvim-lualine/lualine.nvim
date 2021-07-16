@@ -13,7 +13,7 @@ local colors = {
 	pink = "#ad3838",
 	darkgray = "#281b10",
 	lightgray = "#363636",
-	inactivegray = "#656777",
+	inactivegray = "#5b5c58",
 }
 -- LuaFormatter on
 return {
