@@ -7,17 +7,17 @@ local colors = {
 	red       = "#ff1a1a",
 	green     = "#669900",
 	blue      = "#1a1aff",
+  dark      = "#11121D",
 	yellow    = "#e6e600",
 	gray      = "#4d1919",
 	pink      = "#ad3838",
 	darkgray  = "#281b10",
-	lightgray = "#504945",
-	inactivegray = "#7c6f64",
+	lightgray = "#363636",
 }
 -- LuaFormatter on
 return {
 	normal = {
-		a = { bg = colors.gray, fg = colors.black, gui = "bold" },
+		a = { bg = colors.gray, fg = colors.white, gui = "bold" },
 		b = { bg = colors.lightgray, fg = colors.white },
 		c = { bg = colors.darkgray, fg = colors.gray },
 	},
@@ -42,8 +42,8 @@ return {
 		c = { bg = colors.inactivegray, fg = colors.black },
 	},
 	inactive = {
-		a = { bg = colors.darkgray, fg = colors.gray, gui = "bold" },
-		b = { bg = colors.darkgray, fg = colors.gray },
-		c = { bg = colors.darkgray, fg = colors.gray },
+		a = { bg = colors.darkgray, fg = colors.white, gui = "bold" },
+		b = { bg = colors.darkgray, fg = colors.white },
+		c = { bg = colors.darkgray, fg = colors.white },
 	},
 }
