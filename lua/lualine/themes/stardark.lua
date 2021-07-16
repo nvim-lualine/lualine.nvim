@@ -40,7 +40,7 @@ return {
 	command = {
 		a = { bg = colors.green, fg = colors.black, gui = "bold" },
 		b = { bg = colors.lightgray, fg = colors.white },
-		c = { bg = colors.lightgray, fg = colors.black },
+		c = { bg = colors.lightgray, fg = colors.white },
 	},
 	inactive = {
 		a = { bg = colors.darkgray, fg = colors.white, gui = "bold" },
