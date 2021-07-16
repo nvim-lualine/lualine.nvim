@@ -6,25 +6,25 @@ local colors = {
 	white     = "#ebdbb2",
 	red       = "#ff1a1a",
 	green     = "#669900",
-	blue      = "#3c56f1",
+	blue      = "#5396c2",
   dark      = "#11121D",
 	yellow    = "#e6e600",
 	gray      = "#4d1919",
 	pink      = "#ad3838",
 	darkgray  = "#281b10",
 	lightgray = "#363636",
-	incactivegray = "#656777",
+	inactivegray = "#656777",
 }
 -- LuaFormatter on
 return {
 	normal = {
-		a = { bg = colors.gray, fg = colors.white, gui = "bold" },
+		a = { bg = colors.inactivegray, fg = colors.white, gui = "bold" },
 		b = { bg = colors.lightgray, fg = colors.white },
 		c = { bg = colors.darkgray, fg = colors.white },
 	},
 	insert = {
 		a = { bg = colors.blue, fg = colors.black, gui = "bold" },
-		b = { bg = colors.lightgray, fg = colors.white },
+		b = { bg = colors.gray, fg = colors.white },
 		c = { bg = colors.lightgray, fg = colors.white },
 	},
 	visual = {
