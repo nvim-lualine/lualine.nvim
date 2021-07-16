@@ -28,7 +28,7 @@ return {
 		c = { bg = colors.lightgray, fg = colors.white },
 	},
 	visual = {
-		a = { bg = colors.yellow, fg = colors.white, gui = "bold" },
+		a = { bg = colors.yellow, fg = colors.dark, gui = "bold" },
 		b = { bg = colors.lightgray, fg = colors.white },
 		c = { bg = colors.gray, fg = colors.white },
 	},
