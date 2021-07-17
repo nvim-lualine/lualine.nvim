@@ -4,16 +4,15 @@
 local colors = {
 	black = "#282828",
 	white = "#ebdbb2",
-	red = "#ff1a1a",
-	green = "#669900",
-	blue = "#5396c2",
+	red = "#e27d60",
+	green = "#2bbb4f",
+	blue = "#4799eb",
 	dark = "#11121D",
 	yellow = "#e6e600",
 	gray = "#4d1919",
-	pink = "#ad3838",
 	darkgray = "#281b10",
 	lightgray = "#363636",
-	inactivegray = "#5b5c58",
+	inactivegray = "#986fec",
 }
 -- LuaFormatter on
 return {
