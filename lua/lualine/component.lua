@@ -115,9 +115,9 @@ local Component = {
     return self.status
   end,
 
-  -- variable to store component output for manupulation
+  -- variable to store component output for manipulation
   status = '',
-  -- Actual function the updates a component . Must be overwritten with component functionality
+  -- Actual function that updates a component. Must be overwritten with component functionality
   -- luacheck: push no unused args
   update_status = function(self) end,
   -- luacheck: pop
