@@ -42,6 +42,11 @@ Diagnostics.new = function(self, options, child)
             utils.extract_highlight_colors('DiffDelete', 'fg') or
             Diagnostics.default_colors.error
   end
+  if not new_diagnostics.options.color_error_bg then
+    new_diagnostics.options.color_error_bg =
+        utils.extract_highlight_colors('LspDiagnosticsDefaultErrorBg', 'bg') or
+        Diagnostics.default_colors.error_bg
+  end
   if not new_diagnostics.options.color_warn then
     new_diagnostics.options.color_warn =
         utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg') or
@@ -64,7 +69,7 @@ Diagnostics.new = function(self, options, child)
   if new_diagnostics.options.colored then
     new_diagnostics.highlight_groups = {
       error = highlight.create_component_highlight_group(
-          {fg = new_diagnostics.options.color_error}, 'diagnostics_error',
+          {fg = new_diagnostics.options.color_error, bg = new_diagnostics.options.color_error_bg}, 'diagnostics_error',
           new_diagnostics.options),
       warn = highlight.create_component_highlight_group(
           {fg = new_diagnostics.options.color_warn}, 'diagnostics_warn',
