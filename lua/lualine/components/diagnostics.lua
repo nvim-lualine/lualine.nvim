@@ -36,52 +36,60 @@ Diagnostics.new = function(self, options, child)
     new_diagnostics.options.colored = true
   end
   -- apply colors
-  if not new_diagnostics.options.color_error.fg then
-    new_diagnostics.options.color_error.fg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg') or
-            utils.extract_highlight_colors('DiffDelete', 'fg') or
-            Diagnostics.default_colors.error.fg
+  if not new_diagnostics.options.color_error then
+    if not new_diagnostics.options.color_error.fg then
+      new_diagnostics.options.color_error.fg =
+          utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg') or
+              utils.extract_highlight_colors('DiffDelete', 'fg') or
+              Diagnostics.default_colors.error.fg
+    end
+    if not new_diagnostics.options.color_error.bg then
+      new_diagnostics.options.color_error.bg =
+          utils.extract_highlight_colors('LspDiagnosticsDefaultErrorBg', 'bg') or
+          Diagnostics.default_colors.error.bg
+    end
   end
-  if not new_diagnostics.options.color_error.bg then
-    new_diagnostics.options.color_error.bg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultErrorBg', 'bg') or
-        Diagnostics.default_colors.error.bg
+  if not new_diagnostics.options.color_warn then
+    if not new_diagnostics.options.color_warn.fg then
+      new_diagnostics.options.color_warn.fg =
+          utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg') or
+              utils.extract_highlight_colors('DiffText', 'fg') or
+              Diagnostics.default_colors.warn.fg
+    end
+    if not new_diagnostics.options.color_warn.bg then
+      new_diagnostics.options.color_warn.bg =
+          utils.extract_highlight_colors('LspDiagnosticsDefaultWarningBg', 'bg') or
+              utils.extract_highlight_colors('DiffText', 'bg') or
+              Diagnostics.default_colors.warn.bg
+    end
   end
-  if not new_diagnostics.options.color_warn.fg then
-    new_diagnostics.options.color_warn.fg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg') or
-            utils.extract_highlight_colors('DiffText', 'fg') or
-            Diagnostics.default_colors.warn.fg
+  if not new_diagnostics.options.color_info then
+    if not new_diagnostics.options.color_info.fg then
+      new_diagnostics.options.color_info.fg =
+          utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg') or
+              utils.extract_highlight_colors('Normal', 'fg') or
+              Diagnostics.default_colors.info.fg
+    end
+    if not new_diagnostics.options.color_info.bg then
+      new_diagnostics.options.color_info.bg =
+          utils.extract_highlight_colors('LspDiagnosticsDefaultInformationBg', 'bg') or
+              utils.extract_highlight_colors('Normal', 'bg') or
+              Diagnostics.default_colors.info.bg
+    end
   end
-  if not new_diagnostics.options.color_warn.bg then
-    new_diagnostics.options.color_warn.bg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultWarningBg', 'bg') or
-            utils.extract_highlight_colors('DiffText', 'bg') or
-            Diagnostics.default_colors.warn.bg
-  end
-  if not new_diagnostics.options.color_info.fg then
-    new_diagnostics.options.color_info.fg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg') or
-            utils.extract_highlight_colors('Normal', 'fg') or
-            Diagnostics.default_colors.info.fg
-  end
-  if not new_diagnostics.options.color_info.bg then
-    new_diagnostics.options.color_info.bg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultInformationBg', 'bg') or
-            utils.extract_highlight_colors('Normal', 'bg') or
-            Diagnostics.default_colors.info.bg
-  end
-  if not new_diagnostics.options.color_hint.fg then
-    new_diagnostics.options.color_hint.fg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg') or
-            utils.extract_highlight_colors('DiffChange', 'fg') or
-            Diagnostics.default_colors.hint.fg
-  end
-  if not new_diagnostics.options.color_hint.bg then
-    new_diagnostics.options.color_hint.bg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'bg') or
-            utils.extract_highlight_colors('DiffChange', 'bg') or
-            Diagnostics.default_colors.hint.bg
+  if not new_diagnostics.options.color_hint then
+    if not new_diagnostics.options.color_hint.fg then
+      new_diagnostics.options.color_hint.fg =
+          utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg') or
+              utils.extract_highlight_colors('DiffChange', 'fg') or
+              Diagnostics.default_colors.hint.fg
+    end
+    if not new_diagnostics.options.color_hint.bg then
+      new_diagnostics.options.color_hint.bg =
+          utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'bg') or
+              utils.extract_highlight_colors('DiffChange', 'bg') or
+              Diagnostics.default_colors.hint.bg
+    end
   end
 
   if new_diagnostics.options.colored then
