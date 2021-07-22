@@ -7,7 +7,8 @@ local Diagnostics = require('lualine.component'):new()
 
 -- LuaFormatter off
 Diagnostics.default_colors = {
-  error = '#e32636',
+  error = '#000000',
+  error_bg = '#e06c75',
   warn  = '#ffdf00',
   info  = '#ffffff',
   hint  = '#d7afaf',
