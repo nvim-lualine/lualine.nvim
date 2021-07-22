@@ -18,10 +18,10 @@ Diagnostics.default_colors = {
 Diagnostics.new = function(self, options, child)
   local new_diagnostics = self._parent:new(options, child or Diagnostics)
   local default_symbols = new_diagnostics.options.icons_enabled and {
-    error = ' ', -- xf659
-    warn = ' ', -- xf529
-    info = ' ', -- xf7fc
-    hint = ' ' -- xf838
+    error = '  ', -- xf659
+    warn = '  ', -- xf529
+    info = '  ', -- xf7fc
+    hint = '  ' -- xf838
   } or {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'}
   new_diagnostics.symbols = vim.tbl_extend('force', default_symbols,
                                            new_diagnostics.options.symbols or {})
