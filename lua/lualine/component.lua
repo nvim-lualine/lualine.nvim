@@ -1,3 +1,5 @@
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
 local highlight = require 'lualine.highlight'
 
 -- Used to provide a unique id for each component
@@ -24,7 +26,7 @@ local Component = {
   end,
 
   set_separator = function(self)
-    if type(self.options.separator) ~= 'string' then
+    if self.options.separator == nil then
       if self.options.component_separators then
         if self.options.self.section < 'lualine_x' then
           self.options.separator = self.options.component_separators[1]
@@ -99,18 +101,41 @@ local Component = {
   -- Apply separator at end of component only when
   -- custom highlights haven't affected background
   apply_separator = function(self)
-    if self.options.separator and #self.options.separator > 0 then
-      self.status = self.status .. self.options.separator
-      self.applied_separator = self.options.separator
+    local separator = self.options.separator
+    if type(separator) == 'table' then
+      if self.options.separator[2] == '' then
+        if self.options.self.section < 'lualine_x' then
+          separator = self.options.component_separators[1]
+        else
+          separator = self.options.component_separators[2]
+        end
+      else
+        return
+      end
+    end
+    if separator and #separator > 0 then
+      self.status = self.status .. separator
+      self.applied_separator = separator
     end
   end,
 
-  strip_separator = function(self, default_highlight)
-    if not default_highlight then default_highlight = '' end
+  apply_section_separators = function(self)
+    if type(self.options.separator) ~= 'table' then return end
+    if self.options.separator[1] ~= '' then
+      self.status = string.format('%%s{%s}%s', self.options.separator[1],
+                                  self.status)
+      self.strip_previous_separator = true
+    end
+    if self.options.separator[2] ~= '' then
+      self.status = string.format('%s%%S{%s}', self.status,
+                                  self.options.separator[2])
+    end
+  end,
+
+  strip_separator = function(self)
     if not self.applied_separator then self.applied_separator = '' end
     self.status = self.status:sub(1, (#self.status -
-                                      (#self.applied_separator +
-                                          #default_highlight)))
+                                      (#self.applied_separator)))
     self.applied_separator = nil
     return self.status
   end,
@@ -135,6 +160,7 @@ local Component = {
       self:apply_icon()
       self:apply_case()
       self:apply_padding()
+      self:apply_section_separators()
       self:apply_highlights(default_highlight)
       self:apply_separator()
     end
