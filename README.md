@@ -305,6 +305,7 @@ sections = {
       color_info = nil, -- Changes diagnostic's info foreground color
       color_hint = nil, -- Changes diagnostic's hint foreground color
       symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
+      update_in_insert = false, -- Update diagnostics in insert mode
     }
   }
 }
