@@ -35,6 +35,10 @@ Diagnostics.new = function(self, options, child)
   if new_diagnostics.options.colored == nil then
     new_diagnostics.options.colored = true
   end
+  if new_diagnostics.options.update_in_insert == nil then
+    new_diagnostics.options.update_in_insert = false
+  end
+  new_diagnostics.last_update = ''
   -- apply colors
   if not new_diagnostics.options.color_error then
     new_diagnostics.options.color_error =
@@ -82,6 +86,10 @@ Diagnostics.new = function(self, options, child)
 end
 
 Diagnostics.update_status = function(self)
+  if not self.options.update_in_insert
+    and vim.api.nvim_get_mode().mode:sub(1,1) == 'i' then
+    return self.last_update
+  end
   local error_count, warning_count, info_count, hint_count = 0, 0, 0, 0
   local diagnostic_data = self.get_diagnostics(self.options.sources)
   for _, data in pairs(diagnostic_data) do
@@ -115,11 +123,11 @@ Diagnostics.update_status = function(self)
       end
     end
   end
+  self.last_update = ''
   if result[1] ~= nil then
-    return table.concat(result, ' ')
-  else
-    return ''
+    self.last_update = table.concat(result, ' ')
   end
+  return self.last_update
 end
 
 Diagnostics.diagnostic_sources = {
