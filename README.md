@@ -325,7 +325,8 @@ sections = {
   lualine_a = {
     {
       'filetype',
-      colored = true -- displays filetype icon in color if set to `true`
+      colored = true, -- displays filetype icon in color if set to `true
+      disable_text = false -- Display only icon for filetype
     }
   }
 }
