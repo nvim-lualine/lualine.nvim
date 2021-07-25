@@ -38,6 +38,7 @@ function M.draw_section(section, section_name, is_focused)
                                                    .options.section_separators[1])
         end
       end
+      section[component_no].last_component = true
     end
     -- Remove component separator when color option is used in next component
     if strip_next_component then

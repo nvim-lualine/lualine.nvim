@@ -2,6 +2,8 @@
 -- MIT license, see LICENSE for more details.
 local FileName = require('lualine.component'):new()
 
+FileName.inactive_eval = true
+
 local function count(base, pattern)
   return select(2, string.gsub(base, pattern, ''))
 end
