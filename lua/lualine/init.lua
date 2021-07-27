@@ -209,7 +209,7 @@ local function set_statusline()
       augroup lualine
         autocmd!
         autocmd WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
-        autocmd BufWinEnter,WinEnter,BufEnter * set statusline<
+        autocmd BufWinEnter,WinEnter,BufEnter,SessionLoadPost * set statusline<
         autocmd VimResized * redrawstatus
       augroup END
     ]], false)
