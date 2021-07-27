@@ -80,6 +80,15 @@ end
 -- @return: (string) unique name that can be used by component_format_highlight
 --   to retrive highlight group
 function M.create_component_highlight_group(color, highlight_tag, options)
+  local tag_id = 0
+  while (utils.highlight_exists(table.concat(
+                             {'lualine', highlight_tag, 'no_mode'}, '_'))
+      or (options.self.section and utils.highlight_exists(table.concat(
+                             {options.self.section, highlight_tag, 'normal'}, '_')))
+) do
+    highlight_tag = highlight_tag .. '_' .. tostring(tag_id)
+    tag_id = tag_id + 1
+  end
   if color.bg and color.fg then
     -- When bg and fg are both present we donn't need to set highlighs for
     -- each mode as they will surely look the same. So we can work without options
