@@ -111,8 +111,10 @@ function M.create_component_highlight_group(color, highlight_tag, options)
     local default_color_table = active_theme[mode] and
                                     active_theme[mode][section] or
                                     active_theme.normal[section]
-    local bg = (color.bg or default_color_table.bg)
-    local fg = (color.fg or default_color_table.fg)
+    local bg = (color.bg or (type(options.color) == 'table' and options.color.bg)
+                or default_color_table.bg)
+    local fg = (color.fg or (type(options.color) == 'table' and options.color.bg)
+                or default_color_table.fg)
     -- Check if it's same as normal mode if it is no need to create aditional highlight
     if mode ~= 'normal' then
       if bg ~= normal_hl.bg or fg ~= normal_hl.fg then
