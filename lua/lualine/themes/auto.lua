@@ -118,13 +118,14 @@ local colors = {
 -- darken incase of light theme lighten incase of dark theme
 
 local normal_color = utils.extract_highlight_colors('Normal', 'bg')
-if normal_color ~= nil and get_color_brightness(normal_color) > 0.5 then
-  brightness_modifier_parameter = -brightness_modifier_parameter
+if normal_color ~= nil then
+  if get_color_brightness(normal_color) > 0.5 then
+    brightness_modifier_parameter = -brightness_modifier_parameter
+  end
   for name, color in pairs(colors) do
     colors[name] = brightness_modifier(color, brightness_modifier_parameter)
   end
 end
-
 
 -- basic theme defination
 local M = {
