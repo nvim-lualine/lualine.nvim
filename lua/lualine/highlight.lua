@@ -6,7 +6,23 @@ local utils = require 'lualine.utils.utils'
 local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
 local active_theme = nil
 
+local function sanitize_color(color)
+  if type(color) == 'string' then
+    if color:sub(1,1) == '#' then return color end -- RGB value
+    local converter = require 'lualine.utils.cterm_colors'
+    return converter.color_name2rgb(color)
+  elseif type(color) == 'number' then
+    if color > 255 then
+      error("What's this it can't be higher then 255 and you've given "..color)
+    end
+    local converter = require 'lualine.utils.cterm_colors'
+    return converter.cterm2rgb(color)
+  end
+end
+
 function M.highlight(name, foreground, background, gui, reload)
+  foreground = sanitize_color(foreground)
+  background = sanitize_color(background)
   local command = {'highlight', name}
   if foreground and foreground ~= 'none' then
     table.insert(command, 'guifg=' .. foreground)

@@ -300,4 +300,20 @@ function M.get_cterm_color(hex_color)
   return closest_cterm_color
 end
 
+function M.color_name2rgb(name)
+  local color_val = vim.api.nvim_get_color_by_name(name)
+  if color_val == -1 then
+    return '#'..name -- Assuming it's 'rrggbb' without # not rad instead of red
+  end
+  return string.format('#%06x', color_val)
+end
+
+function M.cterm2rgb(color)
+  local color_data = color_table[color + 1]
+  if color_data ~= nil then
+    color_data = color_data[2]
+    return string.format("#%02x%02x%02x", color_data[1], color_data[2], color_data[3])
+  end
+end
+
 return M
