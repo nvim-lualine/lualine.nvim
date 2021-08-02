@@ -167,33 +167,25 @@ end
 local function tabline() return statusline(config.tabline, true) end
 
 local function setup_theme()
-  local async_loader
-  async_loader = vim.loop.new_async(vim.schedule_wrap(
-                                        function()
-        local function get_theme_from_config()
-          local theme_name = config.options.theme
-          if type(theme_name) == 'string' then
-            package.loaded['lualine.themes.'..theme_name] = nil
-            local ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
-            if ok then return theme end
-          elseif type(theme_name) == 'table' then
-            -- use the provided theme as-is
-            return config.options.theme
-          end
-          vim.api.nvim_err_writeln('theme ' .. tostring(theme_name) ..
-                                       ' not found, defaulting to gruvbox')
-          return require 'lualine.themes.gruvbox'
-        end
-        local theme = get_theme_from_config()
-        highlight.create_highlight_groups(theme)
-        vim.api.nvim_exec([[
-          augroup lualine
-            autocmd ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
-          augroup END
-          ]], false)
-        async_loader:close()
-      end))
-  async_loader:send()
+  local function get_theme_from_config()
+    local theme_name = config.options.theme
+    if type(theme_name) == 'string' then
+      package.loaded['lualine.themes.'..theme_name] = nil
+      local ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
+      if ok then return theme end
+    elseif type(theme_name) == 'table' then
+      -- use the provided theme as-is
+      return config.options.theme
+    end
+    vim.api.nvim_err_writeln('theme ' .. tostring(theme_name) ..
+                                 ' not found, defaulting to gruvbox')
+    return require 'lualine.themes.gruvbox'
+  end
+  local theme = get_theme_from_config()
+  highlight.create_highlight_groups(theme)
+  vim.cmd [[
+    autocmd lualine ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
+    ]]
 end
 
 local function set_tabline()
@@ -207,14 +199,19 @@ local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     vim.o.statusline = '%!v:lua.require\'lualine\'.statusline()'
     vim.api.nvim_exec([[
-      augroup lualine
-        autocmd!
-        autocmd WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
-        autocmd BufWinEnter,WinEnter,BufEnter,SessionLoadPost * set statusline<
-        autocmd VimResized * redrawstatus
-      augroup END
+      autocmd lualine WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
+      autocmd lualine BufWinEnter,WinEnter,BufEnter,SessionLoadPost * set statusline<
+      autocmd lualine VimResized * redrawstatus
     ]], false)
   end
+end
+
+local function setup_augroup()
+  vim.cmd [[
+    augroup lualine
+      autocmd!
+    augroup END
+  ]]
 end
 
 local function setup(user_config)
@@ -229,6 +226,7 @@ local function setup(user_config)
   else
     config = config_module.apply_configuration({})
   end
+  setup_augroup()
   setup_theme()
   loader.load_all(config)
   set_statusline()

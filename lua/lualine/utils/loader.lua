@@ -24,24 +24,18 @@ local function component_loader(component)
 end
 
 local function load_sections(sections, options)
-  local async_loader
-  async_loader = vim.loop.new_async(vim.schedule_wrap(
-                                        function()
-        for section_name, section in pairs(sections) do
-          for index, component in pairs(section) do
-            if type(component) == 'string' or type(component) == 'function' then
-              component = {component}
-            end
-            component.self = {}
-            component.self.section = section_name
-            -- apply default args
-            component = vim.tbl_extend('keep', component, options)
-            section[index] = component_loader(component)
-          end
-        end
-        async_loader:close()
-      end))
-  async_loader:send()
+  for section_name, section in pairs(sections) do
+    for index, component in pairs(section) do
+      if type(component) == 'string' or type(component) == 'function' then
+        component = {component}
+      end
+      component.self = {}
+      component.self.section = section_name
+      -- apply default args
+      component = vim.tbl_extend('keep', component, options)
+      section[index] = component_loader(component)
+    end
+  end
 end
 
 local function load_components(config)

@@ -18,7 +18,7 @@ Branch.new = function(self, options, child)
   -- run watch head on load so branch is present when component is loaded
   Branch.update_branch()
   -- update branch state of BufEnter as different Buffer may be on different repos
-  vim.cmd [[autocmd BufEnter * lua require'lualine.components.branch'.update_branch()]]
+  vim.cmd [[autocmd lualine BufEnter * lua require'lualine.components.branch'.update_branch()]]
   return new_branch
 end
 
