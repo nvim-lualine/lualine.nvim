@@ -173,6 +173,7 @@ local function setup_theme()
         local function get_theme_from_config()
           local theme_name = config.options.theme
           if type(theme_name) == 'string' then
+            package.loaded['lualine.themes.'..theme_name] = nil
             local ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
             if ok then return theme end
           elseif type(theme_name) == 'table' then
