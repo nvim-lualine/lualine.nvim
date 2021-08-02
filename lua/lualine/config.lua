@@ -45,9 +45,9 @@ local function apply_configuration(config_table)
     if not config_table[section_group_name] then return end
     for section_name, section in pairs(config_table[section_group_name]) do
       config[section_group_name][section_name] =
-          config_table[section_group_name][section_name]
+          vim.deepcopy(config_table[section_group_name][section_name])
       if type(section) == 'table' then
-        for _, component in pairs(section) do
+        for _, component in pairs(config[section_group_name][section_name]) do
           if type(component) == 'table' and type(component[2]) == 'table' then
             local options = component[2]
             component[2] = nil
@@ -66,6 +66,7 @@ local function apply_configuration(config_table)
                                           config.options.section_separators)
   config.options.component_separators = fix_separators(
                                             config.options.component_separators)
+  return vim.deepcopy(config)
 end
 
-return {config = config, apply_configuration = apply_configuration}
+return {config = vim.deepcopy(config), apply_configuration = apply_configuration}
