@@ -62,13 +62,8 @@ Diff.new = function(self, options, child)
     }
   end
 
-  -- call update functions so git diff is present when component is loaded
-  Diff.update_git_diff_getter()
-  Diff.update_git_diff()
-
   vim.api.nvim_exec([[
   autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff_getter()
-  autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff()
   autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
   ]], false)
 
@@ -153,7 +148,6 @@ function Diff.update_git_diff_getter()
   -- stop older function properly before overwritting it
   if Diff.get_git_diff then
     Diff.get_git_diff:stop()
-    Diff.diff_data = ''
   end
   -- Donn't show git diff when current buffer doesn't have a filename
   if #vim.fn.expand('%') == 0 then
@@ -177,22 +171,20 @@ function Diff.update_git_diff_getter()
     on_exit = function()
       if Diff.diff_data ~= '' then
         Diff.process_diff(Diff.diff_data)
-        Diff.diff_data = ''
       else
         Diff.git_diff = {added = 0, modified = 0, removed = 0}
       end
     end
   })
+  Diff.update_git_diff()
 end
 
 -- Update git_diff veriable
 function Diff.update_git_diff()
-  vim.schedule_wrap(function()
-    if Diff.get_git_diff then
-      Diff.diff_data = ''
-      Diff.get_git_diff:start()
-    end
-  end)()
+  if Diff.get_git_diff then
+    Diff.diff_data = ''
+    Diff.get_git_diff:start()
+  end
 end
 
 return Diff
