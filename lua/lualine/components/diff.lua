@@ -151,7 +151,10 @@ end
 -- Updates the async function for current file
 function Diff.update_git_diff_getter()
   -- stop older function properly before overwritting it
-  if Diff.get_git_diff then Diff.get_git_diff:stop() end
+  if Diff.get_git_diff then
+    Diff.get_git_diff:stop()
+    Diff.diff_data = ''
+  end
   -- Donn't show git diff when current buffer doesn't have a filename
   if #vim.fn.expand('%') == 0 then
     Diff.get_git_diff = nil;
@@ -174,6 +177,7 @@ function Diff.update_git_diff_getter()
     on_exit = function()
       if Diff.diff_data ~= '' then
         Diff.process_diff(Diff.diff_data)
+        Diff.diff_data = ''
       else
         Diff.git_diff = {added = 0, modified = 0, removed = 0}
       end
