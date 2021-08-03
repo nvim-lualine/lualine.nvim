@@ -276,6 +276,10 @@ Component specific local options~
         color_modified = nil, -- changes diff's modified foreground color
         color_removed = nil, -- changes diff's removed foreground color
         symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
+        source = nil, -- A function that works as a data source for diff.
+                      -- it must return a table like
+                      {added = add_count, modified = modified_count, removed = removed_count }
+                      -- Or nil on failure. Count <= 0 won't be displayed.
       }
     }
   }

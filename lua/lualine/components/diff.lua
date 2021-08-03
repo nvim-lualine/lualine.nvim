@@ -62,16 +62,23 @@ Diff.new = function(self, options, child)
     }
   end
 
-  vim.api.nvim_exec([[
-  autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff_getter()
-  autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
-  ]], false)
+  if type(new_instance.options.source) ~= 'function' then
+    -- setup internal source
+    vim.cmd [[
+      autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff_getter()
+      autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
+    ]]
+  end
 
   return new_instance
 end
 
 -- Function that runs everytime statusline is updated
 Diff.update_status = function(self)
+  if self.options.source then
+    Diff.git_diff = self.options.source()
+  end
+
   if Diff.git_diff == nil then return '' end
 
   local colors = {}
