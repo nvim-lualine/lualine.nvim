@@ -129,12 +129,15 @@ local function statusline(sections, is_focused)
 end
 
 -- check if any extension matches the filetype and return proper sections
-local function get_extension_sections()
+local function get_extension_sections(current_ft, is_focused)
   for _, extension in ipairs(config.extensions) do
     for _, filetype in ipairs(extension.filetypes) do
-      local current_ft = vim.api.nvim_buf_get_option(
-                             vim.fn.winbufnr(vim.g.statusline_winid), 'filetype')
-      if current_ft == filetype then return extension.sections end
+      if current_ft == filetype then
+        if is_focused == false and extension.inactive_sections then
+          return extension.inactive_sections
+        end
+        return extension.sections
+      end
     end
   end
   return nil
@@ -144,23 +147,24 @@ local function status_dispatch()
   -- disable on specific filetypes
   local current_ft = vim.api.nvim_buf_get_option(
                          vim.fn.winbufnr(vim.g.statusline_winid), 'filetype')
+  local is_focused = vim.g.statusline_winid == vim.fn.win_getid()
   for _, ft in pairs(config.options.disabled_filetypes) do
     if ft == current_ft then
       vim.wo.statusline = ''
       return ''
     end
   end
-  local extension_sections = get_extension_sections()
-  if vim.g.statusline_winid == vim.fn.win_getid() then
+  local extension_sections = get_extension_sections(current_ft, is_focused)
+  if is_focused then
     if extension_sections ~= nil then
-      return statusline(extension_sections, true)
+      return statusline(extension_sections, is_focused)
     end
-    return statusline(config.sections, true)
+    return statusline(config.sections, is_focused)
   else
     if extension_sections ~= nil then
-      return statusline(extension_sections, false)
+      return statusline(extension_sections, is_focused)
     end
-    return statusline(config.inactive_sections, false)
+    return statusline(config.inactive_sections, is_focused)
   end
 end
 

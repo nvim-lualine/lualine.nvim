@@ -49,9 +49,15 @@ local function load_extensions(config)
     if type(extension) == 'string' then
       local local_extension = require('lualine.extensions.' .. extension)
       load_sections(local_extension.sections, config.options)
+      if local_extension.inactive_sections then
+        load_sections(local_extension.inactive_sections, config.options)
+      end
       config.extensions[index] = local_extension
     elseif type(extension) == 'table' then
       load_sections(extension.sections, config.options)
+      if extension.inactive_sections then
+        load_sections(extension.inactive_sections, config.options)
+      end
       config.extensions[index] = extension
     end
   end
