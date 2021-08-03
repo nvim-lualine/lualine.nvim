@@ -27,15 +27,24 @@ Branch.update_status = function() return Branch.git_branch end
 -- returns full path to git directory for current directory
 function Branch.find_git_dir()
   -- get file dir so we can search from that dir
-  local file_dir = vim.fn.expand('%:p:h') .. ';'
-  -- find .git/ folder genaral case
-  local git_dir = vim.fn.finddir('.git', file_dir)
-  -- find .git file in case of submodules or any other case git dir is in
-  -- any other place than .git/
-  local git_file = vim.fn.findfile('.git', file_dir)
-  -- for some weird reason findfile gives relative path so expand it to fullpath
-  if #git_file > 0 then git_file = vim.fn.fnamemodify(git_file, ':p') end
-  if #git_file > #git_dir then
+  local file_dir = vim.fn.expand('%:p:h')
+  local git_file, git_dir
+  -- Search upward for .git file or folder
+  while (file_dir) do
+    local git_path = file_dir..Branch.sep..'.git'
+    local git_file_stat = vim.loop.fs_stat(git_path)
+    if (git_file_stat) then
+      if git_file_stat.type == 'directory' then
+        git_dir = git_path
+      elseif git_file_stat.type == 'file' then
+        git_file = git_path
+      end
+      break
+    end
+    file_dir = file_dir:match('(.*)'..Branch.sep..'.-')
+  end
+
+  if git_file then
     -- separate git-dir or submodule is used
     local file = io.open(git_file)
     git_dir = file:read()
@@ -69,7 +78,7 @@ end
 function Branch.update_branch()
   Branch.file_changed:stop()
   local git_dir = Branch.find_git_dir()
-  if #git_dir > 0 then
+  if git_dir and #git_dir > 0 then
     local head_file = git_dir .. Branch.sep .. 'HEAD'
     Branch.get_git_head(head_file)
     Branch.file_changed:start(head_file, {}, vim.schedule_wrap(
