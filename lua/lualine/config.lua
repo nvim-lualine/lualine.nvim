@@ -69,4 +69,11 @@ local function apply_configuration(config_table)
   return vim.deepcopy(config)
 end
 
-return {config = vim.deepcopy(config), apply_configuration = apply_configuration}
+local function get_current_conifg()
+  return vim.deepcopy(config)
+end
+
+return {
+  get_config = get_current_conifg,
+  apply_configuration = apply_configuration
+}

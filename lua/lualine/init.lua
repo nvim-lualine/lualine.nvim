@@ -237,4 +237,9 @@ local function setup(user_config)
   set_tabline()
 end
 
-return {setup = setup, statusline = status_dispatch, tabline = tabline}
+return {
+  setup = setup,
+  statusline = status_dispatch,
+  tabline = tabline,
+  get_config = config_module.get_config,
+}

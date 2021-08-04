@@ -105,6 +105,13 @@ require'lualine'.setup {
 
 </details>
 
+If you want to get your current lualine config. you can
+do so with 
+```lua
+require'lualine'.get_config()
+
+```
+
 ---
 ### Starting lualine
 ```lua

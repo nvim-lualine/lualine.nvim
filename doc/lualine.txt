@@ -66,6 +66,11 @@ Default config~
       extensions = {}
     }
 
+If you want to get your current lualine config. you can
+do so with >
+    require'lualine'.get_config()
+
+<
 ------------------------------------------------------------------------------
 STARTING LUALINE                      *lualine-starting_lualine* *lualine.setup()*
 >
