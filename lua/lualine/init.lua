@@ -189,6 +189,7 @@ local function setup_theme()
   highlight.create_highlight_groups(theme)
   vim.cmd [[
     autocmd lualine ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
+    autocmd lualine OptionSet background lua require'lualine'.setup()
     ]]
 end
 
