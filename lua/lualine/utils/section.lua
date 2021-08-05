@@ -70,9 +70,11 @@ function M.draw_section(section, section_name, is_focused)
   -- Remove empty strings from status
   status = utils.list_shrink(status)
   local status_str = table.concat(status)
-  if status_str:find('%%#.*#') == 1 or #status_str == 0 then
+
+  if #status_str == 0 then return ''
+  elseif status_str:find('%%#.*#') == 1 then
     -- Don't prepend with old highlight when the component changes it imidiately
-    return status_str
+    return left_sparator_string .. status_str
   else
     return left_sparator_string .. highlight_name .. status_str
   end
