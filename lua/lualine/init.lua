@@ -218,17 +218,7 @@ local function setup_augroup()
 end
 
 local function setup(user_config)
-  if user_config then
-    config = config_module.apply_configuration(user_config)
-  elseif vim.g.lualine then
-    vim.schedule(function()
-      vim.api.nvim_err_writeln(
-          [[Lualine: lualine will stop supporting vimscript soon, change your config to lua or wrap it around lua << EOF ... EOF]]) -- luacheck: ignore
-    end)
-    config = config_module.apply_configuration(vim.g.lualine)
-  else
-    config = config_module.apply_configuration({})
-  end
+  config = config_module.apply_configuration(user_config)
   setup_augroup()
   setup_theme()
   loader.load_all(config)

@@ -41,27 +41,21 @@ local function fix_separators(separators)
 end
 
 local function apply_configuration(config_table)
+  if not config_table then return vim.deepcopy(config) end
   local function parse_sections(section_group_name)
     if not config_table[section_group_name] then return end
     for section_name, section in pairs(config_table[section_group_name]) do
       config[section_group_name][section_name] =
           vim.deepcopy(config_table[section_group_name][section_name])
-      if type(section) == 'table' then
-        for _, component in pairs(config[section_group_name][section_name]) do
-          if type(component) == 'table' and type(component[2]) == 'table' then
-            local options = component[2]
-            component[2] = nil
-            for key, val in pairs(options) do component[key] = val end
-          end
-        end
-      end
     end
   end
   parse_sections('options')
   parse_sections('sections')
   parse_sections('inactive_sections')
   parse_sections('tabline')
-  if config_table.extensions then config.extensions = config_table.extensions end
+  if config_table.extensions then
+    config.extensions = vim.deepcopy(config_table.extensions)
+  end
   config.options.section_separators = fix_separators(
                                           config.options.section_separators)
   config.options.component_separators = fix_separators(
