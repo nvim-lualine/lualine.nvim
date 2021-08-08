@@ -1,18 +1,18 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local async = require 'lualine.utils.async'
 local utils = require 'lualine.utils.utils'
 local highlight = require 'lualine.highlight'
+local Job = require'lualine.utils.job'
 
 local Diff = require('lualine.component'):new()
 
 -- Vars
 -- variable to store git diff stats
 Diff.git_diff = nil
--- accumulates async output to process in the end
-Diff.diff_data = ''
--- variable to store git_diff getter async function
-Diff.get_git_diff = nil
+-- accumulates output from diff process
+Diff.diff_output_cache = {}
+-- variable to store git_diff job
+Diff.diff_job = nil
 -- default colors
 Diff.default_colors = {
   added = '#f0e130',
@@ -65,7 +65,7 @@ Diff.new = function(self, options, child)
   if type(new_instance.options.source) ~= 'function' then
     -- setup internal source
     vim.cmd [[
-      autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_git_diff_getter()
+      autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_diff_args()
       autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
     ]]
   end
@@ -117,7 +117,7 @@ end
 -- }
 -- error_code = { added = -1, modified = -1, removed = -1 }
 function Diff.get_sign_count()
-  Diff.update_git_diff_getter()
+  Diff.update_diff_args()
   Diff.update_git_diff()
   return Diff.git_diff or {added = -1, modified = -1, removed = -1}
 end
@@ -126,7 +126,7 @@ end
 function Diff.process_diff(data)
   -- Adapted from https://github.com/wbthomason/nvim-vcs.lua
   local added, removed, modified = 0, 0, 0
-  for line in vim.gsplit(data, '\n') do
+  for _, line in ipairs(data) do
     if string.find(line, [[^@@ ]]) then
       local tokens = vim.fn.matchlist(line,
                                       [[^@@ -\v(\d+),?(\d*) \+(\d+),?(\d*)]])
@@ -150,47 +150,48 @@ function Diff.process_diff(data)
   Diff.git_diff = {added = added, modified = modified, removed = removed}
 end
 
--- Updates the async function for current file
-function Diff.update_git_diff_getter()
-  -- stop older function properly before overwritting it
-  if Diff.get_git_diff then
-    Diff.get_git_diff:stop()
-  end
+-- Updates the job args
+function Diff.update_diff_args()
   -- Donn't show git diff when current buffer doesn't have a filename
   if #vim.fn.expand('%') == 0 then
-    Diff.get_git_diff = nil;
+    Diff.diff_args = nil;
     Diff.git_diff = nil;
     return
   end
-  Diff.get_git_diff = async:new({
+  Diff.diff_args = {
     cmd = string.format(
         [[git -C %s --no-pager diff --no-color --no-ext-diff -U0 -- %s]],
         vim.fn.expand('%:h'), vim.fn.expand('%:t')),
     on_stdout = function(_, data)
-      if data then Diff.diff_data = Diff.diff_data .. data end
+      if next(data) then
+        Diff.diff_output_cache = vim.list_extend(Diff.diff_output_cache, data)
+      end
     end,
     on_stderr = function(_, data)
-      if data then
+      data = table.concat(data, '\n')
+      if #data > 1 or (#data == 1 and #data[1] > 0) then
         Diff.git_diff = nil
-        Diff.diff_data = ''
+        Diff.diff_output_cache = {}
       end
     end,
     on_exit = function()
-      if Diff.diff_data ~= '' then
-        Diff.process_diff(Diff.diff_data)
+      if #Diff.diff_output_cache > 0 then
+        Diff.process_diff(Diff.diff_output_cache)
       else
         Diff.git_diff = {added = 0, modified = 0, removed = 0}
       end
     end
-  })
+  }
   Diff.update_git_diff()
 end
 
 -- Update git_diff veriable
 function Diff.update_git_diff()
-  if Diff.get_git_diff then
-    Diff.diff_data = ''
-    Diff.get_git_diff:start()
+  if Diff.diff_args then
+    Diff.diff_output_cache = {}
+    if Diff.diff_job then Diff.diff_job:stop() end
+    Diff.diff_job = Job(Diff.diff_args)
+    if Diff.diff_job then Diff.diff_job:start() end
   end
 end
 
