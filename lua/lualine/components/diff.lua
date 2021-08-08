@@ -20,6 +20,8 @@ Diff.default_colors = {
   modified = '#ff0038'
 }
 
+local diff_cache = {} -- Stores last known value of diff of a buffer
+
 -- Initializer
 Diff.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or Diff)
@@ -64,22 +66,22 @@ Diff.new = function(self, options, child)
 
   if type(new_instance.options.source) ~= 'function' then
     -- setup internal source
-    vim.cmd [[
-      autocmd lualine BufEnter     * lua require'lualine.components.diff'.update_diff_args()
-      autocmd lualine BufWritePost * lua require'lualine.components.diff'.update_git_diff()
-    ]]
+    utils.define_autocmd('BufEnter', "lua require'lualine.components.diff'.update_diff_args()")
+    utils.define_autocmd('BufWritePost', "lua require'lualine.components.diff'.update_git_diff()")
   end
 
   return new_instance
 end
 
 -- Function that runs everytime statusline is updated
-Diff.update_status = function(self)
+Diff.update_status = function(self, is_focused)
+  local git_diff = Diff.git_diff
   if self.options.source then
-    Diff.git_diff = self.options.source()
+    git_diff = self.options.source()
   end
 
-  if Diff.git_diff == nil then return '' end
+  if not is_focused then git_diff = diff_cache[vim.fn.bufnr()] or {} end
+  if git_diff == nil then return '' end
 
   local colors = {}
   if self.options.colored then
@@ -92,12 +94,12 @@ Diff.update_status = function(self)
   local result = {}
   -- loop though data and load available sections in result table
   for _, name in ipairs {'added', 'modified', 'removed'} do
-    if Diff.git_diff[name] and Diff.git_diff[name] > 0 then
+    if git_diff[name] and git_diff[name] > 0 then
       if self.options.colored then
         table.insert(result, colors[name] .. self.options.symbols[name] ..
-                         Diff.git_diff[name])
+                         git_diff[name])
       else
-        table.insert(result, self.options.symbols[name] .. Diff.git_diff[name])
+        table.insert(result, self.options.symbols[name] .. git_diff[name])
       end
     end
   end
@@ -180,6 +182,7 @@ function Diff.update_diff_args()
       else
         Diff.git_diff = {added = 0, modified = 0, removed = 0}
       end
+      diff_cache[vim.fn.bufnr()] = Diff.git_diff
     end
   }
   Diff.update_git_diff()

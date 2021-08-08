@@ -51,7 +51,7 @@ end
 function M.create_highlight_groups(theme)
   utils.clear_highlights()
   active_theme = theme
-  if not vim.o.termguicolors then
+  if not vim.opt.termguicolors:get() then
     cterm_colors = require 'lualine.utils.cterm_colors'
   end
   for mode, sections in pairs(theme) do
@@ -154,7 +154,7 @@ function M.component_format_highlight(highlight_name)
   if highlight_name:find('no_mode') == #highlight_name - #'no_mode' + 1 then
     return '%#' .. highlight_group .. '#'
   end
-  if vim.g.statusline_winid == vim.fn.win_getid() then
+  if utils.is_focused() then
     highlight_group = append_mode(highlight_group)
   else
     highlight_group = highlight_group .. '_inactive'

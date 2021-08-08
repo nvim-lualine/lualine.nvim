@@ -1,14 +1,14 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
+local utils = require('lualine.utils.utils')
 local Branch = require('lualine.component'):new()
-
 -- vars
 Branch.git_branch = ''
 -- os specific path separator
 Branch.sep = package.config:sub(1, 1)
 -- event watcher to watch head file
 Branch.file_changed = vim.loop.new_fs_event()
-
+local branch_cache = {} -- stores last known branch for a buffer
 -- Initilizer
 Branch.new = function(self, options, child)
   local new_branch = self._parent:new(options, child or Branch)
@@ -18,11 +18,14 @@ Branch.new = function(self, options, child)
   -- run watch head on load so branch is present when component is loaded
   Branch.update_branch()
   -- update branch state of BufEnter as different Buffer may be on different repos
-  vim.cmd [[autocmd lualine BufEnter * lua require'lualine.components.branch'.update_branch()]]
+  utils.define_autocmd('BufEnter', "lua require'lualine.components.branch'.update_branch()")
   return new_branch
 end
 
-Branch.update_status = function() return Branch.git_branch end
+Branch.update_status = function(_, is_focused)
+  if not is_focused then return branch_cache[vim.fn.bufnr()] or '' end
+  return Branch.git_branch
+end
 
 -- returns full path to git directory for current directory
 function Branch.find_git_dir()
@@ -90,6 +93,7 @@ function Branch.update_branch()
     -- set to '' when git dir was not found
     Branch.git_branch = ''
   end
+  branch_cache[vim.fn.bufnr()] = Branch.git_branch
 end
 
 return Branch

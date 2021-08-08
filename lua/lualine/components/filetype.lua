@@ -30,7 +30,7 @@ function FileType:apply_icon()
     if icon and self.options.colored then
       local highlight_color = utils.extract_highlight_colors(
                                   icon_highlight_group, 'fg')
-      local is_focused = vim.g.statusline_winid == vim.fn.win_getid()
+      local is_focused = utils.is_focused()
       local default_highlight = highlight.format_highlight(is_focused,
                                                            self.options.self
                                                                .section)

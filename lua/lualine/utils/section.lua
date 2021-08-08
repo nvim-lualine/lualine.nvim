@@ -15,7 +15,7 @@ function M.draw_section(section, section_name, is_focused)
         (type(component) == 'table' and not component.component_no) then
       return '' -- unknown element in section. section posibly not yet loaded
     end
-    table.insert(status, component:draw(highlight_name))
+    table.insert(status, component:draw(highlight_name, is_focused))
   end
 
   -- Flags required for knowing when to remove component separator
@@ -38,7 +38,6 @@ function M.draw_section(section, section_name, is_focused)
                                                    .options.section_separators[1])
         end
       end
-      section[component_no].last_component = true
     end
     -- Remove component separator when color option is used in next component
     if strip_next_component then

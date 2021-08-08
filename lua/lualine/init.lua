@@ -3,6 +3,7 @@
 local highlight = require('lualine.highlight')
 local loader = require('lualine.utils.loader')
 local utils_section = require('lualine.utils.section')
+local utils = require('lualine.utils.utils')
 local config_module = require('lualine.config')
 
 local config = config_module.config
@@ -145,9 +146,8 @@ end
 
 local function status_dispatch()
   -- disable on specific filetypes
-  local current_ft = vim.api.nvim_buf_get_option(
-                         vim.fn.winbufnr(vim.g.statusline_winid), 'filetype')
-  local is_focused = vim.g.statusline_winid == vim.fn.win_getid()
+  local current_ft = vim.bo.filetype
+  local is_focused = utils.is_focused()
   for _, ft in pairs(config.options.disabled_filetypes) do
     if ft == current_ft then
       vim.wo.statusline = ''
@@ -190,24 +190,22 @@ local function setup_theme()
   vim.cmd [[
     autocmd lualine ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
     autocmd lualine OptionSet background lua require'lualine'.setup()
-    ]]
+  ]]
 end
 
 local function set_tabline()
   if next(config.tabline) ~= nil then
-    vim.o.tabline = '%!v:lua.require\'lualine\'.tabline()'
-    vim.o.showtabline = 2
+    vim.go.tabline = "%{%v:lua.require'lualine'.tabline()%}"
+    vim.go.showtabline = 2
   end
 end
 
 local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
-    vim.o.statusline = '%!v:lua.require\'lualine\'.statusline()'
-    vim.api.nvim_exec([[
-      autocmd lualine WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
-      autocmd lualine BufWinEnter,WinEnter,BufEnter,SessionLoadPost * set statusline<
+    vim.go.statusline = "%{%v:lua.require'lualine'.statusline()%}"
+    vim.cmd([[
       autocmd lualine VimResized * redrawstatus
-    ]], false)
+    ]])
   end
 end
 

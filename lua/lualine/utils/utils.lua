@@ -56,14 +56,23 @@ function M.list_shrink(list)
   return new_list
 end
 
--- Wvaluate a component
-function M.lualine_eval(id, ...)
-  local ok, components = pcall(require, 'lualine.component.components')
-  if ok and components then
-    return components[id]:draw(...)
-  else
-    return ''
+-- Check if a auto command is already defined
+local function autocmd_is_defined(event, patern, command_str)
+  return vim.api.nvim_exec(string.format("au lualine %s %s",
+                           event, patern), true):find(command_str) ~= nil
+end
+
+-- Define a auto command if it's not already defined
+function M.define_autocmd(event, patern, cmd)
+  if not cmd then cmd = patern; patern = '*' end
+  if not autocmd_is_defined(event, patern, cmd) then
+    vim.cmd(string.format("autocmd lualine %s %s %s", event, patern, cmd))
   end
+end
+
+-- Check if statusline is on focused window or not
+function M.is_focused()
+  return tonumber(vim.g.actual_curwin) == vim.fn.win_getid()
 end
 
 return M
