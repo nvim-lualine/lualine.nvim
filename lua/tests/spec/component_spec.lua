@@ -47,10 +47,21 @@ describe('Component:', function()
                                                                          .component_name,
                                                                      comp1.options)
     hl.create_component_highlight_group:revert()
-    local opts2 = build_component_opts({color = 'MyHl'})
+    color = 'MyHl'
+    local opts2 = build_component_opts({color = color})
+    stub(hl, 'create_component_highlight_group')
+    hl.create_component_highlight_group.returns('MyCompLinkedHl')
     local comp2 = require('lualine.components.special.function_component'):new(
                       opts2)
-    eq('MyHl', comp2.options.color_highlight_link)
+    eq('MyCompLinkedHl', comp2.options.color_highlight)
+    -- color highlight wan't in options when create_comp_hl was
+    -- called so remove it before assert
+    comp2.options.color_highlight = nil
+    assert.stub(hl.create_component_highlight_group).was_called_with(color,
+                                                                     comp2.options
+                                                                         .component_name,
+                                                                     comp2.options)
+    hl.create_component_highlight_group:revert()
   end)
 
   it('can draw', function()
@@ -186,7 +197,9 @@ describe('Component:', function()
         padding = 0,
         color = 'MyHl'
       })
-      assert_component(nil, opts, '%#MyHl#test')
+      local comp = require('lualine.components.special.function_component'):new(opts)
+      local custom_link_hl_name = 'lualine_'..comp.options.component_name..'_no_mode'
+      eq('%#'..custom_link_hl_name..'#test', comp:draw(opts.hl))
       local opts2 = build_component_opts(
                         {
             component_separators = {'', ''},

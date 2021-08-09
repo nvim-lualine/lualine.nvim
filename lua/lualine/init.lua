@@ -4,6 +4,7 @@ local highlight = require('lualine.highlight')
 local loader = require('lualine.utils.loader')
 local utils_section = require('lualine.utils.section')
 local utils = require('lualine.utils.utils')
+local utils_notices = require('lualine.utils.notices')
 local config_module = require('lualine.config')
 
 local config = config_module.config
@@ -218,12 +219,14 @@ local function setup_augroup()
 end
 
 local function setup(user_config)
+  utils_notices.clear_notices()
   config = config_module.apply_configuration(user_config)
   setup_augroup()
   setup_theme()
   loader.load_all(config)
   set_statusline()
   set_tabline()
+  utils_notices.notice_message_startup()
 end
 
 return {

@@ -20,31 +20,36 @@ local function sanitize_color(color)
   end
 end
 
-function M.highlight(name, foreground, background, gui, reload)
-  foreground = sanitize_color(foreground)
-  background = sanitize_color(background)
-  local command = {'highlight', name}
-  if foreground and foreground ~= 'none' then
-    table.insert(command, 'guifg=' .. foreground)
-    if cterm_colors then
-      table.insert(command,
-                   'ctermfg=' .. cterm_colors.get_cterm_color(foreground))
+function M.highlight(name, foreground, background, gui, link, reload)
+  local command = {'highlight!'}
+  if link and #link > 0 then
+    vim.list_extend(command, {'link', name, link})
+  else
+    foreground = sanitize_color(foreground)
+    background = sanitize_color(background)
+    table.insert(command, name)
+    if foreground and foreground ~= 'none' then
+      table.insert(command, 'guifg=' .. foreground)
+      if cterm_colors then
+        table.insert(command,
+                     'ctermfg=' .. cterm_colors.get_cterm_color(foreground))
+      end
     end
-  end
-  if background and background ~= 'none' then
-    table.insert(command, 'guibg=' .. background)
-    if cterm_colors then
-      table.insert(command,
-                   'ctermbg=' .. cterm_colors.get_cterm_color(background))
+    if background and background ~= 'none' then
+      table.insert(command, 'guibg=' .. background)
+      if cterm_colors then
+        table.insert(command,
+                     'ctermbg=' .. cterm_colors.get_cterm_color(background))
+      end
     end
-  end
-  if gui then
-    table.insert(command, 'cterm=' .. gui)
-    table.insert(command, 'gui=' .. gui)
+    if gui then
+      table.insert(command, 'cterm=' .. gui)
+      table.insert(command, 'gui=' .. gui)
+    end
   end
   vim.cmd(table.concat(command, ' '))
   if not reload then
-    utils.save_highlight(name, {name, foreground, background, gui, true})
+    utils.save_highlight(name, {name, foreground, background, gui, link, true})
   end
 end
 
@@ -55,10 +60,15 @@ function M.create_highlight_groups(theme)
     cterm_colors = require 'lualine.utils.cterm_colors'
   end
   for mode, sections in pairs(theme) do
-    for section, colorscheme in pairs(sections) do
+    for section, color in pairs(sections) do
       local highlight_group_name = {'lualine', section, mode}
-      M.highlight(table.concat(highlight_group_name, '_'), colorscheme.fg,
-                  colorscheme.bg, colorscheme.gui)
+      if type(color) == 'string' then -- link to a highlight group
+        M.highlight(table.concat(highlight_group_name, '_'), nil,
+                    nil, nil, color)
+      else -- Define a new highlight
+        M.highlight(table.concat(highlight_group_name, '_'), color.fg,
+                    color.bg, color.gui, nil)
+      end
     end
   end
 end
@@ -105,12 +115,18 @@ function M.create_component_highlight_group(color, highlight_tag, options)
     highlight_tag = highlight_tag .. '_' .. tostring(tag_id)
     tag_id = tag_id + 1
   end
+  if type(color) == 'string' then
+    local highlight_group_name = table.concat(
+                                     {'lualine', highlight_tag, 'no_mode'}, '_')
+    M.highlight(highlight_group_name, nil, nil, nil, color) -- l8nk to group
+    return highlight_group_name
+  end
   if color.bg and color.fg then
     -- When bg and fg are both present we donn't need to set highlighs for
     -- each mode as they will surely look the same. So we can work without options
     local highlight_group_name = table.concat(
                                      {'lualine', highlight_tag, 'no_mode'}, '_')
-    M.highlight(highlight_group_name, color.fg, color.bg, color.gui)
+    M.highlight(highlight_group_name, color.fg, color.bg, color.gui, nil)
     return highlight_group_name
   end
 
@@ -134,11 +150,13 @@ function M.create_component_highlight_group(color, highlight_tag, options)
     -- Check if it's same as normal mode if it is no need to create aditional highlight
     if mode ~= 'normal' then
       if bg ~= normal_hl.bg or fg ~= normal_hl.fg then
-        M.highlight(table.concat(highlight_group_name, '_'), fg, bg, color.gui)
+        M.highlight(table.concat(highlight_group_name, '_'), fg, bg, color.gui,
+                    nil)
       end
     else
       normal_hl = {bg = bg, fg = fg}
-      M.highlight(table.concat(highlight_group_name, '_'), fg, bg, color.gui)
+      M.highlight(table.concat(highlight_group_name, '_'), fg, bg, color.gui,
+                  nil)
     end
   end
   return options.self.section .. '_' .. highlight_tag
@@ -238,7 +256,7 @@ function M.get_transitional_highlights(left_section_data, right_section_data,
     if reverse then fg, bg = bg, fg end
     if not fg or not bg then return '' end -- Color retrieval failed
     if bg == fg then return '' end -- Separatoe won't be visible anyway
-    M.highlight(highlight_name, fg, bg)
+    M.highlight(highlight_name, fg, bg, nil)
   end
   return '%#' .. highlight_name .. '#'
 end

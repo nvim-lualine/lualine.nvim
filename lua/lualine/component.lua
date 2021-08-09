@@ -39,13 +39,11 @@ local Component = {
 
   create_option_highlights = function(self)
     -- set custom highlights
-    if type(self.options.color) == 'table' then
+    if self.options.color then
       self.options.color_highlight = highlight.create_component_highlight_group(
                                          self.options.color,
                                          self.options.component_name,
                                          self.options)
-    elseif type(self.options.color) == 'string' then
-      self.options.color_highlight_link = self.options.color
     end
   end,
 
@@ -84,9 +82,6 @@ local Component = {
     if self.options.color_highlight then
       self.status = highlight.component_format_highlight(
                         self.options.color_highlight) .. self.status
-    elseif self.options.color_highlight_link then
-      self.status = '%#' .. self.options.color_highlight_link .. '#' ..
-                        self.status
     end
     self.status = self.status .. default_highlight
   end,

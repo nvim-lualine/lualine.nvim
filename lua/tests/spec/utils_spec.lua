@@ -8,7 +8,7 @@ describe('Utils', function()
   local utils = require('lualine.utils.utils')
 
   it('can save and restore highlights', function()
-    local hl1 = {'hl1', '#122233', '#445566', 'italic', true}
+    local hl1 = {'hl1', '#122233', '#445566', 'italic', nil, true}
     utils.save_highlight(hl1[1], hl1)
     -- highlight loaded in loaded_highlights table
     eq(utils.loaded_highlights[hl1[1]], hl1)
@@ -101,9 +101,11 @@ describe('Section genarator', function()
       require('lualine.components.special.function_component'):new(opts_colored),
       require('lualine.components.special.function_component'):new(opts)
     }
+    local highlight_name2 = 'lualine_'..section[2].options.component_name..'_no_mode'
     -- Removes separator on string color
     eq(
-        '%#lualine_MySection_normal# test %#lualine_MySection_normal#%#MyColor#'
+        '%#lualine_MySection_normal# test %#lualine_MySection_normal#%#'
+        ..highlight_name2..'#'
         .. ' test %#lualine_MySection_normal# test %#lualine_MySection_normal#',
         sec.draw_section(section, 'MySection'))
     section[2] =
@@ -119,7 +121,7 @@ describe('Section genarator', function()
     section[2] =
         require('lua.lualine.components.special.function_component'):new(
             opts_colored3)
-    local highlight_name2 =
+    highlight_name2 =
         '%#lualine_c_' .. section[2].options.component_name .. '_normal#'
     -- Doesn't remove separator on color without bg
     eq('%#lualine_MySection_normal# test %#lualine_MySection_normal#' ..
