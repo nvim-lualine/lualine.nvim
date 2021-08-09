@@ -391,6 +391,15 @@ sections = {},
 inactive_sections = {},
 ```
 
+If you're looking for bufferline or want to show tabs in tabline . There are
+manny awesome plugins that can do that. For example:
+
+- [nvim-bufferline](https://github.com/akinsho/nvim-bufferline.lua)
+- [tabline.nvim](https://github.com/kdheepak/tabline.nvim)
+
+tabline.nvim even uses lualines theme by default 🙌
+You can find a bigger list [here](https://github.com/rockerBOO/awesome-neovim#tabline)
+
 ---
 ### Extensions
 Lualine extensions change statusline appearance for a window/buffer with
