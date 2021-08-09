@@ -18,34 +18,6 @@ Diagnostics.default_colors = {
 }
 -- LuaFormatter on
 
-local function color_deprecation_notice(color, opt_name)
-  modules.utils_notices.add_notice(string.format([[
-### Diagnostics component
-Using option `%s` as string to set foreground color has been deprecated
-and will soon be removed. Now this option has same semantics as regular
-`color` option for components. Means now you can set bg/fg or both.
-String value is still valid but it's interpreted differemtly. When a
-string is used for this option it's treated as a highlight group name.
-In that case `%s` will be linked to that highlight group.
-
-You have something like this in your config.
-
-```lua
-  {'diagnostics',
-    %s = '%s',
-  }
-```
-
-You'll have to change it to this to retain previous behavior
-
-```lua
-  {'diagnostics',
-    %s = { fg = '%s'},
-  }
-```
-]], opt_name, opt_name, opt_name, color, opt_name, color))
-end
-
 -- Initializer
 Diagnostics.new = function(self, options, child)
   local new_diagnostics = self._parent:new(options, child or Diagnostics)
@@ -77,40 +49,24 @@ Diagnostics.new = function(self, options, child)
         modules.utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg') or
             modules.utils.extract_highlight_colors('DiffDelete', 'fg') or
             Diagnostics.default_colors.error }
-  elseif type(new_diagnostics.options.color_error) == 'string'
-    and vim.fn.hlexists(new_diagnostics.options.color_error) == 0 then
-    new_diagnostics.options.color_error = {fg = new_diagnostics.options.color_error}
-    color_deprecation_notice(new_diagnostics.options.color_error.fg, 'color_error')
   end
   if not new_diagnostics.options.color_warn then
     new_diagnostics.options.color_warn = {fg =
         modules.utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg') or
             modules.utils.extract_highlight_colors('DiffText', 'fg') or
             Diagnostics.default_colors.warn }
-  elseif type(new_diagnostics.options.color_warn) == 'string'
-    and vim.fn.hlexists(new_diagnostics.options.color_warn) == 0 then
-    new_diagnostics.options.color_warn = {fg = new_diagnostics.options.color_warn}
-    color_deprecation_notice(new_diagnostics.options.color_warn.fg, 'color_warn')
   end
   if not new_diagnostics.options.color_info then
     new_diagnostics.options.color_info = {fg =
         modules.utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg') or
             modules.utils.extract_highlight_colors('Normal', 'fg') or
             Diagnostics.default_colors.info}
-  elseif type(new_diagnostics.options.color_info) == 'string'
-    and vim.fn.hlexists(new_diagnostics.options.color_info) == 0 then
-    new_diagnostics.options.color_info = {fg = new_diagnostics.options.color_info}
-    color_deprecation_notice(new_diagnostics.options.color_info.fg, 'color_info')
   end
   if not new_diagnostics.options.color_hint then
     new_diagnostics.options.color_hint = {fg =
         modules.utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg') or
             modules.utils.extract_highlight_colors('DiffChange', 'fg') or
             Diagnostics.default_colors.hint}
-  elseif type(new_diagnostics.options.color_hint) == 'string'
-    and vim.fn.hlexists(new_diagnostics.options.color_hint) == 0 then
-    new_diagnostics.options.color_hint = {fg = new_diagnostics.options.color_hint}
-    color_deprecation_notice(new_diagnostics.options.color_hint.fg, 'color_hint')
   end
 
   if new_diagnostics.options.colored then

@@ -1,6 +1,5 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-
 local lualine_require = require'lualine_require'
 local modules = lualine_require.lazy_require{
   utils         = 'lualine.utils.utils',
@@ -27,33 +26,6 @@ Diff.default_colors = {
 
 local diff_cache = {} -- Stores last known value of diff of a buffer
 
-local function color_deprecation_notice(color, opt_name)
-  modules.utils_notices.add_notice(string.format([[
-### Diff component
-Using option `%s` as string to set foreground color has been deprecated
-and will soon be removed. Now this option has same semantics as regular
-`color` option for components. Means now you can set bg/fg or both.
-String value is still valid but it's interpreted differemtly. When a
-string is used for this option it's treated as a highlight group name.
-In that case `%s` will be linked to that highlight group.
-
-You have something like this in your config.
-
-```lua
-  {'diff',
-    %s = '%s',
-  }
-```
-
-You'll have to change it to this to retain previous behavior
-
-```lua
-  {'diff',
-    %s = { fg = '%s'},
-  }
-```
-]], opt_name, opt_name, opt_name, color, opt_name, color))
-end
 -- Initializer
 Diff.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or Diff)
@@ -69,28 +41,16 @@ Diff.new = function(self, options, child)
     new_instance.options.color_added = {fg =
       modules.utils.extract_highlight_colors('DiffAdd', 'fg') or
           Diff.default_colors.added}
-  elseif type(new_instance.options.color_added) == 'string'
-    and vim.fn.hlexists(new_instance.options.color_added) == 0 then
-    new_instance.options.color_added = {fg = new_instance.options.color_added}
-    color_deprecation_notice(new_instance.options.color_added.fg, 'color_added')
   end
   if not new_instance.options.color_modified then
     new_instance.options.color_modified = {fg =
         modules.utils.extract_highlight_colors('DiffChange', 'fg') or
             Diff.default_colors.modified}
-  elseif type(new_instance.options.color_modified) == 'string'
-    and vim.fn.hlexists(new_instance.options.color_modified) == 0 then
-    new_instance.options.color_modified = {fg = new_instance.options.color_modified}
-    color_deprecation_notice(new_instance.options.color_modified.fg, 'color_modified')
   end
   if not new_instance.options.color_removed then
     new_instance.options.color_removed = {fg =
         modules.utils.extract_highlight_colors('DiffDelete', 'fg') or
             Diff.default_colors.removed}
-  elseif type(new_instance.options.color_removed) == 'string'
-    and vim.fn.hlexists(new_instance.options.color_removed) == 0 then
-    new_instance.options.color_removed = {fg = new_instance.options.color_removed}
-    color_deprecation_notice(new_instance.options.color_removed.fg, 'color_removed')
   end
 
   -- create highlights and save highlight_name in highlights table
