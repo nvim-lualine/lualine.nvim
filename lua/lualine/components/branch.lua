@@ -4,10 +4,13 @@ local utils = require('lualine.utils.utils')
 local Branch = require('lualine.component'):new()
 -- vars
 Branch.git_branch = ''
+Branch.git_dir = ''
 -- os specific path separator
 Branch.sep = package.config:sub(1, 1)
 -- event watcher to watch head file
-Branch.file_changed = vim.loop.new_fs_event()
+-- Use file wstch for non windows and poll for windows.
+-- windows doesn't like file watch for some reason.
+Branch.file_changed = Branch.sep ~= "\\" and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
 Branch.active_bufnr = '0'
 local branch_cache = {} -- stores last known branch for a buffer
 -- Initilizer
@@ -17,9 +20,9 @@ Branch.new = function(self, options, child)
     new_branch.options.icon = '' -- e0a0
   end
   -- run watch head on load so branch is present when component is loaded
-  Branch.update_branch()
+  Branch.find_git_dir()
   -- update branch state of BufEnter as different Buffer may be on different repos
-  utils.define_autocmd('BufEnter', "lua require'lualine.components.branch'.update_branch()")
+  utils.define_autocmd('BufEnter', "lua require'lualine.components.branch'.find_git_dir()")
   return new_branch
 end
 
@@ -34,14 +37,20 @@ Branch.update_status = function(_, is_focused)
   return Branch.git_branch
 end
 
+local git_dir_cache = {} -- Stores git paths that we already know of
 -- returns full path to git directory for current directory
 function Branch.find_git_dir()
   -- get file dir so we can search from that dir
   local file_dir = vim.fn.expand('%:p:h')
+  local root_dir = file_dir
   local git_file, git_dir
   -- Search upward for .git file or folder
-  while (file_dir) do
-    local git_path = file_dir..Branch.sep..'.git'
+  while (root_dir) do
+    if git_dir_cache[root_dir] then
+      git_dir = git_dir_cache[root_dir]
+      break
+    end
+    local git_path = root_dir..Branch.sep..'.git'
     local git_file_stat = vim.loop.fs_stat(git_path)
     if (git_file_stat) then
       if git_file_stat.type == 'directory' then
@@ -51,7 +60,7 @@ function Branch.find_git_dir()
       end
       break
     end
-    file_dir = file_dir:match('(.*)'..Branch.sep..'.-')
+    root_dir = root_dir:match('(.*)'..Branch.sep..'.-')
   end
 
   if git_file then
@@ -64,6 +73,11 @@ function Branch.find_git_dir()
     if git_dir:sub(1, 1) ~= Branch.sep and not git_dir:match('^%a:.*$') then
       git_dir = git_file:match('(.*).git') .. git_dir
     end
+  end
+  git_dir_cache[file_dir] = git_dir
+  if Branch.git_dir ~= git_dir then
+    Branch.git_dir = git_dir
+    Branch.update_branch()
   end
   return git_dir
 end
@@ -88,15 +102,16 @@ end
 function Branch.update_branch()
   Branch.active_bufnr = tostring(vim.fn.bufnr())
   Branch.file_changed:stop()
-  local git_dir = Branch.find_git_dir()
+  local git_dir = Branch.git_dir
   if git_dir and #git_dir > 0 then
     local head_file = git_dir .. Branch.sep .. 'HEAD'
     Branch.get_git_head(head_file)
-    Branch.file_changed:start(head_file, {}, vim.schedule_wrap(
-                                  function()
-          -- reset file-watch
-          Branch.update_branch()
-        end))
+    Branch.file_changed:start(head_file,
+                              Branch.sep ~= "\\" and {} or 1000,
+                              vim.schedule_wrap( function()
+      -- reset file-watch
+      Branch.update_branch()
+    end))
   else
     -- set to '' when git dir was not found
     Branch.git_branch = ''
