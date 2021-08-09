@@ -14,6 +14,7 @@ Diff.git_diff = nil
 Diff.diff_output_cache = {}
 -- variable to store git_diff job
 Diff.diff_job = nil
+Diff.active_bufnr = '0'
 -- default colors
 Diff.default_colors = {
   added = '#f0e130',
@@ -109,12 +110,19 @@ Diff.new = function(self, options, child)
     utils.define_autocmd('BufEnter', "lua require'lualine.components.diff'.update_diff_args()")
     utils.define_autocmd('BufWritePost', "lua require'lualine.components.diff'.update_git_diff()")
   end
+  Diff.update_diff_args()
 
   return new_instance
 end
 
 -- Function that runs everytime statusline is updated
 Diff.update_status = function(self, is_focused)
+  if Diff.active_bufnr ~= vim.g.actual_curbuf then
+    -- Workaround for https://github.com/hoob3rt/lualine.nvim/issues/286
+    -- See upstream issue https://github.com/neovim/neovim/issues/15300
+    -- Diff is out of sync re sync it.
+    Diff.update_diff_args()
+  end
   local git_diff = Diff.git_diff
   if self.options.source then
     git_diff = self.options.source()
@@ -195,6 +203,7 @@ end
 -- Updates the job args
 function Diff.update_diff_args()
   -- Donn't show git diff when current buffer doesn't have a filename
+  Diff.active_bufnr = tostring(vim.fn.bufnr())
   if #vim.fn.expand('%') == 0 then
     Diff.diff_args = nil;
     Diff.git_diff = nil;

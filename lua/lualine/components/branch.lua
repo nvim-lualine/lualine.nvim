@@ -8,6 +8,7 @@ Branch.git_branch = ''
 Branch.sep = package.config:sub(1, 1)
 -- event watcher to watch head file
 Branch.file_changed = vim.loop.new_fs_event()
+Branch.active_bufnr = '0'
 local branch_cache = {} -- stores last known branch for a buffer
 -- Initilizer
 Branch.new = function(self, options, child)
@@ -23,6 +24,12 @@ Branch.new = function(self, options, child)
 end
 
 Branch.update_status = function(_, is_focused)
+  if Branch.active_bufnr ~= vim.g.actual_curbuf then
+    -- Workaround for https://github.com/hoob3rt/lualine.nvim/issues/286
+    -- See upstream issue https://github.com/neovim/neovim/issues/15300
+    -- Diff is out of sync re sync it.
+    Branch.update_branch()
+  end
   if not is_focused then return branch_cache[vim.fn.bufnr()] or '' end
   return Branch.git_branch
 end
@@ -79,6 +86,7 @@ end
 
 -- Update branch
 function Branch.update_branch()
+  Branch.active_bufnr = tostring(vim.fn.bufnr())
   Branch.file_changed:stop()
   local git_dir = Branch.find_git_dir()
   if git_dir and #git_dir > 0 then
