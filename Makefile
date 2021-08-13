@@ -3,6 +3,7 @@
 lint:
 	@luacheck lua/lualine
 	@luacheck lua/tests
+	@luacheck examples/
 
 format:
 	@for file in `find . -name '*.lua'`;do lua-format $$file -i; done;
