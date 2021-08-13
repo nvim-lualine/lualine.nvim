@@ -47,7 +47,7 @@ end
 local function load_extensions(config)
   for index, extension in pairs(config.extensions) do
     if type(extension) == 'string' then
-      local local_extension = require('lualine.extensions.' .. extension)
+      local local_extension = vim.deepcopy(require('lualine.extensions.' .. extension))
       load_sections(local_extension.sections, config.options)
       if local_extension.inactive_sections then
         load_sections(local_extension.inactive_sections, config.options)
@@ -57,14 +57,15 @@ local function load_extensions(config)
       end
       config.extensions[index] = local_extension
     elseif type(extension) == 'table' then
-      load_sections(extension.sections, config.options)
-      if extension.inactive_sections then
-        load_sections(extension.inactive_sections, config.options)
+      local local_extension = vim.deepcopy(extension)
+      load_sections(local_extension.sections, config.options)
+      if local_extension.inactive_sections then
+        load_sections(local_extension.inactive_sections, config.options)
       end
       if type(local_extension.init) == 'function' then
         local_extension.init()
       end
-      config.extensions[index] = extension
+      config.extensions[index] = local_extension
     end
   end
 end
