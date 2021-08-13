@@ -141,6 +141,14 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648958-b12b2300-74bc-11eb-8232-550949cbbfb3.png'/>
 </p>
 
+### moonfly
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/11382509/129304429-cd2af22d-3b88-4c17-bf99-99f7608576d4.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/11382509/129304441-81a6c88e-364c-476a-9050-0ada4cae1e3b.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/11382509/129304453-2b18900a-13a9-4476-9977-3875e55aabaf.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/11382509/129304469-37fb0168-0484-406b-8b2e-d309232612ab.png'/>
+</p>
+
 ### nightfly
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648974-b9835e00-74bc-11eb-9c52-c5187aa3ff2c.png'/>
