@@ -18,6 +18,11 @@ end
 
 local M = {}
 
+function M.init()
+  -- Make sure ft wf doesn't create a custom statusline
+  vim.g.qf_disable_statusline = true
+end
+
 M.sections = {
   lualine_a = {label},
   lualine_b = {title},
