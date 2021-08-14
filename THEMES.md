@@ -3,8 +3,10 @@
 All available themes are only best effort ports by myself/ other users. If you find a theme to be weird/ wrong please open an issue/ pr.
 
 ### auto
-if your favourite colorcheme is not yet supported you can use `auto` to make
-lualine try to match your colorscheme.
+auto is a special theme. It will automaticaly load theme for your colorscheme.
+If there's no theme available for your colorscheme then
+it'll it's best to generate one.
+
 ### 16color
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648240-02d2ae00-74bb-11eb-9ac1-495849621366.png'/>

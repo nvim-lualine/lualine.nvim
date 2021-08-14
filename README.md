@@ -77,7 +77,7 @@ Each sections holds it's components e.g. current vim's mode.
 require'lualine'.setup {
   options = {
     icons_enabled = true,
-    theme = 'gruvbox',
+    theme = 'auto',
     component_separators = {'', ''},
     section_separators = {'', ''},
     disabled_filetypes = {}
