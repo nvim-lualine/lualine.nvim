@@ -19,7 +19,7 @@ describe('config parsing', function()
     describe('theme', function()
       it('default', function()
         local config = config_module.apply_configuration({})
-        eq(config.options.theme, 'gruvbox')
+        eq(config.options.theme, 'auto')
       end)
       it('custom', function()
         local config = {options = {theme = 'nord'}}

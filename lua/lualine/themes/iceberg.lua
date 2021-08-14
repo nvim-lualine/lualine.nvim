@@ -4,4 +4,4 @@
 -- License: MIT License
 local background = vim.opt.background:get()
 
-return require('lualine.themes.gruvbox_' .. background)
+return require('lualine.themes.iceberg_' .. background)

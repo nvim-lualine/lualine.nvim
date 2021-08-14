@@ -171,20 +171,74 @@ end
 
 local function tabline() return statusline(config.tabline, true) end
 
+local function check_theme_name_deprecation(theme_name)
+  local deprection_table = {
+    oceanicnext      = 'OceanicNext',
+    papercolor       = 'PaperColor',
+    tomorrow         = 'Tomorrow',
+    gruvbox_material = 'gruvbox-material',
+    modus_vivendi    = 'modus-vivendi',
+  }
+  if deprection_table[theme_name] then
+    local correct_name = deprection_table[theme_name]
+    utils_notices.add_notice(string.format([[
+### options.theme
+You're using `%s` as theme name .
+It has recently been renamed to `%s`.
+Please update your config to follow that.
+
+You have something like this in your config.
+```lua
+options = {
+  theme = '%s'
+}
+```
+
+You'll have to change it to something like this.
+```lua
+options = {
+  theme = '%s'
+}
+```
+
+]], theme_name, correct_name, theme_name, correct_name))
+    return  correct_name
+  end
+  return theme_name
+end
+
+local function notify_theme_error(theme_name)
+  local message_template = theme_name ~= 'auto' and [[
+### options.theme
+Theme `%s` not found, falling back to `auto`. Check if spelling is right.
+]] or [[
+### options.theme
+Theme `%s` failed, falling back to `gruvbox`.
+This shouldn't happen.
+Please report the issue at https://github.com/shadmansaleh/lualine.nvim/issues .
+Also provide what colorscheme you're using.
+]]
+  utils_notices.add_notice(string.format(message_template, theme_name))
+end
+
 local function setup_theme()
   local function get_theme_from_config()
     local theme_name = config.options.theme
     if type(theme_name) == 'string' then
-      package.loaded['lualine.themes.'..theme_name] = nil
-      local ok, theme = pcall(require, 'lualine.themes.' .. theme_name)
-      if ok then return theme end
+      theme_name = check_theme_name_deprecation(theme_name)
+      local ok, theme = pcall(loader.load_theme, theme_name)
+      if ok and theme then return theme end
     elseif type(theme_name) == 'table' then
       -- use the provided theme as-is
       return config.options.theme
     end
-    vim.api.nvim_err_writeln('theme ' .. tostring(theme_name) ..
-                                 ' not found, defaulting to gruvbox')
-    return require 'lualine.themes.gruvbox'
+    if theme_name ~= 'auto' then
+      notify_theme_error(theme_name)
+      local ok, theme = pcall(loader.load_theme, 'auto')
+      if ok and theme then return theme end
+    end
+    notify_theme_error('auto')
+    return loader.load_theme('gruvbox')
   end
   local theme = get_theme_from_config()
   highlight.create_highlight_groups(theme)

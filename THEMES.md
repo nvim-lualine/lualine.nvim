@@ -37,6 +37,10 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648541-cbb0cc80-74bb-11eb-843f-19c4c58b1d91.png'/>
 </p>
 
+### ayu
+It's a combination of ayu_light, ayu_dark & ayu_mirage. It loads one of these
+them based you your `g:ayucolor` option.
+
 ### codedark
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648568-dff4c980-74bb-11eb-9d16-b68ac68f2ab2.png'/>
@@ -61,7 +65,7 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648675-22b6a180-74bc-11eb-9b8e-45e64a03e062.png'/>
 </p>
 
-### gruvbox
+### gruvbox_dark
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648685-2b0edc80-74bc-11eb-9ec9-9aac3677df43.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648693-2ea26380-74bc-11eb-831a-9ebbe4f3dd83.png'/>
@@ -77,7 +81,11 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/34294427/118757020-5ffdb600-b896-11eb-95e7-dbf1f08e063d.png'/>
 </p>
 
-### gruvbox_material
+### gruvbox
+It's a combination of gruvbox_light and gruvbox_dark. It loads either of
+them based you your `background` option.
+
+### gruvbox-material
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648725-3f52d980-74bc-11eb-8fa5-a77b0a21cdea.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648728-41b53380-74bc-11eb-99cf-001eab6cc51b.png'/>
@@ -109,6 +117,10 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648862-7aeda380-74bc-11eb-808c-1b12dde45f3d.png'/>
 </p>
 
+### iceberg
+It's a combination of icrberg_light and icrberg_dark. It loads either of
+them based you your `background` option.
+
 ### jellybeans
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648882-82ad4800-74bc-11eb-91e8-4d38fcdec134.png'/>
@@ -125,7 +137,7 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648935-a2dd0700-74bc-11eb-9a4b-72eb1e2ab79e.png'/>
 </p>
 
-### modus_vivendi
+### modus-vivendi
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/9327361/114389966-58176b80-9b9e-11eb-944e-1e0079527d74.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/9327361/114390000-606fa680-9b9e-11eb-97dd-ef5bbc23049a.png'/>
@@ -157,7 +169,7 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649021-cf911e80-74bc-11eb-8b4a-9f9eb61c7973.png'/>
 </p>
 
-### oceanicnext
+### OceanicNext
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649039-d7e95980-74bc-11eb-9a33-df413936c645.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649043-d91a8680-74bc-11eb-9b1b-9c2e88ede3aa.png'/>
@@ -205,6 +217,10 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649137-0cf5ac00-74bd-11eb-8764-765bead5de6e.png'/>
 </p>
 
+### PaperColor
+It's a combination of papercolor_light and papercolor_dark. It loads either of
+them based you your `background` option.
+
 ### powerline
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649147-14b55080-74bd-11eb-9670-713185342eb2.png'/>
@@ -237,7 +253,7 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649258-48907600-74bd-11eb-9bba-8e82b56777d9.png'/>
 </p>
 
-### tomorrow
+### Tomorrow
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649275-51814780-74bd-11eb-881b-1e137a0cbfe0.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649297-59d98280-74bd-11eb-92a5-a8c4af150106.png'/>

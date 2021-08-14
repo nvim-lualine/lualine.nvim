@@ -1,4 +1,13 @@
 local utils = require 'lualine.utils.utils'
+local loader = require 'lualine.utils.loader'
+
+local color_name  = vim.g.colors_name
+if color_name then
+  -- Check if there's a theme for current colorscheme
+  -- If there is load that instead of genarating a new one
+  local ok, theme = pcall(loader.load_theme, color_name)
+  if ok and theme then return theme end
+end
 
 ---------------
 -- Constents --

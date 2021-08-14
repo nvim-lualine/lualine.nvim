@@ -75,4 +75,24 @@ local function load_all(config)
   load_extensions(config)
 end
 
-return {load_all = load_all}
+local function load(patern)
+  local files = vim.fn.uniq(vim.api.nvim_get_runtime_file(patern, true))
+  local n_files = #files
+  if n_files == 0 then return nil
+  elseif n_files == 1 then return  dofile(files[1])
+  else
+    for _, file in ipairs(files) do
+      if not file:find('lualine.nvim') then return dofile(file) end
+    end
+  end
+end
+
+local function load_theme(theme_name)
+  return load(table.concat(
+               {'lua', 'lualine', 'themes', theme_name..'.lua'}, package.config:sub(1, 1)))
+end
+
+return {
+  load_all = load_all,
+  load_theme = load_theme
+}
