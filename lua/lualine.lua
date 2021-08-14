@@ -145,42 +145,6 @@ end
 
 local function tabline() return statusline(config.tabline, true) end
 
-local function check_theme_name_deprecation(theme_name)
-  local deprection_table = {
-    oceanicnext      = 'OceanicNext',
-    papercolor       = 'PaperColor',
-    tomorrow         = 'Tomorrow',
-    gruvbox_material = 'gruvbox-material',
-    modus_vivendi    = 'modus-vivendi',
-  }
-  if deprection_table[theme_name] then
-    local correct_name = deprection_table[theme_name]
-    modules.utils_notices.add_notice(string.format([[
-### options.theme
-You're using `%s` as theme name .
-It has recently been renamed to `%s`.
-Please update your config to follow that.
-
-You have something like this in your config.
-```lua
-options = {
-  theme = '%s'
-}
-```
-
-You'll have to change it to something like this.
-```lua
-options = {
-  theme = '%s'
-}
-```
-
-]], theme_name, correct_name, theme_name, correct_name))
-    return  correct_name
-  end
-  return theme_name
-end
-
 local function notify_theme_error(theme_name)
   local message_template = theme_name ~= 'auto' and [[
 ### options.theme
@@ -199,7 +163,6 @@ local function setup_theme()
   local function get_theme_from_config()
     local theme_name = config.options.theme
     if type(theme_name) == 'string' then
-      theme_name = check_theme_name_deprecation(theme_name)
       local ok, theme = pcall(modules.loader.load_theme, theme_name)
       if ok and theme then return theme end
     elseif type(theme_name) == 'table' then
