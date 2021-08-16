@@ -1,20 +1,22 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local highlight = require('lualine.highlight')
-local loader = require('lualine.utils.loader')
-local utils_section = require('lualine.utils.section')
-local utils = require('lualine.utils.utils')
-local utils_notices = require('lualine.utils.notices')
-local config_module = require('lualine.config')
-
-local config = config_module.config
+local modules = require('lualine.utils.lazy_require'){
+  highlight = 'lualine.highlight',
+  loader = 'lualine.utils.loader',
+  utils_section = 'lualine.utils.section',
+  utils = 'lualine.utils.utils',
+  utils_notices = 'lualine.utils.notices',
+  config_module = 'lualine.config',
+}
+local config           -- Stores cureently applied config
+local new_config = {}  -- Stores config that will be applied
 
 local function apply_transitional_separators(previous_section, current_section,
                                              next_section)
 
   local function fill_section_separator(prev, next, sep, reverse)
     if #sep == 0 then return 0 end
-    local transitional_highlight = highlight.get_transitional_highlights(prev,
+    local transitional_highlight = modules.highlight.get_transitional_highlights(prev,
                                                                          next,
                                                                          reverse)
     if transitional_highlight and #transitional_highlight > 0 then
@@ -92,7 +94,7 @@ local function statusline(sections, is_focused)
   for _, section_name in ipairs(section_sequence) do
     if sections['lualine_' .. section_name] then
       -- insert highlight+components of this section to status_builder
-      local section_data = utils_section.draw_section(
+      local section_data = modules.utils_section.draw_section(
                                sections['lualine_' .. section_name],
                                section_name, is_focused)
       if #section_data > 0 then
@@ -108,7 +110,7 @@ local function statusline(sections, is_focused)
     -- midsection divider
     if not half_passed and status_builder[i].name > 'c' then
       table.insert(status,
-                   highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
+                   modules.highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
       half_passed = true
     end
     -- component separator needs to have fg = current_section.bg
@@ -125,7 +127,7 @@ local function statusline(sections, is_focused)
   -- incase none of x,y,z was configured lets not fill whole statusline with a,b,c section
   if not half_passed then
     table.insert(status,
-                 highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
+                 modules.highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
   end
   return table.concat(status)
 end
@@ -145,30 +147,6 @@ local function get_extension_sections(current_ft, is_focused)
   return nil
 end
 
-local function status_dispatch()
-  -- disable on specific filetypes
-  local current_ft = vim.bo.filetype
-  local is_focused = utils.is_focused()
-  for _, ft in pairs(config.options.disabled_filetypes) do
-    if ft == current_ft then
-      vim.wo.statusline = ''
-      return ''
-    end
-  end
-  local extension_sections = get_extension_sections(current_ft, is_focused)
-  if is_focused then
-    if extension_sections ~= nil then
-      return statusline(extension_sections, is_focused)
-    end
-    return statusline(config.sections, is_focused)
-  else
-    if extension_sections ~= nil then
-      return statusline(extension_sections, is_focused)
-    end
-    return statusline(config.inactive_sections, is_focused)
-  end
-end
-
 local function tabline() return statusline(config.tabline, true) end
 
 local function check_theme_name_deprecation(theme_name)
@@ -181,7 +159,7 @@ local function check_theme_name_deprecation(theme_name)
   }
   if deprection_table[theme_name] then
     local correct_name = deprection_table[theme_name]
-    utils_notices.add_notice(string.format([[
+    modules.utils_notices.add_notice(string.format([[
 ### options.theme
 You're using `%s` as theme name .
 It has recently been renamed to `%s`.
@@ -218,7 +196,7 @@ This shouldn't happen.
 Please report the issue at https://github.com/shadmansaleh/lualine.nvim/issues .
 Also provide what colorscheme you're using.
 ]]
-  utils_notices.add_notice(string.format(message_template, theme_name))
+  modules.utils_notices.add_notice(string.format(message_template, theme_name))
 end
 
 local function setup_theme()
@@ -226,7 +204,7 @@ local function setup_theme()
     local theme_name = config.options.theme
     if type(theme_name) == 'string' then
       theme_name = check_theme_name_deprecation(theme_name)
-      local ok, theme = pcall(loader.load_theme, theme_name)
+      local ok, theme = pcall(modules.loader.load_theme, theme_name)
       if ok and theme then return theme end
     elseif type(theme_name) == 'table' then
       -- use the provided theme as-is
@@ -234,14 +212,14 @@ local function setup_theme()
     end
     if theme_name ~= 'auto' then
       notify_theme_error(theme_name)
-      local ok, theme = pcall(loader.load_theme, 'auto')
+      local ok, theme = pcall(modules.loader.load_theme, 'auto')
       if ok and theme then return theme end
     end
     notify_theme_error('auto')
-    return loader.load_theme('gruvbox')
+    return modules.loader.load_theme('gruvbox')
   end
   local theme = get_theme_from_config()
-  highlight.create_highlight_groups(theme)
+  modules.highlight.create_highlight_groups(theme)
   vim.cmd [[
     autocmd lualine ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
     autocmd lualine OptionSet background lua require'lualine'.setup()
@@ -257,10 +235,9 @@ end
 
 local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
-    vim.go.statusline = "%{%v:lua.require'lualine'.statusline()%}"
-    vim.cmd([[
-      autocmd lualine VimResized * redrawstatus
-    ]])
+    vim.cmd('autocmd lualine VimResized * redrawstatus')
+  else
+    vim.go.statusline = nil
   end
 end
 
@@ -272,20 +249,51 @@ local function setup_augroup()
   ]]
 end
 
-local function setup(user_config)
-  utils_notices.clear_notices()
-  config = config_module.apply_configuration(user_config)
+local function reset_lualine()
+  modules.utils_notices.clear_notices()
+  config = modules.config_module.apply_configuration(new_config)
   setup_augroup()
   setup_theme()
-  loader.load_all(config)
+  modules.loader.load_all(config)
   set_statusline()
   set_tabline()
-  utils_notices.notice_message_startup()
+  modules.utils_notices.notice_message_startup()
+  new_config = nil
+end
+
+local function status_dispatch()
+  -- disable on specific filetypes
+  if new_config then reset_lualine() end
+  local current_ft = vim.bo.filetype
+  local is_focused = modules.utils.is_focused()
+  for _, ft in pairs(config.options.disabled_filetypes) do
+    if ft == current_ft then
+      vim.wo.statusline = ''
+      return ''
+    end
+  end
+  local extension_sections = get_extension_sections(current_ft, is_focused)
+  if is_focused then
+    if extension_sections ~= nil then
+      return statusline(extension_sections, is_focused)
+    end
+    return statusline(config.sections, is_focused)
+  else
+    if extension_sections ~= nil then
+      return statusline(extension_sections, is_focused)
+    end
+    return statusline(config.inactive_sections, is_focused)
+  end
+end
+
+local function setup(user_config)
+  new_config = user_config or {}
+  vim.go.statusline = "%{%v:lua.require'lualine'.statusline()%}"
 end
 
 return {
   setup = setup,
   statusline = status_dispatch,
   tabline = tabline,
-  get_config = config_module.get_config,
+  get_config = function() return modules.config_module.get_config() end,
 }
