@@ -1,8 +1,10 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local highlight = require('lualine.highlight')
-local utils = require('lualine.utils.utils')
-local utils_notices = require('lualine.utils.notices')
+local modules = require('lualine.utils.lazy_require'){
+  highlight = 'lualine.highlight',
+  utils = 'lualine.utils.utils',
+  utils_notices = 'lualine.utils.notices',
+}
 
 local Diagnostics = require('lualine.component'):new()
 
@@ -16,7 +18,7 @@ Diagnostics.default_colors = {
 -- LuaFormatter on
 
 local function color_deprecation_notice(color, opt_name)
-  utils_notices.add_notice(string.format([[
+  modules.utils_notices.add_notice(string.format([[
 ### Diagnostics component
 Using option `%s` as string to set foreground color has been deprecated
 and will soon be removed. Now this option has same semantics as regular
@@ -71,8 +73,8 @@ Diagnostics.new = function(self, options, child)
   -- apply colors
   if not new_diagnostics.options.color_error then
     new_diagnostics.options.color_error = {fg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg') or
-            utils.extract_highlight_colors('DiffDelete', 'fg') or
+        modules.utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg') or
+            modules.utils.extract_highlight_colors('DiffDelete', 'fg') or
             Diagnostics.default_colors.error }
   elseif type(new_diagnostics.options.color_error) == 'string'
     and vim.fn.hlexists(new_diagnostics.options.color_error) == 0 then
@@ -81,8 +83,8 @@ Diagnostics.new = function(self, options, child)
   end
   if not new_diagnostics.options.color_warn then
     new_diagnostics.options.color_warn = {fg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg') or
-            utils.extract_highlight_colors('DiffText', 'fg') or
+        modules.utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg') or
+            modules.utils.extract_highlight_colors('DiffText', 'fg') or
             Diagnostics.default_colors.warn }
   elseif type(new_diagnostics.options.color_warn) == 'string'
     and vim.fn.hlexists(new_diagnostics.options.color_warn) == 0 then
@@ -91,8 +93,8 @@ Diagnostics.new = function(self, options, child)
   end
   if not new_diagnostics.options.color_info then
     new_diagnostics.options.color_info = {fg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg') or
-            utils.extract_highlight_colors('Normal', 'fg') or
+        modules.utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg') or
+            modules.utils.extract_highlight_colors('Normal', 'fg') or
             Diagnostics.default_colors.info}
   elseif type(new_diagnostics.options.color_info) == 'string'
     and vim.fn.hlexists(new_diagnostics.options.color_info) == 0 then
@@ -101,8 +103,8 @@ Diagnostics.new = function(self, options, child)
   end
   if not new_diagnostics.options.color_hint then
     new_diagnostics.options.color_hint = {fg =
-        utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg') or
-            utils.extract_highlight_colors('DiffChange', 'fg') or
+        modules.utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg') or
+            modules.utils.extract_highlight_colors('DiffChange', 'fg') or
             Diagnostics.default_colors.hint}
   elseif type(new_diagnostics.options.color_hint) == 'string'
     and vim.fn.hlexists(new_diagnostics.options.color_hint) == 0 then
@@ -112,16 +114,16 @@ Diagnostics.new = function(self, options, child)
 
   if new_diagnostics.options.colored then
     new_diagnostics.highlight_groups = {
-      error = highlight.create_component_highlight_group(
+      error = modules.highlight.create_component_highlight_group(
           new_diagnostics.options.color_error, 'diagnostics_error',
           new_diagnostics.options),
-      warn = highlight.create_component_highlight_group(
+      warn = modules.highlight.create_component_highlight_group(
           new_diagnostics.options.color_warn, 'diagnostics_warn',
           new_diagnostics.options),
-      info = highlight.create_component_highlight_group(
+      info = modules.highlight.create_component_highlight_group(
           new_diagnostics.options.color_info, 'diagnostics_info',
           new_diagnostics.options),
-      hint = highlight.create_component_highlight_group(
+      hint = modules.highlight.create_component_highlight_group(
           new_diagnostics.options.color_hint, 'diagnostics_hint',
           new_diagnostics.options)
     }
@@ -153,7 +155,7 @@ Diagnostics.update_status = function(self)
   if self.options.colored then
     local colors = {}
     for name, hl in pairs(self.highlight_groups) do
-      colors[name] = highlight.component_format_highlight(hl)
+      colors[name] = modules.highlight.component_format_highlight(hl)
     end
     for _, section in ipairs(self.options.sections) do
       if data[section] ~= nil and data[section] > 0 then
@@ -204,14 +206,25 @@ Diagnostics.diagnostic_sources = {
 Diagnostics.get_diagnostics = function(sources)
   local result = {}
   for index, source in ipairs(sources) do
-    local error_count, warning_count, info_count, hint_count =
-        Diagnostics.diagnostic_sources[source]()
-    result[index] = {
-      error = error_count,
-      warn = warning_count,
-      info = info_count,
-      hint = hint_count
-    }
+    if type(source) == 'string' then
+      local error_count, warning_count, info_count, hint_count =
+          Diagnostics.diagnostic_sources[source]()
+      result[index] = {
+        error = error_count,
+        warn = warning_count,
+        info = info_count,
+        hint = hint_count
+      }
+    elseif type(source) == 'function' then
+      local source_result = source()
+      source_result = type(source_result) == 'table' and source_result or {}
+      result[index] = {
+        error = source_result.error or 0,
+        warn = source_result.warning or 0,
+        info = source_result.info or 0,
+        hint = source_result.hin or 0
+      }
+    end
   end
   return result
 end

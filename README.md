@@ -296,8 +296,10 @@ sections = {
     {
       'diagnostics',
       -- table of diagnostic sources, available sources:
-      -- nvim_lsp, coc, ale, vim_lsp
-      sources = nil,
+      -- 'nvim_lsp', 'coc', 'ale', 'vim_lsp'
+      -- Or a function that returns a table like 
+      --   {error=error_cnt, warning=warn_cnt, info=info_cnt, hint=hint_cnt}
+      sources = {},
       -- displays diagnostics from defined severity
       sections = {'error', 'warn', 'info', 'hint'},
       -- all colors are in format #rrggbb
