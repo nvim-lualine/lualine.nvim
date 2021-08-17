@@ -6,7 +6,10 @@ labels: new feature
 
 ---
 
-<!-- Before creating a new request: search existing issues and prs and ensure it hasn't been already requested.-->
+<!--
+  Before creating a new request: search existing issues and prs
+  and ensure it hasn't been already requested.
+-->
 
 ### Requested feature
 <!-- Describe the feature with details. -->
