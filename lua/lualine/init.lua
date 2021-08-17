@@ -9,7 +9,7 @@ local modules = require('lualine.utils.lazy_require'){
   config_module = 'lualine.config',
 }
 local config           -- Stores cureently applied config
-local new_config = {}  -- Stores config that will be applied
+local new_config = true  -- Stores config that will be applied
 
 local function apply_transitional_separators(previous_section, current_section,
                                              next_section)
@@ -251,7 +251,6 @@ end
 
 local function reset_lualine()
   modules.utils_notices.clear_notices()
-  config = modules.config_module.apply_configuration(new_config)
   setup_augroup()
   setup_theme()
   modules.loader.load_all(config)
@@ -287,7 +286,8 @@ local function status_dispatch()
 end
 
 local function setup(user_config)
-  new_config = user_config or {}
+  new_config = true
+  config = modules.config_module.apply_configuration(user_config)
   vim.go.statusline = "%{%v:lua.require'lualine'.statusline()%}"
 end
 
@@ -295,5 +295,5 @@ return {
   setup = setup,
   statusline = status_dispatch,
   tabline = tabline,
-  get_config = function() return modules.config_module.get_config() end,
+  get_config = modules.config_module.get_config,
 }
