@@ -96,6 +96,29 @@ local function append_mode(highlight_group)
   return highlight_group
 end
 
+-- Helper function for create component highlight
+-- Handles fall back of colors when crea58ng highlight group
+-- @param color table color passed for creating component highlight
+-- @param options_color color set by color option for component
+--        this is first falk back
+-- @param default_color Colors et in theme this is 2nd fall back
+-- @param kind (fg/bg))
+local function get_default_component_color(color, options_color, default_color, kind)
+  if color[kind] then return color[kind] end
+  if options_color then
+    if type(options_color) == 'table' and options_color[kind] then
+      return options_color[kind]
+    elseif type(options_color) == 'string' then
+      return utils.extract_highlight_colors(options_color, kind)
+    end
+  end
+  if type(default_color) == 'table' then
+    return default_color[kind]
+  elseif type(default_color) == 'string' then
+    return utils.extract_highlight_colors(default_color, kind)
+  end
+end
+
 -- Create highlight group with fg bg and gui from theme
 -- @color has to be { fg = "#rrggbb", bg="#rrggbb" gui = "effect" }
 -- all the color elements are optional if fg or bg is not given options must be provided
@@ -143,10 +166,8 @@ function M.create_component_highlight_group(color, highlight_tag, options)
     local default_color_table = active_theme[mode] and
                                     active_theme[mode][section] or
                                     active_theme.normal[section]
-    local bg = (color.bg or (type(options.color) == 'table' and options.color.bg)
-                or default_color_table.bg)
-    local fg = (color.fg or (type(options.color) == 'table' and options.color.fg)
-                or default_color_table.fg)
+    local bg = get_default_component_color(color, options.color, default_color_table, 'bg')
+    local fg = get_default_component_color(color, options.color, default_color_table, 'fg')
     -- Check if it's same as normal mode if it is no need to create aditional highlight
     if mode ~= 'normal' then
       if bg ~= normal_hl.bg or fg ~= normal_hl.fg then
