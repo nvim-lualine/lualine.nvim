@@ -284,7 +284,14 @@ sections = {
       -- color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}
       -- or highlight group
       -- color = "WarningMsg"
-      color = nil
+      color = nil,
+      -- Type option specifies what type a component is.
+      -- When type is omitted lualine will guess it.
+      -- Available types [format: type_name(example)]
+      -- mod(branch/filename), stl(%f/%m), var(g:coc_status/bo:modifiable),
+      -- luae(lua expressions), vimf(viml function name)
+      -- luae is short for lua-expression and vimf is short fror vim-function
+      type = nil,
     }
   }
 }

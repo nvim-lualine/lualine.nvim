@@ -60,31 +60,64 @@ local function lualine_load(patern, use_cache)
   return retval
 end
 
-local function component_loader(component)
-  if type(component[1]) == 'function' then
+local component_types = {
+  luaf = function(component)
     return
       lualine_load({'lua', 'lualine', 'components', 'special', 'function_component'}, true):new(component)
-  end
-  if type(component[1]) == 'string' then
-    -- load the component
+  end,
+  mod = function(component)
     local ok, loaded_component = pcall(lualine_load,
-                          {'lua', 'lualine', 'components', component[1]}, true)
+                            {'lua', 'lualine', 'components', component[1]}, true)
     if ok then
       component.component_name = component[1]
       loaded_component = loaded_component:new(component)
-    elseif string.char(component[1]:byte(1)) == '%' then
-      local stl_expr = component[1] -- Vim's %p %l statusline elements
-      component[1] = function() return stl_expr end
-      loaded_component =
-        lualine_load({'lua', 'lualine', 'components', 'special', 'function_component'}, true):new(component)
-    elseif component[1]:find('[gvtwb]?o?:') == 1 then
-      loaded_component =
-        lualine_load({'lua', 'lualine', 'components', 'special', 'vim_var_component'}, true):new(component)
-    else
-      loaded_component =
-        lualine_load({'lua', 'lualine', 'components', 'special', 'eval_func_component'}, true):new(component)
+      return loaded_component
     end
-    return loaded_component
+  end,
+  stl = function(component)
+    local stl_expr = component[1] -- Vim's %p %l statusline elements
+    component[1] = function() return stl_expr end
+    return
+      lualine_load({'lua', 'lualine', 'components', 'special', 'function_component'}, true):new(component)
+  end,
+  var = function(component)
+    return
+        lualine_load({'lua', 'lualine', 'components', 'special', 'vim_var_component'}, true):new(component)
+  end,
+  ['_'] = function(component)
+    return
+        lualine_load({'lua', 'lualine', 'components', 'special', 'eval_func_component'}, true):new(component)
+  end
+}
+
+local function component_loader(component)
+  if type(component[1]) == 'function' then
+    return component_types.luaf(component)
+  end
+  if type(component[1]) == 'string' then
+    -- load the component
+    if component.type ~= nil then
+      if component_types[component.type] and component.type ~= 'luaf' then
+        return component_types[component.type](component)
+      elseif component.type == 'vimf' or component.type == 'luae' then
+        return component_types['_'](component)
+      else
+        notice.add_notice(string.format([[
+### component.type
+
+component type '%s' isn't recognised. Check if spelling is correct.]], component.type))
+      end
+    end
+    local loaded_component = component_types.mod(component)
+    if loaded_component then
+      return loaded_component
+    elseif string.char(component[1]:byte(1)) == '%' then
+      return component_types.stl(component)
+    elseif component[1]:find('[gvtwb]?o?:') == 1 then
+      return component_types.var(component)
+    else
+      return component_types['_'](component)
+    end
   end
 end
 

@@ -8,12 +8,12 @@ VarComponent.update_status = function(self)
   -- filters var portion from g:var
   local var_name = component:sub(#scope + 2, #component)
   -- Displays nothing when veriable aren't present
+  if not (scope and var_name) then return '' end
   local return_val = vim[scope][var_name]
   if return_val == nil then return '' end
   local ok
   ok, return_val = pcall(tostring, return_val)
-  if ok then return return_val end
-  return ''
+  return ok and return_val or ''
 end
 
 return VarComponent
