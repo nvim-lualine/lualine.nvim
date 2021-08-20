@@ -147,6 +147,8 @@ local Component = {
 
   -- variable to store component output for manipulation
   status = '',
+  last_status = '',
+  last_result = '',
   -- Actual function that updates a component. Must be overwritten with component functionality
   -- luacheck: push no unused args
   update_status = function(self, is_focused) end,
@@ -154,14 +156,17 @@ local Component = {
 
   -- Driver code of the class
   draw = function(self, default_highlight, is_focused)
+    if self.options.condition ~= nil and self.options.condition() ~= true then
+      return ''
+    end
+    local status, use_last_status = self:update_status(is_focused)
+    if status == self.last_result or use_last_status then
+      return self.last_status
+    end
+    self.last_result = status
+    if self.options.format then status = self.options.format(status or '') end
     self.status = ''
     self.applied_separator = ''
-
-    if self.options.condition ~= nil and self.options.condition() ~= true then
-      return self.status
-    end
-    local status = self:update_status(is_focused)
-    if self.options.format then status = self.options.format(status or '') end
     if type(status) == 'string' and #status > 0 then
       self.status = status
       self:apply_icon()
@@ -171,6 +176,7 @@ local Component = {
       self:apply_section_separators()
       self:apply_separator()
     end
+    self.last_status = self.status
     return self.status
   end
 }

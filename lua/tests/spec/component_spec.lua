@@ -277,7 +277,9 @@ describe('Filetype component', function()
       component_separators = {'', ''},
       padding = 0
     })
-    assert_component('filetype', opts, 'lua')
+    vim.bo.filetype = 'test1'
+    assert_component('filetype', opts, 'test1')
+    vim.bo.filetype = 'lua'
   end)
 
   it('colors nvim-web-devicons icons', function()
@@ -298,13 +300,15 @@ describe('Filetype component', function()
       component_separators = {'', ''},
       padding = 0,
     })
-    assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# lua')
+    vim.bo.filetype = 'test2'
+    assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# test2')
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
     assert.stub(hl.create_component_highlight_group).was_called_with(
       {fg = '#000'}, 'test_highlight_group', opts
     )
     hl.create_component_highlight_group:revert()
     utils.extract_highlight_colors:revert()
+    vim.bo.filetype = 'lua'
     package.loaded['nvim-web-devicons'] = nil
   end)
 
@@ -325,9 +329,11 @@ describe('Filetype component', function()
       padding = 0,
       colored = false,
     })
-    assert_component('filetype', opts, '* lua')
+    vim.bo.filetype = 'test3'
+    assert_component('filetype', opts, '* test3')
     hl.create_component_highlight_group:revert()
     utils.extract_highlight_colors:revert()
+    vim.bo.filetype = 'lua'
     package.loaded['nvim-web-devicons'] = nil
   end)
 

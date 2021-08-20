@@ -15,6 +15,8 @@ Diagnostics.default_colors = {
   info  = '#ffffff',
   hint  = '#d7afaf',
 }
+
+Diagnostics.last_data = {}
 -- LuaFormatter on
 
 local function color_deprecation_notice(color, opt_name)
@@ -152,6 +154,8 @@ Diagnostics.update_status = function(self)
     info = info_count,
     hint = hint_count
   }
+  if vim.deep_equal(data) == Diagnostics.last_data then return '', true end
+  Diagnostics.last_data = data
   if self.options.colored then
     local colors = {}
     for name, hl in pairs(self.highlight_groups) do

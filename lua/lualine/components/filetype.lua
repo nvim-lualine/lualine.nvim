@@ -4,6 +4,7 @@ local highlight = require('lualine.highlight')
 local utils = require('lualine.utils.utils')
 
 local FileType = require('lualine.component'):new()
+FileType.last_data = ''
 
 function FileType:new(options, child)
   local new_instance = self._parent:new(options, child or FileType)
@@ -16,7 +17,12 @@ function FileType:new(options, child)
   return new_instance
 end
 
-function FileType.update_status() return vim.bo.filetype or '' end
+function FileType.update_status()
+  local ft = vim.bo.filetype
+  if ft == FileType.last_data then return '', true end
+  FileType.last_data = ft
+  return ft or ''
+end
 
 function FileType:apply_icon()
   if not self.options.icons_enabled then return end

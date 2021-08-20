@@ -23,6 +23,7 @@ Diff.default_colors = {
 }
 
 local diff_cache = {} -- Stores last known value of diff of a buffer
+Diff.last_data = {}
 
 local function color_deprecation_notice(color, opt_name)
   utils_notices.add_notice(string.format([[
@@ -130,6 +131,7 @@ Diff.update_status = function(self, is_focused)
 
   if not is_focused then git_diff = diff_cache[vim.fn.bufnr()] or {} end
   if git_diff == nil then return '' end
+  if vim.deep_equal(git_diff, Diff.last_data) then return '', true end
 
   local colors = {}
   if self.options.colored then

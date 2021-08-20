@@ -1,6 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local FileName = require('lualine.component'):new()
+FileName.last_data = ''
 
 local function count(base, pattern)
   return select(2, string.gsub(base, pattern, ''))
@@ -45,6 +46,8 @@ FileName.update_status = function(self)
   end
 
   if data == '' then data = '[No Name]' end
+  if data == FileName.last_data then return '', true end
+  FileName.last_data = data
 
   if self.options.shorting_target ~= 0 then
     local windwidth = vim.fn.winwidth(0)
