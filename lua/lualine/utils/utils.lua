@@ -76,7 +76,7 @@ function M.is_focused()
 end
 
 function M.is_valid_filename(name)
-  local invalid_chars="[^a-zA-Z0-9_. ]"
+  local invalid_chars="[^a-zA-Z0-9_. -]"
   return name:find(invalid_chars) == nil
 end
 
