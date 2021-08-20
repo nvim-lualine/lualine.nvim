@@ -75,4 +75,9 @@ function M.is_focused()
   return tonumber(vim.g.actual_curwin) == vim.fn.win_getid()
 end
 
+function M.is_valid_filename(name)
+  local invalid_chars="[^a-zA-Z0-9_. ]"
+  return name:find(invalid_chars) == nil
+end
+
 return M

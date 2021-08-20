@@ -1,8 +1,10 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local notice = require'lualine.utils.notices'
+local utils = require'lualine.utils.utils'
 
 local function lualine_load(patern, use_cache)
+  assert(utils.is_valid_filename(patern[#patern]), "Invalid filename")
   local retval, cache_name = nil, nil
   local sep = package.config:sub(1,1)
 
