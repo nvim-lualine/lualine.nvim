@@ -70,6 +70,11 @@ local function component_loader(component)
     if ok then
       component.component_name = component[1]
       loaded_component = loaded_component:new(component)
+    elseif string.char(component[1]:byte(1)) == '%' then
+      local stl_expr = component[1] -- Vim's %p %l statusline elements
+      component[1] = function() return stl_expr end
+      loaded_component =
+        lualine_load({'lua', 'lualine', 'components', 'special', 'function_component'}, true):new(component)
     elseif component[1]:find('[gvtwb]?o?:') == 1 then
       loaded_component =
         lualine_load({'lua', 'lualine', 'components', 'special', 'vim_var_component'}, true):new(component)

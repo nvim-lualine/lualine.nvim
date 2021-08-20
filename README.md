@@ -207,6 +207,12 @@ sections = {lualine_a = {hello}}
 sections = {lualine_a = {'FugitiveHead'}}
 ```
 
+#### Vim's statusline items as lualine component
+
+```lua
+sections = {lualine_c = {'%=', '%t%m', '%3p'}}
+```
+
 ##### Vim variables as lualine component
 Variables from `g:`, `v:`, `t:`, `w:`, `b:`, `o`, `go:`, `vo:`, `to:`, `wo:`, `bo:` scopes can be used.
 
@@ -222,7 +228,7 @@ You can use any valid lua expression as a component including
   * global variables
   * require statements
 ```lua
-sections = {lualine_c = {"os.data('%a')", 'data', require'lsp-status'.status}}
+sections = {lualine_c = {"os.data('%a')", 'data', "require'lsp-status'.status()"}}
 ```
 `data` is a global variable in this example.
 

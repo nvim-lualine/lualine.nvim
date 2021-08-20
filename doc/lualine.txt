@@ -149,6 +149,11 @@ Vim functions as lualine component~
 >
     sections = {lualine_a = {'FugitiveHead'}}
 <
+Vim's statusline items as lualine component~
+>
+    sections = {lualine_c = {'%=', '%t%m', '%3p'}}
+<
+
 Vim variables as lualine component~
 
 Variables from `g:`, `v:`, `t:`, `w:`, `b:`, `o`, `go:`, `vo:`, `to:`, `wo:`, `bo:` scopes can be used.
