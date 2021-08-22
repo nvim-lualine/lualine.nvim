@@ -2,14 +2,16 @@
 ![code size](https://img.shields.io/github/languages/code-size/hoob3rt/lualine.nvim?style=flat-square)
 ![license](https://img.shields.io/github/license/hoob3rt/lualine.nvim?style=flat-square)
 
-A blazing fast and easy to configure neovim statusline written in pure lua.
+A fast and easy to configure statusline plugin for neovim
 
 `lualine.nvim` requires neovim 0.5
 
 ## Contributing
 Feel free to create an issue/pr if you want to see anything else implemented.
+If you have some question or need help with configuration start a [discussion](https://github.com/shadmansaleh/lualine.nvim/discussions).
 
 Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pr.
+You can also help with documentation in [wiki](https://github.com/shadmansaleh/lualine.nvim/wiki)
 
 ## Screenshots
 Here is a preview of how lualine can look like.
