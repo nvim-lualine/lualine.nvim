@@ -260,11 +260,11 @@ local function reset_lualine()
   new_config = nil
 end
 
-local function status_dispatch()
+local function status_dispatch(focused)
   -- disable on specific filetypes
   if new_config then reset_lualine() end
   local current_ft = vim.bo.filetype
-  local is_focused = modules.utils.is_focused()
+  local is_focused = focused ~= nil and focused or modules.utils.is_focused()
   for _, ft in pairs(config.options.disabled_filetypes) do
     if ft == current_ft then
       vim.wo.statusline = ''
