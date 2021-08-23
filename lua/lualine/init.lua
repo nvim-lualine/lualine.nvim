@@ -7,6 +7,7 @@ local modules = require('lualine.utils.lazy_require'){
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
   config_module = 'lualine.config',
+  nt = 'lualine.utils.native',
 }
 local config           -- Stores cureently applied config
 local new_config = true  -- Stores config that will be applied
@@ -91,6 +92,7 @@ local function statusline(sections, is_focused)
   -- The sequence sections should maintain
   local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
   local status_builder = {}
+  local applied_mid_sep = false
   for _, section_name in ipairs(section_sequence) do
     if sections['lualine_' .. section_name] then
       -- insert highlight+components of this section to status_builder
@@ -98,38 +100,45 @@ local function statusline(sections, is_focused)
                                sections['lualine_' .. section_name],
                                section_name, is_focused)
       if #section_data > 0 then
-        table.insert(status_builder, {name = section_name, data = section_data})
+        if section_name > 'c' and not applied_mid_sep then
+          applied_mid_sep = true
+          section_data = '%='
+        end
+        -- table.insert(status_builder, {name = section_name, data = section_data})
+        table.insert(status_builder, section_data)
       end
     end
   end
-
+  local status = table.concat(status_builder)
+  if not applied_mid_sep then status = status .. '%=' end
+  return modules.nt.apply_ts_sep_native(status)
   -- Actual statusline
-  local status = {}
-  local half_passed = false
-  for i = 1, #status_builder do
-    -- midsection divider
-    if not half_passed and status_builder[i].name > 'c' then
-      table.insert(status,
-                   modules.highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
-      half_passed = true
-    end
-    -- component separator needs to have fg = current_section.bg
-    -- and bg = adjacent_section.bg
-    local previous_section = status_builder[i - 1] or {}
-    local current_section = status_builder[i]
-    local next_section = status_builder[i + 1] or {}
+  -- local status = {}
+  -- local half_passed = false
+  -- for i = 1, #status_builder do
+  --   -- midsection divider
+  --   if not half_passed and status_builder[i].name > 'c' then
+  --     table.insert(status,
+  --                  modules.highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
+  --     half_passed = true
+  --   end
+  --   -- component separator needs to have fg = current_section.bg
+  --   -- and bg = adjacent_section.bg
+  --   local previous_section = status_builder[i - 1] or {}
+  --   local current_section = status_builder[i]
+  --   local next_section = status_builder[i + 1] or {}
 
-    local section = apply_transitional_separators(previous_section,
-                                                  current_section, next_section)
+  --   local section = apply_transitional_separators(previous_section,
+  --                                                 current_section, next_section)
 
-    table.insert(status, section)
-  end
-  -- incase none of x,y,z was configured lets not fill whole statusline with a,b,c section
-  if not half_passed then
-    table.insert(status,
-                 modules.highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
-  end
-  return table.concat(status)
+  --   table.insert(status, section)
+  -- end
+  -- -- incase none of x,y,z was configured lets not fill whole statusline with a,b,c section
+  -- if not half_passed then
+  --   table.insert(status,
+  --                modules.highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
+  -- end
+  -- return table.concat(status)
 end
 
 -- check if any extension matches the filetype and return proper sections
