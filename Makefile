@@ -1,5 +1,5 @@
 .DEFAULT_GOAL = build
-CFLAGS = -Wall -Werror -fPIC
+CFLAGS = -Wall -Werror -fPIC -Wl,-undefined -Wl,dynamic_lookup
 
 ifeq ($(OS),Windows_NT)
 	MKD = -mkdir

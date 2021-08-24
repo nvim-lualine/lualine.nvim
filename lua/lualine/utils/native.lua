@@ -20,14 +20,31 @@ ffi.cdef [[
     void (*create_highlight)(char *name, char *fg, char *bg);
   } Lualinelib;
 
+  typedef struct {
+    char *data;
+    size_t size;
+  } String;
+
   void init(Lualinelib *lualib);
-  char *extract_hl_color(char *color_group, const char *scope);
+  char *extract_hl_color(String *name, const char *scope);
   char *apply_transitional_separator(char *stl);
+
+  void free(void *ptr);
 ]]
 
 local utils = require'lualine.utils.utils'
 local highlight = require'lualine.highlight'
 
+local function cstr2str(str)
+  local luastr = ffi.string(str)
+  ffi.C.free(str)
+  return luastr
+end
+
+local function str2cstr(str)
+  local cstr = ffi.cast("char *", str)
+  return cstr
+end
 local function Chl_exsists(hl_name)
   return ffi.cast("bool", utils.highlight_exists(ffi.string(hl_name)))
 end
@@ -46,13 +63,12 @@ end
 
 
 local function extract_hl_color(color_group, scope)
-  local c_color = ffi.new("char [?]", #color_group+1, color_group)
-  local c_scope = ffi.new("char [?]", #scope+1, scope)
-  return ffi.string(lib.extract_hl_color(c_color, c_scope))
+  local name_str = ffi.new("String", {char = str2cstr(color_group), size=#color_group})
+  return cstr2str(lib.extract_hl_color(ffi.cast("String *", name_str), str2cstr(scope)))
 end
 
 local function apply_transitional_separators_native(stl)
-  return ffi.string(lib.apply_transitional_separator(ffi.cast("char *", stl)))
+  return cstr2str(lib.apply_transitional_separator(str2cstr(stl)))
 end
 
 native_init()

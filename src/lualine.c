@@ -24,25 +24,33 @@ bool is_string_same(const String *left, const String *right) {
   return strcmp(left->data, right->data) == 0;
 }
 
-char * extract_hl_color(char *color_group, const char *scope) {
-  String name = {.data = color_group, .size=strlen(color_group)};
+char * extract_hl_color(String *name, const char *scope) {
   Boolean rgb = true;
   Error err = ERROR_INIT;
-  Dictionary color = nvim_get_hl_by_name(name, rgb, &err);
+  Dictionary color = nvim_get_hl_by_name(*name, rgb, &err);
+  if (ERROR_SET(&err)) {
+    api_free_dictionary(color);
+    return NULL;
+  }
   bool scope_bg = strcmp(scope, "bg") == 0 ? true : false;
-  bool scope_fg = scope_bg ? false : true;
   int color_int = -1;
   for (int iii=0; iii < color.size; iii++) {
     if (scope_bg && (strcmp(color.items[iii].key.data, "background") == 0)) {
-      color_int = color.items[iii].value.data.integer;
-    } else if (scope_fg && (strcmp(color.items[iii].key.data, "foreground") == 0)) {
-      color_int = color.items[iii].value.data.integer;
+      if (color.items[iii].value.type == kObjectTypeInteger) {
+        color_int = color.items[iii].value.data.integer;
+      }
+    } else if (!scope_bg && (strcmp(color.items[iii].key.data, "foreground") == 0)) {
+      if (color.items[iii].value.type == kObjectTypeInteger) {
+        color_int = color.items[iii].value.data.integer;
+      }
     }
   }
-
+  api_free_dictionary(color);
+  if (color_int == -1) return NULL;
   char * result = (char*)malloc(sizeof(char) * 8);
   if (result == NULL) return NULL;
   sprintf(result, "#%06x", color_int);
+  result[7] = 0;
   return result;
 }
 
@@ -84,11 +92,11 @@ String get_transitional_highlights(String *left_hl_name,
   if (!lib->hl_exists(hl_name)) {
     char *fg, *bg;
     if (!reverse) {
-      fg = extract_hl_color(left_hl_name->data, "bg");
-      bg = extract_hl_color(right_hl_name->data, "bg");
+      fg = extract_hl_color(left_hl_name, "bg");
+      bg = extract_hl_color(right_hl_name, "bg");
     }else{
-      bg = extract_hl_color(left_hl_name->data, "bg");
-      fg = extract_hl_color(right_hl_name->data, "bg");
+      bg = extract_hl_color(left_hl_name, "bg");
+      fg = extract_hl_color(right_hl_name, "bg");
     }
     if (fg == NULL || bg == NULL) {
       if (fg == NULL) free(fg);
@@ -103,6 +111,8 @@ String get_transitional_highlights(String *left_hl_name,
       return retval;
     }
     lib->create_highlight(hl_name, fg, bg);
+    free(fg);
+    free(bg);
   }
 
   retval.data = hl_name;
@@ -122,7 +132,7 @@ String extract_highlight(char *str) {
   String retval = STRING_INIT;
   if (str[0] == '%' && str[1] == '#') {
     char *endPos = goto_char(str + 2, '#');
-    if (endPos == NULL) return retval; 
+    if (endPos == NULL) return retval;
     retval.data = str + 2;
     retval.size = endPos - str - 1;
     return retval;

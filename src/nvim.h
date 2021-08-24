@@ -114,6 +114,15 @@ struct key_value_pair {
   Object value;
 };
 
+void xfree(void *ptr);
+void api_free_string(String value);
+void api_free_object(Object value);
+void api_free_object(Object value);
+void api_free_array(Array value);
+void api_free_dictionary(Dictionary value);
+void api_clear_error(Error *value);
+void api_free_luaref(LuaRef ref);
+
 extern int name_to_color(const unsigned char *name);
 extern Dictionary nvim_get_hl_by_name(String name, Boolean rgb, Error *err);
 
