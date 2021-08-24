@@ -102,7 +102,7 @@ local function statusline(sections, is_focused)
       if #section_data > 0 then
         if section_name > 'c' and not applied_mid_sep then
           applied_mid_sep = true
-          section_data = '%='
+          section_data = '%='..section_data
         end
         -- table.insert(status_builder, {name = section_name, data = section_data})
         table.insert(status_builder, section_data)
@@ -110,7 +110,6 @@ local function statusline(sections, is_focused)
     end
   end
   local status = table.concat(status_builder)
-  if not applied_mid_sep then status = status .. '%=' end
   return modules.nt.apply_ts_sep_native(status)
   -- Actual statusline
   -- local status = {}

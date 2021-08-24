@@ -27,7 +27,9 @@ bool is_string_same(const String *left, const String *right) {
 char * extract_hl_color(String *name, const char *scope) {
   Boolean rgb = true;
   Error err = ERROR_INIT;
-  Dictionary color = nvim_get_hl_by_name(*name, rgb, &err);
+  String aloc_name = {.data=strndup(name->data, name->size), .size=name->size};
+  Dictionary color = nvim_get_hl_by_name(aloc_name, rgb, &err);
+  free(aloc_name.data);
   if (ERROR_SET(&err)) {
     api_free_dictionary(color);
     return NULL;
@@ -57,8 +59,7 @@ char * extract_hl_color(String *name, const char *scope) {
 // Returns NULL when transitional separator isn't found
 // Returns heap alocated string with name of transitional separator
 String get_transitional_highlights(String *left_hl_name,
-                                   String *right_hl_name,
-                                   bool reverse) {
+                                   String *right_hl_name) {
   String retval = STRING_INIT;
   if (left_hl_name->size == 0|| right_hl_name->size == 0) return retval;
   if (is_string_same(left_hl_name, right_hl_name)) return retval;
@@ -91,13 +92,8 @@ String get_transitional_highlights(String *left_hl_name,
 
   if (!lib->hl_exists(hl_name)) {
     char *fg, *bg;
-    if (!reverse) {
-      fg = extract_hl_color(left_hl_name, "bg");
-      bg = extract_hl_color(right_hl_name, "bg");
-    }else{
-      bg = extract_hl_color(left_hl_name, "bg");
-      fg = extract_hl_color(right_hl_name, "bg");
-    }
+    fg = extract_hl_color(left_hl_name, "bg");
+    bg = extract_hl_color(right_hl_name, "bg");
     if (fg == NULL || bg == NULL) {
       if (fg == NULL) free(fg);
       if (bg == NULL) free(bg);
@@ -116,8 +112,7 @@ String get_transitional_highlights(String *left_hl_name,
   }
 
   retval.data = hl_name;
-  retval.size = hl_name_size;
-
+  retval.size = hl_name_size - 1;
   return retval;
 }
 
@@ -134,7 +129,7 @@ String extract_highlight(char *str) {
     char *endPos = goto_char(str + 2, '#');
     if (endPos == NULL) return retval;
     retval.data = str + 2;
-    retval.size = endPos - str - 1;
+    retval.size = endPos - (str + 2);
     return retval;
   }
   return retval;
@@ -178,12 +173,12 @@ char * apply_transitional_separator(char *stl) {
             s++;
             break;
           }
-          String sep = {.data=s+2, .size=sep_end-(s + 2) - 1};
+          String sep = {.data=s+3, .size=sep_end-(s + 3)};
           s = sep_end + 1;
           copied = s;
           String next_hl = find_next_hl(s);
           if (next_hl.size != 0) {
-            String ts_hl = get_transitional_highlights(&last_hl, &next_hl, false);
+            String ts_hl = get_transitional_highlights(&next_hl, &last_hl);
             if (ts_hl.size != 0) {
               ab_append(ab, "%#", 2);
               ab_append(ab, ts_hl.data, ts_hl.size);
@@ -203,12 +198,12 @@ char * apply_transitional_separator(char *stl) {
             s++;
             break;
           }
-          String sep = {.data=s+2, .size=sep_end-(s + 2) - 1};
+          String sep = {.data=s+3, .size=sep_end-(s + 3)};
           s = sep_end + 1;
           copied = s;
           String next_hl = find_next_hl(s);
           if (next_hl.size != 0) {
-            String ts_hl = get_transitional_highlights(&last_hl, &next_hl, true);
+            String ts_hl = get_transitional_highlights(&last_hl, &next_hl);
             if (ts_hl.size != 0) {
               ab_append(ab, "%#", 2);
               ab_append(ab, ts_hl.data, ts_hl.size);
