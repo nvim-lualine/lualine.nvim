@@ -5,12 +5,11 @@
 #include "nvim.h"
 #include "append_buffer.h"
 
-Lualinelib *lib;
+// #include "logger.h"
 
-void init(Lualinelib *lualib) {
-  lib = lualib;
+void init() {
+  // init_logger("lualine.log", LT_VERBOSE);
 }
-
 // https://stackoverflow.com/questions/4770985/how-to-check-if-a-string-starts-with-another-string-in-c
 bool startsWith(const char *pre, const char *str)
 {
@@ -22,6 +21,27 @@ bool startsWith(const char *pre, const char *str)
 bool is_string_same(const String *left, const String *right) {
   if (left->size != right->size) return false;
   return strcmp(left->data, right->data) == 0;
+}
+
+void lualine_create_highlight(char *name, char *fg, char *bg) {
+  FIXED_TEMP_ARRAY(args, 3);
+  args.items[0] = CSTR_TO_OBJ(name);
+  args.items[1] = CSTR_TO_OBJ(fg);
+  args.items[2] = CSTR_TO_OBJ(bg);
+
+  Error err = ERROR_INIT;
+  Object ret = nvim_exec_lua(STATIC_CSTR_AS_STRING("return package.loaded['lualine.highlight'].highlight(...)"), args, &err);
+  api_free_object(ret);
+}
+
+bool lualine_hl_exists(char *hl_name) {
+  FIXED_TEMP_ARRAY(args, 1);
+  args.items[0] = CSTR_TO_OBJ(hl_name);
+  Error err = ERROR_INIT;
+  Object ret = nvim_exec_lua(STATIC_CSTR_AS_STRING("return package.loaded['lualine.utils.utils'].highlight_exists(...)"), args, &err);
+  bool retval = ret.data.boolean;
+  api_free_object(ret);
+  return retval;
 }
 
 char * extract_hl_color(String *name, const char *scope) {
@@ -90,7 +110,7 @@ String get_transitional_highlights(String *left_hl_name,
   }
   *name_ptr = 0;
 
-  if (!lib->hl_exists(hl_name)) {
+  if (!lualine_hl_exists(hl_name)) {
     char *fg, *bg;
     fg = extract_hl_color(left_hl_name, "bg");
     bg = extract_hl_color(right_hl_name, "bg");
@@ -106,7 +126,7 @@ String get_transitional_highlights(String *left_hl_name,
       free(hl_name);
       return retval;
     }
-    lib->create_highlight(hl_name, fg, bg);
+    lualine_create_highlight(hl_name, fg, bg);
     free(fg);
     free(bg);
   }

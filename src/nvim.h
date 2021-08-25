@@ -114,6 +114,34 @@ struct key_value_pair {
   Object value;
 };
 
+#define OBJECT_OBJ(o) o
+
+#define BOOLEAN_OBJ(b) ((Object) { \
+    .type = kObjectTypeBoolean, \
+    .data.boolean = b })
+#define BOOL(b) BOOLEAN_OBJ(b)
+
+#define INTEGER_OBJ(i) ((Object) { \
+    .type = kObjectTypeInteger, \
+    .data.integer = i })
+
+#define FLOAT_OBJ(f) ((Object) { \
+    .type = kObjectTypeFloat, \
+    .data.floating = f })
+
+#define STRING_OBJ(s) ((Object) { \
+    .type = kObjectTypeString, \
+    .data.string = s })
+
+#define CSTR_TO_OBJ(s) STRING_OBJ(cstr_to_string(s))
+#define FIXED_TEMP_ARRAY(name, fixsize) \
+  Array name = ARRAY_DICT_INIT; \
+  Object name##__items[fixsize]; \
+  name.size = fixsize; \
+  name.items = name##__items; \
+
+#define STATIC_CSTR_AS_STRING(s) ((String) {.data = s, .size = sizeof(s) - 1})
+
 void xfree(void *ptr);
 void api_free_string(String value);
 void api_free_object(Object value);
@@ -122,8 +150,10 @@ void api_free_array(Array value);
 void api_free_dictionary(Dictionary value);
 void api_clear_error(Error *value);
 void api_free_luaref(LuaRef ref);
+String cstr_to_string(const char *str);
 
 extern int name_to_color(const unsigned char *name);
 extern Dictionary nvim_get_hl_by_name(String name, Boolean rgb, Error *err);
 
+Object nvim_exec_lua(String code, Array args, Error *err);
 #endif  // NVIM_H

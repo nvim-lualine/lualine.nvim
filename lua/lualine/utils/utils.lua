@@ -36,7 +36,7 @@ end
 
 -- determine if an highlight exist and isn't cleared
 function M.highlight_exists(highlight_name)
-  return M.loaded_highlights[highlight_name] and true or false
+  return M.loaded_highlights[highlight_name] ~= nil
 end
 
 -- clears loaded_highlights table and highlights
