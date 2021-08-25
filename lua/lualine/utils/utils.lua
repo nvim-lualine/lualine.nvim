@@ -80,4 +80,8 @@ function M.is_valid_filename(name)
   return name:find(invalid_chars) == nil
 end
 
+function M.charAt(str, pos)
+  return string.char(str:byte(pos))
+end
+
 return M

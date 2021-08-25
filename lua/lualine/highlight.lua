@@ -225,58 +225,24 @@ function M.format_highlight(is_focused, highlight_group)
 end
 
 -- @description : Provides transitional highlights for section separators.
--- @param left_section_data :(string) section before separator
--- @param right_section_data:(string) section after separator
--- @param reverse      :(string) Whether it's a left separator or right separator
---    '▶️' and '◀️' needs reverse colors so this parameter needs to be set true.
+-- @param left_hl :(string) this highlights bg is used for fg of transitional hl
+-- @param right_hl:(string) this highlights bg is used for bg of transitional hl
+--    '▶️' and '◀️' ' eeds reverse colors so the caller should swap left and right
 -- @return: (string) formated highlight group name
-function M.get_transitional_highlights(left_section_data, right_section_data,
-                                       reverse)
-  local left_highlight_name, right_highlight_name
-  -- Grab the last highlighter of left section
-  if left_section_data then
-    -- extract highlight_name from .....%#highlight_name#
-    left_highlight_name = left_section_data:match('.*%%#(.-)#.-')
-  else
-    -- When right section us unavailable default to lualine_c
-    left_highlight_name = append_mode('lualine_c')
-    if not utils.highlight_exists(left_highlight_name) then
-      left_highlight_name = 'lualine_c_normal'
-    end
-  end
-  if right_section_data then
-    -- extract highlight_name from %#highlight_name#....
-    right_highlight_name = right_section_data:match('.-%%#(.-)#.*')
-  else
-    -- When right section us unavailable default to lualine_c
-    right_highlight_name = append_mode('lualine_c')
-    if not utils.highlight_exists(right_highlight_name) then
-      right_highlight_name = 'lualine_c_normal'
-    end
-  end
-  -- When both left and right highlights are same nothing to transition to
-  if left_highlight_name == right_highlight_name then return end
+function M.get_transitional_highlights(left_hl, right_hl)
+  -- When both left and right highlights are same or one is absent
+  -- nothing to transition to.
+  if left_hl == nil or right_hl == nil or left_hl == right_hl then return nil end
 
   -- construct the name of hightlight group
-  local highlight_name
-  if left_highlight_name:find('lualine_') == 1 then
-    highlight_name = left_highlight_name .. '_to_' .. right_highlight_name
-  else
-    highlight_name = 'lualine_' .. left_highlight_name .. '_to_' ..
-                         right_highlight_name
-  end
-
+  local highlight_name = table.concat({'lualine_transitional',left_hl,'to',right_hl}, '_')
   if not utils.highlight_exists(highlight_name) then
     -- Create the highlight_group if needed
     -- Get colors from highlights
-    -- using string.format to convert decimal to hexadecimal
-    local fg = utils.extract_highlight_colors(left_highlight_name, 'bg')
-    local bg = utils.extract_highlight_colors(right_highlight_name, 'bg')
-    -- swap the bg and fg when reverse is true. As in that case highlight will
-    -- be placed before section
-    if reverse then fg, bg = bg, fg end
-    if not fg or not bg then return '' end -- Color retrieval failed
-    if bg == fg then return '' end -- Separatoe won't be visible anyway
+    local fg = utils.extract_highlight_colors(left_hl, 'bg')
+    local bg = utils.extract_highlight_colors(right_hl, 'bg')
+    if not fg or not bg then return nil end -- Color retrieval failed
+    if bg == fg then return nil end -- Separator won't be visible anyway
     M.highlight(highlight_name, fg, bg, nil)
   end
   return '%#' .. highlight_name .. '#'

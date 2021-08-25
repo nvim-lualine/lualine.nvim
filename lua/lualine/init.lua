@@ -11,86 +11,79 @@ local modules = require('lualine.utils.lazy_require'){
 local config           -- Stores cureently applied config
 local new_config = true  -- Stores config that will be applied
 
-local function apply_transitional_separators(previous_section, current_section,
-                                             next_section)
+local function apply_transitional_separators(status)
+  local status_applied = {} -- Collects all the pieces for concatation
+  local last_hl         -- Stores lash highligjt group that we found
+  local copied_pos = 1  -- Tracks how much we've copied over to status_applied
+  local str_checked = 1 -- Tracks where the searcher head is at
 
-  local function fill_section_separator(prev, next, sep, reverse)
-    if #sep == 0 then return 0 end
-    local transitional_highlight = modules.highlight.get_transitional_highlights(prev,
-                                                                         next,
-                                                                         reverse)
-    if transitional_highlight and #transitional_highlight > 0 then
-      return transitional_highlight .. sep
-    else
-      return ''
+  local function find_next_hl()
+    -- Gets the next valid hl group from str_checked
+    local hl_pos_start, hl_pos_end = status:find('%%#.-#', str_checked + 1)
+    while true do
+      if not hl_pos_start then return nil end
+      -- When there are more that one hl group next to one another like
+      -- %#HL1#%#HL2#%#HL3# we need to return HL3. This makes that happen.
+      local next_start, next_end = status:find('^%%#.-#', hl_pos_end + 1)
+      if next_start == nil then break end
+      hl_pos_start, hl_pos_end = next_start, next_end
+    end
+    return status:sub(hl_pos_start + 2, hl_pos_end - 1)
+  end
+
+  local function fill_section_separator(sep, reverse)
+    -- Inserts transitional separator along with transitional highlight
+    if last_hl and #last_hl == 0 then return  end
+    local next_hl = find_next_hl()
+    if next_hl == nil then return end
+    local transitional_highlight = reverse -- lua ternary assignment x ? y : z
+                             and modules.highlight.get_transitional_highlights(last_hl, next_hl)
+                             or modules.highlight.get_transitional_highlights(next_hl, last_hl)
+    if transitional_highlight then
+      table.insert(status_applied, transitional_highlight .. sep)
     end
   end
 
-  -- variable to track separators position
-  local sep_pos = 1
-
-  -- %s{sep} is marker for left separator and
-  -- %S{sep} is marker for right separator
-  -- Apply left separator
-  while sep_pos do
-    -- get what the separator char
-    local sep = current_section.data:match('%%s{(.-)}', sep_pos)
-    -- Get where separator starts from
-    sep_pos = current_section.data:find('%%s{.-}', sep_pos)
-    if not sep or not sep_pos then break end
-    -- part of section before separator . -1 since we don't want the %
-    local prev = current_section.data:sub(1, sep_pos - 1)
-    -- part of section after separator. 4 is length of "%s{}"
-    local nxt = current_section.data:sub(sep_pos + 4 + #sep)
-    -- prev might not exist when separator is the first element of section
-    -- use previous section as prev
-    if not prev or #prev == 0 or sep_pos == 1 then
-      prev = previous_section.data
-    end
-    if prev ~= previous_section.data then
-      -- Since the section isn't suppose to be highlighted with separators
-      -- separators highlight extract the last highlight and place it between
-      -- separator and section
-      local last_hl = prev:match('.*(%%#.-#).-')
-      current_section.data = prev ..
-                                 fill_section_separator(prev, nxt, sep, false) ..
-                                 last_hl .. nxt
+  -- Process entire status replace the %s{sep} & %S{sep} placeholders
+  -- with proper transitional separator.
+  while str_checked ~= nil do
+    str_checked = status:find('%%', str_checked)
+    if str_checked == nil then break end
+    table.insert(status_applied, status:sub(copied_pos, str_checked - 1))
+                                              -- -1 so we don't copy '%'
+    copied_pos = str_checked
+    local next_char = modules.utils.charAt(status, str_checked +1)
+    if next_char == '#' then
+      -- %#hl_name# highlights
+      last_hl = status:match('^%%#(.-)#', str_checked)
+      str_checked = str_checked + #last_hl + 3
+    elseif next_char == 's' then
+      -- %s{sep} is marker for left separator and
+      local sep = status:match('^%%s{(.-)}', str_checked)
+      str_checked = str_checked + #sep + 4 -- 4 = len(%{})
+      fill_section_separator(sep, false)
+      copied_pos = str_checked
+    elseif next_char == 'S' then
+      -- %S{sep} is marker for right separator and
+      local sep = status:match('^%%S{(.-)}', str_checked)
+      str_checked = str_checked + #sep + 4 -- 4 = len(%{})
+      fill_section_separator(sep, true)
+      copied_pos = str_checked
+    elseif next_char == '%' then
+      str_checked = str_checked + 2 -- Skip the following % too
     else
-      current_section.data = fill_section_separator(prev, nxt, sep, true) .. nxt
+      str_checked = str_checked + 1 -- Push it forward to avoid inf loop
     end
   end
-
-  -- Reset pos for right separator
-  sep_pos = 1
-  -- Apply right separator
-  while sep_pos do
-    local sep = current_section.data:match('%%S{(.-)}', sep_pos)
-    sep_pos = current_section.data:find('%%S{.-}', sep_pos)
-    if not sep or not sep_pos then break end
-    local prev = current_section.data:sub(1, sep_pos - 1)
-    local nxt = current_section.data:sub(sep_pos + 4 + #sep)
-    if not nxt or #nxt == 0 or sep_pos == #current_section.data then
-      nxt = next_section.data
-    end
-    if nxt ~= next_section.data then
-      current_section.data = prev ..
-                                 fill_section_separator(prev, nxt, sep, false) ..
-                                 nxt
-    else
-      current_section.data = prev ..
-                                 fill_section_separator(prev, nxt, sep, false)
-    end
-    sep_pos = sep_pos + 4 + #sep
-  end
-  return current_section.data
+  table.insert(status_applied, status:sub(copied_pos)) -- Final chunk
+  return table.concat(status_applied)
 end
 
 local function statusline(sections, is_focused)
-
-  -- status_builder stores statusline without section_separators
-  -- The sequence sections should maintain
+  -- The sequence sections should maintain [SECTION_SEQUENCE]
   local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
-  local status_builder = {}
+  local status = {}
+  local applied_midsection_devider = false
   for _, section_name in ipairs(section_sequence) do
     if sections['lualine_' .. section_name] then
       -- insert highlight+components of this section to status_builder
@@ -98,38 +91,16 @@ local function statusline(sections, is_focused)
                                sections['lualine_' .. section_name],
                                section_name, is_focused)
       if #section_data > 0 then
-        table.insert(status_builder, {name = section_name, data = section_data})
+        if not applied_midsection_devider and section_name > 'c' then
+          applied_midsection_devider = true
+          section_data = '%='..section_data
+        end
+        table.insert(status, section_data)
       end
     end
   end
 
-  -- Actual statusline
-  local status = {}
-  local half_passed = false
-  for i = 1, #status_builder do
-    -- midsection divider
-    if not half_passed and status_builder[i].name > 'c' then
-      table.insert(status,
-                   modules.highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
-      half_passed = true
-    end
-    -- component separator needs to have fg = current_section.bg
-    -- and bg = adjacent_section.bg
-    local previous_section = status_builder[i - 1] or {}
-    local current_section = status_builder[i]
-    local next_section = status_builder[i + 1] or {}
-
-    local section = apply_transitional_separators(previous_section,
-                                                  current_section, next_section)
-
-    table.insert(status, section)
-  end
-  -- incase none of x,y,z was configured lets not fill whole statusline with a,b,c section
-  if not half_passed then
-    table.insert(status,
-                 modules.highlight.format_highlight(is_focused, 'lualine_c') .. '%=')
-  end
-  return table.concat(status)
+  return apply_transitional_separators(table.concat(status))
 end
 
 -- check if any extension matches the filetype and return proper sections
