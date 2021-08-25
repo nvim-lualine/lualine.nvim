@@ -71,6 +71,9 @@ local function apply_transitional_separators(status)
       copied_pos = str_checked
     elseif next_char == '%' then
       str_checked = str_checked + 2 -- Skip the following % too
+    elseif next_char == '=' then
+      last_hl = nil
+      str_checked = str_checked + 1 -- Skip the following % too
     else
       str_checked = str_checked + 1 -- Push it forward to avoid inf loop
     end
