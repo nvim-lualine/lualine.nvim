@@ -62,14 +62,16 @@ function Branch.find_git_dir()
         git_dir = git_dir:match('gitdir: (.+)$')
         file:close()
         -- submodule / relative file path
-        if git_dir:sub(1, 1) ~= Branch.sep and not git_dir:match('^%a:.*$') then
+        if git_dir and git_dir:sub(1, 1) ~= Branch.sep and not git_dir:match('^%a:.*$') then
           git_dir = git_path:match('(.*).git') .. git_dir
         end
       end
-      local head_file_stat = vim.loop.fs_stat(git_dir..Branch.sep..'HEAD')
-      if head_file_stat and head_file_stat.type == 'file' then
-        break
-      else git_dir = nil end
+      if git_dir then
+        local head_file_stat = vim.loop.fs_stat(git_dir..Branch.sep..'HEAD')
+        if head_file_stat and head_file_stat.type == 'file' then
+          break
+        else git_dir = nil end
+      end
     end
     root_dir = root_dir:match('(.*)'..Branch.sep..'.-')
   end
