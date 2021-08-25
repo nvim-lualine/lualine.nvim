@@ -43,7 +43,7 @@ function Branch.find_git_dir()
   -- get file dir so we can search from that dir
   local file_dir = vim.fn.expand('%:p:h')
   local root_dir = file_dir
-  local git_file, git_dir
+  local git_dir
   -- Search upward for .git file or folder
   while (root_dir) do
     if git_dir_cache[root_dir] then
@@ -56,24 +56,24 @@ function Branch.find_git_dir()
       if git_file_stat.type == 'directory' then
         git_dir = git_path
       elseif git_file_stat.type == 'file' then
-        git_file = git_path
+        -- separate git-dir or submodule is used
+        local file = io.open(git_path)
+        git_dir = file:read()
+        git_dir = git_dir:match('gitdir: (.+)$')
+        file:close()
+        -- submodule / relative file path
+        if git_dir:sub(1, 1) ~= Branch.sep and not git_dir:match('^%a:.*$') then
+          git_dir = git_path:match('(.*).git') .. git_dir
+        end
       end
-      break
+      local head_file_stat = vim.loop.fs_stat(git_dir..Branch.sep..'HEAD')
+      if head_file_stat and head_file_stat.type == 'file' then
+        break
+      else git_dir = nil end
     end
     root_dir = root_dir:match('(.*)'..Branch.sep..'.-')
   end
 
-  if git_file then
-    -- separate git-dir or submodule is used
-    local file = io.open(git_file)
-    git_dir = file:read()
-    git_dir = git_dir:match('gitdir: (.+)$')
-    file:close()
-    -- submodule / relative file path
-    if git_dir:sub(1, 1) ~= Branch.sep and not git_dir:match('^%a:.*$') then
-      git_dir = git_file:match('(.*).git') .. git_dir
-    end
-  end
   git_dir_cache[file_dir] = git_dir
   if Branch.git_dir ~= git_dir then
     Branch.git_dir = git_dir
