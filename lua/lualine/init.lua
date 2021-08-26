@@ -76,7 +76,13 @@ local function apply_transitional_separators(status)
       copied_pos = str_checked
     elseif next_char == '%' then
       str_checked = str_checked + 2 -- Skip the following % too
-    elseif next_char == '=' then
+    elseif next_char == '=' and last_hl and
+      (last_hl:find('^lualine_a') or last_hl:find('^lualine_b')) then
+      -- TODO: Fix this properly
+      -- This check for lualine_a and lualine_b is dumb. It doesn't garantee
+      -- c or x section isn't present. Worst case sinario after this patch
+      -- we have another visual bug that occurs less frequently.
+      -- Annoying Edge Cases............................................
       last_hl = nil
       str_checked = str_checked + 1 -- Skip the following % too
     else
