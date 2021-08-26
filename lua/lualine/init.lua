@@ -11,38 +11,41 @@ local modules = require('lualine.utils.lazy_require'){
 local config           -- Stores cureently applied config
 local new_config = true  -- Stores config that will be applied
 
+-- Helper for apply_transitional_separators()
+local function find_next_hl(status, str_checked)
+  -- Gets the next valid hl group from str_checked
+  local hl_pos_start, hl_pos_end = status:find('%%#.-#', str_checked)
+  while true do
+    if not hl_pos_start then return nil end
+    -- When there are more that one hl group next to one another like
+    -- %#HL1#%#HL2#%#HL3# we need to return HL3. This makes that happen.
+    local next_start, next_end = status:find('^%%#.-#', hl_pos_end + 1)
+    if next_start == nil then break end
+    hl_pos_start, hl_pos_end = next_start, next_end
+  end
+  return status:sub(hl_pos_start + 2, hl_pos_end - 1)
+end
+
+-- Helper for apply_transitional_separators()
+local function fill_section_separator(status, str_checked, last_hl, sep, reverse)
+  -- Inserts transitional separator along with transitional highlight
+  if last_hl and #last_hl == 0 then return  end
+  local next_hl = find_next_hl(status, str_checked)
+  if next_hl == nil then return end
+  local transitional_highlight = reverse -- lua ternary assignment x ? y : z
+            and modules.highlight.get_transitional_highlights(last_hl, next_hl)
+            or modules.highlight.get_transitional_highlights(next_hl, last_hl)
+  if transitional_highlight then
+    return transitional_highlight .. sep
+  end
+end
+
 local function apply_transitional_separators(status)
   local status_applied = {} -- Collects all the pieces for concatation
   local last_hl         -- Stores lash highligjt group that we found
   local copied_pos = 1  -- Tracks how much we've copied over to status_applied
   local str_checked = 1 -- Tracks where the searcher head is at
 
-  local function find_next_hl()
-    -- Gets the next valid hl group from str_checked
-    local hl_pos_start, hl_pos_end = status:find('%%#.-#', str_checked)
-    while true do
-      if not hl_pos_start then return nil end
-      -- When there are more that one hl group next to one another like
-      -- %#HL1#%#HL2#%#HL3# we need to return HL3. This makes that happen.
-      local next_start, next_end = status:find('^%%#.-#', hl_pos_end + 1)
-      if next_start == nil then break end
-      hl_pos_start, hl_pos_end = next_start, next_end
-    end
-    return status:sub(hl_pos_start + 2, hl_pos_end - 1)
-  end
-
-  local function fill_section_separator(sep, reverse)
-    -- Inserts transitional separator along with transitional highlight
-    if last_hl and #last_hl == 0 then return  end
-    local next_hl = find_next_hl()
-    if next_hl == nil then return end
-    local transitional_highlight = reverse -- lua ternary assignment x ? y : z
-                             and modules.highlight.get_transitional_highlights(last_hl, next_hl)
-                             or modules.highlight.get_transitional_highlights(next_hl, last_hl)
-    if transitional_highlight then
-      table.insert(status_applied, transitional_highlight .. sep)
-    end
-  end
 
   -- Process entire status replace the %s{sep} & %S{sep} placeholders
   -- with proper transitional separator.
@@ -61,7 +64,8 @@ local function apply_transitional_separators(status)
       -- %s{sep} is marker for left separator and
       local sep = status:match('^%%s{(.-)}', str_checked)
       str_checked = str_checked + #sep + 4 -- 4 = len(%{})
-      fill_section_separator(sep, false)
+      local trans_sep = fill_section_separator(status, str_checked, last_hl, sep, false)
+      if trans_sep then table.insert(status_applied, trans_sep) end
       copied_pos = str_checked
     elseif next_char == 'S' then
       -- %S{sep} is marker for right separator and
@@ -72,7 +76,8 @@ local function apply_transitional_separators(status)
         -- and in this exact order skip the left sep as we can't draw both.
         str_checked = status:find('}', str_checked) + 1
       end
-      fill_section_separator(sep, true)
+      local trans_sep = fill_section_separator(status, str_checked, last_hl, sep, true)
+      if trans_sep then table.insert(status_applied, trans_sep) end
       copied_pos = str_checked
     elseif next_char == '%' then
       str_checked = str_checked + 2 -- Skip the following % too
