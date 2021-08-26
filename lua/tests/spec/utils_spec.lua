@@ -76,8 +76,7 @@ describe('Section genarator', function()
       require('lualine.components.special.function_component'):new(opts),
       require('lualine.components.special.function_component'):new(opts)
     }
-    eq(
-        '%#lualine_MySection_normal# test %#lualine_MySection_normal# test %#lualine_MySection_normal#',
+    eq( '%#lualine_MySection_normal# test %#lualine_MySection_normal# test ',
         sec.draw_section(section, 'MySection'))
   end)
 
@@ -103,10 +102,8 @@ describe('Section genarator', function()
     }
     local highlight_name2 = 'lualine_'..section[2].options.component_name..'_no_mode'
     -- Removes separator on string color
-    eq(
-        '%#lualine_MySection_normal# test %#lualine_MySection_normal#%#'
-        ..highlight_name2..'#'
-        .. ' test %#lualine_MySection_normal# test %#lualine_MySection_normal#',
+    eq( '%#lualine_MySection_normal# test %#' ..highlight_name2..'#'
+        .. ' test %#lualine_MySection_normal# test ',
         sec.draw_section(section, 'MySection'))
     section[2] =
         require('lua.lualine.components.special.function_component'):new(
@@ -114,9 +111,8 @@ describe('Section genarator', function()
     local highlight_name =
         '%#lualine_c_' .. section[2].options.component_name .. '_normal#'
     -- Removes separator on color with bg
-    eq('%#lualine_MySection_normal# test %#lualine_MySection_normal#' ..
-           highlight_name ..
-           ' test %#lualine_MySection_normal# test %#lualine_MySection_normal#',
+    eq('%#lualine_MySection_normal# test ' .. highlight_name ..
+           ' test %#lualine_MySection_normal# test ',
        sec.draw_section(section, 'MySection'))
     section[2] =
         require('lua.lualine.components.special.function_component'):new(
@@ -124,9 +120,8 @@ describe('Section genarator', function()
     highlight_name2 =
         '%#lualine_c_' .. section[2].options.component_name .. '_normal#'
     -- Doesn't remove separator on color without bg
-    eq('%#lualine_MySection_normal# test %#lualine_MySection_normal#' ..
-           highlight_name2 ..
-           ' test %#lualine_MySection_normal# test %#lualine_MySection_normal#',
+    eq('%#lualine_MySection_normal# test ' .. highlight_name2 ..
+           ' test %#lualine_MySection_normal#%#lualine_MySection_normal# test ',
        sec.draw_section(section, 'MySection'))
   end)
 end)

@@ -79,7 +79,13 @@ describe('Component:', function()
 
   it('can apply default highlight', function()
     local opts = build_component_opts({padding = 0, hl = '%#My_highlight#'})
-    assert_component(nil, opts, 'test%#My_highlight#')
+    assert_component(nil, opts, '%#My_highlight#test')
+    opts = build_component_opts({function() return "%#Custom_hl#test" end,
+                                padding = 0, hl = '%#My_highlight#'})
+    assert_component(nil, opts, '%#Custom_hl#test%#My_highlight#')
+    opts = build_component_opts({function() return "in middle%#Custom_hl#test" end,
+                                padding = 0, hl = '%#My_highlight#'})
+    assert_component(nil, opts, '%#My_highlight#in middle%#Custom_hl#test%#My_highlight#')
   end)
 
   describe('Global options:', function()
