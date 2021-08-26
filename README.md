@@ -87,7 +87,7 @@ require'lualine'.setup {
   sections = {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff',
-                  {'diagnostics', sources={'nvim_lsp', 'coc', 'ale'}}},
+                  {'diagnostics', sources={'nvim_lsp', 'coc'}}},
     lualine_c = {'filename'},
     lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
@@ -319,7 +319,7 @@ sections = {
       'diagnostics',
       -- table of diagnostic sources, available sources:
       -- 'nvim_lsp', 'coc', 'ale', 'vim_lsp'
-      -- Or a function that returns a table like 
+      -- Or a function that returns a table like
       --   {error=error_cnt, warning=warn_cnt, info=info_cnt, hint=hint_cnt}
       sources = {},
       -- displays diagnostics from defined severity
