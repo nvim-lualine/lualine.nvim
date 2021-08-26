@@ -83,7 +83,17 @@ local Component = {
       self.status = highlight.component_format_highlight(
                         self.options.color_highlight) .. self.status
     end
-    self.status = self.status .. default_highlight
+    if type(self.options.separator) ~= 'table' and self.status:find('%%#') then
+      -- Apply default highlight only when we aren't applying trans sep and
+      -- the component has changed it's hl. since we won't be applying
+      -- regular sep in those cases so ending with default hl isn't neccessay
+      self.status = self.status .. default_highlight
+      -- Also put it in applied sep so when sep get struped so does the hl
+      self.applied_separator = default_highlight
+    end
+    -- Prepend default hl when the component doesn't start with hl otherwise
+    -- color in previous component can cause side effect
+    if not self.status:find('^%%#') then self.status = default_highlight .. self.status end
   end,
 
   -- Apply icon in front of component
@@ -110,7 +120,7 @@ local Component = {
     end
     if separator and #separator > 0 then
       self.status = self.status .. separator
-      self.applied_separator = separator
+      self.applied_separator = self.applied_separator .. separator
     end
   end,
 
@@ -139,12 +149,13 @@ local Component = {
   status = '',
   -- Actual function that updates a component. Must be overwritten with component functionality
   -- luacheck: push no unused args
-  update_status = function(self) end,
+  update_status = function(self, is_focused) end,
   -- luacheck: pop
 
   -- Driver code of the class
   draw = function(self, default_highlight, is_focused)
     self.status = ''
+    self.applied_separator = ''
 
     if self.options.condition ~= nil and self.options.condition() ~= true then
       return self.status
@@ -156,8 +167,8 @@ local Component = {
       self:apply_icon()
       self:apply_case()
       self:apply_padding()
-      self:apply_section_separators()
       self:apply_highlights(default_highlight)
+      self:apply_section_separators()
       self:apply_separator()
     end
     return self.status

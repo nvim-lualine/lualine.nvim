@@ -19,7 +19,7 @@ local function apply_transitional_separators(status)
 
   local function find_next_hl()
     -- Gets the next valid hl group from str_checked
-    local hl_pos_start, hl_pos_end = status:find('%%#.-#', str_checked + 1)
+    local hl_pos_start, hl_pos_end = status:find('%%#.-#', str_checked)
     while true do
       if not hl_pos_start then return nil end
       -- When there are more that one hl group next to one another like
@@ -67,6 +67,11 @@ local function apply_transitional_separators(status)
       -- %S{sep} is marker for right separator and
       local sep = status:match('^%%S{(.-)}', str_checked)
       str_checked = str_checked + #sep + 4 -- 4 = len(%{})
+      if status:find('^%%s', str_checked) then
+        -- When transitional right_sep and left_sep are right next to each other
+        -- and in this exact order skip the left sep as we can't draw both.
+        str_checked = status:find('}', str_checked) + 1
+      end
       fill_section_separator(sep, true)
       copied_pos = str_checked
     elseif next_char == '%' then
@@ -102,7 +107,6 @@ local function statusline(sections, is_focused)
       end
     end
   end
-
   return apply_transitional_separators(table.concat(status))
 end
 

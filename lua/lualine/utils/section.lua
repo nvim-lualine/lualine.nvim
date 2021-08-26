@@ -70,8 +70,18 @@ function M.draw_section(section, section_name, is_focused)
   status = utils.list_shrink(status)
   local status_str = table.concat(status)
 
-  if #status_str == 0 then return ''
-  elseif status_str:find('%%#.*#') == 1 then
+  if #status_str == 0 then return '' end
+
+  local needs_hl
+
+  local find_start_trans_sep_start, find_start_trans_sep_end = status_str:find('^%%s{.-}')
+  if find_start_trans_sep_start then
+    -- the section doesn't need to be prepended with default hl when sections
+    -- first component has trasitionals sep
+    needs_hl = status_str:find('^%%#', find_start_trans_sep_end + 1)
+  else needs_hl = status_str:find('^%%#') end
+
+  if needs_hl then
     -- Don't prepend with old highlight when the component changes it imidiately
     return left_sparator_string .. status_str
   else
