@@ -281,6 +281,12 @@ sections = {
       'mode',
       icon = nil, -- displays icon in front of the component
       separator = nil, -- Determines what separator to use for the component.
+                       -- when a string is given it's treated as component_separator.
+                       -- When a table is given it's treated as section_separator.
+                       -- This options can be used to set colored separators
+                       -- arround component. Option need to be set like `separator = {'', ''}`.
+                       -- Where first element is left_separator and 2nd element is right separator.
+                       -- Passing empty string disables that separator
       condition = nil, -- condition function, component is loaded when function returns true
       -- custom color for component in format
       -- color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}
