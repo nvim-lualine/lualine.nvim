@@ -103,6 +103,7 @@ local function statusline(sections, is_focused)
   local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
   local status = {}
   local applied_midsection_devider = false
+  local applied_trunc = false
   for _, section_name in ipairs(section_sequence) do
     if sections['lualine_' .. section_name] then
       -- insert highlight+components of this section to status_builder
@@ -113,6 +114,10 @@ local function statusline(sections, is_focused)
         if not applied_midsection_devider and section_name > 'c' then
           applied_midsection_devider = true
           section_data = '%='..section_data
+        end
+        if not applied_trunc and section_name > 'b' then
+          applied_trunc = true
+          section_data = '%<'..section_data
         end
         table.insert(status, section_data)
       end
