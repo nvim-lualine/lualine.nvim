@@ -25,7 +25,7 @@ end
 
 EvalFuncComponent.vim_function = function(name)
   -- vim function component
-  local ok, return_val = pcall(vim.fn[name])
+  local ok, return_val = pcall(vim.api.nvim_call_function, name, {})
   if not ok then return '' end -- function call failed
   ok, return_val = pcall(tostring, return_val)
   return ok and return_val or ''
