@@ -5,6 +5,7 @@ All available themes are only best effort ports by myself/ other users. If you f
 ### auto
 if your favourite colorcheme is not yet supported you can use `auto` to make
 lualine try to match your colorscheme.
+
 ### 16color
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648240-02d2ae00-74bb-11eb-9ac1-495849621366.png'/>
@@ -211,6 +212,14 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649150-15e67d80-74bd-11eb-8815-194c51d96016.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649155-17b04100-74bd-11eb-8e41-017eb9a837b5.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649158-18e16e00-74bd-11eb-8687-65b0ecbf20d2.png'/>
+</p>
+
+### powerline_dark
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/59497618/131222522-d539d90a-b118-4983-a956-118795bb9c86.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/59497618/131222533-e604a12b-4833-4578-bd51-c2093845a9f9.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/59497618/131222537-d878db7f-bf95-4157-b167-31a9455484c6.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/59497618/131222539-ca93a9c5-dc70-430a-a862-926969aa3705.png'/>
 </p>
 
 ### seoul256
