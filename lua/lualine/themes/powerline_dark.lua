@@ -18,6 +18,8 @@ local colors = {
   orange       = '#FFAF00',
   red          = '#5F0000',
   brightorange = '#C08A20',
+  brightred    = '#AF0000',
+  cyan         = '#00DFFF',
 }
 -- LuaFormatter on
 return {
@@ -37,9 +39,9 @@ return {
     c = {bg = colors.red, fg = colors.white}
   },
   replace = {
-    a = {bg = colors.brightorange, fg = colors.black, gui = 'bold'},
-    b = {bg = colors.lightgray, fg = colors.white},
-    c = {bg = colors.black, fg = colors.white}
+    a = {bg = colors.brightred, fg = colors.white, gui = 'bold'},
+    b = {bg = colors.cyan, fg = colors.darkblue},
+    c = {bg = colors.navyblue, fg = colors.white}
   },
   command = {
     a = {bg = colors.green, fg = colors.black, gui = 'bold'},
