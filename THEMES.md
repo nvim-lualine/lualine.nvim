@@ -216,10 +216,10 @@ lualine try to match your colorscheme.
 
 ### powerline_dark
 <p>
-<img width='700' src='https://user-images.githubusercontent.com/59497618/131222522-d539d90a-b118-4983-a956-118795bb9c86.png'/>
-<img width='700' src='https://user-images.githubusercontent.com/59497618/131222533-e604a12b-4833-4578-bd51-c2093845a9f9.png'/>
-<img width='700' src='https://user-images.githubusercontent.com/59497618/131222537-d878db7f-bf95-4157-b167-31a9455484c6.png'/>
-<img width='700' src='https://user-images.githubusercontent.com/59497618/131222539-ca93a9c5-dc70-430a-a862-926969aa3705.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/59497618/131224416-851aedd4-27bb-47fd-a9a6-5332aa42ce60.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/59497618/131224418-7bec491b-1183-4ec7-8089-3dbe460cc1e4.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/59497618/131224419-adab4f88-aaf8-449e-9988-ae002333d131.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/59497618/131224421-3b175d7a-fb14-424c-ad53-03d2c3b2ab71.png'/>
 </p>
 
 ### seoul256
