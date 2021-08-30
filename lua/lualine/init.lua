@@ -12,7 +12,7 @@ local config           -- Stores cureently applied config
 local new_config = true  -- Stores config that will be applied
 
 -- Helper for apply_transitional_separators()
-local function find_next_hl(status, str_checked, depth)
+local function find_next_hl(status, str_checked)
   -- Gets the next valid hl group from str_checked
   local hl_pos_start, hl_pos_end = status:find('%%#.-#', str_checked)
   while true do
@@ -23,22 +23,18 @@ local function find_next_hl(status, str_checked, depth)
     if next_start == nil then break end
     hl_pos_start, hl_pos_end = next_start, next_end
   end
-  if depth == nil or depth == 1 then
-    return status:sub(hl_pos_start + 2, hl_pos_end - 1)
-  else
-    return find_next_hl(status, hl_pos_end, depth - 1)
-  end
+  return status:sub(hl_pos_start + 2, hl_pos_end - 1)
 end
 
 -- Helper for apply_transitional_separators()
 local function fill_section_separator(status, str_checked, last_hl, sep, reverse)
   -- Inserts transitional separator along with transitional highlight
-  local prev_hl = #last_hl > 0 and last_hl[#last_hl] or find_next_hl(status, str_checked, 2)
-  local next_hl = find_next_hl(status, str_checked) or (#last_hl > 1 and last_hl[#last_hl - 1])
-  if next_hl == nil or #prev_hl == 0 or #next_hl == 0 then return end
+  if last_hl and #last_hl == 0 then return  end
+  local next_hl = find_next_hl(status, str_checked)
+  if next_hl == nil then return end
   local transitional_highlight = reverse -- lua ternary assignment x ? y : z
-            and modules.highlight.get_transitional_highlights(prev_hl, next_hl)
-            or modules.highlight.get_transitional_highlights(next_hl, prev_hl)
+            and modules.highlight.get_transitional_highlights(last_hl, next_hl)
+            or modules.highlight.get_transitional_highlights(next_hl, last_hl)
   if transitional_highlight then
     return transitional_highlight .. sep
   end
@@ -46,7 +42,7 @@ end
 
 local function apply_transitional_separators(status)
   local status_applied = {} -- Collects all the pieces for concatation
-  local last_hl = {}        -- Stores highlight groups that we found
+  local last_hl         -- Stores lash highligjt group that we found
   local copied_pos = 1  -- Tracks how much we've copied over to status_applied
   local str_checked = 1 -- Tracks where the searcher head is at
 
@@ -62,9 +58,8 @@ local function apply_transitional_separators(status)
     local next_char = modules.utils.charAt(status, str_checked +1)
     if next_char == '#' then
       -- %#hl_name# highlights
-      local hl = status:match('^%%#(.-)#', str_checked)
-      table.insert(last_hl, hl)
-      str_checked = str_checked + #hl + 3
+      last_hl = status:match('^%%#(.-)#', str_checked)
+      str_checked = str_checked + #last_hl + 3
     elseif next_char == 's' then
       -- %s{sep} is marker for left separator and
       local sep = status:match('^%%s{(.-)}', str_checked)
@@ -76,7 +71,7 @@ local function apply_transitional_separators(status)
       -- %S{sep} is marker for right separator and
       local sep = status:match('^%%S{(.-)}', str_checked)
       str_checked = str_checked + #sep + 4 -- 4 = len(%{})
-      if status:find('^%%s', str_checked) or status:find('^%%<%%s', str_checked) then
+      if status:find('^%%s', str_checked) then
         -- When transitional right_sep and left_sep are right next to each other
         -- and in this exact order skip the left sep as we can't draw both.
         str_checked = status:find('}', str_checked) + 1
@@ -87,13 +82,13 @@ local function apply_transitional_separators(status)
     elseif next_char == '%' then
       str_checked = str_checked + 2 -- Skip the following % too
     elseif next_char == '=' and last_hl and
-      (last_hl[#last_hl]:find('^lualine_a') or last_hl[#last_hl]:find('^lualine_b')) then
+      (last_hl:find('^lualine_a') or last_hl:find('^lualine_b')) then
       -- TODO: Fix this properly
       -- This check for lualine_a and lualine_b is dumb. It doesn't garantee
       -- c or x section isn't present. Worst case sinario after this patch
       -- we have another visual bug that occurs less frequently.
       -- Annoying Edge Cases............................................
-      table.insert(last_hl, '')
+      last_hl = nil
       str_checked = str_checked + 1 -- Skip the following % too
     else
       str_checked = str_checked + 1 -- Push it forward to avoid inf loop
