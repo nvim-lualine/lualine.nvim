@@ -1,6 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local M = {}
+local require = require'lualine_require'.require
 local utils = require('lualine.utils.utils')
 local highlight = require('lualine.highlight')
 -- Returns formated string for a section

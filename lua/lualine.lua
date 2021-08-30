@@ -179,10 +179,8 @@ local function setup_theme()
   end
   local theme = get_theme_from_config()
   modules.highlight.create_highlight_groups(theme)
-  vim.cmd [[
-    autocmd lualine ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
-    autocmd lualine OptionSet background lua require'lualine'.setup()
-  ]]
+  vim.cmd [[autocmd lualine ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
+    autocmd lualine OptionSet background lua require'lualine'.setup()]]
 end
 
 local function set_tabline()
@@ -201,11 +199,7 @@ local function set_statusline()
 end
 
 local function setup_augroup()
-  vim.cmd [[
-    augroup lualine
-      autocmd!
-    augroup END
-  ]]
+  vim.cmd [[augroup lualine | autocmd! | augroup END]]
 end
 
 local function reset_lualine()

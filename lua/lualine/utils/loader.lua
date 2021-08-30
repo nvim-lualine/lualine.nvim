@@ -132,12 +132,20 @@ local function load_all(config)
   load_extensions(config)
 end
 
+local function rtp_searcher(file)
+  local ret = {}
+  for dir in vim.gsplit(vim.api.nvim_get_option('rtp'), ',') do
+    local path = dir .. sep .. file
+    if vim.loop.fs_stat(path) then ret[#ret+1] = path end
+  end
+  return ret
+end
+
 local function load_theme(theme_name)
   assert(is_valid_filename(theme_name), "Invalid filename")
   local retval
   local path = table.concat({'lua', 'lualine', 'themes', theme_name}, sep)..'.lua'
-  local files = vim.fn.globpath(vim.api.nvim_get_option('rtp'),
-                                path, true, true)
+  local files = rtp_searcher(path)
   local n_files = #files
   if n_files == 0 then
     -- No match found
