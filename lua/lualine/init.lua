@@ -246,13 +246,17 @@ local function setup_augroup()
 end
 
 local function reset_lualine()
-  modules.utils_notices.clear_notices()
+  if package.loaded['lualine.utils.notices'] then
+    modules.utils_notices.clear_notices()
+  end
   setup_augroup()
   setup_theme()
   modules.loader.load_all(config)
   set_statusline()
   set_tabline()
-  modules.utils_notices.notice_message_startup()
+  if package.loaded['lualine.utils.notices'] then
+    modules.utils_notices.notice_message_startup()
+  end
   new_config = nil
 end
 

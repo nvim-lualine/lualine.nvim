@@ -3,7 +3,9 @@
 
 local lualine_require = require'lualine_require'
 local require = lualine_require.require
-local notice = require'lualine.utils.notices'
+local modules = lualine_require.lazy_require{
+  notice = 'lualine.utils.notices',
+}
 local is_valid_filename = lualine_require.is_valid_filename
 
 local sep = package.config:sub(1,1)
@@ -49,7 +51,7 @@ local function component_loader(component)
       elseif component.type == 'vimf' or component.type == 'luae' then
         return component_types['_'](component)
       else
-        notice.add_notice(string.format([[
+        modules.notice.add_notice(string.format([[
 ### component.type
 
 component type '%s' isn't recognised. Check if spelling is correct.]], component.type))
@@ -105,7 +107,7 @@ local function load_extensions(config)
         end
         table.insert(loaded_extensions, local_extension)
       else
-        notice.add_notice(string.format([[
+        modules.notice.add_notice(string.format([[
 ### Extensions
 Extension named `%s` was not found . Check if spelling is correct.
 ]], extension))
