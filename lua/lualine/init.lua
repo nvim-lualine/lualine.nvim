@@ -71,7 +71,7 @@ local function apply_transitional_separators(status)
       -- %S{sep} is marker for right separator and
       local sep = status:match('^%%S{(.-)}', str_checked)
       str_checked = str_checked + #sep + 4 -- 4 = len(%{})
-      if status:find('^%%s', str_checked) then
+      if status:find('^%%s', str_checked) or status:find('^%%<%%s', str_checked) then
         -- When transitional right_sep and left_sep are right next to each other
         -- and in this exact order skip the left sep as we can't draw both.
         str_checked = status:find('}', str_checked) + 1
