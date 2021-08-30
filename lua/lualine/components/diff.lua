@@ -105,26 +105,30 @@ Diff.new = function(self, options, child)
     }
   end
 
-  if type(new_instance.options.source) ~= 'function' then
+  Diff.diff_checker_enabled = type(new_instance.options.source) ~= 'function'
+
+  if Diff.diff_checker_enabled then
     -- setup internal source
     utils.define_autocmd('BufEnter', "lua require'lualine.components.diff'.update_diff_args()")
     utils.define_autocmd('BufWritePost', "lua require'lualine.components.diff'.update_git_diff()")
+    Diff.update_diff_args()
   end
-  Diff.update_diff_args()
 
   return new_instance
 end
 
 -- Function that runs everytime statusline is updated
 Diff.update_status = function(self, is_focused)
-  if Diff.active_bufnr ~= vim.g.actual_curbuf then
-    -- Workaround for https://github.com/hoob3rt/lualine.nvim/issues/286
-    -- See upstream issue https://github.com/neovim/neovim/issues/15300
-    -- Diff is out of sync re sync it.
-    Diff.update_diff_args()
-  end
-  local git_diff = Diff.git_diff
-  if self.options.source then
+  local git_diff
+  if Diff.diff_checker_enabled then
+    if Diff.active_bufnr ~= vim.g.actual_curbuf then
+      -- Workaround for https://github.com/hoob3rt/lualine.nvim/issues/286
+      -- See upstream issue https://github.com/neovim/neovim/issues/15300
+      -- Diff is out of sync re sync it.
+      Diff.update_diff_args()
+    end
+    git_diff = Diff.git_diff
+  else
     git_diff = self.options.source()
   end
 
@@ -167,8 +171,7 @@ end
 -- }
 -- error_code = { added = -1, modified = -1, removed = -1 }
 function Diff.get_sign_count()
-  Diff.update_diff_args()
-  Diff.update_git_diff()
+  if Diff.diff_checker_enabled then Diff.update_diff_args() end
   return Diff.git_diff or {added = -1, modified = -1, removed = -1}
 end
 
