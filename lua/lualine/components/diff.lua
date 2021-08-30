@@ -109,7 +109,6 @@ Diff.new = function(self, options, child)
 
   if Diff.diff_checker_enabled then
     -- setup internal source
-    utils.define_autocmd('BufEnter', "lua require'lualine.components.diff'.update_diff_args()")
     utils.define_autocmd('BufWritePost', "lua require'lualine.components.diff'.update_git_diff()")
     Diff.update_diff_args()
   end
@@ -122,9 +121,7 @@ Diff.update_status = function(self, is_focused)
   local git_diff
   if Diff.diff_checker_enabled then
     if Diff.active_bufnr ~= vim.g.actual_curbuf then
-      -- Workaround for https://github.com/hoob3rt/lualine.nvim/issues/286
-      -- See upstream issue https://github.com/neovim/neovim/issues/15300
-      -- Diff is out of sync re sync it.
+      -- Sync buffer
       Diff.update_diff_args()
     end
     git_diff = Diff.git_diff
