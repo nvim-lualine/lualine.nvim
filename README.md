@@ -33,6 +33,9 @@ For those who want to break the norms. You can create custom looks in lualine.
 - [evil_lualine](examples/evil_lualine.lua)
 <img width='700' src='https://user-images.githubusercontent.com/13149513/113875129-4453ba00-97d8-11eb-8f21-94a9ef565db3.png'/>
 
+- [bubbles](examples/bubbles.lua)
+<img width='700' src='https://user-images.githubusercontent.com/20235646/131350468-fc556196-5f46-4bfe-a72e-960f6a58db2c.png'/>
+
 ## Performance compared to other plugins
 Unlike other statusline plugins lualine loads only defined components, nothing else.
 
