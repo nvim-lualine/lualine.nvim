@@ -18,8 +18,9 @@ end
 
 function M.require(module)
   if package.loaded[module] then return package.loaded[module] end
+  local pattern = module:gsub('%.', M.sep) .. '.lua'
   if M.plugin_dir then
-    local path = M.plugin_dir .. module:gsub('%.', M.sep) .. '.lua'
+    local path = M.plugin_dir .. pattern
     assert(M.is_valid_filename(module), "Invalid filename")
     if vim.loop.fs_stat(path) then
       local mod_result = dofile(path)
@@ -27,7 +28,27 @@ function M.require(module)
       return mod_result
     end
   end
+
+  local paths = M.rtp_searcher('lua'..M.sep..pattern, true)
+  if #paths > 0 then
+    local mod_result = dofile(paths[1])
+    package.loaded[module] = mod_result
+    return mod_result
+  end
+
   return require(module)
+end
+
+function M.rtp_searcher(file, once)
+  local ret = {}
+  for dir in vim.gsplit(vim.api.nvim_get_option('rtp'), ',') do
+    local path = dir .. M.sep .. file
+    if vim.loop.fs_stat(path) then
+      ret[#ret+1] = path
+      if once then break end
+    end
+  end
+  return ret
 end
 
 function M.lazy_require(modules)
