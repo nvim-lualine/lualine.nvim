@@ -5,7 +5,7 @@ local lualine_require = require'lualine_require'
 local require = lualine_require.require
 local modules = lualine_require.lazy_require{
   utils = 'lualine.utils.utils',
-  color_utils = 'lualine.utils.cterm_colors',
+  color_utils = 'lualine.utils.color_utils',
 }
 local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
 local active_theme = nil
@@ -35,14 +35,14 @@ function M.highlight(name, foreground, background, gui, link, reload)
       table.insert(command, 'guifg=' .. foreground)
       if create_cterm_colors then
         table.insert(command,
-                     'ctermfg=' .. modules.color_utils.get_cterm_color(foreground))
+                     'ctermfg=' .. modules.color_utils.rgb2cterm(foreground))
       end
     end
     if background and background ~= 'none' then
       table.insert(command, 'guibg=' .. background)
       if create_cterm_colors then
         table.insert(command,
-                     'ctermbg=' .. modules.color_utils.get_cterm_color(background))
+                     'ctermbg=' .. modules.color_utils.rgb2cterm(background))
       end
     end
     if gui then
@@ -59,9 +59,7 @@ end
 function M.create_highlight_groups(theme)
   modules.utils.clear_highlights()
   active_theme = theme
-  if not vim.go.termguicolors then
-    create_cterm_colors = true
-  end
+  create_cterm_colors = not vim.go.termguicolors
   for mode, sections in pairs(theme) do
     for section, color in pairs(sections) do
       local highlight_group_name = {'lualine', section, mode}

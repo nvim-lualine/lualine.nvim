@@ -274,7 +274,7 @@ local color_table = {
 }
 -- LuaFormatter on
 
-function M.get_cterm_color(hex_color)
+function M.rgb2cterm(hex_color)
   local function get_color_distance(color1, color2)
     -- returns how much color2 deviates from color1
     local dr = math.abs(color1[1] - color2[1]) / (color1[1] + 1) * 100
