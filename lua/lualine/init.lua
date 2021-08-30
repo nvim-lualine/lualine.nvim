@@ -29,9 +29,10 @@ end
 -- Helper for apply_transitional_separators()
 local function fill_section_separator(status, str_checked, last_hl, sep, reverse)
   -- Inserts transitional separator along with transitional highlight
-  if last_hl and #last_hl == 0 then return  end
   local next_hl = find_next_hl(status, str_checked)
-  if next_hl == nil then return end
+  if last_hl == nil then last_hl = 'Normal' end
+  if next_hl == nil then next_hl = 'Normal' end
+  if #next_hl == 0 or #last_hl == 0 then return end
   local transitional_highlight = reverse -- lua ternary assignment x ? y : z
             and modules.highlight.get_transitional_highlights(last_hl, next_hl)
             or modules.highlight.get_transitional_highlights(next_hl, last_hl)
