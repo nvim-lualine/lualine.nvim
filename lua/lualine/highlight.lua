@@ -1,22 +1,25 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local M = {}
-local cterm_colors
-local utils = require 'lualine.utils.utils'
+local lualine_require = require'lualine_require'
+local require = lualine_require.require
+local modules = lualine_require.lazy_require{
+  utils = 'lualine.utils.utils',
+  color_utils = 'lualine.utils.cterm_colors',
+}
 local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
 local active_theme = nil
+local create_cterm_colors = false
 
 local function sanitize_color(color)
   if type(color) == 'string' then
     if color:sub(1,1) == '#' then return color end -- RGB value
-    local converter = require 'lualine.utils.cterm_colors'
-    return converter.color_name2rgb(color)
+    return modules.color_utils.color_name2rgb(color)
   elseif type(color) == 'number' then
     if color > 255 then
       error("What's this it can't be higher then 255 and you've given "..color)
     end
-    local converter = require 'lualine.utils.cterm_colors'
-    return converter.cterm2rgb(color)
+    return modules.color_utils.cterm2rgb(color)
   end
 end
 
@@ -30,16 +33,16 @@ function M.highlight(name, foreground, background, gui, link, reload)
     table.insert(command, name)
     if foreground and foreground ~= 'none' then
       table.insert(command, 'guifg=' .. foreground)
-      if cterm_colors then
+      if create_cterm_colors then
         table.insert(command,
-                     'ctermfg=' .. cterm_colors.get_cterm_color(foreground))
+                     'ctermfg=' .. modules.color_utils.get_cterm_color(foreground))
       end
     end
     if background and background ~= 'none' then
       table.insert(command, 'guibg=' .. background)
-      if cterm_colors then
+      if create_cterm_colors then
         table.insert(command,
-                     'ctermbg=' .. cterm_colors.get_cterm_color(background))
+                     'ctermbg=' .. modules.color_utils.get_cterm_color(background))
       end
     end
     if gui then
@@ -49,15 +52,15 @@ function M.highlight(name, foreground, background, gui, link, reload)
   end
   vim.cmd(table.concat(command, ' '))
   if not reload then
-    utils.save_highlight(name, {name, foreground, background, gui, link, true})
+    modules.utils.save_highlight(name, {name, foreground, background, gui, link, true})
   end
 end
 
 function M.create_highlight_groups(theme)
-  utils.clear_highlights()
+  modules.utils.clear_highlights()
   active_theme = theme
-  if not vim.opt.termguicolors:get() then
-    cterm_colors = require 'lualine.utils.cterm_colors'
+  if not vim.go.termguicolors then
+    create_cterm_colors = true
   end
   for mode, sections in pairs(theme) do
     for section, color in pairs(sections) do
@@ -109,13 +112,13 @@ local function get_default_component_color(color, options_color, default_color, 
     if type(options_color) == 'table' and options_color[kind] then
       return options_color[kind]
     elseif type(options_color) == 'string' then
-      return utils.extract_highlight_colors(options_color, kind)
+      return modules.utils.extract_highlight_colors(options_color, kind)
     end
   end
   if type(default_color) == 'table' then
     return default_color[kind]
   elseif type(default_color) == 'string' then
-    return utils.extract_highlight_colors(default_color, kind)
+    return modules.utils.extract_highlight_colors(default_color, kind)
   end
 end
 
@@ -130,9 +133,9 @@ end
 --   to retrive highlight group
 function M.create_component_highlight_group(color, highlight_tag, options)
   local tag_id = 0
-  while (utils.highlight_exists(table.concat(
+  while (modules.utils.highlight_exists(table.concat(
                              {'lualine', highlight_tag, 'no_mode'}, '_'))
-      or (options.self.section and utils.highlight_exists(table.concat(
+      or (options.self.section and modules.utils.highlight_exists(table.concat(
                              {options.self.section, highlight_tag, 'normal'}, '_')))
 ) do
     highlight_tag = highlight_tag .. '_' .. tostring(tag_id)
@@ -193,12 +196,12 @@ function M.component_format_highlight(highlight_name)
   if highlight_name:find('no_mode') == #highlight_name - #'no_mode' + 1 then
     return '%#' .. highlight_group .. '#'
   end
-  if utils.is_focused() then
+  if modules.utils.is_focused() then
     highlight_group = append_mode(highlight_group)
   else
     highlight_group = highlight_group .. '_inactive'
   end
-  if utils.highlight_exists(highlight_group) then
+  if modules.utils.highlight_exists(highlight_group) then
     return '%#' .. highlight_group .. '#'
   else
     return '%#' .. highlight_name .. '_normal#'
@@ -207,7 +210,7 @@ end
 
 function M.format_highlight(is_focused, highlight_group)
   if highlight_group > 'lualine_c'
-    and not utils.highlight_exists(highlight_group .. '_normal') then
+    and not modules.utils.highlight_exists(highlight_group .. '_normal') then
     highlight_group = 'lualine_' ..
                           section_highlight_map[highlight_group:match(
                               'lualine_(.)')]
@@ -218,7 +221,7 @@ function M.format_highlight(is_focused, highlight_group)
   else
     highlight_name = append_mode(highlight_group)
   end
-  if utils.highlight_exists(highlight_name) then
+  if modules.utils.highlight_exists(highlight_name) then
     return '%#' .. highlight_name .. '#'
   end
   return '%#' .. highlight_group .. '_normal#'
@@ -236,11 +239,11 @@ function M.get_transitional_highlights(left_hl, right_hl)
 
   -- construct the name of hightlight group
   local highlight_name = table.concat({'lualine_transitional',left_hl,'to',right_hl}, '_')
-  if not utils.highlight_exists(highlight_name) then
+  if not modules.utils.highlight_exists(highlight_name) then
     -- Create the highlight_group if needed
     -- Get colors from highlights
-    local fg = utils.extract_highlight_colors(left_hl, 'bg')
-    local bg = utils.extract_highlight_colors(right_hl, 'bg')
+    local fg = modules.utils.extract_highlight_colors(left_hl, 'bg')
+    local bg = modules.utils.extract_highlight_colors(right_hl, 'bg')
     if not fg or not bg then return nil end -- Color retrieval failed
     if bg == fg then return nil end -- Separator won't be visible anyway
     M.highlight(highlight_name, fg, bg, nil)

@@ -1,11 +1,14 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local utils = require 'lualine.utils.utils'
-local utils_notices = require('lualine.utils.notices')
-local highlight = require 'lualine.highlight'
-local Job = require'lualine.utils.job'
 
-local Diff = require('lualine.component'):new()
+local lualine_require = require'lualine_require'
+local modules = lualine_require.lazy_require{
+  utils         = 'lualine.utils.utils',
+  utils_notices = 'lualine.utils.notices',
+  highlight     = 'lualine.highlight',
+  Job           = 'lualine.utils.job',
+}
+local Diff = lualine_require.require('lualine.component'):new()
 
 -- Vars
 -- variable to store git diff stats
@@ -25,7 +28,7 @@ Diff.default_colors = {
 local diff_cache = {} -- Stores last known value of diff of a buffer
 
 local function color_deprecation_notice(color, opt_name)
-  utils_notices.add_notice(string.format([[
+  modules.utils_notices.add_notice(string.format([[
 ### Diff component
 Using option `%s` as string to set foreground color has been deprecated
 and will soon be removed. Now this option has same semantics as regular
@@ -64,7 +67,7 @@ Diff.new = function(self, options, child)
   -- apply colors
   if not new_instance.options.color_added then
     new_instance.options.color_added = {fg =
-      utils.extract_highlight_colors('DiffAdd', 'fg') or
+      modules.utils.extract_highlight_colors('DiffAdd', 'fg') or
           Diff.default_colors.added}
   elseif type(new_instance.options.color_added) == 'string'
     and vim.fn.hlexists(new_instance.options.color_added) == 0 then
@@ -73,7 +76,7 @@ Diff.new = function(self, options, child)
   end
   if not new_instance.options.color_modified then
     new_instance.options.color_modified = {fg =
-        utils.extract_highlight_colors('DiffChange', 'fg') or
+        modules.utils.extract_highlight_colors('DiffChange', 'fg') or
             Diff.default_colors.modified}
   elseif type(new_instance.options.color_modified) == 'string'
     and vim.fn.hlexists(new_instance.options.color_modified) == 0 then
@@ -82,7 +85,7 @@ Diff.new = function(self, options, child)
   end
   if not new_instance.options.color_removed then
     new_instance.options.color_removed = {fg =
-        utils.extract_highlight_colors('DiffDelete', 'fg') or
+        modules.utils.extract_highlight_colors('DiffDelete', 'fg') or
             Diff.default_colors.removed}
   elseif type(new_instance.options.color_removed) == 'string'
     and vim.fn.hlexists(new_instance.options.color_removed) == 0 then
@@ -93,13 +96,13 @@ Diff.new = function(self, options, child)
   -- create highlights and save highlight_name in highlights table
   if new_instance.options.colored then
     new_instance.highlights = {
-      added = highlight.create_component_highlight_group(
+      added = modules.highlight.create_component_highlight_group(
           new_instance.options.color_added, 'diff_added',
           new_instance.options),
-      modified = highlight.create_component_highlight_group(
+      modified = modules.highlight.create_component_highlight_group(
           new_instance.options.color_modified, 'diff_modified',
           new_instance.options),
-      removed = highlight.create_component_highlight_group(
+      removed = modules.highlight.create_component_highlight_group(
           new_instance.options.color_removed, 'diff_removed',
           new_instance.options)
     }
@@ -109,7 +112,7 @@ Diff.new = function(self, options, child)
 
   if Diff.diff_checker_enabled then
     -- setup internal source
-    utils.define_autocmd('BufWritePost', "lua require'lualine.components.diff'.update_git_diff()")
+    modules.utils.define_autocmd('BufWritePost', "lua require'lualine.components.diff'.update_git_diff()")
     Diff.update_diff_args()
   end
 
@@ -136,7 +139,7 @@ Diff.update_status = function(self, is_focused)
   if self.options.colored then
     -- load the highlights and store them in colors table
     for name, highlight_name in pairs(self.highlights) do
-      colors[name] = highlight.component_format_highlight(highlight_name)
+      colors[name] = modules.highlight.component_format_highlight(highlight_name)
     end
   end
 
@@ -242,7 +245,7 @@ function Diff.update_git_diff()
   if Diff.diff_args then
     Diff.diff_output_cache = {}
     if Diff.diff_job then Diff.diff_job:stop() end
-    Diff.diff_job = Job(Diff.diff_args)
+    Diff.diff_job = modules.Job(Diff.diff_args)
     if Diff.diff_job then Diff.diff_job:start() end
   end
 end

@@ -1,73 +1,20 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
+
+local lualine_require = require'lualine_require'
+local require = lualine_require.require
 local notice = require'lualine.utils.notices'
-local utils = require'lualine.utils.utils'
+local is_valid_filename = lualine_require.is_valid_filename
 
-local function lualine_load(patern, use_cache)
-  assert(utils.is_valid_filename(patern[#patern]), "Invalid filename")
-  local retval, cache_name = nil, nil
-  local sep = package.config:sub(1,1)
-
-  if use_cache == true then
-    -- Turn {lua, lualine, module, name} -> lualine.module.name
-    -- same formst that require uses
-    -- then check if it's in requires cache
-    local copy_patern = {}
-    local start = patern[1] == 'lua' and 2 or 1
-    local copy_start = 1
-    for i=start, #patern do
-      copy_patern[copy_start] = patern[i]
-      copy_start = copy_start + 1
-    end
-    cache_name = table.concat(copy_patern, '.')
-    if package.loaded[cache_name] then
-      return package.loaded[cache_name]
-    end
-  end
-
-  -- Get all the runtime files that match the patern
-  local files = vim.fn.uniq(vim.api.nvim_get_runtime_file(
-                  table.concat(patern, sep)..'.lua', true))
-  local n_files = #files
-
-  if n_files == 0 then
-    -- No match found
-    error(table.concat(patern, sep) .. " Not found")
-  elseif n_files == 1 then
-    -- when only one is found run that and return it's return value
-    retval =  dofile(files[1])
-  else
-    -- More then 1 found . Use the first one that isn't in lualines repo
-    local lualine_repo_pattern = table.concat({'lualine.nvim', 'lua', 'lualine'}, sep)
-    local file_found = false
-    for _, file in ipairs(files) do
-      if not file:find(lualine_repo_pattern) then
-        retval = dofile(file)
-        file_found = true
-        break
-      end
-    end
-    if not file_found then
-      -- This shouldn't happen but somehow we have multiple files but they
-      -- apear to be in lualines repo . Just run the first one
-      retval =  dofile(files[1])
-    end
-  end
-
-  if use_cache == true and cache_name then
-    package.loaded[cache_name] = retval
-  end
-  return retval
-end
+local sep = package.config:sub(1,1)
 
 local component_types = {
   luaf = function(component)
     return
-      lualine_load({'lua', 'lualine', 'components', 'special', 'function_component'}, true):new(component)
+      require('lualine.components.special.function_component'):new(component)
   end,
   mod = function(component)
-    local ok, loaded_component = pcall(lualine_load,
-                            {'lua', 'lualine', 'components', component[1]}, true)
+    local ok, loaded_component = pcall(require,'lualine.components.'..component[1])
     if ok then
       component.component_name = component[1]
       loaded_component = loaded_component:new(component)
@@ -78,15 +25,15 @@ local component_types = {
     local stl_expr = component[1] -- Vim's %p %l statusline elements
     component[1] = function() return stl_expr end
     return
-      lualine_load({'lua', 'lualine', 'components', 'special', 'function_component'}, true):new(component)
+      require('lualine.components.special.function_component'):new(component)
   end,
   var = function(component)
     return
-        lualine_load({'lua', 'lualine', 'components', 'special', 'vim_var_component'}, true):new(component)
+        require('lualine.components.special.vim_var_component'):new(component)
   end,
   ['_'] = function(component)
     return
-        lualine_load({'lua', 'lualine', 'components', 'special', 'eval_func_component'}, true):new(component)
+        require('lualine.components.special.eval_func_component'):new(component)
   end
 }
 
@@ -146,7 +93,7 @@ local function load_extensions(config)
   local loaded_extensions = {}
   for _, extension in pairs(config.extensions) do
     if type(extension) == 'string' then
-      local ok, local_extension = pcall(lualine_load, {'lua', 'lualine', 'extensions', extension}, true)
+      local ok, local_extension = pcall(require, 'lualine.extensions.' ..extension)
       if ok then
         local_extension = vim.deepcopy(local_extension)
         load_sections(local_extension.sections, config.options)
@@ -184,7 +131,36 @@ local function load_all(config)
 end
 
 local function load_theme(theme_name)
-  return lualine_load({'lua', 'lualine', 'themes', theme_name}, false)
+  assert(is_valid_filename(theme_name), "Invalid filename")
+  local retval
+  local path = table.concat({'lua', 'lualine', 'themes', theme_name}, sep)..'.lua'
+  local files = vim.fn.globpath(vim.api.nvim_get_option('rtp'),
+                                path, true, true)
+  local n_files = #files
+  if n_files == 0 then
+    -- No match found
+    error(path .. " Not found")
+  elseif n_files == 1 then
+    -- when only one is found run that and return it's return value
+    retval =  dofile(files[1])
+  else
+    -- More then 1 found . Use the first one that isn't in lualines repo
+    local lualine_repo_pattern = table.concat({'lualine.nvim', 'lua', 'lualine'}, sep)
+    local file_found = false
+    for _, file in ipairs(files) do
+      if not file:find(lualine_repo_pattern) then
+        retval = dofile(file)
+        file_found = true
+        break
+      end
+    end
+    if not file_found then
+      -- This shouldn't happen but somehow we have multiple files but they
+      -- apear to be in lualines repo . Just run the first one
+      retval =  dofile(files[1])
+    end
+  end
+  return retval
 end
 
 return {

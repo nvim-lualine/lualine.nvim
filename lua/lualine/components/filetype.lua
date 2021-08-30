@@ -1,9 +1,11 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local highlight = require('lualine.highlight')
-local utils = require('lualine.utils.utils')
-
-local FileType = require('lualine.component'):new()
+local lualine_require = require'lualine_require'
+local modules = lualine_require.lazy_require{
+  highlight = 'lualine.highlight',
+  utils     = 'lualine.utils.utils',
+}
+local FileType = lualine_require.require('lualine.component'):new()
 
 function FileType:new(options, child)
   local new_instance = self._parent:new(options, child or FileType)
@@ -28,21 +30,21 @@ function FileType:apply_icon()
     icon, icon_highlight_group = devicons.get_icon(f_name, f_extension)
 
     if icon and self.options.colored then
-      local highlight_color = utils.extract_highlight_colors(
+      local highlight_color = modules.utils.extract_highlight_colors(
                                   icon_highlight_group, 'fg')
-      local is_focused = utils.is_focused()
-      local default_highlight = highlight.format_highlight(is_focused,
+      local is_focused = modules.utils.is_focused()
+      local default_highlight = modules.highlight.format_highlight(is_focused,
                                                            self.options.self
                                                                .section)
       local icon_highlight = self.options.self.section .. '_' ..
                                  icon_highlight_group
-      if not utils.highlight_exists(icon_highlight .. '_normal') then
-        icon_highlight = highlight.create_component_highlight_group(
+      if not modules.utils.highlight_exists(icon_highlight .. '_normal') then
+        icon_highlight = modules.highlight.create_component_highlight_group(
                              {fg = highlight_color}, icon_highlight_group,
                              self.options)
       end
 
-      icon = highlight.component_format_highlight(icon_highlight) .. icon ..
+      icon = modules.highlight.component_format_highlight(icon_highlight) .. icon ..
                  default_highlight
     end
   else

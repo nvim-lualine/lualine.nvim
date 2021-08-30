@@ -1,12 +1,13 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local modules = require('lualine.utils.lazy_require'){
+local lualine_require = require'lualine_require'
+local modules = lualine_require.lazy_require{
   highlight = 'lualine.highlight',
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
 }
 
-local Diagnostics = require('lualine.component'):new()
+local Diagnostics = lualine_require.require('lualine.component'):new()
 
 -- LuaFormatter off
 Diagnostics.default_colors = {
