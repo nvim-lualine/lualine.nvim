@@ -1,7 +1,7 @@
 local eq = assert.are.same
 
 describe('config parsing', function()
-  local config_module = require 'lualine.config'
+  local config_module = require 'lualine_config'
 
   describe('options', function()
     describe('icons_enabled', function()

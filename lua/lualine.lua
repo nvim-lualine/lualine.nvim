@@ -7,7 +7,7 @@ local modules = lualine_require.lazy_require{
   utils_section = 'lualine.utils.section',
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
-  config_module = 'lualine.config',
+  config_module = 'lualine_config',
 }
 local config           -- Stores cureently applied config
 local new_config = true  -- Stores config that will be applied
