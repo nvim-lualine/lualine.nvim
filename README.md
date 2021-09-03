@@ -186,6 +186,7 @@ sections = {lualine_a = {'mode'}}
 * `encoding` (file encoding)
 * `fileformat` (file format)
 * `filename`
+* `filesize`
 * `filetype`
 * `hostname`
 * `location` (location in file in line:column format)

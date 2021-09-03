@@ -128,6 +128,7 @@ Available components~
         *   |encoding| (file encoding)
         *   |fileformat| (file format)
         *   |filename|
+        *   |filesize|
         *   |filetype|
         *   |hostname|
         *   |location| (location in file in line:column format)
