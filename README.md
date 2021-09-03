@@ -234,7 +234,7 @@ You can use any valid lua expression as a component including
   * global variables
   * require statements
 ```lua
-sections = {lualine_c = {"os.data('%a')", 'data', "require'lsp-status'.status()"}}
+sections = {lualine_c = {"os.date('%a')", 'data', "require'lsp-status'.status()"}}
 ```
 `data` is a global variable in this example.
 
@@ -263,7 +263,7 @@ Global option used locally overwrites the global, for example:
 
 ```lua
 options = {
-  icons_enabled = 1, -- displays icons in alongside component
+  icons_enabled = true, -- displays icons in alongside component
   padding = 1, -- adds padding to the left and right of components
   left_padding = 1, -- adds padding to the left of components
   right_padding =1, -- adds padding to the right of components
@@ -283,7 +283,7 @@ sections = {
   lualine_a = {
     {
       'mode',
-      icon = nil, -- displays icon in front of the component
+      icon = nil,      -- displays icon in front of the component
       separator = nil, -- Determines what separator to use for the component.
                        -- when a string is given it's treated as component_separator.
                        -- When a table is given it's treated as section_separator.
@@ -347,8 +347,8 @@ sections = {
   lualine_a = {
     {
       'filename',
-      file_status = true, -- displays file status (readonly status, modified status)
-      path = 0, -- 0 = just filename, 1 = relative path, 2 = absolute path
+      file_status = true,  -- displays file status (readonly status, modified status)
+      path = 0,            -- 0 = just filename, 1 = relative path, 2 = absolute path
       shorting_target = 40 -- Shortens path to leave 40 space in the window
                            -- for other components. Terrible name any suggestions?
     }
@@ -385,7 +385,7 @@ sections = {
       symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
       source = nil, -- A function that works as a data source for diff.
                     -- it must return a table like
-                    {added = add_count, modified = modified_count, removed = removed_count }
+                    -- {added = add_count, modified = modified_count, removed = removed_count }
                     -- Or nil on failure. Count <= 0 won't be displayed.
     }
   }

@@ -5,7 +5,7 @@ All available themes are only best effort ports by myself/ other users. If you f
 ### auto
 auto is a special theme. It will automaticaly load theme for your colorscheme.
 If there's no theme available for your colorscheme then
-it'll it's best to generate one.
+it'll try it's best to generate one.
 
 ### 16color
 <p>
