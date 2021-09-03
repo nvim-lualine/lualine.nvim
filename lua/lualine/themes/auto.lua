@@ -1,12 +1,14 @@
 local utils = require 'lualine.utils.utils'
 local loader = require 'lualine.utils.loader'
 
-local color_name  = vim.g.colors_name
+local color_name = vim.g.colors_name
 if color_name then
   -- Check if there's a theme for current colorscheme
   -- If there is load that instead of genarating a new one
   local ok, theme = pcall(loader.load_theme, color_name)
-  if ok and theme then return theme end
+  if ok and theme then
+    return theme
+  end
 end
 
 ---------------
@@ -30,7 +32,9 @@ local function getHi(scope, syntaxlist)
           scope = 'bg'
         end
       end
-      if color[scope] then return color[scope] end
+      if color[scope] then
+        return color[scope]
+      end
     end
   end
   return '#000000'
@@ -38,19 +42,18 @@ end
 
 -- truns #rrggbb -> { red, green, blue }
 local function rgb_str2num(rgb_color_str)
-  if rgb_color_str:find('#') == 1 then
+  if rgb_color_str:find '#' == 1 then
     rgb_color_str = rgb_color_str:sub(2, #rgb_color_str)
   end
   local red = tonumber(rgb_color_str:sub(1, 2), 16)
   local green = tonumber(rgb_color_str:sub(3, 4), 16)
   local blue = tonumber(rgb_color_str:sub(5, 6), 16)
-  return {red = red, green = green, blue = blue}
+  return { red = red, green = green, blue = blue }
 end
 
 -- turns { red, green, blue } -> #rrggbb
 local function rgb_num2str(rgb_color_num)
-  local rgb_color_str = string.format('#%02x%02x%02x', rgb_color_num.red,
-                                      rgb_color_num.green, rgb_color_num.blue)
+  local rgb_color_str = string.format('#%02x%02x%02x', rgb_color_num.red, rgb_color_num.green, rgb_color_num.blue)
   return rgb_color_str
 end
 
@@ -71,8 +74,12 @@ end
 
 -- clamps the val between left and right
 local function clamp(val, left, right)
-  if val > right then return right end
-  if val < left then return left end
+  if val > right then
+    return right
+  end
+  if val < left then
+    return left
+  end
   return val
 end
 
@@ -100,27 +107,31 @@ local function apply_contrast(highlight)
   local hightlight_bg_avg = get_color_avg(highlight.bg)
   local contrast_threshold_config = clamp(contrast_threshold, 0, 0.5)
   local contranst_change_step = 5
-  if hightlight_bg_avg > .5 then contranst_change_step = -contranst_change_step end
+  if hightlight_bg_avg > 0.5 then
+    contranst_change_step = -contranst_change_step
+  end
 
   -- donn't waste too much time here max 25 interation should be more than enough
   local iteration_count = 1
-  while (math.abs(get_color_avg(highlight.fg) - hightlight_bg_avg) <
-      contrast_threshold_config and iteration_count < 25) do
+  while
+    math.abs(get_color_avg(highlight.fg) - hightlight_bg_avg) < contrast_threshold_config and iteration_count < 25
+  do
     highlight.fg = contrast_modifier(highlight.fg, contranst_change_step)
     iteration_count = iteration_count + 1
   end
 end
 
 -- Get the colors to create theme
+-- stylua: ignore
 local colors = {
-  normal = getHi('bg', {'PmenuSel', 'PmenuThumb', 'TabLineSel'}),
-  insert = getHi('fg', {'String', 'MoreMsg'}),
-  replace = getHi('fg', {'Number', 'Type'}),
-  visual = getHi('fg', {'Special', 'Boolean', 'Constant'}),
-  command = getHi('fg', {'Identifier'}),
-  back1 = getHi('bg', {'Normal', 'StatusLineNC'}),
-  fore = getHi('fg', {'Normal', 'StatusLine'}),
-  back2 = getHi('bg', {'StatusLine'})
+  normal  = getHi('bg', { 'PmenuSel', 'PmenuThumb', 'TabLineSel' }),
+  insert  = getHi('fg', { 'String', 'MoreMsg' }),
+  replace = getHi('fg', { 'Number', 'Type' }),
+  visual  = getHi('fg', { 'Special', 'Boolean', 'Constant' }),
+  command = getHi('fg', { 'Identifier' }),
+  back1   = getHi('bg', { 'Normal', 'StatusLineNC' }),
+  fore    = getHi('fg', { 'Normal', 'StatusLine' }),
+  back2   = getHi('bg', { 'StatusLine' }),
 }
 
 -- Change brightness of colors
@@ -139,30 +150,30 @@ end
 -- basic theme defination
 local M = {
   normal = {
-    a = {bg = colors.normal, fg = colors.back1, gui = 'bold'},
-    b = {bg = colors.back1, fg = colors.normal},
-    c = {bg = colors.back2, fg = colors.fore}
+    a = { bg = colors.normal, fg = colors.back1, gui = 'bold' },
+    b = { bg = colors.back1, fg = colors.normal },
+    c = { bg = colors.back2, fg = colors.fore },
   },
   insert = {
-    a = {bg = colors.insert, fg = colors.back1, gui = 'bold'},
-    b = {bg = colors.back1, fg = colors.insert},
-    c = {bg = colors.back2, fg = colors.fore}
+    a = { bg = colors.insert, fg = colors.back1, gui = 'bold' },
+    b = { bg = colors.back1, fg = colors.insert },
+    c = { bg = colors.back2, fg = colors.fore },
   },
   replace = {
-    a = {bg = colors.replace, fg = colors.back1, gui = 'bold'},
-    b = {bg = colors.back1, fg = colors.replace},
-    c = {bg = colors.back2, fg = colors.fore}
+    a = { bg = colors.replace, fg = colors.back1, gui = 'bold' },
+    b = { bg = colors.back1, fg = colors.replace },
+    c = { bg = colors.back2, fg = colors.fore },
   },
   visual = {
-    a = {bg = colors.visual, fg = colors.back1, gui = 'bold'},
-    b = {bg = colors.back1, fg = colors.visual},
-    c = {bg = colors.back2, fg = colors.fore}
+    a = { bg = colors.visual, fg = colors.back1, gui = 'bold' },
+    b = { bg = colors.back1, fg = colors.visual },
+    c = { bg = colors.back2, fg = colors.fore },
   },
   command = {
-    a = {bg = colors.command, fg = colors.back1, gui = 'bold'},
-    b = {bg = colors.back1, fg = colors.command},
-    c = {bg = colors.back2, fg = colors.fore}
-  }
+    a = { bg = colors.command, fg = colors.back1, gui = 'bold' },
+    b = { bg = colors.back1, fg = colors.command },
+    c = { bg = colors.back2, fg = colors.fore },
+  },
 }
 
 M.terminal = M.command
@@ -170,7 +181,9 @@ M.inactive = M.normal
 
 -- Apply prpper contrast so text is readable
 for _, section in pairs(M) do
-  for _, highlight in pairs(section) do apply_contrast(highlight) end
+  for _, highlight in pairs(section) do
+    apply_contrast(highlight)
+  end
 end
 
 return M

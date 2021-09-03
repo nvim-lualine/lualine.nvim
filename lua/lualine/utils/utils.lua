@@ -5,7 +5,9 @@ local M = {}
 -- Note for now only works for termguicolors scope can be bg or fg or any other
 -- attr parameter like bold/italic/reverse
 function M.extract_highlight_colors(color_group, scope)
-  if vim.fn.hlexists(color_group) == 0 then return nil end
+  if vim.fn.hlexists(color_group) == 0 then
+    return nil
+  end
   local color = vim.api.nvim_get_hl_by_name(color_group, true)
   if color.background ~= nil then
     color.bg = string.format('#%06x', color.background)
@@ -15,7 +17,9 @@ function M.extract_highlight_colors(color_group, scope)
     color.fg = string.format('#%06x', color.foreground)
     color.foreground = nil
   end
-  if scope then return color[scope] end
+  if scope then
+    return color[scope]
+  end
   return color
 end
 
@@ -23,22 +27,26 @@ end
 function M.list_shrink(list)
   local new_list = {}
   for i = 1, #list do
-    if list[i] and #list[i] > 0 then table.insert(new_list, list[i]) end
+    if list[i] and #list[i] > 0 then
+      table.insert(new_list, list[i])
+    end
   end
   return new_list
 end
 
 -- Check if a auto command is already defined
 local function autocmd_is_defined(event, patern, command_str)
-  return vim.api.nvim_exec(string.format("au lualine %s %s",
-                           event, patern), true):find(command_str) ~= nil
+  return vim.api.nvim_exec(string.format('au lualine %s %s', event, patern), true):find(command_str) ~= nil
 end
 
 -- Define a auto command if it's not already defined
 function M.define_autocmd(event, patern, cmd)
-  if not cmd then cmd = patern; patern = '*' end
+  if not cmd then
+    cmd = patern
+    patern = '*'
+  end
   if not autocmd_is_defined(event, patern, cmd) then
-    vim.cmd(string.format("autocmd lualine %s %s %s", event, patern, cmd))
+    vim.cmd(string.format('autocmd lualine %s %s %s', event, patern, cmd))
   end
 end
 

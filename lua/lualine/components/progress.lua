@@ -2,6 +2,8 @@
 -- MIT license, see LICENSE for more details.
 local Progress = require('lualine.component'):new()
 
-Progress.update_status = function() return [[%3P]] end
+Progress.update_status = function()
+  return [[%3P]]
+end
 
 return Progress

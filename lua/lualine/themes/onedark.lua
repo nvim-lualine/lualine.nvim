@@ -18,16 +18,16 @@ local colors = {
 
 return {
   normal = {
-    a = {fg = colors.bg, bg = colors.green, gui = 'bold'},
-    b = {fg = colors.fg, bg = colors.gray3},
-    c = {fg = colors.fg, bg = colors.gray2}
+    a = { fg = colors.bg, bg = colors.green, gui = 'bold' },
+    b = { fg = colors.fg, bg = colors.gray3 },
+    c = { fg = colors.fg, bg = colors.gray2 },
   },
-  insert = {a = {fg = colors.bg, bg = colors.blue, gui = 'bold'}},
-  visual = {a = {fg = colors.bg, bg = colors.purple, gui = 'bold'}},
-  replace = {a = {fg = colors.bg, bg = colors.red1, gui = 'bold'}},
+  insert = { a = { fg = colors.bg, bg = colors.blue, gui = 'bold' } },
+  visual = { a = { fg = colors.bg, bg = colors.purple, gui = 'bold' } },
+  replace = { a = { fg = colors.bg, bg = colors.red1, gui = 'bold' } },
   inactive = {
-    a = {fg = colors.gray1, bg = colors.bg, gui = 'bold'},
-    b = {fg = colors.gray1, bg = colors.bg},
-    c = {fg = colors.gray1, bg = colors.gray2}
-  }
+    a = { fg = colors.gray1, bg = colors.bg, gui = 'bold' },
+    b = { fg = colors.gray1, bg = colors.bg },
+    c = { fg = colors.gray1, bg = colors.gray2 },
+  },
 }

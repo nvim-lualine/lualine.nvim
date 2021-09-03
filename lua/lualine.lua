@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local lualine_require = require'lualine_require'
-local modules = lualine_require.lazy_require{
+local lualine_require = require 'lualine_require'
+local modules = lualine_require.lazy_require {
   highlight = 'lualine.highlight',
   loader = 'lualine.utils.loader',
   utils_section = 'lualine.utils.section',
@@ -9,19 +9,23 @@ local modules = lualine_require.lazy_require{
   utils_notices = 'lualine.utils.notices',
   config_module = 'lualine.config',
 }
-local config           -- Stores cureently applied config
-local new_config = true  -- Stores config that will be applied
+local config -- Stores cureently applied config
+local new_config = true -- Stores config that will be applied
 
 -- Helper for apply_transitional_separators()
 local function find_next_hl(status, str_checked)
   -- Gets the next valid hl group from str_checked
   local hl_pos_start, hl_pos_end = status:find('%%#.-#', str_checked)
   while true do
-    if not hl_pos_start then return nil end
+    if not hl_pos_start then
+      return nil
+    end
     -- When there are more that one hl group next to one another like
     -- %#HL1#%#HL2#%#HL3# we need to return HL3. This makes that happen.
     local next_start, next_end = status:find('^%%#.-#', hl_pos_end + 1)
-    if next_start == nil then break end
+    if next_start == nil then
+      break
+    end
     hl_pos_start, hl_pos_end = next_start, next_end
   end
   return status:sub(hl_pos_start + 2, hl_pos_end - 1)
@@ -31,12 +35,18 @@ end
 local function fill_section_separator(status, str_checked, last_hl, sep, reverse)
   -- Inserts transitional separator along with transitional highlight
   local next_hl = find_next_hl(status, str_checked)
-  if last_hl == nil then last_hl = 'Normal' end
-  if next_hl == nil then next_hl = 'Normal' end
-  if #next_hl == 0 or #last_hl == 0 then return end
+  if last_hl == nil then
+    last_hl = 'Normal'
+  end
+  if next_hl == nil then
+    next_hl = 'Normal'
+  end
+  if #next_hl == 0 or #last_hl == 0 then
+    return
+  end
   local transitional_highlight = reverse -- lua ternary assignment x ? y : z
-            and modules.highlight.get_transitional_highlights(last_hl, next_hl)
-            or modules.highlight.get_transitional_highlights(next_hl, last_hl)
+      and modules.highlight.get_transitional_highlights(last_hl, next_hl)
+    or modules.highlight.get_transitional_highlights(next_hl, last_hl)
   if transitional_highlight then
     return transitional_highlight .. sep
   end
@@ -44,20 +54,21 @@ end
 
 local function apply_transitional_separators(status)
   local status_applied = {} -- Collects all the pieces for concatation
-  local last_hl         -- Stores lash highligjt group that we found
-  local copied_pos = 1  -- Tracks how much we've copied over to status_applied
+  local last_hl -- Stores lash highligjt group that we found
+  local copied_pos = 1 -- Tracks how much we've copied over to status_applied
   local str_checked = 1 -- Tracks where the searcher head is at
-
 
   -- Process entire status replace the %s{sep} & %S{sep} placeholders
   -- with proper transitional separator.
   while str_checked ~= nil do
     str_checked = status:find('%%', str_checked)
-    if str_checked == nil then break end
+    if str_checked == nil then
+      break
+    end
     table.insert(status_applied, status:sub(copied_pos, str_checked - 1))
-                                              -- -1 so we don't copy '%'
+    -- -1 so we don't copy '%'
     copied_pos = str_checked
-    local next_char = modules.utils.charAt(status, str_checked +1)
+    local next_char = modules.utils.charAt(status, str_checked + 1)
     if next_char == '#' then
       -- %#hl_name# highlights
       last_hl = status:match('^%%#(.-)#', str_checked)
@@ -67,7 +78,9 @@ local function apply_transitional_separators(status)
       local sep = status:match('^%%s{(.-)}', str_checked)
       str_checked = str_checked + #sep + 4 -- 4 = len(%{})
       local trans_sep = fill_section_separator(status, str_checked, last_hl, sep, false)
-      if trans_sep then table.insert(status_applied, trans_sep) end
+      if trans_sep then
+        table.insert(status_applied, trans_sep)
+      end
       copied_pos = str_checked
     elseif next_char == 'S' then
       -- %S{sep} is marker for right separator and
@@ -79,12 +92,13 @@ local function apply_transitional_separators(status)
         str_checked = status:find('}', str_checked) + 1
       end
       local trans_sep = fill_section_separator(status, str_checked, last_hl, sep, true)
-      if trans_sep then table.insert(status_applied, trans_sep) end
+      if trans_sep then
+        table.insert(status_applied, trans_sep)
+      end
       copied_pos = str_checked
     elseif next_char == '%' then
       str_checked = str_checked + 2 -- Skip the following % too
-    elseif next_char == '=' and last_hl and
-      (last_hl:find('^lualine_a') or last_hl:find('^lualine_b')) then
+    elseif next_char == '=' and last_hl and (last_hl:find '^lualine_a' or last_hl:find '^lualine_b') then
       -- TODO: Fix this properly
       -- This check for lualine_a and lualine_b is dumb. It doesn't garantee
       -- c or x section isn't present. Worst case sinario after this patch
@@ -102,7 +116,7 @@ end
 
 local function statusline(sections, is_focused)
   -- The sequence sections should maintain [SECTION_SEQUENCE]
-  local section_sequence = {'a', 'b', 'c', 'x', 'y', 'z'}
+  local section_sequence = { 'a', 'b', 'c', 'x', 'y', 'z' }
   local status = {}
   local applied_midsection_devider = false
   local applied_trunc = false
@@ -110,16 +124,18 @@ local function statusline(sections, is_focused)
     if sections['lualine_' .. section_name] then
       -- insert highlight+components of this section to status_builder
       local section_data = modules.utils_section.draw_section(
-                               sections['lualine_' .. section_name],
-                               section_name, is_focused)
+        sections['lualine_' .. section_name],
+        section_name,
+        is_focused
+      )
       if #section_data > 0 then
         if not applied_midsection_devider and section_name > 'c' then
           applied_midsection_devider = true
-          section_data = '%='..section_data
+          section_data = '%=' .. section_data
         end
         if not applied_trunc and section_name > 'b' then
           applied_trunc = true
-          section_data = '%<'..section_data
+          section_data = '%<' .. section_data
         end
         table.insert(status, section_data)
       end
@@ -143,13 +159,17 @@ local function get_extension_sections(current_ft, is_focused)
   return nil
 end
 
-local function tabline() return statusline(config.tabline, true) end
+local function tabline()
+  return statusline(config.tabline, true)
+end
 
 local function notify_theme_error(theme_name)
-  local message_template = theme_name ~= 'auto' and [[
+  local message_template = theme_name ~= 'auto'
+      and [[
 ### options.theme
 Theme `%s` not found, falling back to `auto`. Check if spelling is right.
-]] or [[
+]]
+    or [[
 ### options.theme
 Theme `%s` failed, falling back to `gruvbox`.
 This shouldn't happen.
@@ -164,7 +184,9 @@ local function setup_theme()
     local theme_name = config.options.theme
     if type(theme_name) == 'string' then
       local ok, theme = pcall(modules.loader.load_theme, theme_name)
-      if ok and theme then return theme end
+      if ok and theme then
+        return theme
+      end
     elseif type(theme_name) == 'table' then
       -- use the provided theme as-is
       return config.options.theme
@@ -172,10 +194,12 @@ local function setup_theme()
     if theme_name ~= 'auto' then
       notify_theme_error(theme_name)
       local ok, theme = pcall(modules.loader.load_theme, 'auto')
-      if ok and theme then return theme end
+      if ok and theme then
+        return theme
+      end
     end
-    notify_theme_error('auto')
-    return modules.loader.load_theme('gruvbox')
+    notify_theme_error 'auto'
+    return modules.loader.load_theme 'gruvbox'
   end
   local theme = get_theme_from_config()
   modules.highlight.create_highlight_groups(theme)
@@ -192,7 +216,7 @@ end
 
 local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
-    vim.cmd('autocmd lualine VimResized * redrawstatus')
+    vim.cmd 'autocmd lualine VimResized * redrawstatus'
   else
     vim.go.statusline = nil
   end
@@ -219,7 +243,9 @@ end
 
 local function status_dispatch(focused)
   -- disable on specific filetypes
-  if new_config then reset_lualine() end
+  if new_config then
+    reset_lualine()
+  end
   local current_ft = vim.bo.filetype
   local is_focused = focused ~= nil and focused or modules.utils.is_focused()
   for _, ft in pairs(config.options.disabled_filetypes) do

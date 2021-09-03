@@ -36,7 +36,9 @@ Mode.map = {
 
 function Mode.get_mode()
   local mode_code = vim.api.nvim_get_mode().mode
-  if Mode.map[mode_code] == nil then return mode_code end
+  if Mode.map[mode_code] == nil then
+    return mode_code
+  end
   return Mode.map[mode_code]
 end
 

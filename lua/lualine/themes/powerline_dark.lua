@@ -24,33 +24,33 @@ local colors = {
 
 return {
   normal = {
-    a = {bg = colors.neon, fg = colors.black, gui = 'bold'},
-    b = {bg = colors.gray, fg = colors.white},
-    c = {bg = colors.black, fg = colors.brightgreen}
+    a = { bg = colors.neon, fg = colors.black, gui = 'bold' },
+    b = { bg = colors.gray, fg = colors.white },
+    c = { bg = colors.black, fg = colors.brightgreen },
   },
   insert = {
-    a = {bg = colors.blue, fg = colors.darkblue, gui = 'bold'},
-    b = {bg = colors.navyblue, fg = colors.white},
-    c = {bg = colors.purple, fg = colors.white}
+    a = { bg = colors.blue, fg = colors.darkblue, gui = 'bold' },
+    b = { bg = colors.navyblue, fg = colors.white },
+    c = { bg = colors.purple, fg = colors.white },
   },
   visual = {
-    a = {bg = colors.orange, fg = colors.black, gui = 'bold'},
-    b = {bg = colors.darkgray, fg = colors.white},
-    c = {bg = colors.red, fg = colors.white}
+    a = { bg = colors.orange, fg = colors.black, gui = 'bold' },
+    b = { bg = colors.darkgray, fg = colors.white },
+    c = { bg = colors.red, fg = colors.white },
   },
   replace = {
-    a = {bg = colors.brightred, fg = colors.white, gui = 'bold'},
-    b = {bg = colors.cyan, fg = colors.darkblue},
-    c = {bg = colors.navyblue, fg = colors.white}
+    a = { bg = colors.brightred, fg = colors.white, gui = 'bold' },
+    b = { bg = colors.cyan, fg = colors.darkblue },
+    c = { bg = colors.navyblue, fg = colors.white },
   },
   command = {
-    a = {bg = colors.green, fg = colors.black, gui = 'bold'},
-    b = {bg = colors.darkgray, fg = colors.white},
-    c = {bg = colors.black, fg = colors.brightgreen}
+    a = { bg = colors.green, fg = colors.black, gui = 'bold' },
+    b = { bg = colors.darkgray, fg = colors.white },
+    c = { bg = colors.black, fg = colors.brightgreen },
   },
   inactive = {
-    a = {bg = colors.darkgray, fg = colors.gray, gui = 'bold'},
-    b = {bg = colors.darkgray, fg = colors.gray},
-    c = {bg = colors.darkgray, fg = colors.gray}
-  }
+    a = { bg = colors.darkgray, fg = colors.gray, gui = 'bold' },
+    b = { bg = colors.darkgray, fg = colors.gray },
+    c = { bg = colors.darkgray, fg = colors.gray },
+  },
 }

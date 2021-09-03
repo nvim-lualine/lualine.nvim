@@ -6,11 +6,11 @@ describe('config parsing', function()
   describe('options', function()
     describe('icons_enabled', function()
       it('default', function()
-        local config = config_module.apply_configuration({})
+        local config = config_module.apply_configuration {}
         eq(config.options.icons_enabled, true)
       end)
       it('custom', function()
-        local config = {options = {icons_enabled = false}}
+        local config = { options = { icons_enabled = false } }
         config = config_module.apply_configuration(config)
         eq(config.options.icons_enabled, false)
       end)
@@ -18,14 +18,14 @@ describe('config parsing', function()
 
     describe('theme', function()
       it('default', function()
-        local config = config_module.apply_configuration({})
+        local config = config_module.apply_configuration {}
         eq(config.options.theme, 'auto')
       end)
       it('custom', function()
-        local config = {options = {theme = 'nord'}}
+        local config = { options = { theme = 'nord' } }
         config = config_module.apply_configuration(config)
         eq(config.options.theme, 'nord')
-        config = {options = {theme = {}}}
+        config = { options = { theme = {} } }
         config = config_module.apply_configuration(config)
         eq(config.options.theme, {})
       end)
@@ -33,43 +33,43 @@ describe('config parsing', function()
 
     describe('separators', function()
       it('default', function()
-        local config = config_module.apply_configuration({})
-        eq(config.options.component_separators, {'', ''})
-        eq(config.options.section_separators, {'', ''})
+        local config = config_module.apply_configuration {}
+        eq(config.options.component_separators, { '', '' })
+        eq(config.options.section_separators, { '', '' })
       end)
       it('double separators', function()
         local config = {
           options = {
-            component_separators = {'a', 'b'},
-            section_separators = {'c', 'd'}
-          }
+            component_separators = { 'a', 'b' },
+            section_separators = { 'c', 'd' },
+          },
         }
         config = config_module.apply_configuration(config)
-        eq(config.options.component_separators, {'a', 'b'})
-        eq(config.options.section_separators, {'c', 'd'})
+        eq(config.options.component_separators, { 'a', 'b' })
+        eq(config.options.section_separators, { 'c', 'd' })
       end)
 
       describe('single separator', function()
         it('string', function()
           local config = {
-            options = {component_separators = 'a', section_separators = 'b'}
+            options = { component_separators = 'a', section_separators = 'b' },
           }
           config = config_module.apply_configuration(config)
-          eq(config.options.component_separators, {'a', 'a'})
-          eq(config.options.section_separators, {'b', 'b'})
+          eq(config.options.component_separators, { 'a', 'a' })
+          eq(config.options.section_separators, { 'b', 'b' })
         end)
         it('table', function()
           local config = {
-            options = {component_separators = {'a'}, section_separators = {'b'}}
+            options = { component_separators = { 'a' }, section_separators = { 'b' } },
           }
           config = config_module.apply_configuration(config)
-          eq(config.options.component_separators, {'a', 'a'})
-          eq(config.options.section_separators, {'b', 'b'})
+          eq(config.options.component_separators, { 'a', 'a' })
+          eq(config.options.section_separators, { 'b', 'b' })
         end)
       end)
       it('no seprarators', function()
         local config = {
-          options = {component_separators = {}, section_separators = {}}
+          options = { component_separators = {}, section_separators = {} },
         }
         config = config_module.apply_configuration(config)
         eq(config.options.component_separators, {})
@@ -79,24 +79,24 @@ describe('config parsing', function()
 
     describe('disabled filetypes', function()
       it('default', function()
-        local config = config_module.apply_configuration({})
+        local config = config_module.apply_configuration {}
         eq(config.options.disabled_filetypes, {})
       end)
       it('custom', function()
-        local config = {options = {disabled_filetypes = {'lua'}}}
+        local config = { options = { disabled_filetypes = { 'lua' } } }
         config = config_module.apply_configuration(config)
-        eq(config.options.disabled_filetypes, {'lua'})
+        eq(config.options.disabled_filetypes, { 'lua' })
       end)
     end)
 
     describe('non default global option', function()
       it('default', function()
-        local config = {options = {}}
+        local config = { options = {} }
         config = config_module.apply_configuration(config)
         eq(config.options.non_default_global_option, nil)
       end)
       it('custom', function()
-        local config = {options = {non_default_global_option = 1}}
+        local config = { options = { non_default_global_option = 1 } }
         config = config_module.apply_configuration(config)
         eq(config.options.non_default_global_option, 1)
       end)
@@ -108,32 +108,31 @@ describe('config parsing', function()
       local config = {}
       config = config_module.apply_configuration(config)
       local lualine_default_sections = {
-        lualine_a = {'mode'},
-        lualine_b = {'branch', 'diff',
-                      {'diagnostics', sources={'nvim_lsp', 'coc'}}},
-        lualine_c = {'filename'},
-        lualine_x = {'encoding', 'fileformat', 'filetype'},
-        lualine_y = {'progress'},
-        lualine_z = {'location'}
+        lualine_a = { 'mode' },
+        lualine_b = { 'branch', 'diff', { 'diagnostics', sources = { 'nvim_lsp', 'coc' } } },
+        lualine_c = { 'filename' },
+        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' },
       }
       eq(config.sections, lualine_default_sections)
     end)
     it('custom', function()
       local custom_sections = {
-        lualine_a = {{'mode', lower = true}},
-        lualine_b = {'branch', {'branch', lower = true}},
+        lualine_a = { { 'mode', lower = true } },
+        lualine_b = { 'branch', { 'branch', lower = true } },
         lualine_c = nil,
-        lualine_x = {}
+        lualine_x = {},
       }
       local expected_sections = {
-        lualine_a = {{'mode', lower = true}},
-        lualine_b = {'branch', {'branch', lower = true}},
-        lualine_c = {'filename'},
+        lualine_a = { { 'mode', lower = true } },
+        lualine_b = { 'branch', { 'branch', lower = true } },
+        lualine_c = { 'filename' },
         lualine_x = {},
-        lualine_y = {'progress'},
-        lualine_z = {'location'}
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' },
       }
-      local config = {sections = custom_sections}
+      local config = { sections = custom_sections }
       config = config_module.apply_configuration(config)
       eq(config.sections, expected_sections)
     end)
@@ -149,17 +148,17 @@ describe('config parsing', function()
     end)
     it('custom', function()
       local custom_sections = {
-        lualine_a = {{'mode', lower = true}},
-        lualine_b = {'branch', {'branch', lower = true}},
+        lualine_a = { { 'mode', lower = true } },
+        lualine_b = { 'branch', { 'branch', lower = true } },
         lualine_c = nil,
-        lualine_x = {}
+        lualine_x = {},
       }
       local expected_sections = {
-        lualine_a = {{'mode', lower = true}},
-        lualine_b = {'branch', {'branch', lower = true}},
-        lualine_x = {}
+        lualine_a = { { 'mode', lower = true } },
+        lualine_b = { 'branch', { 'branch', lower = true } },
+        lualine_x = {},
       }
-      local config = {tabline = custom_sections}
+      local config = { tabline = custom_sections }
       config = config_module.apply_configuration(config)
       eq(config.tabline, expected_sections)
     end)
@@ -167,14 +166,14 @@ describe('config parsing', function()
 
   describe('extensions', function()
     it('default', function()
-      local config = {options = {}}
+      local config = { options = {} }
       config = config_module.apply_configuration(config)
       eq(config.extensions, {})
     end)
     it('custom', function()
-      local config = {extensions = {'fugitive'}}
+      local config = { extensions = { 'fugitive' } }
       config = config_module.apply_configuration(config)
-      eq(config.extensions, {'fugitive'})
+      eq(config.extensions, { 'fugitive' })
     end)
   end)
 end)

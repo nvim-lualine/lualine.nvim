@@ -3,13 +3,17 @@
 local M = require('lualine.component'):new()
 
 M.update_status = function()
-  local file = vim.fn.expand('%:p')
-  if file == nil or #file == 0 then return '' end
+  local file = vim.fn.expand '%:p'
+  if file == nil or #file == 0 then
+    return ''
+  end
 
   local size = vim.fn.getfsize(file)
-  if size <= 0 then return '' end
+  if size <= 0 then
+    return ''
+  end
 
-  local sufixes = {'b', 'k', 'm', 'g'}
+  local sufixes = { 'b', 'k', 'm', 'g' }
 
   local i = 1
   while size > 1024 and i < #sufixes do

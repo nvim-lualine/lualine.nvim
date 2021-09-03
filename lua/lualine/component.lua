@@ -11,7 +11,7 @@ local Component = {
     local new_component = {}
     new_component.options = options
     new_component._parent = child or self
-    setmetatable(new_component, {__index = new_component._parent})
+    setmetatable(new_component, { __index = new_component._parent })
     -- Operation that are required for creating new components but not for inheritence
     if options ~= nil then
       component_no = component_no + 1
@@ -41,16 +41,19 @@ local Component = {
     -- set custom highlights
     if self.options.color then
       self.options.color_highlight = highlight.create_component_highlight_group(
-                                         self.options.color,
-                                         self.options.component_name,
-                                         self.options)
+        self.options.color,
+        self.options.component_name,
+        self.options
+      )
     end
   end,
 
   -- set upper or lower case
   apply_case = function(self)
     -- Donn't work on components that emit vim statusline escaped chars
-    if self.status:find('%%') and not self.status:find('%%%%') then return end
+    if self.status:find '%%' and not self.status:find '%%%%' then
+      return
+    end
     if self.options.upper == true then
       self.status = self.status:upper()
     elseif self.options.lower == true then
@@ -63,27 +66,26 @@ local Component = {
     local l_padding = (self.options.left_padding or self.options.padding or 1)
     local r_padding = (self.options.right_padding or self.options.padding or 1)
     if l_padding then
-      if self.status:find('%%#.*#') == 1 then
+      if self.status:find '%%#.*#' == 1 then
         -- When component has changed the highlight at begining
         -- we will add the padding after the highlight
-        local pre_highlight =
-            vim.fn.matchlist(self.status, [[\(%#.\{-\}#\)]])[2]
-        self.status = pre_highlight .. string.rep(' ', l_padding) ..
-                          self.status:sub(#pre_highlight + 1, #self.status)
+        local pre_highlight = vim.fn.matchlist(self.status, [[\(%#.\{-\}#\)]])[2]
+        self.status = pre_highlight .. string.rep(' ', l_padding) .. self.status:sub(#pre_highlight + 1, #self.status)
       else
         self.status = string.rep(' ', l_padding) .. self.status
       end
     end
-    if r_padding then self.status = self.status .. string.rep(' ', r_padding) end
+    if r_padding then
+      self.status = self.status .. string.rep(' ', r_padding)
+    end
   end,
 
   -- Applies custom highlights for component
   apply_highlights = function(self, default_highlight)
     if self.options.color_highlight then
-      self.status = highlight.component_format_highlight(
-                        self.options.color_highlight) .. self.status
+      self.status = highlight.component_format_highlight(self.options.color_highlight) .. self.status
     end
-    if type(self.options.separator) ~= 'table' and self.status:find('%%#') then
+    if type(self.options.separator) ~= 'table' and self.status:find '%%#' then
       -- Apply default highlight only when we aren't applying trans sep and
       -- the component has changed it's hl. since we won't be applying
       -- regular sep in those cases so ending with default hl isn't neccessay
@@ -93,7 +95,9 @@ local Component = {
     end
     -- Prepend default hl when the component doesn't start with hl otherwise
     -- color in previous component can cause side effect
-    if not self.status:find('^%%#') then self.status = default_highlight .. self.status end
+    if not self.status:find '^%%#' then
+      self.status = default_highlight .. self.status
+    end
   end,
 
   -- Apply icon in front of component
@@ -125,22 +129,23 @@ local Component = {
   end,
 
   apply_section_separators = function(self)
-    if type(self.options.separator) ~= 'table' then return end
+    if type(self.options.separator) ~= 'table' then
+      return
+    end
     if self.options.separator[1] ~= '' then
-      self.status = string.format('%%s{%s}%s', self.options.separator[1],
-                                  self.status)
+      self.status = string.format('%%s{%s}%s', self.options.separator[1], self.status)
       self.strip_previous_separator = true
     end
     if self.options.separator[2] ~= '' then
-      self.status = string.format('%s%%S{%s}', self.status,
-                                  self.options.separator[2])
+      self.status = string.format('%s%%S{%s}', self.status, self.options.separator[2])
     end
   end,
 
   strip_separator = function(self)
-    if not self.applied_separator then self.applied_separator = '' end
-    self.status = self.status:sub(1, (#self.status -
-                                      (#self.applied_separator)))
+    if not self.applied_separator then
+      self.applied_separator = ''
+    end
+    self.status = self.status:sub(1, (#self.status - #self.applied_separator))
     self.applied_separator = nil
     return self.status
   end,
@@ -161,7 +166,9 @@ local Component = {
       return self.status
     end
     local status = self:update_status(is_focused)
-    if self.options.format then status = self.options.format(status or '') end
+    if self.options.format then
+      status = self.options.format(status or '')
+    end
     if type(status) == 'string' and #status > 0 then
       self.status = status
       self:apply_icon()
@@ -172,7 +179,7 @@ local Component = {
       self:apply_separator()
     end
     return self.status
-  end
+  end,
 }
 
 return Component

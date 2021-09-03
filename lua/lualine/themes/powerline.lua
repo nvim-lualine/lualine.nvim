@@ -21,20 +21,20 @@ local Colors = {
 
 return {
   normal = {
-    a = {fg = Colors.darkestgreen, bg = Colors.brightgreen, gui = 'bold'},
-    b = {fg = Colors.gray10, bg = Colors.gray5},
-    c = {fg = Colors.gray7, bg = Colors.gray2}
+    a = { fg = Colors.darkestgreen, bg = Colors.brightgreen, gui = 'bold' },
+    b = { fg = Colors.gray10, bg = Colors.gray5 },
+    c = { fg = Colors.gray7, bg = Colors.gray2 },
   },
   insert = {
-    a = {fg = Colors.darkestcyan, bg = Colors.white, gui = 'bold'},
-    b = {fg = Colors.darkestcyan, bg = Colors.mediumcyan},
-    c = {fg = Colors.mediumcyan, bg = Colors.darkestblue}
+    a = { fg = Colors.darkestcyan, bg = Colors.white, gui = 'bold' },
+    b = { fg = Colors.darkestcyan, bg = Colors.mediumcyan },
+    c = { fg = Colors.mediumcyan, bg = Colors.darkestblue },
   },
-  visual = {a = {fg = Colors.darkred, bg = Colors.brightorange, gui = 'bold'}},
-  replace = {a = {fg = Colors.white, bg = Colors.brightred, gui = 'bold'}},
+  visual = { a = { fg = Colors.darkred, bg = Colors.brightorange, gui = 'bold' } },
+  replace = { a = { fg = Colors.white, bg = Colors.brightred, gui = 'bold' } },
   inactive = {
-    a = {fg = Colors.gray1, bg = Colors.gray5, gui = 'bold'},
-    b = {fg = Colors.gray1, bg = Colors.gray5},
-    c = {bg = Colors.gray1, fg = Colors.gray5}
-  }
+    a = { fg = Colors.gray1, bg = Colors.gray5, gui = 'bold' },
+    b = { fg = Colors.gray1, bg = Colors.gray5 },
+    c = { bg = Colors.gray1, fg = Colors.gray5 },
+  },
 }

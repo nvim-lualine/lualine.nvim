@@ -2,6 +2,8 @@
 -- MIT license, see LICENSE for more details.
 local Location = require('lualine.component'):new()
 
-Location.update_status = function() return [[%3l:%-2c]] end
+Location.update_status = function()
+  return [[%3l:%-2c]]
+end
 
 return Location

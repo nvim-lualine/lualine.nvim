@@ -17,25 +17,25 @@ local colors = {
 
 return {
   visual = {
-    a = {fg = colors.color2, bg = colors.color3, gui = 'bold'},
-    b = {fg = colors.color4, bg = colors.color5}
+    a = { fg = colors.color2, bg = colors.color3, gui = 'bold' },
+    b = { fg = colors.color4, bg = colors.color5 },
   },
   replace = {
-    a = {fg = colors.color2, bg = colors.color8, gui = 'bold'},
-    b = {fg = colors.color4, bg = colors.color5}
+    a = { fg = colors.color2, bg = colors.color8, gui = 'bold' },
+    b = { fg = colors.color4, bg = colors.color5 },
   },
   inactive = {
-    c = {fg = colors.color9, bg = colors.color2},
-    a = {fg = colors.color10, bg = colors.color2, gui = 'bold'},
-    b = {fg = colors.color9, bg = colors.color2}
+    c = { fg = colors.color9, bg = colors.color2 },
+    a = { fg = colors.color10, bg = colors.color2, gui = 'bold' },
+    b = { fg = colors.color9, bg = colors.color2 },
   },
   normal = {
-    c = {fg = colors.color10, bg = colors.color2},
-    a = {fg = colors.color2, bg = colors.color11, gui = 'bold'},
-    b = {fg = colors.color4, bg = colors.color5}
+    c = { fg = colors.color10, bg = colors.color2 },
+    a = { fg = colors.color2, bg = colors.color11, gui = 'bold' },
+    b = { fg = colors.color4, bg = colors.color5 },
   },
   insert = {
-    a = {fg = colors.color2, bg = colors.color14, gui = 'bold'},
-    b = {fg = colors.color4, bg = colors.color5}
-  }
+    a = { fg = colors.color2, bg = colors.color14, gui = 'bold' },
+    b = { fg = colors.color4, bg = colors.color5 },
+  },
 }

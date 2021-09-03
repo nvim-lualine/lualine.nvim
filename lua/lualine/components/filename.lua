@@ -3,7 +3,7 @@
 local FileName = require('lualine.component'):new()
 
 local default_options = {
-  symbols = {modified = '[+]', readonly = '[-]'},
+  symbols = { modified = '[+]', readonly = '[-]' },
   file_status = true,
   path = 0,
   shorting_target = 40,
@@ -15,15 +15,12 @@ end
 
 local function shorten_path(path, sep)
   -- ('([^/])[^/]+%/', '%1/', 1)
-  return path:gsub(
-             string.format('([^%s])[^%s]+%%%s', sep, sep, sep), '%1' .. sep, 1)
+  return path:gsub(string.format('([^%s])[^%s]+%%%s', sep, sep, sep), '%1' .. sep, 1)
 end
 
 FileName.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or FileName)
-  new_instance.options = vim.tbl_deep_extend('keep',
-                                         new_instance.options or {},
-                                         default_options)
+  new_instance.options = vim.tbl_deep_extend('keep', new_instance.options or {}, default_options)
   return new_instance
 end
 
@@ -31,16 +28,18 @@ FileName.update_status = function(self)
   local data
   if self.options.path == 1 then
     -- relative path
-    data = vim.fn.expand('%:~:.')
+    data = vim.fn.expand '%:~:.'
   elseif self.options.path == 2 then
     -- absolute path
-    data = vim.fn.expand('%:p')
+    data = vim.fn.expand '%:p'
   else
     -- just filename
-    data = vim.fn.expand('%:t')
+    data = vim.fn.expand '%:t'
   end
 
-  if data == '' then data = '[No Name]' end
+  if data == '' then
+    data = '[No Name]'
+  end
 
   if self.options.shorting_target ~= 0 then
     local windwidth = vim.fn.winwidth(0)

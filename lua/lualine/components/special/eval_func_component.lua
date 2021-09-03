@@ -5,11 +5,15 @@ EvalFuncComponent.update_status = function(self)
   local ok, status
   if self.options.type == nil then
     ok, status = pcall(EvalFuncComponent.lua_eval, component)
-    if not ok then status = EvalFuncComponent.vim_function(component) end
+    if not ok then
+      status = EvalFuncComponent.vim_function(component)
+    end
   else
     if self.options.type == 'luae' then
       ok, status = pcall(EvalFuncComponent.lua_eval, component)
-      if not ok then status = nil end
+      if not ok then
+        status = nil
+      end
     elseif self.options.type == 'vimf' then
       status = EvalFuncComponent.vim_function(component)
     end
@@ -26,7 +30,9 @@ end
 EvalFuncComponent.vim_function = function(name)
   -- vim function component
   local ok, return_val = pcall(vim.api.nvim_call_function, name, {})
-  if not ok then return '' end -- function call failed
+  if not ok then
+    return ''
+  end -- function call failed
   ok, return_val = pcall(tostring, return_val)
   return ok and return_val or ''
 end

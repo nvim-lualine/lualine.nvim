@@ -291,7 +291,7 @@ function M.rgb2cterm(hex_color)
   local closest_cterm_color = 0
   local min_distance = 10000
   for _, color in ipairs(color_table) do
-    local current_distance = get_color_distance(color[2], {r, g, b})
+    local current_distance = get_color_distance(color[2], { r, g, b })
     if current_distance < min_distance then
       min_distance = current_distance
       closest_cterm_color = color[1]
@@ -303,7 +303,7 @@ end
 function M.color_name2rgb(name)
   local color_val = vim.api.nvim_get_color_by_name(name)
   if color_val == -1 then
-    return '#'..name -- Assuming it's 'rrggbb' without # not rad instead of red
+    return '#' .. name -- Assuming it's 'rrggbb' without # not rad instead of red
   end
   return string.format('#%06x', color_val)
 end
@@ -312,7 +312,7 @@ function M.cterm2rgb(color)
   local color_data = color_table[color + 1]
   if color_data ~= nil then
     color_data = color_data[2]
-    return string.format("#%02x%02x%02x", color_data[1], color_data[2], color_data[3])
+    return string.format('#%02x%02x%02x', color_data[1], color_data[2], color_data[3])
   end
 end
 

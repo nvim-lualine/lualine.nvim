@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local lualine_require = require'lualine_require'
-local modules = lualine_require.lazy_require{
+local lualine_require = require 'lualine_require'
+local modules = lualine_require.lazy_require {
   highlight = 'lualine.highlight',
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
@@ -14,35 +14,35 @@ local default_symbols = {
     error = ' ', -- xf659
     warn = ' ', -- xf529
     info = ' ', -- xf7fc
-    hint = ' ' -- xf838
+    hint = ' ', -- xf838
   },
-  no_icons = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
+  no_icons = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
 }
 
 local default_options = {
   colored = true,
   update_in_insert = false,
   sources = nil,
-  sections = {'error', 'warn', 'info', 'hint'},
+  sections = { 'error', 'warn', 'info', 'hint' },
   color_error = {
     fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg')
-        or modules.utils.extract_highlight_colors('DiffDelete', 'fg')
-        or '#e32636',
+      or modules.utils.extract_highlight_colors('DiffDelete', 'fg')
+      or '#e32636',
   },
   color_warn = {
     fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg')
-         or modules.utils.extract_highlight_colors('DiffText', 'fg')
-         or '#ffdf00',
+      or modules.utils.extract_highlight_colors('DiffText', 'fg')
+      or '#ffdf00',
   },
   color_info = {
     fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg')
-    or modules.utils.extract_highlight_colors('Normal', 'fg')
-    or '#ffffff',
+      or modules.utils.extract_highlight_colors('Normal', 'fg')
+      or '#ffffff',
   },
   color_hint = {
     fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg')
-         or modules.utils.extract_highlight_colors('DiffChange', 'fg')
-         or '#d7afaf',
+      or modules.utils.extract_highlight_colors('DiffChange', 'fg')
+      or '#d7afaf',
   },
 }
 -- Initializer
@@ -50,34 +50,42 @@ Diagnostics.new = function(self, options, child)
   -- Run super()
   local new_diagnostics = self._parent:new(options, child or Diagnostics)
   -- Apply default options
-  new_diagnostics.options =
-      vim.tbl_deep_extend('keep', new_diagnostics.options or {}, default_options)
+  new_diagnostics.options = vim.tbl_deep_extend('keep', new_diagnostics.options or {}, default_options)
   -- Apply default symbols
-  new_diagnostics.symbols =
-      vim.tbl_extend('keep', new_diagnostics.options.symbols or {},
-                      new_diagnostics.options.icons_enabled ~= false
-                        and default_symbols.icons or default_symbols.no_icons)
+  new_diagnostics.symbols = vim.tbl_extend(
+    'keep',
+    new_diagnostics.options.symbols or {},
+    new_diagnostics.options.icons_enabled ~= false and default_symbols.icons or default_symbols.no_icons
+  )
   -- Initialize highlight groups
   if new_diagnostics.options.colored then
     new_diagnostics.highlight_groups = {
       error = modules.highlight.create_component_highlight_group(
-          new_diagnostics.options.color_error, 'diagnostics_error',
-          new_diagnostics.options),
+        new_diagnostics.options.color_error,
+        'diagnostics_error',
+        new_diagnostics.options
+      ),
       warn = modules.highlight.create_component_highlight_group(
-          new_diagnostics.options.color_warn, 'diagnostics_warn',
-          new_diagnostics.options),
+        new_diagnostics.options.color_warn,
+        'diagnostics_warn',
+        new_diagnostics.options
+      ),
       info = modules.highlight.create_component_highlight_group(
-          new_diagnostics.options.color_info, 'diagnostics_info',
-          new_diagnostics.options),
+        new_diagnostics.options.color_info,
+        'diagnostics_info',
+        new_diagnostics.options
+      ),
       hint = modules.highlight.create_component_highlight_group(
-          new_diagnostics.options.color_hint, 'diagnostics_hint',
-          new_diagnostics.options)
+        new_diagnostics.options.color_hint,
+        'diagnostics_hint',
+        new_diagnostics.options
+      ),
     }
   end
 
   -- Error out no source
   if new_diagnostics.options.sources == nil then
-    print('no sources for diagnostics configured')
+    print 'no sources for diagnostics configured'
     return ''
   end
   -- Initialize variable to store last update so we can use it in insert
@@ -87,8 +95,7 @@ Diagnostics.new = function(self, options, child)
 end
 
 Diagnostics.update_status = function(self)
-  if not self.options.update_in_insert
-    and vim.api.nvim_get_mode().mode:sub(1,1) == 'i' then
+  if not self.options.update_in_insert and vim.api.nvim_get_mode().mode:sub(1, 1) == 'i' then
     return self.last_update
   end
   local error_count, warning_count, info_count, hint_count = 0, 0, 0, 0
@@ -104,7 +111,7 @@ Diagnostics.update_status = function(self)
     error = error_count,
     warn = warning_count,
     info = info_count,
-    hint = hint_count
+    hint = hint_count,
   }
   if self.options.colored then
     local colors = {}
@@ -113,8 +120,7 @@ Diagnostics.update_status = function(self)
     end
     for _, section in ipairs(self.options.sections) do
       if data[section] ~= nil and data[section] > 0 then
-        table.insert(result,
-                     colors[section] .. self.symbols[section] .. data[section])
+        table.insert(result, colors[section] .. self.symbols[section] .. data[section])
       end
     end
   else
@@ -154,20 +160,19 @@ Diagnostics.diagnostic_sources = {
     else
       return 0, 0, 0, 0
     end
-  end
+  end,
 }
 
 Diagnostics.get_diagnostics = function(sources)
   local result = {}
   for index, source in ipairs(sources) do
     if type(source) == 'string' then
-      local error_count, warning_count, info_count, hint_count =
-          Diagnostics.diagnostic_sources[source]()
+      local error_count, warning_count, info_count, hint_count = Diagnostics.diagnostic_sources[source]()
       result[index] = {
         error = error_count,
         warn = warning_count,
         info = info_count,
-        hint = hint_count
+        hint = hint_count,
       }
     elseif type(source) == 'function' then
       local source_result = source()
@@ -176,7 +181,7 @@ Diagnostics.get_diagnostics = function(sources)
         error = source_result.error or 0,
         warn = source_result.warning or 0,
         info = source_result.info or 0,
-        hint = source_result.hin or 0
+        hint = source_result.hin or 0,
       }
     end
   end
