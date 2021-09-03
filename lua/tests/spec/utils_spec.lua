@@ -1,37 +1,10 @@
 local helpers = require 'tests.helpers'
 
 local eq = assert.are.same
-local meths = helpers.meths
 local build_component_opts = helpers.build_component_opts
 
 describe('Utils', function()
   local utils = require('lualine.utils.utils')
-
-  it('can save and restore highlights', function()
-    local hl1 = {'hl1', '#122233', '#445566', 'italic', nil, true}
-    utils.save_highlight(hl1[1], hl1)
-    -- highlight loaded in loaded_highlights table
-    eq(utils.loaded_highlights[hl1[1]], hl1)
-    -- highlight exists works properly
-    eq(utils.highlight_exists('hl1'), true)
-    eq(utils.highlight_exists('hl2'), false)
-    -- highlights can be restored
-    -- hl doesn't exist
-    assert.has_error(function() meths.get_hl_by_name('hl1', true) end,
-                     'Invalid highlight name: hl1')
-    utils.reload_highlights()
-    -- Now hl1 is created
-    eq(meths.get_hl_by_name('hl1', true), {
-      foreground = tonumber(hl1[2]:sub(2, #hl1[2]), 16), -- convert rgb -> int
-      background = tonumber(hl1[3]:sub(2, #hl1[3]), 16), -- convert rgb -> int
-      italic = true
-    })
-    -- highlights can be cleared
-    utils.clear_highlights()
-    eq(utils.highlight_exists('hl1'), false)
-    -- highlight group has been cleared
-    eq(meths.get_hl_by_name('hl1', true), {[true] = 6})
-  end)
 
   it('can retrive highlight groups', function()
     local hl2 = {fg = '#aabbcc', bg = '#889977', reverse = true}

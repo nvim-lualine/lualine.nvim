@@ -40,7 +40,7 @@ function FileType:apply_icon()
                                                                .section)
       local icon_highlight = self.options.self.section .. '_' ..
                                  icon_highlight_group
-      if not modules.utils.highlight_exists(icon_highlight .. '_normal') then
+      if not modules.highlight.highlight_exists(icon_highlight .. '_normal') then
         icon_highlight = modules.highlight.create_component_highlight_group(
                              {fg = highlight_color}, icon_highlight_group,
                              self.options)

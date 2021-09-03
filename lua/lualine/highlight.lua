@@ -7,9 +7,26 @@ local modules = lualine_require.lazy_require{
   utils = 'lualine.utils.utils',
   color_utils = 'lualine.utils.color_utils',
 }
+
 local section_highlight_map = {x = 'c', y = 'b', z = 'a'}
 local active_theme = nil
 local create_cterm_colors = false
+
+-- table to store the highlight names created by lualine
+local loaded_highlights = {}
+
+-- determine if an highlight exist and isn't cleared
+function M.highlight_exists(highlight_name)
+  return loaded_highlights[highlight_name] or false
+end
+
+-- clears loaded_highlights table and highlights
+local function clear_highlights()
+  for highlight_name, _ in pairs(loaded_highlights) do
+    vim.cmd('highlight clear ' .. highlight_name)
+    loaded_highlights[highlight_name] = nil
+  end
+end
 
 local function sanitize_color(color)
   if type(color) == 'string' then
@@ -23,7 +40,7 @@ local function sanitize_color(color)
   end
 end
 
-function M.highlight(name, foreground, background, gui, link, reload)
+function M.highlight(name, foreground, background, gui, link)
   local command = {'highlight!'}
   if link and #link > 0 then
     vim.list_extend(command, {'link', name, link})
@@ -51,13 +68,11 @@ function M.highlight(name, foreground, background, gui, link, reload)
     end
   end
   vim.cmd(table.concat(command, ' '))
-  if not reload then
-    modules.utils.save_highlight(name, {name, foreground, background, gui, link, true})
-  end
+  loaded_highlights[name] = true
 end
 
 function M.create_highlight_groups(theme)
-  modules.utils.clear_highlights()
+  clear_highlights()
   active_theme = theme
   create_cterm_colors = not vim.go.termguicolors
   for mode, sections in pairs(theme) do
@@ -131,9 +146,9 @@ end
 --   to retrive highlight group
 function M.create_component_highlight_group(color, highlight_tag, options)
   local tag_id = 0
-  while (modules.utils.highlight_exists(table.concat(
+  while (M.highlight_exists(table.concat(
                              {'lualine', highlight_tag, 'no_mode'}, '_'))
-      or (options.self.section and modules.utils.highlight_exists(table.concat(
+      or (options.self.section and M.highlight_exists(table.concat(
                              {options.self.section, highlight_tag, 'normal'}, '_')))
 ) do
     highlight_tag = highlight_tag .. '_' .. tostring(tag_id)
@@ -199,7 +214,7 @@ function M.component_format_highlight(highlight_name)
   else
     highlight_group = highlight_group .. '_inactive'
   end
-  if modules.utils.highlight_exists(highlight_group) then
+  if M.highlight_exists(highlight_group) then
     return '%#' .. highlight_group .. '#'
   else
     return '%#' .. highlight_name .. '_normal#'
@@ -208,7 +223,7 @@ end
 
 function M.format_highlight(is_focused, highlight_group)
   if highlight_group > 'lualine_c'
-    and not modules.utils.highlight_exists(highlight_group .. '_normal') then
+    and not M.highlight_exists(highlight_group .. '_normal') then
     highlight_group = 'lualine_' ..
                           section_highlight_map[highlight_group:match(
                               'lualine_(.)')]
@@ -219,7 +234,7 @@ function M.format_highlight(is_focused, highlight_group)
   else
     highlight_name = append_mode(highlight_group)
   end
-  if modules.utils.highlight_exists(highlight_name) then
+  if M.highlight_exists(highlight_name) then
     return '%#' .. highlight_name .. '#'
   end
   return '%#' .. highlight_group .. '_normal#'
@@ -237,7 +252,7 @@ function M.get_transitional_highlights(left_hl, right_hl)
 
   -- construct the name of hightlight group
   local highlight_name = table.concat({'lualine_transitional',left_hl,'to',right_hl}, '_')
-  if not modules.utils.highlight_exists(highlight_name) then
+  if not M.highlight_exists(highlight_name) then
     -- Create the highlight_group if needed
     -- Get colors from highlights
     local fg = modules.utils.extract_highlight_colors(left_hl, 'bg')

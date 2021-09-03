@@ -179,7 +179,7 @@ local function setup_theme()
   end
   local theme = get_theme_from_config()
   modules.highlight.create_highlight_groups(theme)
-  vim.cmd [[autocmd lualine ColorScheme * lua require'lualine.utils.utils'.reload_highlights()
+  vim.cmd [[autocmd lualine ColorScheme * lua require'lualine'.setup()
     autocmd lualine OptionSet background lua require'lualine'.setup()]]
 end
 
