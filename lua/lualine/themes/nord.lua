@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   nord1  = '#3B4252',
   nord3  = '#4C566A',
@@ -10,7 +10,7 @@ local colors = {
   nord8  = '#88C0D0',
   nord13 = '#EBCB8B',
 }
--- LuaFormatter on
+
 return {
   normal = {
     a = {fg = colors.nord1, bg = colors.nord8, gui = 'bold'},

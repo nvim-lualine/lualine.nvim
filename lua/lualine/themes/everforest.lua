@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 gnuyent
 -- MIT license, see LICENSE for more details.
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   bg0    = '#323d43',
   bg1    = '#3c474d',
@@ -13,7 +13,7 @@ local colors = {
   red    = '#e68183',
   grey1  = '#868d80',
 }
--- LuaFormatter on
+
 return {
   normal = {
     a = {bg = colors.green, fg = colors.bg0, gui = 'bold'},

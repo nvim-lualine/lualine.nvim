@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 -- Credit itchyny, jackno (lightline)
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   black   = '#000000',
   maroon  = '#800000',
@@ -20,7 +20,7 @@ local colors = {
   aqua    = '#00ffff',
   white   = '#ffffff',
 }
--- LuaFormatter on
+
 return {
   normal = {
     a = {fg = colors.white, bg = colors.blue, gui = 'bold'},

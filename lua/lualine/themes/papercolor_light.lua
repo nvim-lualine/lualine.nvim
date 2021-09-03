@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 -- Credit: TKNGUE(lightline)
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   red                    = '#df0000',
   green                  = '#008700',
@@ -22,7 +22,6 @@ local colors = {
   statusline_inactive_fg =  '#4d4d4c',
   statusline_inactive_bg = '#dadada',
 }
--- LuaFormatter on
 
 return {
   normal = {

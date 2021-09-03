@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 IGI-111
 -- MIT license, see LICENSE for more details.
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   vertsplit      = '#181A1F',
   special_grey   = '#3B4048',
@@ -20,7 +20,7 @@ local colors = {
   comment_grey   = '#697098',
   black          = '#292D3E',
 }
--- LuaFormatter on
+
 return {
   normal = {
     a = {fg = colors.black, bg = colors.purple, gui = 'bold'},

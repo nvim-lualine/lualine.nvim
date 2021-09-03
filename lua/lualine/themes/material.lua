@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 -- Credit: Lokesh Krishna(lightline)
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   fg     = '#eeffff',
   bg     = '#263238',
@@ -15,7 +15,7 @@ local colors = {
   gray2  = '#2E3C43',
   gray3  = '#515559',
 }
--- LuaFormatter on
+
 return {
   normal = {
     a = {fg = colors.bg, bg = colors.blue, gui = 'bold'},

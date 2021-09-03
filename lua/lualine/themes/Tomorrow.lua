@@ -2,7 +2,7 @@
 -- MIT license, see LICENSE for more details.
 -- Genarated by lightline to lualine theme converter
 -- https://gist.github.com/shadmansaleh/000871c9a608a012721c6acc6d7a19b9
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   color14  = '#718c00',
   color0   = '#666666',
@@ -16,7 +16,7 @@ local colors = {
   color8   = '#8959a8',
   color11  = '#f5871f',
 }
--- LuaFormatter on
+
 return {
   inactive = {
     a = {fg = colors.color0, bg = colors.color1, gui = 'bold'},

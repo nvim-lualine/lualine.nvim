@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   color3   = '#2c3043',
   color6   = '#a1aab8',
@@ -10,7 +10,7 @@ local colors = {
   color1   = '#ff5874',
   color2   = '#c3ccdc',
 }
--- LuaFormatter on
+
 return {
   replace = {
     a = {fg = colors.color0, bg = colors.color1, gui = 'bold'},

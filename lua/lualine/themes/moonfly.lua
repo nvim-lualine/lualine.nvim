@@ -3,7 +3,7 @@
 -- URL:     github.com/bluz71/vim-moonfly-colors
 -- License: MIT (https://opensource.org/licenses/MIT)
 
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   color3   = '#303030',
   color6   = '#9e9e9e',
@@ -14,7 +14,6 @@ local colors = {
   color2   = '#c6c6c6',
 }
 
--- LuaFormatter on
 return {
   replace = {
     a = {fg = colors.color0, bg = colors.color1, gui = 'bold'},

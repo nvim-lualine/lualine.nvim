@@ -2,7 +2,7 @@
 -- Author: lokesh-krishna
 -- MIT license, see LICENSE for more details.
 
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   blue   = '#80a0ff',
   cyan   = '#79dac8',
@@ -12,7 +12,6 @@ local colors = {
   violet = '#d183e8',
   grey   = '#303030',
 }
--- LuaFormatter on
 
 local bubbles_theme = {
   normal = {

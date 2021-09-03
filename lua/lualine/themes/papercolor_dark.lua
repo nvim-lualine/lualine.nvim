@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 -- Credit: TKNGUE(lightline)
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   red                    = '#df0000',
   green                  = '#008700',
@@ -24,7 +24,7 @@ local colors = {
   visual_fg              = '#000000',
   visual_bg              = '#8787af',
 }
--- LuaFormatter on
+
 return {
   normal = {
     a = {fg = colors.foreground, bg = colors.background, gui = 'bold'},

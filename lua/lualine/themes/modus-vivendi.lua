@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 ronniedroid
 -- MIT license, see LICENSE for more details.
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
     black = '#000000',
     white = '#eeeeee',
@@ -13,7 +13,7 @@ local colors = {
     darkgray = '#202020',
     lightgray = '#434343'
 }
--- LuaFormatter on
+
 return {
   normal = {
     a = {bg = colors.blue, fg = colors.lightgray, gui = 'bold'},

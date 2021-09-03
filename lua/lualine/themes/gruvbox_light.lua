@@ -1,3 +1,4 @@
+-- stylua: ignore
 local colors = {
   black        = '#3c3836',
   white        = '#f9f5d7',
@@ -9,6 +10,7 @@ local colors = {
   lightgray    = '#ebdbb2',
   inactivegray = '#a89984'
 }
+
 return {
   normal = {
     a = {bg = colors.darkgray, fg = colors.white, gui = 'bold'},

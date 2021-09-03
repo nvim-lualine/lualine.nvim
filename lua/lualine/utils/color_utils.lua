@@ -2,7 +2,7 @@
 -- MIT license, see LICENSE for more details.
 local M = {}
 
--- LuaFormatter off
+-- stylua: ignore start
 -- color conversion
 local color_table = {
   -- lookup table for cterm colors
@@ -272,7 +272,7 @@ local color_table = {
   {'254', { 228, 228, 228 }},
   {'255', { 238, 238, 238 }},
 }
--- LuaFormatter on
+-- stylua: ignore end
 
 function M.rgb2cterm(hex_color)
   local function get_color_distance(color1, color2)

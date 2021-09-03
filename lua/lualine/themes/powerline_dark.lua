@@ -1,6 +1,6 @@
 -- Copyright (c) 2021 Ashish Panigrahi
 -- MIT license, see LICENSE for more details.
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   black        = '#202020',
   neon         = '#DFFF00',
@@ -21,7 +21,7 @@ local colors = {
   brightred    = '#AF0000',
   cyan         = '#00DFFF',
 }
--- LuaFormatter on
+
 return {
   normal = {
     a = {bg = colors.neon, fg = colors.black, gui = 'bold'},

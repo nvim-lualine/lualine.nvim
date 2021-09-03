@@ -6,7 +6,7 @@ lint:
 	@luacheck examples/
 
 format:
-	@for file in `find . -name '*.lua'`;do lua-format $$file -i; done;
+	@stylua --config-path=.stylua.toml lua/ examples/
 
 test:
 	@nvim --headless -u lua/tests/minimal_init.lua -c "PlenaryBustedDirectory lua/tests/ { minimal_init = './lua/tests/minimal_init.lua' }"

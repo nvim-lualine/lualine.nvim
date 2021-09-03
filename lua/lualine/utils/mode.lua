@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local Mode = {}
--- LuaFormatter off
+-- stylua: ignore
 Mode.map = {
   ['n']    = 'NORMAL',
   ['no']   = 'O-PENDING',
@@ -33,7 +33,7 @@ Mode.map = {
   ['!']    = 'SHELL',
   ['t']    = 'TERMINAL',
 }
--- LuaFormatter on
+
 function Mode.get_mode()
   local mode_code = vim.api.nvim_get_mode().mode
   if Mode.map[mode_code] == nil then return mode_code end

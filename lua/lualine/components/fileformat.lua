@@ -2,10 +2,11 @@
 -- MIT license, see LICENSE for more details.
 local FileFormat = require('lualine.component'):new()
 
+-- stylua: ignore
 FileFormat.icon = {
   unix = '', -- e712
-  dos = '', -- e70f
-  mac = '' -- e711
+  dos  = '', -- e70f
+  mac  = ''  -- e711
 }
 
 FileFormat.update_status = function(self)
