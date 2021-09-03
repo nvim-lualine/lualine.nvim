@@ -297,6 +297,8 @@ describe('Filetype component', function()
     local opts = build_component_opts({
       component_separators = {'', ''},
       padding = 0,
+      colored=true,
+      disable_text = false,
     })
     assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# lua')
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')

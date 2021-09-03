@@ -17,42 +17,32 @@ Diff.diff_output_cache = {}
 -- variable to store git_diff job
 Diff.diff_job = nil
 Diff.active_bufnr = '0'
--- default colors
-Diff.default_colors = {
-  added = '#f0e130',
-  removed = '#90ee90',
-  modified = '#ff0038'
-}
 
 local diff_cache = {} -- Stores last known value of diff of a buffer
+
+local default_options = {
+  colored = true,
+  symbols = {added = '+', modified = '~', removed = '-'},
+  color_added = {
+    fg = modules.utils.extract_highlight_colors('DiffAdd', 'fg')
+         or '#f0e130',
+  },
+  color_modified = {
+    fg = modules.utils.extract_highlight_colors('DiffChange', 'fg')
+         or '#ff0038',
+  },
+  color_removed = {
+    fg = modules.utils.extract_highlight_colors('DiffDelete', 'fg')
+         or '#ff0038',
+  },
+}
 
 -- Initializer
 Diff.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or Diff)
-  local default_symbols = {added = '+', modified = '~', removed = '-'}
-  new_instance.options.symbols = vim.tbl_extend('force', default_symbols,
-                                                new_instance.options.symbols or
-                                                    {})
-  if new_instance.options.colored == nil then
-    new_instance.options.colored = true
-  end
-  -- apply colors
-  if not new_instance.options.color_added then
-    new_instance.options.color_added = {fg =
-      modules.utils.extract_highlight_colors('DiffAdd', 'fg') or
-          Diff.default_colors.added}
-  end
-  if not new_instance.options.color_modified then
-    new_instance.options.color_modified = {fg =
-        modules.utils.extract_highlight_colors('DiffChange', 'fg') or
-            Diff.default_colors.modified}
-  end
-  if not new_instance.options.color_removed then
-    new_instance.options.color_removed = {fg =
-        modules.utils.extract_highlight_colors('DiffDelete', 'fg') or
-            Diff.default_colors.removed}
-  end
-
+  new_instance.options = vim.tbl_deep_extend('keep',
+                                         new_instance.options or {},
+                                         default_options)
   -- create highlights and save highlight_name in highlights table
   if new_instance.options.colored then
     new_instance.highlights = {

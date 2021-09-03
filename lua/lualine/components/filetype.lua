@@ -7,14 +7,16 @@ local modules = lualine_require.lazy_require{
 }
 local FileType = lualine_require.require('lualine.component'):new()
 
+local default_options = {
+  colored = true,
+  disable_text = false,
+}
+
 function FileType:new(options, child)
   local new_instance = self._parent:new(options, child or FileType)
-  if new_instance.options.colored == nil then
-    new_instance.options.colored = true
-  end
-  if new_instance.options.disable_text == nil then
-    new_instance.options.disable_text = false
-  end
+  new_instance.options = vim.tbl_deep_extend('keep',
+                                         new_instance.options or {},
+                                         default_options)
   return new_instance
 end
 

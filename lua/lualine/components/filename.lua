@@ -2,6 +2,13 @@
 -- MIT license, see LICENSE for more details.
 local FileName = require('lualine.component'):new()
 
+local default_options = {
+  symbols = {modified = '[+]', readonly = '[-]'},
+  file_status = true,
+  path = 0,
+  shorting_target = 40,
+}
+
 local function count(base, pattern)
   return select(2, string.gsub(base, pattern, ''))
 end
@@ -14,20 +21,9 @@ end
 
 FileName.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or FileName)
-  local default_symbols = {modified = '[+]', readonly = '[-]'}
-  new_instance.options.symbols = vim.tbl_extend('force', default_symbols,
-                                                new_instance.options.symbols or
-                                                    {})
-
-  -- setting defaults
-  if new_instance.options.file_status == nil then
-    new_instance.options.file_status = true
-  end
-  if new_instance.options.path == nil then new_instance.options.path = 0 end
-  if new_instance.options.shorting_target == nil then
-    new_instance.options.shorting_target = 40
-  end
-
+  new_instance.options = vim.tbl_deep_extend('keep',
+                                         new_instance.options or {},
+                                         default_options)
   return new_instance
 end
 

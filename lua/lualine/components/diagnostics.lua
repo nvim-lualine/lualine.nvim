@@ -9,66 +9,55 @@ local modules = lualine_require.lazy_require{
 
 local Diagnostics = lualine_require.require('lualine.component'):new()
 
--- LuaFormatter off
-Diagnostics.default_colors = {
-  error = '#e32636',
-  warn  = '#ffdf00',
-  info  = '#ffffff',
-  hint  = '#d7afaf',
-}
--- LuaFormatter on
-
--- Initializer
-Diagnostics.new = function(self, options, child)
-  local new_diagnostics = self._parent:new(options, child or Diagnostics)
-  local default_symbols = new_diagnostics.options.icons_enabled and {
+local default_symbols = {
+  icons = {
     error = ' ', -- xf659
     warn = ' ', -- xf529
     info = ' ', -- xf7fc
     hint = ' ' -- xf838
-  } or {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'}
-  new_diagnostics.symbols = vim.tbl_extend('force', default_symbols,
-                                           new_diagnostics.options.symbols or {})
-  if new_diagnostics.options.sources == nil then
-    print('no sources for diagnostics configured')
-    return ''
-  end
-  if new_diagnostics.options.sections == nil then
-    new_diagnostics.options.sections = {'error', 'warn', 'info', 'hint'}
-  end
-  if new_diagnostics.options.colored == nil then
-    new_diagnostics.options.colored = true
-  end
-  if new_diagnostics.options.update_in_insert == nil then
-    new_diagnostics.options.update_in_insert = false
-  end
-  new_diagnostics.last_update = ''
-  -- apply colors
-  if not new_diagnostics.options.color_error then
-    new_diagnostics.options.color_error = {fg =
-        modules.utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg') or
-            modules.utils.extract_highlight_colors('DiffDelete', 'fg') or
-            Diagnostics.default_colors.error }
-  end
-  if not new_diagnostics.options.color_warn then
-    new_diagnostics.options.color_warn = {fg =
-        modules.utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg') or
-            modules.utils.extract_highlight_colors('DiffText', 'fg') or
-            Diagnostics.default_colors.warn }
-  end
-  if not new_diagnostics.options.color_info then
-    new_diagnostics.options.color_info = {fg =
-        modules.utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg') or
-            modules.utils.extract_highlight_colors('Normal', 'fg') or
-            Diagnostics.default_colors.info}
-  end
-  if not new_diagnostics.options.color_hint then
-    new_diagnostics.options.color_hint = {fg =
-        modules.utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg') or
-            modules.utils.extract_highlight_colors('DiffChange', 'fg') or
-            Diagnostics.default_colors.hint}
-  end
+  },
+  no_icons = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'},
+}
 
+local default_options = {
+  colored = true,
+  update_in_insert = false,
+  sources = nil,
+  sections = {'error', 'warn', 'info', 'hint'},
+  color_error = {
+    fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg')
+        or modules.utils.extract_highlight_colors('DiffDelete', 'fg')
+        or '#e32636',
+  },
+  color_warn = {
+    fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg')
+         or modules.utils.extract_highlight_colors('DiffText', 'fg')
+         or '#ffdf00',
+  },
+  color_info = {
+    fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg')
+    or modules.utils.extract_highlight_colors('Normal', 'fg')
+    or '#ffffff',
+  },
+  color_hint = {
+    fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg')
+         or modules.utils.extract_highlight_colors('DiffChange', 'fg')
+         or '#d7afaf',
+  },
+}
+-- Initializer
+Diagnostics.new = function(self, options, child)
+  -- Run super()
+  local new_diagnostics = self._parent:new(options, child or Diagnostics)
+  -- Apply default options
+  new_diagnostics.options =
+      vim.tbl_deep_extend('keep', new_diagnostics.options or {}, default_options)
+  -- Apply default symbols
+  new_diagnostics.symbols =
+      vim.tbl_extend('keep', new_diagnostics.options.symbols or {},
+                      new_diagnostics.options.icons_enabled ~= false
+                        and default_symbols.icons or default_symbols.no_icons)
+  -- Initialize highlight groups
   if new_diagnostics.options.colored then
     new_diagnostics.highlight_groups = {
       error = modules.highlight.create_component_highlight_group(
@@ -86,6 +75,14 @@ Diagnostics.new = function(self, options, child)
     }
   end
 
+  -- Error out no source
+  if new_diagnostics.options.sources == nil then
+    print('no sources for diagnostics configured')
+    return ''
+  end
+  -- Initialize variable to store last update so we can use it in insert
+  -- mode for no update_in_insert
+  new_diagnostics.last_update = ''
   return new_diagnostics
 end
 
