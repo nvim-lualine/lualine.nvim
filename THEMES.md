@@ -3,7 +3,7 @@
 All available themes are only best effort ports by myself/ other users. If you find a theme to be weird/ wrong please open an issue/ pr.
 
 ### auto
-auto is a special theme. It will automaticaly load theme for your colorscheme.
+auto is a special theme. It will automatically load theme for your colorscheme.
 If there's no theme available for your colorscheme then
 it'll try it's best to generate one.
 
@@ -120,7 +120,7 @@ them based you your `background` option.
 </p>
 
 ### iceberg
-It's a combination of icrberg_light and icrberg_dark. It loads either of
+It's a combination of iceberg_light and iceberg_dark. It loads either of
 them based you your `background` option.
 
 ### jellybeans
@@ -247,6 +247,25 @@ them based you your `background` option.
 <img width='700' src='https://user-images.githubusercontent.com/59497618/131224421-3b175d7a-fb14-424c-ad53-03d2c3b2ab71.png'/>
 </p>
 
+### pywal
+pywal is another special theme. It will load the colors from your current [pywal](https://github.com/dylanaraps/pywal) cache, specifically `~/.cache/wal/colors.sh` and generate a theme.
+
+#### `wal --theme ashes`
+
+<img width='700' src='https://user-images.githubusercontent.com/36740602/132101614-8aa90169-a1ed-4911-b09f-31b5bae56cbf.png'/>
+
+#### `wal --theme -l github`
+
+<img width='700' src='https://user-images.githubusercontent.com/36740602/132101617-f3ff65eb-8051-4294-9a55-e6caa9605006.png'/>
+
+#### `wal --theme vscode`
+
+<img width='700' src='https://user-images.githubusercontent.com/36740602/132101619-7d04d748-d478-45a2-983a-f2a93f3c5714.png'/>
+
+#### `wal --theme zenburn`
+
+<img width='700' src='https://user-images.githubusercontent.com/36740602/132101621-505e5bb6-d18a-434c-a0f8-a3904a5c71f2.png'/>
+
 ### seoul256
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649194-2c8cd480-74bd-11eb-8fbc-935d7e0fe921.png'/>
@@ -285,4 +304,4 @@ them based you your `background` option.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649411-8db4a800-74bd-11eb-962a-8b73f9fb7124.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649349-6cec5280-74bd-11eb-9ada-8f1cb8b48ec1.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649358-6fe74300-74bd-11eb-9fe2-a955f964e3ce.png'/>
-</p
+</p>
