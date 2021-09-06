@@ -1,6 +1,9 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local Branch = require('lualine.component'):new()
+local modules = require('lualine_require').lazy_require {
+  utils = 'lualine.utils.utils',
+}
 -- vars
 Branch.git_branch = ''
 Branch.git_dir = ''
@@ -20,12 +23,16 @@ Branch.new = function(self, options, child)
   end
   -- run watch head on load so branch is present when component is loaded
   Branch.find_git_dir()
+  -- update branch state of BufEnter as different Buffer may be on different repos
+  modules.utils.define_autocmd('BufEnter', "lua require'lualine.components.branch'.find_git_dir()")
   return new_branch
 end
 
 Branch.update_status = function(_, is_focused)
   if Branch.active_bufnr ~= vim.g.actual_curbuf then
-    -- Sync buffer
+    -- Workaround for https://github.com/hoob3rt/lualine.nvim/issues/286
+    -- See upstream issue https://github.com/neovim/neovim/issues/15300
+    -- Diff is out of sync re sync it.
     Branch.find_git_dir()
   end
   if not is_focused then
