@@ -32,20 +32,20 @@ jobs:
             chmod +x build/neovim/v0.5.0/nvim
           }
           build/neovim/v0.5.0/nvim --headless -u lua/tests/minimal_init.lua -c "PlenaryBustedDirectory lua/tests/ { minimal_init = './lua/tests/minimal_init.lua' }"
-      - name: Get neovim nightly
-        uses: actions/cache@v2
-        with:
-          path: |
-            build/neovim/nightly
-          key: ${{ runner.os }}-appimage-${{ hashFiles('todays-date') }}
-      - name: Run Test on neovim nightly
-        run: |
-          test -d build/neovim/nightly || {
-            mkdir -p build/neovim/nightly
-            curl -Lo build/neovim/nightly/nvim https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
-            chmod +x build/neovim/nightly/nvim
-          }
-          build/neovim/nightly/nvim --headless -u lua/tests/minimal_init.lua -c "PlenaryBustedDirectory lua/tests/ { minimal_init = './lua/tests/minimal_init.lua' }"
+      # - name: Get neovim nightly
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #       build/neovim/nightly
+      #     key: ${{ runner.os }}-appimage-${{ hashFiles('todays-date') }}
+      # - name: Run Test on neovim nightly
+      #   run: |
+      #     test -d build/neovim/nightly || {
+      #       mkdir -p build/neovim/nightly
+      #       curl -Lo build/neovim/nightly/nvim https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
+      #       chmod +x build/neovim/nightly/nvim
+      #     }
+      #     build/neovim/nightly/nvim --headless -u lua/tests/minimal_init.lua -c "PlenaryBustedDirectory lua/tests/ { minimal_init = './lua/tests/minimal_init.lua' }"
       - name: Lint
         run: |
           sudo apt-get update
