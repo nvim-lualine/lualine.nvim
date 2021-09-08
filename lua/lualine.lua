@@ -55,6 +55,8 @@ end
 local function apply_transitional_separators(status)
   local status_applied = {} -- Collects all the pieces for concatation
   local last_hl -- Stores lash highligjt group that we found
+  local last_hl_reseted = false -- Whether last_hl is nil because we reseted
+  -- it after %=
   local copied_pos = 1 -- Tracks how much we've copied over to status_applied
   local str_checked = 1 -- Tracks where the searcher head is at
 
@@ -77,9 +79,14 @@ local function apply_transitional_separators(status)
       -- %s{sep} is marker for left separator and
       local sep = status:match('^%%s{(.-)}', str_checked)
       str_checked = str_checked + #sep + 4 -- 4 = len(%{})
-      local trans_sep = fill_section_separator(status, str_checked, last_hl, sep, false)
-      if trans_sep then
-        table.insert(status_applied, trans_sep)
+      if not (last_hl == nil and last_hl_reseted) then
+        local trans_sep = fill_section_separator(status, str_checked, last_hl, sep, false)
+        if trans_sep then
+          table.insert(status_applied, trans_sep)
+        end
+      end
+      if last_hl_reseted then
+        last_hl_reseted = false
       end
       copied_pos = str_checked
     elseif next_char == 'S' then
@@ -105,6 +112,7 @@ local function apply_transitional_separators(status)
       -- we have another visual bug that occurs less frequently.
       -- Annoying Edge Cases............................................
       last_hl = nil
+      last_hl_reseted = true
       str_checked = str_checked + 1 -- Skip the following % too
     else
       str_checked = str_checked + 1 -- Push it forward to avoid inf loop
