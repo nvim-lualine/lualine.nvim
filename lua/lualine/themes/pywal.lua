@@ -22,7 +22,7 @@ end
 local colors = {}
 
 for line in vim.gsplit(wal_colors_text, '\n') do
-  if line:match "^[a-z0-9]+='#[a-f0-9]+'" ~= nil then
+  if line:match "^[a-z0-9]+='#[a-fA-F0-9]+'$" ~= nil then
     local i = line:find '='
     local key = line:sub(0, i - 1)
     local value = line:sub(i + 2, #line - 1)
