@@ -1,19 +1,28 @@
 # lualine.nvim
+
+<!-- panvimdoc-ignore-start -->
+
 ![code size](https://img.shields.io/github/languages/code-size/hoob3rt/lualine.nvim?style=flat-square)
 ![license](https://img.shields.io/github/license/hoob3rt/lualine.nvim?style=flat-square)
+
+<!-- panvimdoc-ignore-end -->
 
 A fast and easy to configure statusline plugin for neovim
 
 `lualine.nvim` requires neovim 0.5
 
 ## Contributing
+
 Feel free to create an issue/pr if you want to see anything else implemented.
 If you have some question or need help with configuration start a [discussion](https://github.com/shadmansaleh/lualine.nvim/discussions).
 
 Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pr.
 You can also help with documentation in [wiki](https://github.com/shadmansaleh/lualine.nvim/wiki)
 
+<!-- panvimdoc-ignore-start -->
+
 ## Screenshots
+
 Here is a preview of how lualine can look like.
 
 <p>
@@ -36,7 +45,10 @@ For those who want to break the norms. You can create custom looks in lualine.
 - [bubbles](examples/bubbles.lua)
 <img width='700' src='https://user-images.githubusercontent.com/20235646/131350468-fc556196-5f46-4bfe-a72e-960f6a58db2c.png'/>
 
+<!-- panvimdoc-ignore-end -->
+
 ## Performance compared to other plugins
+
 Unlike other statusline plugins lualine loads only defined components, nothing else.
 
 Startup time performance measured with an amazing plugin [tweekmonster/startuptime.vim](https://github.com/tweekmonster/startuptime.vim)
@@ -49,14 +61,18 @@ All times are measured with only `startuptime.vim` and given statusline plugin i
 
 
 ## Installation
+
 ### [vim-plug](https://github.com/junegunn/vim-plug)
+
 ```vim
 Plug 'hoob3rt/lualine.nvim'
 " If you want to have icons in your statusline choose one of these
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 ```
+
 ### [packer.nvim](https://github.com/wbthomason/packer.nvim)
+
 ```lua
 use {
   'hoob3rt/lualine.nvim',
@@ -119,13 +135,17 @@ require'lualine'.get_config()
 ```
 
 ---
+
 ### Starting lualine
+
 ```lua
 require('lualine').setup()
 ```
 
 ---
+
 ### Setting a theme
+
 ```lua
 options = {theme = 'gruvbox'}
 ```
@@ -151,7 +171,9 @@ Theme structure is available [here](https://github.com/hoob3rt/lualine.nvim/blob
 </details>
 
 ---
+
 ### Separators
+
 Lualine defines two kinds of seperators:
   * `section_separators` - separators between sections
   * `components_separators` - separators between components in sections
@@ -172,6 +194,7 @@ options = {section_separators = '', component_separators = ''}
 </details>
 
 ---
+
 ### Changing components in lualine sections
 
 ```lua
@@ -220,6 +243,7 @@ sections = {lualine_c = {'%=', '%t%m', '%3p'}}
 ```
 
 ##### Vim variables as lualine component
+
 Variables from `g:`, `v:`, `t:`, `w:`, `b:`, `o`, `go:`, `vo:`, `to:`, `wo:`, `bo:` scopes can be used.
 
 See `:h lua-vim-variables` and `:h lua-vim-options` if you are not sure what to use.
@@ -229,6 +253,7 @@ sections = {lualine_a = {'g:coc_status', 'bo:filetype'}}
 ```
 
 ##### Lua expressions as lualine component
+
 You can use any valid lua expression as a component including
   * oneliners
   * global variables
@@ -239,7 +264,9 @@ sections = {lualine_c = {"os.date('%a')", 'data', "require'lsp-status'.status()"
 `data` is a global variable in this example.
 
 ---
+
 ### Component options
+
 Component options can change the way a component behave.
 There are two kinds of options:
   * global options affecting all components
@@ -258,6 +285,7 @@ Global option used locally overwrites the global, for example:
 `mode` will be displayed with `lower = false` and `branch` will be displayed with `lower = true`
 
 #### Available options
+
 <details>
 <summary><b>Global options</b></summary>
 
@@ -314,7 +342,7 @@ sections = {
 <details>
 <summary><b>Component specific local options</b></summary>
 
-#### `diagnostics` component options
+#### diagnostics component options
 
 ```lua
 sections = {
@@ -340,7 +368,7 @@ sections = {
 }
 ```
 
-#### `filename` component options
+#### filename component options
 
 ```lua
 sections = {
@@ -356,7 +384,7 @@ sections = {
 }
 ```
 
-#### `filetype` component options
+#### filetype component options
 
 ```lua
 sections = {
@@ -370,7 +398,7 @@ sections = {
 }
 ```
 
-#### `diff` component options
+#### diff component options
 
 ```lua
 sections = {
@@ -395,7 +423,9 @@ sections = {
 </details>
 
 ---
+
 ### Tabline
+
 You can use lualine to display components in tabline.
 The configuration for tabline sections is exactly the same as for statusline.
 ```lua
@@ -431,7 +461,9 @@ tabline.nvim even uses lualines theme by default 🙌
 You can find a bigger list [here](https://github.com/rockerBOO/awesome-neovim#tabline)
 
 ---
+
 ### Extensions
+
 Lualine extensions change statusline appearance for a window/buffer with
 specified filetypes.
 
@@ -465,8 +497,11 @@ require'lualine'.setup {extensions = {my_extension}}
 </details>
 
 ---
+
 ### Disabling lualine
+
 You can disable lualine for specific filetypes
+
 ```lua
 options = {disabled_filetypes = {'lua'}}
 ```

@@ -1,0 +1,40 @@
+name: panvimdoc
+
+on:
+  push:
+    paths:
+      - README.md
+    branches:
+      - master
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    name: markdown to vimdoc
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup git
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          printf 'VIMDOC_BRANCH=bot/vimdoc/%s\n' ${GITHUB_REF#refs/heads/} >> $GITHUB_ENV
+      - name: Checkout to vimdoc branch
+        run: git checkout -b ${VIMDOC_BRANCH}
+      - name: panvimdoc
+        uses: kdheepak/panvimdoc@main
+        with:
+          vimdoc: lualine
+          description: fast and easy to configure statusline plugin for neovim
+      - name: Create PR
+        run: |
+          if ! [[ -z $(git status -s) ]]; then
+            git add doc/lualine.txt
+            git commit -m "chore: generated vimdoc"
+            git push --force https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY} ${VIMDOC_BRANCH}
+            gh pr create --fill --base ${GITHUB_REF#refs/heads/} --head ${VIMDOC_BRANCH} || true
+          fi
