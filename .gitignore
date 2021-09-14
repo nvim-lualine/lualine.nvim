@@ -44,3 +44,6 @@ tags
 
 # helptags
 doc/tags
+
+# panvimdoc
+/panvimdoc/

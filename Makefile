@@ -11,4 +11,7 @@ format:
 test:
 	@nvim --headless -u lua/tests/minimal_init.lua -c "PlenaryBustedDirectory lua/tests/ { minimal_init = './lua/tests/minimal_init.lua' }"
 
+docgen:
+	@bash ./scripts/docgen.sh
+
 check: lint test

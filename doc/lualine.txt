@@ -43,7 +43,7 @@ installed
 
 INSTALLATION                                            *lualine-installation*
 
-VIM-PLUG <HTTPS://GITHUB.COM/JUNEGUNN/VIM-PLUG>
+VIM-PLUG <HTTPS://GITHUB.COM/JUNEGUNN/VIM-PLUG> ~
 
 >
     Plug 'hoob3rt/lualine.nvim'
@@ -53,7 +53,7 @@ VIM-PLUG <HTTPS://GITHUB.COM/JUNEGUNN/VIM-PLUG>
 <
 
 
-PACKER.NVIM <HTTPS://GITHUB.COM/WBTHOMASON/PACKER.NVIM>
+PACKER.NVIM <HTTPS://GITHUB.COM/WBTHOMASON/PACKER.NVIM> ~
 
 >
     use {
@@ -119,7 +119,7 @@ If you want to get your current lualine config. you can do so with
 
 ------------------------------------------------------------------------------
 
-STARTING LUALINE
+STARTING LUALINE ~
 
 >
     require('lualine').setup()
@@ -128,7 +128,7 @@ STARTING LUALINE
 
 ------------------------------------------------------------------------------
 
-SETTING A THEME
+SETTING A THEME ~
 
 >
     options = {theme = 'gruvbox'}
@@ -158,7 +158,7 @@ Theme structure is available here
 
 ------------------------------------------------------------------------------
 
-SEPARATORS
+SEPARATORS ~
 
 Lualine defines two kinds of separators:
 
@@ -184,14 +184,14 @@ Disabling separators
 
 ------------------------------------------------------------------------------
 
-CHANGING COMPONENTS IN LUALINE SECTIONS
+CHANGING COMPONENTS IN LUALINE SECTIONS ~
 
 >
     sections = {lualine_a = {'mode'}}
 <
 
 
-**Available components**
+Available components ~
 
 
 - `branch` (git branch)
@@ -261,7 +261,7 @@ global variables * require statements
 
 ------------------------------------------------------------------------------
 
-COMPONENT OPTIONS
+COMPONENT OPTIONS ~
 
 Component options can change the way a component behave. There are two kinds of
 options: * global options affecting all components * local options affecting
@@ -284,7 +284,7 @@ with `lower = true`
 
                                                    *lualine-Available-options*
 
-**Global options**
+Global options ~
 
 >
     options = {
@@ -299,7 +299,7 @@ with `lower = true`
 <
 
 
-**Local options**
+Local options ~
 
 >
     sections = {
@@ -333,7 +333,7 @@ with `lower = true`
 <
 
 
-**Component specific local options**
+Component specific local options ~
 
                                        *lualine-diagnostics-component-options*
 
@@ -419,7 +419,7 @@ with `lower = true`
 
 ------------------------------------------------------------------------------
 
-TABLINE
+TABLINE ~
 
 You can use lualine to display components in tabline. The configuration for
 tabline sections is exactly the same as for statusline.
@@ -464,7 +464,7 @@ list here <https://github.com/rockerBOO/awesome-neovim#tabline>
 
 ------------------------------------------------------------------------------
 
-EXTENSIONS
+EXTENSIONS ~
 
 Lualine extensions change statusline appearance for a window/buffer with
 specified filetypes.
@@ -477,7 +477,7 @@ extensions with:
 <
 
 
-**Available extensions**
+Available extensions ~
 
 
 - chadtree
@@ -488,7 +488,7 @@ extensions with:
 - quickfix
 
 
-**Custom extensions**
+Custom extensions ~
 
 You can define your own extensions. If you think an extension might be useful
 for others then please submit a pr.
@@ -501,7 +501,7 @@ for others then please submit a pr.
 
 ------------------------------------------------------------------------------
 
-DISABLING LUALINE
+DISABLING LUALINE ~
 
 You can disable lualine for specific filetypes
 
