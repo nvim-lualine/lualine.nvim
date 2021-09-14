@@ -9,6 +9,30 @@ local modules = lualine_require.lazy_require {
 }
 local Diff = lualine_require.require('lualine.component'):new()
 
+local function check_deprecated_options(options)
+  if options.color_added or options.color_modified or options.color_removed then
+    options.diagnostics_color = options.diagnostics_color or {}
+    require('lualine.utils.notices').add_notice(string.format [[
+### diff.options.colors
+Previously colors in diff section was set with color_added, color_modified..
+separate options . They've been unified under diff_color option.
+Now it should be something like:
+```lua
+{ 'diff',
+  diff_color = {
+    added = color_added,
+    modified = color_modified,
+    removed = color_removed,
+  }
+}
+```
+]])
+    options.diff_color.added = options.color_added
+    options.diff_color.modified = options.color_modified
+    options.diff_color.removed = options.color_removed
+  end
+end
+
 -- Vars
 -- variable to store git diff stats
 Diff.git_diff = nil
@@ -23,14 +47,16 @@ local diff_cache = {} -- Stores last known value of diff of a buffer
 local default_options = {
   colored = true,
   symbols = { added = '+', modified = '~', removed = '-' },
-  color_added = {
-    fg = modules.utils.extract_highlight_colors('DiffAdd', 'fg') or '#f0e130',
-  },
-  color_modified = {
-    fg = modules.utils.extract_highlight_colors('DiffChange', 'fg') or '#ff0038',
-  },
-  color_removed = {
-    fg = modules.utils.extract_highlight_colors('DiffDelete', 'fg') or '#ff0038',
+  diff_color = {
+    added = {
+      fg = modules.utils.extract_highlight_colors('DiffAdd', 'fg') or '#f0e130',
+    },
+    modified = {
+      fg = modules.utils.extract_highlight_colors('DiffChange', 'fg') or '#ff0038',
+    },
+    removed = {
+      fg = modules.utils.extract_highlight_colors('DiffDelete', 'fg') or '#ff0038',
+    },
   },
 }
 
@@ -38,21 +64,22 @@ local default_options = {
 Diff.new = function(self, options, child)
   local new_instance = self._parent:new(options, child or Diff)
   new_instance.options = vim.tbl_deep_extend('keep', new_instance.options or {}, default_options)
+  check_deprecated_options(new_instance.options)
   -- create highlights and save highlight_name in highlights table
   if new_instance.options.colored then
     new_instance.highlights = {
       added = modules.highlight.create_component_highlight_group(
-        new_instance.options.color_added,
+        new_instance.options.diff_color.added,
         'diff_added',
         new_instance.options
       ),
       modified = modules.highlight.create_component_highlight_group(
-        new_instance.options.color_modified,
+        new_instance.options.diff_color.modified,
         'diff_modified',
         new_instance.options
       ),
       removed = modules.highlight.create_component_highlight_group(
-        new_instance.options.color_removed,
+        new_instance.options.diff_color.removed,
         'diff_removed',
         new_instance.options
       ),

@@ -41,10 +41,10 @@ M.build_component_opts = function(opts)
     opts.icons_enabled = true
   end
   if not opts.component_separators then
-    opts.component_separators = { '', '' }
+    opts.component_separators = { left = '', right = '' }
   end
   if not opts.section_separators then
-    opts.section_separators = { '', '' }
+    opts.section_separators = { left = '', right = '' }
   end
   return opts
 end

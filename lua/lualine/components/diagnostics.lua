@@ -9,6 +9,33 @@ local modules = lualine_require.lazy_require {
 
 local Diagnostics = lualine_require.require('lualine.component'):new()
 
+local function check_deprecated_options(options)
+  if options.color_error or options.color_warn or options.color_info or options.color_hint then
+    options.diagnostics_color = options.diagnostics_color or {}
+    require('lualine.utils.notices').add_notice(string.format [[
+### diagnostics.options.colors
+Previously colors in diagnostics section was set with color_error, color_warning..
+separate options . They've been unified under diagnostics_color options.
+Now it should be something like:
+```lua
+{ 'diagnostics',
+  sources = {'nvim_lsp'},
+  diagnostics_color = {
+    error = color_error,
+    warning = color_warning,
+    info = color_info,
+    hint = color_hint,
+  }
+}
+```
+]])
+    options.diagnostics_color.error = options.color_error
+    options.diagnostics_color.warning = options.color_warning
+    options.diagnostics_color.info = options.color_info
+    options.diagnostics_color.hint = options.color_hint
+  end
+end
+
 local default_symbols = {
   icons = {
     error = ' ', -- xf659
@@ -24,25 +51,27 @@ local default_options = {
   update_in_insert = false,
   sources = nil,
   sections = { 'error', 'warn', 'info', 'hint' },
-  color_error = {
-    fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg')
-      or modules.utils.extract_highlight_colors('DiffDelete', 'fg')
-      or '#e32636',
-  },
-  color_warn = {
-    fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg')
-      or modules.utils.extract_highlight_colors('DiffText', 'fg')
-      or '#ffdf00',
-  },
-  color_info = {
-    fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg')
-      or modules.utils.extract_highlight_colors('Normal', 'fg')
-      or '#ffffff',
-  },
-  color_hint = {
-    fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg')
-      or modules.utils.extract_highlight_colors('DiffChange', 'fg')
-      or '#d7afaf',
+  diagnostic_color = {
+    error = {
+      fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg')
+        or modules.utils.extract_highlight_colors('DiffDelete', 'fg')
+        or '#e32636',
+    },
+    warn = {
+      fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg')
+        or modules.utils.extract_highlight_colors('DiffText', 'fg')
+        or '#ffdf00',
+    },
+    info = {
+      fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg')
+        or modules.utils.extract_highlight_colors('Normal', 'fg')
+        or '#ffffff',
+    },
+    hint = {
+      fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg')
+        or modules.utils.extract_highlight_colors('DiffChange', 'fg')
+        or '#d7afaf',
+    },
   },
 }
 -- Initializer
@@ -51,6 +80,7 @@ Diagnostics.new = function(self, options, child)
   local new_diagnostics = self._parent:new(options, child or Diagnostics)
   -- Apply default options
   new_diagnostics.options = vim.tbl_deep_extend('keep', new_diagnostics.options or {}, default_options)
+  check_deprecated_options(new_diagnostics.options)
   -- Apply default symbols
   new_diagnostics.symbols = vim.tbl_extend(
     'keep',
@@ -61,22 +91,22 @@ Diagnostics.new = function(self, options, child)
   if new_diagnostics.options.colored then
     new_diagnostics.highlight_groups = {
       error = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.color_error,
+        new_diagnostics.options.diagnostic_color.error,
         'diagnostics_error',
         new_diagnostics.options
       ),
       warn = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.color_warn,
+        new_diagnostics.options.diagnostic_color.warn,
         'diagnostics_warn',
         new_diagnostics.options
       ),
       info = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.color_info,
+        new_diagnostics.options.diagnostic_color.info,
         'diagnostics_info',
         new_diagnostics.options
       ),
       hint = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.color_hint,
+        new_diagnostics.options.diagnostic_color.hint,
         'diagnostics_hint',
         new_diagnostics.options
       ),

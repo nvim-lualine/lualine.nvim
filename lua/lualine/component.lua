@@ -5,6 +5,28 @@ local highlight = require 'lualine.highlight'
 -- Used to provide a unique id for each component
 local component_no = 1
 
+local function check_deprecated_options(options)
+  local function rename_notice(before, now)
+    if options[before] then
+      require('lualine.utils.notices').add_notice(string.format(
+        [[
+### option.%s
+%s option has been renamed to `%s`. Please use `%s` instead in your config
+for %s component.
+]],
+        before,
+        before,
+        now,
+        now,
+        options.component_name or 'function'
+      ))
+      options[now] = options[before]
+      options[before] = nil
+    end
+  end
+  rename_notice('format', 'fmt')
+  rename_notice('condition', 'cond')
+end
 local Component = {
   -- Creates a new component
   new = function(self, options, child)
@@ -15,6 +37,7 @@ local Component = {
     -- Operation that are required for creating new components but not for inheritence
     if options ~= nil then
       component_no = component_no + 1
+      check_deprecated_options(new_component.options)
       if not options.component_name then
         new_component.options.component_name = tostring(component_no)
       end
@@ -29,9 +52,9 @@ local Component = {
     if self.options.separator == nil then
       if self.options.component_separators then
         if self.options.self.section < 'lualine_x' then
-          self.options.separator = self.options.component_separators[1]
+          self.options.separator = self.options.component_separators.left
         else
-          self.options.separator = self.options.component_separators[2]
+          self.options.separator = self.options.component_separators.right
         end
       end
     end
@@ -63,8 +86,16 @@ local Component = {
 
   -- Adds spaces to left and right of a component
   apply_padding = function(self)
-    local l_padding = (self.options.left_padding or self.options.padding or 1)
-    local r_padding = (self.options.right_padding or self.options.padding or 1)
+    local padding = self.options.padding
+    local l_padding, r_padding
+    if padding == nil then
+      padding = 1
+    end
+    if type(padding) == 'number' then
+      l_padding, r_padding = padding, padding
+    elseif type(padding) == 'table' then
+      l_padding, r_padding = padding.left, padding.right
+    end
     if l_padding then
       if self.status:find '%%#.*#' == 1 then
         -- When component has changed the highlight at begining
@@ -114,9 +145,9 @@ local Component = {
     if type(separator) == 'table' then
       if self.options.separator[2] == '' then
         if self.options.self.section < 'lualine_x' then
-          separator = self.options.component_separators[1]
+          separator = self.options.component_separators.left
         else
-          separator = self.options.component_separators[2]
+          separator = self.options.component_separators.right
         end
       else
         return
@@ -132,12 +163,12 @@ local Component = {
     if type(self.options.separator) ~= 'table' then
       return
     end
-    if self.options.separator[1] ~= '' then
-      self.status = string.format('%%s{%s}%s', self.options.separator[1], self.status)
+    if self.options.separator.left ~= nil and self.options.separator.left ~= '' then
+      self.status = string.format('%%s{%s}%s', self.options.separator.left, self.status)
       self.strip_previous_separator = true
     end
-    if self.options.separator[2] ~= '' then
-      self.status = string.format('%s%%S{%s}', self.status, self.options.separator[2])
+    if self.options.separator.right ~= nil and self.options.separator.right ~= '' then
+      self.status = string.format('%s%%S{%s}', self.status, self.options.separator.right)
     end
   end,
 
@@ -162,12 +193,12 @@ local Component = {
     self.status = ''
     self.applied_separator = ''
 
-    if self.options.condition ~= nil and self.options.condition() ~= true then
+    if self.options.cond ~= nil and self.options.cond() ~= true then
       return self.status
     end
     local status = self:update_status(is_focused)
-    if self.options.format then
-      status = self.options.format(status or '')
+    if self.options.fmt then
+      status = self.options.fmt(status or '')
     end
     if type(status) == 'string' and #status > 0 then
       self.status = status

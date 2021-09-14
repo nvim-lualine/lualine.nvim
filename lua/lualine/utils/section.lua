@@ -34,12 +34,12 @@ function M.draw_section(section, section_name, is_focused)
       if section_name < 'c' then
         if
           type(section[first_component_no].options.separator) ~= 'table'
-          and section[1].options.section_separators[1] ~= ''
+          and (section[1].options.section_separators.left ~= nil and section[1].options.section_separators.left ~= '')
         then
           status[component_no] = string.format(
             '%s%%S{%s}',
             status[component_no],
-            section[1].options.section_separators[1]
+            section[1].options.section_separators.left
           )
         end
       end
@@ -68,11 +68,11 @@ function M.draw_section(section, section_name, is_focused)
     section_name > 'x'
     and section[first_component_no]
     and type(section[first_component_no].options.separator) ~= 'table'
-    and section[1].options.section_separators[2] ~= ''
+    and (section[1].options.section_separators.right ~= nil and section[1].options.section_separators.right ~= '')
   then
     left_sparator_string = string.format(
       '%%s{%s}',
-      section[first_component_no].options.ls_separator or section[1].options.section_separators[2]
+      section[first_component_no].options.ls_separator or section[1].options.section_separators.right
     )
   end
 

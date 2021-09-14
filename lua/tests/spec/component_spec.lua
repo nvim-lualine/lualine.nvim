@@ -54,7 +54,7 @@ describe('Component:', function()
 
   it('can draw', function()
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
     }
     assert_component(nil, opts, 'test')
@@ -89,7 +89,7 @@ describe('Component:', function()
   describe('Global options:', function()
     it('upper', function()
       local opts = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
         upper = true,
       }
@@ -101,7 +101,7 @@ describe('Component:', function()
         function()
           return 'TeSt'
         end,
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
         lower = true,
       }
@@ -110,25 +110,23 @@ describe('Component:', function()
 
     it('left_padding', function()
       local opts = build_component_opts {
-        component_separators = { '', '' },
-        padding = 0,
-        left_padding = 5,
+        component_separators = { left = '', right = '' },
+        padding = { left = 5 },
       }
       assert_component(nil, opts, '     test')
     end)
 
     it('right_padding', function()
       local opts = build_component_opts {
-        component_separators = { '', '' },
-        padding = 0,
-        right_padding = 5,
+        component_separators = { left = '', right = '' },
+        padding = { right = 5 },
       }
       assert_component(nil, opts, 'test     ')
     end)
 
     it('padding', function()
       local opts = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 5,
       }
       assert_component(nil, opts, '     test     ')
@@ -136,7 +134,7 @@ describe('Component:', function()
 
     it('icon', function()
       local opts = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
         icon = '0',
       }
@@ -145,14 +143,14 @@ describe('Component:', function()
 
     it('icons_enabled', function()
       local opts = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
         icons_enabled = true,
         icon = '0',
       }
       assert_component(nil, opts, '0 test')
       local opts2 = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
         icons_enabled = false,
         icon = '0',
@@ -162,37 +160,37 @@ describe('Component:', function()
 
     it('separator', function()
       local opts = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
         separator = '|',
       }
       assert_component(nil, opts, 'test|')
     end)
 
-    it('format', function()
+    it('fmt', function()
       local opts = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
-        format = function(data)
+        fmt = function(data)
           return data:sub(1, 1):upper() .. data:sub(2, #data)
         end,
       }
       assert_component(nil, opts, 'Test')
     end)
 
-    it('condition', function()
+    it('cond', function()
       local opts = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
-        condition = function()
+        cond = function()
           return true
         end,
       }
       assert_component(nil, opts, 'test')
       local opts2 = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
-        condition = function()
+        cond = function()
           return false
         end,
       }
@@ -201,7 +199,7 @@ describe('Component:', function()
 
     it('color', function()
       local opts = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
         color = 'MyHl',
       }
@@ -209,7 +207,7 @@ describe('Component:', function()
       local custom_link_hl_name = 'lualine_' .. comp.options.component_name .. '_no_mode'
       eq('%#' .. custom_link_hl_name .. '#test', comp:draw(opts.hl))
       local opts2 = build_component_opts {
-        component_separators = { '', '' },
+        component_separators = { left = '', right = '' },
         padding = 0,
         color = { bg = '#230055', fg = '#223344' },
       }
@@ -227,7 +225,7 @@ end)
 describe('Encoding component', function()
   it('works', function()
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
     }
     assert_component('encoding', opts, '%{strlen(&fenc)?&fenc:&enc}')
@@ -237,7 +235,7 @@ end)
 describe('Fileformat component', function()
   it('works with icons', function()
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
     }
     local fmt = vim.bo.fileformat
@@ -251,7 +249,7 @@ describe('Fileformat component', function()
   end)
   it('works without icons', function()
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
       icons_enabled = false,
     }
@@ -273,7 +271,7 @@ describe('Filetype component', function()
 
   it('does not add icon when library unavailable', function()
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
     }
     assert_component('filetype', opts, 'lua')
@@ -294,10 +292,10 @@ describe('Filetype component', function()
     utils.extract_highlight_colors.returns '#000'
 
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
       colored = true,
-      disable_text = false,
+      icon_only = false,
     }
     assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# lua')
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
@@ -320,7 +318,7 @@ describe('Filetype component', function()
     hl.create_component_highlight_group.returns 'MyCompHl'
     utils.extract_highlight_colors.returns '#000'
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
       colored = false,
     }
@@ -330,7 +328,7 @@ describe('Filetype component', function()
     package.loaded['nvim-web-devicons'] = nil
   end)
 
-  it('displays only icon when disable_text is true', function()
+  it('displays only icon when icon_only is true', function()
     package.loaded['nvim-web-devicons'] = {
       get_icon = function()
         return '*', 'test_highlight_group'
@@ -338,10 +336,10 @@ describe('Filetype component', function()
     }
 
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
       colored = false,
-      disable_text = true,
+      icon_only = true,
     }
     assert_component('filetype', opts, '*')
     package.loaded['nvim-web-devicons'] = nil
@@ -353,7 +351,7 @@ describe('Hostname component', function()
     stub(vim.loop, 'os_gethostname')
     vim.loop.os_gethostname.returns 'localhost'
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
     }
     assert_component('hostname', opts, 'localhost')
@@ -364,7 +362,7 @@ end)
 describe('Location component', function()
   it('works', function()
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
     }
     assert_component('location', opts, '%3l:%-2c')
@@ -374,7 +372,7 @@ end)
 describe('Progress component', function()
   it('works', function()
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
     }
     assert_component('progress', opts, '%3P')
@@ -386,7 +384,7 @@ describe('Mode component', function()
     stub(vim.api, 'nvim_get_mode')
     vim.api.nvim_get_mode.returns { mode = 'n', blocking = false }
     local opts = build_component_opts {
-      component_separators = { '', '' },
+      component_separators = { left = '', right = '' },
       padding = 0,
     }
     assert_component('mode', opts, 'NORMAL')

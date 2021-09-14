@@ -7,14 +7,36 @@ local modules = lualine_require.lazy_require {
 }
 local FileType = lualine_require.require('lualine.component'):new()
 
+local function check_deprecated_options(options)
+  local function rename_notice(before, now)
+    if options[before] then
+      require('lualine.utils.notices').add_notice(string.format(
+        [[
+### option.%s
+%s option has been renamed to `%s`. Please use `%s` instead in your config
+for filetype component.
+]],
+        before,
+        before,
+        now,
+        now
+      ))
+      options[now] = options[before]
+      options[before] = nil
+    end
+  end
+  rename_notice('disable_text', 'icon_only')
+end
+
 local default_options = {
   colored = true,
-  disable_text = false,
+  icon_only = false,
 }
 
 function FileType:new(options, child)
   local new_instance = self._parent:new(options, child or FileType)
   new_instance.options = vim.tbl_deep_extend('keep', new_instance.options or {}, default_options)
+  check_deprecated_options(new_instance.options)
   return new_instance
 end
 
@@ -59,7 +81,7 @@ function FileType:apply_icon()
     return
   end
 
-  if self.options.disable_text then
+  if self.options.icon_only then
     self.status = icon
   else
     self.status = icon .. ' ' .. self.status

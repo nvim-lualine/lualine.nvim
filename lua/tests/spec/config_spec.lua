@@ -34,19 +34,19 @@ describe('config parsing', function()
     describe('separators', function()
       it('default', function()
         local config = config_module.apply_configuration {}
-        eq(config.options.component_separators, { '', '' })
-        eq(config.options.section_separators, { '', '' })
+        eq(config.options.component_separators, { left = '', right = '' })
+        eq(config.options.section_separators, { left = '', right = '' })
       end)
       it('double separators', function()
         local config = {
           options = {
-            component_separators = { 'a', 'b' },
-            section_separators = { 'c', 'd' },
+            component_separators = { left = 'a', right = 'b' },
+            section_separators = { left = 'c', right = 'd' },
           },
         }
         config = config_module.apply_configuration(config)
-        eq(config.options.component_separators, { 'a', 'b' })
-        eq(config.options.section_separators, { 'c', 'd' })
+        eq(config.options.component_separators, { left = 'a', right = 'b' })
+        eq(config.options.section_separators, { left = 'c', right = 'd' })
       end)
 
       describe('single separator', function()
@@ -55,16 +55,16 @@ describe('config parsing', function()
             options = { component_separators = 'a', section_separators = 'b' },
           }
           config = config_module.apply_configuration(config)
-          eq(config.options.component_separators, { 'a', 'a' })
-          eq(config.options.section_separators, { 'b', 'b' })
+          eq(config.options.component_separators, { left = 'a', right = 'a' })
+          eq(config.options.section_separators, { left = 'b', right = 'b' })
         end)
         it('table', function()
           local config = {
             options = { component_separators = { 'a' }, section_separators = { 'b' } },
           }
           config = config_module.apply_configuration(config)
-          eq(config.options.component_separators, { 'a', 'a' })
-          eq(config.options.section_separators, { 'b', 'b' })
+          eq(config.options.component_separators, { left = 'a', right = 'a' })
+          eq(config.options.section_separators, { left = 'b', right = 'b' })
         end)
       end)
       it('no seprarators', function()

@@ -54,7 +54,7 @@ end)
 describe('Section genarator', function()
   local sec = require 'lualine.utils.section'
   it('can draw', function()
-    local opts = build_component_opts { section_separators = { '', '' } }
+    local opts = build_component_opts { section_separators = { left = '', right = '' } }
     local section = {
       require('lualine.components.special.function_component'):new(opts),
       require('lualine.components.special.function_component'):new(opts),
@@ -63,15 +63,15 @@ describe('Section genarator', function()
   end)
 
   it('can remove separators from component with custom colors', function()
-    local opts = build_component_opts { section_separators = { '', '' } }
+    local opts = build_component_opts { section_separators = { left = '', right = '' } }
     local opts_colored = build_component_opts { color = 'MyColor' }
     local opts_colored2 = build_component_opts {
       color = { bg = '#223344' },
-      section_separators = { '', '' },
+      section_separators = { left = '', right = '' },
     }
     local opts_colored3 = build_component_opts {
       color = { fg = '#223344' },
-      section_separators = { '', '' },
+      section_separators = { left = '', right = '' },
     }
     require('lualine.highlight').create_highlight_groups(require 'lualine.themes.gruvbox')
     local section = {

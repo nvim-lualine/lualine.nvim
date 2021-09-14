@@ -10,8 +10,7 @@ local empty = {
   function()
     return ' '
   end,
-  left_padding = 0,
-  right_padding = 0,
+  padding = 0,
 }
 
 M.sections = {

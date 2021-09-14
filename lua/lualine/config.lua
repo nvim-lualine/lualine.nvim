@@ -4,8 +4,8 @@ local config = {
   options = {
     icons_enabled = true,
     theme = 'auto',
-    component_separators = { '', '' },
-    section_separators = { '', '' },
+    component_separators = { left = '', right = '' },
+    section_separators = { left = '', right = '' },
     disabled_filetypes = {},
   },
   sections = {
@@ -28,13 +28,25 @@ local config = {
   extensions = {},
 }
 
--- change separator format 'x' or {'x'} to {'x', 'x'}
+local function check_sep_format_deprication(sep)
+  if type(sep) == 'table' and vim.tbl_islist(sep) then
+    require('lualine.utils.notices').add_persistent_notice(string.format [[
+### option.separator
+Using list for configuring separators has been depricated. Please configure it
+with {left = left_sep, right = right_sep} like table.
+]])
+    sep = { left = sep[1], right = sep[2] or sep[1] }
+  end
+  return sep
+end
+
+-- change separator format 'x' to {left='x', right='x'}
 local function fix_separators(separators)
   if separators ~= nil then
     if type(separators) == 'string' then
-      return { separators, separators }
-    elseif type(separators) == 'table' and #separators == 1 then
-      return { separators[1], separators[1] }
+      return { left = separators, right = separators }
+    else
+      return check_sep_format_deprication(separators)
     end
   end
   return separators

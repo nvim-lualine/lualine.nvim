@@ -99,8 +99,8 @@ require'lualine'.setup {
   options = {
     icons_enabled = true,
     theme = 'auto',
-    component_separators = {'', ''},
-    section_separators = {'', ''},
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
     disabled_filetypes = {}
   },
   sections = {
@@ -128,7 +128,7 @@ require'lualine'.setup {
 </details>
 
 If you want to get your current lualine config. you can
-do so with 
+do so with
 ```lua
 require'lualine'.get_config()
 
@@ -181,10 +181,13 @@ Lualine defines two kinds of separators:
 
 ```lua
 options = {
-  section_separators = {'', ''},
-  component_separators = {'', ''}
+  section_separators = { left = '', right = ''},
+  component_separators = { left = '', right = ''}
 }
 ```
+
+Here left means it'll be used for left sections (a, b, c) and right means
+it'll be used for right sections (x, y, z).
 
 <details><summary>Disabling separators</summary>
 
@@ -278,12 +281,16 @@ but you cannot use local options as global.
 Global option used locally overwrites the global, for example:
 ```lua
     require'lualine'.setup {
-      options = {lower = true},
-      sections = {lualine_a = {{'mode', lower = false}}, lualine_b = {'branch'}}
+      options = {fmt = string.lower},
+      sections = {lualine_a = {
+        {'mode', fmt = function(str) return str:sub(1,1) end}},
+                  lualine_b = {'branch'}}
     }
 ```
 
-`mode` will be displayed with `lower = false` and `branch` will be displayed with `lower = true`
+`mode` will be formatted with the passed fa=unction so only first char will be
+shown . On the other hand branch will be formatted with global formatter
+`string.lower` so it will be showed in lower case.
 
 #### Available options
 
@@ -294,11 +301,9 @@ Global option used locally overwrites the global, for example:
 options = {
   icons_enabled = true, -- displays icons in alongside component
   padding = 1, -- adds padding to the left and right of components
-  left_padding = 1, -- adds padding to the left of components
-  right_padding =1, -- adds padding to the right of components
-  upper = false, -- displays components in uppercase
-  lower = false, -- displays components in lowercase
-  format = nil -- format function, formats component's output
+               -- padding can be specified to left or right separately like
+               -- padding = { left = left_padding, right = right_padding }
+  fmt = nil -- fmt function, formats component's output
 }
 ```
 
@@ -317,10 +322,12 @@ sections = {
                        -- when a string is given it's treated as component_separator.
                        -- When a table is given it's treated as section_separator.
                        -- This options can be used to set colored separators
-                       -- arround component. Option need to be set like `separator = {'', ''}`.
-                       -- Where first element is left_separator and 2nd element is right separator.
+                       -- arround component. Option need to be set like
+                       -- `separator = { left = '', right = ''}`.
+                       -- Where left will be placed in left side of component
+                       -- and right will be placed in right side of component
                        -- Passing empty string disables that separator
-      condition = nil, -- condition function, component is loaded when function returns true
+      cond = nil, -- condition function, component is loaded when function returns true
       -- custom color for component in format
       -- color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}
       -- or highlight group
@@ -358,10 +365,12 @@ sections = {
       -- displays diagnostics from defined severity
       sections = {'error', 'warn', 'info', 'hint'},
       -- all colors are in format #rrggbb
-      color_error = nil, -- changes diagnostic's error foreground color
-      color_warn = nil, -- changes diagnostic's warn foreground color
-      color_info = nil, -- Changes diagnostic's info foreground color
-      color_hint = nil, -- Changes diagnostic's hint foreground color
+      diagnostics_color = {
+        error = nil, -- changes diagnostic's error foreground color
+        warn = nil,  -- changes diagnostic's warn foreground color
+        info = nil,  -- Changes diagnostic's info foreground color
+        hint = nil,  -- Changes diagnostic's hint foreground color
+      }
       symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
       update_in_insert = false, -- Update diagnostics in insert mode
     }
@@ -393,7 +402,7 @@ sections = {
     {
       'filetype',
       colored = true, -- displays filetype icon in color if set to `true
-      disable_text = false -- Display only icon for filetype
+      icon_only = false -- Display only icon for filetype
     }
   }
 }
@@ -408,9 +417,11 @@ sections = {
       'diff',
       colored = true, -- displays diff status in color if set to true
       -- all colors are in format #rrggbb
-      color_added = nil, -- changes diff's added foreground color
-      color_modified = nil, -- changes diff's modified foreground color
-      color_removed = nil, -- changes diff's removed foreground color
+      diff_color = {
+        added = nil,    -- changes diff's added foreground color
+        modified = nil, -- changes diff's modified foreground color
+        removed = nil,  -- changes diff's removed foreground color
+      }
       symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
       source = nil, -- A function that works as a data source for diff.
                     -- it must return a table like
