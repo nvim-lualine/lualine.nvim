@@ -174,9 +174,10 @@ Theme structure is available [here](https://github.com/hoob3rt/lualine.nvim/blob
 
 ### Separators
 
-Lualine defines two kinds of seperators:
-  * `section_separators` - separators between sections
-  * `components_separators` - separators between components in sections
+Lualine defines two kinds of separators:
+
+* `section_separators` - separators between sections
+* `components_separators` - separators between components in sections
 
 ```lua
 options = {
