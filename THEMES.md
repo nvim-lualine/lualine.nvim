@@ -125,6 +125,14 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648935-a2dd0700-74bc-11eb-9a4b-72eb1e2ab79e.png'/>
 </p>
 
+### melange_dark
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/6548350/133673183-7f9d6745-1a5d-4bc5-933c-a017ce3f2315.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/6548350/133673319-b4dee5de-1836-4776-a9ec-39a3c57eeb87.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/6548350/133673373-c777bdff-8076-4168-9b3b-ad6e1ad2fa0b.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/6548350/133673694-1736b8a2-43d1-4be2-a9b8-a5faf66eb26a.png'/>
+</p>
+
 ### modus_vivendi
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/9327361/114389966-58176b80-9b9e-11eb-944e-1e0079527d74.png'/>
