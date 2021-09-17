@@ -51,7 +51,7 @@ local default_options = {
   update_in_insert = false,
   sources = nil,
   sections = { 'error', 'warn', 'info', 'hint' },
-  diagnostic_color = {
+  diagnostics_color = {
     error = {
       fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg')
         or modules.utils.extract_highlight_colors('DiffDelete', 'fg')
@@ -60,7 +60,7 @@ local default_options = {
     warn = {
       fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg')
         or modules.utils.extract_highlight_colors('DiffText', 'fg')
-        or '#ffdf00',
+        or '#ffa500',
     },
     info = {
       fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg')
@@ -70,7 +70,7 @@ local default_options = {
     hint = {
       fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg')
         or modules.utils.extract_highlight_colors('DiffChange', 'fg')
-        or '#d7afaf',
+        or '#273faf',
     },
   },
 }
@@ -91,22 +91,22 @@ Diagnostics.new = function(self, options, child)
   if new_diagnostics.options.colored then
     new_diagnostics.highlight_groups = {
       error = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.diagnostic_color.error,
+        new_diagnostics.options.diagnostics_color.error,
         'diagnostics_error',
         new_diagnostics.options
       ),
       warn = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.diagnostic_color.warn,
+        new_diagnostics.options.diagnostics_color.warn,
         'diagnostics_warn',
         new_diagnostics.options
       ),
       info = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.diagnostic_color.info,
+        new_diagnostics.options.diagnostics_color.info,
         'diagnostics_info',
         new_diagnostics.options
       ),
       hint = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.diagnostic_color.hint,
+        new_diagnostics.options.diagnostics_color.hint,
         'diagnostics_hint',
         new_diagnostics.options
       ),
@@ -209,9 +209,9 @@ Diagnostics.get_diagnostics = function(sources)
       source_result = type(source_result) == 'table' and source_result or {}
       result[index] = {
         error = source_result.error or 0,
-        warn = source_result.warning or 0,
+        warn = source_result.warn or 0,
         info = source_result.info or 0,
-        hint = source_result.hin or 0,
+        hint = source_result.hint or 0,
       }
     end
   end

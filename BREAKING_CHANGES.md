@@ -60,4 +60,4 @@ See [#24](https://github.com/shadmansaleh/lualine.nvim/pull/24) for details
 - color_added, color_modified, color_removed are now available as added,
 modified, removed in diff_color table option
 - color_error, color_warning, color_info, color_hint are now available
-as error, warning, info, hint in diagnostics_color table option
+as error, warn, info, hint in diagnostics_color table option
