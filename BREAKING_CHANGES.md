@@ -43,11 +43,11 @@ a cases it takes an optional `winid` in first argument .
 You can wrap it with a function so those self & is_active doesn't
 get passed to `lsp_status`
 ```lua
-lualine_c = { function() return require'lsp_status'.status() end}
+lualine_c = { function() return require'lsp-status'.status() end}
 ```
 
 ### Options simplification
-See #24 for details
+See [#24](https://github.com/shadmansaleh/lualine.nvim/pull/24) for details
 - `upper` & `lower` removed use `string.upper/lower` in `fmt` option.
 - separators are specified by left & right instead of position
   instead of `{'>', '<'}` you'll use `{left= '>', right='<'}`.
