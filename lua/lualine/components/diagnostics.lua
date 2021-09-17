@@ -53,24 +53,32 @@ local default_options = {
   sections = { 'error', 'warn', 'info', 'hint' },
   diagnostics_color = {
     error = {
-      fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultError', 'fg')
-        or modules.utils.extract_highlight_colors('DiffDelete', 'fg')
-        or '#e32636',
+      fg = modules.utils.extract_color_from_hllist(
+        'fg',
+        { 'DiagnosticError', 'LspDiagnosticsDefaultError', 'DiffDelete' },
+        '#e32636'
+      ),
     },
     warn = {
-      fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultWarning', 'fg')
-        or modules.utils.extract_highlight_colors('DiffText', 'fg')
-        or '#ffa500',
+      fg = modules.utils.extract_color_from_hllist(
+        'fg',
+        { 'DiagnosticWarn', 'LspDiagnosticsDefaultWarning', 'DiffText' },
+        '#ffa500'
+      ),
     },
     info = {
-      fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultInformation', 'fg')
-        or modules.utils.extract_highlight_colors('Normal', 'fg')
-        or '#ffffff',
+      fg = modules.utils.extract_color_from_hllist(
+        'fg',
+        { 'DiagnosticInfo', 'LspDiagnosticsDefaultInformation', 'Normal' },
+        '#ffffff'
+      ),
     },
     hint = {
-      fg = modules.utils.extract_highlight_colors('LspDiagnosticsDefaultHint', 'fg')
-        or modules.utils.extract_highlight_colors('DiffChange', 'fg')
-        or '#273faf',
+      fg = modules.utils.extract_color_from_hllist(
+        'fg',
+        { 'DiagnosticHint', 'LspDiagnosticsDefaultHint', 'DiffChange' },
+        '#273faf'
+      ),
     },
   },
 }

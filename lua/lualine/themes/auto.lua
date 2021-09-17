@@ -19,27 +19,6 @@ local contrast_threshold = 0.3
 -- how much brightness is changed in percentage for light and dark themes
 local brightness_modifier_parameter = 10
 
--- retrives color value from highlight group name in syntax_list
--- first present highlight is returned
-local function getHi(scope, syntaxlist)
-  for _, highlight_name in pairs(syntaxlist) do
-    if vim.fn.hlexists(highlight_name) ~= 0 then
-      local color = utils.extract_highlight_colors(highlight_name)
-      if color.reverse then
-        if scope == 'bg' then
-          scope = 'fg'
-        else
-          scope = 'bg'
-        end
-      end
-      if color[scope] then
-        return color[scope]
-      end
-    end
-  end
-  return '#000000'
-end
-
 -- truns #rrggbb -> { red, green, blue }
 local function rgb_str2num(rgb_color_str)
   if rgb_color_str:find '#' == 1 then
@@ -124,14 +103,14 @@ end
 -- Get the colors to create theme
 -- stylua: ignore
 local colors = {
-  normal  = getHi('bg', { 'PmenuSel', 'PmenuThumb', 'TabLineSel' }),
-  insert  = getHi('fg', { 'String', 'MoreMsg' }),
-  replace = getHi('fg', { 'Number', 'Type' }),
-  visual  = getHi('fg', { 'Special', 'Boolean', 'Constant' }),
-  command = getHi('fg', { 'Identifier' }),
-  back1   = getHi('bg', { 'Normal', 'StatusLineNC' }),
-  fore    = getHi('fg', { 'Normal', 'StatusLine' }),
-  back2   = getHi('bg', { 'StatusLine' }),
+  normal  = utils.extract_color_from_hllist('bg', { 'PmenuSel', 'PmenuThumb', 'TabLineSel' }, '#000000'),
+  insert  = utils.extract_color_from_hllist('fg', { 'String', 'MoreMsg' }, '#000000'),
+  replace = utils.extract_color_from_hllist('fg', { 'Number', 'Type' }, '#000000'),
+  visual  = utils.extract_color_from_hllist('fg', { 'Special', 'Boolean', 'Constant' }, '#000000'),
+  command = utils.extract_color_from_hllist('fg', { 'Identifier' }, '#000000'),
+  back1   = utils.extract_color_from_hllist('bg', { 'Normal', 'StatusLineNC' }, '#000000'),
+  fore    = utils.extract_color_from_hllist('fg', { 'Normal', 'StatusLine' }, '#000000'),
+  back2   = utils.extract_color_from_hllist('bg', { 'StatusLine' }, '#000000'),
 }
 
 -- Change brightness of colors

@@ -23,6 +23,27 @@ function M.extract_highlight_colors(color_group, scope)
   return color
 end
 
+-- retrives color value from highlight group name in syntax_list
+-- first present highlight is returned
+function M.extract_color_from_hllist(scope, syntaxlist, default)
+  for _, highlight_name in ipairs(syntaxlist) do
+    if vim.fn.hlexists(highlight_name) ~= 0 then
+      local color = M.extract_highlight_colors(highlight_name)
+      if color.reverse then
+        if scope == 'bg' then
+          scope = 'fg'
+        else
+          scope = 'bg'
+        end
+      end
+      if color[scope] then
+        return color[scope]
+      end
+    end
+  end
+  return default
+end
+
 -- remove empty strings from list
 function M.list_shrink(list)
   local new_list = {}
