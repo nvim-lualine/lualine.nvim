@@ -183,6 +183,17 @@ Diagnostics.diagnostic_sources = {
     local hint_count = vim.lsp.diagnostic.get_count(0, 'Hint')
     return error_count, warning_count, info_count, hint_count
   end,
+  nvim = function()
+    local diagnostics = vim.diagnostic.get(0)
+    local count = { 0, 0, 0, 0 }
+    for _, diagnostic in ipairs(diagnostics) do
+      count[diagnostic.severity] = count[diagnostic.severity] + 1
+    end
+    return count[vim.diagnostic.severity.ERROR],
+      count[vim.diagnostic.severity.WARN],
+      count[vim.diagnostic.severity.INFO],
+      count[vim.diagnostic.severity.HINT]
+  end,
   coc = function()
     local data = vim.b.coc_diagnostic_info
     if data then
@@ -197,6 +208,14 @@ Diagnostics.diagnostic_sources = {
       return data.error + data.style_error, data.warning + data.style_warning, data.info, 0
     else
       return 0, 0, 0, 0
+    end
+  end,
+  vim_lsp = function()
+    local ok, data = pcall(vim.fn['lsp#get_buffer_diagnostics_counts'])
+    if ok then
+      return data.error, data.warning, data.information
+    else
+      return 0, 0, 0
     end
   end,
 }
