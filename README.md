@@ -11,6 +11,14 @@ A fast and easy to configure statusline plugin for neovim
 
 `lualine.nvim` requires neovim 0.5
 
+<!-- panvimdoc-ignore-start -->
+
+This is a fork of [hoob3rt/lualine.nvim](https://github.com/hoob3rt/lualine.nvim).
+If you're switching from there please checkout [BREAKING_CHANGES.md](./BREAKING_CHANGES.md)
+to see what you may have to change in your config.
+
+<!-- panvimdoc-ignore-end -->
+
 ## Contributing
 
 Feel free to create an issue/pr if you want to see anything else implemented.
