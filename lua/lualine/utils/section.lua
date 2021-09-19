@@ -6,7 +6,7 @@ local utils = require 'lualine.utils.utils'
 local highlight = require 'lualine.highlight'
 -- Returns formated string for a section
 function M.draw_section(section, section_name, is_focused)
-  local highlight_name = highlight.format_highlight(is_focused, 'lualine_' .. section_name)
+  local highlight_name = highlight.format_highlight('lualine_' .. section_name, is_focused)
 
   local status = {}
   for _, component in pairs(section) do

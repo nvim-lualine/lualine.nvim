@@ -57,8 +57,7 @@ function FileType:apply_icon()
 
     if icon and self.options.colored then
       local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
-      local is_focused = modules.utils.is_focused()
-      local default_highlight = modules.highlight.format_highlight(is_focused, self.options.self.section)
+      local default_highlight = modules.highlight.format_highlight(self.options.self.section)
       local icon_highlight = self.options.self.section .. '_' .. icon_highlight_group
       if not modules.highlight.highlight_exists(icon_highlight .. '_normal') then
         icon_highlight = modules.highlight.create_component_highlight_group(

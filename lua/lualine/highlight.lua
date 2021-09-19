@@ -90,7 +90,13 @@ end
 -- @description: adds '_mode' at end of highlight_group
 -- @param highlight_group:(string) name of highlight group
 -- @return: (string) highlight group name with mode
-function M.append_mode(highlight_group)
+function M.append_mode(highlight_group, is_focused)
+  if is_focused == nil then
+    is_focused = modules.utils.is_focused()
+  end
+  if is_focused == false then
+    return highlight_group .. '_inactive'
+  end
   local mode = require('lualine.utils.mode').get_mode()
   if
     mode == 'VISUAL'
@@ -217,11 +223,7 @@ function M.component_format_highlight(highlight_name)
   if highlight_name:find 'no_mode' == #highlight_name - #'no_mode' + 1 then
     return '%#' .. highlight_group .. '#'
   end
-  if modules.utils.is_focused() then
-    highlight_group = M.append_mode(highlight_group)
-  else
-    highlight_group = highlight_group .. '_inactive'
-  end
+  highlight_group = M.append_mode(highlight_group)
   if M.highlight_exists(highlight_group) then
     return '%#' .. highlight_group .. '#'
   else
@@ -229,16 +231,12 @@ function M.component_format_highlight(highlight_name)
   end
 end
 
-function M.format_highlight(is_focused, highlight_group)
+function M.format_highlight(highlight_group, is_focused)
   if highlight_group > 'lualine_c' and not M.highlight_exists(highlight_group .. '_normal') then
     highlight_group = 'lualine_' .. section_highlight_map[highlight_group:match 'lualine_(.)']
   end
   local highlight_name
-  if not is_focused then
-    highlight_name = highlight_group .. [[_inactive]]
-  else
-    highlight_name = M.append_mode(highlight_group)
-  end
+  highlight_name = M.append_mode(highlight_group, is_focused)
   if M.highlight_exists(highlight_name) then
     return '%#' .. highlight_name .. '#'
   end
