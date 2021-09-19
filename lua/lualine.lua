@@ -139,7 +139,7 @@ local function statusline(sections, is_focused)
       if #section_data > 0 then
         if not applied_midsection_devider and section_name > 'c' then
           applied_midsection_devider = true
-          section_data = '%=' .. section_data
+          section_data = '%#' .. modules.highlight.append_mode 'lualine_c' .. '#%=' .. section_data
         end
         if not applied_trunc and section_name > 'b' then
           applied_trunc = true

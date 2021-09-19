@@ -6,16 +6,9 @@ local function fugitive_branch()
   local icon = '' -- e0a0
   return icon .. ' ' .. vim.fn.FugitiveHead()
 end
-local empty = {
-  function()
-    return ' '
-  end,
-  padding = 0,
-}
 
 M.sections = {
   lualine_a = { fugitive_branch },
-  lualine_c = { empty },
   lualine_z = { 'location' },
 }
 

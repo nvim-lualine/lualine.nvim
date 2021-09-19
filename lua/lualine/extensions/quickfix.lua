@@ -15,12 +15,6 @@ local function title()
   end
   return vim.fn.getqflist({ title = 0 }).title
 end
-local empty = {
-  function()
-    return ' '
-  end,
-  padding = 0,
-}
 
 local M = {}
 
@@ -32,7 +26,6 @@ end
 M.sections = {
   lualine_a = { label },
   lualine_b = { title },
-  lualine_c = { empty },
   lualine_z = { 'location' },
 }
 

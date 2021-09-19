@@ -90,7 +90,7 @@ end
 -- @description: adds '_mode' at end of highlight_group
 -- @param highlight_group:(string) name of highlight group
 -- @return: (string) highlight group name with mode
-local function append_mode(highlight_group)
+function M.append_mode(highlight_group)
   local mode = require('lualine.utils.mode').get_mode()
   if
     mode == 'VISUAL'
@@ -218,7 +218,7 @@ function M.component_format_highlight(highlight_name)
     return '%#' .. highlight_group .. '#'
   end
   if modules.utils.is_focused() then
-    highlight_group = append_mode(highlight_group)
+    highlight_group = M.append_mode(highlight_group)
   else
     highlight_group = highlight_group .. '_inactive'
   end
@@ -237,7 +237,7 @@ function M.format_highlight(is_focused, highlight_group)
   if not is_focused then
     highlight_name = highlight_group .. [[_inactive]]
   else
-    highlight_name = append_mode(highlight_group)
+    highlight_name = M.append_mode(highlight_group)
   end
   if M.highlight_exists(highlight_name) then
     return '%#' .. highlight_name .. '#'
