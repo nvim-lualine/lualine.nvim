@@ -45,7 +45,7 @@ end
 
 function M.rtp_searcher(file, once)
   local ret = {}
-  for dir in vim.gsplit(vim.api.nvim_get_option 'rtp', ',') do
+  for _, dir in ipairs(vim.api.nvim_list_runtime_paths()) do
     local path = dir .. M.sep .. file
     if vim.loop.fs_stat(path) then
       ret[#ret + 1] = path
