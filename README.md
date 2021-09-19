@@ -502,6 +502,7 @@ extensions = {'quickfix'}
 * nerdtree
 * nvim-tree
 * quickfix
+* toggleterm
 
 </details>
 
