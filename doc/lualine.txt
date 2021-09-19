@@ -496,6 +496,7 @@ Available extensions ~
 - nerdtree
 - nvim-tree
 - quickfix
+- toggleterm
 
 
 Custom extensions ~
