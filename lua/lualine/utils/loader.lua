@@ -224,8 +224,8 @@ end
 local function load_theme(theme_name)
   assert(is_valid_filename(theme_name), 'Invalid filename')
   local retval
-  local path = table.concat({ 'lua', 'lualine', 'themes', theme_name }, sep) .. '.lua'
-  local files = lualine_require.rtp_searcher(path)
+  local path = table.concat { 'lua/lualine/themes/', theme_name, '.lua' }
+  local files = vim.api.nvim_get_runtime_file(path, true)
   local n_files = #files
   if n_files == 0 then
     -- No match found

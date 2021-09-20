@@ -35,7 +35,8 @@ function M.require(module)
     end
   end
 
-  local paths = M.rtp_searcher('lua' .. M.sep .. pattern, true)
+  pattern = table.concat { 'lua/', module:gsub('%.', '/'), '.lua' }
+  local paths = vim.api.nvim_get_runtime_file(pattern, false)
   if #paths > 0 then
     local mod_result = dofile(paths[1])
     package.loaded[module] = mod_result
@@ -43,20 +44,6 @@ function M.require(module)
   end
 
   return require(module)
-end
-
-function M.rtp_searcher(file, once)
-  local ret = {}
-  for _, dir in ipairs(vim.api.nvim_list_runtime_paths()) do
-    local path = dir .. M.sep .. file
-    if vim.loop.fs_stat(path) then
-      ret[#ret + 1] = path
-      if once then
-        break
-      end
-    end
-  end
-  return ret
 end
 
 function M.lazy_require(modules)
