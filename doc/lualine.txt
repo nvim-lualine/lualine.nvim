@@ -82,6 +82,20 @@ Lualine has sections as shown below.
 
 Each sections holds it’s components e.g. current vim’s mode.
 
+Configuring from `.vim` file
+
+All the examples below are in lua. You can use the same examples in `.vim` file
+by wrapping them in lua heredoc like this:
+
+>
+    lua << END
+    require'lualine'.setup()
+    END
+<
+
+
+checkout `:help lua-heredoc`.
+
 Default config
 
 >
