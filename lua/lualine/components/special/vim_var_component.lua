@@ -1,3 +1,5 @@
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
 local VarComponent = require('lualine.component'):new()
 VarComponent.update_status = function(self)
   local component = self.options[1]

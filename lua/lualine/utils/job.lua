@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
+
 -- Wrapper arround job api
 local Job = setmetatable({
   start = function(self)

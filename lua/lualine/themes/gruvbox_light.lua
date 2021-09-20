@@ -1,3 +1,5 @@
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
 -- stylua: ignore
 local colors = {
   black        = '#3c3836',

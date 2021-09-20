@@ -2,15 +2,15 @@
 -- MIT license, see LICENSE for more details.
 -- stylua: ignore
 local colors = {
-    black = '#000000',
-    white = '#eeeeee',
-    red = '#ffa0a0',
-    green = '#88cf88',
-    blue = '#92baff',
-    magenta = '#feacd0',
-    cyan = '#a0bfdf',
-    gray = '#2f2f2f',
-    darkgray = '#202020',
+    black     = '#000000',
+    white     = '#eeeeee',
+    red       = '#ffa0a0',
+    green     = '#88cf88',
+    blue      = '#92baff',
+    magenta   = '#feacd0',
+    cyan      = '#a0bfdf',
+    gray      = '#2f2f2f',
+    darkgray  = '#202020',
     lightgray = '#434343'
 }
 

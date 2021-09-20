@@ -59,14 +59,19 @@ For those who want to break the norms. You can create custom looks in lualine.
 
 Unlike other statusline plugins lualine loads only defined components, nothing else.
 
-Startup time performance measured with an amazing plugin [tweekmonster/startuptime.vim](https://github.com/tweekmonster/startuptime.vim)
+Startup time performance measured with an amazing plugin [dstein64/vim-startuptime](https://github.com/dstein64/vim-startuptime)
 
-All times are measured with only `startuptime.vim` and given statusline plugin installed
+All times are measured with clean `init.vim` with only `vim-startuptime`,
+`vim-plug` and given statusline plugin installed.
+In controle just `vim-startuptime` and`vim-plug` is installed.
+And mesured time is complete startuptime of vim not time spent
+on specific plugin.
 
-| clean vimrc    | lualine      | lightline    |  airline     |
-| :------------: | :----------: | :----------: | :----------: |
-|  8.943 ms      | 9.034 ms     |  11.463 ms   | 13.425 ms    |
+|  control   |  lualine  | lightline |  airline  |
+| :--------: | :-------: | :-------: | :-------: |
+|  8.943 ms  | 10.140 ms | 12.522 ms | 38.850 ms |
 
+Last Updated On: 20-09-2021
 
 ## Installation
 
@@ -76,7 +81,6 @@ All times are measured with only `startuptime.vim` and given statusline plugin i
 Plug 'hoob3rt/lualine.nvim'
 " If you want to have icons in your statusline choose one of these
 Plug 'kyazdani42/nvim-web-devicons'
-Plug 'ryanoasis/vim-devicons'
 ```
 
 ### [packer.nvim](https://github.com/wbthomason/packer.nvim)
@@ -87,6 +91,8 @@ use {
   requires = {'kyazdani42/nvim-web-devicons', opt = true}
 }
 ```
+
+You'll also have need to have a patched font if you want icons.
 
 ## Usage and customization
 

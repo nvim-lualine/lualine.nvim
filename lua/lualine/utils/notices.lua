@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
+
 -- To provide notices for user
 local M = {}
 local notices = {}

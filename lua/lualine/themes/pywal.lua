@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
+
 local lualine_require = require 'lualine_require'
 local modules = lualine_require.lazy_require {
   utils_notices = 'lualine.utils.notices',

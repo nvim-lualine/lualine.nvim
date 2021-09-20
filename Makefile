@@ -14,4 +14,6 @@ test:
 docgen:
 	@bash ./scripts/docgen.sh
 
+precommit_check: docgen format test lint
+
 check: lint test

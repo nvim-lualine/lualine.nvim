@@ -1,3 +1,6 @@
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
+
 local EvalFuncComponent = require('lualine.component'):new()
 
 EvalFuncComponent.update_status = function(self)
