@@ -63,9 +63,9 @@ Startup time performance measured with an amazing plugin [dstein64/vim-startupti
 
 All times are measured with clean `init.vim` with only `vim-startuptime`,
 `vim-plug` and given statusline plugin installed.
-In controle just `vim-startuptime` and`vim-plug` is installed.
-And mesured time is complete startuptime of vim not time spent
-on specific plugin.
+In control just `vim-startuptime` and`vim-plug` is installed.
+And measured time is complete startuptime of vim not time spent
+on specific plugin. These numbers are average of 20 runs.
 
 |  control   |  lualine  | lightline |  airline  |
 | :--------: | :-------: | :-------: | :-------: |
