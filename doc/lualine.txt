@@ -203,7 +203,9 @@ Available components ~
 
 
 - `branch` (git branch)
+- `buffers` (shows currently available buffers)
 - `diagnostics` (diagnostics count from your prefered source)
+- `diff` (git diff status)
 - `encoding` (file encoding)
 - `fileformat` (file format)
 - `filename`
@@ -213,7 +215,7 @@ Available components ~
 - `location` (location in file in line:column format)
 - `mode` (vim mode)
 - `progress` (%progress in file)
-- `diff` (git diff status)
+- `tabs` (shows currently available tabs)
 
 
                                                    *lualine-Custom-components*
@@ -346,6 +348,32 @@ Local options ~
 
 Component specific local options ~
 
+                                           *lualine-buffers-component-options*
+
+>
+    sections = {
+      lualine_a = {
+        {
+          'buffers',
+          show_filename_only = true, -- shows shortened relative path when false
+          show_modified_status = true -- shows indicator then bufder is modified
+          max_length = vim.o.columns * 2 / 3, -- maximum width of buffers component
+          filetype_names = {
+            TelescopePrompt = 'Telescope',
+            dashboard = 'Dashboard',
+            packer = 'Packer',
+            fzf = 'FZF',
+          }, -- shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
+          buffers_color = {
+            active = nil,   -- color for active buffer
+            inactive = nil, -- color for inactive buffer
+          },
+        }
+      }
+    }
+<
+
+
                                        *lualine-diagnostics-component-options*
 
 >
@@ -432,6 +460,27 @@ Component specific local options ~
 <
 
 
+                                              *lualine-tabs-component-options*
+
+>
+    sections = {
+      lualine_a = {
+        {
+          'tabs',
+          max_length = vim.o.columns / 3, -- maximum width of tabs component
+          mode = 0, -- 0  shows tab_nr
+                    -- 1  shows tab_name
+                    -- 2  shows tab_nr + tab_name
+          tabs_color = {
+            active = nil,   -- color for active tab
+            inactive = nil, -- color for inactive tab
+          },
+        }
+      }
+    }
+<
+
+
 ------------------------------------------------------------------------------
 
 TABLINE ~
@@ -453,7 +502,22 @@ tabline sections is exactly the same as for statusline.
 
 This will show branch and filename component in top of neovim inside tabline.
 
-You can also completely move your statuline to tabline by configuring
+lualine also provides 2 components buffers & tabs that you can use to get more
+traditional tabline/bufferline.
+
+>
+    tabline = {
+      lualine_a = {'buffers'},
+      lualine_b = {'branch'},
+      lualine_c = {'filename'},
+      lualine_x = {},
+      lualine_y = {},
+      lualine_z = {'tabs'}
+    }
+<
+
+
+You can also completely move your statusline to tabline by configuring
 `lualine.tabline` and disabling `lualine.sections` and
 `lualine.inactive_sections`.
 
@@ -466,8 +530,8 @@ You can also completely move your statuline to tabline by configuring
 <
 
 
-If you’re looking for bufferline or want to show tabs in tabline. There are
-manny awesome plugins that can do that. For example:
+If you want a more sophisticated tabline you can use other tabline plugins with
+lualine too. For example:
 
 
 - nvim-bufferline <https://github.com/akinsho/nvim-bufferline.lua>
@@ -484,7 +548,7 @@ EXTENSIONS ~
 Lualine extensions change statusline appearance for a window/buffer with
 specified filetypes.
 
-By default no extension are loaded to improve performance. You can load
+By default no extensions are loaded to improve performance. You can load
 extensions with:
 
 >

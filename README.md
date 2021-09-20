@@ -48,10 +48,10 @@ For those who want to break the norms. You can create custom looks in lualine.
 **Example** :
 
 - [evil_lualine](examples/evil_lualine.lua)
-<img width='700' src='https://user-images.githubusercontent.com/13149513/113875129-4453ba00-97d8-11eb-8f21-94a9ef565db3.png'/>
+  <img width='700' src='https://user-images.githubusercontent.com/13149513/113875129-4453ba00-97d8-11eb-8f21-94a9ef565db3.png'/>
 
 - [bubbles](examples/bubbles.lua)
-<img width='700' src='https://user-images.githubusercontent.com/20235646/131350468-fc556196-5f46-4bfe-a72e-960f6a58db2c.png'/>
+  <img width='700' src='https://user-images.githubusercontent.com/20235646/131350468-fc556196-5f46-4bfe-a72e-960f6a58db2c.png'/>
 
 <!-- panvimdoc-ignore-end -->
 
@@ -143,6 +143,7 @@ require'lualine'.setup {
 
 If you want to get your current lualine config. you can
 do so with
+
 ```lua
 require'lualine'.get_config()
 
@@ -180,6 +181,7 @@ require'lualine'.setup{
   ...
 }
 ```
+
 Theme structure is available [here](https://github.com/hoob3rt/lualine.nvim/blob/master/CONTRIBUTING.md#adding-a-theme)
 
 </details>
@@ -223,7 +225,9 @@ sections = {lualine_a = {'mode'}}
 <summary><b>Available components</b></summary>
 
 * `branch` (git branch)
+* `buffers` (shows currently available buffers)
 * `diagnostics` (diagnostics count from your prefered source)
+* `diff` (git diff status)
 * `encoding` (file encoding)
 * `fileformat` (file format)
 * `filename`
@@ -233,7 +237,7 @@ sections = {lualine_a = {'mode'}}
 * `location` (location in file in line:column format)
 * `mode` (vim mode)
 * `progress` (%progress in file)
-* `diff` (git diff status)
+* `tabs` (shows currently available tabs)
 
 </details>
 
@@ -279,6 +283,7 @@ You can use any valid lua expression as a component including
 ```lua
 sections = {lualine_c = {"os.date('%a')", 'data', "require'lsp-status'.status()"}}
 ```
+
 `data` is a global variable in this example.
 
 ---
@@ -293,6 +298,7 @@ There are two kinds of options:
 Global options can be used as local options (can be applied to specific components)
 but you cannot use local options as global.
 Global option used locally overwrites the global, for example:
+
 ```lua
     require'lualine'.setup {
       options = {fmt = string.lower},
@@ -363,6 +369,31 @@ sections = {
 
 <details>
 <summary><b>Component specific local options</b></summary>
+
+#### buffers component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'buffers',
+      show_filename_only = true, -- shows shortened relative path when false
+      show_modified_status = true -- shows indicator then bufder is modified
+      max_length = vim.o.columns * 2 / 3, -- maximum width of buffers component
+      filetype_names = {
+        TelescopePrompt = 'Telescope',
+        dashboard = 'Dashboard',
+        packer = 'Packer',
+        fzf = 'FZF',
+      }, -- shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
+      buffers_color = {
+        active = nil,   -- color for active buffer
+        inactive = nil, -- color for inactive buffer
+      },
+    }
+  }
+}
+```
 
 #### diagnostics component options
 
@@ -446,6 +477,26 @@ sections = {
 }
 ```
 
+#### tabs component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'tabs',
+      max_length = vim.o.columns / 3, -- maximum width of tabs component
+      mode = 0, -- 0  shows tab_nr
+                -- 1  shows tab_name
+                -- 2  shows tab_nr + tab_name
+      tabs_color = {
+        active = nil,   -- color for active tab
+        inactive = nil, -- color for inactive tab
+      },
+    }
+  }
+}
+```
+
 </details>
 
 ---
@@ -454,6 +505,7 @@ sections = {
 
 You can use lualine to display components in tabline.
 The configuration for tabline sections is exactly the same as for statusline.
+
 ```lua
 tabline = {
   lualine_a = {},
@@ -464,9 +516,23 @@ tabline = {
   lualine_z = {}
 }
 ```
+
 This will show branch and filename component in top of neovim inside tabline .
 
-You can also completely move your statuline to tabline by configuring 
+lualine also provides 2 components buffers & tabs that you can use to get more traditional tabline/bufferline.
+
+```lua
+tabline = {
+  lualine_a = {'buffers'},
+  lualine_b = {'branch'},
+  lualine_c = {'filename'},
+  lualine_x = {},
+  lualine_y = {},
+  lualine_z = {'tabs'}
+}
+```
+
+You can also completely move your statusline to tabline by configuring
 `lualine.tabline` and disabling `lualine.sections` and `lualine.inactive_sections`.
 
 ```lua
@@ -477,8 +543,8 @@ sections = {},
 inactive_sections = {},
 ```
 
-If you're looking for bufferline or want to show tabs in tabline . There are
-manny awesome plugins that can do that. For example:
+If you want a more sophisticated tabline you can use other
+tabline plugins with lualine too . For example:
 
 - [nvim-bufferline](https://github.com/akinsho/nvim-bufferline.lua)
 - [tabline.nvim](https://github.com/kdheepak/tabline.nvim)
@@ -493,8 +559,9 @@ You can find a bigger list [here](https://github.com/rockerBOO/awesome-neovim#ta
 Lualine extensions change statusline appearance for a window/buffer with
 specified filetypes.
 
-By default no extension are loaded to improve performance. 
+By default no extensions are loaded to improve performance.
 You can load extensions with:
+
 ```lua
 extensions = {'quickfix'}
 ```
@@ -516,6 +583,7 @@ extensions = {'quickfix'}
 <summary><b>Custom extensions</b></summary>
 
 You can define your own extensions. If you think an extension might be useful for others then please submit a pr.
+
 ```lua
 local my_extension = {sections = {lualine_a = 'mode'}, filetypes = {'lua'}}
 require'lualine'.setup {extensions = {my_extension}}
