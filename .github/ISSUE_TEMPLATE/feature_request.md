@@ -1,9 +1,8 @@
 ---
-name: Feature Resuest
+name: Feature Request
 about: Request a feature for lualine
-title: 'Feat: '
+title: "Feat: "
 labels: new feature
-
 ---
 
 <!--
@@ -12,7 +11,9 @@ labels: new feature
 -->
 
 ### Requested feature
+
 <!-- Describe the feature with details. -->
 
 ### Motivation
+
 <!-- Explain why you think it should be included in lualine.-->
