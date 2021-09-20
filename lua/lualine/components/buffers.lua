@@ -12,6 +12,7 @@ local default_options = {
     dashboard = 'Dashboard',
     packer = 'Packer',
     fzf = 'FZF',
+    alpha = 'Alpha',
   },
 }
 
@@ -197,12 +198,16 @@ function Buffers:update_status()
     b.current = true
     if self.options.self.section < 'lualine_x' then
       b.last = true
-      buffers[#buffers].last = nil
+      if #buffers > 0 then
+        buffers[#buffers].last = nil
+      end
       buffers[#buffers + 1] = b
       current = #buffers
     else
       b.first = true
-      buffers[1].first = nil
+      if #buffers > 0 then
+        buffers[1].first = nil
+      end
       table.insert(buffers, 1, b)
       current = 1
     end

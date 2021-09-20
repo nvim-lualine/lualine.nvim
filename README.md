@@ -385,6 +385,7 @@ sections = {
         dashboard = 'Dashboard',
         packer = 'Packer',
         fzf = 'FZF',
+        alpha = 'Alpha'
       }, -- shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
       buffers_color = {
         active = nil,   -- color for active buffer
