@@ -49,7 +49,7 @@ local default_symbols = {
 local default_options = {
   colored = true,
   update_in_insert = false,
-  sources = nil,
+  sources = { 'nvim_lsp', 'coc' },
   sections = { 'error', 'warn', 'info', 'hint' },
   diagnostics_color = {
     error = {
@@ -122,7 +122,7 @@ Diagnostics.new = function(self, options, child)
   end
 
   -- Error out no source
-  if new_diagnostics.options.sources == nil then
+  if #new_diagnostics.options.sources < 1 then
     print 'no sources for diagnostics configured'
     return ''
   end

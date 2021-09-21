@@ -14,6 +14,10 @@ local default_options = {
     fzf = 'FZF',
     alpha = 'Alpha',
   },
+  buffers_color = {
+    active = nil,
+    inactive = nil,
+  },
 }
 
 local function get_hl(section, is_active)
@@ -42,13 +46,11 @@ end
 
 function Buffer:get_props()
   self.file = vim.fn.bufname(self.bufnr)
-  self.filepath = vim.fn.expand('#' .. self.bufnr .. ':p:~')
   self.buftype = vim.api.nvim_buf_get_option(self.bufnr, 'buftype')
   self.filetype = vim.api.nvim_buf_get_option(self.bufnr, 'filetype')
   local modified = self.options.show_modified_status and vim.api.nvim_buf_get_option(self.bufnr, 'modified')
   local modified_icon = self.options.icons_enabled and ' ' or ' +'
   self.modified_icon = modified and modified_icon or ''
-  self.visible = vim.fn.bufwinid(self.bufnr) ~= -1
   self.icon = ''
   if self.options.icons_enabled then
     local dev

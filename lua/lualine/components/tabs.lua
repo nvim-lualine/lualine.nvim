@@ -6,6 +6,10 @@ local highlight = require 'lualine.highlight'
 local default_options = {
   max_length = 0,
   mode = 0,
+  tabs_color = {
+    active = nil,
+    inactive = nil,
+  },
 }
 
 local function get_hl(section, is_active)

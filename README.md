@@ -106,7 +106,7 @@ Lualine has sections as shown below.
 
 Each sections holds it's components e.g. current vim's mode.
 
-<details><summary>Configuring from `.vim` file</summary>
+<details><summary>Configuring lualine in init.vim</summary>
 
 All the examples below are in lua. You can use the same examples
 in `.vim` file by wrapping them in lua heredoc like this:
@@ -332,26 +332,40 @@ shown . On the other hand branch will be formatted with global formatter
 <details>
 <summary><b>Global options</b></summary>
 
+These are `options` that are used in options table.
+They set behavior of lualine.
+
+Values set here are treated as default for other options
+that work in component level.
+
+for example even though `icons_enabled` is a general component option.
+you can set `icons_enabled` to `false` and icons will be disabled on all
+component. You can still overwrite defaults set in option table by specifying
+the option value in component.
+
 ```lua
 options = {
-  icons_enabled = true, -- displays icons in alongside component
-  padding = 1, -- adds padding to the left and right of components
-               -- padding can be specified to left or right separately like
-               -- padding = { left = left_padding, right = right_padding }
-  fmt = nil -- fmt function, formats component's output
+  theme = 'auto',          -- lualine theme
+  component_separators = {left = '', right = ''},
+  section_separators = {left = '', right = ''},
+  disabled_filetypes = {},  -- filetypes to diable lualine on
 }
 ```
 
 </details>
 
 <details>
-<summary><b>Local options</b></summary>
+<summary><b>General component options</b></summary>
+
+These are options that control behavior at component level
+and are available for all components.
 
 ```lua
 sections = {
   lualine_a = {
     {
       'mode',
+      icons_enabled = true, -- displays icons in alongside component
       icon = nil,      -- displays icon in front of the component
       separator = nil, -- Determines what separator to use for the component.
                        -- when a string is given it's treated as component_separator.
@@ -375,6 +389,10 @@ sections = {
       -- luae(lua expressions), vimf(viml function name)
       -- luae is short for lua-expression and vimf is short fror vim-function
       type = nil,
+      padding = 1, -- adds padding to the left and right of components
+                   -- padding can be specified to left or right separately like
+                   -- padding = { left = left_padding, right = right_padding }
+      fmt = nil,   -- format function, formats component's output
     }
   }
 }
@@ -383,7 +401,11 @@ sections = {
 </details>
 
 <details>
-<summary><b>Component specific local options</b></summary>
+<summary><b>Component specific options</b></summary>
+
+These are options that are available on specific components.
+For example you have option on `diagnostics` component to
+specify what your diagnostic sources will be.
 
 #### buffers component options
 
@@ -422,7 +444,7 @@ sections = {
       -- 'nvim_lsp', 'nvim', 'coc', 'ale', 'vim_lsp'
       -- Or a function that returns a table like
       --   {error=error_cnt, warn=warn_cnt, info=info_cnt, hint=hint_cnt}
-      sources = {},
+      sources = {'nvim_lsp', 'coc'},
       -- displays diagnostics from defined severity
       sections = {'error', 'warn', 'info', 'hint'},
       -- all colors are in format #rrggbb
