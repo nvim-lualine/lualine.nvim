@@ -2,12 +2,12 @@
 
 <!-- panvimdoc-ignore-start -->
 
-![code size](https://img.shields.io/github/languages/code-size/hoob3rt/lualine.nvim?style=flat-square)
-![license](https://img.shields.io/github/license/hoob3rt/lualine.nvim?style=flat-square)
+![code size](https://img.shields.io/github/languages/code-size/shadmansaleh/lualine.nvim?style=flat-square)
+![license](https://img.shields.io/github/license/shadmansaleh/lualine.nvim?style=flat-square)
 
 <!-- panvimdoc-ignore-end -->
 
-A fast and easy to configure statusline plugin for neovim
+A blazing fast and easy to configure Neovim statusline written in Lua
 
 `lualine.nvim` requires neovim 0.5
 
@@ -78,7 +78,7 @@ Last Updated On: 20-09-2021
 ### [vim-plug](https://github.com/junegunn/vim-plug)
 
 ```vim
-Plug 'hoob3rt/lualine.nvim'
+Plug 'shadmansaleh/lualine.nvim'
 " If you want to have icons in your statusline choose one of these
 Plug 'kyazdani42/nvim-web-devicons'
 ```
@@ -87,7 +87,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 
 ```lua
 use {
-  'hoob3rt/lualine.nvim',
+  'shadmansaleh/lualine.nvim',
   requires = {'kyazdani42/nvim-web-devicons', opt = true}
 }
 ```
@@ -197,7 +197,7 @@ require'lualine'.setup{
 }
 ```
 
-Theme structure is available [here](https://github.com/hoob3rt/lualine.nvim/blob/master/CONTRIBUTING.md#adding-a-theme)
+Theme structure is available [here](./CONTRIBUTING.md#adding-a-theme)
 
 </details>
 

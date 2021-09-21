@@ -12,7 +12,7 @@ Table of Contents                                  *lualine-table-of-contents*
 ==============================================================================
 1. lualine.nvim                                         *lualine-lualine.nvim*
 
-A fast and easy to configure statusline plugin for neovim
+A blazing fast and easy to configure Neovim statusline written in Lua
 
 `lualine.nvim` requires neovim 0.5
 
@@ -51,7 +51,7 @@ INSTALLATION                                            *lualine-installation*
 VIM-PLUG <HTTPS://GITHUB.COM/JUNEGUNN/VIM-PLUG> ~
 
 >
-    Plug 'hoob3rt/lualine.nvim'
+    Plug 'shadmansaleh/lualine.nvim'
     " If you want to have icons in your statusline choose one of these
     Plug 'kyazdani42/nvim-web-devicons'
 <
@@ -61,7 +61,7 @@ PACKER.NVIM <HTTPS://GITHUB.COM/WBTHOMASON/PACKER.NVIM> ~
 
 >
     use {
-      'hoob3rt/lualine.nvim',
+      'shadmansaleh/lualine.nvim',
       requires = {'kyazdani42/nvim-web-devicons', opt = true}
     }
 <
@@ -173,8 +173,7 @@ Customizing themes
 <
 
 
-Theme structure is available here
-<https://github.com/hoob3rt/lualine.nvim/blob/master/CONTRIBUTING.md#adding-a-theme>
+Theme structure is available here <./CONTRIBUTING.md#adding-a-theme>
 
 ------------------------------------------------------------------------------
 
