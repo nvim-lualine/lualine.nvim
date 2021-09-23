@@ -638,3 +638,14 @@ You can disable lualine for specific filetypes
 ```lua
 options = {disabled_filetypes = {'lua'}}
 ```
+
+<!-- panvimdoc-ignore-start -->
+
+### Contributors
+Thanks goes to these wonderful people
+
+<a href="https://github.com/shadmansaleh/lualine.nvim/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=shadmansaleh/lualine.nvim" />
+</a>
+
+<!-- panvimdoc-ignore-end -->
