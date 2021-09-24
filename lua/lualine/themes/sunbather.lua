@@ -1,3 +1,6 @@
+-- Copyright (c) 2021 DanisDGK
+-- MIT license, see LICENSE for more details.
+-- LuaFormatter off
 local colors = {
   black           = "#000000",
   medium_gray     = "#767676",
@@ -6,6 +9,7 @@ local colors = {
   lightest_gray   = "#EEEEEE",
   dark_pink       = "#ff5f87",
 }
+--LuaFormatter on
 return {
   normal = {
     a = {bg = colors.dark_pink, fg = colors.black, gui = 'bold'},
