@@ -237,6 +237,14 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649258-48907600-74bd-11eb-9bba-8e82b56777d9.png'/>
 </p>
 
+### sunbather
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/38492793/134714601-4408a1d4-b558-4fc3-87f5-d79320277f78.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/38492793/134714613-0cfc88c5-f574-4de6-967a-07709fd3d755.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/38492793/134714621-ea882ed1-c706-4d00-a761-7e7c196d5fbf.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/38492793/134714629-811d8701-1167-45fc-b5ae-567bc93f2f0e.png'/>
+</p>
+
 ### tomorrow
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649275-51814780-74bd-11eb-881b-1e137a0cbfe0.png'/>
