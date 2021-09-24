@@ -213,6 +213,15 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649158-18e16e00-74bd-11eb-8687-65b0ecbf20d2.png'/>
 </p>
 
+### purify
+<p>
+<img width="700" src="https://user-images.githubusercontent.com/52131706/134700252-0a44c167-d78e-4bde-9261-67d2be91196d.png">
+<img width="700" src="https://user-images.githubusercontent.com/52131706/134700264-76f2bbbc-bcda-4f11-a580-565f3ab9769c.png">
+<img width="700" src="https://user-images.githubusercontent.com/52131706/134700271-149709ee-a389-4aac-bae7-9d232879630c.png">
+<img width="700" src="https://user-images.githubusercontent.com/52131706/134700286-65a0b979-e47d-4163-ba92-75db44013ae6.png">
+
+<p>
+
 ### purify_echo
 <p>
 <img width="700" src="https://user-images.githubusercontent.com/52131706/134695256-6174ba29-3dee-4d8e-bd12-a178c139a061.png">
