@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local Tabs = require('lualine.component'):new()
+local M = require('lualine.component'):extend()
 local highlight = require 'lualine.highlight'
 
 local default_options = {
@@ -103,30 +103,29 @@ function Tab:separator_after()
   end
 end
 
-function Tabs:new(options, child)
-  local newObj = self._parent:new(options, child or Tabs)
+function M:init(options)
+  M.super.init(self, options)
   default_options.tabs_color = {
     active = get_hl(options.self.section, true),
     inactive = get_hl(options.self.section, false),
   }
-  newObj.options = vim.tbl_deep_extend('keep', newObj.options or {}, default_options)
+  self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
   -- stylua: ignore
-  newObj.highlights = {
+  self.highlights = {
     active = highlight.create_component_highlight_group(
-      newObj.options.tabs_color.active,
+      self.options.tabs_color.active,
       'tabs_active',
-      newObj.options
+      self.options
     ),
     inactive = highlight.create_component_highlight_group(
-      newObj.options.tabs_color.inactive,
+      self.options.tabs_color.inactive,
       'tabs_active',
-      newObj.options
+      self.options
     ),
   }
-  return newObj
 end
 
-function Tabs:update_status()
+function M:update_status()
   local data = {}
   local tabs = {}
   for t = 1, vim.fn.tabpagenr '$' do
@@ -214,4 +213,4 @@ vim.cmd [[
   endfunction
 ]]
 
-return Tabs
+return M

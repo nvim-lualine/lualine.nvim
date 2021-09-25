@@ -1,36 +1,35 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
+local M = require('lualine.component'):extend()
 
-local EvalFuncComponent = require('lualine.component'):new()
-
-EvalFuncComponent.update_status = function(self)
+function M:update_status()
   local component = self.options[1]
   local ok, status
   if self.options.type == nil then
-    ok, status = pcall(EvalFuncComponent.lua_eval, component)
+    ok, status = pcall(M.lua_eval, component)
     if not ok then
-      status = EvalFuncComponent.vim_function(component)
+      status = M.vim_function(component)
     end
   else
     if self.options.type == 'luae' then
-      ok, status = pcall(EvalFuncComponent.lua_eval, component)
+      ok, status = pcall(M.lua_eval, component)
       if not ok then
         status = nil
       end
     elseif self.options.type == 'vimf' then
-      status = EvalFuncComponent.vim_function(component)
+      status = M.vim_function(component)
     end
   end
   return status
 end
 
-EvalFuncComponent.lua_eval = function(code)
+function M.lua_eval(code)
   local result = loadstring('return ' .. code)()
   assert(result, 'String expected got nil')
   return tostring(result)
 end
 
-EvalFuncComponent.vim_function = function(name)
+function M.vim_function(name)
   -- vim function component
   local ok, return_val = pcall(vim.api.nvim_call_function, name, {})
   if not ok then
@@ -40,4 +39,4 @@ EvalFuncComponent.vim_function = function(name)
   return ok and return_val or ''
 end
 
-return EvalFuncComponent
+return M

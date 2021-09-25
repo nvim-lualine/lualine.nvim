@@ -61,3 +61,33 @@ See [#24](https://github.com/shadmansaleh/lualine.nvim/pull/24) for details
 modified, removed in diff_color table option
 - color_error, color_warning, color_info, color_hint are now available
 as error, warn, info, hint in diagnostics_color table option
+
+### Component class refactor
+***Applicable only ones responsible for custom components***
+- Now call extend method on super class to create new type of component instead of calling new with empty args.
+- Don't overrite new method for initialization. Overrite init instead.
+- rename Component._parent -> Component.super
+- Call methods from super class directly on classes super not through
+  objects super or self.super
+So basically if you had something like
+```lua
+local my_comp = require'lualine.component':new()
+function mycomp:new(options, child)
+  local obj = self._parent:new(options, child or my_comp)
+  obj.x = 1
+  obj.y = 2
+  return obj
+end
+```
+change it to
+```lua
+local my_comp = require('lualine.component'):extend()
+
+function my_comp:init(options)
+  -- Notice carefully it's not self.super.init nor my_comp.super:init
+  my_comp.super.init(self, options)
+  self.x = 1
+  self.y = 2
+end
+```
+

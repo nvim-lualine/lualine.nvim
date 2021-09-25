@@ -12,13 +12,13 @@ local sep = lualine_require.sep
 
 local component_types = {
   luaf = function(component)
-    return require('lualine.components.special.function_component'):new(component)
+    return require 'lualine.components.special.function_component'(component)
   end,
   mod = function(component)
     local ok, loaded_component = pcall(require, 'lualine.components.' .. component[1])
     if ok then
       component.component_name = component[1]
-      loaded_component = loaded_component:new(component)
+      loaded_component = loaded_component(component)
       return loaded_component
     end
   end,
@@ -27,13 +27,13 @@ local component_types = {
     component[1] = function()
       return stl_expr
     end
-    return require('lualine.components.special.function_component'):new(component)
+    return require 'lualine.components.special.function_component'(component)
   end,
   var = function(component)
-    return require('lualine.components.special.vim_var_component'):new(component)
+    return require 'lualine.components.special.vim_var_component'(component)
   end,
   ['_'] = function(component)
-    return require('lualine.components.special.eval_func_component'):new(component)
+    return require 'lualine.components.special.eval_func_component'(component)
   end,
 }
 

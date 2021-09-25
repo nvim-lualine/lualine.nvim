@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local Buffers = require('lualine.component'):new()
+local M = require('lualine.component'):extend()
 local highlight = require 'lualine.highlight'
 
 local default_options = {
@@ -134,29 +134,28 @@ function Buffer:name()
     or vim.fn.pathshorten(vim.fn.fnamemodify(self.file, ':p:.'))
 end
 
-function Buffers:new(options, child)
-  local newObj = self._parent:new(options, child or Buffers)
+function M:init(options)
+  M.super.init(self, options)
   default_options.buffers_color = {
     active = get_hl(options.self.section, true),
     inactive = get_hl(options.self.section, false),
   }
-  newObj.options = vim.tbl_deep_extend('keep', newObj.options or {}, default_options)
-  newObj.highlights = {
+  self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
+  self.highlights = {
     active = highlight.create_component_highlight_group(
-      newObj.options.buffers_color.active,
+      self.options.buffers_color.active,
       'buffers_active',
-      newObj.options
+      self.options
     ),
     inactive = highlight.create_component_highlight_group(
-      newObj.options.buffers_color.inactive,
+      self.options.buffers_color.inactive,
       'buffers_active',
-      newObj.options
+      self.options
     ),
   }
-  return newObj
 end
 
-function Buffers:update_status()
+function M:update_status()
   local data = {}
   local buffers = {}
   for b = 1, vim.fn.bufnr '$' do
@@ -267,4 +266,4 @@ vim.cmd [[
   endfunction
 ]]
 
-return Buffers
+return M

@@ -1,7 +1,8 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local VarComponent = require('lualine.component'):new()
-VarComponent.update_status = function(self)
+local M = require('lualine.component'):extend()
+
+function M:update_status()
   local component = self.options[1]
   -- vim veriable component
   -- accepts g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo:
@@ -31,4 +32,4 @@ VarComponent.update_status = function(self)
   return ok and return_val or ''
 end
 
-return VarComponent
+return M

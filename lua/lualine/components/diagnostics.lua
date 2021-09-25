@@ -7,7 +7,7 @@ local modules = lualine_require.lazy_require {
   utils_notices = 'lualine.utils.notices',
 }
 
-local Diagnostics = lualine_require.require('lualine.component'):new()
+local M = lualine_require.require 'lualine.component':extend()
 
 local function check_deprecated_options(options)
   if options.color_error or options.color_warn or options.color_info or options.color_hint then
@@ -83,56 +83,55 @@ local default_options = {
   },
 }
 -- Initializer
-Diagnostics.new = function(self, options, child)
+function M:init(options)
   -- Run super()
-  local new_diagnostics = self._parent:new(options, child or Diagnostics)
+  M.super.init(self, options)
   -- Apply default options
-  new_diagnostics.options = vim.tbl_deep_extend('keep', new_diagnostics.options or {}, default_options)
-  check_deprecated_options(new_diagnostics.options)
+  self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
+  check_deprecated_options(self.options)
   -- Apply default symbols
-  new_diagnostics.symbols = vim.tbl_extend(
+  self.symbols = vim.tbl_extend(
     'keep',
-    new_diagnostics.options.symbols or {},
-    new_diagnostics.options.icons_enabled ~= false and default_symbols.icons or default_symbols.no_icons
+    self.options.symbols or {},
+    self.options.icons_enabled ~= false and default_symbols.icons or default_symbols.no_icons
   )
   -- Initialize highlight groups
-  if new_diagnostics.options.colored then
-    new_diagnostics.highlight_groups = {
+  if self.options.colored then
+    self.highlight_groups = {
       error = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.diagnostics_color.error,
+        self.options.diagnostics_color.error,
         'diagnostics_error',
-        new_diagnostics.options
+        self.options
       ),
       warn = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.diagnostics_color.warn,
+        self.options.diagnostics_color.warn,
         'diagnostics_warn',
-        new_diagnostics.options
+        self.options
       ),
       info = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.diagnostics_color.info,
+        self.options.diagnostics_color.info,
         'diagnostics_info',
-        new_diagnostics.options
+        self.options
       ),
       hint = modules.highlight.create_component_highlight_group(
-        new_diagnostics.options.diagnostics_color.hint,
+        self.options.diagnostics_color.hint,
         'diagnostics_hint',
-        new_diagnostics.options
+        self.options
       ),
     }
   end
 
   -- Error out no source
-  if #new_diagnostics.options.sources < 1 then
+  if #self.options.sources < 1 then
     print 'no sources for diagnostics configured'
     return ''
   end
   -- Initialize variable to store last update so we can use it in insert
   -- mode for no update_in_insert
-  new_diagnostics.last_update = ''
-  return new_diagnostics
+  self.last_update = ''
 end
 
-Diagnostics.update_status = function(self)
+function M:update_status()
   if not self.options.update_in_insert and vim.api.nvim_get_mode().mode:sub(1, 1) == 'i' then
     return self.last_update
   end
@@ -175,7 +174,7 @@ Diagnostics.update_status = function(self)
   return self.last_update
 end
 
-Diagnostics.diagnostic_sources = {
+M.diagnostic_sources = {
   nvim_lsp = function()
     local error_count = vim.lsp.diagnostic.get_count(0, 'Error')
     local warning_count = vim.lsp.diagnostic.get_count(0, 'Warning')
@@ -220,11 +219,11 @@ Diagnostics.diagnostic_sources = {
   end,
 }
 
-Diagnostics.get_diagnostics = function(sources)
+M.get_diagnostics = function(sources)
   local result = {}
   for index, source in ipairs(sources) do
     if type(source) == 'string' then
-      local error_count, warning_count, info_count, hint_count = Diagnostics.diagnostic_sources[source]()
+      local error_count, warning_count, info_count, hint_count = M.diagnostic_sources[source]()
       result[index] = {
         error = error_count,
         warn = warning_count,
@@ -245,4 +244,4 @@ Diagnostics.get_diagnostics = function(sources)
   return result
 end
 
-return Diagnostics
+return M

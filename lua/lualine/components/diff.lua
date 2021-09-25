@@ -7,7 +7,7 @@ local modules = lualine_require.lazy_require {
   highlight = 'lualine.highlight',
   Job = 'lualine.utils.job',
 }
-local Diff = lualine_require.require('lualine.component'):new()
+local M = lualine_require.require('lualine.component'):extend()
 
 local function check_deprecated_options(options)
   if options.color_added or options.color_modified or options.color_removed then
@@ -35,12 +35,12 @@ end
 
 -- Vars
 -- variable to store git diff stats
-Diff.git_diff = nil
+M.git_diff = nil
 -- accumulates output from diff process
-Diff.diff_output_cache = {}
+M.diff_output_cache = {}
 -- variable to store git_diff job
-Diff.diff_job = nil
-Diff.active_bufnr = '0'
+M.diff_job = nil
+M.active_bufnr = '0'
 
 local diff_cache = {} -- Stores last known value of diff of a buffer
 
@@ -61,54 +61,52 @@ local default_options = {
 }
 
 -- Initializer
-Diff.new = function(self, options, child)
-  local new_instance = self._parent:new(options, child or Diff)
-  new_instance.options = vim.tbl_deep_extend('keep', new_instance.options or {}, default_options)
-  check_deprecated_options(new_instance.options)
+function M:init(options)
+  M.super.init(self, options)
+  self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
+  check_deprecated_options(self.options)
   -- create highlights and save highlight_name in highlights table
-  if new_instance.options.colored then
-    new_instance.highlights = {
+  if self.options.colored then
+    self.highlights = {
       added = modules.highlight.create_component_highlight_group(
-        new_instance.options.diff_color.added,
+        self.options.diff_color.added,
         'diff_added',
-        new_instance.options
+        self.options
       ),
       modified = modules.highlight.create_component_highlight_group(
-        new_instance.options.diff_color.modified,
+        self.options.diff_color.modified,
         'diff_modified',
-        new_instance.options
+        self.options
       ),
       removed = modules.highlight.create_component_highlight_group(
-        new_instance.options.diff_color.removed,
+        self.options.diff_color.removed,
         'diff_removed',
-        new_instance.options
+        self.options
       ),
     }
   end
 
-  Diff.diff_checker_enabled = type(new_instance.options.source) ~= 'function'
+  M.diff_checker_enabled = type(self.options.source) ~= 'function'
 
-  if Diff.diff_checker_enabled then
+  if M.diff_checker_enabled then
     -- setup internal source
     modules.utils.define_autocmd('BufEnter', "lua require'lualine.components.diff'.update_diff_args()")
     modules.utils.define_autocmd('BufWritePost', "lua require'lualine.components.diff'.update_git_diff()")
-    Diff.update_diff_args()
+    M.update_diff_args()
   end
-
-  return new_instance
 end
 
 -- Function that runs everytime statusline is updated
-Diff.update_status = function(self, is_focused)
+function M:update_status(is_focused)
   local git_diff
-  if Diff.diff_checker_enabled then
-    if Diff.active_bufnr ~= vim.g.actual_curbuf then
+  if M.diff_checker_enabled then
+    if M.active_bufnr ~= vim.g.actual_curbuf then
       -- Workaround for https://github.com/hoob3rt/lualine.nvim/issues/286
       -- See upstream issue https://github.com/neovim/neovim/issues/15300
       -- Diff is out of sync re sync it.
-      Diff.update_diff_args()
+      M.update_diff_args()
     end
-    git_diff = Diff.git_diff
+    git_diff = M.git_diff
   else
     git_diff = self.options.source()
   end
@@ -154,15 +152,15 @@ end
 --    removed = removed_count,
 -- }
 -- error_code = { added = -1, modified = -1, removed = -1 }
-function Diff.get_sign_count()
-  if Diff.diff_checker_enabled then
-    Diff.update_diff_args()
+function M.get_sign_count()
+  if M.diff_checker_enabled then
+    M.update_diff_args()
   end
-  return Diff.git_diff or { added = -1, modified = -1, removed = -1 }
+  return M.git_diff or { added = -1, modified = -1, removed = -1 }
 end
 
 -- process diff data and update git_diff{ added, removed, modified }
-function Diff.process_diff(data)
+function M.process_diff(data)
   -- Adapted from https://github.com/wbthomason/nvim-vcs.lua
   local added, removed, modified = 0, 0, 0
   for _, line in ipairs(data) do
@@ -185,19 +183,19 @@ function Diff.process_diff(data)
       end
     end
   end
-  Diff.git_diff = { added = added, modified = modified, removed = removed }
+  M.git_diff = { added = added, modified = modified, removed = removed }
 end
 
 -- Updates the job args
-function Diff.update_diff_args()
+function M.update_diff_args()
   -- Donn't show git diff when current buffer doesn't have a filename
-  Diff.active_bufnr = tostring(vim.fn.bufnr())
+  M.active_bufnr = tostring(vim.fn.bufnr())
   if #vim.fn.expand '%' == 0 then
-    Diff.diff_args = nil
-    Diff.git_diff = nil
+    M.diff_args = nil
+    M.git_diff = nil
     return
   end
-  Diff.diff_args = {
+  M.diff_args = {
     cmd = string.format(
       [[git -C %s --no-pager diff --no-color --no-ext-diff -U0 -- %s]],
       vim.fn.expand '%:h',
@@ -205,40 +203,40 @@ function Diff.update_diff_args()
     ),
     on_stdout = function(_, data)
       if next(data) then
-        Diff.diff_output_cache = vim.list_extend(Diff.diff_output_cache, data)
+        M.diff_output_cache = vim.list_extend(M.diff_output_cache, data)
       end
     end,
     on_stderr = function(_, data)
       data = table.concat(data, '\n')
       if #data > 1 or (#data == 1 and #data[1] > 0) then
-        Diff.git_diff = nil
-        Diff.diff_output_cache = {}
+        M.git_diff = nil
+        M.diff_output_cache = {}
       end
     end,
     on_exit = function()
-      if #Diff.diff_output_cache > 0 then
-        Diff.process_diff(Diff.diff_output_cache)
+      if #M.diff_output_cache > 0 then
+        M.process_diff(M.diff_output_cache)
       else
-        Diff.git_diff = { added = 0, modified = 0, removed = 0 }
+        M.git_diff = { added = 0, modified = 0, removed = 0 }
       end
-      diff_cache[vim.fn.bufnr()] = Diff.git_diff
+      diff_cache[vim.fn.bufnr()] = M.git_diff
     end,
   }
-  Diff.update_git_diff()
+  M.update_git_diff()
 end
 
 -- Update git_diff veriable
-function Diff.update_git_diff()
-  if Diff.diff_args then
-    Diff.diff_output_cache = {}
-    if Diff.diff_job then
-      Diff.diff_job:stop()
+function M.update_git_diff()
+  if M.diff_args then
+    M.diff_output_cache = {}
+    if M.diff_job then
+      M.diff_job:stop()
     end
-    Diff.diff_job = modules.Job(Diff.diff_args)
-    if Diff.diff_job then
-      Diff.diff_job:start()
+    M.diff_job = modules.Job(M.diff_args)
+    if M.diff_job then
+      M.diff_job:start()
     end
   end
 end
 
-return Diff
+return M

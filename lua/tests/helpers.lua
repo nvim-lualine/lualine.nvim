@@ -17,7 +17,7 @@ M.assert_component = function(component, opts, result)
   if component == nil then
     component = 'special.function_component'
   end
-  local comp = require('lualine.components.' .. component):new(opts)
+  local comp = require('lualine.components.' .. component)(opts)
   eq(result, comp:draw(opts.hl))
 end
 
