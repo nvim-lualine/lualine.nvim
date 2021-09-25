@@ -642,7 +642,7 @@ options = {disabled_filetypes = {'lua'}}
 <!-- panvimdoc-ignore-start -->
 
 ### Contributors
-Thanks goes to these wonderful people
+Thanks to these wonderful people we enjoy this awesome plugin.
 
 <a href="https://github.com/shadmansaleh/lualine.nvim/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=shadmansaleh/lualine.nvim" />
