@@ -49,7 +49,7 @@ function Buffer:get_props()
   self.buftype = vim.api.nvim_buf_get_option(self.bufnr, 'buftype')
   self.filetype = vim.api.nvim_buf_get_option(self.bufnr, 'filetype')
   local modified = self.options.show_modified_status and vim.api.nvim_buf_get_option(self.bufnr, 'modified')
-  local modified_icon = self.options.icons_enabled and ' ' or ' +'
+  local modified_icon = self.options.icons_enabled and ' ●' or ' +'
   self.modified_icon = modified and modified_icon or ''
   self.icon = ''
   if self.options.icons_enabled then
