@@ -15,6 +15,24 @@ local create_cterm_colors = false
 -- table to store the highlight names created by lualine
 local loaded_highlights = {}
 
+-- table to map mode to highlight suffixes
+local mode_to_highlight = {
+  ['VISUAL'] = '_visual',
+  ['V-BLOCK'] = '_visual',
+  ['V-LINE'] = '_visual',
+  ['SELECT'] = '_visual',
+  ['S-LINE'] = '_visual',
+  ['S-BLOCK'] = '_visual',
+  ['REPLACE'] = '_replace',
+  ['V-REPLACE'] = '_replace',
+  ['INSERT'] = '_insert',
+  ['COMMAND'] = '_command',
+  ['EX'] = '_command',
+  ['MORE'] = '_command',
+  ['CONFIRM'] = '_command',
+  ['TERMINAL'] = '_terminal',
+}
+
 -- determine if an highlight exist and isn't cleared
 function M.highlight_exists(highlight_name)
   return loaded_highlights[highlight_name] or false
@@ -98,27 +116,7 @@ function M.append_mode(highlight_group, is_focused)
     return highlight_group .. '_inactive'
   end
   local mode = require('lualine.utils.mode').get_mode()
-  if
-    mode == 'VISUAL'
-    or mode == 'V-BLOCK'
-    or mode == 'V-LINE'
-    or mode == 'SELECT'
-    or mode == 'S-LINE'
-    or mode == 'S-BLOCK'
-  then
-    highlight_group = highlight_group .. '_visual'
-  elseif mode == 'REPLACE' or mode == 'V-REPLACE' then
-    highlight_group = highlight_group .. '_replace'
-  elseif mode == 'INSERT' then
-    highlight_group = highlight_group .. '_insert'
-  elseif mode == 'COMMAND' or mode == 'EX' or mode == 'MORE' or mode == 'CONFIRM' then
-    highlight_group = highlight_group .. '_command'
-  elseif mode == 'TERMINAL' then
-    highlight_group = highlight_group .. '_terminal'
-  else
-    highlight_group = highlight_group .. '_normal'
-  end
-  return highlight_group
+  return highlight_group .. (mode_to_highlight[mode] or '_normal')
 end
 
 -- Helper function for create component highlight
