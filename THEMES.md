@@ -125,6 +125,14 @@ lualine try to match your colorscheme.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648935-a2dd0700-74bc-11eb-9a4b-72eb1e2ab79e.png'/>
 </p>
 
+### modus_operandi
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/33635216/134817118-d0f7b741-36fc-4fd7-8a70-b07ab0a35c74.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/33635216/134817159-db9dac36-8edb-4089-bec1-ed2bc2f26d4d.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/33635216/134817178-63fd0851-d41f-4150-b6b9-5b81b1d25930.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/33635216/134817215-776c883e-4f23-443b-9db6-7f77e494418c.png'/>
+</p>
+
 ### modus_vivendi
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/9327361/114389966-58176b80-9b9e-11eb-944e-1e0079527d74.png'/>
