@@ -52,6 +52,7 @@ function M.show_notices()
   notice = vim.list_extend(notice, vim.tbl_flatten(notices))
   vim.fn.append(0, notice)
   vim.api.nvim_win_set_cursor(0, { 1, 0 })
+  vim.bo.modifiable=false
 end
 
 function M.clear_notices()
