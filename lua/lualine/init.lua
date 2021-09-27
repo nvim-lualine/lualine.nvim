@@ -169,8 +169,8 @@ local function set_statusline()
     vim.api.nvim_exec([[
       augroup lualine
         autocmd!
-        autocmd WinLeave,BufLeave * lua vim.wo.statusline=require'lualine'.statusline()
-        autocmd BufWinEnter,WinEnter,BufEnter * set statusline<
+        autocmd WinLeave,BufLeave * silent! lua vim.wo.statusline=require'lualine'.statusline()
+        autocmd BufWinEnter,WinEnter,BufEnter * silent! set statusline<
         autocmd VimResized * redrawstatus
       augroup END
     ]], false)
