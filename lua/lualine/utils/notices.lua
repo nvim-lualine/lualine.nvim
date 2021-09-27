@@ -36,19 +36,19 @@ function M.notice_message_startup()
 end
 
 function M.show_notices()
-  vim.cmd('silent! keepalt split')
+  vim.cmd 'silent! keepalt split'
 
   local winid = vim.fn.win_getid()
   local bufnr = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_win_set_buf(winid, bufnr)
 
-  vim.wo[winid].winfixheight   = true
-  vim.wo[winid].winfixwidth    = true
-  vim.wo[winid].number         = false
-  vim.wo[winid].foldcolumn     = '0'
+  vim.wo[winid].winfixheight = true
+  vim.wo[winid].winfixwidth = true
+  vim.wo[winid].number = false
+  vim.wo[winid].foldcolumn = '0'
   vim.wo[winid].relativenumber = false
-  vim.wo[winid].signcolumn     = 'no'
-  vim.bo[bufnr].filetype       = 'markdown'
+  vim.wo[winid].signcolumn = 'no'
+  vim.bo[bufnr].filetype = 'markdown'
 
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'q', '<Cmd>bd<CR>', { noremap = true, silent = true })
 
@@ -62,10 +62,10 @@ function M.show_notices()
   notice = vim.list_extend(notice, vim.tbl_flatten(notices))
   vim.fn.appendbufline(bufnr, 0, notice)
 
-  vim.fn.deletebufline(bufnr, #notice, vim.fn.line('$'))
+  vim.fn.deletebufline(bufnr, #notice, vim.fn.line '$')
   vim.api.nvim_win_set_cursor(winid, { 1, 0 })
-  vim.bo[bufnr].modified  = false
-  vim.bo[bufnr].modifiable  = false
+  vim.bo[bufnr].modified = false
+  vim.bo[bufnr].modifiable = false
 end
 
 function M.clear_notices()
