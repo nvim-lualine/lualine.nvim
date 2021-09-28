@@ -1,7 +1,7 @@
-This file contains braking changes that have been made in this branch to
+This file contains breaking changes that have been made in this branch to
 make it easier to switch from [hoob3rt/lualine.nvim](https://github.com/hoob3rt/lualine.nvim)
-In this file contains changes in timed order . It's possible breaking change
-has been made to several times to same thing . In that case the one in the
+This file contains changes in chronological order. It's possible breaking change
+has been made several times to the same thing. In that case the one nearest the
 bottom indicates current state.
 
 ### Color option unification
@@ -18,10 +18,10 @@ You'll have
 ```lua
 color_added = { fg = '#rrbbgg' }
 ```
-for same effect.
+for the same effect.
 
 ### Theme rename
-So themes were renamed so they are same as their `g:color_name`
+Some themes were renamed so they are same as their `g:color_name`
 - oceanicnext      -> OceanicNext
 - papercolor       -> PaperColor
 - tomorrow         -> Tomorrow
@@ -29,18 +29,18 @@ So themes were renamed so they are same as their `g:color_name`
 - modus_vivendi    -> modus-vivendi
 
 ### function components now receive some default parameters
-Now function components receive same args as `update_status`. So fuctions
-signature is now
+Now function components receive the same args as `update_status`. So the function
+signature is now:
 ```lua
 function(self, is_active)
 ```
 `self` is a table that represents the component in lualine & `is_active` is
 a boolean value that indicates whether the function is being evaluated
-for active statusline or inactive statusline. This means function components
-can be more versatile. But also means you can't use functions that take
-optional arguments directly as function component . `lsp_status` is such
-a cases it takes an optional `winid` in first argument .
-You can wrap it with a function so those self & is_active doesn't
+for an active statusline or an inactive statusline. This means function components
+can be more versatile. But it also means you can't use functions that take
+optional arguments directly as function component. `lsp_status` is such
+a case that takes an optional `winid` in its first argument.
+You can wrap it with a function so the `self` & `is_active` don't
 get passed to `lsp_status`
 ```lua
 lualine_c = { function() return require'lsp-status'.status() end}
@@ -52,7 +52,7 @@ See [#24](https://github.com/shadmansaleh/lualine.nvim/pull/24) for details
 - separators are specified by left & right instead of position
   instead of `{'>', '<'}` you'll use `{left= '>', right='<'}`.
 - `left_padding` & `right_padding` removed. You can specify left or right
-  padding with padding option like padding = `{ left = 5 }`
+  padding with a padding option like padding = `{ left = 5 }`
 - Option rename:
  - condition -> cond
  - format -> fmt
