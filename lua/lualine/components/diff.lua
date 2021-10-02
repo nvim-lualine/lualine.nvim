@@ -169,8 +169,8 @@ function Diff.process_diff(data)
     if string.find(line, [[^@@ ]]) then
       local tokens = vim.fn.matchlist(line, [[^@@ -\v(\d+),?(\d*) \+(\d+),?(\d*)]])
       local line_stats = {
-        mod_count = tokens[3] == '' and 1 or tonumber(tokens[3]),
-        new_count = tokens[5] == '' and 1 or tonumber(tokens[5]),
+        mod_count = tokens[3] == nil and 0 or tokens[3] == '' and 1 or tonumber(tokens[3]),
+        new_count = tokens[5] == nil and 0 or tokens[5] == '' and 1 or tonumber(tokens[5]),
       }
 
       if line_stats.mod_count == 0 and line_stats.new_count > 0 then
