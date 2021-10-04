@@ -98,7 +98,7 @@ Diagnostics.update_status = function(self)
     hint = hint_count
   }
   local visible = self.options.visible == true
-  if type(self.options.visible == "function") then
+  if type(self.options.visible) == "function" then
     visible = self.options.visible()
   end
   if self.options.colored then
