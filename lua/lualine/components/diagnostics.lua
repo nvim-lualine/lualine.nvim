@@ -97,20 +97,24 @@ Diagnostics.update_status = function(self)
     info = info_count,
     hint = hint_count
   }
+  local visible = self.options.visible == "always"
+  if type(self.options.visible == "function") then
+    visible = self.options.visible()
+  end
   if self.options.colored then
     local colors = {}
     for name, hl in pairs(self.highlight_groups) do
       colors[name] = highlight.component_format_highlight(hl)
     end
     for _, section in ipairs(self.options.sections) do
-      if data[section] ~= nil and data[section] > 0 then
+      if data[section] ~= nil and (visible or data[section] > 0) then
         table.insert(result,
                      colors[section] .. self.symbols[section] .. data[section])
       end
     end
   else
     for _, section in ipairs(self.options.sections) do
-      if data[section] ~= nil and data[section] > 0 then
+      if data[section] ~= nil and (visible or data[section] > 0) then
         table.insert(result, self.symbols[section] .. data[section])
       end
     end
