@@ -97,7 +97,7 @@ Diagnostics.update_status = function(self)
     info = info_count,
     hint = hint_count
   }
-  local visible = self.options.visible == "always"
+  local visible = self.options.visible == true
   if type(self.options.visible == "function") then
     visible = self.options.visible()
   end

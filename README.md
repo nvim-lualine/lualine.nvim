@@ -298,7 +298,8 @@ sections = {
       color_warn = nil, -- changes diagnostic's warn foreground color
       color_info = nil, -- Changes diagnostic's info foreground color
       color_hint = nil, -- Changes diagnostic's hint foreground color
-      symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
+      symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'},
+      visible = nil, -- show diagnostics even if 0, boolean or function returning boolean
     }
   }
 }
