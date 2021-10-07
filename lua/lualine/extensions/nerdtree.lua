@@ -4,18 +4,10 @@ local function get_short_cwd()
   return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
 end
 
-local empty = {
-  function()
-    return ' '
-  end,
-  padding = 0,
-}
-
 local M = {}
 
 M.sections = {
   lualine_a = { get_short_cwd },
-  lualine_x = { empty },
 }
 
 M.filetypes = { 'nerdtree' }
