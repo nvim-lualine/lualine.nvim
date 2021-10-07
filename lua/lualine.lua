@@ -126,7 +126,7 @@ local function statusline(sections, is_focused)
   -- The sequence sections should maintain [SECTION_SEQUENCE]
   local section_sequence = { 'a', 'b', 'c', 'x', 'y', 'z' }
   local status = {}
-  local applied_midsection_devider = false
+  local applied_midsection_divider = false
   local applied_trunc = false
   for _, section_name in ipairs(section_sequence) do
     if sections['lualine_' .. section_name] then
@@ -137,8 +137,8 @@ local function statusline(sections, is_focused)
         is_focused
       )
       if #section_data > 0 then
-        if not applied_midsection_devider and section_name > 'c' then
-          applied_midsection_devider = true
+        if not applied_midsection_divider and section_name > 'c' then
+          applied_midsection_divider = true
           section_data = modules.highlight.format_highlight 'lualine_c' .. '%=' .. section_data
         end
         if not applied_trunc and section_name > 'b' then
@@ -148,6 +148,10 @@ local function statusline(sections, is_focused)
         table.insert(status, section_data)
       end
     end
+  end
+  if applied_midsection_divider == false and config.options.always_divide_middle ~= false then
+    -- When non of section x,y,z is present
+    table.insert(status, modules.highlight.format_highlight 'lualine_c' .. '%=')
   end
   return apply_transitional_separators(table.concat(status))
 end

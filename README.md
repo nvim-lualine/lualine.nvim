@@ -131,6 +131,7 @@ require'lualine'.setup {
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
     disabled_filetypes = {}
+    always_divide_middle = true,
   },
   sections = {
     lualine_a = {'mode'},
@@ -349,6 +350,9 @@ options = {
   component_separators = {left = '', right = ''},
   section_separators = {left = '', right = ''},
   disabled_filetypes = {},  -- filetypes to diable lualine on
+  always_divide_middle = true, -- When true left_sections (a,b,c) can't
+                               -- take over entiee statusline even
+                               -- when none of section x, y, z is present.
 }
 ```
 
