@@ -132,7 +132,7 @@ function Tabs:update_status()
   for t = 1, vim.fn.tabpagenr '$' do
     tabs[#tabs + 1] = Tab:new { tabnr = t, options = self.options, highlights = self.highlights }
   end
-  local current = vim.api.nvim_get_current_tabpage()
+  local current = vim.fn.tabpagenr()
   tabs[1].first = true
   tabs[#tabs].last = true
   if tabs[current] then
@@ -157,7 +157,7 @@ function Tabs:update_status()
   end
   local current_tab = tabs[current]
   if current_tab == nil then
-    local t = Tab:new { tabnr = vim.fn.tabpagenr() }
+    local t = Tab:new { tabnr = vim.fn.tabpagenr(), options = self.options, highlights = self.highlights }
     t.current = true
     t.last = true
     data[#data + 1] = t:render()
