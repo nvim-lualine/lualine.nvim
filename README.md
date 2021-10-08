@@ -652,4 +652,11 @@ Thanks to these wonderful people we enjoy this awesome plugin.
   <img src="https://contrib.rocks/image?repo=shadmansaleh/lualine.nvim" />
 </a>
 
+### Wiki
+Check out the [wiki](https://github.com/shadmansaleh/lualine.nvim/wiki/Plugins) for more info .
+
+You can find some useful [configuration snippets](https://github.com/shadmansaleh/lualine.nvim/wiki/Component-snippets) here. You can also share your awesome snippents with others.
+
+If you want to extened lualine with plugins or want to know
+which ones already do [wiki/plugins](https://github.com/shadmansaleh/lualine.nvim/wiki/Plugins) is for you.
 <!-- panvimdoc-ignore-end -->
