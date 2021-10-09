@@ -453,10 +453,10 @@ sections = {
       sections = {'error', 'warn', 'info', 'hint'},
       -- all colors are in format #rrggbb
       diagnostics_color = {
-        error = nil, -- changes diagnostic's error foreground color
-        warn = nil,  -- changes diagnostic's warn foreground color
-        info = nil,  -- Changes diagnostic's info foreground color
-        hint = nil,  -- Changes diagnostic's hint foreground color
+        error = nil, -- changes diagnostic's error color
+        warn = nil,  -- changes diagnostic's warn color
+        info = nil,  -- Changes diagnostic's info color
+        hint = nil,  -- Changes diagnostic's hint color
       }
       symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
       update_in_insert = false, -- Update diagnostics in insert mode
@@ -505,9 +505,9 @@ sections = {
       colored = true, -- displays diff status in color if set to true
       -- all colors are in format #rrggbb
       diff_color = {
-        added = nil,    -- changes diff's added foreground color
-        modified = nil, -- changes diff's modified foreground color
-        removed = nil,  -- changes diff's removed foreground color
+        added = nil,    -- changes diff's added color
+        modified = nil, -- changes diff's modified color
+        removed = nil,  -- changes diff's removed color
       }
       symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
       source = nil, -- A function that works as a data source for diff.
