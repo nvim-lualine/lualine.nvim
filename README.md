@@ -653,7 +653,7 @@ Thanks to these wonderful people we enjoy this awesome plugin.
 </a>
 
 ### Wiki
-Check out the [wiki](https://github.com/shadmansaleh/lualine.nvim/wiki/Plugins) for more info .
+Check out the [wiki](https://github.com/shadmansaleh/lualine.nvim/wiki) for more info .
 
 You can find some useful [configuration snippets](https://github.com/shadmansaleh/lualine.nvim/wiki/Component-snippets) here. You can also share your awesome snippents with others.
 
