@@ -16,8 +16,16 @@ M.assert_component = function(component, opts, result)
   -- for testing global options
   if component == nil then
     component = 'special.function_component'
+  else
+    opts.component_name = component
   end
-  local comp = require('lualine.components.' .. component)(opts)
+  local comp = require('lualine.components.' .. component)
+  if type(comp) == 'table' then
+    comp = comp(opts)
+  elseif type(comp) == 'function' then
+    opts[1] = comp
+    comp = require 'lualine.components.special.function_component'(opts)
+  end
   eq(result, comp:draw(opts.hl))
 end
 

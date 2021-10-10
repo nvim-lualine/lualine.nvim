@@ -18,7 +18,12 @@ local component_types = {
     local ok, loaded_component = pcall(require, 'lualine.components.' .. component[1])
     if ok then
       component.component_name = component[1]
-      loaded_component = loaded_component(component)
+      if type(loaded_component) == 'table' then
+        loaded_component = loaded_component(component)
+      elseif type(loaded_component) == 'function' then
+        component[1] = loaded_component
+        loaded_component = require 'lualine.components.special.function_component'(component)
+      end
       return loaded_component
     end
   end,
