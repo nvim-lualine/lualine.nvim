@@ -231,6 +231,10 @@ local function load_theme(theme_name)
   local retval
   local path = table.concat { 'lua/lualine/themes/', theme_name, '.lua' }
   local files = vim.api.nvim_get_runtime_file(path, true)
+  if #files <= 0 then
+    path = table.concat { 'lua/lualine/themes/', theme_name, '/init.lua' }
+    files = vim.api.nvim_get_runtime_file(path, true)
+  end
   local n_files = #files
   if n_files == 0 then
     -- No match found
