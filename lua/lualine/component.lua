@@ -7,29 +7,6 @@ local M = require('lualine.utils.class'):extend()
 -- Used to provide a unique id for each component
 local component_no = 1
 
-local function check_deprecated_options(options)
-  local function rename_notice(before, now)
-    if options[before] then
-      require('lualine.utils.notices').add_notice(string.format(
-        [[
-### option.%s
-%s option has been renamed to `%s`. Please use `%s` instead in your config
-for %s component.
-]],
-        before,
-        before,
-        now,
-        now,
-        options.component_name or 'function'
-      ))
-      options[now] = options[before]
-      options[before] = nil
-    end
-  end
-  rename_notice('format', 'fmt')
-  rename_notice('condition', 'cond')
-end
-
 function M:__tostring()
   local str = 'Component: ' .. self.options.component_name
   if self.debug then
@@ -42,7 +19,6 @@ end
 function M:init(options)
   self.options = options or {}
   component_no = component_no + 1
-  check_deprecated_options(self.options)
   if not options.component_name then
     self.options.component_name = tostring(component_no)
   end
@@ -71,19 +47,6 @@ function M:create_option_highlights()
       self.options.component_name,
       self.options
     )
-  end
-end
-
--- set upper or lower case
-function M:apply_case()
-  -- Donn't work on components that emit vim statusline escaped chars
-  if self.status:find '%%' and not self.status:find '%%%%' then
-    return
-  end
-  if self.options.upper == true then
-    self.status = self.status:upper()
-  elseif self.options.lower == true then
-    self.status = self.status:lower()
   end
 end
 
@@ -206,7 +169,6 @@ function M:draw(default_highlight, is_focused)
   if type(status) == 'string' and #status > 0 then
     self.status = status
     self:apply_icon()
-    self:apply_case()
     self:apply_padding()
     self:apply_highlights(default_highlight)
     self:apply_section_separators()

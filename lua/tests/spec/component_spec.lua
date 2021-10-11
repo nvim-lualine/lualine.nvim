@@ -90,27 +90,6 @@ describe('Component:', function()
   end)
 
   describe('Global options:', function()
-    it('upper', function()
-      local opts = build_component_opts {
-        component_separators = { left = '', right = '' },
-        padding = 0,
-        upper = true,
-      }
-      assert_component(nil, opts, 'TEST')
-    end)
-
-    it('lower', function()
-      local opts = build_component_opts {
-        function()
-          return 'TeSt'
-        end,
-        component_separators = { left = '', right = '' },
-        padding = 0,
-        lower = true,
-      }
-      assert_component(nil, opts, 'test')
-    end)
-
     it('left_padding', function()
       local opts = build_component_opts {
         component_separators = { left = '', right = '' },

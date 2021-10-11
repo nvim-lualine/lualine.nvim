@@ -9,33 +9,6 @@ local modules = lualine_require.lazy_require {
 
 local M = lualine_require.require 'lualine.component':extend()
 
-local function check_deprecated_options(options)
-  if options.color_error or options.color_warn or options.color_info or options.color_hint then
-    options.diagnostics_color = options.diagnostics_color or {}
-    require('lualine.utils.notices').add_notice(string.format [[
-### diagnostics.options.colors
-Previously colors in diagnostics section was set with color_error, color_warning..
-separate options . They've been unified under diagnostics_color options.
-Now it should be something like:
-```lua
-{ 'diagnostics',
-  sources = {'nvim_lsp'},
-  diagnostics_color = {
-    error = color_error,
-    warning = color_warning,
-    info = color_info,
-    hint = color_hint,
-  }
-}
-```
-]])
-    options.diagnostics_color.error = options.color_error
-    options.diagnostics_color.warning = options.color_warning
-    options.diagnostics_color.info = options.color_info
-    options.diagnostics_color.hint = options.color_hint
-  end
-end
-
 local default_symbols = {
   icons = {
     error = ' ', -- xf659
@@ -88,7 +61,6 @@ function M:init(options)
   M.super.init(self, options)
   -- Apply default options
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
-  check_deprecated_options(self.options)
   -- Apply default symbols
   self.symbols = vim.tbl_extend(
     'keep',

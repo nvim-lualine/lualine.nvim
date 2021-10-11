@@ -78,79 +78,6 @@ end
 
 local function option_deprecatation_notice(component)
   local types = {
-    case = function()
-      local kind = component.upper ~= nil and 'upper' or 'lower'
-      modules.notice.add_notice(string.format(
-        [[
-### option.%s
-
-Option `%s` has been deprecated.
-Please use `fmt` option if you need to change case of a component.
-
-You have some thing like this in your config:
-
-```lua
-  %s = true,
-```
-
-You'll have to change it to this to retain old behavior:
-
-```lua
-  fmt = string.%s
-```
-]],
-        kind,
-        kind,
-        kind,
-        kind
-      ))
-    end,
-    padding = function()
-      local kind = component.left_padding ~= nil and 'left_padding' or 'right_padding'
-      modules.notice.add_notice(string.format(
-        [[
-### option.%s
-
-Option `%s` has been deprecated.
-Please use `padding` option to set left/right padding.
-
-You have some thing like this in your config:
-
-```lua
-  %s = %d,
-```
-
-You'll have to change it to this to retain old behavior:
-
-```lua
-  padding = { %s = %d }
-```
-if you've set both left_padding and right_padding for a component
-you'll need to have something like
-```lua
-  padding = { left = x, right = y }
-```
-When you set `padding = x` it's same as `padding = {left = x, right = x}`
-]],
-        kind,
-        kind,
-        kind,
-        component[kind],
-        kind == 'left_padding' and 'left' or 'right',
-        component[kind]
-      ))
-      if component.left_padding and component.right_padding then
-        component.padding = { left = component.left_padding, right = component.right_padding }
-        component.left_padding = nil
-        component.right_padding = nil
-      elseif component.left_padding then
-        component.padding = { left = component.left_padding, right = 1 }
-        component.left_padding = nil
-      else
-        component.padding = { left = 1, right = component.right_padding }
-        component.right_padding = nil
-      end
-    end,
     type_name = function()
       local changed_to = component.type == 'luae' and 'lua_expr' or 'vim_fun'
       modules.notice.add_notice(string.format(
@@ -182,12 +109,6 @@ You'll have to change it to this to retain old behavior:
       component.type = changed_to
     end,
   }
-  if component.upper ~= nil or component.lower ~= nil then
-    types.case()
-  end
-  if component.left_padding ~= nil or component.right_padding ~= nil then
-    types.padding()
-  end
   if component.type == 'luae' or component.type == 'vimf' then
     types.type_name()
   end

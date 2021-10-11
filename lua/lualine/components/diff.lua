@@ -9,30 +9,6 @@ local modules = lualine_require.lazy_require {
 }
 local M = lualine_require.require('lualine.component'):extend()
 
-local function check_deprecated_options(options)
-  if options.color_added or options.color_modified or options.color_removed then
-    options.diagnostics_color = options.diagnostics_color or {}
-    require('lualine.utils.notices').add_notice(string.format [[
-### diff.options.colors
-Previously colors in diff section was set with color_added, color_modified..
-separate options . They've been unified under diff_color option.
-Now it should be something like:
-```lua
-{ 'diff',
-  diff_color = {
-    added = color_added,
-    modified = color_modified,
-    removed = color_removed,
-  }
-}
-```
-]])
-    options.diff_color.added = options.color_added
-    options.diff_color.modified = options.color_modified
-    options.diff_color.removed = options.color_removed
-  end
-end
-
 -- Vars
 -- variable to store git diff stats
 M.git_diff = nil
@@ -64,7 +40,6 @@ local default_options = {
 function M:init(options)
   M.super.init(self, options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
-  check_deprecated_options(self.options)
   -- create highlights and save highlight_name in highlights table
   if self.options.colored then
     self.highlights = {

@@ -63,11 +63,14 @@ describe('config parsing', function()
         end)
         it('table', function()
           local config = {
-            options = { component_separators = { 'a' }, section_separators = { 'b' } },
+            options = {
+              component_separators = { left = 'a', right = 'b' },
+              section_separators = { left = 'b', right = 'a' },
+            },
           }
           config = config_module.apply_configuration(config)
-          eq(config.options.component_separators, { left = 'a', right = 'a' })
-          eq(config.options.section_separators, { left = 'b', right = 'b' })
+          eq(config.options.component_separators, { left = 'a', right = 'b' })
+          eq(config.options.section_separators, { left = 'b', right = 'a' })
         end)
       end)
       it('no seprarators', function()
