@@ -11,7 +11,7 @@ local is_valid_filename = lualine_require.is_valid_filename
 local sep = lualine_require.sep
 
 local component_types = {
-  luaf = function(component)
+  lua_fun = function(component)
     return require 'lualine.components.special.function_component'(component)
   end,
   mod = function(component)
@@ -44,14 +44,14 @@ local component_types = {
 
 local function component_loader(component)
   if type(component[1]) == 'function' then
-    return component_types.luaf(component)
+    return component_types.lua_fun(component)
   end
   if type(component[1]) == 'string' then
     -- load the component
     if component.type ~= nil then
-      if component_types[component.type] and component.type ~= 'luaf' then
+      if component_types[component.type] and component.type ~= 'lua_fun' then
         return component_types[component.type](component)
-      elseif component.type == 'vimf' or component.type == 'luae' then
+      elseif component.type == 'vim_fun' or component.type == 'lua_expr' then
         return component_types['_'](component)
       else
         modules.notice.add_notice(string.format(
@@ -151,12 +151,45 @@ When you set `padding = x` it's same as `padding = {left = x, right = x}`
         component.right_padding = nil
       end
     end,
+    type_name = function()
+      local changed_to = component.type == 'luae' and 'lua_expr' or 'vim_fun'
+      modules.notice.add_notice(string.format(
+        [[
+### option.type.%s
+
+type name `%s` has been deprecated.
+Please use `%s`.
+
+You have some thing like this in your config config for %s component:
+
+```lua
+  type = %s,
+```
+
+You'll have to change it to this to retain old behavior:
+
+```lua
+  type = %s
+```
+]],
+        component.type,
+        component.type,
+        changed_to,
+        tostring(component[1]),
+        component.type,
+        changed_to
+      ))
+      component.type = changed_to
+    end,
   }
   if component.upper ~= nil or component.lower ~= nil then
     types.case()
   end
   if component.left_padding ~= nil or component.right_padding ~= nil then
     types.padding()
+  end
+  if component.type == 'luae' or component.type == 'vimf' then
+    types.type_name()
   end
 end
 

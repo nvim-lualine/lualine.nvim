@@ -11,12 +11,12 @@ function M:update_status()
       status = M.vim_function(component)
     end
   else
-    if self.options.type == 'luae' then
+    if self.options.type == 'lua_expr' then
       ok, status = pcall(M.lua_eval, component)
       if not ok then
         status = nil
       end
-    elseif self.options.type == 'vimf' then
+    elseif self.options.type == 'vim_fun' then
       status = M.vim_function(component)
     end
   end
