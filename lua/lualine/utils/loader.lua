@@ -11,14 +11,19 @@ local is_valid_filename = lualine_require.is_valid_filename
 local sep = lualine_require.sep
 
 local component_types = {
-  luaf = function(component)
-    return require('lualine.components.special.function_component'):new(component)
+  lua_fun = function(component)
+    return require 'lualine.components.special.function_component'(component)
   end,
   mod = function(component)
     local ok, loaded_component = pcall(require, 'lualine.components.' .. component[1])
     if ok then
       component.component_name = component[1]
-      loaded_component = loaded_component:new(component)
+      if type(loaded_component) == 'table' then
+        loaded_component = loaded_component(component)
+      elseif type(loaded_component) == 'function' then
+        component[1] = loaded_component
+        loaded_component = require 'lualine.components.special.function_component'(component)
+      end
       return loaded_component
     end
   end,
@@ -27,26 +32,26 @@ local component_types = {
     component[1] = function()
       return stl_expr
     end
-    return require('lualine.components.special.function_component'):new(component)
+    return require 'lualine.components.special.function_component'(component)
   end,
   var = function(component)
-    return require('lualine.components.special.vim_var_component'):new(component)
+    return require 'lualine.components.special.vim_var_component'(component)
   end,
   ['_'] = function(component)
-    return require('lualine.components.special.eval_func_component'):new(component)
+    return require 'lualine.components.special.eval_func_component'(component)
   end,
 }
 
 local function component_loader(component)
   if type(component[1]) == 'function' then
-    return component_types.luaf(component)
+    return component_types.lua_fun(component)
   end
   if type(component[1]) == 'string' then
     -- load the component
     if component.type ~= nil then
-      if component_types[component.type] and component.type ~= 'luaf' then
+      if component_types[component.type] and component.type ~= 'lua_fun' then
         return component_types[component.type](component)
-      elseif component.type == 'vimf' or component.type == 'luae' then
+      elseif component.type == 'vim_fun' or component.type == 'lua_expr' then
         return component_types['_'](component)
       else
         modules.notice.add_notice(string.format(
@@ -73,85 +78,39 @@ end
 
 local function option_deprecatation_notice(component)
   local types = {
-    case = function()
-      local kind = component.upper ~= nil and 'upper' or 'lower'
+    type_name = function()
+      local changed_to = component.type == 'luae' and 'lua_expr' or 'vim_fun'
       modules.notice.add_notice(string.format(
         [[
-### option.%s
+### option.type.%s
 
-Option `%s` has been deprecated.
-Please use `fmt` option if you need to change case of a component.
+type name `%s` has been deprecated.
+Please use `%s`.
 
-You have some thing like this in your config:
+You have some thing like this in your config config for %s component:
 
 ```lua
-  %s = true,
+  type = %s,
 ```
 
 You'll have to change it to this to retain old behavior:
 
 ```lua
-  fmt = string.%s
+  type = %s
 ```
 ]],
-        kind,
-        kind,
-        kind,
-        kind
+        component.type,
+        component.type,
+        changed_to,
+        tostring(component[1]),
+        component.type,
+        changed_to
       ))
-    end,
-    padding = function()
-      local kind = component.left_padding ~= nil and 'left_padding' or 'right_padding'
-      modules.notice.add_notice(string.format(
-        [[
-### option.%s
-
-Option `%s` has been deprecated.
-Please use `padding` option to set left/right padding.
-
-You have some thing like this in your config:
-
-```lua
-  %s = %d,
-```
-
-You'll have to change it to this to retain old behavior:
-
-```lua
-  padding = { %s = %d }
-```
-if you've set both left_padding and right_padding for a component
-you'll need to have something like
-```lua
-  padding = { left = x, right = y }
-```
-When you set `padding = x` it's same as `padding = {left = x, right = x}`
-]],
-        kind,
-        kind,
-        kind,
-        component[kind],
-        kind == 'left_padding' and 'left' or 'right',
-        component[kind]
-      ))
-      if component.left_padding and component.right_padding then
-        component.padding = { left = component.left_padding, right = component.right_padding }
-        component.left_padding = nil
-        component.right_padding = nil
-      elseif component.left_padding then
-        component.padding = { left = component.left_padding, right = 1 }
-        component.left_padding = nil
-      else
-        component.padding = { left = 1, right = component.right_padding }
-        component.right_padding = nil
-      end
+      component.type = changed_to
     end,
   }
-  if component.upper ~= nil or component.lower ~= nil then
-    types.case()
-  end
-  if component.left_padding ~= nil or component.right_padding ~= nil then
-    types.padding()
+  if component.type == 'luae' or component.type == 'vimf' then
+    types.type_name()
   end
 end
 
@@ -226,6 +185,10 @@ local function load_theme(theme_name)
   local retval
   local path = table.concat { 'lua/lualine/themes/', theme_name, '.lua' }
   local files = vim.api.nvim_get_runtime_file(path, true)
+  if #files <= 0 then
+    path = table.concat { 'lua/lualine/themes/', theme_name, '/init.lua' }
+    files = vim.api.nvim_get_runtime_file(path, true)
+  end
   local n_files = #files
   if n_files == 0 then
     -- No match found

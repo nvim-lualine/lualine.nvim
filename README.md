@@ -390,8 +390,8 @@ sections = {
       -- When type is omitted lualine will guess it.
       -- Available types [format: type_name(example)]
       -- mod(branch/filename), stl(%f/%m), var(g:coc_status/bo:modifiable),
-      -- luae(lua expressions), vimf(viml function name)
-      -- luae is short for lua-expression and vimf is short fror vim-function
+      -- lua_expr(lua expressions), vim_fun(viml function name)
+      -- lua_expr is short for lua-expression and vim_fun is short fror vim-function
       type = nil,
       padding = 1, -- adds padding to the left and right of components
                    -- padding can be specified to left or right separately like

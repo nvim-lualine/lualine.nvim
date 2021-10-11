@@ -1,8 +1,6 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local M = require('lualine.component'):new()
-
-M.update_status = function()
+local function filesize()
   local file = vim.fn.expand '%:p'
   if file == nil or #file == 0 then
     return ''
@@ -24,4 +22,4 @@ M.update_status = function()
   return string.format('%.1f%s', size, sufixes[i])
 end
 
-return M
+return filesize

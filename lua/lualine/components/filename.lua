@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local FileName = require('lualine.component'):new()
+local M = require('lualine.component'):extend()
 
 local default_options = {
   symbols = { modified = '[+]', readonly = '[-]' },
@@ -18,13 +18,12 @@ local function shorten_path(path, sep)
   return path:gsub(string.format('([^%s])[^%s]+%%%s', sep, sep, sep), '%1' .. sep, 1)
 end
 
-FileName.new = function(self, options, child)
-  local new_instance = self._parent:new(options, child or FileName)
-  new_instance.options = vim.tbl_deep_extend('keep', new_instance.options or {}, default_options)
-  return new_instance
+M.init = function(self, options)
+  M.super.init(self, options)
+  self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
 end
 
-FileName.update_status = function(self)
+M.update_status = function(self)
   local data
   if self.options.path == 1 then
     -- relative path
@@ -63,4 +62,4 @@ FileName.update_status = function(self)
   return data
 end
 
-return FileName
+return M

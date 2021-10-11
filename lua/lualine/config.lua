@@ -29,25 +29,11 @@ local config = {
   extensions = {},
 }
 
-local function check_sep_format_deprecation(sep)
-  if type(sep) == 'table' and vim.tbl_islist(sep) then
-    require('lualine.utils.notices').add_persistent_notice(string.format [[
-### option.separator
-Using list for configuring separators has been deprecated. Please configure it
-with {left = left_sep, right = right_sep} like table.
-]])
-    sep = { left = sep[1], right = sep[2] or sep[1] }
-  end
-  return sep
-end
-
 -- change separator format 'x' to {left='x', right='x'}
 local function fix_separators(separators)
   if separators ~= nil then
     if type(separators) == 'string' then
       return { left = separators, right = separators }
-    else
-      return check_sep_format_deprecation(separators)
     end
   end
   return separators

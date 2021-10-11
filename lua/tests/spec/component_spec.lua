@@ -12,20 +12,20 @@ local stub = require 'luassert.stub'
 describe('Component:', function()
   it('can select separators', function()
     local opts = build_component_opts()
-    local comp = require('lualine.components.special.function_component'):new(opts)
+    local comp = require 'lualine.components.special.function_component'(opts)
     -- correct for lualine_c
     eq('', comp.options.separator)
     local opts2 = build_component_opts { self = { section = 'lualine_y' } }
-    local comp2 = require('lualine.components.special.function_component'):new(opts2)
+    local comp2 = require 'lualine.components.special.function_component'(opts2)
     -- correct for lualine_u
     eq('', comp2.options.separator)
   end)
 
   it('can provide unique identifier', function()
     local opts1 = build_component_opts()
-    local comp1 = require('lualine.components.special.function_component'):new(opts1)
+    local comp1 = require 'lualine.components.special.function_component'(opts1)
     local opts2 = build_component_opts()
-    local comp2 = require('lualine.components.special.function_component'):new(opts2)
+    local comp2 = require 'lualine.components.special.function_component'(opts2)
     neq(comp1.component_no, comp2.component_no)
   end)
 
@@ -35,7 +35,7 @@ describe('Component:', function()
     local hl = require 'lualine.highlight'
     stub(hl, 'create_component_highlight_group')
     hl.create_component_highlight_group.returns 'MyCompHl'
-    local comp1 = require('lualine.components.special.function_component'):new(opts1)
+    local comp1 = require 'lualine.components.special.function_component'(opts1)
     eq('MyCompHl', comp1.options.color_highlight)
     -- color highlight wan't in options when create_comp_hl was
     -- called so remove it before assert
@@ -46,7 +46,7 @@ describe('Component:', function()
     local opts2 = build_component_opts { color = color }
     stub(hl, 'create_component_highlight_group')
     hl.create_component_highlight_group.returns 'MyCompLinkedHl'
-    local comp2 = require('lualine.components.special.function_component'):new(opts2)
+    local comp2 = require 'lualine.components.special.function_component'(opts2)
     eq('MyCompLinkedHl', comp2.options.color_highlight)
     -- color highlight wan't in options when create_comp_hl was
     -- called so remove it before assert
@@ -90,27 +90,6 @@ describe('Component:', function()
   end)
 
   describe('Global options:', function()
-    it('upper', function()
-      local opts = build_component_opts {
-        component_separators = { left = '', right = '' },
-        padding = 0,
-        upper = true,
-      }
-      assert_component(nil, opts, 'TEST')
-    end)
-
-    it('lower', function()
-      local opts = build_component_opts {
-        function()
-          return 'TeSt'
-        end,
-        component_separators = { left = '', right = '' },
-        padding = 0,
-        lower = true,
-      }
-      assert_component(nil, opts, 'test')
-    end)
-
     it('left_padding', function()
       local opts = build_component_opts {
         component_separators = { left = '', right = '' },
@@ -206,7 +185,7 @@ describe('Component:', function()
         padding = 0,
         color = 'MyHl',
       }
-      local comp = require('lualine.components.special.function_component'):new(opts)
+      local comp = require 'lualine.components.special.function_component'(opts)
       local custom_link_hl_name = 'lualine_' .. comp.options.component_name .. '_no_mode'
       eq('%#' .. custom_link_hl_name .. '#test', comp:draw(opts.hl))
       local opts2 = build_component_opts {
@@ -217,7 +196,7 @@ describe('Component:', function()
       local hl = require 'lualine.highlight'
       stub(hl, 'component_format_highlight')
       hl.component_format_highlight.returns '%#MyCompHl#'
-      local comp2 = require('lualine.components.special.function_component'):new(opts2)
+      local comp2 = require 'lualine.components.special.function_component'(opts2)
       assert_component(nil, opts2, '%#MyCompHl#test')
       assert.stub(hl.component_format_highlight).was_called_with(comp2.options.color_highlight)
       hl.component_format_highlight:revert()
