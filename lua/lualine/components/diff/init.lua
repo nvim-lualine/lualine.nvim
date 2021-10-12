@@ -14,10 +14,10 @@ local default_options = {
   symbols = { added = '+', modified = '~', removed = '-' },
   diff_color = {
     added = {
-      fg = modules.utils.extract_highlight_colors('DiffAdd', 'fg') or '#f0e130',
+      fg = modules.utils.extract_highlight_colors('DiffAdd', 'fg') or '#90ee90',
     },
     modified = {
-      fg = modules.utils.extract_highlight_colors('DiffChange', 'fg') or '#ff0038',
+      fg = modules.utils.extract_highlight_colors('DiffChange', 'fg') or '#f0e130',
     },
     removed = {
       fg = modules.utils.extract_highlight_colors('DiffDelete', 'fg') or '#ff0038',
