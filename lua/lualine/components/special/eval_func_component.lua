@@ -23,12 +23,18 @@ function M:update_status()
   return status
 end
 
+---evaluate the lua code and return it's result as string
+---@param code string
+---@return string
 function M.lua_eval(code)
   local result = loadstring('return ' .. code)()
   assert(result, 'String expected got nil')
   return tostring(result)
 end
 
+---call vim function (name) and return it's result as string
+---@param name string
+---@return string
 function M.vim_function(name)
   -- vim function component
   local ok, return_val = pcall(vim.api.nvim_call_function, name, {})

@@ -2,6 +2,7 @@ local require = require('lualine_require').require
 local utils = require 'lualine.utils.utils'
 local M = {}
 
+-- default symbols for diagnostics component
 M.symbols = {
   icons = {
     error = ' ', -- xf659
@@ -12,6 +13,7 @@ M.symbols = {
   no_icons = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
 }
 
+-- default options for diagnostics component
 M.options = {
   colored = true,
   update_in_insert = false,

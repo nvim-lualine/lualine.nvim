@@ -16,7 +16,8 @@ local sep = package.config:sub(1, 1)
 local file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
 local git_dir_cache = {} -- Stores git paths that we already know of
 
--- sets git_branch veriable to branch name or commit hash if not on branch
+---sets git_branch veriable to branch name or commit hash if not on branch
+---@param head_file string full path of .git/HEAD file
 local function get_git_head(head_file)
   local f_head = io.open(head_file)
   if f_head then
@@ -32,7 +33,7 @@ local function get_git_head(head_file)
   return nil
 end
 
--- Update branch
+---update the current value of git_branch and setup file watch on HEAD file
 local function update_branch()
   active_bufnr = tostring(vim.fn.bufnr())
   file_changed:stop()
@@ -55,7 +56,9 @@ local function update_branch()
   branch_cache[vim.fn.bufnr()] = current_git_branch
 end
 
--- returns full path to git directory for dir_path or current directory
+---returns full path to git directory for dir_path or current directory
+---@param dir_path string|nil
+---@return string
 function M.find_git_dir(dir_path)
   -- get file dir so we can search from that dir
   local file_dir = dir_path or vim.fn.expand '%:p:h'
@@ -103,6 +106,7 @@ function M.find_git_dir(dir_path)
   return git_dir
 end
 
+---initialize git_branch ,odule
 function M.init()
   -- run watch head on load so branch is present when component is loaded
   M.find_git_dir()

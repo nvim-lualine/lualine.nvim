@@ -1,6 +1,8 @@
 local highlight = require 'lualine.highlight'
 local Tab = require('lualine.utils.class'):extend()
 
+---intialize a new tab from opts
+---@param opts table
 function Tab:init(opts)
   assert(opts.tabnr, 'Cannot create Tab without tabnr')
   self.tabnr = opts.tabnr
@@ -8,6 +10,9 @@ function Tab:init(opts)
   self.highlights = opts.highlights
 end
 
+---returns name for tab. tabs name is the name of buffer in last active window
+--- of the tab.
+---@return string
 function Tab:label()
   local buflist = vim.fn.tabpagebuflist(self.tabnr)
   local winnr = vim.fn.tabpagewinnr(self.tabnr)
@@ -27,11 +32,14 @@ function Tab:label()
   return vim.fn.fnamemodify(file, ':t')
 end
 
+---returns rendered tab
+---@return string
 function Tab:render()
   local name
-  if self.ellipse then
+  if self.ellipse then -- show elipsis
     name = '...'
   else
+    -- different formats for different modes
     if self.options.mode == 0 then
       name = string.format('%s%s ', (self.last or not self.first) and ' ' or '', tostring(self.tabnr))
     elseif self.options.mode == 1 then
@@ -40,10 +48,14 @@ function Tab:render()
       name = string.format('%s%s %s ', (self.last or not self.first) and ' ' or '', tostring(self.tabnr), self:label())
     end
   end
-  self.len = #name
+  self.len = vim.fn.strchars(name)
+
+  -- setup for mouse clicks
   local line = string.format('%%%s@LualineSwitchTab@%s%%T', self.tabnr, name)
+  -- apply highlight
   line = highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')]) .. line
 
+  -- apply separators
   if self.options.self.section < 'lualine_x' and not self.first then
     local sep_before = self:separator_before()
     line = sep_before .. line
@@ -56,6 +68,8 @@ function Tab:render()
   return line
 end
 
+---apply separator before current tab
+---@return string
 function Tab:separator_before()
   if self.current or self.aftercurrent then
     return '%S{' .. self.options.section_separators.left .. '}'
@@ -64,6 +78,8 @@ function Tab:separator_before()
   end
 end
 
+---apply separator after current tab
+---@return string
 function Tab:separator_after()
   if self.current or self.beforecurrent then
     return '%s{' .. self.options.section_separators.right .. '}'

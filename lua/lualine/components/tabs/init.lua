@@ -14,6 +14,11 @@ local default_options = {
   },
 }
 
+-- This function is duplicated in buffers
+---returns the proper hl for tab in section. used for setting default highlights
+---@param section string name of section tabs component is in
+---@param is_active boolean
+---@return string hl name
 local function get_hl(section, is_active)
   local suffix = is_active and '_normal' or '_inactive'
   local section_redirects = {
@@ -55,6 +60,8 @@ function M:update_status()
   for t = 1, vim.fn.tabpagenr '$' do
     tabs[#tabs + 1] = Tab { tabnr = t, options = self.options, highlights = self.highlights }
   end
+  -- mark the first, last, current, before current, after current tabpages
+  -- for rendering
   local current = vim.fn.tabpagenr()
   tabs[1].first = true
   tabs[#tabs].last = true
@@ -79,7 +86,9 @@ function M:update_status()
     end
   end
   local current_tab = tabs[current]
-  if current_tab == nil then
+  -- start drawing from current tab and draw left and right of it until
+  -- all tabpages are drawn or max_length has been reached.
+  if current_tab == nil then -- maybe redundent code
     local t = Tab { tabnr = vim.fn.tabpagenr(), options = self.options, highlights = self.highlights }
     t.current = true
     t.last = true
@@ -97,6 +106,7 @@ function M:update_status()
       if before == nil and after == nil then
         break
       end
+      -- draw left most undrawn tab if fits in max_length
       if before then
         rendered_before = before:render()
         total_length = total_length + before.len
@@ -105,6 +115,7 @@ function M:update_status()
         end
         table.insert(data, 1, rendered_before)
       end
+      -- draw right most undrawn tab if fits in max_length
       if after then
         rendered_after = after:render()
         total_length = total_length + after.len
@@ -114,6 +125,7 @@ function M:update_status()
         data[#data + 1] = rendered_after
       end
     end
+    -- draw elipsis (...) on relevent sides if all tabs don't fit in max_length
     if total_length > max_length then
       if before ~= nil then
         before.ellipse = true

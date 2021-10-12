@@ -1,5 +1,8 @@
 local M = {}
 
+---functions that how how to retrieve diagnostics from specific source.
+---returns error_count:number, warning_count:number,
+---        info_count:number, hint_count:number
 M.sources = {
   nvim_lsp = function()
     local error_count = vim.lsp.diagnostic.get_count(0, 'Error')
@@ -45,6 +48,9 @@ M.sources = {
   end,
 }
 
+---returns list of diagnostics count from all sources
+---@param sources table list of sources
+---@return table {{error_count, warning_count, info_count, hint_count}}
 M.get_diagnostics = function(sources)
   local result = {}
   for index, source in ipairs(sources) do

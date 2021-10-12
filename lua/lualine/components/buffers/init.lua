@@ -22,6 +22,11 @@ local default_options = {
   },
 }
 
+-- This function is duplicated in tabs
+---returns the proper hl for buffer in section. used for setting default highlights
+---@param section string name of section buffers component is in
+---@param is_active boolean
+---@return string hl name
 local function get_hl(section, is_active)
   local suffix = is_active and '_normal' or '_inactive'
   local section_redirects = {
@@ -66,6 +71,8 @@ function M:update_status()
   end
   local current_bufnr = vim.fn.bufnr()
   local current = -2
+  -- mark the first, last, current, before current, after current buffers
+  -- for rendering
   if buffers[1] then
     buffers[1].first = true
   end
@@ -95,6 +102,8 @@ function M:update_status()
       current = i
     end
   end
+  -- start drawing from current buffer and draw left and right of it until
+  -- all buffers are drawn or max_length has been reached.
   if current == -2 then
     local b = Buffer { bufnr = vim.fn.bufnr(), options = self.options, highlights = self.highlights }
     b.current = true
@@ -127,24 +136,26 @@ function M:update_status()
     if before == nil and after == nil then
       break
     end
+    -- draw left most undrawn buffer if fits in max_length
     if before then
       rendered_before = before:render()
       total_length = total_length + before.len
+      if total_length > max_length then
+        break
+      end
+      table.insert(data, 1, rendered_before)
     end
+    -- draw right most undrawn buffer if fits in max_length
     if after then
       rendered_after = after:render()
       total_length = total_length + after.len
-    end
-    if total_length > max_length then
-      break
-    end
-    if before then
-      table.insert(data, 1, rendered_before)
-    end
-    if after then
+      if total_length > max_length then
+        break
+      end
       data[#data + 1] = rendered_after
     end
   end
+  -- draw elipsis (...) on relevent sides if all buffers don't fit in max_length
   if total_length > max_length then
     if before ~= nil then
       before.ellipse = true

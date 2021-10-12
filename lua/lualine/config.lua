@@ -29,7 +29,9 @@ local config = {
   extensions = {},
 }
 
--- change separator format 'x' to {left='x', right='x'}
+--- change separator format 'x' to {left='x', right='x'}
+---@param separators string|table
+---@return table
 local function fix_separators(separators)
   if separators ~= nil then
     if type(separators) == 'string' then
@@ -39,6 +41,9 @@ local function fix_separators(separators)
   return separators
 end
 
+---extends config based on configtable
+---@param config_table table
+---@return table copy of config
 local function apply_configuration(config_table)
   if not config_table then
     return vim.deepcopy(config)
@@ -63,6 +68,8 @@ local function apply_configuration(config_table)
   return vim.deepcopy(config)
 end
 
+--- returns current active config
+---@return table a copy of config
 local function get_current_config()
   return vim.deepcopy(config)
 end

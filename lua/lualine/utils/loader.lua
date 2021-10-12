@@ -7,13 +7,15 @@ local modules = lualine_require.lazy_require {
   notice = 'lualine.utils.notices',
 }
 local is_valid_filename = lualine_require.is_valid_filename
-
 local sep = lualine_require.sep
 
+--- function that loads specific type of component
 local component_types = {
+  --- loads lua functions as component
   lua_fun = function(component)
     return require 'lualine.components.special.function_component'(component)
   end,
+  --- loads lua modules as components (ones in /lua/lualine/components/)
   mod = function(component)
     local ok, loaded_component = pcall(require, 'lualine.components.' .. component[1])
     if ok then
@@ -27,6 +29,7 @@ local component_types = {
       return loaded_component
     end
   end,
+  --- loads builtin statusline patterns as component
   stl = function(component)
     local stl_expr = component[1] -- Vim's %p %l statusline elements
     component[1] = function()
@@ -34,14 +37,19 @@ local component_types = {
     end
     return require 'lualine.components.special.function_component'(component)
   end,
+  --- loads variables & options (g:,go:,b:,bo:...) as componenta
   var = function(component)
     return require 'lualine.components.special.vim_var_component'(component)
   end,
+  --- loads vim functions and lua expressions as components
   ['_'] = function(component)
     return require 'lualine.components.special.eval_func_component'(component)
   end,
 }
 
+---load a component from component confif
+---@param component table component + component options
+---@return table the loaded & initialized component
 local function component_loader(component)
   if type(component[1]) == 'function' then
     return component_types.lua_fun(component)
@@ -114,6 +122,9 @@ You'll have to change it to this to retain old behavior:
   end
 end
 
+---loads all the section from a config
+---@param sections table list of sections
+---@param options table global options table
 local function load_sections(sections, options)
   for section_name, section in pairs(sections) do
     for index, component in pairs(section) do
@@ -130,12 +141,16 @@ local function load_sections(sections, options)
   end
 end
 
+---loads all the configs (active, inactive, tabline)
+---@param config table user config
 local function load_components(config)
   load_sections(config.sections, config.options)
   load_sections(config.inactive_sections, config.options)
   load_sections(config.tabline, config.options)
 end
 
+---loads all the extensions
+---@param config table user confif
 local function load_extensions(config)
   local loaded_extensions = {}
   for _, extension in pairs(config.extensions) do
@@ -175,11 +190,17 @@ Extension named `%s` was not found . Check if spelling is correct.
   config.extensions = loaded_extensions
 end
 
+---loads sections and extensions or entire user config
+---@param config table user config
 local function load_all(config)
   load_components(config)
   load_extensions(config)
 end
 
+---loads a theme from lua module
+---priotizes external themes (from user config or other plugins) over the bundled ones
+---@param theme_name string
+---@return table theme defination from module
 local function load_theme(theme_name)
   assert(is_valid_filename(theme_name), 'Invalid filename')
   local retval

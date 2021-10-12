@@ -4,11 +4,11 @@ local Object = {}
 Object.__index = Object
 
 -- luacheck: push no unused args
--- Initializer
+---Initializer
 function Object:init(...) end
 -- luacheck: pop
 
--- Extened base class to create a child class
+---Extened base class to create a child class
 function Object:extend()
   local cls = {}
   for k, v in pairs(self) do
@@ -28,14 +28,14 @@ function Object:__tostring()
 end
 -- luacheck: pop
 
--- Creates a new object
+---Creates a new object
 function Object:new(...)
   local obj = setmetatable({}, self)
   obj:init(...)
   return obj
 end
 
--- Creates a new object
+---Creates a new object
 function Object:__call(...)
   return self:new(...)
 end

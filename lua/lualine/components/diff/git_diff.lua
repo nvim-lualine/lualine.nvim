@@ -17,7 +17,8 @@ local diff_job = nil
 local active_bufnr = '0'
 local diff_cache = {} -- Stores last known value of diff of a buffer
 
--- initialize the module
+---initialize the module
+---param opts table
 function M.init(opts)
   if type(opts.source) == 'function' then
     M.src = opts.source
@@ -28,14 +29,15 @@ function M.init(opts)
   end
 end
 
--- Api to get git sign count
--- scheme :
--- {
---    added = added_count,
---    modified = modified_count,
---    removed = removed_count,
--- }
--- error_code = { added = -1, modified = -1, removed = -1 }
+---Api to get git sign count
+---scheme :
+---{
+---   added = added_count,
+---   modified = modified_count,
+---   removed = removed_count,
+---}
+---error_code = { added = -1, modified = -1, removed = -1 }
+---@param bufnr number|nil
 function M.get_sign_count(bufnr)
   if bufnr then
     return diff_cache[bufnr]
@@ -52,7 +54,8 @@ function M.get_sign_count(bufnr)
   return git_diff
 end
 
--- process diff data and update git_diff{ added, removed, modified }
+---process diff data and update git_diff{ added, removed, modified }
+---@param data string output on stdout od git diff job
 local function process_diff(data)
   -- Adapted from https://github.com/wbthomason/nvim-vcs.lua
   local added, removed, modified = 0, 0, 0
@@ -79,7 +82,7 @@ local function process_diff(data)
   git_diff = { added = added, modified = modified, removed = removed }
 end
 
--- Updates the job args
+---updates the job args
 function M.update_diff_args()
   -- Donn't show git diff when current buffer doesn't have a filename
   active_bufnr = tostring(vim.fn.bufnr())
@@ -118,7 +121,7 @@ function M.update_diff_args()
   M.update_git_diff()
 end
 
--- Update git_diff veriable
+---update git_diff veriable
 function M.update_git_diff()
   if M.diff_args then
     diff_output_cache = {}

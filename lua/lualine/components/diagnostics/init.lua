@@ -69,6 +69,7 @@ function M:update_status()
   end
   local error_count, warning_count, info_count, hint_count = 0, 0, 0, 0
   local diagnostic_data = modules.sources.get_diagnostics(self.options.sources)
+  -- sum all the counts
   for _, data in pairs(diagnostic_data) do
     error_count = error_count + data.error
     warning_count = warning_count + data.warn
@@ -82,6 +83,7 @@ function M:update_status()
     info = info_count,
     hint = hint_count,
   }
+  -- format the counts with symbols and highlights
   if self.options.colored then
     local colors = {}
     for name, hl in pairs(self.highlight_groups) do

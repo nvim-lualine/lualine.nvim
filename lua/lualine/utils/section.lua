@@ -4,7 +4,16 @@ local M = {}
 local require = require('lualine_require').require
 local utils = require 'lualine.utils.utils'
 local highlight = require 'lualine.highlight'
--- Returns formated string for a section
+
+---runs draw function on components in section
+---handles separator edge cases :/
+---also handles default transitional separators at section boundaries
+---(why? I don't know)
+---@param section table list of components
+---@param section_name string used for getting proper hl
+---@param is_focused boolean
+---@return string formated string for a section
+--TODO Clean this up this does lots of messy stuff.
 function M.draw_section(section, section_name, is_focused)
   local highlight_name = highlight.format_highlight('lualine_' .. section_name, is_focused)
 

@@ -4,6 +4,7 @@ local M = {}
 
 M.sep = package.config:sub(1, 1)
 
+-- Figures ou full path of lualine installation
 local source = debug.getinfo(1, 'S').source
 if source:sub(1, 1) == '@' then
   local base_start = source:find(table.concat({ 'lualine.nvim', 'lua', 'lualine_require.lua' }, M.sep))
@@ -15,11 +16,17 @@ if source:sub(1, 1) == '@' then
   end
 end
 
+--- checks if name is valied
+---@param name string
+---@return boolean
 function M.is_valid_filename(name)
   local invalid_chars = '[^a-zA-Z0-9_. -]'
   return name:find(invalid_chars) == nil
 end
 
+---require module module
+---@param module string mogule arraived
+---@return any the required module
 function M.require(module)
   if package.loaded[module] then
     return package.loaded[module]
@@ -61,6 +68,10 @@ function M.require(module)
   return require(module)
 end
 
+---requires modules when they are used
+---@param modules table k-v table where v is module path and k is name that will
+---                     be indexed
+---@return table metatable where when a key is indexed it gets required and cached
 function M.lazy_require(modules)
   return setmetatable({}, {
     __index = function(self, key)

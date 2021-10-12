@@ -7,6 +7,9 @@ local M = require('lualine.utils.class'):extend()
 -- Used to provide a unique id for each component
 local component_no = 1
 
+-- variable to store component output for manipulation
+M.status = ''
+
 function M:__tostring()
   local str = 'Component: ' .. self.options.component_name
   if self.debug then
@@ -15,7 +18,8 @@ function M:__tostring()
   return str
 end
 
--- Initialize new component
+---initialize new component
+---@param options table options for component
 function M:init(options)
   self.options = options or {}
   component_no = component_no + 1
@@ -27,6 +31,8 @@ function M:init(options)
   self:create_option_highlights()
 end
 
+---sets the default separator for component based on whether the component
+---is in left sections or right sections when separator option is omited.
 function M:set_separator()
   if self.options.separator == nil then
     if self.options.component_separators then
@@ -39,6 +45,7 @@ function M:set_separator()
   end
 end
 
+---creates hl group from color option
 function M:create_option_highlights()
   -- set custom highlights
   if self.options.color then
@@ -50,7 +57,7 @@ function M:create_option_highlights()
   end
 end
 
--- Adds spaces to left and right of a component
+---adds spaces to left and right of a component
 function M:apply_padding()
   local padding = self.options.padding
   local l_padding, r_padding
@@ -77,7 +84,7 @@ function M:apply_padding()
   end
 end
 
--- Applies custom highlights for component
+---applies custom highlights for component
 function M:apply_highlights(default_highlight)
   if self.options.color_highlight then
     self.status = highlight.component_format_highlight(self.options.color_highlight) .. self.status
@@ -97,15 +104,15 @@ function M:apply_highlights(default_highlight)
   end
 end
 
--- Apply icon in front of component
+---apply icon in front of component (prepemds component with icon)
 function M:apply_icon()
   if self.options.icons_enabled and self.options.icon then
     self.status = self.options.icon .. ' ' .. self.status
   end
 end
 
--- Apply separator at end of component only when
--- custom highlights haven't affected background
+---apply separator at end of component only when
+---custom highlights haven't affected background
 function M:apply_separator()
   local separator = self.options.separator
   if type(separator) == 'table' then
@@ -125,6 +132,7 @@ function M:apply_separator()
   end
 end
 
+---apply transitional separator for the component
 function M:apply_section_separators()
   if type(self.options.separator) ~= 'table' then
     return
@@ -138,6 +146,8 @@ function M:apply_section_separators()
   end
 end
 
+---remove separator from tail of this component.
+---called by lualine.utils.sections.draw_section to manage unnecessary separators
 function M:strip_separator()
   if not self.applied_separator then
     self.applied_separator = ''
@@ -147,14 +157,12 @@ function M:strip_separator()
   return self.status
 end
 
--- variable to store component output for manipulation
-M.status = ''
--- Actual function that updates a component. Must be overwritten with component functionality
 -- luacheck: push no unused args
+---actual function that updates a component. Must be overwritten with component functionality
 function M:update_status(is_focused) end
 -- luacheck: pop
 
--- Driver code of the class
+---driver code of the class
 function M:draw(default_highlight, is_focused)
   self.status = ''
   self.applied_separator = ''

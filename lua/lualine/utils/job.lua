@@ -1,12 +1,15 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 
--- Wrapper arround job api
+--- wrapper arround job api
+--- creates a job handler when called
 local Job = setmetatable({
+  --- start the job
   start = function(self)
     self.job_id = vim.fn.jobstart(self.args.cmd, self.args)
     return self.job_id > 0
   end,
+  --- stop the job. also imidiately disables io from the job.
   stop = function(self)
     if self.killed then
       return
@@ -30,6 +33,10 @@ local Job = setmetatable({
     end
   end,
 }, {
+  ---create new job handler
+  ---@param self table base job table
+  ---@param args table same args as jobstart except cmd is also passed in part of it
+  ---@return table new job handler
   __call = function(self, args)
     args = vim.deepcopy(args or {})
     if type(args.cmd) == 'string' then

@@ -6,6 +6,8 @@ local M = {}
 local notices = {}
 local persistent_notices = {}
 
+---append new notice
+---@param notice string|table table is a list of strings
 function M.add_notice(notice)
   if type(notice) == 'string' then
     notice = vim.split(notice, '\n')
@@ -13,6 +15,8 @@ function M.add_notice(notice)
   table.insert(notices, notice)
 end
 
+---appends persistent notice. These don't get cleared on setup
+---@param notice string|table table is a list of strings
 function M.add_persistent_notice(notice)
   if type(notice) == 'string' then
     notice = vim.split(notice, '\n')
@@ -22,6 +26,8 @@ function M.add_persistent_notice(notice)
   end
 end
 
+---show setup :LuaLineNotices and show notification about error when there
+---are notices available
 function M.notice_message_startup()
   if #notices > 0 or #persistent_notices then
     vim.cmd 'command! -nargs=0 LualineNotices lua require"lualine.utils.notices".show_notices()'
@@ -35,6 +41,7 @@ function M.notice_message_startup()
   end
 end
 
+---create notice view
 function M.show_notices()
   vim.cmd 'silent! keepalt split'
 
@@ -54,7 +61,7 @@ function M.show_notices()
 
   local ok, _ = pcall(vim.api.nvim_buf_set_name, 0, 'Lualine Notices')
   if not ok then
-    vim.notify('Lualine Notices is already open in another window', vim.log.levels.ERROR, {})
+    vim.notify('Lualine Notices is already open in another buffer', vim.log.levels.ERROR, {})
     vim.cmd 'normal q'
     return
   end

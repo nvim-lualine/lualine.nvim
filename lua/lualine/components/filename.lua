@@ -9,10 +9,18 @@ local default_options = {
   shorting_target = 40,
 }
 
+---counts how many times pattern occur in base ( used for counting path-sep )
+---@param base string
+---@param pattern string
+---@return number
 local function count(base, pattern)
   return select(2, string.gsub(base, pattern, ''))
 end
 
+---shortens path by turning apple/orange -> a/orange
+---@param path string
+---@param sep string path separator
+---@return string
 local function shorten_path(path, sep)
   -- ('([^/])[^/]+%/', '%1/', 1)
   return path:gsub(string.format('([^%s])[^%s]+%%%s', sep, sep, sep), '%1' .. sep, 1)

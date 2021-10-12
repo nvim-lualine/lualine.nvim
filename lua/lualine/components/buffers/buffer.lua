@@ -1,7 +1,8 @@
 local highlight = require 'lualine.highlight'
-
 local Buffer = require('lualine.utils.class'):extend()
 
+---intialize a new buffer from opts
+---@param opts table
 function Buffer:init(opts)
   assert(opts.bufnr, 'Cannot create Buffer without bufnr')
   self.bufnr = opts.bufnr
@@ -10,6 +11,7 @@ function Buffer:init(opts)
   self:get_props()
 end
 
+---setup icons, modified status for buffer
 function Buffer:get_props()
   self.file = vim.fn.bufname(self.bufnr)
   self.buftype = vim.api.nvim_buf_get_option(self.bufnr, 'buftype')
@@ -40,21 +42,25 @@ function Buffer:get_props()
       self.icon = dev .. ' '
     end
   end
-  return self
 end
 
+---returns rendered buffer
+---@return string
 function Buffer:render()
   local name
-  if self.ellipse then
+  if self.ellipse then -- show elipsis
     name = '...'
   else
     name = string.format(' %s%s%s ', self.icon, self:name(), self.modified_icon)
   end
   self.len = vim.fn.strchars(name)
 
+  -- setup for mouse clicks
   local line = string.format('%%%s@LualineSwitchBuffer@%s%%T', self.bufnr, name)
+  -- apply highlight
   line = highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')]) .. line
 
+  -- apply separators
   if self.options.self.section < 'lualine_x' and not self.first then
     local sep_before = self:separator_before()
     line = sep_before .. line
@@ -67,6 +73,8 @@ function Buffer:render()
   return line
 end
 
+---apply separator before current buffer
+---@return string
 function Buffer:separator_before()
   if self.current or self.aftercurrent then
     return '%S{' .. self.options.section_separators.left .. '}'
@@ -75,6 +83,8 @@ function Buffer:separator_before()
   end
 end
 
+---apply separator after current buffer
+---@return string
 function Buffer:separator_after()
   if self.current or self.beforecurrent then
     return '%s{' .. self.options.section_separators.right .. '}'
@@ -83,6 +93,8 @@ function Buffer:separator_after()
   end
 end
 
+---returns name of current buffer after filtering special buffers
+---@return string
 function Buffer:name()
   if self.options.filetype_names[self.filetype] then
     return self.options.filetype_names[self.filetype]
