@@ -47,3 +47,9 @@ doc/tags
 
 # panvimdoc
 /panvimdoc/
+
+# luacov
+luacov.report
+luacov.report.index
+luacov.stats
+
