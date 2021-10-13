@@ -23,7 +23,7 @@ end
 function M:init(options)
   self.options = options or {}
   component_no = component_no + 1
-  if not options.component_name then
+  if not self.options.component_name then
     self.options.component_name = tostring(component_no)
   end
   self.component_no = component_no
