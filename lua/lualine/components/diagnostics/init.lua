@@ -83,6 +83,14 @@ function M:update_status()
     info = info_count,
     hint = hint_count,
   }
+
+  local always_visible = false
+  if type(self.options.always_visible) == 'boolean' then
+    always_visible = self.options.always_visible
+  elseif type(self.options.always_visible) == 'function' then
+    always_visible = self.options.always_visible()
+  end
+
   -- format the counts with symbols and highlights
   if self.options.colored then
     local colors = {}
@@ -90,13 +98,13 @@ function M:update_status()
       colors[name] = modules.highlight.component_format_highlight(hl)
     end
     for _, section in ipairs(self.options.sections) do
-      if data[section] ~= nil and data[section] > 0 then
+      if data[section] ~= nil and (always_visible or data[section] > 0) then
         table.insert(result, colors[section] .. self.symbols[section] .. data[section])
       end
     end
   else
     for _, section in ipairs(self.options.sections) do
-      if data[section] ~= nil and data[section] > 0 then
+      if data[section] ~= nil and (always_visible or data[section] > 0) then
         table.insert(result, self.symbols[section] .. data[section])
       end
     end

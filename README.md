@@ -460,6 +460,7 @@ sections = {
       }
       symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
       update_in_insert = false, -- Update diagnostics in insert mode
+      always_visible = false, -- Show diagnostics even if count is 0, boolean or function returning boolean
     }
   }
 }

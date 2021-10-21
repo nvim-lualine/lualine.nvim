@@ -17,6 +17,7 @@ M.symbols = {
 M.options = {
   colored = true,
   update_in_insert = false,
+  always_visible = false,
   sources = { 'nvim_lsp', 'coc' },
   sections = { 'error', 'warn', 'info', 'hint' },
   diagnostics_color = {
