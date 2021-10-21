@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local function encoding()
-  return [[%{strlen(&fenc)?&fenc:&enc}]]
+  return vim.opt.fileencoding:get()
 end
 
 return encoding

@@ -210,7 +210,13 @@ describe('Encoding component', function()
       component_separators = { left = '', right = '' },
       padding = 0,
     }
-    assert_component('encoding', opts, '%{strlen(&fenc)?&fenc:&enc}')
+    local tmp_path = 'tmp.txt'
+    local tmp_fp = io.open(tmp_path, 'w')
+    tmp_fp:write 'test file'
+    tmp_fp:close()
+    vim.cmd('e ' .. tmp_path)
+    assert_component('encoding', opts, 'utf-8')
+    os.remove(tmp_path)
   end)
 end)
 
