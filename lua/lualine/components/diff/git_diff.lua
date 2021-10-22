@@ -46,7 +46,7 @@ function M.get_sign_count(bufnr)
     git_diff = M.src()
     diff_cache[vim.fn.bufnr()] = git_diff
   elseif vim.g.actual_curbuf ~= nil and active_bufnr ~= vim.g.actual_curbuf then
-    -- Workaround for https://github.com/hoob3rt/lualine.nvim/issues/286
+    -- Workaround for https://github.com/nvim-lualine/lualine.nvim/issues/286
     -- See upstream issue https://github.com/neovim/neovim/issues/15300
     -- Diff is out of sync re sync it.
     M.update_diff_args()

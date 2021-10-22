@@ -115,7 +115,7 @@ function M.init()
 end
 function M.get_branch(bufnr)
   if vim.g.actual_curbuf ~= nil and active_bufnr ~= vim.g.actual_curbuf then
-    -- Workaround for https://github.com/hoob3rt/lualine.nvim/issues/286
+    -- Workaround for https://github.com/nvim-lualine/lualine.nvim/issues/286
     -- See upstream issue https://github.com/neovim/neovim/issues/15300
     -- Diff is out of sync re sync it.
     M.find_git_dir()

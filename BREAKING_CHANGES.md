@@ -1,8 +1,6 @@
-This file contains breaking changes that have been made in this branch to
-make it easier to switch from [hoob3rt/lualine.nvim](https://github.com/hoob3rt/lualine.nvim)
-This file contains changes in chronological order. It's possible breaking change
-has been made several times to the same thing. In that case the one nearest the
-bottom indicates current state.
+This file contains breaking changes in chronological order. It's possible
+breaking change has been made several times to the same thing. In that case
+the one nearest the bottom indicates current state.
 
 ### Color option unification
 color_added, color_modified, color_removed options in diff & color_error,
