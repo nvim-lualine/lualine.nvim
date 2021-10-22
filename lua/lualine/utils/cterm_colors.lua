@@ -2,7 +2,7 @@
 -- MIT license, see LICENSE for more details.
 local M = {}
 
--- stylua: ignore start
+-- LuaFormatter off
 -- color conversion
 local color_table = {
   -- lookup table for cterm colors
@@ -272,12 +272,9 @@ local color_table = {
   {'254', { 228, 228, 228 }},
   {'255', { 238, 238, 238 }},
 }
--- stylua: ignore end
+-- LuaFormatter on
 
----converts #rrggbb fomated color to cterm ('0'-'255') color
----@param hex_color string
----@return string
-function M.rgb2cterm(hex_color)
+function M.get_cterm_color(hex_color)
   local function get_color_distance(color1, color2)
     -- returns how much color2 deviates from color1
     local dr = math.abs(color1[1] - color2[1]) / (color1[1] + 1) * 100
@@ -294,35 +291,13 @@ function M.rgb2cterm(hex_color)
   local closest_cterm_color = 0
   local min_distance = 10000
   for _, color in ipairs(color_table) do
-    local current_distance = get_color_distance(color[2], { r, g, b })
+    local current_distance = get_color_distance(color[2], {r, g, b})
     if current_distance < min_distance then
       min_distance = current_distance
       closest_cterm_color = color[1]
     end
   end
   return closest_cterm_color
-end
-
----converts color name (only ones supported by neovim) formated colors to #rrggbb
----@param name string like red,green,grey
----@return string
-function M.color_name2rgb(name)
-  local color_val = vim.api.nvim_get_color_by_name(name)
-  if color_val == -1 then
-    return '#' .. name -- Assuming it's 'rrggbb' without # not rad instead of red
-  end
-  return string.format('#%06x', color_val)
-end
-
----converts cterm(0-255) to #rrggbb
----@param color number
----@return string
-function M.cterm2rgb(color)
-  local color_data = color_table[color + 1]
-  if color_data ~= nil then
-    color_data = color_data[2]
-    return string.format('#%02x%02x%02x', color_data[1], color_data[2], color_data[3])
-  end
 end
 
 return M

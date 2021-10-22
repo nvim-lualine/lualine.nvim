@@ -7,11 +7,8 @@ local function fugitive_branch()
   return icon .. ' ' .. vim.fn.FugitiveHead()
 end
 
-M.sections = {
-  lualine_a = { fugitive_branch },
-  lualine_z = { 'location' },
-}
+M.sections = {lualine_a = {fugitive_branch}, lualine_z = {'location'}}
 
-M.filetypes = { 'fugitive' }
+M.filetypes = {'fugitive'}
 
 return M

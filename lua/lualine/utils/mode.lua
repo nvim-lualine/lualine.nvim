@@ -1,8 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local Mode = {}
-
--- stylua: ignore
+-- LuaFormatter off
 Mode.map = {
   ['n']    = 'NORMAL',
   ['no']   = 'O-PENDING',
@@ -12,13 +11,9 @@ Mode.map = {
   ['niI']  = 'NORMAL',
   ['niR']  = 'NORMAL',
   ['niV']  = 'NORMAL',
-  ['nt']   = 'NORMAL',
   ['v']    = 'VISUAL',
-  ['vs']   = 'VISUAL',
   ['V']    = 'V-LINE',
-  ['Vs']   = 'V-LINE',
   ['']   = 'V-BLOCK',
-  ['s']  = 'V-BLOCK',
   ['s']    = 'SELECT',
   ['S']    = 'S-LINE',
   ['']   = 'S-BLOCK',
@@ -27,10 +22,8 @@ Mode.map = {
   ['ix']   = 'INSERT',
   ['R']    = 'REPLACE',
   ['Rc']   = 'REPLACE',
-  ['Rx']   = 'REPLACE',
   ['Rv']   = 'V-REPLACE',
-  ['Rvc']  = 'V-REPLACE',
-  ['Rvx']  = 'V-REPLACE',
+  ['Rx']   = 'REPLACE',
   ['c']    = 'COMMAND',
   ['cv']   = 'EX',
   ['ce']   = 'EX',
@@ -40,13 +33,10 @@ Mode.map = {
   ['!']    = 'SHELL',
   ['t']    = 'TERMINAL',
 }
-
----@return string current mode name
+-- LuaFormatter on
 function Mode.get_mode()
   local mode_code = vim.api.nvim_get_mode().mode
-  if Mode.map[mode_code] == nil then
-    return mode_code
-  end
+  if Mode.map[mode_code] == nil then return mode_code end
   return Mode.map[mode_code]
 end
 

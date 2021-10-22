@@ -1,4 +1,5 @@
 globals = {
    "vim",
+   "vimp",
    "assert"
 }

@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local function hostname()
-  return vim.loop.os_gethostname()
-end
+local HostName = require('lualine.component'):new()
 
-return hostname
+HostName.update_status = vim.loop.os_gethostname
+
+return HostName
