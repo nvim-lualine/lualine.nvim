@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local Progress = require('lualine.component'):new()
+local function progress()
+  return '%3p%%'
+end
 
-Progress.update_status = function() return [[%3P]] end
-
-return Progress
+return progress

@@ -1,6 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 -- Credit: itchyny(lightline)
-local background = vim.o.background
+-- License: MIT License
+local style = vim.g.ayucolor or 'dark'
 
-return require('lualine.themes.papercolor_' .. background)
+return require('lualine.themes.ayu_' .. style)
