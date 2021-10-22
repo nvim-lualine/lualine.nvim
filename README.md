@@ -2,8 +2,8 @@
 
 <!-- panvimdoc-ignore-start -->
 
-![code size](https://img.shields.io/github/languages/code-size/shadmansaleh/lualine.nvim?style=flat-square)
-![license](https://img.shields.io/github/license/shadmansaleh/lualine.nvim?style=flat-square)
+![code size](https://img.shields.io/github/languages/code-size/nvim-lualine/lualine.nvim?style=flat-square)
+![license](https://img.shields.io/github/license/nvim-lualine/lualine.nvim?style=flat-square)
 
 <!-- panvimdoc-ignore-end -->
 
@@ -22,10 +22,10 @@ to see what you may have to change in your config.
 ## Contributing
 
 Feel free to create an issue/pr if you want to see anything else implemented.
-If you have some question or need help with configuration start a [discussion](https://github.com/shadmansaleh/lualine.nvim/discussions).
+If you have some question or need help with configuration start a [discussion](https://github.com/nvim-lualine/lualine.nvim/discussions).
 
 Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pr.
-You can also help with documentation in [wiki](https://github.com/shadmansaleh/lualine.nvim/wiki)
+You can also help with documentation in [wiki](https://github.com/nvim-lualine/lualine.nvim/wiki)
 
 <!-- panvimdoc-ignore-start -->
 
@@ -78,7 +78,7 @@ Last Updated On: 20-09-2021
 ### [vim-plug](https://github.com/junegunn/vim-plug)
 
 ```vim
-Plug 'shadmansaleh/lualine.nvim'
+Plug 'nvim-lualine/lualine.nvim'
 " If you want to have icons in your statusline choose one of these
 Plug 'kyazdani42/nvim-web-devicons'
 ```
@@ -87,7 +87,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 
 ```lua
 use {
-  'shadmansaleh/lualine.nvim',
+  'nvim-lualine/lualine.nvim',
   requires = {'kyazdani42/nvim-web-devicons', opt = true}
 }
 ```
@@ -648,15 +648,15 @@ options = {disabled_filetypes = {'lua'}}
 ### Contributors
 Thanks to these wonderful people we enjoy this awesome plugin.
 
-<a href="https://github.com/shadmansaleh/lualine.nvim/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=shadmansaleh/lualine.nvim" />
+<a href="https://github.com/nvim-lualine/lualine.nvim/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=nvim-lualine/lualine.nvim" />
 </a>
 
 ### Wiki
-Check out the [wiki](https://github.com/shadmansaleh/lualine.nvim/wiki) for more info .
+Check out the [wiki](https://github.com/nvim-lualine/lualine.nvim/wiki) for more info .
 
-You can find some useful [configuration snippets](https://github.com/shadmansaleh/lualine.nvim/wiki/Component-snippets) here. You can also share your awesome snippents with others.
+You can find some useful [configuration snippets](https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets) here. You can also share your awesome snippents with others.
 
 If you want to extened lualine with plugins or want to know
-which ones already do [wiki/plugins](https://github.com/shadmansaleh/lualine.nvim/wiki/Plugins) is for you.
+which ones already do [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
 <!-- panvimdoc-ignore-end -->

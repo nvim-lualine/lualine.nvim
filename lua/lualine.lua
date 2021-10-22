@@ -212,7 +212,7 @@ Theme `%s` not found, falling back to `auto`. Check if spelling is right.
 ### options.theme
 Theme `%s` failed, falling back to `gruvbox`.
 This shouldn't happen.
-Please report the issue at https://github.com/shadmansaleh/lualine.nvim/issues .
+Please report the issue at https://github.com/nvim-lualine/lualine.nvim/issues .
 Also provide what colorscheme you're using.
 ]]
   modules.utils_notices.add_notice(string.format(message_template, theme_name))

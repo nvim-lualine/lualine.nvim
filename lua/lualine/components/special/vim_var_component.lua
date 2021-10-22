@@ -15,7 +15,7 @@ function M:update_status()
     return ''
   end
   -- Support accessing keys within dictionary
-  -- https://github.com/shadmansaleh/lualine.nvim/issues/25#issuecomment-907374548
+  -- https://github.com/nvim-lualine/lualine.nvim/issues/25#issuecomment-907374548
   local name_chunks = vim.split(var_name, '%.')
   local return_val = vim[scope][name_chunks[1]]
   for i = 2, #name_chunks do

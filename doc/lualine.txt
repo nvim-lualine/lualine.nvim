@@ -20,11 +20,11 @@ CONTRIBUTING                                            *lualine-contributing*
 
 Feel free to create an issue/pr if you want to see anything else implemented.
 If you have some question or need help with configuration start a discussion
-<https://github.com/shadmansaleh/lualine.nvim/discussions>.
+<https://github.com/nvim-lualine/lualine.nvim/discussions>.
 
 Please read CONTRIBUTING.md <./CONTRIBUTING.md> before opening a pr. You can
 also help with documentation in wiki
-<https://github.com/shadmansaleh/lualine.nvim/wiki>
+<https://github.com/nvim-lualine/lualine.nvim/wiki>
 
 PERFORMANCE COMPARED TO OTHER PLUGINS*lualine-performance-compared-to-other-plugins*
 
@@ -51,7 +51,7 @@ INSTALLATION                                            *lualine-installation*
 VIM-PLUG <HTTPS://GITHUB.COM/JUNEGUNN/VIM-PLUG> ~
 
 >
-    Plug 'shadmansaleh/lualine.nvim'
+    Plug 'nvim-lualine/lualine.nvim'
     " If you want to have icons in your statusline choose one of these
     Plug 'kyazdani42/nvim-web-devicons'
 <
@@ -61,7 +61,7 @@ PACKER.NVIM <HTTPS://GITHUB.COM/WBTHOMASON/PACKER.NVIM> ~
 
 >
     use {
-      'shadmansaleh/lualine.nvim',
+      'nvim-lualine/lualine.nvim',
       requires = {'kyazdani42/nvim-web-devicons', opt = true}
     }
 <
