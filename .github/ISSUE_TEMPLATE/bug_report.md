@@ -43,18 +43,18 @@ labels: bug
   reproduce might be ignored.
 
   This script can help you with that.
-  https://gist.github.com/shadmansaleh/3aca29632e9a77a632705b62617c9dac
+  https://github.com/nvim-lualine/lualine.nvim/blob/master/scripts/nvim_isolated_conf.sh
 
   Create an isolated config directory with:
 
-    `nvim_conf.sh -c DirectoryName`
+    `nvim_isolated_conf.sh -c DirectoryName`
 
   Then modify the DirectoryName/.config/nvim/init.vim
   so you can reproduce the issue .
 
   You can load the config to see if the issue is occuring with
 
-    `nvim_conf.sh -l DirectoryName`
+    `nvim_isolated_conf.sh -l DirectoryName`
 
   Paste the DirectoryName/.config/init.vim without comments below
 -->
