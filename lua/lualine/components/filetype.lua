@@ -1,49 +1,67 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local highlight = require('lualine.highlight')
-local utils = require('lualine.utils.utils')
+local lualine_require = require 'lualine_require'
+local modules = lualine_require.lazy_require {
+  highlight = 'lualine.highlight',
+  utils = 'lualine.utils.utils',
+}
+local M = lualine_require.require('lualine.component'):extend()
 
-local FileType = require('lualine.component'):new()
+local default_options = {
+  colored = true,
+  icon_only = false,
+}
 
-FileType.update_status = function(self)
-  local data = vim.bo.filetype
-  if #data > 0 then
-    local ok, devicons = pcall(require, 'nvim-web-devicons')
-    if ok then
-      local f_name, f_extension = vim.fn.expand('%:t'), vim.fn.expand('%:e')
-      local icon, icon_highlight_group = devicons.get_icon(f_name, f_extension)
-      self.options.icon = icon
-
-      if self.options.icon and
-          (self.options.colored or self.options.colored == nil) then
-        self.options.colored = true
-
-        local highlight_color = utils.extract_highlight_colors(icon_highlight_group, 'fg')
-        local is_focused = vim.g.statusline_winid == vim.fn.win_getid()
-        local default_highlight = highlight.format_highlight(is_focused,
-                                                             self.options.self
-                                                                 .section)
-        local icon_highlight = self.options.self.section .. '_' ..
-                                   icon_highlight_group
-        if not utils.highlight_exists(icon_highlight .. '_normal') then
-          icon_highlight = highlight.create_component_highlight_group(
-                               {fg = highlight_color}, icon_highlight_group,
-                               self.options)
-        end
-
-        self.options.icon =
-            highlight.component_format_highlight(icon_highlight) ..
-                self.options.icon .. default_highlight
-      end
-    else
-      ok = vim.fn.exists('*WebDevIconsGetFileTypeSymbol')
-      if ok ~= 0 then
-        self.options.icon = vim.fn.WebDevIconsGetFileTypeSymbol()
-      end
-    end
-    return data
-  end
-  return ''
+function M:init(options)
+  M.super.init(self, options)
+  self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
 end
 
-return FileType
+function M.update_status()
+  return vim.bo.filetype or ''
+end
+
+function M:apply_icon()
+  if not self.options.icons_enabled then
+    return
+  end
+
+  local icon, icon_highlight_group
+  local ok, devicons = pcall(require, 'nvim-web-devicons')
+  if ok then
+    local f_name, f_extension = vim.fn.expand '%:t', vim.fn.expand '%:e'
+    icon, icon_highlight_group = devicons.get_icon(f_name, f_extension)
+
+    if icon and self.options.colored then
+      local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
+      local default_highlight = modules.highlight.format_highlight(self.options.self.section)
+      local icon_highlight = self.options.self.section .. '_' .. icon_highlight_group
+      if not modules.highlight.highlight_exists(icon_highlight .. '_normal') then
+        icon_highlight = modules.highlight.create_component_highlight_group(
+          { fg = highlight_color },
+          icon_highlight_group,
+          self.options
+        )
+      end
+
+      icon = modules.highlight.component_format_highlight(icon_highlight) .. icon .. default_highlight
+    end
+  else
+    ok = vim.fn.exists '*WebDevIconsGetFileTypeSymbol'
+    if ok ~= 0 then
+      icon = vim.fn.WebDevIconsGetFileTypeSymbol()
+    end
+  end
+
+  if not icon then
+    return
+  end
+
+  if self.options.icon_only then
+    self.status = icon
+  else
+    self.status = icon .. ' ' .. self.status
+  end
+end
+
+return M

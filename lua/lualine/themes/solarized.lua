@@ -2,6 +2,6 @@
 -- MIT license, see LICENSE for more details.
 -- Credit: itchyny(lightline)
 -- License: MIT License
-local background = vim.o.background
+local background = vim.opt.background:get()
 
 return require('lualine.themes.solarized_' .. background)

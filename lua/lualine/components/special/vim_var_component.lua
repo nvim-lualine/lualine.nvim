@@ -1,19 +1,35 @@
-local VarComponent = require('lualine.component'):new()
-VarComponent.update_status = function(self)
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
+local M = require('lualine.component'):extend()
+
+function M:update_status()
   local component = self.options[1]
   -- vim veriable component
   -- accepts g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo:
   -- filters g portion from g:var
-  local scope = component:match('[gvtwb]?o?')
+  local scope = component:match '[gvtwb]?o?'
   -- filters var portion from g:var
   local var_name = component:sub(#scope + 2, #component)
   -- Displays nothing when veriable aren't present
-  local return_val = vim[scope][var_name]
-  if return_val == nil then return '' end
+  if not (scope and var_name) then
+    return ''
+  end
+  -- Support accessing keys within dictionary
+  -- https://github.com/nvim-lualine/lualine.nvim/issues/25#issuecomment-907374548
+  local name_chunks = vim.split(var_name, '%.')
+  local return_val = vim[scope][name_chunks[1]]
+  for i = 2, #name_chunks do
+    if return_val == nil then
+      break
+    end
+    return_val = return_val[name_chunks[i]]
+  end
+  if return_val == nil then
+    return ''
+  end
   local ok
   ok, return_val = pcall(tostring, return_val)
-  if ok then return return_val end
-  return ''
+  return ok and return_val or ''
 end
 
-return VarComponent
+return M

@@ -43,4 +43,15 @@ luac.out
 tags
 
 # helptags
-doc/tags
+/doc/tags
+
+# panvimdoc
+/panvimdoc/
+
+# luacov
+/luacov.report
+/luacov.report.index
+/luacov.stats
+
+# tests
+/tmp_home/

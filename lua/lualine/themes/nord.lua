@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
--- LuaFormatter off
+-- stylua: ignore
 local colors = {
   nord1  = '#3B4252',
   nord3  = '#4C566A',
@@ -10,20 +10,19 @@ local colors = {
   nord8  = '#88C0D0',
   nord13 = '#EBCB8B',
 }
--- LuaFormatter on
+
 return {
   normal = {
-    a = {fg = colors.nord1, bg = colors.nord8, gui = 'bold'},
-    b = {fg = colors.nord5, bg = colors.nord1},
-    c = {fg = colors.nord5, bg = colors.nord3}
+    a = { fg = colors.nord1, bg = colors.nord8, gui = 'bold' },
+    b = { fg = colors.nord5, bg = colors.nord1 },
+    c = { fg = colors.nord5, bg = colors.nord3 },
   },
-  insert = {a = {fg = colors.nord1, bg = colors.nord6, gui = 'bold'}},
-  visual = {a = {fg = colors.nord1, bg = colors.nord7, gui = 'bold'}},
-  replace = {a = {fg = colors.nord1, bg = colors.nord13, gui = 'bold'}},
+  insert = { a = { fg = colors.nord1, bg = colors.nord6, gui = 'bold' } },
+  visual = { a = { fg = colors.nord1, bg = colors.nord7, gui = 'bold' } },
+  replace = { a = { fg = colors.nord1, bg = colors.nord13, gui = 'bold' } },
   inactive = {
-    a = {fg = colors.nord1, bg = colors.nord8, gui = 'bold'},
-    b = {fg = colors.nord5, bg = colors.nord1},
-    c = {fg = colors.nord5, bg = colors.nord1}
-  }
+    a = { fg = colors.nord1, bg = colors.nord8, gui = 'bold' },
+    b = { fg = colors.nord5, bg = colors.nord1 },
+    c = { fg = colors.nord5, bg = colors.nord1 },
+  },
 }
-
