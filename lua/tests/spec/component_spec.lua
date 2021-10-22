@@ -347,7 +347,7 @@ describe('Location component', function()
       component_separators = { left = '', right = '' },
       padding = 0,
     }
-    assert_component('location', opts, '%3l:%-2c')
+    assert_component('location', opts, '%3l:%-2v')
   end)
 end)
 
@@ -357,7 +357,7 @@ describe('Progress component', function()
       component_separators = { left = '', right = '' },
       padding = 0,
     }
-    assert_component('progress', opts, '%3P')
+    assert_component('progress', opts, '%3p%%')
   end)
 end)
 
