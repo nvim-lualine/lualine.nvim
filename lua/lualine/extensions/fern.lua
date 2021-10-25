@@ -1,14 +1,10 @@
 -- MIT license, see LICENSE for more details.
 -- Extension for fern file explorer.
+local nerdtree = require 'lualine.extensions.nerdtree'
+
 local M = {}
 
-local function fern_path()
-  return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
-end
-
-M.sections = {
-  lualine_a = { fern_path },
-}
+M.sections = vim.deepcopy(nerdtree.sections)
 
 M.filetypes = { 'fern' }
 
