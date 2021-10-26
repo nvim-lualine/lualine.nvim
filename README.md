@@ -451,8 +451,33 @@ sections = {
         hint = nil,  -- Changes diagnostic's hint color
       }
       symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
+      colored = true, -- displays diagnostics status in color if set to true
       update_in_insert = false, -- Update diagnostics in insert mode
       always_visible = false, -- Show diagnostics even if count is 0, boolean or function returning boolean
+    }
+  }
+}
+```
+
+#### diff component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'diff',
+      colored = true, -- displays diff status in color if set to true
+      -- all colors are in format #rrggbb
+      diff_color = {
+        added = nil,    -- changes diff's added color
+        modified = nil, -- changes diff's modified color
+        removed = nil,  -- changes diff's removed color
+      }
+      symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
+      source = nil, -- A function that works as a data source for diff.
+                    -- it must return a table like
+                    -- {added = add_count, modified = modified_count, removed = removed_count }
+                    -- Or nil on failure. Count <= 0 won't be displayed.
     }
   }
 }
@@ -483,30 +508,6 @@ sections = {
       'filetype',
       colored = true, -- displays filetype icon in color if set to `true
       icon_only = false -- Display only icon for filetype
-    }
-  }
-}
-```
-
-#### diff component options
-
-```lua
-sections = {
-  lualine_a = {
-    {
-      'diff',
-      colored = true, -- displays diff status in color if set to true
-      -- all colors are in format #rrggbb
-      diff_color = {
-        added = nil,    -- changes diff's added color
-        modified = nil, -- changes diff's modified color
-        removed = nil,  -- changes diff's removed color
-      }
-      symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
-      source = nil, -- A function that works as a data source for diff.
-                    -- it must return a table like
-                    -- {added = add_count, modified = modified_count, removed = removed_count }
-                    -- Or nil on failure. Count <= 0 won't be displayed.
     }
   }
 }

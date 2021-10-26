@@ -60,29 +60,34 @@ function M:init(options)
   end
   -- Initialize variable to store last update so we can use it in insert
   -- mode for no update_in_insert
-  self.last_update = ''
+  self.last_diagnostics_count = {}
 end
 
 function M:update_status()
-  if not self.options.update_in_insert and vim.api.nvim_get_mode().mode:sub(1, 1) == 'i' then
-    return self.last_update
-  end
-  local error_count, warning_count, info_count, hint_count = 0, 0, 0, 0
-  local diagnostic_data = modules.sources.get_diagnostics(self.options.sources)
-  -- sum all the counts
-  for _, data in pairs(diagnostic_data) do
-    error_count = error_count + data.error
-    warning_count = warning_count + data.warn
-    info_count = info_count + data.info
-    hint_count = hint_count + data.hint
-  end
+  local bufnr = vim.fn.bufnr()
+  local diagnostics_count
   local result = {}
-  local data = {
-    error = error_count,
-    warn = warning_count,
-    info = info_count,
-    hint = hint_count,
-  }
+  if self.options.update_in_insert or vim.api.nvim_get_mode().mode:sub(1, 1) ~= 'i' then
+    local error_count, warning_count, info_count, hint_count = 0, 0, 0, 0
+    local diagnostic_data = modules.sources.get_diagnostics(self.options.sources)
+    -- sum all the counts
+    for _, data in pairs(diagnostic_data) do
+      error_count = error_count + data.error
+      warning_count = warning_count + data.warn
+      info_count = info_count + data.info
+      hint_count = hint_count + data.hint
+    end
+    diagnostics_count = {
+      error = error_count,
+      warn = warning_count,
+      info = info_count,
+      hint = hint_count,
+    }
+    -- Save count for insert mode
+    self.last_diagnostics_count[bufnr] = diagnostics_count
+  else -- Use cached count in insert mode with update_in_insert disabled
+    diagnostics_count = self.last_diagnostics_count[bufnr] or { error = 0, warn = 0, info = 0, hint = 0 }
+  end
 
   local always_visible = false
   if type(self.options.always_visible) == 'boolean' then
@@ -98,22 +103,18 @@ function M:update_status()
       colors[name] = modules.highlight.component_format_highlight(hl)
     end
     for _, section in ipairs(self.options.sections) do
-      if data[section] ~= nil and (always_visible or data[section] > 0) then
-        table.insert(result, colors[section] .. self.symbols[section] .. data[section])
+      if diagnostics_count[section] ~= nil and (always_visible or diagnostics_count[section] > 0) then
+        table.insert(result, colors[section] .. self.symbols[section] .. diagnostics_count[section])
       end
     end
   else
     for _, section in ipairs(self.options.sections) do
-      if data[section] ~= nil and (always_visible or data[section] > 0) then
-        table.insert(result, self.symbols[section] .. data[section])
+      if diagnostics_count[section] ~= nil and (always_visible or diagnostics_count[section] > 0) then
+        table.insert(result, self.symbols[section] .. diagnostics_count[section])
       end
     end
   end
-  self.last_update = ''
-  if result[1] ~= nil then
-    self.last_update = table.concat(result, ' ')
-  end
-  return self.last_update
+  return table.concat(result, ' ')
 end
 
 return M
