@@ -604,6 +604,7 @@ Available extensions ~
 
 
 - chadtree
+- fern
 - fugitive
 - fzf
 - nerdtree
