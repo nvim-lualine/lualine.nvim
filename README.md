@@ -605,6 +605,7 @@ extensions = {'quickfix'}
 <summary><b>Available extensions</b></summary>
 
 * chadtree
+* fern
 * fugitive
 * fzf
 * nerdtree
