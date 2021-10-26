@@ -483,6 +483,23 @@ sections = {
 }
 ```
 
+#### fileformat component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'fileformat',
+      symbols = {
+        unix = '', -- e712
+        dos = '', -- e70f
+        mac = '', -- e711
+      }
+    }
+  }
+}
+```
+
 #### filename component options
 
 ```lua
