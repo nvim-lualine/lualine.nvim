@@ -11,12 +11,12 @@ local active_bufnr = '0'
 -- os specific path separator
 local sep = package.config:sub(1, 1)
 -- event watcher to watch head file
--- Use file wstch for non windows and poll for windows.
--- windows doesn't like file watch for some reason.
+-- Use file watch for non Windows and poll for Windows.
+-- Windows doesn't like file watch for some reason.
 local file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
 local git_dir_cache = {} -- Stores git paths that we already know of
 
----sets git_branch veriable to branch name or commit hash if not on branch
+---sets git_branch variable to branch name or commit hash if not on branch
 ---@param head_file string full path of .git/HEAD file
 local function get_git_head(head_file)
   local f_head = io.open(head_file)
@@ -33,7 +33,7 @@ local function get_git_head(head_file)
   return nil
 end
 
----update the current value of git_branch and setup file watch on HEAD file
+---updates the current value of git_branch and sets up file watch on HEAD file
 local function update_branch()
   active_bufnr = tostring(vim.fn.bufnr())
   file_changed:stop()
@@ -106,7 +106,7 @@ function M.find_git_dir(dir_path)
   return git_dir
 end
 
----initialize git_branch ,odule
+---initializes git_branch module
 function M.init()
   -- run watch head on load so branch is present when component is loaded
   M.find_git_dir()
