@@ -96,7 +96,7 @@ function M:update_status()
   if type(max_length) == 'function' then
     max_length = max_length(self)
   end
-  
+
   if max_length == 0 then
     max_length = math.floor(2 * vim.o.columns / 3)
   end
