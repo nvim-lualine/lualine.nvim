@@ -413,6 +413,7 @@ sections = {
       show_filename_only = true, -- shows shortened relative path when false
       show_modified_status = true -- shows indicator then bufder is modified
       max_length = vim.o.columns * 2 / 3, -- maximum width of buffers component
+                                          -- can also be a function that returns value of max_length dynamicaly 
       filetype_names = {
         TelescopePrompt = 'Telescope',
         dashboard = 'Dashboard',
@@ -538,6 +539,7 @@ sections = {
     {
       'tabs',
       max_length = vim.o.columns / 3, -- maximum width of tabs component
+                                      -- can also be a function that returns value of max_length dynamicaly 
       mode = 0, -- 0  shows tab_nr
                 -- 1  shows tab_name
                 -- 2  shows tab_nr + tab_name
