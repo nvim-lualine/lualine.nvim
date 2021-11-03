@@ -29,7 +29,9 @@ function M:apply_icon()
   local icon, icon_highlight_group
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if ok then
-    local f_name, f_extension = vim.fn.expand '%:t', vim.fn.expand '%:e'
+    local f_name = vim.fn.expand '%:t'
+    local f_extension = vim.api.nvim_buf_get_option(0, 'filetype')
+    f_extension = f_extension ~= '' and f_extension or vim.fn.expand '%:e'
     icon, icon_highlight_group = devicons.get_icon(f_name, f_extension)
 
     if icon and self.options.colored then
