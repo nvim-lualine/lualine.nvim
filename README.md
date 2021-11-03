@@ -470,9 +470,9 @@ sections = {
       colored = true, -- displays diff status in color if set to true
       -- all colors are in format #rrggbb
       diff_color = {
-        added = nil,    -- changes diff's added color
-        modified = nil, -- changes diff's modified color
-        removed = nil,  -- changes diff's removed color
+        added = {fg = nil},    -- changes diff's added color
+        modified = {fg = nil}, -- changes diff's modified color
+        removed = {fg = nil},  -- changes diff's removed color
       }
       symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
       source = nil, -- A function that works as a data source for diff.
