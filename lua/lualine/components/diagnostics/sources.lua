@@ -41,9 +41,9 @@ M.sources = {
   vim_lsp = function()
     local ok, data = pcall(vim.fn['lsp#get_buffer_diagnostics_counts'])
     if ok then
-      return data.error, data.warning, data.information
+      return data.error, data.warning, data.information, data.hint
     else
-      return 0, 0, 0
+      return 0, 0, 0, 0
     end
   end,
 }
