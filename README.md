@@ -325,6 +325,8 @@ shown . On the other hand branch will be formatted with global formatter
 <details>
 <summary><b>Global options</b></summary>
 
+#### Global options
+
 These are `options` that are used in options table.
 They set behavior of lualine.
 
@@ -353,6 +355,8 @@ options = {
 <details>
 <summary><b>General component options</b></summary>
 
+#### General options
+
 These are options that control behavior at component level
 and are available for all components.
 
@@ -373,11 +377,17 @@ sections = {
                        -- and right will be placed in right side of component
                        -- Passing empty string disables that separator
       cond = nil, -- condition function, component is loaded when function returns true
-      -- custom color for component in format
-      -- color = {fg = '#rrggbb', bg= '#rrggbb', gui='style'}
+      -- custom color for the component in format
+      -- here '|' refers to or meaning a different acceptable format for that placeholder
+      -- 'highlight_group_name' | {fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style'}
+      --  Note: all other color options including themes accept  like diff_color same color values
+      -- Example
+      -- color = {fg = '#ffaa88', bg = 'grey', gui='italic,bold'},
+      -- color = {fg = 204} -- when fg/bg is skiped they default to themes fg/bg
+      -- color = 'WarningMsg'
       -- or highlight group
       -- color = "WarningMsg"
-      color = nil,
+      color = nil, -- default is themes color for that section and mode
       -- Type option specifies what type a component is.
       -- When type is omitted lualine will guess it.
       -- Available types [format: type_name(example)]
@@ -413,7 +423,7 @@ sections = {
       show_filename_only = true, -- shows shortened relative path when false
       show_modified_status = true -- shows indicator then bufder is modified
       max_length = vim.o.columns * 2 / 3, -- maximum width of buffers component
-                                          -- can also be a function that returns value of max_length dynamicaly 
+                                          -- can also be a function that returns value of max_length dynamicaly
       filetype_names = {
         TelescopePrompt = 'Telescope',
         dashboard = 'Dashboard',
@@ -422,8 +432,9 @@ sections = {
         alpha = 'Alpha'
       }, -- shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
       buffers_color = {
-        active = nil,   -- color for active buffer
-        inactive = nil, -- color for inactive buffer
+        -- Same values like general color option can be used here.
+        active = 'lualine_{section}_normal', color for active buffer
+        inactive = 'lualine_{section}_inactive', -- color for inactive buffer
       },
     }
   }
@@ -444,12 +455,12 @@ sections = {
       sources = {'nvim_lsp', 'coc'},
       -- displays diagnostics from defined severity
       sections = {'error', 'warn', 'info', 'hint'},
-      -- all colors are in format #rrggbb
       diagnostics_color = {
-        error = nil, -- changes diagnostic's error color
-        warn = nil,  -- changes diagnostic's warn color
-        info = nil,  -- Changes diagnostic's info color
-        hint = nil,  -- Changes diagnostic's hint color
+        -- Same values like general color option can be used here.
+        error = 'DiagnosticError', -- changes diagnostic's error color
+        warn  = 'DiagnosticWarn',  -- changes diagnostic's warn color
+        info  = 'DiagnosticInfo',  -- Changes diagnostic's info color
+        hint  = 'DiagnosticHint',  -- Changes diagnostic's hint color
       }
       symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
       colored = true, -- displays diagnostics status in color if set to true
@@ -470,9 +481,10 @@ sections = {
       colored = true, -- displays diff status in color if set to true
       -- all colors are in format #rrggbb
       diff_color = {
-        added = nil,    -- changes diff's added color
-        modified = nil, -- changes diff's modified color
-        removed = nil,  -- changes diff's removed color
+        -- Same values like general color option can be used here.
+        added    = 'DiffAdd',    -- changes diff's added color
+        modified = 'DiffChange', -- changes diff's modified color
+        removed  = 'DiffDelete', -- changes diff's removed color you
       }
       symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
       source = nil, -- A function that works as a data source for diff.
@@ -539,13 +551,14 @@ sections = {
     {
       'tabs',
       max_length = vim.o.columns / 3, -- maximum width of tabs component
-                                      -- can also be a function that returns value of max_length dynamicaly 
+                                      -- can also be a function that returns value of max_length dynamicaly
       mode = 0, -- 0  shows tab_nr
                 -- 1  shows tab_name
                 -- 2  shows tab_nr + tab_name
       tabs_color = {
-        active = nil,   -- color for active tab
-        inactive = nil, -- color for inactive tab
+        -- Same values like general color option can be used here.
+        active = 'lualine_{section}_normal',   -- color for active tab
+        inactive = 'lualine_{section}_inactive', -- color for inactive tab
       },
     }
   }
