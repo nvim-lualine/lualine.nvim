@@ -122,6 +122,46 @@ You'll have to change it to this to retain old behavior:
   end
 end
 
+--- Shows notice about invalid types passed as component
+--- @param index number the index of component jn section table
+--- @param component table containing component elements
+--- return bool whether check passed or not
+local function is_valid_component_type(index, component)
+  if type(component_types) == 'table' and type(index) == 'number' then
+    return true
+  end
+  modules.notice.add_notice(string.format(
+    [[
+### Unrecognized component
+Only functions, strings and tables can be used as component.
+You seem to have a `%s` as component indexed as `%s`.
+Something like:
+```lua
+    %s = %s,
+```
+
+This commonly occurs when you forget to pass table with option for component.
+When a component has option that component needs to be a table which holds
+the component as first element and the options as key value paris.
+For example:
+```lua
+lualine_c = {
+    {'diagnostics',
+        sources = {'nvim'},
+    }
+}
+```
+Notice the inner extra {} surrounding the component and it's options.
+Make sure your config follows this.
+]],
+    type(component),
+    index,
+    index,
+    vim.inspect(component)
+  ))
+  return false
+end
+
 ---loads all the section from a config
 ---@param sections table list of sections
 ---@param options table global options table
@@ -131,12 +171,14 @@ local function load_sections(sections, options)
       if type(component) == 'string' or type(component) == 'function' then
         component = { component }
       end
-      component.self = {}
-      component.self.section = section_name
-      -- apply default args
-      component = vim.tbl_extend('keep', component, options)
-      option_deprecatation_notice(component)
-      section[index] = component_loader(component)
+      if is_valid_component_type(index, component) then
+        component.self = {}
+        component.self.section = section_name
+        -- apply default args
+        component = vim.tbl_extend('keep', component, options)
+        option_deprecatation_notice(component)
+        section[index] = component_loader(component)
+      end
     end
   end
 end
