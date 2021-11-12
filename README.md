@@ -421,7 +421,10 @@ sections = {
     {
       'buffers',
       show_filename_only = true, -- shows shortened relative path when false
-      show_modified_status = true -- shows indicator then bufder is modified
+      show_modified_status = true -- shows indicator then buffer is modified
+      mode = 0, -- 0 shows buffer name
+                -- 1 buffer index (bufnr)
+                -- 2 shows buffer name + buffer index (bufnr)
       max_length = vim.o.columns * 2 / 3, -- maximum width of buffers component
                                           -- can also be a function that returns value of max_length dynamicaly
       filetype_names = {

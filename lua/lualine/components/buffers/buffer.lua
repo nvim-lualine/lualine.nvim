@@ -48,10 +48,17 @@ end
 ---@return string
 function Buffer:render()
   local name
+
   if self.ellipse then -- show elipsis
     name = '...'
   else
-    name = string.format(' %s%s%s ', self.icon, self:name(), self.modified_icon)
+    if self.options.mode == 0 then
+      name = string.format(' %s%s%s ', self.icon, self:name(), self.modified_icon)
+    elseif self.options.mode == 1 then
+      name = string.format(' %s %s%s ', self.bufnr, self.icon, self.modified_icon)
+    else
+      name = string.format(' %s %s%s%s ', self.bufnr, self.icon, self:name(), self.modified_icon)
+    end
   end
   self.len = vim.fn.strchars(name)
 
