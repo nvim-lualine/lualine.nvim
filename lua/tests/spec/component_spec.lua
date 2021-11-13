@@ -258,11 +258,19 @@ describe('Filetype component', function()
   end)
 
   it('does not add icon when library unavailable', function()
+    local old_require = _G.require
+    function _G.require(...)
+      if select(1, ...) == 'nvim-web-devicons' then
+        error("Test case not suppose to have web-dev-icon 👀")
+      end
+      return old_require(...)
+    end
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
       padding = 0,
     }
     assert_component('filetype', opts, 'lua')
+    _G.require = old_require
   end)
 
   it('colors nvim-web-devicons icons', function()
