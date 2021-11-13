@@ -8,6 +8,7 @@ local highlight = require 'lualine.highlight'
 local default_options = {
   show_filename_only = true,
   show_modified_status = true,
+  mode = 0,
   max_length = 0,
   filetype_names = {
     TelescopePrompt = 'Telescope',
