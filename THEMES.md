@@ -43,6 +43,14 @@ it'll try it's best to generate one.
 It's a combination of ayu_light, ayu_dark & ayu_mirage. It loads one of these
 them based you your `g:ayucolor` option.
 
+### base16_ocean
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/564113/141649910-1f14e0bc-98b6-4439-9e85-4584106022ad.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/564113/141649934-55508a08-a0cc-4714-bb48-03bf273e4b94.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/564113/141649942-633526a0-ef09-4b43-8d61-48e83dc74c90.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/564113/141649946-4aebbc45-bda1-49c7-a1e8-0449adbf0adf.png'/>
+</p>
+
 ### codedark
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648568-dff4c980-74bb-11eb-9d16-b68ac68f2ab2.png'/>
