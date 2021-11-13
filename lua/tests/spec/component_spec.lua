@@ -261,7 +261,7 @@ describe('Filetype component', function()
     local old_require = _G.require
     function _G.require(...)
       if select(1, ...) == 'nvim-web-devicons' then
-        error("Test case not suppose to have web-dev-icon 👀")
+        error 'Test case not suppose to have web-dev-icon 👀'
       end
       return old_require(...)
     end
