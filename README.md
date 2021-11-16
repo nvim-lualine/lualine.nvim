@@ -98,7 +98,7 @@ Lualine has sections as shown below.
 
 Each sections holds it's components e.g. current vim's mode.
 
-<details><summary>Configuring lualine in init.vim</summary>
+#### Configuring lualine in init.vim
 
 All the examples below are in lua. You can use the same examples
 in `.vim` file by wrapping them in lua heredoc like this:
@@ -111,9 +111,8 @@ END
 
 checkout `:help lua-heredoc`.
 
-</details>
 
-<details><summary>Default config</summary>
+#### Default config
 
 ```lua
 require'lualine'.setup {
@@ -147,7 +146,6 @@ require'lualine'.setup {
 }
 ```
 
-</details>
 
 If you want to get your current lualine config. you can
 do so with
@@ -177,8 +175,7 @@ All available themes are listed in [THEMES.md](./THEMES.md)
 
 Please create a pr if you managed to port a popular theme before me, [here is how to do it](./CONTRIBUTING.md).
 
-<details>
-<summary>Customizing themes</summary>
+#### Customizing themes
 
 ```lua
 local custom_gruvbox = require'lualine.themes.gruvbox'
@@ -192,7 +189,6 @@ require'lualine'.setup{
 
 Theme structure is available [here](./CONTRIBUTING.md#adding-a-theme)
 
-</details>
 
 ---
 
@@ -213,13 +209,12 @@ options = {
 Here left means it'll be used for left sections (a, b, c) and right means
 it'll be used for right sections (x, y, z).
 
-<details><summary>Disabling separators</summary>
+#### Disabling separators
 
 ```lua
 options = {section_separators = '', component_separators = ''}
 ```
 
-</details>
 
 ---
 
@@ -229,8 +224,7 @@ options = {section_separators = '', component_separators = ''}
 sections = {lualine_a = {'mode'}}
 ```
 
-<details>
-<summary><b>Available components</b></summary>
+#### Available components
 
 * `branch` (git branch)
 * `buffers` (shows currently available buffers)
@@ -247,7 +241,6 @@ sections = {lualine_a = {'mode'}}
 * `progress` (%progress in file)
 * `tabs` (shows currently available tabs)
 
-</details>
 
 #### Custom components
 
@@ -266,7 +259,7 @@ sections = {lualine_a = {hello}}
 sections = {lualine_a = {'FugitiveHead'}}
 ```
 
-#### Vim's statusline items as lualine component
+##### Vim's statusline items as lualine component
 
 ```lua
 sections = {lualine_c = {'%=', '%t%m', '%3p'}}
@@ -322,9 +315,6 @@ shown . On the other hand branch will be formatted with global formatter
 
 #### Available options
 
-<details>
-<summary><b>Global options</b></summary>
-
 #### Global options
 
 These are `options` that are used in options table.
@@ -350,12 +340,7 @@ options = {
 }
 ```
 
-</details>
-
-<details>
-<summary><b>General component options</b></summary>
-
-#### General options
+#### General component options
 
 These are options that control behavior at component level
 and are available for all components.
@@ -404,10 +389,8 @@ sections = {
 }
 ```
 
-</details>
 
-<details>
-<summary><b>Component specific options</b></summary>
+#### Component specific options
 
 These are options that are available on specific components.
 For example you have option on `diagnostics` component to
@@ -568,7 +551,6 @@ sections = {
 }
 ```
 
-</details>
 
 ---
 
@@ -637,8 +619,7 @@ You can load extensions with:
 extensions = {'quickfix'}
 ```
 
-<details>
-<summary><b>Available extensions</b></summary>
+#### Available extensions
 
 * chadtree
 * fern
@@ -649,10 +630,8 @@ extensions = {'quickfix'}
 * quickfix
 * toggleterm
 
-</details>
 
-<details>
-<summary><b>Custom extensions</b></summary>
+#### Custom extensions
 
 You can define your own extensions. If you think an extension might be useful for others then please submit a pr.
 
@@ -660,8 +639,6 @@ You can define your own extensions. If you think an extension might be useful fo
 local my_extension = {sections = {lualine_a = 'mode'}, filetypes = {'lua'}}
 require'lualine'.setup {extensions = {my_extension}}
 ```
-
-</details>
 
 ---
 

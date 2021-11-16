@@ -82,10 +82,13 @@ Lualine has sections as shown below.
 
 Each sections holds it’s components e.g. current vim’s mode.
 
-Configuring lualine in init.vim
+                                     *lualine-Configuring-lualine-in-init.vim*
 
-All the examples below are in lua. You can use the same examples in `.vim` file
-by wrapping them in lua heredoc like this:
+Configuring lualine in init.vim        All the examples below are in lua. You
+                                       can use the same examples in `.vim` file
+                                       by wrapping them in lua heredoc like
+                                       this:
+
 
 >
     lua << END
@@ -96,7 +99,7 @@ by wrapping them in lua heredoc like this:
 
 checkout `:help lua-heredoc`.
 
-Default config
+                                                      *lualine-Default-config*
 
 >
     require'lualine'.setup {
@@ -131,7 +134,9 @@ Default config
 <
 
 
-If you want to get your current lualine config. you can do so with
+Default config                         If you want to get your current lualine
+                                       config. you can do so with
+
 
 >
     require'lualine'.get_config()
@@ -161,7 +166,7 @@ All available themes are listed in THEMES.md <./THEMES.md>
 Please create a pr if you managed to port a popular theme before me, here is
 how to do it <./CONTRIBUTING.md>.
 
-Customizing themes
+                                                  *lualine-Customizing-themes*
 
 >
     local custom_gruvbox = require'lualine.themes.gruvbox'
@@ -174,7 +179,9 @@ Customizing themes
 <
 
 
-Theme structure is available here <./CONTRIBUTING.md#adding-a-theme>
+Customizing themes                     Theme structure is available here
+                                       <./CONTRIBUTING.md#adding-a-theme>
+
 
 ------------------------------------------------------------------------------
 
@@ -198,7 +205,7 @@ Lualine defines two kinds of separators:
 Here left means it’ll be used for left sections (a, b, c) and right means
 it’ll be used for right sections (x, y, z).
 
-Disabling separators
+                                                *lualine-Disabling-separators*
 
 >
     options = {section_separators = '', component_separators = ''}
@@ -214,7 +221,7 @@ CHANGING COMPONENTS IN LUALINE SECTIONS ~
 <
 
 
-Available components ~
+                                                *lualine-Available-components*
 
 
 - `branch` (git branch)
@@ -252,7 +259,7 @@ VIM FUNCTIONS AS LUALINE COMPONENT
 <
 
 
-                       *lualine-Vim’s-statusline-items-as-lualine-component*
+VIM’S STATUSLINE ITEMS AS LUALINE COMPONENT
 
 >
     sections = {lualine_c = {'%=', '%t%m', '%3p'}}
@@ -312,8 +319,6 @@ shown. On the other hand branch will be formatted with global formatter
 
                                                    *lualine-Available-options*
 
-Global options ~
-
                                                       *lualine-Global-options*
 
 Global options                         These are `options` that are used in
@@ -342,11 +347,9 @@ in component.
 <
 
 
-General component options ~
+                                           *lualine-General-component-options*
 
-                                                     *lualine-General-options*
-
-General options                        These are options that control behavior
+General component options              These are options that control behavior
                                        at component level and are available for
                                        all components.
 
@@ -396,11 +399,14 @@ General options                        These are options that control behavior
 <
 
 
-Component specific options ~
+                                          *lualine-Component-specific-options*
 
-These are options that are available on specific components. For example you
-have option on `diagnostics` component to specify what your diagnostic sources
-will be.
+Component specific options             These are options that are available on
+                                       specific components. For example you
+                                       have option on `diagnostics` component
+                                       to specify what your diagnostic sources
+                                       will be.
+
 
                                            *lualine-buffers-component-options*
 
@@ -639,7 +645,7 @@ extensions with:
 <
 
 
-Available extensions ~
+                                                *lualine-Available-extensions*
 
 
 - chadtree
@@ -652,10 +658,12 @@ Available extensions ~
 - toggleterm
 
 
-Custom extensions ~
+                                                   *lualine-Custom-extensions*
 
-You can define your own extensions. If you think an extension might be useful
-for others then please submit a pr.
+Custom extensions                      You can define your own extensions. If
+                                       you think an extension might be useful
+                                       for others then please submit a pr.
+
 
 >
     local my_extension = {sections = {lualine_a = 'mode'}, filetypes = {'lua'}}
