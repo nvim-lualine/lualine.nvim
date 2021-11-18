@@ -267,7 +267,8 @@ local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     vim.cmd 'autocmd lualine VimResized * redrawstatus'
   else
-    vim.go.statusline = nil
+    vim.go.statusline = ''
+    vim.go.laststatus = 0
   end
 end
 

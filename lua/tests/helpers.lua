@@ -11,9 +11,7 @@ M.meths = setmetatable({}, {
   end,
 })
 
--- Checks ouput of a component
-M.assert_component = function(component, opts, result)
-  -- for testing global options
+function M.init_component(component, opts)
   if component == nil then
     component = 'special.function_component'
   else
@@ -26,9 +24,19 @@ M.assert_component = function(component, opts, result)
     opts[1] = comp
     comp = require 'lualine.components.special.function_component'(opts)
   end
+  return comp
+end
+
+-- Checks ouput of a component
+M.assert_component = function(component, opts, result)
+  local comp = M.init_component(component, opts)
+  -- for testing global options
   eq(result, comp:draw(opts.hl))
 end
 
+function M.assert_component_instence(comp, result)
+  eq(result, comp:draw(comp.options.hl))
+end
 -- sets defaults for component options
 M.build_component_opts = function(opts)
   if not opts then
