@@ -47,19 +47,23 @@ end
 ---returns rendered buffer
 ---@return string
 function Buffer:render()
-  local name
+  local name = self:name()
+  if self.options.fmt then
+    name = self.options.fmt(name or '')
+  end
 
   if self.ellipse then -- show elipsis
     name = '...'
   else
     if self.options.mode == 0 then
-      name = string.format(' %s%s%s ', self.icon, self:name(), self.modified_icon)
+      name = string.format('%s%s%s', self.icon, name, self.modified_icon)
     elseif self.options.mode == 1 then
-      name = string.format(' %s %s%s ', self.bufnr, self.icon, self.modified_icon)
+      name = string.format('%s %s%s', self.bufnr, self.icon, self.modified_icon)
     else
-      name = string.format(' %s %s%s%s ', self.bufnr, self.icon, self:name(), self.modified_icon)
+      name = string.format('%s %s%s%s', self.bufnr, self.icon, name, self.modified_icon)
     end
   end
+  name = Buffer.apply_padding(name, self.options.padding)
   self.len = vim.fn.strchars(name)
 
   -- setup for mouse clicks
@@ -117,6 +121,17 @@ function Buffer:name()
   end
   return self.options.show_filename_only and vim.fn.fnamemodify(self.file, ':t')
     or vim.fn.pathshorten(vim.fn.fnamemodify(self.file, ':p:.'))
+end
+
+---adds spaces to left and right
+function Buffer.apply_padding(str, padding)
+  local l_padding, r_padding = 1, 1
+  if type(padding) == 'number' then
+    l_padding, r_padding = padding, padding
+  elseif type(padding) == 'table' then
+    l_padding, r_padding = padding.left or 0, padding.right or 0
+  end
+  return string.rep(' ', l_padding) .. str .. string.rep(' ', r_padding)
 end
 
 return Buffer

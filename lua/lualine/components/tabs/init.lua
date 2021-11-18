@@ -147,6 +147,22 @@ function M:update_status()
   return table.concat(data)
 end
 
+function M:draw()
+  self.status = ''
+  self.applied_separator = ''
+
+  if self.options.cond ~= nil and self.options.cond() ~= true then
+    return self.status
+  end
+  local status = self:update_status()
+  if type(status) == 'string' and #status > 0 then
+    self.status = status
+    self:apply_section_separators()
+    self:apply_separator()
+  end
+  return self.status
+end
+
 vim.cmd [[
   function! LualineSwitchTab(tabnr, mouseclicks, mousebutton, modifiers)
     execute a:tabnr . "tabnext"
