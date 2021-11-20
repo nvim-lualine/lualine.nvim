@@ -447,8 +447,8 @@ sections = {
         warn  = 'DiagnosticWarn',  -- changes diagnostic's warn color
         info  = 'DiagnosticInfo',  -- Changes diagnostic's info color
         hint  = 'DiagnosticHint',  -- Changes diagnostic's hint color
-      }
-      symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
+      },
+      symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'},
       colored = true, -- displays diagnostics status in color if set to true
       update_in_insert = false, -- Update diagnostics in insert mode
       always_visible = false, -- Show diagnostics even if count is 0, boolean or function returning boolean
@@ -471,8 +471,8 @@ sections = {
         added    = 'DiffAdd',    -- changes diff's added color
         modified = 'DiffChange', -- changes diff's modified color
         removed  = 'DiffDelete', -- changes diff's removed color you
-      }
-      symbols = {added = '+', modified = '~', removed = '-'} -- changes diff symbols
+      },
+      symbols = {added = '+', modified = '~', removed = '-'}, -- changes diff symbols
       source = nil, -- A function that works as a data source for diff.
                     -- it must return a table like
                     -- {added = add_count, modified = modified_count, removed = removed_count }
