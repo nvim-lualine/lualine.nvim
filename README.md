@@ -84,7 +84,7 @@ use {
 }
 ```
 
-You'll also have need to have a patched font if you want icons.
+You'll also need to have a patched font if you want icons.
 
 ## Usage and customization
 
