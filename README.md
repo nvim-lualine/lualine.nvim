@@ -468,9 +468,9 @@ sections = {
       -- all colors are in format #rrggbb
       diff_color = {
         -- Same values like general color option can be used here.
-        added    = 'DiffAdd',    -- changes diff's added color
-        modified = 'DiffChange', -- changes diff's modified color
-        removed  = 'DiffDelete', -- changes diff's removed color you
+        added    = { fg = 'DiffAdd' },    -- changes diff's added color
+        modified = { fg = 'DiffChange' }, -- changes diff's modified color
+        removed  = { fg = 'DiffDelete' }, -- changes diff's removed color
       },
       symbols = {added = '+', modified = '~', removed = '-'}, -- changes diff symbols
       source = nil, -- A function that works as a data source for diff.
