@@ -12,7 +12,7 @@ M.sources = {
     return error_count, warning_count, info_count, hint_count
   end,
   nvim = function()
-    local diagnostics = vim.diagnostic.get(0)
+    local diagnostics = vim.diagnostic.get(vim.fn.bufnr())
     local count = { 0, 0, 0, 0 }
     for _, diagnostic in ipairs(diagnostics) do
       count[diagnostic.severity] = count[diagnostic.severity] + 1
