@@ -216,7 +216,7 @@ describe('Encoding component', function()
     tmp_fp:close()
     vim.cmd('e ' .. tmp_path)
     assert_component('encoding', opts, 'utf-8')
-    vim.cmd('bd!')
+    vim.cmd 'bd!'
     os.remove(tmp_path)
   end)
 end)
