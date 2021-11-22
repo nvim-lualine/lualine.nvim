@@ -216,6 +216,7 @@ describe('Encoding component', function()
     tmp_fp:close()
     vim.cmd('e ' .. tmp_path)
     assert_component('encoding', opts, 'utf-8')
+    vim.cmd('bd!')
     os.remove(tmp_path)
   end)
 end)
@@ -386,4 +387,217 @@ describe('Mode component', function()
     assert_component('mode', opts, 'NORMAL')
     vim.api.nvim_get_mode:revert()
   end)
+end)
+
+describe('FileSize component', function()
+  it('works', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+    }
+    local fname = 'test-file.txt'
+    local f = io.open(fname, 'w')
+    f:write(string.rep('........................................\n', 200))
+    f:close()
+    vim.cmd(':edit ' .. fname)
+    assert_component('filesize', opts, '8.0k')
+    vim.cmd ':bdelete!'
+    os.remove(fname)
+  end)
+end)
+
+describe('Filename component', function()
+  local function shorten_path(path, target)
+    target = target and target or 40
+    local sep = package.config:sub(1, 1)
+    local winwidth = vim.fn.winwidth(0)
+    local segments = select(2, string.gsub(path, sep, ''))
+    for _ = 0, segments do
+      if winwidth <= 84 or #path > winwidth - target then
+        path = path:gsub(string.format('([^%s])[^%s]+%%%s', sep, sep, sep), '%1' .. sep, 1)
+      end
+    end
+    return path
+  end
+
+  it('works', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      file_status = false,
+      path = 0,
+    }
+    vim.cmd ':e test-file.txt'
+    assert_component('filename', opts, 'test-file.txt')
+    vim.cmd ':bdelete!'
+  end)
+
+  it('can show file_status', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      file_status = true,
+      path = 0,
+    }
+    vim.cmd ':e test-file.txt'
+    vim.bo.modified = false
+    assert_component('filename', opts, 'test-file.txt')
+    vim.bo.modified = true
+    assert_component('filename', opts, 'test-file.txt[+]')
+    vim.bo.modified = false
+    vim.bo.ro = true
+    assert_component('filename', opts, 'test-file.txt[-]')
+    vim.cmd ':bdelete!'
+  end)
+
+  it('can show relative path', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      file_status = false,
+      path = 1,
+    }
+    vim.cmd ':e test-file.txt'
+    assert_component('filename', opts, shorten_path(vim.fn.expand '%:~:.'))
+    vim.cmd ':bdelete!'
+  end)
+
+  it('can show full path', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      file_status = false,
+      path = 2,
+    }
+    vim.cmd ':e test-file.txt'
+    assert_component('filename', opts, shorten_path(vim.fn.expand '%:p'))
+    vim.cmd ':bdelete!'
+  end)
+end)
+
+describe('vim option & variable component', function()
+  local opts = build_component_opts {
+    component_separators = { left = '', right = '' },
+    padding = 0,
+  }
+
+  local function assert_vim_var_component(name, options, result)
+    options[1] = name
+    assert_component('special.vim_var_component', options, result)
+    opts[1] = nil
+  end
+  it('works with variable', function()
+    assert_vim_var_component('g:gvar', opts, '')
+    vim.g.gvar = 'var1'
+    assert_vim_var_component('g:gvar', opts, 'var1')
+    vim.g.gvar = 'var2'
+    assert_vim_var_component('g:gvar', opts, 'var2')
+    vim.b.gvar = 'bvar1'
+    assert_vim_var_component('b:gvar', opts, 'bvar1')
+    vim.w.gvar = 'wvar1'
+    assert_vim_var_component('w:gvar', opts, 'wvar1')
+  end)
+  it('can index dictionaries', function()
+    vim.g.gvar = { a = { b = 'var-value' } }
+    assert_vim_var_component('g:gvar.a.b', opts, 'var-value')
+  end)
+  it('works with options', function()
+    local old_number = vim.wo.number
+    vim.wo.number = false
+    assert_vim_var_component('wo:number', opts, 'false')
+    vim.wo.number = old_number
+    local old_tw = vim.go.tw
+    vim.go.tw = 80
+    assert_vim_var_component('go:tw', opts, '80')
+    vim.go.tw = old_tw
+  end)
+end)
+
+describe('Vim option & variable component', function()
+  local opts = build_component_opts {
+    component_separators = { left = '', right = '' },
+    padding = 0,
+  }
+
+  local function assert_vim_var_component(name, options, result)
+    options[1] = name
+    assert_component('special.eval_func_component', options, result)
+    opts[1] = nil
+  end
+
+  it('works with vim function', function()
+    vim.cmd [[
+      func! TestFunction() abort
+        return "TestVimFunction"
+      endf
+    ]]
+    assert_vim_var_component('TestFunction', opts, 'TestVimFunction')
+    vim.cmd 'delfunction TestFunction'
+  end)
+
+  it('works with lua expression', function()
+    _G.TestFunction = function()
+      return 'TestLuaFunction'
+    end
+    assert_vim_var_component('TestFunction()', opts, 'TestLuaFunction')
+    _G.TestFunction = nil
+  end)
+end)
+
+describe('Branch component', function()
+  local tmpdir
+  local file
+  local git = function(...)
+    return vim.fn.system('git -C ' .. tmpdir .. ' ' .. string.format(...))
+  end
+  local assert_comp_ins = helpers.assert_component_instence
+
+  before_each(function()
+    tmpdir = os.tmpname()
+    os.remove(tmpdir)
+    file = tmpdir .. '/test.txt'
+    vim.fn.mkdir(tmpdir, 'p')
+    git 'init -b test_branch'
+    vim.cmd [[aug lualine
+    au!
+    aug END
+  ]]
+  end)
+
+  after_each(function()
+    os.remove(tmpdir)
+  end)
+
+  it('works with regular branches', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+    }
+    local branch_comp = helpers.init_component('branch', opts)
+    vim.cmd('e ' .. file)
+    assert_comp_ins(branch_comp, ' test_branch')
+    git 'checkout -b test_branch2'
+    vim.cmd 'e k'
+    vim.cmd 'bd'
+    vim.cmd('e ' .. file)
+    opts.icons_enabled = false
+    assert_comp_ins(branch_comp, 'test_branch2')
+  end)
+
+  -- TODO: Figure out why this test fails in CI
+  -- it('works in detached head mode', function()
+  --   local opts = build_component_opts {
+  --     component_separators = { left = '', right = '' },
+  --     icons_enabled = false,
+  --     padding = 0,
+  --   }
+  --   git 'checkout -b test_branch2'
+  --   git 'commit --allow-empty -m "test commit1"'
+  --   git 'commit --allow-empty -m "test commit2"'
+  --   git 'commit --allow-empty -m "test commit3"'
+  --   git('checkout HEAD~1')
+  --   vim.cmd('e ' .. file)
+  --   local rev = git('rev-parse --short=6 HEAD'):sub(1, 6)
+  --   assert_component('branch', opts, rev)
+  -- end)
 end)
