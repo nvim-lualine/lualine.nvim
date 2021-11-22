@@ -396,6 +396,19 @@ These are options that are available on specific components.
 For example you have option on `diagnostics` component to
 specify what your diagnostic sources will be.
 
+#### branch component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'branch',
+      icon = '', -- e725
+    }
+  }
+}
+```
+
 #### buffers component options
 
 ```lua
