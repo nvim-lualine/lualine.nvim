@@ -1,5 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
+local utils = require 'lualine.utils.utils'
+
 local config = {
   options = {
     icons_enabled = true,
@@ -46,7 +48,7 @@ end
 ---@return table copy of config
 local function apply_configuration(config_table)
   if not config_table then
-    return vim.deepcopy(config)
+    return utils.deepcopy(config)
   end
   local function parse_sections(section_group_name)
     if config_table[section_group_name] == nil then
@@ -57,7 +59,7 @@ local function apply_configuration(config_table)
       return
     end
     for section_name, section in pairs(config_table[section_group_name]) do
-      config[section_group_name][section_name] = vim.deepcopy(section)
+      config[section_group_name][section_name] = utils.deepcopy(section)
     end
   end
   parse_sections 'options'
@@ -65,17 +67,17 @@ local function apply_configuration(config_table)
   parse_sections 'inactive_sections'
   parse_sections 'tabline'
   if config_table.extensions then
-    config.extensions = vim.deepcopy(config_table.extensions)
+    config.extensions = utils.deepcopy(config_table.extensions)
   end
   config.options.section_separators = fix_separators(config.options.section_separators)
   config.options.component_separators = fix_separators(config.options.component_separators)
-  return vim.deepcopy(config)
+  return utils.deepcopy(config)
 end
 
 --- returns current active config
 ---@return table a copy of config
 local function get_current_config()
-  return vim.deepcopy(config)
+  return utils.deepcopy(config)
 end
 
 return {

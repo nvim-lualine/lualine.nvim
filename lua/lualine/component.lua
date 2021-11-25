@@ -18,6 +18,8 @@ function M:__tostring()
   return str
 end
 
+M.__is_lualine_component = true
+
 ---initialize new component
 ---@param options table options for component
 function M:init(options)

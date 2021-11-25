@@ -4,6 +4,7 @@
 local lualine_require = require 'lualine_require'
 local require = lualine_require.require
 local modules = lualine_require.lazy_require {
+  utils = 'lualine.utils.utils',
   notice = 'lualine.utils.notices',
 }
 local is_valid_filename = lualine_require.is_valid_filename
@@ -11,6 +12,10 @@ local sep = lualine_require.sep
 
 --- function that loads specific type of component
 local component_types = {
+  -- loads custion component
+  custom = function(component)
+    return component[1](component)
+  end,
   --- loads lua functions as component
   lua_fun = function(component)
     return require 'lualine.components.special.function_component'(component)
@@ -53,8 +58,7 @@ local component_types = {
 local function component_loader(component)
   if type(component[1]) == 'function' then
     return component_types.lua_fun(component)
-  end
-  if type(component[1]) == 'string' then
+  elseif type(component[1]) == 'string' then
     -- load the component
     if component.type ~= nil then
       if component_types[component.type] and component.type ~= 'lua_fun' then
@@ -81,6 +85,8 @@ component type '%s' isn't recognised. Check if spelling is correct.]],
     else
       return component_types['_'](component)
     end
+  elseif type(component[1]) == 'table' then
+    return component_types.custom(component)
   end
 end
 
@@ -168,7 +174,7 @@ end
 local function load_sections(sections, options)
   for section_name, section in pairs(sections) do
     for index, component in pairs(section) do
-      if type(component) == 'string' or type(component) == 'function' then
+      if (type(component) == 'string' or type(component) == 'function') or modules.utils.is_component(component) then
         component = { component }
       end
       if is_valid_component_type(index, component) then
