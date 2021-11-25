@@ -205,7 +205,7 @@ local function load_extensions(config)
     if type(extension) == 'string' then
       local ok, local_extension = pcall(require, 'lualine.extensions.' .. extension)
       if ok then
-        local_extension = vim.deepcopy(local_extension)
+        local_extension = modules.utils.deepcopy(local_extension)
         load_sections(local_extension.sections, config.options)
         if local_extension.inactive_sections then
           load_sections(local_extension.inactive_sections, config.options)
@@ -224,7 +224,7 @@ Extension named `%s` was not found . Check if spelling is correct.
         ))
       end
     elseif type(extension) == 'table' then
-      local local_extension = vim.deepcopy(extension)
+      local local_extension = modules.utils.deepcopy(extension)
       load_sections(local_extension.sections, config.options)
       if local_extension.inactive_sections then
         load_sections(local_extension.inactive_sections, config.options)
