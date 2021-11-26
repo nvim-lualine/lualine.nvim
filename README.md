@@ -637,7 +637,7 @@ extensions = {'quickfix'}
 You can define your own extensions. If you think an extension might be useful for others then please submit a pr.
 
 ```lua
-local my_extension = {sections = {lualine_a = 'mode'}, filetypes = {'lua'}}
+local my_extension = {sections = {lualine_a = {'mode'}}, filetypes = {'lua'}}
 require'lualine'.setup {extensions = {my_extension}}
 ```
 

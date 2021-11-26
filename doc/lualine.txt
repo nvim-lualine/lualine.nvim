@@ -666,7 +666,7 @@ Custom extensions                      You can define your own extensions. If
 
 
 >
-    local my_extension = {sections = {lualine_a = 'mode'}, filetypes = {'lua'}}
+    local my_extension = {sections = {lualine_a = {'mode'}}, filetypes = {'lua'}}
     require'lualine'.setup {extensions = {my_extension}}
 <
 
