@@ -4,8 +4,6 @@ on:
   push:
     paths:
       - README.md
-    branches:
-      - master
 
 jobs:
   docs:
@@ -23,18 +21,23 @@ jobs:
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           printf 'VIMDOC_BRANCH=bot/vimdoc/%s\n' ${GITHUB_REF#refs/heads/} >> $GITHUB_ENV
-      - name: Checkout to vimdoc branch
-        run: git checkout -b ${VIMDOC_BRANCH}
-      - name: panvimdoc
+          if [[ ${GITHUB_REF#refs/heads/} == "master" ]]; then
+            git checkout -b bot/vimdoc/${GITHUB_REF#refs/heads/}
+          fi
+      - name: Generate docs with panvimdoc
         uses: kdheepak/panvimdoc@v2.7.1
         with:
           vimdoc: lualine
           description: fast and easy to configure statusline plugin for neovim
-      - name: Create PR
+      - name: Push changes
         run: |
           if ! [[ -z $(git status -s) ]]; then
             git add doc/lualine.txt
             git commit -m "chore: generated vimdoc"
-            git push --force https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY} ${VIMDOC_BRANCH}
-            gh pr create --fill --base ${GITHUB_REF#refs/heads/} --head ${VIMDOC_BRANCH} || true
+            if [[ ${GITHUB_REF#refs/heads/} == "master" ]]; then
+              git push --force https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY} ${VIMDOC_BRANCH}
+              gh pr create --fill --base ${GITHUB_REF#refs/heads/} --head ${VIMDOC_BRANCH} || true
+            else
+              git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY} ${GITHUB_REF#refs/heads/}
+            fi
           fi
