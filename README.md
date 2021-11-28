@@ -629,8 +629,8 @@ extensions = {'quickfix'}
 * nerdtree
 * nvim-tree
 * quickfix
-* toggleterm
 * symbols-outline
+* toggleterm
 
 
 #### Custom extensions
