@@ -2,7 +2,7 @@
 -- MIT license, see LICENSE for more details.
 local M = {}
 
-M.sections = { lualine_a = { { 'filetype' } } }
+M.sections = { lualine_a = { 'filetype' } }
 
 M.filetypes = { 'Outline' }
 
