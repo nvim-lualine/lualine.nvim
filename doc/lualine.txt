@@ -655,8 +655,8 @@ extensions with:
 - nerdtree
 - nvim-tree
 - quickfix
-- toggleterm
 - symbols-outline
+- toggleterm
 
 
                                                    *lualine-Custom-extensions*
