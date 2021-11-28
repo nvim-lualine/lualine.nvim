@@ -656,6 +656,7 @@ extensions with:
 - nvim-tree
 - quickfix
 - toggleterm
+- symbols-outline
 
 
                                                    *lualine-Custom-extensions*

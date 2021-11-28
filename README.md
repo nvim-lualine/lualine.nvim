@@ -630,6 +630,7 @@ extensions = {'quickfix'}
 * nvim-tree
 * quickfix
 * toggleterm
+* symbols-outline
 
 
 #### Custom extensions
