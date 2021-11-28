@@ -104,7 +104,7 @@ function M.update_diff_args()
     end,
     on_stderr = function(_, data)
       data = table.concat(data, '\n')
-      if #data > 1 or (#data == 1 and #data[1] > 0) then
+      if #data > 0 then
         git_diff = nil
         diff_output_cache = {}
       end
