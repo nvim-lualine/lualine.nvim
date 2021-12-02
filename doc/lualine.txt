@@ -114,7 +114,7 @@ checkout `:help lua-heredoc`.
       sections = {
         lualine_a = {'mode'},
         lualine_b = {'branch', 'diff',
-                      {'diagnostics', sources={'nvim', 'coc'}}},
+                      {'diagnostics', sources={'nvim_lsp', 'coc'}}},
         lualine_c = {'filename'},
         lualine_x = {'encoding', 'fileformat', 'filetype'},
         lualine_y = {'progress'},
@@ -448,10 +448,10 @@ Component specific options             These are options that are available on
         {
           'diagnostics',
           -- table of diagnostic sources, available sources:
-          -- 'nvim', 'coc', 'ale', 'vim_lsp'
+          -- 'nvim_lsp', 'nvim', 'coc', 'ale', 'vim_lsp'
           -- Or a function that returns a table like
           --   {error=error_cnt, warn=warn_cnt, info=info_cnt, hint=hint_cnt}
-          sources = {'nvim', 'coc'},
+          sources = {'nvim_lsp', 'coc'},
           -- displays diagnostics from defined severity
           sections = {'error', 'warn', 'info', 'hint'},
           diagnostics_color = {
