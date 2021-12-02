@@ -2,6 +2,8 @@
 -- MIT license, see LICENSE for more details.
 local utils = require 'lualine.utils.utils'
 
+local is_06 = vim.fn.has 'nvim-0.6.0' == 1
+
 local config = {
   options = {
     icons_enabled = true,
@@ -13,7 +15,11 @@ local config = {
   },
   sections = {
     lualine_a = { 'mode' },
-    lualine_b = { 'branch', 'diff', { 'diagnostics', sources = { 'nvim_lsp', 'coc' } } },
+    lualine_b = {
+      'branch',
+      'diff',
+      { 'diagnostics', sources = { is_06 and 'nvim' or 'nvim_lsp', 'coc' } },
+    },
     lualine_c = { 'filename' },
     lualine_x = { 'encoding', 'fileformat', 'filetype' },
     lualine_y = { 'progress' },
@@ -59,6 +65,12 @@ local function apply_configuration(config_table)
       return
     end
     for section_name, section in pairs(config_table[section_group_name]) do
+      if is_06 and section_name == 'nvim_lsp' then
+        vim.notify(
+          '[lualine] The "nvim_lsp" source has been deprecated. Use the "nvim" source instead.',
+          vim.log.levels.WARN
+        )
+      end
       config[section_group_name][section_name] = utils.deepcopy(section)
     end
   end
