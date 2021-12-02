@@ -2,6 +2,8 @@ local require = require('lualine_require').require
 local utils = require 'lualine.utils.utils'
 local M = {}
 
+local is_06 = vim.fn.has 'nvim-0.6.0' == 1
+
 -- default symbols for diagnostics component
 M.symbols = {
   icons = {
@@ -18,7 +20,7 @@ M.options = {
   colored = true,
   update_in_insert = false,
   always_visible = false,
-  sources = { 'nvim_lsp', 'coc' },
+  sources = { is_06 and 'nvim' or 'nvim_lsp', 'coc' },
   sections = { 'error', 'warn', 'info', 'hint' },
   diagnostics_color = {
     error = {

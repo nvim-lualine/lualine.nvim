@@ -34,7 +34,7 @@ describe('Lualine', function()
         },
         {
           'diagnostics',
-          sources = { 'nvim_lsp', 'coc' },
+          sources = { 'nvim', 'coc' },
         },
       },
       lualine_c = { 'filename' },
