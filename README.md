@@ -60,9 +60,9 @@ In control just `vim-startuptime` and`vim-plug` is installed.
 And measured time is complete startuptime of vim not time spent
 on specific plugin. These numbers are average of 20 runs.
 
-|  control   |  lualine  | lightline |  airline  |
-| :--------: | :-------: | :-------: | :-------: |
-|  8.943 ms  | 10.140 ms | 12.522 ms | 38.850 ms |
+| control  |  lualine  | lightline |  airline  |
+| :------: | :-------: | :-------: | :-------: |
+| 8.943 ms | 10.140 ms | 12.522 ms | 38.850 ms |
 
 Last Updated On: 20-09-2021
 
@@ -112,7 +112,6 @@ END
 
 checkout `:help lua-heredoc`.
 
-
 #### Default config
 
 ```lua
@@ -146,7 +145,6 @@ require'lualine'.setup {
   extensions = {}
 }
 ```
-
 
 If you want to get your current lualine config. you can
 do so with
@@ -190,15 +188,14 @@ require'lualine'.setup{
 
 Theme structure is available [here](./CONTRIBUTING.md#adding-a-theme)
 
-
 ---
 
 ### Separators
 
 Lualine defines two kinds of separators:
 
-* `section_separators` - separators between sections
-* `components_separators` - separators between components in sections
+- `section_separators` - separators between sections
+- `components_separators` - separators between components in sections
 
 ```lua
 options = {
@@ -216,7 +213,6 @@ it'll be used for right sections (x, y, z).
 options = {section_separators = '', component_separators = ''}
 ```
 
-
 ---
 
 ### Changing components in lualine sections
@@ -227,21 +223,20 @@ sections = {lualine_a = {'mode'}}
 
 #### Available components
 
-* `branch` (git branch)
-* `buffers` (shows currently available buffers)
-* `diagnostics` (diagnostics count from your prefered source)
-* `diff` (git diff status)
-* `encoding` (file encoding)
-* `fileformat` (file format)
-* `filename`
-* `filesize`
-* `filetype`
-* `hostname`
-* `location` (location in file in line:column format)
-* `mode` (vim mode)
-* `progress` (%progress in file)
-* `tabs` (shows currently available tabs)
-
+- `branch` (git branch)
+- `buffers` (shows currently available buffers)
+- `diagnostics` (diagnostics count from your prefered source)
+- `diff` (git diff status)
+- `encoding` (file encoding)
+- `fileformat` (file format)
+- `filename`
+- `filesize`
+- `filetype`
+- `hostname`
+- `location` (location in file in line:column format)
+- `mode` (vim mode)
+- `progress` (%progress in file)
+- `tabs` (shows currently available tabs)
 
 #### Custom components
 
@@ -279,9 +274,11 @@ sections = {lualine_a = {'g:coc_status', 'bo:filetype'}}
 ##### Lua expressions as lualine component
 
 You can use any valid lua expression as a component including
-  * oneliners
-  * global variables
-  * require statements
+
+- oneliners
+- global variables
+- require statements
+
 ```lua
 sections = {lualine_c = {"os.date('%a')", 'data', "require'lsp-status'.status()"}}
 ```
@@ -294,8 +291,9 @@ sections = {lualine_c = {"os.date('%a')", 'data', "require'lsp-status'.status()"
 
 Component options can change the way a component behave.
 There are two kinds of options:
-  * global options affecting all components
-  * local options affecting specific
+
+- global options affecting all components
+- local options affecting specific
 
 Global options can be used as local options (can be applied to specific components)
 but you cannot use local options as global.
@@ -390,7 +388,6 @@ sections = {
 }
 ```
 
-
 #### Component specific options
 
 These are options that are available on specific components.
@@ -405,7 +402,7 @@ sections = {
     {
       'buffers',
       show_filename_only = true, -- shows shortened relative path when false
-      show_modified_status = true -- shows indicator then buffer is modified
+      show_modified_status = true, -- shows indicator then buffer is modified
       mode = 0, -- 0 shows buffer name
                 -- 1 buffer index (bufnr)
                 -- 2 shows buffer name + buffer index (bufnr)
@@ -552,7 +549,6 @@ sections = {
 }
 ```
 
-
 ---
 
 ### Tabline
@@ -622,16 +618,15 @@ extensions = {'quickfix'}
 
 #### Available extensions
 
-* chadtree
-* fern
-* fugitive
-* fzf
-* nerdtree
-* nvim-tree
-* quickfix
-* toggleterm
-* symbols-outline
-
+- chadtree
+- fern
+- fugitive
+- fzf
+- nerdtree
+- nvim-tree
+- quickfix
+- toggleterm
+- symbols-outline
 
 #### Custom extensions
 
@@ -655,6 +650,7 @@ options = {disabled_filetypes = {'lua'}}
 <!-- panvimdoc-ignore-start -->
 
 ### Contributors
+
 Thanks to these wonderful people we enjoy this awesome plugin.
 
 <a href="https://github.com/nvim-lualine/lualine.nvim/graphs/contributors">
@@ -662,10 +658,12 @@ Thanks to these wonderful people we enjoy this awesome plugin.
 </a>
 
 ### Wiki
+
 Check out the [wiki](https://github.com/nvim-lualine/lualine.nvim/wiki) for more info .
 
 You can find some useful [configuration snippets](https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets) here. You can also share your awesome snippents with others.
 
 If you want to extened lualine with plugins or want to know
 which ones already do [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
+
 <!-- panvimdoc-ignore-end -->
