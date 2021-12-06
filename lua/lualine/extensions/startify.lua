@@ -1,7 +1,7 @@
 local M = {}
 
 M.sections = {
-  lualine_a = {},
+  lualine_a = { 'filetype' },
 }
 
 M.filetypes = { 'startify' }

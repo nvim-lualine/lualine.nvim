@@ -631,6 +631,7 @@ extensions = {'quickfix'}
 - [Trouble](https://github.com/folke/trouble.nvim)
 - [Undotree](https://github.com/mbbill/undotree)
 - [Vim-Plug](https://github.com/junegunn/vim-plug)
+- [Startify](https://github.com/mhinz/vim-startify)
 
 #### Custom extensions
 
