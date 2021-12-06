@@ -627,6 +627,10 @@ extensions = {'quickfix'}
 - quickfix
 - toggleterm
 - symbols-outline
+- [Neogit](https://github.com/TimUntersberger/neogit)
+- [Trouble](https://github.com/folke/trouble.nvim)
+- [Undotree](https://github.com/mbbill/undotree)
+- [Vim-Plug](https://github.com/junegunn/vim-plug)
 
 #### Custom extensions
 
