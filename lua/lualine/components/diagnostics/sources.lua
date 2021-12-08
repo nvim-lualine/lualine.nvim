@@ -5,10 +5,10 @@ local M = {}
 ---        info_count:number, hint_count:number
 M.sources = {
   nvim_lsp = function()
-    local error_count = vim.lsp.diagnostic.get_count(0, 'Error')
-    local warning_count = vim.lsp.diagnostic.get_count(0, 'Warning')
-    local info_count = vim.lsp.diagnostic.get_count(0, 'Information')
-    local hint_count = vim.lsp.diagnostic.get_count(0, 'Hint')
+    local error_count = #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.ERROR})
+    local warning_count = #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.WARN})
+    local info_count = #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.INFO})
+    local hint_count = #vim.diagnostic.get(0, {severity = vim.diagnostic.severity.HINT})
     return error_count, warning_count, info_count, hint_count
   end,
   nvim = function()
