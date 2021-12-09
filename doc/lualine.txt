@@ -113,8 +113,7 @@ checkout `:help lua-heredoc`.
       },
       sections = {
         lualine_a = {'mode'},
-        lualine_b = {'branch', 'diff',
-                      {'diagnostics', sources={'nvim_lsp', 'coc'}}},
+        lualine_b = {'branch', 'diff', 'diagnostics'},
         lualine_c = {'filename'},
         lualine_x = {'encoding', 'fileformat', 'filetype'},
         lualine_y = {'progress'},
@@ -457,18 +456,18 @@ Component specific options             These are options that are available on
         {
           'diagnostics',
           -- table of diagnostic sources, available sources:
-          -- 'nvim_lsp', 'nvim', 'coc', 'ale', 'vim_lsp'
+          -- 'nvim_lsp', 'nvim_diagnostic', 'coc', 'ale', 'vim_lsp'
           -- Or a function that returns a table like
           --   {error=error_cnt, warn=warn_cnt, info=info_cnt, hint=hint_cnt}
-          sources = {'nvim_lsp', 'coc'},
+          sources = {'nvim_diagnostic', 'coc'},
           -- displays diagnostics from defined severity
           sections = {'error', 'warn', 'info', 'hint'},
           diagnostics_color = {
             -- Same values like general color option can be used here.
             error = 'DiagnosticError', -- changes diagnostic's error color
             warn  = 'DiagnosticWarn',  -- changes diagnostic's warn color
-            info  = 'DiagnosticInfo',  -- Changes diagnostic's info color
-            hint  = 'DiagnosticHint',  -- Changes diagnostic's hint color
+            info  = 'DiagnosticInfo',  -- changes diagnostic's info color
+            hint  = 'DiagnosticHint',  -- changes diagnostic's hint color
           },
           symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'},
           colored = true, -- displays diagnostics status in color if set to true

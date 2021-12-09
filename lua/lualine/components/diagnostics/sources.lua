@@ -11,7 +11,7 @@ M.sources = {
     local hint_count = vim.lsp.diagnostic.get_count(0, 'Hint')
     return error_count, warning_count, info_count, hint_count
   end,
-  nvim = function()
+  nvim_diagnostic = function()
     local diagnostics = vim.diagnostic.get(0)
     local count = { 0, 0, 0, 0 }
     for _, diagnostic in ipairs(diagnostics) do
