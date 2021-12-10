@@ -449,6 +449,7 @@ sections = {
       colored = true, -- displays diagnostics status in color if set to true
       update_in_insert = false, -- Update diagnostics in insert mode
       always_visible = false, -- Show diagnostics even if count is 0, boolean or function returning boolean
+      render = function(icon, count) return icon .. count end, -- Customise diagnotic render, function returning string
     }
   }
 }
