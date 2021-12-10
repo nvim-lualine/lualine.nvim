@@ -58,7 +58,7 @@ function M:init(options)
     print 'no sources for diagnostics configured'
     return ''
   end
-  if vim.fn.has 'nvim-0.6' then
+  if vim.fn.has 'nvim-0.6' == 1 then
     for i, name in ipairs(self.options.sources) do
       if name == 'nvim_lsp' then
         self.options.sources[i] = 'nvim_diagnostic'

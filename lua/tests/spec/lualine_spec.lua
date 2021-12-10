@@ -32,10 +32,7 @@ describe('Lualine', function()
           end,
           icon = '',
         },
-        {
-          'diagnostics',
-          sources = { 'nvim_lsp', 'coc' },
-        },
+        'diagnostics',
       },
       lualine_c = { 'filename' },
       lualine_x = { 'encoding', 'fileformat', 'filetype' },
