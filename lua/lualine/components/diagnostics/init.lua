@@ -141,13 +141,13 @@ function M:update_status()
     end
     for _, section in ipairs(self.options.sections) do
       if diagnostics_count[section] ~= nil and (always_visible or diagnostics_count[section] > 0) then
-        table.insert(result, colors[section] .. self.symbols[section] .. diagnostics_count[section])
+        table.insert(result, colors[section] .. self.options.render(self.symbols[section], diagnostics_count[section]))
       end
     end
   else
     for _, section in ipairs(self.options.sections) do
       if diagnostics_count[section] ~= nil and (always_visible or diagnostics_count[section] > 0) then
-        table.insert(result, self.symbols[section] .. diagnostics_count[section])
+        table.insert(result, self.options.render(self.symbols[section], diagnostics_count[section]))
       end
     end
   end

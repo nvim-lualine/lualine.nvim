@@ -20,6 +20,7 @@ M.options = {
   always_visible = false,
   sources = { vim.fn.has 'nvim-0.6' == 1 and 'nvim_diagnostic' or 'nvim_lsp', 'coc' },
   sections = { 'error', 'warn', 'info', 'hint' },
+  render = function(icon, count) return icon .. count end,
   diagnostics_color = {
     error = {
       fg = utils.extract_color_from_hllist(
