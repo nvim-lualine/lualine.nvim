@@ -179,7 +179,7 @@ how to do it <./CONTRIBUTING.md>.
 
 
 Customizing themes                     Theme structure is available here
-                                       <./CONTRIBUTING.md#adding-a-theme>
+                                       <https://github.com/nvim-lualine/lualine.nvim/wiki/Writting-a-theme>
 
 
 ------------------------------------------------------------------------------

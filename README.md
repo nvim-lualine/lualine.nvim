@@ -185,7 +185,7 @@ require'lualine'.setup{
 }
 ```
 
-Theme structure is available [here](./CONTRIBUTING.md#adding-a-theme)
+Theme structure is available [here](https://github.com/nvim-lualine/lualine.nvim/wiki/Writting-a-theme)
 
 ---
 
