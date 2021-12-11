@@ -249,11 +249,11 @@ end
 ---@param is_focused boolean
 ---@return string formatted highlight group name
 function M.format_highlight(highlight_group, is_focused)
-  if highlight_group > 'lualine_c' and not M.highlight_exists(highlight_group .. '_normal') then
+  local highlight_name = M.append_mode(highlight_group, is_focused)
+  if highlight_group > 'lualine_c' and not M.highlight_exists(highlight_name) then
     highlight_group = 'lualine_' .. section_highlight_map[highlight_group:match 'lualine_(.)']
+    highlight_name = M.append_mode(highlight_group, is_focused)
   end
-  local highlight_name
-  highlight_name = M.append_mode(highlight_group, is_focused)
   if M.highlight_exists(highlight_name) then
     return '%#' .. highlight_name .. '#'
   end
