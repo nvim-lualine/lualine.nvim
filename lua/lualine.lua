@@ -278,7 +278,7 @@ local function reset_lualine()
     -- When notices module is not loaded there are no notices to clear.
     modules.utils_notices.clear_notices()
   end
-  vim.cmd [[augroup lualine | autocmd! | augroup END]]
+  vim.cmd [[augroup lualine | exe "autocmd!" | augroup END]]
   setup_theme()
   -- load components & extensions
   modules.loader.load_all(config)
