@@ -3,7 +3,7 @@
 local M = require('lualine.component'):extend()
 
 local default_options = {
-  symbols = { modified = '[+]', readonly = '[-]' },
+  symbols = { modified = '[+]', readonly = '[-]', unnamed = '[No Name]' },
   file_status = true,
   path = 0,
   shorting_target = 40,
@@ -45,7 +45,7 @@ M.update_status = function(self)
   end
 
   if data == '' then
-    data = '[No Name]'
+    data = self.options.symbols.unnamed
   end
 
   if self.options.shorting_target ~= 0 then
