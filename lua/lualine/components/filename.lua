@@ -63,7 +63,8 @@ M.update_status = function(self)
   if self.options.file_status then
     if vim.bo.modified then
       data = data .. self.options.symbols.modified
-    elseif vim.bo.modifiable == false or vim.bo.readonly == true then
+    end
+    if vim.bo.modifiable == false or vim.bo.readonly == true then
       data = data .. self.options.symbols.readonly
     end
   end
