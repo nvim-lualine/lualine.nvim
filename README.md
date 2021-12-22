@@ -416,7 +416,7 @@ sections = {
       }, -- shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
       buffers_color = {
         -- Same values like general color option can be used here.
-        active = 'lualine_{section}_normal', color for active buffer
+        active = 'lualine_{section}_normal', -- color for active buffer
         inactive = 'lualine_{section}_inactive', -- color for inactive buffer
       },
     }
