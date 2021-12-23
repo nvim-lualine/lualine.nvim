@@ -130,7 +130,7 @@ describe('Lualine', function()
     )
   end)
 
-  it('works with icons diabled', function()
+  it('works with icons disabled', function()
     local conf = vim.deepcopy(config)
     conf.options.icons_enabled = false
     conf.options.section_separators = ''
