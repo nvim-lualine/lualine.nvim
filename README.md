@@ -331,7 +331,7 @@ options = {
   theme = 'auto',          -- lualine theme
   component_separators = {left = '', right = ''},
   section_separators = {left = '', right = ''},
-  disabled_filetypes = {},  -- filetypes to diable lualine on
+  disabled_filetypes = {},  -- filetypes to disable lualine on
   always_divide_middle = true, -- When true left_sections (a,b,c) can't
                                -- take over entiee statusline even
                                -- when none of section x, y, z is present.
