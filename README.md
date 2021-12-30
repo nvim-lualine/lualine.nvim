@@ -328,13 +328,13 @@ the option value in component.
 
 ```lua
 options = {
-  theme = 'auto',          -- lualine theme
+  theme = 'auto',              -- lualine theme
   component_separators = {left = '', right = ''},
   section_separators = {left = '', right = ''},
-  disabled_filetypes = {},  -- filetypes to disable lualine on
-  always_divide_middle = true, -- When true left_sections (a,b,c) can't
-                               -- take over entiee statusline even
-                               -- when none of section x, y, z is present.
+  disabled_filetypes = {},     -- filetypes to disable lualine for
+  always_divide_middle = true, -- when set to true, left_sections (a,b,c)
+                               -- can't take over entire statusline even if
+                               -- neither of 'x', 'y' or 'z' are present.
 }
 ```
 
@@ -348,26 +348,29 @@ sections = {
   lualine_a = {
     {
       'mode',
-      icons_enabled = true, -- displays icons in alongside component
-      icon = nil,      -- displays icon in front of the component
-      separator = nil, -- Determines what separator to use for the component.
+      icons_enabled = true, -- enables the display of icons alongside the component.
+      icon = nil,      -- defines the icon to be displayed in front of the component.
+      separator = nil, -- determines what separator to use for the component.
                        -- when a string is given it's treated as component_separator.
-                       -- When a table is given it's treated as section_separator.
-                       -- This options can be used to set colored separators
-                       -- arround component. Option need to be set like
+                       -- when a table is given it's treated as section_separator.
+                       -- these options can be used to set colored separators
+                       -- around a component. The options need to be set like
                        -- `separator = { left = '', right = ''}`.
-                       -- Where left will be placed in left side of component
-                       -- and right will be placed in right side of component
-                       -- Passing empty string disables that separator
-      cond = nil, -- condition function, component is loaded when function returns true
+                       -- where left will be placed on left side of component
+                       -- and right will be placed on right side of component.
+                       -- passing an empty string disables that separator.
+      cond = nil, -- condition function, component is loaded when the function returns true
       -- custom color for the component in format
-      -- here '|' refers to or meaning a different acceptable format for that placeholder
+      -- here '|' refers to 'or', meaning a different acceptable format for that placeholder e.g.:
       -- 'highlight_group_name' | {fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style'}
-      --  Note: all other color options including themes accept  like diff_color same color values
-      -- Example
-      -- color = {fg = '#ffaa88', bg = 'grey', gui='italic,bold'},
-      -- color = {fg = 204} -- when fg/bg is skiped they default to themes fg/bg
-      -- color = 'WarningMsg'
+      --
+      -- note: all other color options including themes accept like diff_color same color values.
+      --
+      -- example:
+      --   color = {fg = '#ffaa88', bg = 'grey', gui='italic,bold'},
+      --   color = {fg = 204} -- when fg/bg is skiped they default to themes fg/bg
+      --   color = 'WarningMsg'
+      --
       -- or highlight group
       -- color = "WarningMsg"
       color = nil, -- default is themes color for that section and mode
@@ -381,7 +384,7 @@ sections = {
       padding = 1, -- adds padding to the left and right of components
                    -- padding can be specified to left or right separately like
                    -- padding = { left = left_padding, right = right_padding }
-      fmt = nil,   -- format function, formats component's output
+      fmt = nil,   -- format function, formats the component's output
     }
   }
 }
@@ -400,13 +403,13 @@ sections = {
   lualine_a = {
     {
       'buffers',
-      show_filename_only = true, -- shows shortened relative path when false
+      show_filename_only = true,   -- shows shortened relative path when false
       show_modified_status = true, -- shows indicator then buffer is modified
-      mode = 0, -- 0 shows buffer name
-                -- 1 buffer index (bufnr)
-                -- 2 shows buffer name + buffer index (bufnr)
+      mode = 0, -- 0: shows buffer name
+                -- 1: shows buffer index (bufnr)
+                -- 2: shows buffer name + buffer index (bufnr)
       max_length = vim.o.columns * 2 / 3, -- maximum width of buffers component
-                                          -- can also be a function that returns value of max_length dynamicaly
+                                          -- can also be a function that returns value of max_length dynamically
       filetype_names = {
         TelescopePrompt = 'Telescope',
         dashboard = 'Dashboard',
@@ -416,7 +419,7 @@ sections = {
       }, -- shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
       buffers_color = {
         -- Same values like general color option can be used here.
-        active = 'lualine_{section}_normal', -- color for active buffer
+        active = 'lualine_{section}_normal',     -- color for active buffer
         inactive = 'lualine_{section}_inactive', -- color for inactive buffer
       },
     }
@@ -433,7 +436,7 @@ sections = {
       'diagnostics',
       -- table of diagnostic sources, available sources:
       -- 'nvim_lsp', 'nvim_diagnostic', 'coc', 'ale', 'vim_lsp'
-      -- Or a function that returns a table like
+      -- or a function that returns a table like:
       --   {error=error_cnt, warn=warn_cnt, info=info_cnt, hint=hint_cnt}
       sources = {'nvim_diagnostic', 'coc'},
       -- displays diagnostics from defined severity
@@ -446,9 +449,9 @@ sections = {
         hint  = 'DiagnosticHint',  -- changes diagnostic's hint color
       },
       symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'},
-      colored = true, -- displays diagnostics status in color if set to true
-      update_in_insert = false, -- Update diagnostics in insert mode
-      always_visible = false, -- Show diagnostics even if count is 0, boolean or function returning boolean
+      colored = true,           -- displays diagnostics status in color if set to true
+      update_in_insert = false, -- update diagnostics in insert mode
+      always_visible = false,   -- show diagnostics even if count is 0, boolean or function returning boolean
     }
   }
 }
@@ -470,10 +473,10 @@ sections = {
         removed  = 'DiffDelete', -- changes diff's removed color you
       },
       symbols = {added = '+', modified = '~', removed = '-'}, -- changes diff symbols
-      source = nil, -- A function that works as a data source for diff.
-                    -- it must return a table like
-                    -- {added = add_count, modified = modified_count, removed = removed_count }
-                    -- Or nil on failure. Count <= 0 won't be displayed.
+      source = nil, -- a function that works as a data source for diff.
+                    -- it must return a table like:
+                    --   {added = add_count, modified = modified_count, removed = removed_count }
+                    -- or nil on failure. count <= 0 won't be displayed.
     }
   }
 }
@@ -488,8 +491,8 @@ sections = {
       'fileformat',
       symbols = {
         unix = '', -- e712
-        dos = '', -- e70f
-        mac = '', -- e711
+        dos = '',  -- e70f
+        mac = '',  -- e711
       }
     }
   }
@@ -503,14 +506,18 @@ sections = {
   lualine_a = {
     {
       'filename',
-      file_status = true,   -- displays file status (readonly status, modified status)
-      path = 0,             -- 0 = just filename, 1 = relative path, 2 = absolute path
-      shorting_target = 40, -- Shortens path to leave 40 space in the window
-                            -- for other components. Terrible name any suggestions?
+      file_status = true, -- displays file status (readonly status, modified status)
+      path = 0,           -- 0: just filename
+                          -- 1: relative path
+                          -- 2: absolute path
+
+
+      shorting_target = 40, -- shortens path to leave 40 spaces in the window
+                            -- for other components. (terrible name, any suggestions?)
       symbols = {
-        modified = '[+]',      -- when the file was modified
-        readonly = '[-]',      -- if the file is not modifiable or readonly
-        unnamed = '[No Name]', -- default display name for unnamed buffers
+        modified = '[+]',      -- text to show when the file is modified
+        readonly = '[-]',      -- text to show when the file is non-modifiable or readonly
+        unnamed = '[No Name]', -- text to show for unnamed buffers
       }
     }
   }
@@ -524,8 +531,8 @@ sections = {
   lualine_a = {
     {
       'filetype',
-      colored = true, -- displays filetype icon in color if set to `true
-      icon_only = false -- Display only icon for filetype
+      colored = true, -- displays filetype icon in color if set to true
+      icon_only = false -- display only an icon for filetype
     }
   }
 }
@@ -539,10 +546,10 @@ sections = {
     {
       'tabs',
       max_length = vim.o.columns / 3, -- maximum width of tabs component
-                                      -- can also be a function that returns value of max_length dynamicaly
-      mode = 0, -- 0  shows tab_nr
-                -- 1  shows tab_name
-                -- 2  shows tab_nr + tab_name
+                                      -- can also be a function that returns value of max_length dynamically
+      mode = 0, -- 0: shows tab_nr
+                -- 1: shows tab_name
+                -- 2: shows tab_nr + tab_name
       tabs_color = {
         -- Same values like general color option can be used here.
         active = 'lualine_{section}_normal',   -- color for active tab
