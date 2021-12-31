@@ -304,7 +304,7 @@ Global option used locally overwrites the global, for example:
     require'lualine'.setup {
       options = { fmt = string.lower },
       sections = { lualine_a = {
-        { 'mode', fmt = function(str) return str:sub(1,1) end} },
+        { 'mode', fmt = function(str) return str:sub(1,1) end } },
                   lualine_b = {'branch'} }
     }
 ```
@@ -351,25 +351,25 @@ sections = {
     {
       'mode',
       icons_enabled = true, -- Enables the display of icons alongside the component.
-      icon = nil,      -- Defines the icon to be displayed in front of the component.
+      icon = nil,           -- Defines the icon to be displayed in front of the component.
 
-      separator = nil, -- Determines what separator to use for the component.
-                       -- Note:
-                       --  When a string is provided it's treated as component_separator.
-                       --  When a table is provided it's treated as section_separator.
-                       --
-                       -- These options can be used to set colored separators
-                       -- around a component. 
-                       --
-                       -- The options need to be set as such:
-                       --   separator = { left = '', right = ''}
-                       --
-                       -- Where left will be placed on left side of component,
-                       -- and right will be placed on its right.
-                       --
-                       -- Passing an empty string disables the separator.
+      separator = nil,      -- Determines what separator to use for the component.
+                            -- Note:
+                            --  When a string is provided it's treated as component_separator.
+                            --  When a table is provided it's treated as section_separator.
+                            --  Passing an empty string disables the separator.
+                            --
+                            -- These options can be used to set colored separators
+                            -- around a component. 
+                            --
+                            -- The options need to be set as such:
+                            --   separator = { left = '', right = ''}
+                            --
+                            -- Where left will be placed on left side of component,
+                            -- and right will be placed on its right.
+                            --
 
-      cond = nil, -- Condition function, the component is loaded when the function returns `true`.
+      cond = nil,           -- Condition function, the component is loaded when the function returns `true`.
 
       -- Defines a custom color for the component:
       --
@@ -419,7 +419,7 @@ sections = {
     {
       'buffers',
       show_filename_only = true,   -- Shows shortened relative path when set to false.
-      show_modified_status = true, -- Shows indicator then buffer is modified.
+      show_modified_status = true, -- Shows indicator when the buffer is modified.
 
       mode = 0, -- 0: Shows buffer name
                 -- 1: Shows buffer index (bufnr)
@@ -460,7 +460,7 @@ sections = {
       --   { error=error_cnt, warn=warn_cnt, info=info_cnt, hint=hint_cnt }
       sources = { 'nvim_diagnostic', 'coc' },
 
-      -- Displays diagnostics from defined severity
+      -- Displays diagnostics for the defined severity types
       sections = { 'error', 'warn', 'info', 'hint' },
 
       diagnostics_color = {
@@ -493,7 +493,7 @@ sections = {
         modified = 'DiffChange', -- Changes the diff's modified color
         removed  = 'DiffDelete', -- Changes the diff's removed color you
       },
-      symbols = {added = '+', modified = '~', removed = '-'}, -- Changes the symbols used by the diff
+      symbols = {added = '+', modified = '~', removed = '-'}, -- Changes the symbols used by the diff.
       source = nil, -- A function that works as a data source for diff.
                     -- It must return a table as such:
                     --   { added = add_count, modified = modified_count, removed = removed_count }
@@ -536,9 +536,9 @@ sections = {
       shorting_target = 40,    -- Shortens path to leave 40 spaces in the window
                                -- for other components. (terrible name, any suggestions?)
       symbols = {
-        modified = '[+]',      -- Text to show when the file is modified
-        readonly = '[-]',      -- Text to show when the file is non-modifiable or readonly
-        unnamed = '[No Name]', -- Text to show for unnamed buffers
+        modified = '[+]',      -- Text to show when the file is modified.
+        readonly = '[-]',      -- Text to show when the file is non-modifiable or readonly.
+        unnamed = '[No Name]', -- Text to show for unnamed buffers.
       }
     }
   }
