@@ -370,7 +370,7 @@ sections = {
       -- here, '|' refers to 'or', meaning a different acceptable format for that placeholder e.g.:
       -- 'highlight_group_name' | {fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style'}
       --
-      -- Note: all other color options including themes accept like diff_color same color values.
+      -- Note: all other color options like diff_color including themes accept same color values
       --
       -- example:
       --   color = {fg = '#ffaa88', bg = 'grey', gui='italic,bold'},
@@ -474,7 +474,6 @@ sections = {
     {
       'diff',
       colored = true, -- Displays diff status in color if set to true
-      -- All colors are in #rrggbb format
       diff_color = {
         -- Same values like general color option can be used here.
         added    = 'DiffAdd',    -- Changes the diff's added color
