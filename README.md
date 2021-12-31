@@ -7,23 +7,23 @@
 
 <!-- panvimdoc-ignore-end -->
 
-A blazing fast and easy to configure Neovim statusline written in Lua
+A blazing fast and easy to configure Neovim statusline written in Lua.
 
-`lualine.nvim` requires neovim 0.5
+`lualine.nvim` requires Neovim >= 0.5.
 
 ## Contributing
 
-Feel free to create an issue/pr if you want to see anything else implemented.
-If you have some question or need help with configuration start a [discussion](https://github.com/nvim-lualine/lualine.nvim/discussions).
+Feel free to create an issue/PR if you want to see anything else implemented.
+If you have some question or need help with configuration, start a [discussion](https://github.com/nvim-lualine/lualine.nvim/discussions).
 
-Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pr.
-You can also help with documentation in [wiki](https://github.com/nvim-lualine/lualine.nvim/wiki)
+Please read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a PR.
+You can also help with documentation in the [wiki](https://github.com/nvim-lualine/lualine.nvim/wiki).
 
 <!-- panvimdoc-ignore-start -->
 
 ## Screenshots
 
-Here is a preview of how lualine can look like.
+Here is a preview of what lualine can look like.
 
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108650373-bb025580-74bf-11eb-8682-2c09321dd18e.png'/>
@@ -54,11 +54,11 @@ Unlike other statusline plugins lualine loads only defined components, nothing e
 
 Startup time performance measured with an amazing plugin [dstein64/vim-startuptime](https://github.com/dstein64/vim-startuptime)
 
-All times are measured with clean `init.vim` with only `vim-startuptime`,
+Times are measured with a clean `init.vim` with only `vim-startuptime`,
 `vim-plug` and given statusline plugin installed.
 In control just `vim-startuptime` and`vim-plug` is installed.
 And measured time is complete startuptime of vim not time spent
-on specific plugin. These numbers are average of 20 runs.
+on specific plugin. These numbers are the average of 20 runs.
 
 | control  |  lualine  | lightline |  airline  |
 | :------: | :-------: | :-------: | :-------: |
@@ -97,12 +97,12 @@ Lualine has sections as shown below.
 +-------------------------------------------------+
 ```
 
-Each sections holds it's components e.g. current vim's mode.
+Each sections holds its components e.g. Vim's current mode.
 
 #### Configuring lualine in init.vim
 
 All the examples below are in lua. You can use the same examples
-in `.vim` file by wrapping them in lua heredoc like this:
+in `.vim` files by wrapping them in lua heredoc like this:
 
 ```vim
 lua << END
@@ -110,7 +110,7 @@ require'lualine'.setup()
 END
 ```
 
-checkout `:help lua-heredoc`.
+For more information, check out `:help lua-heredoc`.
 
 #### Default config
 
@@ -169,9 +169,9 @@ require'lualine'.setup()
 options = { theme = 'gruvbox' }
 ```
 
-All available themes are listed in [THEMES.md](./THEMES.md)
+All available themes are listed in [THEMES.md](./THEMES.md).
 
-Please create a PR if you managed to port a popular theme before me, [here is how to do it](./CONTRIBUTING.md).
+Please create a PR if you managed to port a popular theme before us, [here is how to do it](./CONTRIBUTING.md).
 
 #### Customizing themes
 
@@ -205,8 +205,8 @@ options = {
 }
 ```
 
-Here left means it'll be used for left sections (a, b, c) and right means
-it'll be used for right sections (x, y, z).
+Here, left refers to the left-most sections (a, b, c), and right refers
+to the right-most sections (x, y, z).
 
 #### Disabling separators
 
@@ -226,7 +226,7 @@ sections = {lualine_a = {'mode'}}
 
 - `branch` (git branch)
 - `buffers` (shows currently available buffers)
-- `diagnostics` (diagnostics count from your prefered source)
+- `diagnostics` (diagnostics count from your preferred source)
 - `diff` (git diff status)
 - `encoding` (file encoding)
 - `fileformat` (file format)
@@ -274,8 +274,7 @@ sections = { lualine_a = { 'g:coc_status', 'bo:filetype' } }
 
 ##### Lua expressions as lualine component
 
-You can use any valid lua expression as a component including
-
+You can use any valid lua expression as a component including:
 - oneliners
 - global variables
 - require statements
@@ -292,7 +291,6 @@ sections = { lualine_c = { "os.date('%a')", 'data', "require'lsp-status'.status(
 
 Component options can change the way a component behave.
 There are two kinds of options:
-
 - global options affecting all components
 - local options affecting specific
 
@@ -411,7 +409,7 @@ These are options that are available on specific components.
 For example you have option on `diagnostics` component to
 specify what your diagnostic sources will be.
 
-#### buffers component options
+#### `buffers` component options
 
 ```lua
 sections = {
@@ -446,7 +444,7 @@ sections = {
 }
 ```
 
-#### diagnostics component options
+#### `diagnostics` component options
 
 ```lua
 sections = {
@@ -479,7 +477,7 @@ sections = {
 }
 ```
 
-#### diff component options
+#### `diff` component options
 
 ```lua
 sections = {
@@ -503,7 +501,7 @@ sections = {
 }
 ```
 
-#### fileformat component options
+#### `fileformat` component options
 
 ```lua
 sections = {
@@ -520,7 +518,7 @@ sections = {
 }
 ```
 
-#### filename component options
+#### `filename` component options
 
 ```lua
 sections = {
@@ -545,7 +543,7 @@ sections = {
 }
 ```
 
-#### filetype component options
+#### `filetype` component options
 
 ```lua
 sections = {
@@ -559,7 +557,7 @@ sections = {
 }
 ```
 
-#### tabs component options
+#### `tabs` component options
 
 ```lua
 sections = {
@@ -589,7 +587,7 @@ sections = {
 ### Tabline
 
 You can use lualine to display components in tabline.
-The configuration for tabline sections is exactly the same as for statusline.
+The configuration for tabline sections is exactly the same as that of the statusline.
 
 ```lua
 tabline = {
@@ -602,9 +600,9 @@ tabline = {
 }
 ```
 
-This will show branch and filename component in top of neovim inside tabline .
+This will show the branch and filename components on top of neovim inside tabline.
 
-lualine also provides 2 components buffers & tabs that you can use to get more traditional tabline/bufferline.
+lualine also provides 2 components, buffers and tabs, that you can use to get a more traditional tabline/bufferline.
 
 ```lua
 tabline = {
@@ -617,8 +615,8 @@ tabline = {
 }
 ```
 
-You can also completely move your statusline to tabline by configuring
-`lualine.tabline` and disabling `lualine.sections` and `lualine.inactive_sections`.
+You can also completely move your statusline to a tabline by configuring
+`lualine.tabline` and disabling `lualine.sections` and `lualine.inactive_sections`:
 
 ```lua
 tabline = {
@@ -629,13 +627,13 @@ inactive_sections = {},
 ```
 
 If you want a more sophisticated tabline you can use other
-tabline plugins with lualine too . For example:
+tabline plugins with lualine too. For example:
 
 - [nvim-bufferline](https://github.com/akinsho/nvim-bufferline.lua)
 - [tabline.nvim](https://github.com/kdheepak/tabline.nvim)
 
-tabline.nvim even uses lualines theme by default 🙌
-You can find a bigger list [here](https://github.com/rockerBOO/awesome-neovim#tabline)
+tabline.nvim even uses lualine's theme by default 🙌
+You can find a bigger list [here](https://github.com/rockerBOO/awesome-neovim#tabline).
 
 ---
 
@@ -665,7 +663,7 @@ extensions = {'quickfix'}
 
 #### Custom extensions
 
-You can define your own extensions. If you think an extension might be useful for others then please submit a pr.
+You can define your own extensions. If you think an extension might be useful for others, then please submit a PR.
 
 ```lua
 local my_extension = { sections = { lualine_a = {'mode'} }, filetypes = {'lua'} }
@@ -676,7 +674,7 @@ require'lualine'.setup { extensions = { my_extension } }
 
 ### Disabling lualine
 
-You can disable lualine for specific filetypes
+You can disable lualine for specific filetypes:
 
 ```lua
 options = { disabled_filetypes = {'lua'} }
@@ -694,11 +692,11 @@ Thanks to these wonderful people we enjoy this awesome plugin.
 
 ### Wiki
 
-Check out the [wiki](https://github.com/nvim-lualine/lualine.nvim/wiki) for more info .
+Check out the [wiki](https://github.com/nvim-lualine/lualine.nvim/wiki) for more info.
 
-You can find some useful [configuration snippets](https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets) here. You can also share your awesome snippents with others.
+You can find some useful [configuration snippets](https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets) here. You can also share your awesome snippets with others.
 
-If you want to extened lualine with plugins or want to know
-which ones already do [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
+If you want to extend lualine with plugins or want to know
+which ones already do, [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
 
 <!-- panvimdoc-ignore-end -->
