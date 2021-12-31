@@ -663,7 +663,7 @@ extensions = {'quickfix'}
 
 #### Custom extensions
 
-You can define your own extensions. If you think an extension might be useful for others, then please submit a PR.
+You can define your own extensions. If you believe an extension may be useful to others, then please submit a PR.
 
 ```lua
 local my_extension = { sections = { lualine_a = {'mode'} }, filetypes = {'lua'} }
@@ -684,7 +684,7 @@ options = { disabled_filetypes = {'lua'} }
 
 ### Contributors
 
-Thanks to these wonderful people we enjoy this awesome plugin.
+Thanks to these wonderful people, we enjoy this awesome plugin.
 
 <a href="https://github.com/nvim-lualine/lualine.nvim/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=nvim-lualine/lualine.nvim" />
