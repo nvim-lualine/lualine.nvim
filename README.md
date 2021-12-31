@@ -35,7 +35,7 @@ Here is a preview of what lualine can look like.
 
 Screenshots of all available themes are listed in [THEMES.md](./THEMES.md)
 
-For those who want to break the norms. You can create custom looks in lualine.
+For those who want to break the norms, you can create custom looks for lualine.
 
 **Example** :
 
@@ -50,7 +50,7 @@ For those who want to break the norms. You can create custom looks in lualine.
 
 ## Performance compared to other plugins
 
-Unlike other statusline plugins lualine loads only defined components, nothing else.
+Unlike other statusline plugins, lualine loads only a defined set of components, nothing else.
 
 Startup time performance measured with an amazing plugin [dstein64/vim-startuptime](https://github.com/dstein64/vim-startuptime)
 
@@ -187,16 +187,16 @@ require('lualine').setup {
 }
 ```
 
-Theme structure is available [here](https://github.com/nvim-lualine/lualine.nvim/wiki/Writting-a-theme)
+Theme structure is available [here](https://github.com/nvim-lualine/lualine.nvim/wiki/Writting-a-theme).
 
 ---
 
 ### Separators
 
-Lualine defines two kinds of separators:
+lualine defines two kinds of separators:
 
-- `section_separators` - separators between sections
-- `components_separators` - separators between components in sections
+- `section_separators`    - separators between sections
+- `components_separators` - separators between the different components in sections
 
 ```lua
 options = {
@@ -530,7 +530,6 @@ sections = {
                                -- 1: Relative path
                                -- 2: Absolute path
 
-
       shorting_target = 40,    -- Shortens path to leave 40 spaces in the window
                                -- for other components. (terrible name, any suggestions?)
       symbols = {
@@ -550,7 +549,7 @@ sections = {
   lualine_a = {
     {
       'filetype',
-      colored = true, -- Displays filetype icon in color if set to true
+      colored = true,   -- Displays filetype icon in color if set to true
       icon_only = false -- Display only an icon for filetype
     }
   }
@@ -627,7 +626,7 @@ inactive_sections = {},
 ```
 
 If you want a more sophisticated tabline you can use other
-tabline plugins with lualine too. For example:
+tabline plugins with lualine too, for example:
 
 - [nvim-bufferline](https://github.com/akinsho/nvim-bufferline.lua)
 - [tabline.nvim](https://github.com/kdheepak/tabline.nvim)
@@ -639,7 +638,7 @@ You can find a bigger list [here](https://github.com/rockerBOO/awesome-neovim#ta
 
 ### Extensions
 
-Lualine extensions change statusline appearance for a window/buffer with
+lualine extensions change statusline appearance for a window/buffer with
 specified filetypes.
 
 By default no extensions are loaded to improve performance.
