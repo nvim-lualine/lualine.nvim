@@ -106,7 +106,7 @@ in `.vim` files by wrapping them in lua heredoc like this:
 
 ```vim
 lua << END
-require'lualine'.setup()
+require('lualine').setup()
 END
 ```
 
@@ -115,7 +115,7 @@ For more information, check out `:help lua-heredoc`.
 #### Default config
 
 ```lua
-require'lualine'.setup {
+require('lualine').setup {
   options = {
     icons_enabled = true,
     theme = 'auto',
@@ -149,7 +149,7 @@ If you want to get your current lualine config, you can
 do so with:
 
 ```lua
-require'lualine'.get_config()
+require('lualine').get_config()
 
 ```
 
@@ -158,7 +158,7 @@ require'lualine'.get_config()
 ### Starting lualine
 
 ```lua
-require'lualine'.setup()
+require('lualine').setup()
 ```
 
 ---
@@ -181,7 +181,7 @@ local custom_gruvbox = require'lualine.themes.gruvbox'
 -- Change the background of lualine_c section for normal mode
 custom_gruvbox.normal.c.bg = '#112233'
 
-require'lualine'.setup {
+require('lualine').setup {
   options = { theme  = custom_gruvbox },
   ...
 }
@@ -299,7 +299,7 @@ but you cannot use local options as global.
 Global option used locally overwrites the global, for example:
 
 ```lua
-    require'lualine'.setup {
+    require('lualine').setup {
       options = { fmt = string.lower },
       sections = { lualine_a = {
         { 'mode', fmt = function(str) return str:sub(1,1) end } },
@@ -435,7 +435,7 @@ sections = {
       }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
 
       buffers_color = {
-        -- Same values of the general color option can be used here.
+        -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active buffer.
         inactive = 'lualine_{section}_inactive', -- Color for inactive buffer.
       },
@@ -462,7 +462,7 @@ sections = {
       sections = { 'error', 'warn', 'info', 'hint' },
 
       diagnostics_color = {
-        -- Same values of the general color option can be used here.
+        -- Same values as the general color option can be used here.
         error = 'DiagnosticError', -- Changes diagnostics' error color.
         warn  = 'DiagnosticWarn',  -- Changes diagnostics' warn color.
         info  = 'DiagnosticInfo',  -- Changes diagnostics' info color.
@@ -573,7 +573,7 @@ sections = {
                 -- 2: Shows tab_nr + tab_name
 
       tabs_color = {
-        -- Same values of the general color option can be used here.
+        -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active tab.
         inactive = 'lualine_{section}_inactive', -- Color for inactive tab.
       },
@@ -667,7 +667,7 @@ You can define your own extensions. If you believe an extension may be useful to
 
 ```lua
 local my_extension = { sections = { lualine_a = {'mode'} }, filetypes = {'lua'} }
-require'lualine'.setup { extensions = { my_extension } }
+require('lualine').setup { extensions = { my_extension } }
 ```
 
 ---
