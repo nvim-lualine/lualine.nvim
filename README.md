@@ -50,7 +50,7 @@ For those who want to break the norms, you can create custom looks for lualine.
 
 ## Performance compared to other plugins
 
-Unlike other statusline plugins, lualine loads only a defined set of components, nothing else.
+Unlike other statusline plugins, lualine loads only the components you specify, and nothing else.
 
 Startup time performance measured with an amazing plugin [dstein64/vim-startuptime](https://github.com/dstein64/vim-startuptime)
 
@@ -187,7 +187,7 @@ require('lualine').setup {
 }
 ```
 
-Theme structure is available [here](https://github.com/nvim-lualine/lualine.nvim/wiki/Writting-a-theme).
+Theme structure is available [here](https://github.com/nvim-lualine/lualine.nvim/wiki/Writing-a-theme).
 
 ---
 
@@ -372,7 +372,7 @@ sections = {
       -- Defines a custom color for the component:
       --
       -- 'highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' }
-      -- Note: 
+      -- Note:
       --  '|' is synonymous with 'or', meaning a different acceptable format for that placeholder.
       --
       -- Examples:
@@ -565,7 +565,7 @@ sections = {
       'tabs',
       max_length = vim.o.columns / 3, -- Maximum width of tabs component.
                                       -- Note:
-                                      -- It can also be a function that returns 
+                                      -- It can also be a function that returns
                                       -- the value of `max_length` dynamically.
       mode = 0, -- 0: Shows tab_nr
                 -- 1: Shows tab_name
