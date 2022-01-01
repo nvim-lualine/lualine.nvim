@@ -112,7 +112,7 @@ END
 
 For more information, check out `:help lua-heredoc`.
 
-#### Default config
+#### Default configuration
 
 ```lua
 require('lualine').setup {
