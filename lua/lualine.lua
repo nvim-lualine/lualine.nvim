@@ -259,7 +259,7 @@ local function set_tabline()
     vim.go.tabline = "%{%v:lua.require'lualine'.tabline()%}"
     vim.go.showtabline = 2
     vim.schedule(function()
-      vim.api.nvim_command('redrawtabline')
+      vim.api.nvim_command 'redrawtabline'
     end)
   end
 end
