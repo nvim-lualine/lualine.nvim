@@ -1,8 +1,8 @@
-local lualine_require = require 'lualine_require'
-local modules = lualine_require.lazy_require {
+local lualine_require = require('lualine_require')
+local modules = lualine_require.lazy_require({
   utils = 'lualine.utils.utils',
   Job = 'lualine.utils.job',
-}
+})
 
 local M = {}
 
@@ -86,7 +86,7 @@ end
 function M.update_diff_args()
   -- Donn't show git diff when current buffer doesn't have a filename
   active_bufnr = tostring(vim.fn.bufnr())
-  if #vim.fn.expand '%' == 0 then
+  if #vim.fn.expand('%') == 0 then
     M.diff_args = nil
     git_diff = nil
     return
@@ -94,8 +94,8 @@ function M.update_diff_args()
   M.diff_args = {
     cmd = string.format(
       [[git -C %s --no-pager diff --no-color --no-ext-diff -U0 -- %s]],
-      vim.fn.expand '%:h',
-      vim.fn.expand '%:t'
+      vim.fn.expand('%:h'),
+      vim.fn.expand('%:t')
     ),
     on_stdout = function(_, data)
       if next(data) then

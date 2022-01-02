@@ -1,9 +1,9 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local require = require('lualine_require').require
-local Tab = require 'lualine.components.tabs.tab'
+local Tab = require('lualine.components.tabs.tab')
 local M = require('lualine.component'):extend()
-local highlight = require 'lualine.highlight'
+local highlight = require('lualine.highlight')
 
 local default_options = {
   max_length = 0,
@@ -57,8 +57,8 @@ end
 function M:update_status()
   local data = {}
   local tabs = {}
-  for t = 1, vim.fn.tabpagenr '$' do
-    tabs[#tabs + 1] = Tab { tabnr = t, options = self.options, highlights = self.highlights }
+  for t = 1, vim.fn.tabpagenr('$') do
+    tabs[#tabs + 1] = Tab({ tabnr = t, options = self.options, highlights = self.highlights })
   end
   -- mark the first, last, current, before current, after current tabpages
   -- for rendering
@@ -93,7 +93,7 @@ function M:update_status()
   -- start drawing from current tab and draw left and right of it until
   -- all tabpages are drawn or max_length has been reached.
   if current_tab == nil then -- maybe redundent code
-    local t = Tab { tabnr = vim.fn.tabpagenr(), options = self.options, highlights = self.highlights }
+    local t = Tab({ tabnr = vim.fn.tabpagenr(), options = self.options, highlights = self.highlights })
     t.current = true
     t.last = true
     data[#data + 1] = t:render()
@@ -163,10 +163,10 @@ function M:draw()
   return self.status
 end
 
-vim.cmd [[
+vim.cmd([[
   function! LualineSwitchTab(tabnr, mouseclicks, mousebutton, modifiers)
     execute a:tabnr . "tabnext"
   endfunction
-]]
+]])
 
 return M

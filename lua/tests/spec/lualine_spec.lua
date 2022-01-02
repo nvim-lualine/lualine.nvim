@@ -4,7 +4,7 @@
 local eq = assert.are.same
 
 describe('Lualine', function()
-  local utils = require 'lualine.utils.utils'
+  local utils = require('lualine.utils.utils')
   local lualine_focused = true
   utils.is_focused = function()
     return lualine_focused
@@ -51,7 +51,7 @@ describe('Lualine', function()
     extensions = {},
   }
   before_each(function()
-    vim.cmd 'bufdo bdelete'
+    vim.cmd('bufdo bdelete')
     pcall(vim.cmd, 'tabdo tabclose')
     lualine_focused = true
     require('lualine').setup(config)

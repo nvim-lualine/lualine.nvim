@@ -1,4 +1,4 @@
-local highlight = require 'lualine.highlight'
+local highlight = require('lualine.highlight')
 local Tab = require('lualine.utils.class'):extend()
 
 ---intialize a new tab from opts

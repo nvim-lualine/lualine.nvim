@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local require = require('lualine_require').require
-local highlight = require 'lualine.highlight'
+local highlight = require('lualine.highlight')
 local M = require('lualine.utils.class'):extend()
 
 -- Used to provide a unique id for each component
@@ -72,7 +72,7 @@ function M:apply_padding()
     l_padding, r_padding = padding.left, padding.right
   end
   if l_padding then
-    if self.status:find '%%#.*#' == 1 then
+    if self.status:find('%%#.*#') == 1 then
       -- When component has changed the highlight at begining
       -- we will add the padding after the highlight
       local pre_highlight = vim.fn.matchlist(self.status, [[\(%#.\{-\}#\)]])[2]
@@ -91,7 +91,7 @@ function M:apply_highlights(default_highlight)
   if self.options.color_highlight then
     self.status = highlight.component_format_highlight(self.options.color_highlight) .. self.status
   end
-  if type(self.options.separator) ~= 'table' and self.status:find '%%#' then
+  if type(self.options.separator) ~= 'table' and self.status:find('%%#') then
     -- Apply default highlight only when we aren't applying trans sep and
     -- the component has changed it's hl. since we won't be applying
     -- regular sep in those cases so ending with default hl isn't neccessay
@@ -101,7 +101,7 @@ function M:apply_highlights(default_highlight)
   end
   -- Prepend default hl when the component doesn't start with hl otherwise
   -- color in previous component can cause side effect
-  if not self.status:find '^%%#' then
+  if not self.status:find('^%%#') then
     self.status = default_highlight .. self.status
   end
 end

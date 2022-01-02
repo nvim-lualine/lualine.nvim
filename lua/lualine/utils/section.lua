@@ -2,8 +2,8 @@
 -- MIT license, see LICENSE for more details.
 local M = {}
 local require = require('lualine_require').require
-local utils = require 'lualine.utils.utils'
-local highlight = require 'lualine.highlight'
+local utils = require('lualine.utils.utils')
+local highlight = require('lualine.highlight')
 
 ---runs draw function on components in section
 ---handles separator edge cases :/
@@ -95,13 +95,13 @@ function M.draw_section(section, section_name, is_focused)
 
   local needs_hl
 
-  local find_start_trans_sep_start, find_start_trans_sep_end = status_str:find '^%%s{.-}'
+  local find_start_trans_sep_start, find_start_trans_sep_end = status_str:find('^%%s{.-}')
   if find_start_trans_sep_start then
     -- the section doesn't need to be prepended with default hl when sections
     -- first component has trasitionals sep
     needs_hl = status_str:find('^%%#', find_start_trans_sep_end + 1)
   else
-    needs_hl = status_str:find '^%%#'
+    needs_hl = status_str:find('^%%#')
   end
 
   if needs_hl then

@@ -1,7 +1,7 @@
 local M = {}
 
 local require = require('lualine_require').require
-local utils = require 'lualine.utils.utils'
+local utils = require('lualine.utils.utils')
 
 -- vars
 local current_git_branch = ''
@@ -23,7 +23,7 @@ local function get_git_head(head_file)
   if f_head then
     local HEAD = f_head:read()
     f_head:close()
-    local branch = HEAD:match 'ref: refs/heads/(.+)$'
+    local branch = HEAD:match('ref: refs/heads/(.+)$')
     if branch then
       current_git_branch = branch
     else
@@ -61,7 +61,7 @@ end
 ---@return string
 function M.find_git_dir(dir_path)
   -- get file dir so we can search from that dir
-  local file_dir = dir_path or vim.fn.expand '%:p:h'
+  local file_dir = dir_path or vim.fn.expand('%:p:h')
   local root_dir = file_dir
   local git_dir
   -- Search upward for .git file or folder
@@ -80,12 +80,12 @@ function M.find_git_dir(dir_path)
         local file = io.open(git_path)
         if file then
           git_dir = file:read()
-          git_dir = git_dir and git_dir:match 'gitdir: (.+)$'
+          git_dir = git_dir and git_dir:match('gitdir: (.+)$')
           file:close()
         end
         -- submodule / relative file path
-        if git_dir and git_dir:sub(1, 1) ~= sep and not git_dir:match '^%a:.*$' then
-          git_dir = git_path:match '(.*).git' .. git_dir
+        if git_dir and git_dir:sub(1, 1) ~= sep and not git_dir:match('^%a:.*$') then
+          git_dir = git_path:match('(.*).git') .. git_dir
         end
       end
       if git_dir then

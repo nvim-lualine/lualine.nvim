@@ -22,7 +22,7 @@ function M.init_component(component, opts)
     comp = comp(opts)
   elseif type(comp) == 'function' then
     opts[1] = comp
-    comp = require 'lualine.components.special.function_component'(opts)
+    comp = require('lualine.components.special.function_component')(opts)
   end
   return comp
 end

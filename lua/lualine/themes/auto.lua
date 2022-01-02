@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local utils = require 'lualine.utils.utils'
-local loader = require 'lualine.utils.loader'
+local utils = require('lualine.utils.utils')
+local loader = require('lualine.utils.loader')
 
 local color_name = vim.g.colors_name
 if color_name then
@@ -23,7 +23,7 @@ local brightness_modifier_parameter = 10
 
 -- truns #rrggbb -> { red, green, blue }
 local function rgb_str2num(rgb_color_str)
-  if rgb_color_str:find '#' == 1 then
+  if rgb_color_str:find('#') == 1 then
     rgb_color_str = rgb_color_str:sub(2, #rgb_color_str)
   end
   local red = tonumber(rgb_color_str:sub(1, 2), 16)

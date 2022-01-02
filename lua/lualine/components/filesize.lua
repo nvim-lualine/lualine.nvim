@@ -1,7 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local function filesize()
-  local file = vim.fn.expand '%:p'
+  local file = vim.fn.expand('%:p')
   if file == nil or #file == 0 then
     return ''
   end

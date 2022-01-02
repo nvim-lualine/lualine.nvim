@@ -1,4 +1,4 @@
-local highlight = require 'lualine.highlight'
+local highlight = require('lualine.highlight')
 local Buffer = require('lualine.utils.class'):extend()
 
 ---intialize a new buffer from opts
@@ -26,13 +26,13 @@ function Buffer:get_props()
     if not status then
       dev, _ = '', ''
     elseif self.filetype == 'TelescopePrompt' then
-      dev, _ = require('nvim-web-devicons').get_icon 'telescope'
+      dev, _ = require('nvim-web-devicons').get_icon('telescope')
     elseif self.filetype == 'fugitive' then
-      dev, _ = require('nvim-web-devicons').get_icon 'git'
+      dev, _ = require('nvim-web-devicons').get_icon('git')
     elseif self.filetype == 'vimwiki' then
-      dev, _ = require('nvim-web-devicons').get_icon 'markdown'
+      dev, _ = require('nvim-web-devicons').get_icon('markdown')
     elseif self.buftype == 'terminal' then
-      dev, _ = require('nvim-web-devicons').get_icon 'zsh'
+      dev, _ = require('nvim-web-devicons').get_icon('zsh')
     elseif vim.fn.isdirectory(self.file) == 1 then
       dev, _ = '', nil
     else

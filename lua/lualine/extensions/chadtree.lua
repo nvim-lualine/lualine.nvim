@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local nerdtree = require 'lualine.extensions.nerdtree'
+local nerdtree = require('lualine.extensions.nerdtree')
 
 local M = {}
 

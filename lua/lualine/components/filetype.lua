@@ -1,10 +1,10 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local lualine_require = require 'lualine_require'
-local modules = lualine_require.lazy_require {
+local lualine_require = require('lualine_require')
+local modules = lualine_require.lazy_require({
   highlight = 'lualine.highlight',
   utils = 'lualine.utils.utils',
-}
+})
 local M = lualine_require.require('lualine.component'):extend()
 
 local default_options = {
@@ -29,7 +29,7 @@ function M:apply_icon()
   local icon, icon_highlight_group
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if ok then
-    local f_name, f_extension = vim.fn.expand '%:t', vim.fn.expand '%:e'
+    local f_name, f_extension = vim.fn.expand('%:t'), vim.fn.expand('%:e')
     f_extension = f_extension ~= '' and f_extension or vim.bo.filetype
     icon, icon_highlight_group = devicons.get_icon(f_name, f_extension)
 
@@ -48,7 +48,7 @@ function M:apply_icon()
       icon = modules.highlight.component_format_highlight(icon_highlight) .. icon .. default_highlight
     end
   else
-    ok = vim.fn.exists '*WebDevIconsGetFileTypeSymbol'
+    ok = vim.fn.exists('*WebDevIconsGetFileTypeSymbol')
     if ok ~= 0 then
       icon = vim.fn.WebDevIconsGetFileTypeSymbol()
     end

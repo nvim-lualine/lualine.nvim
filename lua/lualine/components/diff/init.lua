@@ -1,12 +1,12 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local lualine_require = require 'lualine_require'
-local modules = lualine_require.lazy_require {
+local lualine_require = require('lualine_require')
+local modules = lualine_require.lazy_require({
   git_diff = 'lualine.components.diff.git_diff',
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
   highlight = 'lualine.highlight',
-}
+})
 local M = lualine_require.require('lualine.component'):extend()
 
 local default_options = {
@@ -81,7 +81,7 @@ function M:update_status(is_focused)
 
   local result = {}
   -- loop though data and load available sections in result table
-  for _, name in ipairs { 'added', 'modified', 'removed' } do
+  for _, name in ipairs({ 'added', 'modified', 'removed' }) do
     if git_diff[name] and git_diff[name] > 0 then
       if self.options.colored then
         table.insert(result, colors[name] .. self.options.symbols[name] .. git_diff[name])

@@ -7,7 +7,7 @@ function M:update_status()
   -- vim veriable component
   -- accepts g:, v:, t:, w:, b:, o, go:, vo:, to:, wo:, bo:
   -- filters g portion from g:var
-  local scope = component:match '[gvtwb]?o?'
+  local scope = component:match('[gvtwb]?o?')
   -- filters var portion from g:var
   local var_name = component:sub(#scope + 2, #component)
   -- Displays nothing when veriable aren't present

@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local utils = require 'lualine.utils.utils'
+local utils = require('lualine.utils.utils')
 
 local config = {
   options = {
@@ -62,10 +62,10 @@ local function apply_configuration(config_table)
       config[section_group_name][section_name] = utils.deepcopy(section)
     end
   end
-  parse_sections 'options'
-  parse_sections 'sections'
-  parse_sections 'inactive_sections'
-  parse_sections 'tabline'
+  parse_sections('options')
+  parse_sections('sections')
+  parse_sections('inactive_sections')
+  parse_sections('tabline')
   if config_table.extensions then
     config.extensions = utils.deepcopy(config_table.extensions)
   end

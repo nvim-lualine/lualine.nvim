@@ -1,12 +1,12 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local M = {}
-local lualine_require = require 'lualine_require'
+local lualine_require = require('lualine_require')
 local require = lualine_require.require
-local modules = lualine_require.lazy_require {
+local modules = lualine_require.lazy_require({
   utils = 'lualine.utils.utils',
   color_utils = 'lualine.utils.color_utils',
-}
+})
 
 local section_highlight_map = { x = 'c', y = 'b', z = 'a' }
 local active_theme = nil
@@ -202,7 +202,7 @@ function M.create_component_highlight_group(color, highlight_tag, options)
   }
   local normal_hl
   -- convert lualine_a -> a before setting section
-  local section = options.self.section:match 'lualine_(.*)'
+  local section = options.self.section:match('lualine_(.*)')
   if section > 'c' and not active_theme.normal[section] then
     section = section_highlight_map[section]
   end
@@ -231,7 +231,7 @@ end
 ---@return string formatted highlight group name
 function M.component_format_highlight(highlight_name)
   local highlight_group = highlight_name
-  if highlight_name:find 'no_mode' == #highlight_name - #'no_mode' + 1 then
+  if highlight_name:find('no_mode') == #highlight_name - #'no_mode' + 1 then
     return '%#' .. highlight_group .. '#'
   end
   highlight_group = M.append_mode(highlight_group)
@@ -251,7 +251,7 @@ end
 function M.format_highlight(highlight_group, is_focused)
   local highlight_name = M.append_mode(highlight_group, is_focused)
   if highlight_group > 'lualine_c' and not M.highlight_exists(highlight_name) then
-    highlight_group = 'lualine_' .. section_highlight_map[highlight_group:match 'lualine_(.)']
+    highlight_group = 'lualine_' .. section_highlight_map[highlight_group:match('lualine_(.)')]
     highlight_name = M.append_mode(highlight_group, is_focused)
   end
   if M.highlight_exists(highlight_name) then

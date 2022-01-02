@@ -2,7 +2,7 @@
 -- MIT license, see LICENSE for more details.
 local M = require('lualine.component'):extend()
 local require = require('lualine_require').require
-local git_branch = require 'lualine.components.branch.git_branch'
+local git_branch = require('lualine.components.branch.git_branch')
 
 -- Initilizer
 M.init = function(self, options)

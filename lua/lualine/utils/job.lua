@@ -44,9 +44,9 @@ local Job = setmetatable({
     end
     self.__index = self
     local job = setmetatable({ args = args }, self)
-    job:wrap_cb_alive 'on_stdout'
-    job:wrap_cb_alive 'on_stderr'
-    job:wrap_cb_alive 'on_stdin'
+    job:wrap_cb_alive('on_stdout')
+    job:wrap_cb_alive('on_stderr')
+    job:wrap_cb_alive('on_stdin')
     return job
   end,
 })

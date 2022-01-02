@@ -1,12 +1,12 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 
-local lualine_require = require 'lualine_require'
+local lualine_require = require('lualine_require')
 local require = lualine_require.require
-local modules = lualine_require.lazy_require {
+local modules = lualine_require.lazy_require({
   utils = 'lualine.utils.utils',
   notice = 'lualine.utils.notices',
-}
+})
 local is_valid_filename = lualine_require.is_valid_filename
 local sep = lualine_require.sep
 
@@ -18,7 +18,7 @@ local component_types = {
   end,
   --- loads lua functions as component
   lua_fun = function(component)
-    return require 'lualine.components.special.function_component'(component)
+    return require('lualine.components.special.function_component')(component)
   end,
   --- loads lua modules as components (ones in /lua/lualine/components/)
   mod = function(component)
@@ -29,7 +29,7 @@ local component_types = {
         loaded_component = loaded_component(component)
       elseif type(loaded_component) == 'function' then
         component[1] = loaded_component
-        loaded_component = require 'lualine.components.special.function_component'(component)
+        loaded_component = require('lualine.components.special.function_component')(component)
       end
       return loaded_component
     end
@@ -40,15 +40,15 @@ local component_types = {
     component[1] = function()
       return stl_expr
     end
-    return require 'lualine.components.special.function_component'(component)
+    return require('lualine.components.special.function_component')(component)
   end,
   --- loads variables & options (g:,go:,b:,bo:...) as componenta
   var = function(component)
-    return require 'lualine.components.special.vim_var_component'(component)
+    return require('lualine.components.special.vim_var_component')(component)
   end,
   --- loads vim functions and lua expressions as components
   ['_'] = function(component)
-    return require 'lualine.components.special.eval_func_component'(component)
+    return require('lualine.components.special.eval_func_component')(component)
   end,
 }
 
@@ -80,7 +80,7 @@ component type '%s' isn't recognised. Check if spelling is correct.]],
       return loaded_component
     elseif string.char(component[1]:byte(1)) == '%' then
       return component_types.stl(component)
-    elseif component[1]:find '[gvtwb]?o?:' == 1 then
+    elseif component[1]:find('[gvtwb]?o?:') == 1 then
       return component_types.var(component)
     else
       return component_types['_'](component)
@@ -252,10 +252,10 @@ end
 local function load_theme(theme_name)
   assert(is_valid_filename(theme_name), 'Invalid filename')
   local retval
-  local path = table.concat { 'lua/lualine/themes/', theme_name, '.lua' }
+  local path = table.concat({ 'lua/lualine/themes/', theme_name, '.lua' })
   local files = vim.api.nvim_get_runtime_file(path, true)
   if #files <= 0 then
-    path = table.concat { 'lua/lualine/themes/', theme_name, '/init.lua' }
+    path = table.concat({ 'lua/lualine/themes/', theme_name, '/init.lua' })
     files = vim.api.nvim_get_runtime_file(path, true)
   end
   local n_files = #files

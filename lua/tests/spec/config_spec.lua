@@ -4,12 +4,12 @@
 local eq = assert.are.same
 
 describe('config parsing', function()
-  local config_module = require 'lualine.config'
+  local config_module = require('lualine.config')
 
   describe('options', function()
     describe('icons_enabled', function()
       it('default', function()
-        local config = config_module.apply_configuration {}
+        local config = config_module.apply_configuration({})
         eq(config.options.icons_enabled, true)
       end)
       it('custom', function()
@@ -21,7 +21,7 @@ describe('config parsing', function()
 
     describe('theme', function()
       it('default', function()
-        local config = config_module.apply_configuration {}
+        local config = config_module.apply_configuration({})
         eq(config.options.theme, 'auto')
       end)
       it('custom', function()
@@ -36,7 +36,7 @@ describe('config parsing', function()
 
     describe('separators', function()
       it('default', function()
-        local config = config_module.apply_configuration {}
+        local config = config_module.apply_configuration({})
         eq(config.options.component_separators, { left = '', right = '' })
         eq(config.options.section_separators, { left = '', right = '' })
       end)
@@ -85,7 +85,7 @@ describe('config parsing', function()
 
     describe('disabled filetypes', function()
       it('default', function()
-        local config = config_module.apply_configuration {}
+        local config = config_module.apply_configuration({})
         eq(config.options.disabled_filetypes, {})
       end)
       it('custom', function()

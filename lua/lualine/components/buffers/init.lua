@@ -1,9 +1,9 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local require = require('lualine_require').require
-local Buffer = require 'lualine.components.buffers.buffer'
+local Buffer = require('lualine.components.buffers.buffer')
 local M = require('lualine.component'):extend()
-local highlight = require 'lualine.highlight'
+local highlight = require('lualine.highlight')
 
 local default_options = {
   show_filename_only = true,
@@ -65,9 +65,9 @@ end
 function M:update_status()
   local data = {}
   local buffers = {}
-  for b = 1, vim.fn.bufnr '$' do
+  for b = 1, vim.fn.bufnr('$') do
     if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
-      buffers[#buffers + 1] = Buffer { bufnr = b, options = self.options, highlights = self.highlights }
+      buffers[#buffers + 1] = Buffer({ bufnr = b, options = self.options, highlights = self.highlights })
     end
   end
   local current_bufnr = vim.fn.bufnr()
@@ -110,7 +110,7 @@ function M:update_status()
   -- start drawing from current buffer and draw left and right of it until
   -- all buffers are drawn or max_length has been reached.
   if current == -2 then
-    local b = Buffer { bufnr = vim.fn.bufnr(), options = self.options, highlights = self.highlights }
+    local b = Buffer({ bufnr = vim.fn.bufnr(), options = self.options, highlights = self.highlights })
     b.current = true
     if self.options.self.section < 'lualine_x' then
       b.last = true
@@ -193,10 +193,10 @@ function M:draw()
   return self.status
 end
 
-vim.cmd [[
+vim.cmd([[
   function! LualineSwitchBuffer(bufnr, mouseclicks, mousebutton, modifiers)
     execute ":buffer " . a:bufnr
   endfunction
-]]
+]])
 
 return M

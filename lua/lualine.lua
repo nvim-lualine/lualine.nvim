@@ -1,14 +1,14 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local lualine_require = require 'lualine_require'
-local modules = lualine_require.lazy_require {
+local lualine_require = require('lualine_require')
+local modules = lualine_require.lazy_require({
   highlight = 'lualine.highlight',
   loader = 'lualine.utils.loader',
   utils_section = 'lualine.utils.section',
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
   config_module = 'lualine.config',
-}
+})
 local config -- Stores cureently applied config
 local new_config = true -- Stores config that will be applied
 
@@ -119,7 +119,7 @@ local function apply_transitional_separators(status)
       copied_pos = str_checked
     elseif next_char == '%' then
       str_checked = str_checked + 2 -- Skip the following % too
-    elseif next_char == '=' and last_hl and (last_hl:find '^lualine_a' or last_hl:find '^lualine_b') then
+    elseif next_char == '=' and last_hl and (last_hl:find('^lualine_a') or last_hl:find('^lualine_b')) then
       -- TODO: Fix this properly
       -- This check for lualine_a and lualine_b is dumb. It doesn't garantee
       -- c or x section isn't present. Worst case sinario after this patch
@@ -158,7 +158,7 @@ local function statusline(sections, is_focused)
       if #section_data > 0 then
         if not applied_midsection_divider and section_name > 'c' then
           applied_midsection_divider = true
-          section_data = modules.highlight.format_highlight 'lualine_c' .. '%=' .. section_data
+          section_data = modules.highlight.format_highlight('lualine_c') .. '%=' .. section_data
         end
         if not applied_trunc and section_name > 'b' then
           applied_trunc = true
@@ -170,7 +170,7 @@ local function statusline(sections, is_focused)
   end
   if applied_midsection_divider == false and config.options.always_divide_middle ~= false then
     -- When non of section x,y,z is present
-    table.insert(status, modules.highlight.format_highlight 'lualine_c' .. '%=')
+    table.insert(status, modules.highlight.format_highlight('lualine_c') .. '%=')
   end
   return apply_transitional_separators(table.concat(status))
 end
@@ -244,13 +244,13 @@ local function setup_theme()
         return theme
       end
     end
-    notify_theme_error 'auto'
-    return modules.loader.load_theme 'gruvbox'
+    notify_theme_error('auto')
+    return modules.loader.load_theme('gruvbox')
   end
   local theme = get_theme_from_config()
   modules.highlight.create_highlight_groups(theme)
-  vim.cmd [[autocmd lualine ColorScheme * lua require'lualine'.setup()
-    autocmd lualine OptionSet background lua require'lualine'.setup()]]
+  vim.cmd([[autocmd lualine ColorScheme * lua require'lualine'.setup()
+    autocmd lualine OptionSet background lua require'lualine'.setup()]])
 end
 
 --- Sets &tabline option to lualine
@@ -268,7 +268,7 @@ end
 --- adds auto command to redraw lualine on VimResized event
 local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
-    vim.cmd 'autocmd lualine VimResized * redrawstatus'
+    vim.cmd('autocmd lualine VimResized * redrawstatus')
   else
     vim.go.statusline = ''
     vim.go.laststatus = 0
@@ -281,7 +281,7 @@ local function reset_lualine()
     -- When notices module is not loaded there are no notices to clear.
     modules.utils_notices.clear_notices()
   end
-  vim.cmd [[augroup lualine | exe "autocmd!" | augroup END]]
+  vim.cmd([[augroup lualine | exe "autocmd!" | augroup END]])
   setup_theme()
   -- load components & extensions
   modules.loader.load_all(config)

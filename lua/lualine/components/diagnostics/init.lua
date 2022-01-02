@@ -1,13 +1,13 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local lualine_require = require 'lualine_require'
-local modules = lualine_require.lazy_require {
+local lualine_require = require('lualine_require')
+local modules = lualine_require.lazy_require({
   default_config = 'lualine.components.diagnostics.config',
   sources = 'lualine.components.diagnostics.sources',
   highlight = 'lualine.highlight',
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
-}
+})
 
 local M = lualine_require.require('lualine.component'):extend()
 
@@ -55,14 +55,14 @@ function M:init(options)
 
   -- Error out no source
   if #self.options.sources < 1 then
-    print 'no sources for diagnostics configured'
+    print('no sources for diagnostics configured')
     return ''
   end
-  if vim.fn.has 'nvim-0.6' == 1 then
+  if vim.fn.has('nvim-0.6') == 1 then
     for i, name in ipairs(self.options.sources) do
       if name == 'nvim_lsp' then
         self.options.sources[i] = 'nvim_diagnostic'
-        modules.utils_notices.add_notice [[
+        modules.utils_notices.add_notice([[
 ### diagnostics.source
 Diagnostics source `nvim_lsp` has been deprecated in favour of `nvim_diagnostic`.
 nvim_diagnostic shows diagnostics from neovim's diagnostics api
@@ -76,10 +76,10 @@ It needs to be updated to:
 ```lua
   {'diagnostics', sources = {'nvim_diagnostic'}}
 ```
-]]
+]])
       elseif name == 'nvim' then
         self.options.sources[i] = 'nvim_diagnostic'
-        modules.utils_notices.add_notice [[
+        modules.utils_notices.add_notice([[
 ### diagnostics.source
 Diagnostics source `nvim` has been renamed to `nvim_diagnostic`
 
@@ -91,7 +91,7 @@ It needs to be updated to:
 ```lua
   {'diagnostics', sources = {'nvim_diagnostic'}}
 ```
-]]
+]])
       end
     end
   end

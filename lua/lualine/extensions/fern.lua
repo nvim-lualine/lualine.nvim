@@ -1,6 +1,6 @@
 -- MIT license, see LICENSE for more details.
 -- Extension for fern file explorer.
-local nerdtree = require 'lualine.extensions.nerdtree'
+local nerdtree = require('lualine.extensions.nerdtree')
 
 local M = {}
 
