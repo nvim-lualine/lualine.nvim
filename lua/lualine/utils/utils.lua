@@ -90,7 +90,7 @@ end
 
 -- Check if statusline is on focused window or not
 function M.is_focused()
-  return tonumber(vim.g.actual_curwin) == vim.fn.win_getid()
+  return tonumber(vim.g.actual_curwin) == vim.api.nvim_get_current_win()
 end
 
 --- Check what's the charecter at pos

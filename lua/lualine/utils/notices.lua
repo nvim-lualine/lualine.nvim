@@ -45,7 +45,7 @@ end
 function M.show_notices()
   vim.cmd('silent! keepalt split')
 
-  local winid = vim.fn.win_getid()
+  local winid = vim.api.nvim_get_current_win()
   local bufnr = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_win_set_buf(winid, bufnr)
 
