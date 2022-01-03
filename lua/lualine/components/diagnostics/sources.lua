@@ -12,6 +12,9 @@ M.sources = {
     return error_count, warning_count, info_count, hint_count
   end,
   nvim_diagnostic = function()
+    if vim.diagnostic == nil then
+      return 0, 0, 0, 0
+    end
     local diagnostics = vim.diagnostic.get(0)
     local count = { 0, 0, 0, 0 }
     for _, diagnostic in ipairs(diagnostics) do
