@@ -66,7 +66,7 @@ end
 
 -- Function that runs everytime statusline is updated
 function M:update_status(is_focused)
-  local git_diff = modules.git_diff.get_sign_count((not is_focused and vim.fn.bufnr()))
+  local git_diff = modules.git_diff.get_sign_count((not is_focused and vim.api.nvim_get_current_buf()))
   if git_diff == nil then
     return ''
   end

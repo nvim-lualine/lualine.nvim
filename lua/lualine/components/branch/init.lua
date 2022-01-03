@@ -14,7 +14,7 @@ M.init = function(self, options)
 end
 
 M.update_status = function(_, is_focused)
-  return git_branch.get_branch((not is_focused and vim.fn.bufnr()))
+  return git_branch.get_branch((not is_focused and vim.api.nvim_get_current_buf()))
 end
 
 return M

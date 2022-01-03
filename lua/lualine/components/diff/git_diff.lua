@@ -44,7 +44,7 @@ function M.get_sign_count(bufnr)
   end
   if M.src then
     git_diff = M.src()
-    diff_cache[vim.fn.bufnr()] = git_diff
+    diff_cache[vim.api.nvim_get_current_buf()] = git_diff
   elseif vim.g.actual_curbuf ~= nil and active_bufnr ~= vim.g.actual_curbuf then
     -- Workaround for https://github.com/nvim-lualine/lualine.nvim/issues/286
     -- See upstream issue https://github.com/neovim/neovim/issues/15300
@@ -85,7 +85,7 @@ end
 ---updates the job args
 function M.update_diff_args()
   -- Donn't show git diff when current buffer doesn't have a filename
-  active_bufnr = tostring(vim.fn.bufnr())
+  active_bufnr = tostring(vim.api.nvim_get_current_buf())
   if #vim.fn.expand('%') == 0 then
     M.diff_args = nil
     git_diff = nil
@@ -115,7 +115,7 @@ function M.update_diff_args()
       else
         git_diff = { added = 0, modified = 0, removed = 0 }
       end
-      diff_cache[vim.fn.bufnr()] = git_diff
+      diff_cache[vim.api.nvim_get_current_buf()] = git_diff
     end,
   }
   M.update_git_diff()
