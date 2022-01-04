@@ -31,7 +31,7 @@ M.sources = {
     end
   end,
   ale = function()
-    local ok, data = pcall(vim.fn['ale#statusline#Count'], vim.fn.bufnr())
+    local ok, data = pcall(vim.fn['ale#statusline#Count'], vim.api.nvim_get_current_buf())
     if ok then
       return data.error + data.style_error, data.warning + data.style_warning, data.info, 0
     else

@@ -35,7 +35,7 @@ end
 
 ---updates the current value of git_branch and sets up file watch on HEAD file
 local function update_branch()
-  active_bufnr = tostring(vim.fn.bufnr())
+  active_bufnr = tostring(vim.api.nvim_get_current_buf())
   file_changed:stop()
   local git_dir = current_git_dir
   if git_dir and #git_dir > 0 then
@@ -53,7 +53,7 @@ local function update_branch()
     -- set to '' when git dir was not found
     current_git_branch = ''
   end
-  branch_cache[vim.fn.bufnr()] = current_git_branch
+  branch_cache[vim.api.nvim_get_current_buf()] = current_git_branch
 end
 
 ---returns full path to git directory for dir_path or current directory

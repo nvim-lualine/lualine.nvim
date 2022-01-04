@@ -101,7 +101,7 @@ It needs to be updated to:
 end
 
 function M:update_status()
-  local bufnr = vim.fn.bufnr()
+  local bufnr = vim.api.nvim_get_current_buf()
   local diagnostics_count
   local result = {}
   if self.options.update_in_insert or vim.api.nvim_get_mode().mode:sub(1, 1) ~= 'i' then

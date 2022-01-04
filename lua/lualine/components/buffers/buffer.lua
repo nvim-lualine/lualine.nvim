@@ -13,7 +13,7 @@ end
 
 ---setup icons, modified status for buffer
 function Buffer:get_props()
-  self.file = vim.fn.bufname(self.bufnr)
+  self.file = vim.api.nvim_buf_get_name(self.bufnr)
   self.buftype = vim.api.nvim_buf_get_option(self.bufnr, 'buftype')
   self.filetype = vim.api.nvim_buf_get_option(self.bufnr, 'filetype')
   local modified = self.options.show_modified_status and vim.api.nvim_buf_get_option(self.bufnr, 'modified')

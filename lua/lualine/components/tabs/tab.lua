@@ -17,7 +17,7 @@ function Tab:label()
   local buflist = vim.fn.tabpagebuflist(self.tabnr)
   local winnr = vim.fn.tabpagewinnr(self.tabnr)
   local bufnr = buflist[winnr]
-  local file = vim.fn.bufname(bufnr)
+  local file = vim.api.nvim_buf_get_name(bufnr)
   local buftype = vim.fn.getbufvar(bufnr, '&buftype')
   if buftype == 'help' then
     return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
