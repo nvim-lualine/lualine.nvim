@@ -66,7 +66,7 @@ function M:update_status()
   local data = {}
   local buffers = {}
   for b = 1, vim.fn.bufnr('$') do
-    if vim.api.nvim_buf_get_option(b, 'buflisted') and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
+    if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
       buffers[#buffers + 1] = Buffer({ bufnr = b, options = self.options, highlights = self.highlights })
     end
   end
