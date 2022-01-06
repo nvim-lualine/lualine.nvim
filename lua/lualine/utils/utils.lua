@@ -148,17 +148,16 @@ end
 ---@param fn function Function to call.
 ---@param args table List of arguments used for calling function.
 ---@param times number Number of times to retry on error.
----@retrun any Result of fn.
+---@return any Result of fn.
 function M.retry_call(fn, args, times)
   times = times or 3
-  local ret
-  for _=0,times do
-    ret = {pcall(fn, unpack(args))}
-    if ret[1] == true then
-      return unpack(ret, 2)
+  for _=0,times-1 do
+    local result = {pcall(fn, unpack(args))}
+    if result[1] == true then
+      return unpack(result, 2)
     end
   end
-  error(ret[2])
+  return fn(unpack(args))
 end
 
 --- Wrap a function in retry_call
