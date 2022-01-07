@@ -91,7 +91,7 @@ You'll also need to have a patched font if you want icons.
 
 Lualine has sections as shown below.
 
-```
+```text
 +-------------------------------------------------+
 | A | B | C                             X | Y | Z |
 +-------------------------------------------------+
@@ -99,7 +99,7 @@ Lualine has sections as shown below.
 
 Each sections holds its components e.g. Vim's current mode.
 
-#### Configuring lualine in init.vim
+### Configuring lualine in init.vim
 
 All the examples below are in lua. You can use the same examples
 in `.vim` files by wrapping them in lua heredoc like this:
@@ -198,6 +198,8 @@ lualine defines two kinds of separators:
 - `section_separators`    - separators between sections
 - `components_separators` - separators between the different components in sections
 
+**Note**: if viewing this README in a browser, chances are the characters below will not be visible.
+
 ```lua
 options = {
   section_separators = { left = '', right = '' },
@@ -291,6 +293,7 @@ sections = { lualine_c = { "os.date('%a')", 'data', "require'lsp-status'.status(
 
 Component options can change the way a component behave.
 There are two kinds of options:
+
 - global options affecting all components
 - local options affecting specific
 
@@ -321,7 +324,7 @@ They set behavior of lualine.
 Values set here are treated as default for other options
 that work in component level.
 
-for example even though `icons_enabled` is a general component option.
+For example even though `icons_enabled` is a general component option.
 you can set `icons_enabled` to `false` and icons will be disabled on all
 component. You can still overwrite defaults set in option table by specifying
 the option value in component.
