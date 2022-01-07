@@ -82,13 +82,10 @@ Lualine has sections as shown below.
 
 Each sections holds its components e.g. Vim’s current mode.
 
-                                     *lualine-Configuring-lualine-in-init.vim*
+CONFIGURING LUALINE IN INIT.VIM ~
 
-Configuring lualine in init.vim        All the examples below are in lua. You
-                                       can use the same examples in `.vim`
-                                       files by wrapping them in lua heredoc
-                                       like this:
-
+All the examples below are in lua. You can use the same examples in `.vim`
+files by wrapping them in lua heredoc like this:
 
 >
     lua << END
@@ -195,6 +192,9 @@ lualine defines two kinds of separators:
 - `components_separators` - separators between the different components in sections
 
 
+**Note**: if viewing this README in a browser, chances are the characters below
+will not be visible.
+
 >
     options = {
       section_separators = { left = '', right = '' },
@@ -297,8 +297,12 @@ global variables - require statements
 COMPONENT OPTIONS ~
 
 Component options can change the way a component behave. There are two kinds of
-options: - global options affecting all components - local options affecting
-specific
+options:
+
+
+- global options affecting all components
+- local options affecting specific
+
 
 Global options can be used as local options (can be applied to specific
 components) but you cannot use local options as global. Global option used
@@ -330,7 +334,7 @@ Global options                         These are `options` that are used in
 Values set here are treated as default for other options that work in component
 level.
 
-for example even though `icons_enabled` is a general component option. you can
+For example even though `icons_enabled` is a general component option. you can
 set `icons_enabled` to `false` and icons will be disabled on all component. You
 can still overwrite defaults set in option table by specifying the option value
 in component.
