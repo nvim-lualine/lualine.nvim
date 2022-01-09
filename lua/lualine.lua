@@ -9,7 +9,7 @@ local modules = lualine_require.lazy_require({
   utils_notices = 'lualine.utils.notices',
   config_module = 'lualine.config',
 })
-local config -- Stores cureently applied config
+local config -- Stores currently applied config
 local new_config = true -- Stores config that will be applied
 
 -- Helper for apply_transitional_separators()
