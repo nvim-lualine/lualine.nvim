@@ -90,44 +90,6 @@ component type '%s' isn't recognised. Check if spelling is correct.]],
   end
 end
 
-local function option_deprecatation_notice(component)
-  local types = {
-    type_name = function()
-      local changed_to = component.type == 'luae' and 'lua_expr' or 'vim_fun'
-      modules.notice.add_notice(string.format(
-        [[
-### option.type.%s
-
-type name `%s` has been deprecated.
-Please use `%s`.
-
-You have some thing like this in your config config for %s component:
-
-```lua
-  type = %s,
-```
-
-You'll have to change it to this to retain old behavior:
-
-```lua
-  type = %s
-```
-]],
-        component.type,
-        component.type,
-        changed_to,
-        tostring(component[1]),
-        component.type,
-        changed_to
-      ))
-      component.type = changed_to
-    end,
-  }
-  if component.type == 'luae' or component.type == 'vimf' then
-    types.type_name()
-  end
-end
-
 --- Shows notice about invalid types passed as component
 --- @param index number the index of component jn section table
 --- @param component table containing component elements
@@ -182,7 +144,6 @@ local function load_sections(sections, options)
         component.self.section = section_name
         -- apply default args
         component = vim.tbl_extend('keep', component, options)
-        option_deprecatation_notice(component)
         section[index] = component_loader(component)
       end
     end

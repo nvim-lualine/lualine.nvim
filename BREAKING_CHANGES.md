@@ -89,3 +89,9 @@ function my_comp:init(options)
 end
 ```
 
+### Type option(luae & vimf) rename
+These were hard to understand before. Now the name should convey more info.
+
+- luae -> lua_expr
+- vimf -> vim_fun
+
