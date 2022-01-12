@@ -53,51 +53,16 @@ function M:init(options)
     }
   end
 
-  -- Error out no source
-  if #self.options.sources < 1 then
-    print('no sources for diagnostics configured')
-    return ''
-  end
-  if vim.fn.has('nvim-0.6') == 1 then
-    for i, name in ipairs(self.options.sources) do
-      if name == 'nvim_lsp' then
-        self.options.sources[i] = 'nvim_diagnostic'
-        modules.utils_notices.add_notice([[
-### diagnostics.source
-Diagnostics source `nvim_lsp` has been deprecated in favour of `nvim_diagnostic`.
-nvim_diagnostic shows diagnostics from neovim's diagnostics api
-while nvim_lsp used to only show lsp diagnostics.
-
-You've something like this your config.
-```lua
-  {'diagnostics', sources = {'nvim_lsp'}}
-```
-It needs to be updated to:
-```lua
-  {'diagnostics', sources = {'nvim_diagnostic'}}
-```
-]])
-      elseif name == 'nvim' then
-        self.options.sources[i] = 'nvim_diagnostic'
-        modules.utils_notices.add_notice([[
-### diagnostics.source
-Diagnostics source `nvim` has been renamed to `nvim_diagnostic`
-
-You've something like this your config.
-```lua
-  {'diagnostics', sources = {'nvim'}}
-```
-It needs to be updated to:
-```lua
-  {'diagnostics', sources = {'nvim_diagnostic'}}
-```
-]])
-      end
-    end
-  end
   -- Initialize variable to store last update so we can use it in insert
   -- mode for no update_in_insert
   self.last_diagnostics_count = {}
+
+  -- Error out no source
+  if #self.options.sources < 1 then
+    modules.utils_notices.add_notice(
+      '### diagnostics.sources\n\nno sources for diagnostics configured.\nPlease specify which diagnostics source you want lualine to use with `sources` option.\n'
+    )
+  end
 end
 
 function M:update_status()

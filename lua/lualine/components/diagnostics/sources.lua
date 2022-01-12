@@ -5,10 +5,29 @@ local M = {}
 ---        info_count:number, hint_count:number
 M.sources = {
   nvim_lsp = function()
-    local error_count = vim.lsp.diagnostic.get_count(0, 'Error')
-    local warning_count = vim.lsp.diagnostic.get_count(0, 'Warning')
-    local info_count = vim.lsp.diagnostic.get_count(0, 'Information')
-    local hint_count = vim.lsp.diagnostic.get_count(0, 'Hint')
+    local error_count, warning_count, info_count, hint_count
+    if vim.fn.has('nvim-0.6') == 1 then
+      -- On nvim 0.6+ use vim.diagnostic to get lsp generated diagnostic count.
+      local diagnostics = vim.diagnostic.get(0)
+      local count = { 0, 0, 0, 0 }
+      for _, diagnostic in ipairs(diagnostics) do
+        if vim.startswith(vim.diagnostic.get_namespace(diagnostic.namespace).name, 'vim.lsp') then
+          count[diagnostic.severity] = count[diagnostic.severity] + 1
+        end
+      end
+      error_count = count[vim.diagnostic.severity.ERROR]
+      warning_count = count[vim.diagnostic.severity.WARN]
+      info_count = count[vim.diagnostic.severity.INFO]
+      hint_count = count[vim.diagnostic.severity.HINT]
+    else
+      -- On 0.5 use older vim.lsp.diagnostic module.
+      -- Maybe we should phase out support for 0.5 though I haven't yet found a solid reason to.
+      -- Eventually this will be removed when 0.5 is no longer supported.
+      error_count = vim.lsp.diagnostic.get_count(0, 'Error')
+      warning_count = vim.lsp.diagnostic.get_count(0, 'Warning')
+      info_count = vim.lsp.diagnostic.get_count(0, 'Information')
+      hint_count = vim.lsp.diagnostic.get_count(0, 'Hint')
+    end
     return error_count, warning_count, info_count, hint_count
   end,
   nvim_diagnostic = function()
