@@ -11,8 +11,8 @@ local colors = {
   yellow = '#e5c07b',
   fg     = '#abb2bf',
   bg     = '#282c34',
-  gray1  = '#5c6370',
-  gray2  = '#2c323d',
+  gray1  = '#828997',
+  gray2  = '#2c323c',
   gray3  = '#3e4452',
 }
 
