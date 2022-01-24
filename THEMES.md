@@ -189,18 +189,18 @@ them based you your `background` option.
 
 ### onedark
 <p>
-<img width='700' src='https://user-images.githubusercontent.com/41551030/108649068-e5064880-74bc-11eb-9a8f-5e3b8f401efe.png'/>
-<img width='700' src='https://user-images.githubusercontent.com/41551030/108649071-e6377580-74bc-11eb-8715-99d5aaf9eed0.png'/>
-<img width='700' src='https://user-images.githubusercontent.com/41551030/108649075-e9326600-74bc-11eb-8a94-210575aca09e.png'/>
-<img width='700' src='https://user-images.githubusercontent.com/41551030/108649077-ea639300-74bc-11eb-8166-3bbccd66e3a5.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/8293386/150810955-ef6bf575-4a96-439c-a708-37dd25c63a47.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/8293386/150811104-31fbc04c-1500-4779-a079-98bd1e56701d.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/8293386/150811324-d1169232-a7b6-4f79-a104-031ea7972a32.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/8293386/150811517-f90a406d-a4b9-4bd5-913c-ec1ae547c400.png'/>
 </p>
 
 ### onelight
 <p>
-<img width='700' src='https://user-images.githubusercontent.com/41551030/108649091-f18aa100-74bc-11eb-9e1e-e55fbae7c6b4.png'/>
-<img width='700' src='https://user-images.githubusercontent.com/41551030/108649094-f2bbce00-74bc-11eb-9d72-41362bd40c73.png'/>
-<img width='700' src='https://user-images.githubusercontent.com/41551030/108649095-f3546480-74bc-11eb-8ea3-9a5b7ff3c3c1.png'/>
-<img width='700' src='https://user-images.githubusercontent.com/41551030/108649096-f4859180-74bc-11eb-8aec-217cd5053537.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/8293386/150809518-b596f9bc-c351-4e71-9dec-e1856efaff8a.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/8293386/150809979-237c6414-4278-447d-a00f-0a32e2770195.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/8293386/150810292-afeecfce-3b53-468d-aed9-1bb5ea9ed46f.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/8293386/150810514-81024b2c-3b80-466f-85ce-914e191bb4f9.png'/>
 </p>
 
 ### palenight
