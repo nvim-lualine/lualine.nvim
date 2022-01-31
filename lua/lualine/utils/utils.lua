@@ -151,8 +151,8 @@ end
 ---@return any Result of fn.
 function M.retry_call(fn, args, times)
   times = times or 3
-  for _=0,times-1 do
-    local result = {pcall(fn, unpack(args))}
+  for _ = 0, times - 1 do
+    local result = { pcall(fn, unpack(args)) }
     if result[1] == true then
       return unpack(result, 2)
     end
@@ -166,7 +166,7 @@ end
 ---@return function retry call wraped function
 function M.retry_call_wrap(fn, times)
   return function(...)
-    return M.retry_call(fn, {...}, times)
+    return M.retry_call(fn, { ... }, times)
   end
 end
 
