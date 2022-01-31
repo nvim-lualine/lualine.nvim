@@ -4,52 +4,62 @@ on:
   push:
     branches: [master]
   pull_request:
+    branches: [master]
+
+# Cancel any in-progress CI runs for a PR if it is updated
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 
 jobs:
-  appimage-ubuntu:
-    name: ubuntu
-    runs-on: ubuntu-latest
+  tests:
+    name: ${{ matrix.os }} ${{ matrix.flavor }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - flavor: nvim-0.5
+            runner: ubuntu-20.04
+            os: linux
+            nvim_version: v0.5.0
+          - flavor: nvim-0.6
+            runner: ubuntu-20.04
+            os: linux
+            nvim_version: v0.6.0
+          - flavor: nvim-nightly
+            runner: ubuntu-20.04
+            os: linux
+            nvim_version: nightly
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
       - name: Setup Test Environment
         run: |
-          date +%F > todays-date
-          mkdir -p ~/.local/share/nvim/site/pack/vendor/start
-          git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
-          git clone --depth 1 https://github.com/kyazdani42/nvim-web-devicons ~/.local/share/nvim/site/pack/vendor/start/nvim-web-devicons
-          ln -s $(pwd) ~/.local/share/nvim/site/pack/vendor/start
-      - name: Get neovim v0.5.0
-        uses: actions/cache@v2
+          mkdir -p ./tmp_home/nvim/pack/vendor/start
+          git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ./tmp_home/nvim/pack/vendor/start/plenary.nvim
+          git clone --depth 1 https://github.com/kyazdani42/nvim-web-devicons ./tmp_home/nvim/pack/vendor/start/nvim-web-devicons
+          ln -s $(pwd) ./tmp_home/nvim/pack/vendor/start
+      - name: Setup neovim ${{matrix.nvim_version}}
+        uses: rhysd/action-setup-vim@v1
         with:
-          path: |
-            build/neovim/v0.5.0
-          key: ${{ runner.os }}-appimage-0.5
-      - name: Run Test on neovim v0.5.0
+            neovim: true
+            version: ${{matrix.nvim_version}}
+      - name: Run tests
         run: |
-          test -d build/neovim/v0.5.0 || {
-            mkdir -p build/neovim/v0.5.0
-            curl -Lo build/neovim/v0.5.0/nvim https://github.com/neovim/neovim/releases/download/v0.5.0/nvim.appimage
-            chmod +x build/neovim/v0.5.0/nvim
-          }
-          build/neovim/v0.5.0/nvim --headless -u lua/tests/minimal_init.lua -c "PlenaryBustedDirectory lua/tests/ { minimal_init = './lua/tests/minimal_init.lua' }"
-      # - name: Get neovim nightly
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: |
-      #       build/neovim/nightly
-      #     key: ${{ runner.os }}-appimage-${{ hashFiles('todays-date') }}
-      # - name: Run Test on neovim nightly
-      #   run: |
-      #     test -d build/neovim/nightly || {
-      #       mkdir -p build/neovim/nightly
-      #       curl -Lo build/neovim/nightly/nvim https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
-      #       chmod +x build/neovim/nightly/nvim
-      #     }
-      #     build/neovim/nightly/nvim --headless -u lua/tests/minimal_init.lua -c "PlenaryBustedDirectory lua/tests/ { minimal_init = './lua/tests/minimal_init.lua' }"
-      - name: Lint
+          make test
+  lint:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup linters
         run: |
           sudo apt-get update
           sudo apt-get install luarocks
           sudo luarocks install luacheck
+      - name: Run luacheck
+        run: |
           luacheck lua/
           luacheck examples/
