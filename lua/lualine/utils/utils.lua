@@ -143,4 +143,31 @@ function M.is_component(comp)
   return mt and mt.__is_lualine_component == true
 end
 
+--- Call function with args and return it's result.
+--- If error occurs during fn retry times times.
+---@param fn function Function to call.
+---@param args table List of arguments used for calling function.
+---@param times number Number of times to retry on error.
+---@return any Result of fn.
+function M.retry_call(fn, args, times)
+  times = times or 3
+  for _=0,times-1 do
+    local result = {pcall(fn, unpack(args))}
+    if result[1] == true then
+      return unpack(result, 2)
+    end
+  end
+  return fn(unpack(args))
+end
+
+--- Wrap a function in retry_call
+---@param fn function Function to call.
+---@param times number Number of times to retry on error.
+---@return function retry call wraped function
+function M.retry_call_wrap(fn, times)
+  return function(...)
+    return M.retry_call(fn, {...}, times)
+  end
+end
+
 return M
