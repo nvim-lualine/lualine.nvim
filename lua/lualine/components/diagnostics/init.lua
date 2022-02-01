@@ -20,6 +20,10 @@ function M:init(options)
   M.super.init(self, options)
   -- Apply default options
   self.options = vim.tbl_deep_extend('keep', self.options or {}, modules.default_config.options)
+  -- apply default sources
+  if not self.options.sources then
+    self.options.sources = { vim.fn.has('nvim-0.6') == 1 and 'nvim_diagnostic' or 'nvim_lsp', 'coc' }
+  end
   -- Apply default symbols
   self.symbols = vim.tbl_extend(
     'keep',

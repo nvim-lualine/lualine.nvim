@@ -66,6 +66,7 @@ describe('Section genarator', function()
   end)
 
   it('can remove separators from component with custom colors', function()
+    vim.g.actual_curwin = tostring(vim.api.nvim_get_current_win())
     local opts = build_component_opts { section_separators = { left = '', right = '' } }
     local opts_colored = build_component_opts { color = 'MyColor' }
     local opts_colored2 = build_component_opts {
@@ -104,5 +105,6 @@ describe('Section genarator', function()
         .. ' test %#lualine_MySection_normal#%#lualine_MySection_normal# test ',
       sec.draw_section(section, 'MySection')
     )
+    vim.g.actual_curwin = nil
   end)
 end)

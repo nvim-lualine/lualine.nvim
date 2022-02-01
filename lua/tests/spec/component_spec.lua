@@ -280,12 +280,12 @@ describe('Filetype component', function()
         return '*', 'test_highlight_group'
       end,
     }
-
+    vim.g.actual_curwin = tostring(vim.api.nvim_get_current_win())
     local hl = require('lualine.highlight')
     local utils = require('lualine.utils.utils')
     stub(hl, 'create_component_highlight_group')
     stub(utils, 'extract_highlight_colors')
-    hl.create_component_highlight_group.returns('MyCompHl')
+    hl.create_component_highlight_group.returns { name = 'MyCompHl', no_mode = false, section = 'a' }
     utils.extract_highlight_colors.returns('#000')
 
     local opts = build_component_opts {
@@ -300,6 +300,7 @@ describe('Filetype component', function()
     hl.create_component_highlight_group:revert()
     utils.extract_highlight_colors:revert()
     package.loaded['nvim-web-devicons'] = nil
+    vim.g.actual_curwin = nil
   end)
 
   it("Doesn't color when colored is false", function()
