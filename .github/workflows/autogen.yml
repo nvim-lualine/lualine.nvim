@@ -1,6 +1,14 @@
 name: autogen
 on:
   push:
+    branches: [master]
+    paths:
+      - "lua/**.lua"
+      - "examples/**.lua"
+      - ".stylua.toml"
+      - "README.md"
+  pull_request:
+    branches: [master]
     paths:
       - "lua/**.lua"
       - "examples/**.lua"
