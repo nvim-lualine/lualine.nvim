@@ -14,7 +14,6 @@ local create_cterm_colors = false
 
 -- table to store the highlight names created by lualine
 local loaded_highlights = {}
-local hl_fns = {}
 
 -- table to map mode to highlight suffixes
 local mode_to_highlight = {
@@ -47,7 +46,6 @@ local function clear_highlights()
     vim.cmd('highlight clear ' .. highlight_name)
   end
   loaded_highlights = {}
-  hl_fns = {}
 end
 
 ---converts cterm, color_name type colors to #rrggbb format
@@ -184,6 +182,8 @@ end
 
 -- Helper function for create component highlight
 ---Handles fall back of colors when creating highlight group
+---@param mode string mode which default component color should be given.
+---@param section string the lualine section component is in.
 ---@param color table color passed for creating component highlight
 ---@param options_color table color set by color option for component
 ---       this is first fall back
@@ -254,17 +254,14 @@ function M.create_component_highlight_group(color, highlight_tag, options)
   if type(color) == 'string' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag, 'no_mode' }, '_')
     M.highlight(highlight_group_name, nil, nil, nil, color) -- l8nk to group
-    return { name = highlight_group_name, no_mode = true, fmt = '%%#' .. highlight_group_name .. '#' }
+    return { name = highlight_group_name, no_mode = true }
   end
   if type(color) == 'function' then
-    table.insert(hl_fns, color)
-    local highlight_group_name = table.concat({ 'lualine', highlight_tag, 'fn' .. #hl_fns }, '_')
+    local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
     return {
       name = highlight_group_name,
-      fn_id = #hl_fns,
-      is_fn = true,
+      fn = color,
       no_mode = false,
-      fmt = '%%#' .. highlight_group_name .. '#',
       section = section,
       component_color = color ~= options.color and options.color,
     }
@@ -274,7 +271,7 @@ function M.create_component_highlight_group(color, highlight_tag, options)
     -- each mode as they will surely look the same. So we can work without options
     local highlight_group_name = table.concat({ 'lualine', highlight_tag, 'no_mode' }, '_')
     M.highlight(highlight_group_name, color.fg, color.bg, color.gui, nil)
-    return { name = highlight_group_name, no_mode = true, fmt = '%%#' .. highlight_group_name .. '#' }
+    return { name = highlight_group_name, no_mode = true, section = section }
   end
 
   local modes = {
@@ -294,7 +291,6 @@ function M.create_component_highlight_group(color, highlight_tag, options)
   return {
     name = options.self.section .. '_' .. highlight_tag,
     no_mode = false,
-    fmt = table.concat({ '%%#' .. options.self.section, highlight_tag, '%s#' }, '_'),
     section = section,
   }
 end
@@ -305,7 +301,7 @@ end
 ---  this parameter to receive highlight that was created
 ---@return string formatted highlight group name
 function M.component_format_highlight(highlight)
-  if not highlight.is_fn then
+  if not highlight.fn then
     local highlight_group = highlight.name
     if highlight.no_mode then
       return '%#' .. highlight_group .. '#'
@@ -314,7 +310,7 @@ function M.component_format_highlight(highlight)
     return '%#' .. highlight_group .. '#'
   else
     local mode = require('lualine.utils.mode').get_mode()
-    local color = hl_fns[highlight.fn_id] { mode = mode, section = highlight.section }
+    local color = highlight.fn { mode = mode, section = highlight.section }
     if type(color) == 'string' then
       local hl_name = highlight.name .. '_no_mode'
       M.highlight(hl_name, nil, nil, nil, color)
