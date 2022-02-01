@@ -387,14 +387,19 @@ General component options              These are options that control behavior
     
           -- Defines a custom color for the component:
           --
-          -- 'highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' }
+          -- 'highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' } | function
           -- Note:
           --  '|' is synonymous with 'or', meaning a different acceptable format for that placeholder.
+          -- function has to return 'highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' }
           --
           -- Examples:
           --   color = { fg = '#ffaa88', bg = 'grey', gui='italic,bold' },
           --   color = { fg = 204 }   -- When fg/bg are omitted, they default to the your theme's fg/bg.
           --   color = 'WarningMsg'   -- Highlight groups can also be used.
+          --   color = function(mode, section)
+          --      return { fg = vim.fn.mode() == 'n' and '#ffaa88' or '#33aaff',
+          --               bg = 'grey', gui='italic,bold' }
+          --      end,
           --
           color = nil, -- The default is your theme's color for that section and mode.
     
