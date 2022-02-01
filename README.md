@@ -361,7 +361,7 @@ sections = {
                             --  Passing an empty string disables the separator.
                             --
                             -- These options can be used to set colored separators
-                            -- around a component. 
+                            -- around a component.
                             --
                             -- The options need to be set as such:
                             --   separator = { left = '', right = ''}
@@ -660,8 +660,8 @@ extensions = {'quickfix'}
 - nerdtree
 - nvim-tree
 - quickfix
-- toggleterm
 - symbols-outline
+- toggleterm
 
 #### Custom extensions
 

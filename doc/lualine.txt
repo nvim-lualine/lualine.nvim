@@ -374,7 +374,7 @@ General component options              These are options that control behavior
                                 --  Passing an empty string disables the separator.
                                 --
                                 -- These options can be used to set colored separators
-                                -- around a component. 
+                                -- around a component.
                                 --
                                 -- The options need to be set as such:
                                 --   separator = { left = '', right = ''}
@@ -694,8 +694,8 @@ extensions with:
 - nerdtree
 - nvim-tree
 - quickfix
-- toggleterm
 - symbols-outline
+- toggleterm
 
 
                                                    *lualine-Custom-extensions*
