@@ -3,10 +3,10 @@
 
 local lualine_require = require('lualine_require')
 local require = lualine_require.require
-local modules = lualine_require.lazy_require({
+local modules = lualine_require.lazy_require {
   utils = 'lualine.utils.utils',
   notice = 'lualine.utils.notices',
-})
+}
 local is_valid_filename = lualine_require.is_valid_filename
 local sep = lualine_require.sep
 
@@ -213,10 +213,10 @@ end
 local function load_theme(theme_name)
   assert(is_valid_filename(theme_name), 'Invalid filename')
   local retval
-  local path = table.concat({ 'lua/lualine/themes/', theme_name, '.lua' })
+  local path = table.concat { 'lua/lualine/themes/', theme_name, '.lua' }
   local files = vim.api.nvim_get_runtime_file(path, true)
   if #files <= 0 then
-    path = table.concat({ 'lua/lualine/themes/', theme_name, '/init.lua' })
+    path = table.concat { 'lua/lualine/themes/', theme_name, '/init.lua' }
     files = vim.api.nvim_get_runtime_file(path, true)
   end
   local n_files = #files

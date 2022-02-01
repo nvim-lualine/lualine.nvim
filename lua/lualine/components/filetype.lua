@@ -1,10 +1,10 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local lualine_require = require('lualine_require')
-local modules = lualine_require.lazy_require({
+local modules = lualine_require.lazy_require {
   highlight = 'lualine.highlight',
   utils = 'lualine.utils.utils',
-})
+}
 local M = lualine_require.require('lualine.component'):extend()
 
 local default_options = {

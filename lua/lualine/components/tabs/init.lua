@@ -58,7 +58,7 @@ function M:update_status()
   local data = {}
   local tabs = {}
   for t = 1, vim.fn.tabpagenr('$') do
-    tabs[#tabs + 1] = Tab({ tabnr = t, options = self.options, highlights = self.highlights })
+    tabs[#tabs + 1] = Tab { tabnr = t, options = self.options, highlights = self.highlights }
   end
   -- mark the first, last, current, before current, after current tabpages
   -- for rendering
@@ -93,7 +93,7 @@ function M:update_status()
   -- start drawing from current tab and draw left and right of it until
   -- all tabpages are drawn or max_length has been reached.
   if current_tab == nil then -- maybe redundent code
-    local t = Tab({ tabnr = vim.fn.tabpagenr(), options = self.options, highlights = self.highlights })
+    local t = Tab { tabnr = vim.fn.tabpagenr(), options = self.options, highlights = self.highlights }
     t.current = true
     t.last = true
     data[#data + 1] = t:render()

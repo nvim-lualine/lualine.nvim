@@ -67,7 +67,7 @@ function M:update_status()
   local buffers = {}
   for b = 1, vim.fn.bufnr('$') do
     if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
-      buffers[#buffers + 1] = Buffer({ bufnr = b, options = self.options, highlights = self.highlights })
+      buffers[#buffers + 1] = Buffer { bufnr = b, options = self.options, highlights = self.highlights }
     end
   end
   local current_bufnr = vim.api.nvim_get_current_buf()
@@ -110,7 +110,7 @@ function M:update_status()
   -- start drawing from current buffer and draw left and right of it until
   -- all buffers are drawn or max_length has been reached.
   if current == -2 then
-    local b = Buffer({ bufnr = vim.api.nvim_get_current_buf(), options = self.options, highlights = self.highlights })
+    local b = Buffer { bufnr = vim.api.nvim_get_current_buf(), options = self.options, highlights = self.highlights }
     b.current = true
     if self.options.self.section < 'lualine_x' then
       b.last = true

@@ -1,8 +1,8 @@
 local lualine_require = require('lualine_require')
-local modules = lualine_require.lazy_require({
+local modules = lualine_require.lazy_require {
   utils = 'lualine.utils.utils',
   Job = 'lualine.utils.job',
-})
+}
 
 local M = {}
 

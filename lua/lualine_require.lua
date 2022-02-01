@@ -53,10 +53,10 @@ function M.require(module)
     end
   end
 
-  pattern_path = table.concat({ 'lua/', module:gsub('%.', '/'), '.lua' })
+  pattern_path = table.concat { 'lua/', module:gsub('%.', '/'), '.lua' }
   local paths = vim.api.nvim_get_runtime_file(pattern_path, false)
   if #paths <= 0 then
-    pattern_path = table.concat({ 'lua/', module:gsub('%.', '/'), '/init.lua' })
+    pattern_path = table.concat { 'lua/', module:gsub('%.', '/'), '/init.lua' }
     paths = vim.api.nvim_get_runtime_file(pattern_path, false)
   end
   if #paths > 0 then

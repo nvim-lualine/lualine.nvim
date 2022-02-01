@@ -1,13 +1,13 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local lualine_require = require('lualine_require')
-local modules = lualine_require.lazy_require({
+local modules = lualine_require.lazy_require {
   default_config = 'lualine.components.diagnostics.config',
   sources = 'lualine.components.diagnostics.sources',
   highlight = 'lualine.highlight',
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
-})
+}
 
 local M = lualine_require.require('lualine.component'):extend()
 

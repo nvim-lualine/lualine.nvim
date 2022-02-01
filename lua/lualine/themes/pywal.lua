@@ -2,9 +2,9 @@
 -- MIT license, see LICENSE for more details.
 
 local lualine_require = require('lualine_require')
-local modules = lualine_require.lazy_require({
+local modules = lualine_require.lazy_require {
   utils_notices = 'lualine.utils.notices',
-})
+}
 local sep = package.config:sub(1, 1)
 local wal_colors_path = table.concat({ os.getenv('HOME'), '.cache', 'wal', 'colors.sh' }, sep)
 local wal_colors_file = io.open(wal_colors_path, 'r')

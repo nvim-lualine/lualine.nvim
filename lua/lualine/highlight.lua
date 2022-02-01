@@ -3,10 +3,10 @@
 local M = {}
 local lualine_require = require('lualine_require')
 local require = lualine_require.require
-local modules = lualine_require.lazy_require({
+local modules = lualine_require.lazy_require {
   utils = 'lualine.utils.utils',
   color_utils = 'lualine.utils.color_utils',
-})
+}
 
 local section_highlight_map = { x = 'c', y = 'b', z = 'a' }
 local active_theme = nil

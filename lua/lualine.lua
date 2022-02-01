@@ -1,14 +1,14 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local lualine_require = require('lualine_require')
-local modules = lualine_require.lazy_require({
+local modules = lualine_require.lazy_require {
   highlight = 'lualine.highlight',
   loader = 'lualine.utils.loader',
   utils_section = 'lualine.utils.section',
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
   config_module = 'lualine.config',
-})
+}
 local config -- Stores currently applied config
 local new_config = true -- Stores config that will be applied
 
