@@ -15,7 +15,7 @@ local highlight = require('lualine.highlight')
 ---@return string formated string for a section
 --TODO Clean this up this does lots of messy stuff.
 function M.draw_section(section, section_name, is_focused)
-  local highlight_name = highlight.format_highlight('lualine_' .. section_name, is_focused)
+  local highlight_name = highlight.format_highlight(section_name, is_focused)
 
   local status = {}
   for _, component in pairs(section) do

@@ -10,6 +10,7 @@ local modules = lualine_require.lazy_require {
 
 local section_highlight_map = { x = 'c', y = 'b', z = 'a' }
 local active_theme = nil
+local theme_hls = {}
 local create_cterm_colors = false
 
 -- table to store the highlight names created by lualine
@@ -153,15 +154,15 @@ end
 function M.create_highlight_groups(theme)
   clear_highlights()
   active_theme = theme
+  theme_hls = {}
+  local psudo_options = {self={section='lualine_a'}}
   create_cterm_colors = not vim.go.termguicolors
   for mode, sections in pairs(theme) do
+    theme_hls[mode] = {}
     for section, color in pairs(sections) do
-      local highlight_group_name = { 'lualine', section, mode }
-      if type(color) == 'string' then -- link to a highlight group
-        M.highlight(table.concat(highlight_group_name, '_'), nil, nil, nil, color)
-      else -- Define a new highlight
-        M.highlight(table.concat(highlight_group_name, '_'), color.fg, color.bg, color.gui, nil)
-      end
+      local hl_tag = table.concat({section, mode}, '_')
+      psudo_options.self.section = 'lualine_'..section
+      theme_hls[mode][section] = M.create_component_highlight_group(color, hl_tag, psudo_options, true)
     end
   end
 end
@@ -213,6 +214,8 @@ local function get_default_component_color(mode, section, color, options_color)
   end
   if type(default_color) == 'string' then
     default_color = modules.utils.extract_highlight_colors(default_color)
+  elseif type(default_color) == 'function' then
+    default_color = default_color(mode, section)
   end
   if type(default_color) == 'table' then
     if not ret.fg and default_color.fg then
@@ -232,9 +235,9 @@ end
 ---@param highlight_tag string is unique tag for highlight group
 ---returns the name of highlight group
 ---@param options table is parameter of component.init() function
----@return string unique name that can be used by component_format_highlight
+---@return table that can be used by component_format_highlight
 ---  to retrieve highlight group
-function M.create_component_highlight_group(color, highlight_tag, options)
+function M.create_component_highlight_group(color, highlight_tag, options, apply_no_default)
   local tag_id = 0
   -- convert lualine_a -> a before setting section
   local section = options.self.section:match('lualine_(.*)')
@@ -242,7 +245,7 @@ function M.create_component_highlight_group(color, highlight_tag, options)
     section = section_highlight_map[section]
   end
   while
-    M.highlight_exists(table.concat({ 'lualine', highlight_tag, 'no_mode' }, '_'))
+    M.highlight_exists(table.concat({ 'lualine', highlight_tag }, '_'))
     or (
       options.self.section
       and M.highlight_exists(table.concat({ options.self.section, highlight_tag, 'normal' }, '_'))
@@ -252,9 +255,9 @@ function M.create_component_highlight_group(color, highlight_tag, options)
     tag_id = tag_id + 1
   end
   if type(color) == 'string' then
-    local highlight_group_name = table.concat({ 'lualine', highlight_tag, 'no_mode' }, '_')
+    local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
     M.highlight(highlight_group_name, nil, nil, nil, color) -- l8nk to group
-    return { name = highlight_group_name, no_mode = true }
+    return { name = highlight_group_name, no_mode = true, link=true, no_default = apply_no_default }
   end
   if type(color) == 'function' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
@@ -264,14 +267,15 @@ function M.create_component_highlight_group(color, highlight_tag, options)
       no_mode = false,
       section = section,
       component_color = color ~= options.color and options.color,
+      no_default = apply_no_default,
     }
   end
-  if color.bg and color.fg then
+  if apply_no_default or (color.bg and color.fg) then
     -- When bg and fg are both present we donn't need to set highlighs for
     -- each mode as they will surely look the same. So we can work without options
-    local highlight_group_name = table.concat({ 'lualine', highlight_tag, 'no_mode' }, '_')
+    local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
     M.highlight(highlight_group_name, color.fg, color.bg, color.gui, nil)
-    return { name = highlight_group_name, no_mode = true, section = section }
+    return { name = highlight_group_name, no_mode = true, section = section, no_default = apply_no_default, }
   end
 
   local modes = {
@@ -292,6 +296,7 @@ function M.create_component_highlight_group(color, highlight_tag, options)
     name = options.self.section .. '_' .. highlight_tag,
     no_mode = false,
     section = section,
+    no_default = apply_no_default,
   }
 end
 
@@ -300,25 +305,25 @@ end
 ---  return value of create_component_highlight_group is to be passed in
 ---  this parameter to receive highlight that was created
 ---@return string formatted highlight group name
-function M.component_format_highlight(highlight)
+function M.component_format_highlight(highlight, is_focused)
   if not highlight.fn then
     local highlight_group = highlight.name
     if highlight.no_mode then
       return '%#' .. highlight_group .. '#'
     end
-    highlight_group = M.append_mode(highlight_group)
+    highlight_group = M.append_mode(highlight_group, is_focused)
     return '%#' .. highlight_group .. '#'
   else
     local mode = require('lualine.utils.mode').get_mode()
     local color = highlight.fn { mode = mode, section = highlight.section }
     if type(color) == 'string' then
-      local hl_name = highlight.name .. '_no_mode'
+      local hl_name = highlight.name
       M.highlight(hl_name, nil, nil, nil, color)
       return '%#' .. hl_name .. '#'
     elseif type(color) == 'table' then
-      local hl_name = highlight.name .. '_no_mode'
-      if not color.fg or not color.bg then
-        hl_name = M.append_mode(highlight.name)
+      local hl_name = highlight.name
+      if not highlight.no_default and not (color.fg and color.bg) then
+        hl_name = M.append_mode(highlight.name, is_focused)
         color = get_default_component_color(mode, highlight.section, color, highlight.component_color)
       end
       M.highlight(hl_name, color.fg, color.bg, color.gui, nil)
@@ -328,21 +333,39 @@ function M.component_format_highlight(highlight)
 end
 
 ---@description: retrieve highlight_groups for section
----@param highlight_group string highlight group name without mode
+---@param section string highlight group name without mode
 ---  return value of create_component_highlight_group is to be passed in
 ---  this parameter to receive highlight that was created
 ---@param is_focused boolean
 ---@return string formatted highlight group name
-function M.format_highlight(highlight_group, is_focused)
-  local highlight_name = M.append_mode(highlight_group, is_focused)
-  if highlight_group > 'lualine_c' and not M.highlight_exists(highlight_name) then
-    highlight_group = 'lualine_' .. section_highlight_map[highlight_group:match('lualine_(.)')]
-    highlight_name = M.append_mode(highlight_group, is_focused)
+function M.format_highlight(section, is_focused)
+  local mode
+  if is_focused then
+    mode = mode_to_highlight[require('lualine.utils.mode').get_mode()] or '_normal'
+  else
+    mode = '_inactive'
   end
-  if M.highlight_exists(highlight_name) then
-    return '%#' .. highlight_name .. '#'
+  mode = mode:sub(2)
+  if theme_hls[mode] and theme_hls[mode][section] then
+    return M.component_format_highlight(theme_hls[mode][section], is_focused)
+  elseif theme_hls[mode] and section > 'c' and theme_hls[mode][section_highlight_map[section]] then
+    return M.component_format_highlight(theme_hls[mode][section_highlight_map[section]], is_focused)
+  elseif theme_hls['normal'] and theme_hls['normal'][section] then
+    return M.component_format_highlight(theme_hls['normal'][section], is_focused)
+  elseif theme_hls['normal'] and section > 'c' and theme_hls['normal'][section_highlight_map[section]] then
+    return M.component_format_highlight(theme_hls['normal'][section_highlight_map[section]], is_focused)
+  else
+    error("Unable to ditermine color for mode: "..mode..", section: ".. section)
   end
-  return '%#' .. highlight_group .. '_normal#'
+  -- local highlight_name = M.append_mode(section, is_focused)
+  -- if section > 'lualine_c' and not M.highlight_exists(highlight_name) then
+  --   section = 'lualine_' .. section_highlight_map[section:match('lualine_(.)')]
+  --   highlight_name = M.append_mode(section, is_focused)
+  -- end
+  -- if M.highlight_exists(highlight_name) then
+  --   return '%#' .. highlight_name .. '#'
+  -- end
+  -- return '%#' .. section .. '_normal#'
 end
 
 ---@description : Provides transitional highlights for section separators.
@@ -371,8 +394,12 @@ function M.get_transitional_highlights(left_hl, right_hl)
       return nil -- Separator won't be visible anyway
     end
     M.highlight(highlight_name, fg, bg, nil)
-    loaded_highlights[left_hl].attached[highlight_name] = { bg = 'fg' }
-    loaded_highlights[right_hl].attached[highlight_name] = { fg = 'bg' }
+    if loaded_highlights[left_hl] then
+      loaded_highlights[left_hl].attached[highlight_name] = { bg = 'fg' }
+    end
+    if loaded_highlights[right_hl] then
+      loaded_highlights[right_hl].attached[highlight_name] = { fg = 'bg' }
+    end
   end
   return '%#' .. highlight_name .. '#'
 end

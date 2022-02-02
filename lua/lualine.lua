@@ -158,7 +158,7 @@ local statusline = modules.utils.retry_call_wrap(function(sections, is_focused)
       if #section_data > 0 then
         if not applied_midsection_divider and section_name > 'c' then
           applied_midsection_divider = true
-          section_data = modules.highlight.format_highlight('lualine_c') .. '%=' .. section_data
+          section_data = modules.highlight.format_highlight('c', is_focused) .. '%=' .. section_data
         end
         if not applied_trunc and section_name > 'b' then
           applied_trunc = true
@@ -170,7 +170,7 @@ local statusline = modules.utils.retry_call_wrap(function(sections, is_focused)
   end
   if applied_midsection_divider == false and config.options.always_divide_middle ~= false then
     -- When non of section x,y,z is present
-    table.insert(status, modules.highlight.format_highlight('lualine_c') .. '%=')
+    table.insert(status, modules.highlight.format_highlight('c', is_focused) .. '%=')
   end
   return apply_transitional_separators(table.concat(status))
 end)
