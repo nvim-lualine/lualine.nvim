@@ -155,13 +155,13 @@ function M.create_highlight_groups(theme)
   clear_highlights()
   active_theme = theme
   theme_hls = {}
-  local psudo_options = {self={section='lualine_a'}}
+  local psudo_options = { self = { section = 'lualine_a' } }
   create_cterm_colors = not vim.go.termguicolors
   for mode, sections in pairs(theme) do
     theme_hls[mode] = {}
     for section, color in pairs(sections) do
-      local hl_tag = table.concat({section, mode}, '_')
-      psudo_options.self.section = 'lualine_'..section
+      local hl_tag = table.concat({ section, mode }, '_')
+      psudo_options.self.section = 'lualine_' .. section
       theme_hls[mode][section] = M.create_component_highlight_group(color, hl_tag, psudo_options, true)
     end
   end
@@ -257,7 +257,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   if type(color) == 'string' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
     M.highlight(highlight_group_name, nil, nil, nil, color) -- l8nk to group
-    return { name = highlight_group_name, no_mode = true, link=true, no_default = apply_no_default }
+    return { name = highlight_group_name, no_mode = true, link = true, no_default = apply_no_default }
   end
   if type(color) == 'function' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
@@ -275,7 +275,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
     -- each mode as they will surely look the same. So we can work without options
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
     M.highlight(highlight_group_name, color.fg, color.bg, color.gui, nil)
-    return { name = highlight_group_name, no_mode = true, section = section, no_default = apply_no_default, }
+    return { name = highlight_group_name, no_mode = true, section = section, no_default = apply_no_default }
   end
 
   local modes = {
@@ -355,7 +355,7 @@ function M.format_highlight(section, is_focused)
   elseif theme_hls['normal'] and section > 'c' and theme_hls['normal'][section_highlight_map[section]] then
     return M.component_format_highlight(theme_hls['normal'][section_highlight_map[section]], is_focused)
   else
-    error("Unable to ditermine color for mode: "..mode..", section: ".. section)
+    error('Unable to ditermine color for mode: ' .. mode .. ', section: ' .. section)
   end
   -- local highlight_name = M.append_mode(section, is_focused)
   -- if section > 'lualine_c' and not M.highlight_exists(highlight_name) then
