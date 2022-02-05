@@ -662,6 +662,7 @@ extensions = {'quickfix'}
 - quickfix
 - symbols-outline
 - toggleterm
+- aerial
 
 #### Custom extensions
 
