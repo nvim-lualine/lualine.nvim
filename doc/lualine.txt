@@ -696,7 +696,6 @@ extensions with:
 - quickfix
 - symbols-outline
 - toggleterm
-- aerial
 
 
                                                    *lualine-Custom-extensions*
