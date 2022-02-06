@@ -653,6 +653,7 @@ extensions = {'quickfix'}
 
 #### Available extensions
 
+- aerial
 - chadtree
 - fern
 - fugitive
