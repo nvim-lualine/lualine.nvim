@@ -1,6 +1,10 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
+local require = require('lualine_require').require
 local utils = require('lualine.utils.utils')
+local modules = require('lualine_require').lazy_require {
+  utils_notices = 'lualine.utils.notices',
+}
 
 local config = {
   options = {
@@ -10,6 +14,7 @@ local config = {
     section_separators = { left = '', right = '' },
     disabled_filetypes = {},
     always_divide_middle = true,
+    globalstatus = false,
   },
   sections = {
     lualine_a = { 'mode' },
@@ -61,6 +66,12 @@ local function apply_configuration(config_table)
     for section_name, section in pairs(config_table[section_group_name]) do
       config[section_group_name][section_name] = utils.deepcopy(section)
     end
+  end
+  if config_table.options and config_table.options.globalstatus and vim.fn.has('nvim-0.7') == 0 then
+    modules.utils_notices.add_notice(
+      '### Options.globalstatus\nSorry `globalstatus` option can only be used in neovim 0.7 or higher.\n'
+    )
+    config_table.options.globalstatus = false
   end
   parse_sections('options')
   parse_sections('sections')
