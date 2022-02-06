@@ -687,6 +687,7 @@ extensions with:
                                                 *lualine-Available-extensions*
 
 
+- aerial
 - chadtree
 - fern
 - fugitive
