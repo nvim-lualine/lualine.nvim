@@ -14,6 +14,10 @@ end
 --- of the tab.
 ---@return string
 function Tab:label()
+  local custom_tabname = vim.t[self.tabnr].tabname
+  if custom_tabname and custom_tabname ~= '' then
+    return custom_tabname
+  end
   local buflist = vim.fn.tabpagebuflist(self.tabnr)
   local winnr = vim.fn.tabpagewinnr(self.tabnr)
   local bufnr = buflist[winnr]

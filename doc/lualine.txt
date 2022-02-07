@@ -645,9 +645,39 @@ more traditional tabline/bufferline.
 <
 
 
-You can also completely move your statusline to a tabline by configuring
-`lualine.tabline` and disabling `lualine.sections` and
-`lualine.inactive_sections`:
+                                                             *lualine-Buffers*
+
+Buffers                                Shows currently open buffers. Like
+                                       bufferline. See
+                                       |lualine-buffers-options| for all
+                                       builtin behaviors of buffers component.
+
+
+                                                                *lualine-Tabs*
+
+Tabs                                   Shows currently open tab. Like usual
+                                       tabline. See |lualine-tabs-options| for
+                                       all builtin behaviors of tabs component.
+                                       You can also use `:LualineRenameTab` to
+                                       set a name for a tabpage. For example:
+
+
+>
+    :LualineRenameTab Project_K
+<
+
+
+It’s useful when you’re using rendering mode 2/3 in tabs. To unname a
+tablage run `:LualineRenameTab` without argument.
+
+                                               *lualine-Tabline-as-statusline*
+
+Tabline as statusline                  You can also completely move your
+                                       statusline to a tabline by configuring
+                                       `lualine.tabline` and disabling
+                                       `lualine.sections` and
+                                       `lualine.inactive_sections`:
+
 
 >
     tabline = {

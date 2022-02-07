@@ -167,6 +167,17 @@ vim.cmd([[
   function! LualineSwitchTab(tabnr, mouseclicks, mousebutton, modifiers)
     execute a:tabnr . "tabnext"
   endfunction
+
+  function! LualineRenameTab(...)
+    if a:0 == 1
+      let t:tabname = a:1
+    else
+      unlet t:tabname
+    end
+    redrawtabline
+  endfunction
+
+  command! -nargs=? LualineRenameTab call LualineRenameTab("<args>")
 ]])
 
 return M
