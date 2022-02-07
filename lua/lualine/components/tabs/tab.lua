@@ -14,8 +14,19 @@ end
 --- of the tab.
 ---@return string
 function Tab:label()
-  local custom_tabname = vim.fn.gettabvar(self.tabnr, 'tabname')
-  if custom_tabname ~= '' then
+  local custom_tabname
+  if vim.g.lualine_tabnames then
+    custom_tabname = vim.g.lualine_tabnames[tostring(self.tabnr)]
+  else
+    vim.cmd(
+    [[
+    if(exists("g:Lualine_tabnames_str"))
+      let g:lualine_tabnames = json_decode(g:Lualine_tabnames_str)
+    endif
+    ]]
+    )
+  end
+  if custom_tabname and custom_tabname ~= '' then
     return custom_tabname
   end
   local buflist = vim.fn.tabpagebuflist(self.tabnr)
