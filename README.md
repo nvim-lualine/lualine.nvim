@@ -617,6 +617,24 @@ tabline = {
 }
 ```
 
+#### Buffers
+Shows currently open buffers. Like bufferline . See
+[buffers options](#buffers-component-options)
+for all builtin behaviors of buffers component.
+
+#### Tabs
+Shows currently open tab. Like usual tabline. See
+[tabs options](#tabs-component-options)
+for all builtin behaviors of tabs component.
+You can also use `:LualineRenameTab` to set a name for a tabpage.
+For example:
+```vim
+:LualineRenameTab Project_K
+````
+It's useful when you're using rendering mode 2/3 in tabs.
+To unname a tablage run `:LualineRenameTab` without argument.
+
+#### Tabline as statusline
 You can also completely move your statusline to a tabline by configuring
 `lualine.tabline` and disabling `lualine.sections` and `lualine.inactive_sections`:
 
