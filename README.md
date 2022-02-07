@@ -412,7 +412,7 @@ These are options that are available on specific components.
 For example you have option on `diagnostics` component to
 specify what your diagnostic sources will be.
 
-#### `buffers` component options
+#### buffers component options
 
 ```lua
 sections = {
@@ -447,7 +447,7 @@ sections = {
 }
 ```
 
-#### `diagnostics` component options
+#### diagnostics component options
 
 ```lua
 sections = {
@@ -480,7 +480,7 @@ sections = {
 }
 ```
 
-#### `diff` component options
+#### diff component options
 
 ```lua
 sections = {
@@ -504,7 +504,7 @@ sections = {
 }
 ```
 
-#### `fileformat` component options
+#### fileformat component options
 
 ```lua
 sections = {
@@ -521,7 +521,7 @@ sections = {
 }
 ```
 
-#### `filename` component options
+#### filename component options
 
 ```lua
 sections = {
@@ -545,7 +545,7 @@ sections = {
 }
 ```
 
-#### `filetype` component options
+#### filetype component options
 
 ```lua
 sections = {
@@ -559,7 +559,7 @@ sections = {
 }
 ```
 
-#### `tabs` component options
+#### tabs component options
 
 ```lua
 sections = {

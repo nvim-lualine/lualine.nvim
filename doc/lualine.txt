@@ -429,7 +429,7 @@ Component specific options             These are options that are available on
                                        will be.
 
 
-                                         *lualine-`buffers`-component-options*
+                                           *lualine-buffers-component-options*
 
 >
     sections = {
@@ -465,7 +465,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                     *lualine-`diagnostics`-component-options*
+                                       *lualine-diagnostics-component-options*
 
 >
     sections = {
@@ -499,7 +499,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                            *lualine-`diff`-component-options*
+                                              *lualine-diff-component-options*
 
 >
     sections = {
@@ -524,7 +524,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                      *lualine-`fileformat`-component-options*
+                                        *lualine-fileformat-component-options*
 
 >
     sections = {
@@ -542,7 +542,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                        *lualine-`filename`-component-options*
+                                          *lualine-filename-component-options*
 
 >
     sections = {
@@ -567,7 +567,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                        *lualine-`filetype`-component-options*
+                                          *lualine-filetype-component-options*
 
 >
     sections = {
@@ -582,7 +582,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                            *lualine-`tabs`-component-options*
+                                              *lualine-tabs-component-options*
 
 >
     sections = {
