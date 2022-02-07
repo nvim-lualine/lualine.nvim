@@ -310,7 +310,7 @@ Global option used locally overwrites the global, for example:
     }
 ```
 
-`mode` will be formatted with the passed fa=unction so only first char will be
+`mode` will be formatted with the passed function so only first char will be
 shown . On the other hand branch will be formatted with global formatter
 `string.lower` so it will be showed in lower case.
 
