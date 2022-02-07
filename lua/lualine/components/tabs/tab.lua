@@ -14,22 +14,27 @@ end
 --- of the tab.
 ---@return string
 function Tab:label()
-  local buflist = vim.fn.tabpagebuflist(self.tabnr)
-  local winnr = vim.fn.tabpagewinnr(self.tabnr)
-  local bufnr = buflist[winnr]
-  local file = vim.api.nvim_buf_get_name(bufnr)
-  local buftype = vim.fn.getbufvar(bufnr, '&buftype')
-  if buftype == 'help' then
-    return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
-  elseif buftype == 'terminal' then
-    local match = string.match(vim.split(file, ' ')[1], 'term:.*:(%a+)')
-    return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ':t')
-  elseif vim.fn.isdirectory(file) == 1 then
-    return vim.fn.fnamemodify(file, ':p:.')
-  elseif file == '' then
-    return '[No Name]'
+  local custom_tabname = vim.fn.gettabvar(self.tabnr, 'tabname')
+  if custom_tabname ~= '' then
+    return custom_tabname
+  else
+    local buflist = vim.fn.tabpagebuflist(self.tabnr)
+    local winnr = vim.fn.tabpagewinnr(self.tabnr)
+    local bufnr = buflist[winnr]
+    local file = vim.api.nvim_buf_get_name(bufnr)
+    local buftype = vim.fn.getbufvar(bufnr, '&buftype')
+    if buftype == 'help' then
+      return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
+    elseif buftype == 'terminal' then
+      local match = string.match(vim.split(file, ' ')[1], 'term:.*:(%a+)')
+      return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ':t')
+    elseif vim.fn.isdirectory(file) == 1 then
+      return vim.fn.fnamemodify(file, ':p:.')
+    elseif file == '' then
+      return '[No Name]'
+    end
+    return vim.fn.fnamemodify(file, ':t')
   end
-  return vim.fn.fnamemodify(file, ':t')
 end
 
 ---returns rendered tab
