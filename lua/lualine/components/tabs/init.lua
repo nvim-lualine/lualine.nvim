@@ -169,11 +169,7 @@ vim.cmd([[
   endfunction
 
   function! LualineRenameTab(tabname)
-    if(!exists("g:lualine_tabnames"))
-      let g:lualine_tabnames = {}
-    endif
-    let g:lualine_tabnames[tabpagenr()] = a:tabname
-    let g:Lualine_tabnames_str = json_encode(g:lualine_tabnames)
+    let t:tabname = a:tabname
     redrawtabline
   endfunction
 
