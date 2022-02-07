@@ -6,6 +6,7 @@ local Tab = require('lualine.utils.class'):extend()
 function Tab:init(opts)
   assert(opts.tabnr, 'Cannot create Tab without tabnr')
   self.tabnr = opts.tabnr
+  self.tabId = opts.tabId
   self.options = opts.options
   self.highlights = opts.highlights
 end
@@ -14,7 +15,7 @@ end
 --- of the tab.
 ---@return string
 function Tab:label()
-  local custom_tabname = vim.t[self.tabnr].tabname
+  local custom_tabname = vim.t[self.tabId].tabname
   if custom_tabname and custom_tabname ~= '' then
     return custom_tabname
   end
