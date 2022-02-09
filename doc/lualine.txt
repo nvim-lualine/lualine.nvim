@@ -429,7 +429,7 @@ Component specific options             These are options that are available on
                                        will be.
 
 
-                                         *lualine-`buffers`-component-options*
+                                           *lualine-buffers-component-options*
 
 >
     sections = {
@@ -465,7 +465,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                     *lualine-`diagnostics`-component-options*
+                                       *lualine-diagnostics-component-options*
 
 >
     sections = {
@@ -499,7 +499,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                            *lualine-`diff`-component-options*
+                                              *lualine-diff-component-options*
 
 >
     sections = {
@@ -524,7 +524,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                      *lualine-`fileformat`-component-options*
+                                        *lualine-fileformat-component-options*
 
 >
     sections = {
@@ -542,7 +542,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                        *lualine-`filename`-component-options*
+                                          *lualine-filename-component-options*
 
 >
     sections = {
@@ -567,7 +567,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                        *lualine-`filetype`-component-options*
+                                          *lualine-filetype-component-options*
 
 >
     sections = {
@@ -582,7 +582,7 @@ Component specific options             These are options that are available on
 <
 
 
-                                            *lualine-`tabs`-component-options*
+                                              *lualine-tabs-component-options*
 
 >
     sections = {
@@ -645,9 +645,39 @@ more traditional tabline/bufferline.
 <
 
 
-You can also completely move your statusline to a tabline by configuring
-`lualine.tabline` and disabling `lualine.sections` and
-`lualine.inactive_sections`:
+                                                             *lualine-Buffers*
+
+Buffers                                Shows currently open buffers. Like
+                                       bufferline. See
+                                       |lualine-buffers-options| for all
+                                       builtin behaviors of buffers component.
+
+
+                                                                *lualine-Tabs*
+
+Tabs                                   Shows currently open tab. Like usual
+                                       tabline. See |lualine-tabs-options| for
+                                       all builtin behaviors of tabs component.
+                                       You can also use `:LualineRenameTab` to
+                                       set a name for a tabpage. For example:
+
+
+>
+    :LualineRenameTab Project_K
+<
+
+
+It’s useful when you’re using rendering mode 2/3 in tabs. To unname a
+tablage run `:LualineRenameTab` without argument.
+
+                                               *lualine-Tabline-as-statusline*
+
+Tabline as statusline                  You can also completely move your
+                                       statusline to a tabline by configuring
+                                       `lualine.tabline` and disabling
+                                       `lualine.sections` and
+                                       `lualine.inactive_sections`:
+
 
 >
     tabline = {

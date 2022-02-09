@@ -57,8 +57,8 @@ end
 function M:update_status()
   local data = {}
   local tabs = {}
-  for t = 1, vim.fn.tabpagenr('$') do
-    tabs[#tabs + 1] = Tab { tabnr = t, options = self.options, highlights = self.highlights }
+  for nr, id in ipairs(vim.api.nvim_list_tabpages()) do
+    tabs[#tabs + 1] = Tab { tabId = id, tabnr = nr, options = self.options, highlights = self.highlights }
   end
   -- mark the first, last, current, before current, after current tabpages
   -- for rendering
@@ -93,7 +93,12 @@ function M:update_status()
   -- start drawing from current tab and draw left and right of it until
   -- all tabpages are drawn or max_length has been reached.
   if current_tab == nil then -- maybe redundent code
-    local t = Tab { tabnr = vim.fn.tabpagenr(), options = self.options, highlights = self.highlights }
+    local t = Tab {
+      tabId = vim.api.nvim_get_current_tabpage(),
+      tabnr = vim.fn.tabpagenr(),
+      options = self.options,
+      highlights = self.highlights,
+    }
     t.current = true
     t.last = true
     data[#data + 1] = t:render()
@@ -167,6 +172,17 @@ vim.cmd([[
   function! LualineSwitchTab(tabnr, mouseclicks, mousebutton, modifiers)
     execute a:tabnr . "tabnext"
   endfunction
+
+  function! LualineRenameTab(...)
+    if a:0 == 1
+      let t:tabname = a:1
+    else
+      unlet t:tabname
+    end
+    redrawtabline
+  endfunction
+
+  command! -nargs=? LualineRenameTab call LualineRenameTab("<args>")
 ]])
 
 return M

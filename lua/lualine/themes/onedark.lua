@@ -23,6 +23,7 @@ return {
     b = { fg = colors.fg, bg = colors.gray3 },
     c = { fg = colors.fg, bg = colors.gray2 },
   },
+  command = { a = { fg = colors.bg, bg = colors.yellow, gui = 'bold' } },
   insert = { a = { fg = colors.bg, bg = colors.blue, gui = 'bold' } },
   visual = { a = { fg = colors.bg, bg = colors.purple, gui = 'bold' } },
   terminal = { a = { fg = colors.bg, bg = colors.cyan, gui = 'bold' } },
