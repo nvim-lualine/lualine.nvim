@@ -6,6 +6,7 @@ local colors = {
   blue   = '#61afef',
   green  = '#98c379',
   purple = '#c678dd',
+  cyaan  = '#56b6c2',
   red1   = '#e06c75',
   red2   = '#be5046',
   yellow = '#e5c07b',
@@ -24,6 +25,7 @@ return {
   },
   insert = { a = { fg = colors.bg, bg = colors.blue, gui = 'bold' } },
   visual = { a = { fg = colors.bg, bg = colors.purple, gui = 'bold' } },
+  terminal = { a = { fg = colors.bg, bg = colors.cyaan, gui = 'bold' } },
   replace = { a = { fg = colors.bg, bg = colors.red1, gui = 'bold' } },
   inactive = {
     a = { fg = colors.gray1, bg = colors.bg, gui = 'bold' },
