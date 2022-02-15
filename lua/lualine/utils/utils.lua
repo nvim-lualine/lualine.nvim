@@ -174,6 +174,9 @@ end
 ---@param str string
 ---@return string
 function M.stl_escape(str)
+  if type(str) ~= 'string' then
+    return str
+  end
   return str:gsub('%%', '%%%%')
 end
 

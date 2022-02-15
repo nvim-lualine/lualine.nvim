@@ -18,7 +18,8 @@ function M:init(options)
 end
 
 function M.update_status()
-  return vim.bo.filetype or ''
+  local ft = vim.bo.filetype or ''
+  return modules.utils.stl_escape(ft)
 end
 
 function M:apply_icon()

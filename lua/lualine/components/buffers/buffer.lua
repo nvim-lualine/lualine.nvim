@@ -1,5 +1,9 @@
-local highlight = require('lualine.highlight')
 local Buffer = require('lualine.utils.class'):extend()
+
+local modules = require('lualine_require').lazy_require {
+  highlight = 'lualine.highlight',
+  utils = 'lualine.utils.utils',
+}
 
 ---intialize a new buffer from opts
 ---@param opts table
@@ -13,7 +17,7 @@ end
 
 ---setup icons, modified status for buffer
 function Buffer:get_props()
-  self.file = vim.api.nvim_buf_get_name(self.bufnr)
+  self.file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(self.bufnr))
   self.buftype = vim.api.nvim_buf_get_option(self.bufnr, 'buftype')
   self.filetype = vim.api.nvim_buf_get_option(self.bufnr, 'filetype')
   local modified = self.options.show_modified_status and vim.api.nvim_buf_get_option(self.bufnr, 'modified')
@@ -69,7 +73,8 @@ function Buffer:render()
   -- setup for mouse clicks
   local line = string.format('%%%s@LualineSwitchBuffer@%s%%T', self.bufnr, name)
   -- apply highlight
-  line = highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')]) .. line
+  line = modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')])
+    .. line
 
   -- apply separators
   if self.options.self.section < 'lualine_x' and not self.first then

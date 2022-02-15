@@ -1,5 +1,9 @@
-local highlight = require('lualine.highlight')
 local Tab = require('lualine.utils.class'):extend()
+
+local modules = require('lualine_require').lazy_require {
+  highlight = 'lualine.highlight',
+  utils = 'lualine.utils.utils',
+}
 
 ---intialize a new tab from opts
 ---@param opts table
@@ -17,12 +21,12 @@ end
 function Tab:label()
   local custom_tabname = vim.t[self.tabId].tabname
   if custom_tabname and custom_tabname ~= '' then
-    return custom_tabname
+    return modules.utils.stl_escape(custom_tabname)
   end
   local buflist = vim.fn.tabpagebuflist(self.tabnr)
   local winnr = vim.fn.tabpagewinnr(self.tabnr)
   local bufnr = buflist[winnr]
-  local file = vim.api.nvim_buf_get_name(bufnr)
+  local file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(bufnr))
   local buftype = vim.fn.getbufvar(bufnr, '&buftype')
   if buftype == 'help' then
     return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
@@ -62,7 +66,8 @@ function Tab:render()
   -- setup for mouse clicks
   local line = string.format('%%%s@LualineSwitchTab@%s%%T', self.tabnr, name)
   -- apply highlight
-  line = highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')]) .. line
+  line = modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')])
+    .. line
 
   -- apply separators
   if self.options.self.section < 'lualine_x' and not self.first then
