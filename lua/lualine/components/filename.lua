@@ -2,6 +2,10 @@
 -- MIT license, see LICENSE for more details.
 local M = require('lualine.component'):extend()
 
+local modules = require('lualine_require').lazy_require {
+  utils = 'lualine.utils.utils',
+}
+
 local default_options = {
   symbols = { modified = '[+]', readonly = '[-]', unnamed = '[No Name]' },
   file_status = true,
@@ -43,6 +47,8 @@ M.update_status = function(self)
     -- just filename
     data = vim.fn.expand('%:t')
   end
+
+  data = modules.utils.stl_escape(data)
 
   if data == '' then
     data = self.options.symbols.unnamed
