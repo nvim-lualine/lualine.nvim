@@ -42,7 +42,7 @@ it'll try it's best to generate one.
 ### ayu
 It's a combination of ayu_light, ayu_dark & ayu_mirage. If `g:ayucolor` exists,
 it loads one of these based on your `g:ayucolor` option. Otherwise, it will
-load `ayu_light` when `background=light` and `ayu_dark` when `background=dark`
+load ayu_light when background=light and ayu_dark when background=dark
 But if `g:ayuprefermirage` exists, it will load ayu_mirage instead when
 `background=dark`.
 
