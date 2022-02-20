@@ -279,12 +279,12 @@ function M.get_transitional_highlights(left_hl, right_hl)
     -- Get colors from highlights
     local fg = modules.utils.extract_highlight_colors(left_hl, 'bg')
     local bg = modules.utils.extract_highlight_colors(right_hl, 'bg')
-    if not fg or not bg then
-      return nil
-    end -- Color retrieval failed
+    if not fg and not bg then
+      return nil -- Color retrieval failed
+    end
     if bg == fg then
-      return nil
-    end -- Separator won't be visible anyway
+      return nil -- Separator won't be visible anyway
+    end
     M.highlight(highlight_name, fg, bg, nil)
   end
   return '%#' .. highlight_name .. '#'
