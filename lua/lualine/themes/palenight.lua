@@ -23,16 +23,16 @@ local colors = {
 
 return {
   normal = {
-    a = { fg = colors.black, bg = colors.purple, gui = 'bold' },
+    a = { fg = colors.black, bg = colors.cyan, gui = 'bold' },
     b = { fg = colors.purple, bg = colors.menu_grey },
     c = { fg = colors.comment_grey, bg = colors.black },
   },
   insert = {
-    a = { fg = colors.black, bg = colors.blue, gui = 'bold' },
+    a = { fg = colors.black, bg = colors.purple, gui = 'bold' },
     b = { fg = colors.blue, bg = colors.menu_grey },
   },
   visual = {
-    a = { fg = colors.black, bg = colors.cyan, gui = 'bold' },
+    a = { fg = colors.black, bg = colors.blue, gui = 'bold' },
     b = { fg = colors.cyan, bg = colors.menu_grey },
   },
   replace = {
