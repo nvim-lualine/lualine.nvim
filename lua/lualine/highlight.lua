@@ -112,6 +112,14 @@ function M.highlight(name, foreground, background, gui, link)
   -- update attached hl groups
   local old_hl_def = loaded_highlights[name]
   if old_hl_def and next(old_hl_def.attached) then
+    -- Update attached hl groups as they announced to depend on hl_group 'name'
+    -- 'hl' being in 'name'a attached table means 'hl'
+    -- depends of 'name'.
+    -- 'hl' key in attached table will contain a table that
+    -- defines the reletaion between 'hl' & 'name'.
+    -- name.attached.hl = { bg = 'fg' } means
+    -- hl's fg is same as 'names' bg . So 'hl's fg should
+    -- be updated when ever 'name' changes it's 'bg'
     local bg_changed = old_hl_def.bg ~= background
     local fg_changed = old_hl_def.bg ~= foreground
     local gui_changed = old_hl_def.gui ~= gui
@@ -273,17 +281,21 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
     highlight_tag = highlight_tag .. '_' .. tostring(tag_id)
     tag_id = tag_id + 1
   end
+
   if type(color) == 'string' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
     M.highlight(highlight_group_name, nil, nil, nil, color) -- l8nk to group
     return {
       name = highlight_group_name,
+      fn = nil,
       no_mode = true,
       link = true,
-      no_default = apply_no_default,
+      section = section,
       options = options,
+      no_default = apply_no_default,
     }
   end
+
   if type(color) == 'function' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
     -- create a dummy hl entry so now other hls can attach to it.
@@ -294,11 +306,13 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
       name = highlight_group_name,
       fn = color,
       no_mode = false,
+      link = false,
       section = section,
       options = options,
       no_default = apply_no_default,
     }
   end
+
   if apply_no_default or (color.bg and color.fg) then
     -- When bg and fg are both present we donn't need to set highlighs for
     -- each mode as they will surely look the same. So we can work without options
@@ -323,7 +337,9 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   end
   return {
     name = options.self.section .. '_' .. highlight_tag,
+    fn = nil,
     no_mode = false,
+    link = false,
     section = section,
     options = options,
     no_default = apply_no_default,
