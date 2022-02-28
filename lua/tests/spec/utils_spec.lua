@@ -5,6 +5,7 @@ local helpers = require('tests.helpers')
 
 local eq = assert.are.same
 local build_component_opts = helpers.build_component_opts
+local stub = require('luassert.stub')
 
 describe('Utils', function()
   local utils = require('lualine.utils.utils')
@@ -55,6 +56,10 @@ describe('Cterm genarator', function()
 end)
 
 describe('Section genarator', function()
+  local hl = require('lualine.highlight')
+  stub(hl, 'format_highlight')
+  hl.format_highlight.returns('%#lualine_c_normal#')
+
   local sec = require('lualine.utils.section')
   it('can draw', function()
     local opts = build_component_opts { section_separators = { left = '', right = '' } }
@@ -62,10 +67,15 @@ describe('Section genarator', function()
       require('lualine.components.special.function_component')(opts),
       require('lualine.components.special.function_component')(opts),
     }
-    eq('%#lualine_MySection_normal# test %#lualine_MySection_normal# test ', sec.draw_section(section, 'MySection'))
+    eq('%#lualine_c_normal# test %#lualine_c_normal# test ', sec.draw_section(section, 'c', true))
+
+    hl.format_highlight:revert()
   end)
 
   it('can remove separators from component with custom colors', function()
+    stub(hl, 'format_highlight')
+    hl.format_highlight.returns('%#lualine_MySection_normal#')
+
     vim.g.actual_curwin = tostring(vim.api.nvim_get_current_win())
     local opts = build_component_opts { section_separators = { left = '', right = '' } }
     local opts_colored = build_component_opts { color = 'MyColor' }
@@ -83,20 +93,20 @@ describe('Section genarator', function()
       require('lualine.components.special.function_component')(opts_colored),
       require('lualine.components.special.function_component')(opts),
     }
-    local highlight_name2 = 'lualine_' .. section[2].options.component_name .. '_no_mode'
+    local highlight_name2 = 'lualine_' .. section[2].options.component_name
     -- Removes separator on string color
     eq(
       '%#lualine_MySection_normal# test %#' .. highlight_name2 .. '#' .. ' test %#lualine_MySection_normal# test ',
       sec.draw_section(section, 'MySection')
     )
-    section[2] = require('lua.lualine.components.special.function_component')(opts_colored2)
+    section[2] = require('lualine.components.special.function_component')(opts_colored2)
     local highlight_name = '%#lualine_c_' .. section[2].options.component_name .. '_normal#'
     -- Removes separator on color with bg
     eq(
       '%#lualine_MySection_normal# test ' .. highlight_name .. ' test %#lualine_MySection_normal# test ',
       sec.draw_section(section, 'MySection')
     )
-    section[2] = require('lua.lualine.components.special.function_component')(opts_colored3)
+    section[2] = require('lualine.components.special.function_component')(opts_colored3)
     highlight_name2 = '%#lualine_c_' .. section[2].options.component_name .. '_normal#'
     -- Doesn't remove separator on color without bg
     eq(
@@ -106,5 +116,7 @@ describe('Section genarator', function()
       sec.draw_section(section, 'MySection')
     )
     vim.g.actual_curwin = nil
+
+    hl.format_highlight:revert()
   end)
 end)

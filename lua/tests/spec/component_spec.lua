@@ -186,7 +186,7 @@ describe('Component:', function()
         color = 'MyHl',
       }
       local comp = require('lualine.components.special.function_component')(opts)
-      local custom_link_hl_name = 'lualine_' .. comp.options.component_name .. '_no_mode'
+      local custom_link_hl_name = 'lualine_' .. comp.options.component_name
       eq('%#' .. custom_link_hl_name .. '#test', comp:draw(opts.hl))
       local opts2 = build_component_opts {
         component_separators = { left = '', right = '' },
@@ -284,8 +284,10 @@ describe('Filetype component', function()
     local hl = require('lualine.highlight')
     local utils = require('lualine.utils.utils')
     stub(hl, 'create_component_highlight_group')
+    stub(hl, 'format_highlight')
     stub(utils, 'extract_highlight_colors')
     hl.create_component_highlight_group.returns { name = 'MyCompHl', no_mode = false, section = 'a' }
+    hl.format_highlight.returns('%#lualine_c_normal#')
     utils.extract_highlight_colors.returns('#000')
 
     local opts = build_component_opts {
@@ -298,6 +300,7 @@ describe('Filetype component', function()
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
     assert.stub(hl.create_component_highlight_group).was_called_with({ fg = '#000' }, 'test_highlight_group', opts)
     hl.create_component_highlight_group:revert()
+    hl.format_highlight:revert()
     utils.extract_highlight_colors:revert()
     package.loaded['nvim-web-devicons'] = nil
     vim.g.actual_curwin = nil
