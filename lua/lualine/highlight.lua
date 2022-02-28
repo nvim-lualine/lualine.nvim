@@ -379,7 +379,7 @@ function M.format_highlight(section, is_focused)
   elseif theme_hls['normal'] and section > 'c' and theme_hls['normal'][section_highlight_map[section]] then
     return M.component_format_highlight(theme_hls['normal'][section_highlight_map[section]], is_focused)
   else
-    error('Unable to determine color for mode: ' .. mode .. ', section: ' .. section)
+    return '%#' .. M.append_mode('lualine_' .. section) .. '#'
   end
 end
 
