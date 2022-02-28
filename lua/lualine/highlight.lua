@@ -193,8 +193,7 @@ local function get_default_component_color(hl_name, mode, section, color, option
   if ret.fg and ret.bg then
     return ret
   end
-  if options.color and options.color_highlight
-    and  options.color_highlight.name ~= hl_name then
+  if options.color and options.color_highlight and options.color_highlight.name ~= hl_name then
     if type(options.color) == 'string' then
       options.color = modules.utils.extract_highlight_colors(options.color)
     elseif type(options.color) == 'function' then
@@ -271,13 +270,19 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   if type(color) == 'string' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
     M.highlight(highlight_group_name, nil, nil, nil, color) -- l8nk to group
-    return { name = highlight_group_name, no_mode = true, link = true, no_default = apply_no_default, options = options}
+    return {
+      name = highlight_group_name,
+      no_mode = true,
+      link = true,
+      no_default = apply_no_default,
+      options = options,
+    }
   end
   if type(color) == 'function' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
     -- create a dummy hl entry so now other hls can attach to it.
     loaded_highlights[highlight_group_name] = {
-      attached =  {},
+      attached = {},
     }
     return {
       name = highlight_group_name,
