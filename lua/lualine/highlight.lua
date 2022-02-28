@@ -115,7 +115,7 @@ function M.highlight(name, foreground, background, gui, link)
 
   -- update attached hl groups
   local old_hl_def = loaded_highlights[name]
-  if old_hl_def and #old_hl_def.attached > 0 then
+  if old_hl_def and next(old_hl_def.attached) then
     local bg_changed = old_hl_def.bg ~= background
     local fg_changed = old_hl_def.bg ~= foreground
     for attach_name, attach_desc in pairs(old_hl_def.attached) do
@@ -186,8 +186,7 @@ end
 ---@param mode string mode which default component color should be given.
 ---@param section string the lualine section component is in.
 ---@param color table color passed for creating component highlight
----@param options.color table color set by color option for component
----       this is first fall back
+---@param options table Options table of component this is first fall back
 local function get_default_component_color(hl_name, mode, section, color, options)
   local default_color = active_theme[mode] and active_theme[mode][section] or active_theme.normal[section]
   local ret = { fg = color.fg, bg = color.bg }
@@ -201,7 +200,7 @@ local function get_default_component_color(hl_name, mode, section, color, option
     elseif type(options.color) == 'function' then
       options.color = options.color(mode, section)
     end
-    local options_hl_name = M.append_mode(options.color_highlight.name)
+    local options_hl_name = options.color_highlight.name and M.append_mode(options.color_highlight.name) or ''
     if type(options.color) == 'table' then
       if not ret.fg and options.color.fg then
         ret.fg = options.color.fg
@@ -276,6 +275,10 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   end
   if type(color) == 'function' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
+    -- create a dummy hl entry so now other hls can attach to it.
+    loaded_highlights[highlight_group_name] = {
+      attached =  {},
+    }
     return {
       name = highlight_group_name,
       fn = color,
@@ -303,9 +306,9 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
     'inactive',
   }
   for _, mode in ipairs(modes) do
-    local highlight_group_name = { options.self.section, highlight_tag, mode }
+    local highlight_group_name = table.concat({ options.self.section, highlight_tag, mode }, '_')
     local cl = get_default_component_color(highlight_group_name, mode, section, color, options)
-    M.highlight(table.concat(highlight_group_name, '_'), cl.fg, cl.bg, color.gui, nil)
+    M.highlight(highlight_group_name, cl.fg, cl.bg, color.gui, nil)
   end
   return {
     name = options.self.section .. '_' .. highlight_tag,
@@ -373,15 +376,6 @@ function M.format_highlight(section, is_focused)
   else
     error('Unable to ditermine color for mode: ' .. mode .. ', section: ' .. section)
   end
-  -- local highlight_name = M.append_mode(section, is_focused)
-  -- if section > 'lualine_c' and not M.highlight_exists(highlight_name) then
-  --   section = 'lualine_' .. section_highlight_map[section:match('lualine_(.)')]
-  --   highlight_name = M.append_mode(section, is_focused)
-  -- end
-  -- if M.highlight_exists(highlight_name) then
-  --   return '%#' .. highlight_name .. '#'
-  -- end
-  -- return '%#' .. section .. '_normal#'
 end
 
 ---@description : Provides transitional highlights for section separators.
@@ -414,7 +408,7 @@ function M.get_transitional_highlights(left_hl, right_hl)
       loaded_highlights[left_hl].attached[highlight_name] = { bg = 'fg' }
     end
     if loaded_highlights[right_hl] then
-      loaded_highlights[right_hl].attached[highlight_name] = { fg = 'bg' }
+      loaded_highlights[right_hl].attached[highlight_name] = { bg = 'bg' }
     end
   end
   return '%#' .. highlight_name .. '#'
