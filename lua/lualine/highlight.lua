@@ -339,7 +339,7 @@ function M.component_format_highlight(highlight, is_focused)
     return '%#' .. highlight_group .. '#'
   else
     local mode = require('lualine.utils.mode').get_mode()
-    local color = highlight.fn { mode = mode, section = highlight.section }
+    local color = highlight.fn { mode = mode, section = highlight.section } or {}
     if type(color) == 'string' then
       local hl_name = highlight.name
       M.highlight(hl_name, nil, nil, nil, color)
