@@ -94,21 +94,17 @@ function M.highlight(name, foreground, background, gui, link)
       return -- color is already defined why are we doing this anyway ?
     end
     table.insert(command, name)
-    if foreground and foreground ~= 'None' then
-      table.insert(command, 'guifg=' .. foreground)
-      if create_cterm_colors then
-        table.insert(command, 'ctermfg=' .. modules.color_utils.rgb2cterm(foreground))
-      end
-    end
-    if background and background ~= 'None' then
-      table.insert(command, 'guibg=' .. background)
-      if create_cterm_colors then
-        table.insert(command, 'ctermbg=' .. modules.color_utils.rgb2cterm(background))
-      end
-    end
-    if gui and gui ~= '' then
+    foreground = foreground or 'None'
+    background = background or 'None'
+    gui = gui or 'None'
+
+    table.insert(command, 'guifg=' .. foreground)
+    table.insert(command, 'guibg=' .. background)
+    table.insert(command, 'gui=' .. gui)
+    if create_cterm_colors then
+      table.insert(command, 'ctermfg=' .. modules.color_utils.rgb2cterm(foreground))
+      table.insert(command, 'ctermbg=' .. modules.color_utils.rgb2cterm(background))
       table.insert(command, 'cterm=' .. gui)
-      table.insert(command, 'gui=' .. gui)
     end
   end
   vim.cmd(table.concat(command, ' '))
@@ -118,6 +114,7 @@ function M.highlight(name, foreground, background, gui, link)
   if old_hl_def and next(old_hl_def.attached) then
     local bg_changed = old_hl_def.bg ~= background
     local fg_changed = old_hl_def.bg ~= foreground
+    local gui_changed = old_hl_def.gui ~= gui
     for attach_name, attach_desc in pairs(old_hl_def.attached) do
       if bg_changed and attach_desc.bg and loaded_highlights[attach_name] then
         M.highlight(
@@ -134,6 +131,15 @@ function M.highlight(name, foreground, background, gui, link)
           attach_desc.fg == 'fg' and foreground or loaded_highlights[attach_name].fg,
           attach_desc.fg == 'bg' and foreground or loaded_highlights[attach_name].bg,
           loaded_highlights[attach_name].gui,
+          loaded_highlights[attach_name].link
+        )
+      end
+      if gui_changed and attach_desc.gui and loaded_highlights[attach_name] then
+        M.highlight(
+          attach_name,
+          loaded_highlights[attach_name].fg,
+          loaded_highlights[attach_name].bg,
+          gui,
           loaded_highlights[attach_name].link
         )
       end
@@ -340,14 +346,13 @@ function M.component_format_highlight(highlight, is_focused)
   else
     local mode = require('lualine.utils.mode').get_mode()
     local color = highlight.fn { mode = mode, section = highlight.section } or {}
+    local hl_name = highlight.name
     if type(color) == 'string' then
-      local hl_name = highlight.name
       M.highlight(hl_name, nil, nil, nil, color)
       return '%#' .. hl_name .. '#'
     elseif type(color) == 'table' then
-      local hl_name = highlight.name
       if not highlight.no_default and not (color.fg and color.bg) then
-        hl_name = M.append_mode(highlight.name, is_focused)
+        hl_name = M.append_mode(hl_name, is_focused)
         color = get_default_component_color(hl_name, mode, highlight.section, color, highlight.options)
       end
       M.highlight(hl_name, color.fg, color.bg, color.gui, nil)
