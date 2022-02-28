@@ -186,26 +186,34 @@ end
 ---@param mode string mode which default component color should be given.
 ---@param section string the lualine section component is in.
 ---@param color table color passed for creating component highlight
----@param options_color table color set by color option for component
+---@param options.color table color set by color option for component
 ---       this is first fall back
-local function get_default_component_color(mode, section, color, options_color)
+local function get_default_component_color(hl_name, mode, section, color, options)
   local default_color = active_theme[mode] and active_theme[mode][section] or active_theme.normal[section]
   local ret = { fg = color.fg, bg = color.bg }
   if ret.fg and ret.bg then
     return ret
   end
-  if options_color then
-    if type(options_color) == 'string' then
-      options_color = modules.utils.extract_highlight_colors(options_color)
-    elseif type(options_color) == 'function' then
-      options_color = options_color(mode, section)
+  if options.color and options.color_highlight
+    and  options.color_highlight.name ~= hl_name then
+    if type(options.color) == 'string' then
+      options.color = modules.utils.extract_highlight_colors(options.color)
+    elseif type(options.color) == 'function' then
+      options.color = options.color(mode, section)
     end
-    if type(options_color) == 'table' then
-      if not ret.fg and options_color.fg then
-        ret.fg = options_color.fg
+    local options_hl_name = M.append_mode(options.color_highlight.name)
+    if type(options.color) == 'table' then
+      if not ret.fg and options.color.fg then
+        ret.fg = options.color.fg
+        if loaded_highlights[options_hl_name] then
+          loaded_highlights[options_hl_name].attached[hl_name] = { fg = 'fg' }
+        end
       end
-      if not ret.bg and options_color.bg then
-        ret.bg = options_color.bg
+      if not ret.bg and options.color.bg then
+        ret.bg = options.color.bg
+        if loaded_highlights[options_hl_name] then
+          loaded_highlights[options_hl_name].attached[hl_name] = { bg = 'bg' }
+        end
       end
     end
   end
@@ -217,12 +225,19 @@ local function get_default_component_color(mode, section, color, options_color)
   elseif type(default_color) == 'function' then
     default_color = default_color(mode, section)
   end
+  local default_hl_name = string.format('lualine_%s_%s', section, mode)
   if type(default_color) == 'table' then
     if not ret.fg and default_color.fg then
       ret.fg = default_color.fg
+      if loaded_highlights[default_hl_name] then
+        loaded_highlights[default_hl_name].attached[hl_name] = { fg = 'fg' }
+      end
     end
     if not ret.bg and default_color.bg then
       ret.bg = default_color.bg
+      if loaded_highlights[default_hl_name] then
+        loaded_highlights[default_hl_name].attached[hl_name] = { bg = 'bg' }
+      end
     end
   end
   return ret
@@ -257,7 +272,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   if type(color) == 'string' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
     M.highlight(highlight_group_name, nil, nil, nil, color) -- l8nk to group
-    return { name = highlight_group_name, no_mode = true, link = true, no_default = apply_no_default }
+    return { name = highlight_group_name, no_mode = true, link = true, no_default = apply_no_default, options = options}
   end
   if type(color) == 'function' then
     local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
@@ -266,7 +281,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
       fn = color,
       no_mode = false,
       section = section,
-      component_color = color ~= options.color and options.color,
+      options = options,
       no_default = apply_no_default,
     }
   end
@@ -289,13 +304,14 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   }
   for _, mode in ipairs(modes) do
     local highlight_group_name = { options.self.section, highlight_tag, mode }
-    local cl = get_default_component_color(mode, section, color, options.color)
+    local cl = get_default_component_color(highlight_group_name, mode, section, color, options)
     M.highlight(table.concat(highlight_group_name, '_'), cl.fg, cl.bg, color.gui, nil)
   end
   return {
     name = options.self.section .. '_' .. highlight_tag,
     no_mode = false,
     section = section,
+    options = options,
     no_default = apply_no_default,
   }
 end
@@ -324,7 +340,7 @@ function M.component_format_highlight(highlight, is_focused)
       local hl_name = highlight.name
       if not highlight.no_default and not (color.fg and color.bg) then
         hl_name = M.append_mode(highlight.name, is_focused)
-        color = get_default_component_color(mode, highlight.section, color, highlight.component_color)
+        color = get_default_component_color(hl_name, mode, highlight.section, color, highlight.options)
       end
       M.highlight(hl_name, color.fg, color.bg, color.gui, nil)
       return '%#' .. hl_name .. '#'
