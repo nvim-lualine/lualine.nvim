@@ -226,7 +226,7 @@ local function get_default_component_color(highlight, mode, section, color, opti
       if def_color == highlight.fn then
         return
       end
-      def_color = def_color(mode, section)
+      def_color = def_color{section = section}
     end
     if type(def_color) == 'table' then
       if not ret.fg and def_color.fg then
@@ -371,8 +371,7 @@ function M.component_format_highlight(highlight, is_focused)
     highlight_group = append_mode(highlight_group, is_focused)
     return '%#' .. highlight_group .. '#'
   else
-    local mode = require('lualine.utils.mode').get_mode()
-    local color = highlight.fn { mode = mode, section = highlight.section } or {}
+    local color = highlight.fn { section = highlight.section } or {}
     local hl_name = highlight.name
     if type(color) == 'string' then
       M.highlight(hl_name, nil, nil, nil, color)
