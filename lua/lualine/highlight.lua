@@ -376,7 +376,7 @@ end
 ---@return string formatted highlight group name
 function M.format_highlight(section, is_focused)
   local mode = append_mode('', is_focused):sub(2)
-  local ret
+  local ret = ''
 
   if theme_hls[mode] and theme_hls[mode][section] then
     ret = M.component_format_highlight(theme_hls[mode][section], is_focused)
@@ -386,8 +386,6 @@ function M.format_highlight(section, is_focused)
     ret = M.component_format_highlight(theme_hls['normal'][section], is_focused)
   elseif theme_hls['normal'] and section > 'c' and theme_hls['normal'][section_highlight_map[section]] then
     ret = M.component_format_highlight(theme_hls['normal'][section_highlight_map[section]], is_focused)
-  else
-    ret = string.format('%%#lualine_%s_%s#', section, mode)
   end
 
   return ret
