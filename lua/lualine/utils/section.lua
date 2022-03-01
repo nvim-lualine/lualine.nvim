@@ -62,6 +62,11 @@ function M.draw_section(section, section_name, is_focused)
     if
       (type(section[component_no].options.color) == 'table' and section[component_no].options.color.bg)
       or type(section[component_no].options.color) == 'string'
+      or (
+        type(section[component_no].options.color) == 'function'
+        and section[component_no].color_fn_cache
+        and section[component_no].color_fn_cache.bg
+      )
     then
       strip_next_component = true
       status[component_no] = section[component_no]:strip_separator()

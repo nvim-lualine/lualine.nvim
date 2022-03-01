@@ -384,7 +384,7 @@ function M.component_format_highlight(highlight, is_focused)
         color = get_default_component_color(hl, append_mode(''):sub(2), highlight.section, color, highlight.options)
       end
       M.highlight(hl_name, color.fg, color.bg, color.gui, nil)
-      return '%#' .. hl_name .. '#'
+      return '%#' .. hl_name .. '#', color
     end
   end
 end

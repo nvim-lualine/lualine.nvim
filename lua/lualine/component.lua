@@ -89,7 +89,9 @@ end
 ---applies custom highlights for component
 function M:apply_highlights(default_highlight)
   if self.options.color_highlight then
-    self.status = highlight.component_format_highlight(self.options.color_highlight) .. self.status
+    local hl_fmt
+    hl_fmt, M.color_fn_cache = highlight.component_format_highlight(self.options.color_highlight)
+    self.status = hl_fmt .. self.status
   end
   if type(self.options.separator) ~= 'table' and self.status:find('%%#') then
     -- Apply default highlight only when we aren't applying trans sep and
