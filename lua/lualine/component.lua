@@ -163,7 +163,7 @@ function M:get_default_hl()
   if self.options.color_highlight then
     return highlight.component_format_highlight(self.options.color_highlight)
   elseif self.default_hl then
-     return self.default_hl
+    return self.default_hl
   else
     return highlight.format_highlight(self.options.self.section)
   end

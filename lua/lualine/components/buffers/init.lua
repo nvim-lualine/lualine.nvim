@@ -44,8 +44,8 @@ end
 function M:init(options)
   M.super.init(self, options)
   default_options.buffers_color = {
-    active = get_hl('lualine_'..options.self.section, true),
-    inactive = get_hl('lualine_'..options.self.section, false),
+    active = get_hl('lualine_' .. options.self.section, true),
+    inactive = get_hl('lualine_' .. options.self.section, false),
   }
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
   self.highlights = {
