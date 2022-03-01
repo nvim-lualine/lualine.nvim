@@ -71,7 +71,7 @@ end
 
 function M.get_lualine_hl(name)
   local hl = loaded_highlights[name]
-  if hl then
+  if hl and not hl.empty then
     if hl.link then
       return modules.utils.extract_highlight_colors(hl.link)
     end
@@ -107,6 +107,7 @@ function M.highlight(name, foreground, background, gui, link)
   else
     foreground = sanitize_color(foreground)
     background = sanitize_color(background)
+    gui = (gui ~= nil and gui ~= '') and gui or 'None'
     if
       loaded_highlights[name]
       and loaded_highlights[name].fg == foreground
@@ -116,8 +117,6 @@ function M.highlight(name, foreground, background, gui, link)
       return -- color is already defined why are we doing this anyway ?
     end
     table.insert(command, name)
-    gui = (gui ~= nil and gui ~= '') and gui or 'None'
-
     table.insert(command, 'guifg=' .. foreground)
     table.insert(command, 'guibg=' .. background)
     table.insert(command, 'gui=' .. gui)
@@ -183,6 +182,17 @@ function M.highlight(name, foreground, background, gui, link)
   }
 end
 
+---Attach an hl to another so attachee auto updated on change to hl it's attached too.
+---@param provider string the hl receiver is getting attached to
+---@param receiver string the hl that will be auto updated upon change to provider
+---@param provider_el_type string (fg/bg) what element receiver relates to of provider
+---@param receiver_el_type string (fg/bg) what element provider relates to of receiver
+local function attach_hl(provider, receiver, provider_el_type, receiver_el_type)
+  if loaded_highlights[provider] == nil then
+    loaded_highlights[provider] = { empty = true, attached = {} }
+  end
+  loaded_highlights[provider].attached[receiver] = { [provider_el_type] = receiver_el_type }
+end
 ---define hl_groups for a theme
 ---@param theme table
 function M.create_highlight_groups(theme)
@@ -194,7 +204,7 @@ function M.create_highlight_groups(theme)
   for mode, sections in pairs(theme) do
     theme_hls[mode] = {}
     for section, color in pairs(sections) do
-      local hl_tag = table.concat({ section, mode }, '_')
+      local hl_tag = mode
       psudo_options.self.section = section
       theme_hls[mode][section] = M.create_component_highlight_group(color, hl_tag, psudo_options, true)
     end
@@ -242,29 +252,31 @@ local function get_default_component_color(hl_name, mode, section, color, option
     if vim.deep_equal(def_color, color) then
       return
     end
+    if type(def_color) == 'function' then
+      def_color = def_color { section = section }
+    end
     if type(def_color) == 'string' then
       def_color = modules.utils.extract_highlight_colors(def_color)
-    elseif type(def_color) == 'function' then
-      def_color = def_color { section = section }
     end
     if type(def_color) == 'table' then
       if not ret.fg and def_color.fg then
         ret.fg = def_color.fg
-        if loaded_highlights[def_name] then
-          loaded_highlights[def_name].attached[hl_name] = { fg = 'fg' }
-        end
+        attach_hl(def_name, hl_name, 'fg', 'fg')
       end
       if not ret.bg and def_color.bg then
         ret.bg = def_color.bg
-        if loaded_highlights[def_name] then
-          loaded_highlights[def_name].attached[hl_name] = { bg = 'bg' }
-        end
+        attach_hl(def_name, hl_name, 'bg', 'bg')
       end
     end
   end
 
-  if options.color and options.color_highlight and options.color_highlight.name ~= hl_name then
-    apply_default(options.color, options.color_highlight.name and append_mode(options.color_highlight.name) or '')
+  if
+    options.color
+    and options.color_highlight
+    and options.color_highlight.name
+    and options.color_highlight.name .. '_' .. mode ~= hl_name
+  then
+    apply_default(options.color, options.color_highlight.name .. '_' .. mode)
   end
 
   if not ret.fg or not ret.bg then
@@ -300,7 +312,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   end
 
   if type(color) == 'string' then
-    local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
+    local highlight_group_name = table.concat({ 'lualine', section, highlight_tag }, '_')
     M.highlight(highlight_group_name, nil, nil, nil, color) -- l8nk to group
     return {
       name = highlight_group_name,
@@ -314,11 +326,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   end
 
   if type(color) == 'function' then
-    local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
-    -- create a dummy hl entry so now other hls can attach to it.
-    loaded_highlights[highlight_group_name] = {
-      attached = {},
-    }
+    local highlight_group_name = table.concat({ 'lualine', section, highlight_tag }, '_')
     return {
       name = highlight_group_name,
       fn = color,
@@ -333,7 +341,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   if apply_no_default or (color.bg and color.fg) then
     -- When bg and fg are both present we donn't need to set highlighs for
     -- each mode as they will surely look the same. So we can work without options
-    local highlight_group_name = table.concat({ 'lualine', highlight_tag }, '_')
+    local highlight_group_name = table.concat({ 'lualine', section, highlight_tag }, '_')
     M.highlight(highlight_group_name, color.fg, color.bg, color.gui, nil)
     return {
       name = highlight_group_name,
@@ -455,12 +463,8 @@ function M.get_transitional_highlights(left_hl, right_hl)
       return nil -- Separator won't be visible anyway
     end
     M.highlight(highlight_name, fg, bg, nil)
-    if loaded_highlights[left_hl] then
-      loaded_highlights[left_hl].attached[highlight_name] = { bg = 'fg' }
-    end
-    if loaded_highlights[right_hl] then
-      loaded_highlights[right_hl].attached[highlight_name] = { bg = 'bg' }
-    end
+    attach_hl(left_hl, highlight_name, 'bg', 'fg')
+    attach_hl(right_hl, highlight_name, 'bg', 'bg')
   end
   return '%#' .. highlight_name .. '#'
 end
