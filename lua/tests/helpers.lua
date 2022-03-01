@@ -49,7 +49,7 @@ M.build_component_opts = function(opts)
     end
   end
   if not opts.self then
-    opts.self = { section = 'lualine_c' }
+    opts.self = { section = 'c' }
   end
   if not opts.theme then
     opts.theme = 'gruvbox'

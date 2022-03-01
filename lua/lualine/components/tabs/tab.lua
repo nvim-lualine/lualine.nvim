@@ -70,11 +70,11 @@ function Tab:render()
     .. line
 
   -- apply separators
-  if self.options.self.section < 'lualine_x' and not self.first then
+  if self.options.self.section < 'x' and not self.first then
     local sep_before = self:separator_before()
     line = sep_before .. line
     self.len = self.len + vim.fn.strchars(sep_before)
-  elseif self.options.self.section >= 'lualine_x' and not self.last then
+  elseif self.options.self.section >= 'x' and not self.last then
     local sep_after = self:separator_after()
     line = line .. sep_after
     self.len = self.len + vim.fn.strchars(sep_after)

@@ -91,7 +91,7 @@ component type '%s' isn't recognised. Check if spelling is correct.]],
 end
 
 --- Shows notice about invalid types passed as component
---- @param index number the index of component jn section table
+--- @param index number the index of component in section table
 --- @param component table containing component elements
 --- return bool whether check passed or not
 local function is_valid_component_type(index, component)
@@ -141,7 +141,7 @@ local function load_sections(sections, options)
       end
       if is_valid_component_type(index, component) then
         component.self = {}
-        component.self.section = section_name
+        component.self.section = section_name:match('lualine_(.*)')
         -- apply default args
         component = vim.tbl_extend('keep', component, options)
         section[index] = component_loader(component)

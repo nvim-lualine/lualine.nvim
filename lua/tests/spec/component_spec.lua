@@ -15,7 +15,7 @@ describe('Component:', function()
     local comp = require('lualine.components.special.function_component')(opts)
     -- correct for lualine_c
     eq('', comp.options.separator)
-    local opts2 = build_component_opts { self = { section = 'lualine_y' } }
+    local opts2 = build_component_opts { self = { section = 'y' } }
     local comp2 = require('lualine.components.special.function_component')(opts2)
     -- correct for lualine_u
     eq('', comp2.options.separator)

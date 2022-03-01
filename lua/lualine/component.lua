@@ -38,7 +38,7 @@ end
 function M:set_separator()
   if self.options.separator == nil then
     if self.options.component_separators then
-      if self.options.self.section < 'lualine_x' then
+      if self.options.self.section < 'x' then
         self.options.separator = self.options.component_separators.left
       else
         self.options.separator = self.options.component_separators.right
@@ -119,7 +119,7 @@ function M:apply_separator()
   local separator = self.options.separator
   if type(separator) == 'table' then
     if self.options.separator[2] == '' then
-      if self.options.self.section < 'lualine_x' then
+      if self.options.self.section < 'x' then
         separator = self.options.component_separators.left
       else
         separator = self.options.component_separators.right

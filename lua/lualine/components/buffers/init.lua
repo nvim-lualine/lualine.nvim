@@ -44,8 +44,8 @@ end
 function M:init(options)
   M.super.init(self, options)
   default_options.buffers_color = {
-    active = get_hl(options.self.section, true),
-    inactive = get_hl(options.self.section, false),
+    active = get_hl('lualine_'..options.self.section, true),
+    inactive = get_hl('lualine_'..options.self.section, false),
   }
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
   self.highlights = {
@@ -112,7 +112,7 @@ function M:update_status()
   if current == -2 then
     local b = Buffer { bufnr = vim.api.nvim_get_current_buf(), options = self.options, highlights = self.highlights }
     b.current = true
-    if self.options.self.section < 'lualine_x' then
+    if self.options.self.section < 'x' then
       b.last = true
       if #buffers > 0 then
         buffers[#buffers].last = nil

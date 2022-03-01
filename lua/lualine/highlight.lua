@@ -167,13 +167,13 @@ function M.create_highlight_groups(theme)
   clear_highlights()
   active_theme = theme
   theme_hls = {}
-  local psudo_options = { self = { section = 'lualine_a' } }
+  local psudo_options = { self = { section = 'a' } }
   create_cterm_colors = not vim.go.termguicolors
   for mode, sections in pairs(theme) do
     theme_hls[mode] = {}
     for section, color in pairs(sections) do
       local hl_tag = table.concat({ section, mode }, '_')
-      psudo_options.self.section = 'lualine_' .. section
+      psudo_options.self.section = section
       theme_hls[mode][section] = M.create_component_highlight_group(color, hl_tag, psudo_options, true)
     end
   end
@@ -248,8 +248,7 @@ end
 ---@return table that can be used by component_format_highlight
 ---  to retrieve highlight group
 function M.create_component_highlight_group(color, highlight_tag, options, apply_no_default)
-  -- convert lualine_a -> a before setting section
-  local section = options.self.section:match('lualine_(.*)')
+  local section = options.self.section
   if section > 'c' and not active_theme.normal[section] then
     section = section_highlight_map[section]
   end
@@ -257,10 +256,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   local tag_id = 0
   while
     M.highlight_exists(table.concat({ 'lualine', highlight_tag }, '_'))
-    or (
-      options.self.section
-      and M.highlight_exists(table.concat({ options.self.section, highlight_tag, 'normal' }, '_'))
-    )
+    or (section and M.highlight_exists(table.concat({ 'lualine', section, highlight_tag, 'normal' }, '_')))
   do
     highlight_tag = highlight_tag .. '_' .. tostring(tag_id)
     tag_id = tag_id + 1
@@ -322,12 +318,12 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
     'inactive',
   }
   for _, mode in ipairs(modes) do
-    local highlight_group_name = table.concat({ options.self.section, highlight_tag, mode }, '_')
+    local highlight_group_name = table.concat({ 'lualine', section, highlight_tag, mode }, '_')
     local cl = get_default_component_color(highlight_group_name, mode, section, color, options)
     M.highlight(highlight_group_name, cl.fg, cl.bg, color.gui, nil)
   end
   return {
-    name = options.self.section .. '_' .. highlight_tag,
+    name = table.concat({ 'lualine', section, highlight_tag }, '_'),
     fn = nil,
     no_mode = false,
     link = false,
