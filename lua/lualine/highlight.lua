@@ -200,7 +200,16 @@ end
 ---@param color table color passed for creating component highlight
 ---@param options table Options table of component this is first fall back
 local function get_default_component_color(hl_name, mode, section, color, options)
-  local default_theme_color = active_theme[mode] and active_theme[mode][section] or active_theme.normal[section]
+  local default_theme_color
+  if active_theme[mode] and active_theme[mode][section] then
+    default_theme_color = active_theme[mode][section]
+  elseif section >= 'c' and active_theme[mode] and active_theme[mode][section_highlight_map[section]] then
+    default_theme_color = active_theme[mode][section_highlight_map[section]]
+  elseif section >= 'c' and active_theme.normal[section_highlight_map[section]] then
+    default_theme_color = active_theme.normal[section_highlight_map[section]]
+  else
+    default_theme_color = active_theme.normal[section]
+  end
   local ret = { fg = color.fg, bg = color.bg }
   if ret.fg and ret.bg then
     return ret
