@@ -292,11 +292,12 @@ describe('Filetype component', function()
 
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
+      hl = '%#lualine_c_normal#',
       padding = 0,
       colored = true,
       icon_only = false,
     }
-    assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# lua')
+    assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# lua%#lualine_c_normal#')
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
     assert.stub(hl.create_component_highlight_group).was_called_with({ fg = '#000' }, 'test_highlight_group', opts)
     hl.create_component_highlight_group:revert()

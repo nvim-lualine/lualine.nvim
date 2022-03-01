@@ -159,6 +159,16 @@ function M:strip_separator()
   return self.status
 end
 
+function M:get_default_hl()
+  if self.options.color_highlight then
+    return highlight.component_format_highlight(self.options.color_highlight)
+  elseif self.default_hl then
+     return self.default_hl
+  else
+    return highlight.format_highlight(self.options.self.section)
+  end
+end
+
 -- luacheck: push no unused args
 ---actual function that updates a component. Must be overwritten with component functionality
 function M:update_status(is_focused) end
@@ -172,6 +182,7 @@ function M:draw(default_highlight, is_focused)
   if self.options.cond ~= nil and self.options.cond() ~= true then
     return self.status
   end
+  self.default_hl = default_highlight
   local status = self:update_status(is_focused)
   if self.options.fmt then
     status = self.options.fmt(status or '')
