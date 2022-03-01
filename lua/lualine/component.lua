@@ -54,7 +54,8 @@ function M:create_option_highlights()
     self.options.color_highlight = highlight.create_component_highlight_group(
       self.options.color,
       self.options.component_name,
-      self.options
+      self.options,
+      false
     )
   end
 end

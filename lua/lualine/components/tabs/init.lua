@@ -44,12 +44,14 @@ function M:init(options)
     active = highlight.create_component_highlight_group(
       self.options.tabs_color.active,
       'tabs_active',
-      self.options
+      self.options,
+      false
     ),
     inactive = highlight.create_component_highlight_group(
       self.options.tabs_color.inactive,
       'tabs_active',
-      self.options
+      self.options,
+      false
     ),
   }
 end

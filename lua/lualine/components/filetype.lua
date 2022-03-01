@@ -43,7 +43,8 @@ function M:apply_icon()
         icon_highlight = modules.highlight.create_component_highlight_group(
           { fg = highlight_color },
           icon_highlight_group,
-          self.options
+          self.options,
+          false
         )
         icon_hl_cache[highlight_color] = icon_highlight
       end

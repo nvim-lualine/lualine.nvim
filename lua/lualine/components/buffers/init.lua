@@ -52,12 +52,14 @@ function M:init(options)
     active = highlight.create_component_highlight_group(
       self.options.buffers_color.active,
       'buffers_active',
-      self.options
+      self.options,
+      false
     ),
     inactive = highlight.create_component_highlight_group(
       self.options.buffers_color.inactive,
       'buffers_active',
-      self.options
+      self.options,
+      false
     ),
   }
 end
