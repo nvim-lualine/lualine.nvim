@@ -383,7 +383,7 @@ sections = {
       --   color = { fg = '#ffaa88', bg = 'grey', gui='italic,bold' },
       --   color = { fg = 204 }   -- When fg/bg are omitted, they default to the your theme's fg/bg.
       --   color = 'WarningMsg'   -- Highlight groups can also be used.
-      --   color = function(mode, section)
+      --   color = function(section)
       --      return { fg = vim.fn.mode() == 'n' and '#ffaa88' or '#33aaff',
       --               bg = 'grey', gui='italic,bold' }
       --      end,
