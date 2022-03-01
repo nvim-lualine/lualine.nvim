@@ -69,6 +69,28 @@ local function sanitize_color(color)
   end
 end
 
+function M.get_lualine_hl(name)
+  local hl = loaded_highlights[name]
+  if hl then
+    if hl.link then
+      return modules.utils.extract_highlight_colors(hl.link)
+    end
+    local hl_def = {
+      fg = hl.fg ~= 'None' and vim.deepcopy(hl.fg),
+      bg = hl.bg ~= 'None' and vim.deepcopy(hl.bg),
+    }
+    if hl.gui then
+      for _, flag in ipairs(vim.split(hl.gui, ',')) do
+        if flag ~= 'None' then
+          hl_def[flag] = true
+        end
+      end
+    end
+
+    return hl_def
+  end
+end
+
 --- Define a hl_group
 ---@param name string
 ---@param foreground string|number: color
@@ -195,12 +217,12 @@ end
 
 -- Helper function for create component highlight
 ---Handles fall back of colors when creating highlight group
+---@param hl_name string name of highlight that we are setting default values for
 ---@param mode string mode which default component color should be given.
 ---@param section string the lualine section component is in.
 ---@param color table color passed for creating component highlight
 ---@param options table Options table of component this is first fall back
-local function get_default_component_color(highlight, mode, section, color, options)
-  local hl_name = highlight.name
+local function get_default_component_color(hl_name, mode, section, color, options)
   local default_theme_color
   if active_theme[mode] and active_theme[mode][section] then
     default_theme_color = active_theme[mode][section]
@@ -223,10 +245,7 @@ local function get_default_component_color(highlight, mode, section, color, opti
     if type(def_color) == 'string' then
       def_color = modules.utils.extract_highlight_colors(def_color)
     elseif type(def_color) == 'function' then
-      if def_color == highlight.fn then
-        return
-      end
-      def_color = def_color{section = section}
+      def_color = def_color { section = section }
     end
     if type(def_color) == 'table' then
       if not ret.fg and def_color.fg then
@@ -251,6 +270,8 @@ local function get_default_component_color(highlight, mode, section, color, opti
   if not ret.fg or not ret.bg then
     apply_default(default_theme_color, string.format('lualine_%s_%s', section, mode))
   end
+  ret.fg = sanitize_color(ret.fg)
+  ret.bg = sanitize_color(ret.bg)
   return ret
 end
 
@@ -334,17 +355,9 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
     'inactive',
   }
   for _, mode in ipairs(modes) do
-    local hl = {
-      name = table.concat({ 'lualine', section, highlight_tag, mode }, '_'),
-      fn = nil,
-      no_mode = false,
-      link = false,
-      section = section,
-      options = options,
-      no_default = apply_no_default,
-    }
-    local cl = get_default_component_color(hl, mode, section, color, options)
-    M.highlight(hl.name, cl.fg, cl.bg, color.gui, nil)
+    local hl_name = table.concat({ 'lualine', section, highlight_tag, mode }, '_')
+    local cl = get_default_component_color(hl_name, mode, section, color, options)
+    M.highlight(hl_name, cl.fg, cl.bg, cl.gui, nil)
   end
   return {
     name = table.concat({ 'lualine', section, highlight_tag }, '_'),
@@ -378,9 +391,14 @@ function M.component_format_highlight(highlight, is_focused)
       return '%#' .. hl_name .. '#'
     elseif type(color) == 'table' then
       if not highlight.no_default and not (color.fg and color.bg) then
-        local hl = vim.deepcopy(highlight)
-        hl.name = append_mode(hl.name, is_focused)
-        color = get_default_component_color(hl, append_mode(''):sub(2), highlight.section, color, highlight.options)
+        hl_name = append_mode(highlight.name, is_focused)
+        color = get_default_component_color(
+          hl_name,
+          append_mode(''):sub(2),
+          highlight.section,
+          color,
+          highlight.options
+        )
       end
       M.highlight(hl_name, color.fg, color.bg, color.gui, nil)
       return '%#' .. hl_name .. '#', color

@@ -74,7 +74,9 @@ describe('Section genarator', function()
 
   it('can remove separators from component with custom colors', function()
     stub(hl, 'format_highlight')
+    stub(hl, 'get_lualine_hl')
     hl.format_highlight.returns('%#lualine_MySection_normal#')
+    hl.get_lualine_hl.returns { fg = '#000000', bg = '#ffffff' }
 
     vim.g.actual_curwin = tostring(vim.api.nvim_get_current_win())
     local opts = build_component_opts { section_separators = { left = '', right = '' } }
@@ -118,5 +120,6 @@ describe('Section genarator', function()
     vim.g.actual_curwin = nil
 
     hl.format_highlight:revert()
+    hl.get_lualine_hl:revert()
   end)
 end)
