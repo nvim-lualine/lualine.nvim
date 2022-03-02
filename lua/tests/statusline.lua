@@ -96,8 +96,10 @@ local function eval_stl(stl_expr, width)
   return table.concat(buf, '\n')
 end
 
-function M:expect_expr(result, expr)
-  eq(helpers.dedent(result), eval_stl(expr, self.width))
+function M:expect_expr(expected, expr)
+  expected = helpers.dedent(expected)
+  local result = eval_stl(expr, self.width)
+  eq(expected, result, '\nDiff:\n'..vim.diff(expected, result, {algorithm='histogram'}))
 end
 
 function M:snapshot_expr(expr)
