@@ -1,4 +1,5 @@
 local ffi = require('ffi')
+local helpers = require('tests.helpers')
 local eq = require'luassert'.are.same
 local stub = require('luassert.stub')
 
@@ -91,17 +92,17 @@ local function eval_stl(stl_expr, width)
     stl = stl .. string.format('{%d:%s}', hl_map[hl.name].id, vim.fn.strpart(stl_buf, hl.start, hl.len))
   end
   table.insert(buf, '|' .. stl .. '|')
+  table.insert(buf, '')
   return table.concat(buf, '\n')
 end
 
 function M:expect_expr(result, expr)
-  eq(result, eval_stl(expr, self.width))
+  eq(helpers.dedent(result), eval_stl(expr, self.width))
 end
 
 function M:snapshot_expr(expr)
   print('statusline:expect [===[')
-  print(eval_stl(expr, self.width))
-  print(']===]')
+  print(eval_stl(expr, self.width)..']===]')
 end
 
 function M:snapshot()
