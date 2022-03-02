@@ -95,7 +95,7 @@ describe('Section genarator', function()
       require('lualine.components.special.function_component')(opts_colored),
       require('lualine.components.special.function_component')(opts),
     }
-    local highlight_name2 = 'lualine_' .. section[2].options.component_name
+    local highlight_name2 = 'lualine_c_' .. section[2].options.component_name
     -- Removes separator on string color
     eq(
       '%#lualine_MySection_normal# test %#' .. highlight_name2 .. '#' .. ' test %#lualine_MySection_normal# test ',
