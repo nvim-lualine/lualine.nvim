@@ -58,6 +58,15 @@ function M:create_option_highlights()
       false
     )
   end
+  -- setup icon highlight
+  if type(self.options.icon) == 'table' and self.options.icon.color then
+    self.options.icon_color_highlight = highlight.create_component_highlight_group(
+      self.options.icon.color,
+      self.options.component_name .. 'icon',
+      self.options,
+      false
+    )
+  end
 end
 
 ---adds spaces to left and right of a component
@@ -111,8 +120,22 @@ end
 
 ---apply icon in front of component (prepemds component with icon)
 function M:apply_icon()
-  if self.options.icons_enabled and self.options.icon then
-    self.status = self.options.icon .. ' ' .. self.status
+  local icon = self.options.icon
+  if self.options.icons_enabled and icon then
+    if type(icon) == 'table' then
+      icon = icon[1]
+    end
+    if self.options.icon_color_highlight then
+      self.status = table.concat {
+        highlight.component_format_highlight(self.options.icon_color_highlight),
+        icon,
+        self:get_default_hl(),
+        ' ',
+        self.status,
+      }
+    else
+      self.status = table.concat({ icon, self.status }, ' ')
+    end
   end
 end
 

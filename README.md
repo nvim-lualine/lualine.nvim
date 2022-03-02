@@ -352,7 +352,12 @@ sections = {
     {
       'mode',
       icons_enabled = true, -- Enables the display of icons alongside the component.
-      icon = nil,           -- Defines the icon to be displayed in front of the component.
+      -- Defines the icon to be displayed in front of the component.
+      -- Can be string|table
+      -- As table it must contain the icon as first entry and can use
+      -- color option to custom color the icon. Example:
+      -- {'branch', icon = ''} / {'branch', icon = {'', color={fg='green'}}}
+      icon = nil,
 
       separator = nil,      -- Determines what separator to use for the component.
                             -- Note:
