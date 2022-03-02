@@ -57,7 +57,7 @@ function M:init(options)
     ),
     inactive = highlight.create_component_highlight_group(
       self.options.buffers_color.inactive,
-      'buffers_active',
+      'buffers_inactive',
       self.options,
       false
     ),

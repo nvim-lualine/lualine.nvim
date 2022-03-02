@@ -49,7 +49,7 @@ function M:init(options)
     ),
     inactive = highlight.create_component_highlight_group(
       self.options.tabs_color.inactive,
-      'tabs_active',
+      'tabs_inactive',
       self.options,
       false
     ),

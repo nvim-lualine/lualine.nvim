@@ -304,7 +304,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
 
   local tag_id = 0
   while
-    M.highlight_exists(table.concat({ 'lualine', highlight_tag }, '_'))
+    M.highlight_exists(table.concat({ 'lualine', section, highlight_tag }, '_'))
     or (section and M.highlight_exists(table.concat({ 'lualine', section, highlight_tag, 'normal' }, '_')))
   do
     highlight_tag = highlight_tag .. '_' .. tostring(tag_id)
