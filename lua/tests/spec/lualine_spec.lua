@@ -2,7 +2,7 @@
 -- MIT license, see LICENSE for more details.
 
 local eq = assert.are.same
-local statusline = require'tests.statusline'.new(120, true)
+local statusline = require('tests.statusline').new(120, true)
 
 describe('Lualine', function()
   local utils = require('lualine.utils.utils')
@@ -59,7 +59,7 @@ describe('Lualine', function()
   end)
 
   it('shows active statusline', function()
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
@@ -68,12 +68,12 @@ describe('Lualine', function()
        10: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
     }
     |{1: NORMAL }{8:}{3:  master }{10:}{5: [No Name] }{5:                                                                      }{5:  }{10:}{3: 100% }{8:}{1:   0:1  }|
-    ]===]
+    ]===])
   end)
 
   it('shows inactive statusline', function()
     lualine_focused = false
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
@@ -82,7 +82,7 @@ describe('Lualine', function()
        10: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
     }
     |{1: NORMAL }{8:}{3:  master }{10:}{5: [No Name] }{5:                                                                      }{5:  }{10:}{3: 100% }{8:}{1:   0:1  }|
-    ]===]
+    ]===])
   end)
 
   it('get_config can retrive config', function()
@@ -93,7 +93,7 @@ describe('Lualine', function()
     local conf = require('lualine').get_config()
     conf.sections.lualine_a = {}
     require('lualine').setup(conf)
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         2: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
@@ -102,21 +102,21 @@ describe('Lualine', function()
         8: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
     }
     |{2:  master }{8:}{4: [No Name] }{4:                                                                               }{4:  }{8:}{2: 100% }{7:}{1:   0:1  }|
-    ]===]
+    ]===])
   end)
 
   it('Can work without section separators', function()
     local conf = vim.deepcopy(config)
     conf.options.section_separators = ''
     require('lualine').setup(conf)
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
         5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
     }
     |{1: NORMAL }{3:  master }{5: [No Name] }{5:                                                                          }{5:  }{3: 100% }{1:   0:1  }|
-    ]===]
+    ]===])
   end)
 
   it('Can work without component_separators', function()
@@ -128,7 +128,7 @@ describe('Lualine', function()
       return 'test_comp2'
     end)
     require('lualine').setup(conf)
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         5: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
@@ -137,10 +137,10 @@ describe('Lualine', function()
        12: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
     }
     |{1: NORMAL }{1: test_comp1 }{10:}{5:  master }{12:}{7: [No Name] }{7:                                            }{7:  }{12:}{5: 100% }{10:}{1:   0:1  }{1: test_comp2 }|
-    ]===]
+    ]===])
     conf.options.component_separators = ''
     require('lualine').setup(conf)
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         5: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
@@ -149,7 +149,7 @@ describe('Lualine', function()
        12: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
     }
     |{1: NORMAL }{1: test_comp1 }{10:}{5:  master }{12:}{7: [No Name] }{7:                                              }{7:  }{12:}{5: 100% }{10:}{1:   0:1  }{1: test_comp2 }|
-    ]===]
+    ]===])
   end)
 
   it('mid divider can be disbled on special case', function()
@@ -159,7 +159,7 @@ describe('Lualine', function()
     conf.sections.lualine_y = {}
     conf.sections.lualine_z = {}
     require('lualine').setup(conf)
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         2: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
@@ -168,7 +168,7 @@ describe('Lualine', function()
         5: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
     }
     |{1: NORMAL }{4:}{2:  master }{5:}{3: [No Name] }|
-    ]===]
+    ]===])
   end)
 
   it('works with icons disabled', function()
@@ -176,14 +176,14 @@ describe('Lualine', function()
     conf.options.icons_enabled = false
     conf.options.section_separators = ''
     require('lualine').setup(conf)
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
         5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
     }
     |{1: NORMAL }{3: master }{5: [No Name] }{5:                                                                         }{5: unix }{3: 100% }{1:   0:1  }|
-    ]===]
+    ]===])
   end)
 
   it('can be desabled for specific filetypes', function()
@@ -192,11 +192,11 @@ describe('Lualine', function()
     require('lualine').setup(conf)
     local old_ft = vim.bo.ft
     vim.bo.ft = 'test_ft'
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
     }
     ||
-    ]===]
+    ]===])
     vim.bo.ft = old_ft
   end)
 
@@ -215,14 +215,14 @@ describe('Lualine', function()
     local old_ft = vim.bo.ft
     vim.bo.ft = 'test_ft'
     require('lualine').setup(conf)
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         2: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         3: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
     }
     |{1: custom_extension_component }{3:}{2:                                                                                           }|
-    ]===]
+    ]===])
     vim.bo.ft = old_ft
   end)
 
@@ -241,16 +241,16 @@ describe('Lualine', function()
     local old_ft = vim.bo.ft
     vim.bo.ft = 'test_ft1'
     require('lualine').setup(conf)
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         2: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         3: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
     }
     |{1: custom_extension_component }{3:}{2:                                                                                           }|
-    ]===]
+    ]===])
     vim.bo.ft = old_ft
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
@@ -259,17 +259,17 @@ describe('Lualine', function()
        10: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
     }
     |{1: NORMAL }{8:}{3:  master }{10:}{5: [No Name] }{5:                                                                      }{5:  }{10:}{3: 100% }{8:}{1:   0:1  }|
-    ]===]
+    ]===])
 
     vim.bo.ft = 'test_ft2'
-    statusline:expect [===[
+    statusline:expect([===[
     highlights = {
         1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
         2: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         3: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
     }
     |{1: custom_extension_component }{3:}{2:                                                                                           }|
-    ]===]
+    ]===])
     vim.bo.ft = old_ft
   end)
 

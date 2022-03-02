@@ -90,9 +90,9 @@ function M.dedent(str, leave_indent)
   -- create a pattern for the indent
   indent = indent:gsub('%s', '[ \t]')
   -- strip it from the first line
-  str = str:gsub('^'..indent, left_indent)
+  str = str:gsub('^' .. indent, left_indent)
   -- strip it from the remaining lines
-  str = str:gsub('[\n]'..indent, '\n' .. left_indent)
+  str = str:gsub('[\n]' .. indent, '\n' .. left_indent)
   return str
 end
 

@@ -1,6 +1,6 @@
 local ffi = require('ffi')
 local helpers = require('tests.helpers')
-local eq = require'luassert'.are.same
+local eq = require('luassert').are.same
 local stub = require('luassert.stub')
 
 local M = {}
@@ -102,7 +102,7 @@ end
 
 function M:snapshot_expr(expr)
   print('statusline:expect [===[')
-  print(eval_stl(expr, self.width)..']===]')
+  print(eval_stl(expr, self.width) .. ']===]')
 end
 
 function M:snapshot()
@@ -112,7 +112,6 @@ function M:snapshot()
   self:snapshot_expr(require('lualine').statusline(self.active))
   utils.is_focused:revert()
 end
-
 
 function M:expect(result)
   local utils = require('lualine.utils.utils')
