@@ -232,7 +232,7 @@ end
 ---@param section string the lualine section component is in.
 ---@param color table color passed for creating component highlight
 ---@param options table Options table of component this is first fall back
-local function get_default_component_color(hl_name, mode, section, color, options, no_default)
+local function get_default_component_color(hl_name, mode, section, color, options)
   local default_theme_color
   if active_theme[mode] and active_theme[mode][section] then
     default_theme_color = active_theme[mode][section]
@@ -244,20 +244,13 @@ local function get_default_component_color(hl_name, mode, section, color, option
     default_theme_color = active_theme.normal[section]
   end
 
-  if type(color) == 'function' then
-    color = color {section = section} or {}
-  end
-  if type(color) == 'string' then
-    return {link = color}
-  end
   local ret = { fg = color.fg, bg = color.bg, gui = color.gui }
-  if no_default == true or (ret.fg and ret.bg) then
+  if ret.fg and ret.bg then
     return ret
   end
 
   local function apply_default(def_color, def_name)
-    if type(def_color) == 'function' and loaded_highlights[def_name]
-       and not loaded_highlights[def_name].empty then
+    if type(def_color) == 'function' and loaded_highlights[def_name] and not loaded_highlights[def_name].empty then
       if loaded_highlights[def_name].link then
         def_color = loaded_highlights[def_name].link
       else
@@ -361,7 +354,15 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   }
   for _, mode in ipairs(modes) do
     local hl_name = table.concat({ 'lualine', section, highlight_tag, mode }, '_')
-    local cl = get_default_component_color(hl_name, mode, section, color, options)
+    local cl = color
+    if type(color) == 'function' then
+      cl = color { section = section } or {}
+    end
+    if type(cl) == 'string' then
+      cl = { link = cl }
+    else
+      cl = get_default_component_color(hl_name, mode, section, cl, options)
+    end
     M.highlight(hl_name, cl.fg, cl.bg, cl.gui, cl.link)
   end
   return {
@@ -402,8 +403,7 @@ function M.component_format_highlight(highlight, is_focused)
           append_mode(''):sub(2),
           highlight.section,
           color,
-          highlight.options,
-          highlight.apply_no_default
+          highlight.options
         )
       end
       M.highlight(hl_name, color.fg, color.bg, color.gui, color.link)
