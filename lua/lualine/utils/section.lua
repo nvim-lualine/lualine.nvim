@@ -15,7 +15,7 @@ local highlight = require('lualine.highlight')
 ---@return string formated string for a section
 --TODO Clean this up this does lots of messy stuff.
 function M.draw_section(section, section_name, is_focused)
-  local highlight_name = highlight.format_highlight('lualine_' .. section_name, is_focused)
+  local highlight_name = highlight.format_highlight(section_name, is_focused)
 
   local status = {}
   for _, component in pairs(section) do
@@ -25,6 +25,8 @@ function M.draw_section(section, section_name, is_focused)
     end
     table.insert(status, component:draw(highlight_name, is_focused))
   end
+
+  local section_color = utils.extract_highlight_colors(string.match(highlight_name, '%%#(.*)#'))
 
   -- Flags required for knowing when to remove component separator
   local strip_next_component = false
@@ -60,8 +62,18 @@ function M.draw_section(section, section_name, is_focused)
     end
     -- Remove component separator when color option is used to color background
     if
-      (type(section[component_no].options.color) == 'table' and section[component_no].options.color.bg)
+      (
+        type(section[component_no].options.color) == 'table'
+        and section[component_no].options.color.bg
+        and section[component_no].options.color.bg ~= section_color.bg
+      )
       or type(section[component_no].options.color) == 'string'
+      or (
+        type(section[component_no].options.color) == 'function'
+        and section[component_no].color_fn_cache
+        and section[component_no].color_fn_cache.bg
+        and section[component_no].color_fn_cache.bg ~= section_color.bg
+      )
     then
       strip_next_component = true
       status[component_no] = section[component_no]:strip_separator()

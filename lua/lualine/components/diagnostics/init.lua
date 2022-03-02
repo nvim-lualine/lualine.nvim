@@ -33,22 +33,26 @@ function M:init(options)
       error = modules.highlight.create_component_highlight_group(
         self.options.diagnostics_color.error,
         'diagnostics_error',
-        self.options
+        self.options,
+        false
       ),
       warn = modules.highlight.create_component_highlight_group(
         self.options.diagnostics_color.warn,
         'diagnostics_warn',
-        self.options
+        self.options,
+        false
       ),
       info = modules.highlight.create_component_highlight_group(
         self.options.diagnostics_color.info,
         'diagnostics_info',
-        self.options
+        self.options,
+        false
       ),
       hint = modules.highlight.create_component_highlight_group(
         self.options.diagnostics_color.hint,
         'diagnostics_hint',
-        self.options
+        self.options,
+        false
       ),
     }
   end

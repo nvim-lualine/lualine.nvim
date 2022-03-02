@@ -29,10 +29,10 @@ function M.init_component(component, opts)
 end
 
 -- Checks ouput of a component
-M.assert_component = function(component, opts, result)
+M.assert_component = function(component, opts, result, is_active)
   local comp = M.init_component(component, opts)
   -- for testing global options
-  eq(result, comp:draw(opts.hl))
+  eq(result, comp:draw(opts.hl, is_active or true))
 end
 
 function M.assert_component_instence(comp, result)
@@ -49,7 +49,7 @@ M.build_component_opts = function(opts)
     end
   end
   if not opts.self then
-    opts.self = { section = 'lualine_c' }
+    opts.self = { section = 'c' }
   end
   if not opts.theme then
     opts.theme = 'gruvbox'

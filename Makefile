@@ -31,7 +31,7 @@ endif
 	@rm -rf tmp_home
 
 docgen:
-	@bash ./scripts/docgen.sh
+	@sh ./scripts/docgen.sh
 
 precommit_check: docgen format test lint
 

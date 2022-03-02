@@ -387,15 +387,19 @@ General component options              These are options that control behavior
     
           -- Defines a custom color for the component:
           --
-          -- 'highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' }
+          -- 'highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' } | function
           -- Note:
           --  '|' is synonymous with 'or', meaning a different acceptable format for that placeholder.
+          -- color function has to return one of other color types ('highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' })
+          -- color functions can be used to have different colors based on state as shown below.
           --
           -- Examples:
           --   color = { fg = '#ffaa88', bg = 'grey', gui='italic,bold' },
           --   color = { fg = 204 }   -- When fg/bg are omitted, they default to the your theme's fg/bg.
           --   color = 'WarningMsg'   -- Highlight groups can also be used.
-          --
+          --   color = function(section)
+          --      return { fg = vim.bo.modified and '#aa3355' or '#33aa88' }
+          --   end,
           color = nil, -- The default is your theme's color for that section and mode.
     
           -- Specify what type a component is, if omitted, lualine will guess it for you.

@@ -15,7 +15,7 @@ describe('Component:', function()
     local comp = require('lualine.components.special.function_component')(opts)
     -- correct for lualine_c
     eq('', comp.options.separator)
-    local opts2 = build_component_opts { self = { section = 'lualine_y' } }
+    local opts2 = build_component_opts { self = { section = 'y' } }
     local comp2 = require('lualine.components.special.function_component')(opts2)
     -- correct for lualine_u
     eq('', comp2.options.separator)
@@ -40,7 +40,12 @@ describe('Component:', function()
     -- color highlight wan't in options when create_comp_hl was
     -- called so remove it before assert
     comp1.options.color_highlight = nil
-    assert.stub(hl.create_component_highlight_group).was_called_with(color, comp1.options.component_name, comp1.options)
+    assert.stub(hl.create_component_highlight_group).was_called_with(
+      color,
+      comp1.options.component_name,
+      comp1.options,
+      false
+    )
     hl.create_component_highlight_group:revert()
     color = 'MyHl'
     local opts2 = build_component_opts { color = color }
@@ -51,7 +56,12 @@ describe('Component:', function()
     -- color highlight wan't in options when create_comp_hl was
     -- called so remove it before assert
     comp2.options.color_highlight = nil
-    assert.stub(hl.create_component_highlight_group).was_called_with(color, comp2.options.component_name, comp2.options)
+    assert.stub(hl.create_component_highlight_group).was_called_with(
+      color,
+      comp2.options.component_name,
+      comp2.options,
+      false
+    )
     hl.create_component_highlight_group:revert()
   end)
 
@@ -186,7 +196,7 @@ describe('Component:', function()
         color = 'MyHl',
       }
       local comp = require('lualine.components.special.function_component')(opts)
-      local custom_link_hl_name = 'lualine_' .. comp.options.component_name .. '_no_mode'
+      local custom_link_hl_name = 'lualine_c_' .. comp.options.component_name
       eq('%#' .. custom_link_hl_name .. '#test', comp:draw(opts.hl))
       local opts2 = build_component_opts {
         component_separators = { left = '', right = '' },
@@ -280,26 +290,36 @@ describe('Filetype component', function()
         return '*', 'test_highlight_group'
       end,
     }
-
+    vim.g.actual_curwin = tostring(vim.api.nvim_get_current_win())
     local hl = require('lualine.highlight')
     local utils = require('lualine.utils.utils')
     stub(hl, 'create_component_highlight_group')
+    stub(hl, 'format_highlight')
     stub(utils, 'extract_highlight_colors')
-    hl.create_component_highlight_group.returns('MyCompHl')
+    hl.create_component_highlight_group.returns { name = 'MyCompHl', no_mode = false, section = 'a' }
+    hl.format_highlight.returns('%#lualine_c_normal#')
     utils.extract_highlight_colors.returns('#000')
 
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
+      hl = '%#lualine_c_normal#',
       padding = 0,
       colored = true,
       icon_only = false,
     }
-    assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# lua')
+    assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# lua%#lualine_c_normal#')
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
-    assert.stub(hl.create_component_highlight_group).was_called_with({ fg = '#000' }, 'test_highlight_group', opts)
+    assert.stub(hl.create_component_highlight_group).was_called_with(
+      { fg = '#000' },
+      'test_highlight_group',
+      opts,
+      false
+    )
     hl.create_component_highlight_group:revert()
+    hl.format_highlight:revert()
     utils.extract_highlight_colors:revert()
     package.loaded['nvim-web-devicons'] = nil
+    vim.g.actual_curwin = nil
   end)
 
   it("Doesn't color when colored is false", function()

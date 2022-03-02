@@ -47,17 +47,20 @@ function M:init(options)
       added = modules.highlight.create_component_highlight_group(
         self.options.diff_color.added,
         'diff_added',
-        self.options
+        self.options,
+        false
       ),
       modified = modules.highlight.create_component_highlight_group(
         self.options.diff_color.modified,
         'diff_modified',
-        self.options
+        self.options,
+        false
       ),
       removed = modules.highlight.create_component_highlight_group(
         self.options.diff_color.removed,
         'diff_removed',
-        self.options
+        self.options,
+        false
       ),
     }
   end
