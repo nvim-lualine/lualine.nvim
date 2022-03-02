@@ -232,7 +232,7 @@ end
 ---@param section string the lualine section component is in.
 ---@param color table color passed for creating component highlight
 ---@param options table Options table of component this is first fall back
-local function get_default_component_color(hl_name, mode, section, color, options)
+local function get_default_component_color(hl_name, mode, section, color, options, no_default)
   local default_theme_color
   if active_theme[mode] and active_theme[mode][section] then
     default_theme_color = active_theme[mode][section]
@@ -243,14 +243,26 @@ local function get_default_component_color(hl_name, mode, section, color, option
   else
     default_theme_color = active_theme.normal[section]
   end
+
+  if type(color) == 'function' then
+    color = color {section = section} or {}
+  end
+  if type(color) == 'string' then
+    return {link = color}
+  end
   local ret = { fg = color.fg, bg = color.bg, gui = color.gui }
-  if ret.fg and ret.bg then
+  if no_default == true or (ret.fg and ret.bg) then
     return ret
   end
 
   local function apply_default(def_color, def_name)
-    if vim.deep_equal(def_color, color) then
-      return
+    if type(def_color) == 'function' and loaded_highlights[def_name]
+       and not loaded_highlights[def_name].empty then
+      if loaded_highlights[def_name].link then
+        def_color = loaded_highlights[def_name].link
+      else
+        def_color = loaded_highlights[def_name]
+      end
     end
     if type(def_color) == 'function' then
       def_color = def_color { section = section }
@@ -259,11 +271,11 @@ local function get_default_component_color(hl_name, mode, section, color, option
       def_color = modules.utils.extract_highlight_colors(def_color)
     end
     if type(def_color) == 'table' then
-      if not ret.fg and def_color.fg then
+      if not ret.fg then
         ret.fg = def_color.fg
         attach_hl(def_name, hl_name, 'fg', 'fg')
       end
-      if not ret.bg and def_color.bg then
+      if not ret.bg then
         ret.bg = def_color.bg
         attach_hl(def_name, hl_name, 'bg', 'bg')
       end
@@ -277,9 +289,7 @@ local function get_default_component_color(hl_name, mode, section, color, option
     and options.color_highlight.name .. '_' .. mode ~= hl_name
   then
     apply_default(options.color, options.color_highlight.name .. '_' .. mode)
-  end
-
-  if not ret.fg or not ret.bg then
+  else
     apply_default(default_theme_color, string.format('lualine_%s_%s', section, mode))
   end
   ret.fg = sanitize_color(ret.fg)
@@ -325,20 +335,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
     }
   end
 
-  if type(color) == 'function' then
-    local highlight_group_name = table.concat({ 'lualine', section, highlight_tag }, '_')
-    return {
-      name = highlight_group_name,
-      fn = color,
-      no_mode = false,
-      link = false,
-      section = section,
-      options = options,
-      no_default = apply_no_default,
-    }
-  end
-
-  if apply_no_default or (color.bg and color.fg) then
+  if type(color) ~= 'function' and (apply_no_default or (color.bg and color.fg)) then
     -- When bg and fg are both present we donn't need to set highlighs for
     -- each mode as they will surely look the same. So we can work without options
     local highlight_group_name = table.concat({ 'lualine', section, highlight_tag }, '_')
@@ -365,11 +362,11 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   for _, mode in ipairs(modes) do
     local hl_name = table.concat({ 'lualine', section, highlight_tag, mode }, '_')
     local cl = get_default_component_color(hl_name, mode, section, color, options)
-    M.highlight(hl_name, cl.fg, cl.bg, cl.gui, nil)
+    M.highlight(hl_name, cl.fg, cl.bg, cl.gui, cl.link)
   end
   return {
     name = table.concat({ 'lualine', section, highlight_tag }, '_'),
-    fn = nil,
+    fn = type(color) == 'function' and color,
     no_mode = false,
     link = false,
     section = section,
@@ -405,10 +402,11 @@ function M.component_format_highlight(highlight, is_focused)
           append_mode(''):sub(2),
           highlight.section,
           color,
-          highlight.options
+          highlight.options,
+          highlight.apply_no_default
         )
       end
-      M.highlight(hl_name, color.fg, color.bg, color.gui, nil)
+      M.highlight(hl_name, color.fg, color.bg, color.gui, color.link)
       return '%#' .. hl_name .. '#', color
     end
   end
