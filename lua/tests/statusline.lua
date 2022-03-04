@@ -1,6 +1,51 @@
+-- Copyright (c) 2020-2021 shadmansaleh
+-- MIT license, see LICENSE for more details.
+
+--- ## Testing module for lualines statusline
+---
+--- ###Uses:
+---
+--- Create a new instence with status width 120 & for active statusline
+--- like following.
+---
+--- ``lua
+--- local statusline = require('tests.statusline').new(120, true)
+--- ```
+---
+--- To create a new instence with status width 80 & for inactive statusline use following.
+---
+--- ``lua
+--- local statusline = require('tests.statusline').new(120, true)
+--- ```
+---
+--- Now setup the state you want to test.
+--- To test you'll call `expect` pmethod on statusline for example.
+---
+--- ``lua
+--- statusline:expect([===[
+---
+---]===])
+--- ```
+---
+--- For more flexibility you can match a patten in expect block.
+--- ``lua
+--- statusline:expect([===[
+---
+---]===])
+--- ```
+---
+--- An easy way to create an expect block is to call `snapshot` method
+--- on statusline where you'll call expect and run the test. It will print
+--- an expect block based on the state of statusline. You can copy it and
+--- replace the snapshot call with the expect call.
+---
+--- ``lua
+--- statusline:snapshot()
+--- ```
+
+
 local ffi = require('ffi')
 local helpers = require('tests.helpers')
-local eq = require('luassert').are.same
 local stub = require('luassert.stub')
 
 local M = {}
@@ -71,33 +116,70 @@ local function eval_stl(stl_expr, width)
   local hl_list = process_hlrec(hltab, stl_buf)
   stl_buf = ffi.string(stl_buf)
 
-  local hls, hl_map = {}, {}
-  for _, hl in ipairs(hl_list) do
-    table.insert(hls, hl.name)
-  end
-  table.sort(hls)
+  local  hl_map = {}
 
   local buf = { 'highlights = {' }
-  for i, v in ipairs(hls) do
-    if not hl_map[v] then
-      hl_map[v] = require('lualine.utils.utils').extract_highlight_colors(v) or {}
-      table.insert(buf, string.format(' %4d: %s = %s', i, v, vim.inspect(hl_map[v], { newline = ' ', indent = '' })))
-      hl_map[v].id = i
+  if #hl_list == 0 then
+    buf[1] = 'highlights = {}'
+  else
+    local hl_id = 1
+    for _, hl in ipairs(hl_list) do
+      local hl_name = hl.name
+      if not hl_map[hl_name] then
+        hl_map[hl_name] = require('lualine.utils.utils').extract_highlight_colors(hl_name) or {}
+        table.insert(buf, string.format(' %4d: %s = %s', hl_id, hl_name, vim.inspect(hl_map[hl_name], { newline = ' ', indent = '' })))
+        hl_map[hl_name].id = hl_id
+        hl_id = hl_id + 1
+      end
     end
+    table.insert(buf, '}')
   end
-  table.insert(buf, '}')
 
-  local stl = ''
+  local stl = {}
   for _, hl in ipairs(hl_list) do
-    stl = stl .. string.format('{%d:%s}', hl_map[hl.name].id, vim.fn.strpart(stl_buf, hl.start, hl.len))
+    table.insert(stl, string.format('{%d:%s}', hl_map[hl.name].id,
+                                    vim.fn.strpart(stl_buf, hl.start, hl.len)))
   end
-  table.insert(buf, '|' .. stl .. '|')
+  table.insert(buf, '|' .. table.concat(stl, '\n') .. '|')
   table.insert(buf, '')
   return table.concat(buf, '\n')
 end
 
-function M:expect_expr(result, expr)
-  eq(helpers.dedent(result), eval_stl(expr, self.width))
+function M:expect_expr(expect, expr)
+  expect = helpers.dedent(expect)
+  local actual = eval_stl(expr, self.width)
+  local matched = true
+  local errmsg = {}
+  if expect ~= actual then
+    expect = vim.split(expect, '\n')
+    actual = vim.split(actual, '\n')
+    for i=1, math.max(#expect, #actual) do
+      if expect[i] and actual[i] then
+        local match_pat = expect[i]:match('{MATCH:(.*)}')
+        if expect[i] == actual[i] or (match_pat and actual[i]:match(match_pat)) then
+          expect[i] = string.rep(' ', 2) .. expect[i]
+          actual[i] = string.rep(' ', 2) .. actual[i]
+          goto loop_end
+        end
+      end
+      matched = false
+      if expect[i] then
+        expect[i] = '*'..string.rep(' ', 1) .. expect[i]
+      end
+      if actual[i] then
+        actual[i] = '*'..string.rep(' ', 1) .. actual[i]
+      end
+      ::loop_end::
+    end
+  end
+  if not matched then
+    table.insert(errmsg, "Unexpected statusline")
+    table.insert(errmsg, "Expected:")
+    table.insert(errmsg, table.concat(expect, '\n')..'\n')
+    table.insert(errmsg, "Actual:")
+    table.insert(errmsg, table.concat(actual, '\n'))
+  end
+  assert(matched, table.concat(errmsg, '\n'))
 end
 
 function M:snapshot_expr(expr)
