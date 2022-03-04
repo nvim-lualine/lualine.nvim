@@ -752,6 +752,55 @@ describe('Lualine', function()
         ]===])
       end)
     end)
+
+    describe('windows component', function()
+      it('works', function()
+        local conf = vim.deepcopy(tab_conf)
+        conf.tabline.lualine_a = { { 'windows', max_length = 1e3, icons_enabled = false } }
+        vim.cmd('e ' .. 'a.txt')
+        vim.cmd('tabe ' .. 'b.txt')
+        vim.cmd('vsplit ' .. 'c.txt')
+        vim.cmd('tabe ' .. 'd.txt')
+        require('lualine').setup(conf)
+        require('lualine').statusline()
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: d.txt }
+        {2:}
+        {3:                                                                                                                }|
+        ]===])
+
+        vim.cmd('tabprev')
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
+            3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
+            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: c.txt }
+        {2:}
+        {3: b.txt }
+        {4:                                                                                                         }|
+        ]===])
+
+        vim.cmd('tabprev')
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: a.txt }
+        {2:}
+        {3:                                                                                                                }|
+        ]===])
+      end)
+    end)
   end)
 
   describe('diagnostics', function()
