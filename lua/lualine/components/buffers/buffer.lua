@@ -15,6 +15,10 @@ function Buffer:init(opts)
   self:get_props()
 end
 
+function Buffer:is_current()
+  return vim.api.nvim_get_current_buf() == self.bufnr
+end
+
 ---setup icons, modified status for buffer
 function Buffer:get_props()
   self.file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(self.bufnr))

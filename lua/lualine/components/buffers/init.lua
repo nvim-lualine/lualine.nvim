@@ -64,15 +64,28 @@ function M:init(options)
   }
 end
 
-function M:update_status()
-  local data = {}
+function M:new_buffer(bufnr)
+  return Buffer:new({
+    bufnr = bufnr,
+    options = self.options,
+    highlights = self.highlights,
+  })
+end
+
+function M:buffers()
   local buffers = {}
-  for b = 1, vim.fn.bufnr('$') do
+  for b = 1, vim.fn.bufnr '$' do
     if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
-      buffers[#buffers + 1] = Buffer { bufnr = b, options = self.options, highlights = self.highlights }
+      buffers[#buffers + 1] = self:new_buffer(b)
     end
   end
-  local current_bufnr = vim.api.nvim_get_current_buf()
+
+  return buffers
+end
+
+function M:update_status()
+  local data = {}
+  local buffers = self:buffers()
   local current = -2
   -- mark the first, last, current, before current, after current buffers
   -- for rendering
@@ -83,7 +96,7 @@ function M:update_status()
     buffers[#buffers].last = true
   end
   for i, buffer in ipairs(buffers) do
-    if buffer.bufnr == current_bufnr then
+    if buffer:is_current() then
       buffer.current = true
       current = i
     end
@@ -112,7 +125,7 @@ function M:update_status()
   -- start drawing from current buffer and draw left and right of it until
   -- all buffers are drawn or max_length has been reached.
   if current == -2 then
-    local b = Buffer { bufnr = vim.api.nvim_get_current_buf(), options = self.options, highlights = self.highlights }
+    local b = self:new_buffer(vim.fn.bufnr())
     b.current = true
     if self.options.self.section < 'x' then
       b.last = true
