@@ -9,13 +9,22 @@
 --- like following.
 ---
 --- ``lua
---- local statusline = require('tests.statusline').new(120, true)
+--- local statusline = require('tests.statusline').new(120, 'active')
 --- ```
 ---
 --- To create a new instence with status width 80 & for inactive statusline use following.
 ---
 --- ``lua
---- local statusline = require('tests.statusline').new(120, true)
+--- local statusline = require('tests.statusline').new(120, 'inactive')
+--- ```
+---
+--- Now setup the state you want to test.
+--- To test you'll call `expect` pmethod on statusline for example.
+---
+--- To create a new instence with status width 80 & tabline
+---
+--- ``lua
+--- local statusline = require('tests.statusline').new(120, 'tabline')
 --- ```
 ---
 --- Now setup the state you want to test.
@@ -154,6 +163,12 @@ function M:expect_expr(expect, expr)
   if expect ~= actual then
     expect = vim.split(expect, '\n')
     actual = vim.split(actual, '\n')
+    if expect[#expect] == '' then
+      expect[#expect] = nil
+    end
+    if actual[#actual] == '' then
+      actual[#actual] = nil
+    end
     for i = 1, math.max(#expect, #actual) do
       if expect[i] and actual[i] then
         local match_pat = expect[i]:match('{MATCH:(.*)}')
@@ -191,29 +206,45 @@ end
 function M:snapshot()
   local utils = require('lualine.utils.utils')
   stub(utils, 'is_focused')
-  utils.is_focused.returns(self.active)
-  self:snapshot_expr(require('lualine').statusline(self.active))
+  utils.is_focused.returns(self.type ~= 'inactive')
+  local expr
+  if self.type == 'inactive' then
+    expr = require('lualine').statusline(false)
+  elseif self.type == 'tabline' then
+    expr = require('lualine').tabline()
+  else
+    expr = require('lualine').statusline(true)
+  end
+  self:snapshot_expr(expr)
   utils.is_focused:revert()
 end
 
 function M:expect(result)
   local utils = require('lualine.utils.utils')
   stub(utils, 'is_focused')
-  utils.is_focused.returns(self.active)
-  self:expect_expr(result, require('lualine').statusline(self.active))
+  utils.is_focused.returns(self.type ~= 'inactive')
+  local expr
+  if self.type == 'inactive' then
+    expr = require('lualine').statusline(false)
+  elseif self.type == 'tabline' then
+    expr = require('lualine').tabline()
+  else
+    expr = require('lualine').statusline(true)
+  end
+  self:expect_expr(result, expr)
   utils.is_focused:revert()
 end
 
-function M.new(_, width, active)
+function M.new(_, width, eval_type)
   if type(_) ~= 'table' then
-    active = width
+    eval_type = width
     width = _
   end
   local self = {}
   self.width = width or 120
-  self.active = active
-  if self.active == nil then
-    self.active = true
+  self.type = eval_type
+  if self.type == nil then
+    self.type = 'active'
   end
   return setmetatable(self, {
     __index = M,
@@ -223,4 +254,4 @@ function M.new(_, width, active)
   })
 end
 
-return M.new(120, true)
+return M.new(120, 'active')

@@ -2,7 +2,7 @@
 -- MIT license, see LICENSE for more details.
 
 local eq = assert.are.same
-local statusline = require('tests.statusline').new(120, true)
+local statusline = require('tests.statusline').new(120, 'active')
 
 describe('Lualine', function()
   local config
@@ -77,7 +77,7 @@ describe('Lualine', function()
   end)
 
   it('shows inactive statusline', function()
-    local inactive_statusline = statusline.new(120, false)
+    local inactive_statusline = statusline.new(120, 'inactive')
     inactive_statusline:expect([===[
     highlights = {
         1: lualine_c_inactive = { bg = "#3c3836", fg = "#a89984" }
