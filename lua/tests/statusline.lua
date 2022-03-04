@@ -43,7 +43,6 @@
 --- statusline:snapshot()
 --- ```
 
-
 local ffi = require('ffi')
 local helpers = require('tests.helpers')
 local stub = require('luassert.stub')
@@ -116,7 +115,7 @@ local function eval_stl(stl_expr, width)
   local hl_list = process_hlrec(hltab, stl_buf)
   stl_buf = ffi.string(stl_buf)
 
-  local  hl_map = {}
+  local hl_map = {}
 
   local buf = { 'highlights = {' }
   if #hl_list == 0 then
@@ -127,7 +126,10 @@ local function eval_stl(stl_expr, width)
       local hl_name = hl.name
       if not hl_map[hl_name] then
         hl_map[hl_name] = require('lualine.utils.utils').extract_highlight_colors(hl_name) or {}
-        table.insert(buf, string.format(' %4d: %s = %s', hl_id, hl_name, vim.inspect(hl_map[hl_name], { newline = ' ', indent = '' })))
+        table.insert(
+          buf,
+          string.format(' %4d: %s = %s', hl_id, hl_name, vim.inspect(hl_map[hl_name], { newline = ' ', indent = '' }))
+        )
         hl_map[hl_name].id = hl_id
         hl_id = hl_id + 1
       end
@@ -137,8 +139,7 @@ local function eval_stl(stl_expr, width)
 
   local stl = {}
   for _, hl in ipairs(hl_list) do
-    table.insert(stl, string.format('{%d:%s}', hl_map[hl.name].id,
-                                    vim.fn.strpart(stl_buf, hl.start, hl.len)))
+    table.insert(stl, string.format('{%d:%s}', hl_map[hl.name].id, vim.fn.strpart(stl_buf, hl.start, hl.len)))
   end
   table.insert(buf, '|' .. table.concat(stl, '\n') .. '|')
   table.insert(buf, '')
@@ -153,7 +154,7 @@ function M:expect_expr(expect, expr)
   if expect ~= actual then
     expect = vim.split(expect, '\n')
     actual = vim.split(actual, '\n')
-    for i=1, math.max(#expect, #actual) do
+    for i = 1, math.max(#expect, #actual) do
       if expect[i] and actual[i] then
         local match_pat = expect[i]:match('{MATCH:(.*)}')
         if expect[i] == actual[i] or (match_pat and actual[i]:match(match_pat)) then
@@ -164,19 +165,19 @@ function M:expect_expr(expect, expr)
       end
       matched = false
       if expect[i] then
-        expect[i] = '*'..string.rep(' ', 1) .. expect[i]
+        expect[i] = '*' .. string.rep(' ', 1) .. expect[i]
       end
       if actual[i] then
-        actual[i] = '*'..string.rep(' ', 1) .. actual[i]
+        actual[i] = '*' .. string.rep(' ', 1) .. actual[i]
       end
       ::loop_end::
     end
   end
   if not matched then
-    table.insert(errmsg, "Unexpected statusline")
-    table.insert(errmsg, "Expected:")
-    table.insert(errmsg, table.concat(expect, '\n')..'\n')
-    table.insert(errmsg, "Actual:")
+    table.insert(errmsg, 'Unexpected statusline')
+    table.insert(errmsg, 'Expected:')
+    table.insert(errmsg, table.concat(expect, '\n') .. '\n')
+    table.insert(errmsg, 'Actual:')
     table.insert(errmsg, table.concat(actual, '\n'))
   end
   assert(matched, table.concat(errmsg, '\n'))
