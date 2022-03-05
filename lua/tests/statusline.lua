@@ -32,6 +32,12 @@
 ---
 --- ``lua
 --- statusline:expect([===[
+---    highlights = {
+---        1: lualine_c_inactive = { bg = "#3c3836", fg = "#a89984" }
+---    }
+---    |{1: [No Name] }
+---    {1:                                                                                                     }
+---    {1:   0:1  }|
 ---
 ---]===])
 --- ```
@@ -39,6 +45,19 @@
 --- For more flexibility you can match a patten in expect block.
 --- ``lua
 --- statusline:expect([===[
+---    highlights = {
+---        1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
+---        2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
+---        3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828" }
+---        4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+---        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+---    }
+---    {MATCH:|{1: %d+ }}
+---    {MATCH:{1: %d+ }}
+---    {2:}
+---    {MATCH:{3: %d+ }}
+---    {4:}
+---    {MATCH:{5:%s+}|}
 ---
 ---]===])
 --- ```
@@ -204,8 +223,8 @@ function M:snapshot_expr(expr)
     inactive = 'inactive_statusline',
     tabline = 'tabline',
   }
-  print((type_map[self.type] or 'statusline') .. ':expect [===[')
-  print(eval_stl(expr, self.width) .. ']===]')
+  print((type_map[self.type] or 'statusline') .. ':expect([===[')
+  print(eval_stl(expr, self.width) .. ']===])')
 end
 
 function M:snapshot()
