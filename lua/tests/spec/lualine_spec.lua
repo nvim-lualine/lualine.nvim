@@ -51,8 +51,7 @@ describe('Lualine', function()
     }
 
     vim.cmd('bufdo bdelete')
-    vim.opt.swapfile = false,
-    pcall(vim.cmd, 'tabdo tabclose')
+    vim.opt.swapfile = false, pcall(vim.cmd, 'tabdo tabclose')
     require('lualine').setup(config)
   end)
 
@@ -361,7 +360,7 @@ describe('Lualine', function()
       }
       require('lualine').setup(conf)
       require('lualine').statusline()
-      tabline:expect [===[
+      tabline:expect([===[
       highlights = {
           1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
           2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
@@ -370,7 +369,7 @@ describe('Lualine', function()
       |{1: tabline_component }
       {2:}
       {3:                                                                                                    }|
-      ]===]
+      ]===])
     end)
 
     it('can use tabline as statusline', function()
@@ -382,7 +381,7 @@ describe('Lualine', function()
       require('lualine').statusline()
       eq('', vim.go.statusline)
 
-      tabline:expect [===[
+      tabline:expect([===[
       highlights = {
           1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
           2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984" }
@@ -401,17 +400,17 @@ describe('Lualine', function()
       {3: 100% }
       {2:}
       {1:   0:1  }|
-      ]===]
+      ]===])
     end)
     describe('tabs component', function()
       it('works', function()
         local conf = vim.deepcopy(tab_conf)
         conf.tabline.lualine_a = { { 'tabs', max_length = 1e3 } }
-        vim.cmd 'tabnew'
-        vim.cmd 'tabnew'
+        vim.cmd('tabnew')
+        vim.cmd('tabnew')
         require('lualine').setup(conf)
         require('lualine').statusline()
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
@@ -425,10 +424,10 @@ describe('Lualine', function()
         {3: 3 }
         {4:}
         {5:                                                                                                            }|
-        ]===]
+        ]===])
 
-        vim.cmd 'tabprev'
-        tabline:expect [===[
+        vim.cmd('tabprev')
+        tabline:expect([===[
         highlights = {
             1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
@@ -442,10 +441,10 @@ describe('Lualine', function()
         {4:}
         {1: 3 }
         {5:                                                                                                             }|
-        ]===]
+        ]===])
 
-        vim.cmd 'tabprev'
-        tabline:expect [===[
+        vim.cmd('tabprev')
+        tabline:expect([===[
         highlights = {
             1: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828" }
             2: lualine_transitional_lualine_a_tabs_active_to_lualine_a_tabs_inactive = { bg = "#3c3836", fg = "#a89984" }
@@ -457,7 +456,7 @@ describe('Lualine', function()
         {3: 2 }
         {3: 3 }
         {4:                                                                                                             }|
-        ]===]
+        ]===])
       end)
 
       it('mode option can change layout', function()
@@ -467,7 +466,7 @@ describe('Lualine', function()
         vim.cmd('tabe ' .. 'b.txt')
         require('lualine').setup(conf)
         require('lualine').statusline()
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
@@ -481,9 +480,9 @@ describe('Lualine', function()
         {3: 3 }
         {4:}
         {5:                                                                                                            }|
-        ]===]
+        ]===])
 
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
@@ -497,12 +496,12 @@ describe('Lualine', function()
         {3: 3 }
         {4:}
         {5:                                                                                                            }|
-        ]===]
+        ]===])
 
         conf.tabline.lualine_a = { { 'tabs', max_length = 1e3, mode = 1 } }
         require('lualine').setup(conf)
         require('lualine').statusline()
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
@@ -516,12 +515,12 @@ describe('Lualine', function()
         {3: b.txt }
         {4:}
         {5:                                                                                            }|
-        ]===]
+        ]===])
 
         conf.tabline.lualine_a = { { 'tabs', max_length = 1e3, mode = 2 } }
         require('lualine').setup(conf)
         require('lualine').statusline()
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
@@ -535,7 +534,7 @@ describe('Lualine', function()
         {3: 3 b.txt }
         {4:}
         {5:                                                                                      }|
-        ]===]
+        ]===])
       end)
     end)
 
@@ -547,7 +546,7 @@ describe('Lualine', function()
         vim.cmd('tabe ' .. 'b.txt')
         require('lualine').setup(conf)
         require('lualine').statusline()
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
@@ -561,10 +560,10 @@ describe('Lualine', function()
         {4:}
         {1: [No Name] }
         {5:                                                                                             }|
-        ]===]
+        ]===])
 
-        vim.cmd 'tabprev'
-        tabline:expect [===[
+        vim.cmd('tabprev')
+        tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
@@ -576,10 +575,10 @@ describe('Lualine', function()
         {3: b.txt }
         {3: [No Name] }
         {4:                                                                                             }|
-        ]===]
+        ]===])
 
-        vim.cmd 'tabprev'
-        tabline:expect [===[
+        vim.cmd('tabprev')
+        tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
@@ -593,7 +592,7 @@ describe('Lualine', function()
         {3: [No Name] }
         {4:}
         {5:                                                                                            }|
-        ]===]
+        ]===])
       end)
 
       it('mode option can change layout', function()
@@ -603,7 +602,7 @@ describe('Lualine', function()
         vim.cmd('tabe ' .. 'b.txt')
         require('lualine').setup(conf)
         require('lualine').statusline()
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
@@ -617,12 +616,12 @@ describe('Lualine', function()
         {MATCH:{3: %d+ }}
         {4:}
         {MATCH:{5:%s+}|}
-        ]===]
+        ]===])
 
         conf.tabline.lualine_a = { { 'buffers', max_length = 1e3, mode = 1, icons_enabled = false } }
         require('lualine').setup(conf)
         require('lualine').statusline()
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
@@ -636,12 +635,12 @@ describe('Lualine', function()
         {4:}
         {MATCH:{1: %d+  }}
         {MATCH:{5:%s+}|}
-        ]===]
+        ]===])
 
         conf.tabline.lualine_a = { { 'buffers', max_length = 1e3, mode = 2, icons_enabled = false } }
         require('lualine').setup(conf)
         require('lualine').statusline()
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
@@ -655,7 +654,7 @@ describe('Lualine', function()
         {4:}
         {MATCH:{1: %d+ %[No Name%] }}
         {MATCH:{5:%s+}|}
-        ]===]
+        ]===])
       end)
 
       it('can show modified status', function()
@@ -663,7 +662,7 @@ describe('Lualine', function()
         conf.tabline.lualine_a = { { 'buffers', max_length = 1e3, show_modified_status = true, icons_enabled = false } }
         require('lualine').setup(conf)
         require('lualine').statusline()
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
@@ -672,10 +671,10 @@ describe('Lualine', function()
         |{1: [No Name] }
         {2:}
         {3:                                                                                                            }|
-        ]===]
+        ]===])
 
         vim.bo.modified = true
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
@@ -684,7 +683,7 @@ describe('Lualine', function()
         |{1: [No Name] + }
         {2:}
         {3:                                                                                                          }|
-        ]===]
+        ]===])
         vim.bo.modified = false
       end)
 
@@ -696,7 +695,7 @@ describe('Lualine', function()
         local path = 'aaaaaa/bbbbb/cccccc/ddddd/eeeee/ffff/gggg'
         vim.fn.mkdir(path, 'p')
         vim.cmd('e ' .. path .. '/asdf.txt')
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
@@ -705,19 +704,19 @@ describe('Lualine', function()
         |{1: a/b/c/d/e/f/g/asdf.txt }
         {2:}
         {3:                                                                                               }|
-        ]===]
+        ]===])
         vim.fn.delete(path:match('(%w+)/.*'), 'rf')
       end)
 
       it('can show ellipsis when max_width is crossed', function()
         local conf = vim.deepcopy(tab_conf)
         conf.tabline.lualine_a = { { 'buffers', max_length = 1 } }
-        vim.cmd 'tabe a.txt'
-        vim.cmd 'tabe b.txt'
-        vim.cmd 'tabprev'
+        vim.cmd('tabe a.txt')
+        vim.cmd('tabe b.txt')
+        vim.cmd('tabprev')
         require('lualine').setup(conf)
         require('lualine').statusline()
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
@@ -728,7 +727,7 @@ describe('Lualine', function()
         {2:}
         {3: ... }
         {4:                                                                                                         }|
-        ]===]
+        ]===])
       end)
 
       it('can show filetype icons', function()
@@ -737,7 +736,7 @@ describe('Lualine', function()
         require('lualine').setup(conf)
         require('lualine').statusline()
         vim.cmd('e t.lua')
-        tabline:expect [===[
+        tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
@@ -746,9 +745,8 @@ describe('Lualine', function()
         |{1:  t.lua }
         {2:}
         {3:                                                                                                              }|
-        ]===]
+        ]===])
       end)
-
     end)
   end)
 end)
