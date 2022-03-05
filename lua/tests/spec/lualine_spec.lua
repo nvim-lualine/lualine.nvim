@@ -611,12 +611,12 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: 1 }
-        {1: 2 }
+        {MATCH:|{1: %d+ }}
+        {MATCH:{1: %d+ }}
         {2:}
-        {3: 3 }
+        {MATCH:{3: %d+ }}
         {4:}
-        {5:                                                                                                            }|
+        {MATCH:{5:%s+}|}
         ]===]
 
         conf.tabline.lualine_a = { { 'buffers', max_length = 1e3, mode = 1, icons_enabled = false } }
@@ -630,12 +630,12 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: 7  }
+        {MATCH:|{1: %d+  }}
         {2:}
-        {3: 8  }
+        {MATCH:{3: %d+  }}
         {4:}
-        {1: 9  }
-        {5:                                                                                                          }|
+        {MATCH:{1: %d+  }}
+        {MATCH:{5:%s+}|}
         ]===]
 
         conf.tabline.lualine_a = { { 'buffers', max_length = 1e3, mode = 2, icons_enabled = false } }
@@ -649,12 +649,12 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: 7 a.txt }
+        {MATCH:|{1: %d+ a.txt }}
         {2:}
-        {3: 8 b.txt }
+        {MATCH:{3: %d+ b.txt }}
         {4:}
-        {1: 9 [No Name] }
-        {5:                                                                                       }|
+        {MATCH:{1: %d+ %[No Name%] }}
+        {MATCH:{5:%s+}|}
         ]===]
       end)
 

@@ -28,7 +28,7 @@
 --- ```
 ---
 --- Now setup the state you want to test.
---- To test you'll call `expect` pmethod on statusline for example.
+--- To test you'll call `expect` method on statusline for example.
 ---
 --- ``lua
 --- statusline:expect([===[
