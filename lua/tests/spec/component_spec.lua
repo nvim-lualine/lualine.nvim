@@ -568,7 +568,7 @@ describe('Branch component', function()
   local tmpdir
   local file
   local git = function(...)
-    return vim.fn.system('git -C ' .. tmpdir .. ' ' .. string.format(...))
+    return  vim.fn.system("git -c user.name='asdf' -c user.email='asdf@jlk.org' -C " .. tmpdir .. ' ' .. string.format(...))
   end
   local assert_comp_ins = helpers.assert_component_instence
 
@@ -604,20 +604,19 @@ describe('Branch component', function()
     assert_comp_ins(branch_comp, 'test_branch2')
   end)
 
-  -- TODO: Figure out why this test fails in CI
-  -- it('works in detached head mode', function()
-  --   local opts = build_component_opts {
-  --     component_separators = { left = '', right = '' },
-  --     icons_enabled = false,
-  --     padding = 0,
-  --   }
-  --   git 'checkout -b test_branch2'
-  --   git 'commit --allow-empty -m "test commit1"'
-  --   git 'commit --allow-empty -m "test commit2"'
-  --   git 'commit --allow-empty -m "test commit3"'
-  --   git('checkout HEAD~1')
-  --   vim.cmd('e ' .. file)
-  --   local rev = git('rev-parse --short=6 HEAD'):sub(1, 6)
-  --   assert_component('branch', opts, rev)
-  -- end)
+  it('works in detached head mode', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      icons_enabled = false,
+      padding = 0,
+    }
+    git 'checkout -b test_branch2'
+    git 'commit --allow-empty -m "test commit1"'
+    git 'commit --allow-empty -m "test commit2"'
+    git 'commit --allow-empty -m "test commit3"'
+    git('checkout HEAD~1')
+    vim.cmd('e ' .. file)
+    local rev = git('rev-parse --short=6 HEAD'):sub(1, 6)
+    assert_component('branch', opts, rev)
+  end)
 end)
