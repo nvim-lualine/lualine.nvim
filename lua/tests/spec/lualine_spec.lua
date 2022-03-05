@@ -50,8 +50,9 @@ describe('Lualine', function()
       extensions = {},
     }
 
+    vim.opt.swapfile = false
     vim.cmd('bufdo bdelete')
-    vim.opt.swapfile = false, pcall(vim.cmd, 'tabdo tabclose')
+    pcall(vim.cmd, 'tabdo tabclose')
     require('lualine').setup(config)
   end)
 
@@ -242,7 +243,9 @@ describe('Lualine', function()
     local old_ft = vim.bo.ft
     vim.bo.ft = 'test_ft'
     statusline:expect([===[
-    highlights = {}
+    highlights = {
+        1: StatusLine = { bold = true, reverse = true }
+    }
     ||
     ]===])
     vim.bo.ft = old_ft

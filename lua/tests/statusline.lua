@@ -104,22 +104,39 @@ int build_stl_str_hl(
 );
 ]])
 
-local function gen_stl(stl_fmt, width)
-  local stlbuf = ffi.new('char_u [?]', width + 100)
-  local fmt = ffi.cast('char_u *', stl_fmt)
-  local fillchar = ffi.cast('char_u', 0x20)
-  local hltab = ffi.new('stl_hlrec_t *[1]', ffi.new('stl_hlrec_t *'))
-  ffi.C.build_stl_str_hl(ffi.C.curwin, stlbuf, width + 100, fmt, 0, fillchar, width, hltab, nil)
-  return stlbuf, hltab
-end
-
-local function process_hlrec(hltab, stlbuf)
+local function process_hlrec(hltab, stlbuf, eval_type)
+  local function default_hl()
+    if eval_type == 'tabline' then
+      return "TabLineFill"
+    elseif eval_type == 'inactive' then
+      return "StatusLineNC"
+    else
+      return "StatusLine"
+    end
+  end
   local len = #ffi.string(stlbuf)
   local hltab_data = hltab[0]
   local result = {}
+  if hltab_data[0].start ~= stlbuf then
+    table.insert(result, {
+      group = default_hl(),
+      start = 0,
+    })
+  end
+
   local n = 0
   while hltab_data[n].start ~= nil do
-    local hl_pos = { name = vim.fn.synIDattr(-1 * hltab_data[n].userhl, 'name') }
+    local group_name
+    if hltab_data[n].userhl == 0 then
+      group_name = default_hl()
+    elseif hltab_data[n].userhl < 0 then
+      group_name = vim.fn.synIDattr(-1 * hltab_data[n].userhl, 'name')
+    else
+      group_name = string.format('User%d', hltab_data[n].userhl)
+    end
+
+    local hl_pos = { group = group_name }
+
     if n == 0 then
       hl_pos.start = hltab_data[n].start - stlbuf
     else
@@ -138,36 +155,54 @@ local function process_hlrec(hltab, stlbuf)
   end, result)
 end
 
-local function eval_stl(stl_expr, width)
-  local stl_buf, hltab = gen_stl(stl_expr, width)
-  local hl_list = process_hlrec(hltab, stl_buf)
-  stl_buf = ffi.string(stl_buf)
+local function gen_stl(stl_fmt, width, eval_type)
+  local stlbuf = ffi.new('char_u [?]', width + 100)
+  local fmt = ffi.cast('char_u *', stl_fmt)
+  local fillchar = ffi.cast('char_u', 0x20)
+  local hltab = ffi.new('stl_hlrec_t *[1]', ffi.new('stl_hlrec_t *'))
+  ffi.C.build_stl_str_hl(ffi.C.curwin, stlbuf, width + 100, fmt, 0, fillchar, width, hltab, nil)
+  return { str = ffi.string(stlbuf), highlights = process_hlrec(hltab, stlbuf, eval_type) }
+end
+
+local function eval_stl(stl_expr, width, eval_type)
+  local stl_buf, hl_list, stl_eval_res
+  if vim.fn.has('nvim-0.6') == 1 then
+    stl_eval_res = vim.api.nvim_eval_statusline(
+      stl_expr,
+      { maxwidth = width, highlights = true, fillchar = ' ', use_tabline = (eval_type == 'tabline')}
+    )
+  else
+    stl_eval_res = gen_stl(stl_expr, width, eval_type)
+  end
+  stl_buf, hl_list = stl_eval_res.str, stl_eval_res.highlights
 
   local hl_map = {}
 
   local buf = { 'highlights = {' }
-  if #hl_list == 0 then
-    buf[1] = 'highlights = {}'
-  else
-    local hl_id = 1
-    for _, hl in ipairs(hl_list) do
-      local hl_name = hl.name
-      if not hl_map[hl_name] then
-        hl_map[hl_name] = require('lualine.utils.utils').extract_highlight_colors(hl_name) or {}
-        table.insert(
-          buf,
-          string.format(' %4d: %s = %s', hl_id, hl_name, vim.inspect(hl_map[hl_name], { newline = ' ', indent = '' }))
-        )
-        hl_map[hl_name].id = hl_id
-        hl_id = hl_id + 1
-      end
+  local hl_id = 1
+  for _, hl in ipairs(hl_list) do
+    local hl_name = hl.group
+    if not hl_map[hl_name] then
+      hl_map[hl_name] = require('lualine.utils.utils').extract_highlight_colors(hl_name) or {}
+      table.insert(
+        buf,
+        string.format(' %4d: %s = %s', hl_id, hl_name, vim.inspect(hl_map[hl_name], { newline = ' ', indent = '' }))
+      )
+      hl_map[hl_name].id = hl_id
+      hl_id = hl_id + 1
     end
-    table.insert(buf, '}')
   end
+  table.insert(buf, '}')
 
   local stl = {}
-  for _, hl in ipairs(hl_list) do
-    table.insert(stl, string.format('{%d:%s}', hl_map[hl.name].id, vim.fn.strpart(stl_buf, hl.start, hl.len)))
+  for i = 1, #hl_list do
+    local start, finish = hl_list[i].start, hl_list[i + 1] and hl_list[i + 1].start or #stl_buf
+    if start ~= finish then
+      table.insert(
+        stl,
+        string.format('{%d:%s}', hl_map[hl_list[i].group].id, vim.fn.strpart(stl_buf, start, finish - start))
+      )
+    end
   end
   table.insert(buf, '|' .. table.concat(stl, '\n') .. '|')
   table.insert(buf, '')
@@ -176,7 +211,7 @@ end
 
 function M:expect_expr(expect, expr)
   expect = helpers.dedent(expect)
-  local actual = eval_stl(expr, self.width)
+  local actual = eval_stl(expr, self.width, self.type)
   local matched = true
   local errmsg = {}
   if expect ~= actual then
@@ -224,7 +259,7 @@ function M:snapshot_expr(expr)
     tabline = 'tabline',
   }
   print((type_map[self.type] or 'statusline') .. ':expect([===[')
-  print(eval_stl(expr, self.width) .. ']===])')
+  print(eval_stl(expr, self.width, self.type) .. ']===])')
 end
 
 function M:snapshot()
