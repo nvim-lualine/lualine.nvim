@@ -107,11 +107,11 @@ int build_stl_str_hl(
 local function process_hlrec(hltab, stlbuf, eval_type)
   local function default_hl()
     if eval_type == 'tabline' then
-      return "TabLineFill"
+      return 'TabLineFill'
     elseif eval_type == 'inactive' then
-      return "StatusLineNC"
+      return 'StatusLineNC'
     else
-      return "StatusLine"
+      return 'StatusLine'
     end
   end
   local len = #ffi.string(stlbuf)
@@ -169,7 +169,7 @@ local function eval_stl(stl_expr, width, eval_type)
   if vim.fn.has('nvim-0.6') == 1 then
     stl_eval_res = vim.api.nvim_eval_statusline(
       stl_expr,
-      { maxwidth = width, highlights = true, fillchar = ' ', use_tabline = (eval_type == 'tabline')}
+      { maxwidth = width, highlights = true, fillchar = ' ', use_tabline = (eval_type == 'tabline') }
     )
   else
     stl_eval_res = gen_stl(stl_expr, width, eval_type)
