@@ -46,6 +46,18 @@ load ayu_light when background=light and ayu_dark when background=dark
 But if `g:ayuprefermirage` exists, it will load ayu_mirage instead when
 `background=dark`.
 
+### base16
+
+This theme will automatically uses colors defined by your colorscheme using [RRethy/nvim-base16](https://github.com/RRethy/nvim-base16)] plugin.
+The following example is using the `tomorrow-night` colorscheme:
+
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/11501572/156889654-3dedc9a1-e7a5-4cbe-b219-2a97499cf1d2.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/11501572/156889648-93bf3ce8-064d-4ac0-8415-20d6ef87c60b.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/11501572/156889624-c97fc3ae-d642-41ba-b39a-f9a72ff8b15e.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/11501572/156889566-17066e95-7f85-4bfd-8178-c4a34beab453.png'/>
+</p>
+
 ### codedark
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648568-dff4c980-74bb-11eb-9d16-b68ac68f2ab2.png'/>
