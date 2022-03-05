@@ -199,7 +199,12 @@ function M:expect_expr(expect, expr)
 end
 
 function M:snapshot_expr(expr)
-  print('statusline:expect [===[')
+  local type_map = {
+    active = 'statusline',
+    inactive = 'inactive_statusline',
+    tabline = 'tabline',
+  }
+  print((type_map[self.type] or 'statusline') .. ':expect [===[')
   print(eval_stl(expr, self.width) .. ']===]')
 end
 
@@ -254,4 +259,4 @@ function M.new(_, width, eval_type)
   })
 end
 
-return M.new(120, 'active')
+return M.new()
