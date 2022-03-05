@@ -301,10 +301,6 @@ end
 ---  to retrieve highlight group
 function M.create_component_highlight_group(color, highlight_tag, options, apply_no_default)
   local section = options.self.section
-  if section > 'c' and not active_theme.normal[section] then
-    section = section_highlight_map[section]
-  end
-
   local tag_id = 0
   while
     M.highlight_exists(table.concat({ 'lualine', section, highlight_tag }, '_'))
