@@ -756,17 +756,23 @@ describe('Lualine', function()
   describe('diagnostics', function()
     local diagnostics_conf = vim.deepcopy(config)
     diagnostics_conf.sections = {
-      lualine_a = { {
-        'diagnostics',
-        symbols = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
-        diagnostics_color = {
-          error = { bg = "#a89984", fg = "#ff0000" },
-          warn = { bg = "#a89984", fg = "#ffa500" },
-          info = { bg = "#a89984", fg = "#add8e6" },
-          hint = { bg = "#a89984", fg = "#d3d3d3" },
+      lualine_a = {
+        {
+          'diagnostics',
+          symbols = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
+          diagnostics_color = {
+            error = { bg = '#a89984', fg = '#ff0000' },
+            warn = { bg = '#a89984', fg = '#ffa500' },
+            info = { bg = '#a89984', fg = '#add8e6' },
+            hint = { bg = '#a89984', fg = '#d3d3d3' },
+          },
+          sources = {
+            function()
+              return {}
+            end,
+          },
         },
-        sources = { function() return {} end },
-      } },
+      },
       lualine_b = {},
       lualine_c = {},
       lualine_x = {},
@@ -787,7 +793,9 @@ describe('Lualine', function()
 
     it('shows only positive diagnostics', function()
       local conf = vim.deepcopy(diagnostics_conf)
-      conf.sections.lualine_a[1].sources[1] = function() return { error = 0, warn = 0, info = 1, hint = 0 } end
+      conf.sections.lualine_a[1].sources[1] = function()
+        return { error = 0, warn = 0, info = 1, hint = 0 }
+      end
       require('lualine').setup(conf)
       statusline:expect([===[
       highlights = {
@@ -803,7 +811,9 @@ describe('Lualine', function()
 
     it('shows all diagnostics with same background', function()
       local conf = vim.deepcopy(diagnostics_conf)
-      conf.sections.lualine_a[1].sources[1] = function() return { error = 1, warn = 2, info = 3, hint = 4 } end
+      conf.sections.lualine_a[1].sources[1] = function()
+        return { error = 1, warn = 2, info = 3, hint = 4 }
+      end
       require('lualine').setup(conf)
       statusline:expect([===[
       highlights = {
@@ -825,12 +835,14 @@ describe('Lualine', function()
 
     it('shows all diagnostics with padding when background changes', function()
       local conf = vim.deepcopy(diagnostics_conf)
-      conf.sections.lualine_a[1].sources[1] = function() return { error = 1, warn = 2, info = 3, hint = 4 } end
+      conf.sections.lualine_a[1].sources[1] = function()
+        return { error = 1, warn = 2, info = 3, hint = 4 }
+      end
       conf.sections.lualine_a[1].diagnostics_color = {
-        error = { bg = "#ff0000", fg = "#a89984" },
-        warn = { bg = "#ffa500", fg = "#a89984" },
-        info = { bg = "#add8e6", fg = "#a89984" },
-        hint = { bg = "#add8e6", fg = "#a89984" },
+        error = { bg = '#ff0000', fg = '#a89984' },
+        warn = { bg = '#ffa500', fg = '#a89984' },
+        info = { bg = '#add8e6', fg = '#a89984' },
+        hint = { bg = '#add8e6', fg = '#a89984' },
       }
       require('lualine').setup(conf)
       statusline:expect([===[
