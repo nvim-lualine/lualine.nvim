@@ -76,8 +76,8 @@ function M.get_lualine_hl(name)
       return modules.utils.extract_highlight_colors(hl.link)
     end
     local hl_def = {
-      fg = hl.fg ~= 'None' and vim.deepcopy(hl.fg),
-      bg = hl.bg ~= 'None' and vim.deepcopy(hl.bg),
+      fg = hl.fg ~= 'None' and vim.deepcopy(hl.fg) or nil,
+      bg = hl.bg ~= 'None' and vim.deepcopy(hl.bg) or nil,
     }
     if hl.gui then
       for _, flag in ipairs(vim.split(hl.gui, ',')) do
@@ -456,7 +456,7 @@ function M.get_transitional_highlights(left_hl, right_hl)
     if bg == fg then
       return nil -- Separator won't be visible anyway
     end
-    M.highlight(highlight_name, fg, bg, nil)
+    M.highlight(highlight_name, fg, bg, nil, nil)
     attach_hl(left_hl, highlight_name, 'bg', 'fg')
     attach_hl(right_hl, highlight_name, 'bg', 'bg')
   end
