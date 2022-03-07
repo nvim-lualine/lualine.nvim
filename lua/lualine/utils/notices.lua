@@ -29,7 +29,7 @@ end
 ---show setup :LuaLineNotices and show notification about error when there
 ---are notices available
 function M.notice_message_startup()
-  if #notices > 0 or #persistent_notices then
+  if #notices > 0 or #persistent_notices > 0 then
     vim.cmd('command! -nargs=0 LualineNotices lua require"lualine.utils.notices".show_notices()')
     vim.schedule(function()
       vim.notify(
