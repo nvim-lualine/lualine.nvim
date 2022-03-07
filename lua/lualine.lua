@@ -10,7 +10,6 @@ local modules = lualine_require.lazy_require {
   config_module = 'lualine.config',
 }
 local config -- Stores currently applied config
-local new_config = true -- Stores config that will be applied
 
 -- Helper for apply_transitional_separators()
 --- finds first applied highlight group fter str_checked in status
@@ -258,9 +257,9 @@ local function set_tabline()
   if next(config.tabline) ~= nil then
     vim.go.tabline = "%{%v:lua.require'lualine'.tabline()%}"
     vim.go.showtabline = 2
-    vim.schedule(function()
-      vim.api.nvim_command('redrawtabline')
-    end)
+  elseif vim.go.tabline == "%{%v:lua.require'lualine'.tabline()%}" then
+    vim.go.tabline = nil
+    vim.go.showtabline = 1
   end
 end
 
@@ -269,28 +268,12 @@ end
 local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     vim.cmd('autocmd lualine VimResized * redrawstatus')
-  else
-    vim.go.statusline = ''
-    vim.go.laststatus = 0
+    vim.go.statusline = "%{%v:lua.require'lualine'.statusline()%}"
+    vim.go.laststatus = 2
+  elseif vim.go.statusline == "%{%v:lua.require'lualine'.statusline()%}" then
+    vim.go.statusline = nil
+    vim.go.laststatus = 2
   end
-end
-
---- reloads lualine using new_config
-local function reset_lualine()
-  if package.loaded['lualine.utils.notices'] then
-    -- When notices module is not loaded there are no notices to clear.
-    modules.utils_notices.clear_notices()
-  end
-  vim.cmd([[augroup lualine | exe "autocmd!" | augroup END]])
-  setup_theme()
-  -- load components & extensions
-  modules.loader.load_all(config)
-  set_statusline()
-  set_tabline()
-  if package.loaded['lualine.utils.notices'] then
-    modules.utils_notices.notice_message_startup()
-  end
-  new_config = nil
 end
 
 -- lualine.statusline function
@@ -299,10 +282,6 @@ end
 ---@return string statusline string
 local function status_dispatch(focused)
   local retval
-  if new_config then
-    -- reload lualine when config was changed
-    reset_lualine()
-  end
   local current_ft = vim.bo.filetype
   local is_focused = focused ~= nil and focused or modules.utils.is_focused()
   for _, ft in pairs(config.options.disabled_filetypes) do
@@ -338,10 +317,20 @@ end
 --- sets &last_status tl 2
 ---@param user_config table table
 local function setup(user_config)
-  new_config = true
   config = modules.config_module.apply_configuration(user_config)
-  vim.go.statusline = "%{%v:lua.require'lualine'.statusline()%}"
-  vim.go.laststatus = 2
+  if package.loaded['lualine.utils.notices'] then
+    -- When notices module is not loaded there are no notices to clear.
+    modules.utils_notices.clear_notices()
+  end
+  vim.cmd([[augroup lualine | exe "autocmd!" | augroup END]])
+  setup_theme()
+  -- load components & extensions
+  modules.loader.load_all(config)
+  set_statusline()
+  set_tabline()
+  if package.loaded['lualine.utils.notices'] then
+    modules.utils_notices.notice_message_startup()
+  end
 end
 
 return {
