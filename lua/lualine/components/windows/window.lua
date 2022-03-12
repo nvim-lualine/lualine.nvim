@@ -25,4 +25,8 @@ function Window:apply_mode(name)
   return string.format('%s %s%s%s', self.win_number, self.icon, name, self.modified_icon)
 end
 
+function Window:configure_mouse_click(name)
+  return string.format('%%%s@LualineSwitchWindow@%s%%T', self.win_number, name)
+end
+
 return Window

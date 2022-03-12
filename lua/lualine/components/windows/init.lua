@@ -46,4 +46,10 @@ function M:should_hide(winnr)
   return not is_listed or is_buftype_disabled or is_filetype_disabled
 end
 
+vim.cmd([[
+  function! LualineSwitchWindow(win_number, mouseclicks, mousebutton, modifiers)
+    execute a:win_number . 'wincmd w'
+  endfunction
+]])
+
 return M

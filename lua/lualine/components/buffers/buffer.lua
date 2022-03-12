@@ -52,6 +52,13 @@ function Buffer:get_props()
   end
 end
 
+---returns line configured for handling mouse click
+---@param name string
+---@return string
+function Buffer:configure_mouse_click(name)
+  return string.format('%%%s@LualineSwitchBuffer@%s%%T', self.bufnr, name)
+end
+
 ---returns rendered buffer
 ---@return string
 function Buffer:render()
@@ -69,7 +76,7 @@ function Buffer:render()
   self.len = vim.fn.strchars(name)
 
   -- setup for mouse clicks
-  local line = string.format('%%%s@LualineSwitchBuffer@%s%%T', self.bufnr, name)
+  local line = self:configure_mouse_click(name)
   -- apply highlight
   line = modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')])
     .. line
