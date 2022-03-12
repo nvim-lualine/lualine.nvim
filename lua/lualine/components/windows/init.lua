@@ -41,9 +41,9 @@ function M:should_hide(winnr)
   local buftype = vim.api.nvim_buf_get_option(bufnr, 'buftype')
   local is_filetype_disabled = vim.tbl_contains(self.options.disabled_filetypes, filetype)
   local is_buftype_disabled = vim.tbl_contains(self.options.disabled_buftypes, buftype)
-  local is_listed = vim.api.nvim_buf_get_option(bufnr, 'buflisted')
+  local is_floating = '' ~= vim.api.nvim_win_get_config(winnr).relative
 
-  return not is_listed or is_buftype_disabled or is_filetype_disabled
+  return is_floating or is_buftype_disabled or is_filetype_disabled
 end
 
 vim.cmd([[
