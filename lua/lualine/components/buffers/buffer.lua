@@ -63,13 +63,7 @@ function Buffer:render()
   if self.ellipse then -- show elipsis
     name = '...'
   else
-    if self.options.mode == 0 then
-      name = string.format('%s%s%s', self.icon, name, self.modified_icon)
-    elseif self.options.mode == 1 then
-      name = string.format('%s %s%s', self.bufnr, self.icon, self.modified_icon)
-    else
-      name = string.format('%s %s%s%s', self.bufnr, self.icon, name, self.modified_icon)
-    end
+    name = self:apply_mode(name)
   end
   name = Buffer.apply_padding(name, self.options.padding)
   self.len = vim.fn.strchars(name)
@@ -141,6 +135,18 @@ function Buffer.apply_padding(str, padding)
     l_padding, r_padding = padding.left or 0, padding.right or 0
   end
   return string.rep(' ', l_padding) .. str .. string.rep(' ', r_padding)
+end
+
+function Buffer:apply_mode(name)
+  if self.options.mode == 0 then
+    return string.format('%s%s%s', self.icon, name, self.modified_icon)
+  end
+
+  if self.options.mode == 1 then
+    return string.format('%s %s%s', self.bufnr, self.icon, self.modified_icon)
+  end
+
+  return string.format('%s %s%s%s', self.bufnr, self.icon, name, self.modified_icon)
 end
 
 return Buffer
