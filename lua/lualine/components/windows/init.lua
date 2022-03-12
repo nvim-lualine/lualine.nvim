@@ -3,7 +3,7 @@ local M = require('lualine.components.buffers'):extend()
 
 local default_options = {
   disabled_filetypes = {},
-  disabled_buftypes = { 'quickfix', 'prompt' }
+  disabled_buftypes = { 'quickfix', 'prompt' },
 }
 
 function M:init(options)
