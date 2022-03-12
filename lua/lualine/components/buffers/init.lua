@@ -65,6 +65,8 @@ function M:init(options)
 end
 
 function M:new_buffer(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+
   return Buffer:new({
     bufnr = bufnr,
     options = self.options,
@@ -125,7 +127,7 @@ function M:update_status()
   -- start drawing from current buffer and draw left and right of it until
   -- all buffers are drawn or max_length has been reached.
   if current == -2 then
-    local b = self:new_buffer(vim.fn.bufnr())
+    local b = self:new_buffer()
     b.current = true
     if self.options.self.section < 'x' then
       b.last = true

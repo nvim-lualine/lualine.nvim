@@ -12,9 +12,10 @@ function M:init(options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
 end
 
-function M:new_buffer(bufnr, winnr)
+function M:new_buffer(winnr)
+  winnr = winnr or vim.api.nvim_get_current_win()
+
   return Window:new({
-    bufnr = bufnr,
     winnr = winnr,
     options = self.options,
     highlights = self.highlights,
@@ -28,7 +29,7 @@ function M:buffers()
 
   for _, winnr in ipairs(vim.api.nvim_tabpage_list_wins(tabnr)) do
     if not self:should_hide(winnr) then
-      buffers[#buffers + 1] = self:new_buffer(vim.api.nvim_win_get_buf(winnr), winnr)
+      buffers[#buffers + 1] = self:new_buffer(winnr)
     end
   end
 
