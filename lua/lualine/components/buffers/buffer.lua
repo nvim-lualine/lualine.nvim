@@ -124,6 +124,9 @@ function Buffer:name()
   elseif self.buftype == 'terminal' then
     local match = string.match(vim.split(self.file, ' ')[1], 'term:.*:(%a+)')
     return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ':t')
+  elseif self.buftype == 'quickfix' then
+    local is_loclist = 0 ~= vim.fn.getloclist(0, { filewinid = 1 }).filewinid
+    return is_loclist and 'Location list' or 'Quickfix List'
   elseif vim.fn.isdirectory(self.file) == 1 then
     return vim.fn.fnamemodify(self.file, ':p:.')
   elseif self.file == '' then
