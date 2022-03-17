@@ -269,10 +269,8 @@ local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     vim.cmd('autocmd lualine VimResized * redrawstatus')
     vim.go.statusline = "%{%v:lua.require'lualine'.statusline()%}"
-    vim.go.laststatus = 2
   elseif vim.go.statusline == "%{%v:lua.require'lualine'.statusline()%}" then
     vim.go.statusline = nil
-    vim.go.laststatus = 2
   end
 end
 
