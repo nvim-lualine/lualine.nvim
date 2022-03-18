@@ -15,6 +15,7 @@ local default_options = {
 function M:init(options)
   M.super.init(self, options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
+  self.icon_hl_cache = {}
 end
 
 function M.update_status()
@@ -22,7 +23,6 @@ function M.update_status()
   return modules.utils.stl_escape(ft)
 end
 
-local icon_hl_cache = {}
 function M:apply_icon()
   if not self.options.icons_enabled then
     return
@@ -39,7 +39,7 @@ function M:apply_icon()
       local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
       if highlight_color then
         local default_highlight = self:get_default_hl()
-        local icon_highlight = icon_hl_cache[highlight_color]
+        local icon_highlight = self.icon_hl_cache[highlight_color]
         if not icon_highlight or not modules.highlight.highlight_exists(icon_highlight.name .. '_normal') then
           icon_highlight = modules.highlight.create_component_highlight_group(
             { fg = highlight_color },
@@ -47,7 +47,7 @@ function M:apply_icon()
             self.options,
             false
           )
-          icon_hl_cache[highlight_color] = icon_highlight
+          self.icon_hl_cache[highlight_color] = icon_highlight
         end
 
         icon = modules.highlight.component_format_highlight(icon_highlight) .. icon .. default_highlight
