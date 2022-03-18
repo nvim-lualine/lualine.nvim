@@ -277,8 +277,8 @@ local function set_statusline()
 end
 
 -- lualine.statusline function
---- Draw correct statusline for current winwow
----@param focused boolean : force the vale of is_focuased . useful for debugginf
+--- Draw correct statusline for current window
+---@param focused boolean : force the value of is_focused . useful for debugging
 ---@return string statusline string
 local function status_dispatch(focused)
   local retval
