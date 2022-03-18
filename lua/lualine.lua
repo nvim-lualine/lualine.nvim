@@ -258,7 +258,7 @@ local function set_tabline()
     vim.go.tabline = "%{%v:lua.require'lualine'.tabline()%}"
     vim.go.showtabline = 2
   elseif vim.go.tabline == "%{%v:lua.require'lualine'.tabline()%}" then
-    vim.go.tabline = nil
+    vim.go.tabline = ''
     vim.go.showtabline = 1
   end
 end
@@ -271,7 +271,7 @@ local function set_statusline()
     vim.go.statusline = "%{%v:lua.require'lualine'.statusline()%}"
     vim.go.laststatus = config.options.globalstatus and 3 or 2
   elseif vim.go.statusline == "%{%v:lua.require'lualine'.statusline()%}" then
-    vim.go.statusline = nil
+    vim.go.statusline = ''
     vim.go.laststatus = 2
   end
 end
