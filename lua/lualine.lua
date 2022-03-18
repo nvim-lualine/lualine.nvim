@@ -269,7 +269,7 @@ local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     vim.cmd('autocmd lualine VimResized * redrawstatus')
     vim.go.statusline = "%{%v:lua.require'lualine'.statusline()%}"
-    vim.go.laststatus = 2
+    vim.go.laststatus = config.options.globalstatus and 3 or 2
   elseif vim.go.statusline == "%{%v:lua.require'lualine'.statusline()%}" then
     vim.go.statusline = nil
     vim.go.laststatus = 2
@@ -317,11 +317,11 @@ end
 --- sets &last_status tl 2
 ---@param user_config table table
 local function setup(user_config)
-  config = modules.config_module.apply_configuration(user_config)
   if package.loaded['lualine.utils.notices'] then
     -- When notices module is not loaded there are no notices to clear.
     modules.utils_notices.clear_notices()
   end
+  config = modules.config_module.apply_configuration(user_config)
   vim.cmd([[augroup lualine | exe "autocmd!" | augroup END]])
   setup_theme()
   -- load components & extensions
