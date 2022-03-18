@@ -765,8 +765,8 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            2: lualine_transitional_lualine_a_windows_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
         |{1: 1 d.txt }
@@ -777,9 +777,9 @@ describe('Lualine', function()
         vim.cmd('tabprev')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
+            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            2: lualine_transitional_lualine_a_windows_active_to_lualine_a_windows_inactive = { bg = "#3c3836", fg = "#a89984" }
+            3: lualine_a_windows_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
         |{1: 1 c.txt }
@@ -791,8 +791,8 @@ describe('Lualine', function()
         vim.cmd('tabprev')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            2: lualine_transitional_lualine_a_windows_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
         |{1: 1 a.txt }

@@ -1,5 +1,6 @@
 local Window = require('lualine.components.windows.window')
 local M = require('lualine.components.buffers'):extend()
+local highlight = require('lualine.highlight')
 
 local default_options = {
   disabled_filetypes = {},
@@ -10,6 +11,23 @@ function M:init(options)
   M.super.init(self, options)
 
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
+  self.options.windows_color = self.options.windows_color or self.options.buffers_color
+  self.options.buffers_color = nil
+
+  self.highlights = {
+    active = highlight.create_component_highlight_group(
+      self.options.windows_color.active,
+      'windows_active',
+      self.options,
+      false
+    ),
+    inactive = highlight.create_component_highlight_group(
+      self.options.windows_color.inactive,
+      'windows_inactive',
+      self.options,
+      false
+    ),
+  }
 end
 
 function M:new_buffer(winnr)
