@@ -11,7 +11,7 @@ function M:init(options)
   M.super.init(self, options)
 
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
-  self.options.windows_color = self.options.windows_color or self.options.buffers_color
+  self.options.windows_color = vim.tbl_deep_extend('keep', self.options.windows_color or {}, self.options.buffers_color)
   self.options.buffers_color = nil
 
   self.highlights = {

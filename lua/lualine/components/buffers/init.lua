@@ -48,20 +48,22 @@ function M:init(options)
     inactive = get_hl('lualine_' .. options.self.section, false),
   }
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
-  self.highlights = {
-    active = highlight.create_component_highlight_group(
+  if self.options.component_name == 'buffers' then
+    self.highlights = {
+      active = highlight.create_component_highlight_group(
       self.options.buffers_color.active,
       'buffers_active',
       self.options,
       false
-    ),
-    inactive = highlight.create_component_highlight_group(
+      ),
+      inactive = highlight.create_component_highlight_group(
       self.options.buffers_color.inactive,
       'buffers_inactive',
       self.options,
       false
-    ),
-  }
+      ),
+    }
+  end
 end
 
 function M:new_buffer(bufnr)
