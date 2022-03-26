@@ -53,7 +53,7 @@ end
 ---@param color string|number
 ---@return string
 local function sanitize_color(color)
-  if color == nil or color == '' then
+  if color == nil or color == '' or color == 'None' then
     return 'None'
   end
   if type(color) == 'string' then
