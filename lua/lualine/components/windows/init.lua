@@ -34,11 +34,11 @@ end
 function M:new_buffer(winnr)
   winnr = winnr or vim.api.nvim_get_current_win()
 
-  return Window:new({
+  return Window:new {
     winnr = winnr,
     options = self.options,
     highlights = self.highlights,
-  })
+  }
 end
 
 --- Override to only return buffers shown in the windows of the current tab

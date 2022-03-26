@@ -51,16 +51,16 @@ function M:init(options)
   if self.options.component_name == 'buffers' then
     self.highlights = {
       active = highlight.create_component_highlight_group(
-      self.options.buffers_color.active,
-      'buffers_active',
-      self.options,
-      false
+        self.options.buffers_color.active,
+        'buffers_active',
+        self.options,
+        false
       ),
       inactive = highlight.create_component_highlight_group(
-      self.options.buffers_color.inactive,
-      'buffers_inactive',
-      self.options,
-      false
+        self.options.buffers_color.inactive,
+        'buffers_inactive',
+        self.options,
+        false
       ),
     }
   end
@@ -69,16 +69,16 @@ end
 function M:new_buffer(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
 
-  return Buffer:new({
+  return Buffer:new {
     bufnr = bufnr,
     options = self.options,
     highlights = self.highlights,
-  })
+  }
 end
 
 function M:buffers()
   local buffers = {}
-  for b = 1, vim.fn.bufnr '$' do
+  for b = 1, vim.fn.bufnr('$') do
     if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
       buffers[#buffers + 1] = self:new_buffer(b)
     end
