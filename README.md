@@ -724,6 +724,8 @@ Thanks to these wonderful people, we enjoy this awesome plugin.
   <img src="https://contrib.rocks/image?repo=nvim-lualine/lualine.nvim" />
 </a>
 
+<!-- panvimdoc-ignore-end -->
+
 ### Wiki
 
 Check out the [wiki](https://github.com/nvim-lualine/lualine.nvim/wiki) for more info.
@@ -733,4 +735,5 @@ You can find some useful [configuration snippets](https://github.com/nvim-lualin
 If you want to extend lualine with plugins or want to know
 which ones already do, [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
 
-<!-- panvimdoc-ignore-end -->
+### Support
+I you appreciate my work you can by me a coffee [here](https://www.buymeacoffee.com/shadmansalJ).
