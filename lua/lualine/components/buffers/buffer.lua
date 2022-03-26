@@ -15,6 +15,10 @@ function Buffer:init(opts)
   self:get_props()
 end
 
+function Buffer:is_current()
+  return vim.api.nvim_get_current_buf() == self.bufnr
+end
+
 ---setup icons, modified status for buffer
 function Buffer:get_props()
   self.file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(self.bufnr))
@@ -48,6 +52,13 @@ function Buffer:get_props()
   end
 end
 
+---returns line configured for handling mouse click
+---@param name string
+---@return string
+function Buffer:configure_mouse_click(name)
+  return string.format('%%%s@LualineSwitchBuffer@%s%%T', self.bufnr, name)
+end
+
 ---returns rendered buffer
 ---@return string
 function Buffer:render()
@@ -59,19 +70,13 @@ function Buffer:render()
   if self.ellipse then -- show elipsis
     name = '...'
   else
-    if self.options.mode == 0 then
-      name = string.format('%s%s%s', self.icon, name, self.modified_icon)
-    elseif self.options.mode == 1 then
-      name = string.format('%s %s%s', self.bufnr, self.icon, self.modified_icon)
-    else
-      name = string.format('%s %s%s%s', self.bufnr, self.icon, name, self.modified_icon)
-    end
+    name = self:apply_mode(name)
   end
   name = Buffer.apply_padding(name, self.options.padding)
   self.len = vim.fn.strchars(name)
 
   -- setup for mouse clicks
-  local line = string.format('%%%s@LualineSwitchBuffer@%s%%T', self.bufnr, name)
+  local line = self:configure_mouse_click(name)
   -- apply highlight
   line = modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')])
     .. line
@@ -119,6 +124,9 @@ function Buffer:name()
   elseif self.buftype == 'terminal' then
     local match = string.match(vim.split(self.file, ' ')[1], 'term:.*:(%a+)')
     return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ':t')
+  elseif self.buftype == 'quickfix' then
+    local is_loclist = 0 ~= vim.fn.getloclist(0, { filewinid = 1 }).filewinid
+    return is_loclist and 'Location list' or 'Quickfix List'
   elseif vim.fn.isdirectory(self.file) == 1 then
     return vim.fn.fnamemodify(self.file, ':p:.')
   elseif self.file == '' then
@@ -137,6 +145,18 @@ function Buffer.apply_padding(str, padding)
     l_padding, r_padding = padding.left or 0, padding.right or 0
   end
   return string.rep(' ', l_padding) .. str .. string.rep(' ', r_padding)
+end
+
+function Buffer:apply_mode(name)
+  if self.options.mode == 0 then
+    return string.format('%s%s%s', self.icon, name, self.modified_icon)
+  end
+
+  if self.options.mode == 1 then
+    return string.format('%s %s%s', self.bufnr, self.icon, self.modified_icon)
+  end
+
+  return string.format('%s %s%s%s', self.bufnr, self.icon, name, self.modified_icon)
 end
 
 return Buffer
