@@ -1,8 +1,8 @@
 .DEFAULT_GOAL = check
 
 lint:
-	@luacheck lua/lualine
-	@luacheck lua/tests
+	@luacheck lua/lualine/
+	@luacheck tests/
 	@luacheck examples/
 
 format:

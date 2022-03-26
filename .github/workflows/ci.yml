@@ -61,5 +61,4 @@ jobs:
           sudo luarocks install luacheck
       - name: Run luacheck
         run: |
-          luacheck lua/
-          luacheck examples/
+          make lint
