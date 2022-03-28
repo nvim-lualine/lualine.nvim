@@ -66,11 +66,12 @@ function M:init(options)
   end
 end
 
-function M:new_buffer(bufnr)
+function M:new_buffer(bufnr, buf_index)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
-
+  buf_index = buf_index or ''
   return Buffer:new {
     bufnr = bufnr,
+    buf_index = buf_index,
     options = self.options,
     highlights = self.highlights,
   }
@@ -80,7 +81,7 @@ function M:buffers()
   local buffers = {}
   for b = 1, vim.fn.bufnr('$') do
     if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
-      buffers[#buffers + 1] = self:new_buffer(b)
+      buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1)
     end
   end
 
