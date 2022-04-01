@@ -282,7 +282,9 @@ local function get_default_component_color(hl_name, mode, section, color, option
     and options.color_highlight.name .. '_' .. mode ~= hl_name
   then
     apply_default(options.color, options.color_highlight.name .. '_' .. mode)
-  else
+  end
+
+  if not ret.fg or not ret.bg then
     apply_default(default_theme_color, string.format('lualine_%s_%s', section, mode))
   end
   ret.fg = sanitize_color(ret.fg)
