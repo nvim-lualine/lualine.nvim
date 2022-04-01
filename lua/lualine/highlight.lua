@@ -463,4 +463,14 @@ function M.get_transitional_highlights(left_hl, right_hl)
   return '%#' .. highlight_name .. '#'
 end
 
+function M.get_stl_default_hl(focused)
+  if focused == 3 then
+    return 'TabLineFill'
+  elseif not focused then
+    return 'StatusLineNC'
+  else
+    return 'StatusLine'
+  end
+end
+
 return M

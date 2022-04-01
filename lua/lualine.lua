@@ -41,14 +41,14 @@ end
 ---@param last_hl string : last applied hl group name before str_checked
 ---@param reverse boolean : reverse the hl group ( true for right separators )
 ---@return string|nil concated separator highlight and transitional separator
-local function fill_section_separator(status, str_checked, last_hl, sep, reverse)
+local function fill_section_separator(status, is_focused, str_checked, last_hl, sep, reverse)
   -- Inserts transitional separator along with transitional highlight
   local next_hl = find_next_hl(status, str_checked)
   if last_hl == nil then
-    last_hl = 'Normal'
+    last_hl = modules.highlight.get_stl_default_hl(is_focused)
   end
   if next_hl == nil then
-    next_hl = 'Normal'
+    next_hl = modules.highlight.get_stl_default_hl(is_focused)
   end
   if #next_hl == 0 or #last_hl == 0 then
     return
@@ -65,7 +65,7 @@ end
 --- replaces %s/S{sep} with proper left/right separator highlight + sep
 ---@param status string : unprossed statusline string
 ---@return string : processed statusline string
-local function apply_transitional_separators(status)
+local function apply_transitional_separators(status, is_focused)
   local status_applied = {} -- Collects all the pieces for concatation
   local last_hl -- Stores lash highligjt group that we found
   local last_hl_reseted = false -- Whether last_hl is nil because we reseted
@@ -93,7 +93,7 @@ local function apply_transitional_separators(status)
       local sep = status:match('^%%s{(.-)}', str_checked)
       str_checked = str_checked + #sep + 4 -- 4 = len(%{})
       if not (last_hl == nil and last_hl_reseted) then
-        local trans_sep = fill_section_separator(status, str_checked, last_hl, sep, false)
+        local trans_sep = fill_section_separator(status, is_focused, str_checked, last_hl, sep, false)
         if trans_sep then
           table.insert(status_applied, trans_sep)
         end
@@ -111,7 +111,7 @@ local function apply_transitional_separators(status)
         -- and in this exact order skip the left sep as we can't draw both.
         str_checked = status:find('}', str_checked) + 1
       end
-      local trans_sep = fill_section_separator(status, str_checked, last_hl, sep, true)
+      local trans_sep = fill_section_separator(status, is_focused, str_checked, last_hl, sep, true)
       if trans_sep then
         table.insert(status_applied, trans_sep)
       end
@@ -171,7 +171,7 @@ local statusline = modules.utils.retry_call_wrap(function(sections, is_focused)
     -- When non of section x,y,z is present
     table.insert(status, modules.highlight.format_highlight('c', is_focused) .. '%=')
   end
-  return apply_transitional_separators(table.concat(status))
+  return apply_transitional_separators(table.concat(status), is_focused)
 end)
 
 --- check if any extension matches the filetype and return proper sections
@@ -198,7 +198,7 @@ end
 
 ---@return string statusline string for tabline
 local function tabline()
-  return statusline(config.tabline, true)
+  return statusline(config.tabline, 3)
 end
 
 local function notify_theme_error(theme_name)
