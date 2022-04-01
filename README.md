@@ -437,8 +437,8 @@ sections = {
       show_modified_status = true, -- Shows indicator when the buffer is modified.
 
       mode = 0, -- 0: Shows buffer name
-                -- 1: Shows buffer index (bufnr)
-                -- 2: Shows buffer name + buffer index (bufnr)
+                -- 1: Shows buffer index
+                -- 2: Shows buffer name + buffer index
 
       max_length = vim.o.columns * 2 / 3, -- Maximum width of buffers component,
                                           -- it can also be a function that returns
@@ -609,8 +609,8 @@ sections = {
       show_modified_status = true, -- Shows indicator when the window is modified.
 
       mode = 0, -- 0: Shows window name
-                -- 1: Shows window index (bufnr)
-                -- 2: Shows window name + window index (bufnr)
+                -- 1: Shows window index
+                -- 2: Shows window name + window index
 
       max_length = vim.o.columns * 2 / 3, -- Maximum width of windows component,
                                           -- it can also be a function that returns
@@ -672,6 +672,12 @@ tabline = {
 Shows currently open buffers. Like bufferline . See
 [buffers options](#buffers-component-options)
 for all builtin behaviors of buffers component.
+You can use `:LualineBuffersJump` to jump to buffer based on index
+of buffer in buffers component.
+```vim
+  :LualineBuffersJump 2  " Jumps to 2nd buffer in buffers component.
+  :LualineBuffersJump $  " Jumps to last buffer in buffers component.
+```
 
 #### Tabs
 Shows currently open tab. Like usual tabline. See

@@ -79,9 +79,11 @@ end
 
 function M:buffers()
   local buffers = {}
+  M.bufpos2nr = {}
   for b = 1, vim.fn.bufnr('$') do
     if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
       buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1)
+      M.bufpos2nr[#buffers] = b
     end
   end
 
@@ -213,10 +215,24 @@ function M:draw()
   return self.status
 end
 
+function M.buffer_jump(buf_pos)
+  if buf_pos == '$' then
+    buf_pos = #M.bufpos2nr
+  else
+    buf_pos = tonumber(buf_pos)
+  end
+  if buf_pos < 1 or buf_pos > #M.bufpos2nr then
+    error('Error: Unable to jump buffer position out of range')
+  end
+  vim.api.nvim_set_current_buf(M.bufpos2nr[buf_pos])
+end
+
 vim.cmd([[
   function! LualineSwitchBuffer(bufnr, mouseclicks, mousebutton, modifiers)
     execute ":buffer " . a:bufnr
   endfunction
+
+  command! -nargs=1 LualineBuffersJump call v:lua.require'lualine.components.buffers'.buffer_jump(<f-args>)
 ]])
 
 return M
