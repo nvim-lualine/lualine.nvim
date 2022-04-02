@@ -87,6 +87,22 @@ use {
 
 You'll also need to have a patched font if you want icons.
 
+### LualineNotices and empty windows
+
+Lualine warns about config issues during startup, but the recommended
+`:LualineNotices` only spawns an empty window.
+
+The empty window is related to loading the colorscheme after calling lualine
+setup. Load lualine after the colorscheme:
+
+```lua
+use({
+  "nvim-lualine/lualine.nvim",
+  requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+  after = '<COLORSCHEME>'
+})
+```
+
 ## Usage and customization
 
 Lualine has sections as shown below.
