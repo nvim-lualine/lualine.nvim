@@ -106,6 +106,15 @@ them based you your `background` option.
 <img width='700' src='https://user-images.githubusercontent.com/69089176/118902070-c2919900-b90c-11eb-9296-145a99ce52ce.png'/>
 </p>
 
+### hybrid
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/1167317/161424505-ef688667-a435-414c-9ea9-42b06f132cfb.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/1167317/161424513-88968f09-39bb-42dd-aac0-b622f8013302.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/1167317/161424516-6b23e984-3816-4f1f-84bf-3c9669e9f17d.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/1167317/161424522-c7d55131-60bc-47c3-abbb-637a7db25942.png'/>
+
+</p>
+
 ### iceberg_dark
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648796-614c5c00-74bc-11eb-8398-cde120ec7746.png'/>
