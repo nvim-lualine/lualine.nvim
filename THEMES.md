@@ -54,6 +54,14 @@ But if `g:ayuprefermirage` exists, it will load ayu_mirage instead when
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648582-e8e59b00-74bb-11eb-9239-edcc8e9c2c18.png'/>
 </p>
 
+### cyberpunk-neon
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/23743455/162495042-4e96adf1-098a-4170-b8f8-69b269ab144d.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/23743455/162495040-59402309-437b-42b7-8f3d-2acd52149060.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/23743455/162495038-54123261-f378-4ade-b747-98950f14b563.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/23743455/162495039-a933114c-a045-4ce4-ae93-01892f79b9cd.png'/>
+</p>
+
 ### dracula
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648594-f0a53f80-74bb-11eb-9018-9ee12260750e.png'/>
