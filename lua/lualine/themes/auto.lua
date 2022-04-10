@@ -5,6 +5,11 @@ local loader = require('lualine.utils.loader')
 
 local color_name = vim.g.colors_name
 if color_name then
+  -- All base16 colorschemes share the same theme
+  if 'base16' == color_name:sub(1, 6) then
+    color_name = 'base16'
+  end
+
   -- Check if there's a theme for current colorscheme
   -- If there is load that instead of genarating a new one
   local ok, theme = pcall(loader.load_theme, color_name)
