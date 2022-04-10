@@ -53,7 +53,7 @@ end
 ---@param color string|number
 ---@return string
 local function sanitize_color(color)
-  if color == nil or color == '' then
+  if color == nil or color == '' or (type(color) == 'string' and color:lower() == 'none') then
     return 'None'
   end
   if type(color) == 'string' then
@@ -76,8 +76,8 @@ function M.get_lualine_hl(name)
       return modules.utils.extract_highlight_colors(hl.link)
     end
     local hl_def = {
-      fg = hl.fg ~= 'None' and vim.deepcopy(hl.fg),
-      bg = hl.bg ~= 'None' and vim.deepcopy(hl.bg),
+      fg = hl.fg ~= 'None' and vim.deepcopy(hl.fg) or nil,
+      bg = hl.bg ~= 'None' and vim.deepcopy(hl.bg) or nil,
     }
     if hl.gui then
       for _, flag in ipairs(vim.split(hl.gui, ',')) do
@@ -282,7 +282,9 @@ local function get_default_component_color(hl_name, mode, section, color, option
     and options.color_highlight.name .. '_' .. mode ~= hl_name
   then
     apply_default(options.color, options.color_highlight.name .. '_' .. mode)
-  else
+  end
+
+  if not ret.fg or not ret.bg then
     apply_default(default_theme_color, string.format('lualine_%s_%s', section, mode))
   end
   ret.fg = sanitize_color(ret.fg)
@@ -456,11 +458,21 @@ function M.get_transitional_highlights(left_hl, right_hl)
     if bg == fg then
       return nil -- Separator won't be visible anyway
     end
-    M.highlight(highlight_name, fg, bg, nil)
+    M.highlight(highlight_name, fg, bg, nil, nil)
     attach_hl(left_hl, highlight_name, 'bg', 'fg')
     attach_hl(right_hl, highlight_name, 'bg', 'bg')
   end
   return '%#' .. highlight_name .. '#'
+end
+
+function M.get_stl_default_hl(focused)
+  if focused == 3 then
+    return 'TabLineFill'
+  elseif not focused then
+    return 'StatusLineNC'
+  else
+    return 'StatusLine'
+  end
 end
 
 return M

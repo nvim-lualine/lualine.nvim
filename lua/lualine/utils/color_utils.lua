@@ -278,6 +278,9 @@ local color_table = {
 ---@param hex_color string
 ---@return string
 function M.rgb2cterm(hex_color)
+  if hex_color == 'None' then
+    return 'None'
+  end
   local function get_color_distance(color1, color2)
     -- returns how much color2 deviates from color1
     local dr = math.abs(color1[1] - color2[1]) / (color1[1] + 1) * 100

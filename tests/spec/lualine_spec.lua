@@ -17,6 +17,7 @@ describe('Lualine', function()
         section_separators = { left = '', right = '' },
         disabled_filetypes = {},
         always_divide_middle = true,
+        globalstatus = false,
       },
       sections = {
         lualine_a = { 'mode' },
@@ -750,6 +751,166 @@ describe('Lualine', function()
         {3:                                                                                                              }|
         ]===])
       end)
+    end)
+
+    describe('windows component', function()
+      it('works', function()
+        local conf = vim.deepcopy(tab_conf)
+        conf.tabline.lualine_a = { { 'windows', max_length = 1e3, mode = 2, icons_enabled = false } }
+        vim.cmd('e ' .. 'a.txt')
+        vim.cmd('tabe ' .. 'b.txt')
+        vim.cmd('vsplit ' .. 'c.txt')
+        vim.cmd('tabe ' .. 'd.txt')
+        require('lualine').setup(conf)
+        require('lualine').statusline()
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            2: lualine_transitional_lualine_a_windows_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: 1 d.txt }
+        {2:}
+        {3:                                                                                                              }|
+        ]===])
+
+        vim.cmd('tabprev')
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            2: lualine_transitional_lualine_a_windows_active_to_lualine_a_windows_inactive = { bg = "#3c3836", fg = "#a89984" }
+            3: lualine_a_windows_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
+            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: 1 c.txt }
+        {2:}
+        {3: 2 b.txt }
+        {4:                                                                                                     }|
+        ]===])
+
+        vim.cmd('tabprev')
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            2: lualine_transitional_lualine_a_windows_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: 1 a.txt }
+        {2:}
+        {3:                                                                                                              }|
+        ]===])
+      end)
+    end)
+  end)
+
+  describe('diagnostics', function()
+    local diagnostics_conf = vim.deepcopy(config)
+    diagnostics_conf.sections = {
+      lualine_a = {
+        {
+          'diagnostics',
+          symbols = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
+          diagnostics_color = {
+            error = { bg = '#a89984', fg = '#ff0000' },
+            warn = { bg = '#a89984', fg = '#ffa500' },
+            info = { bg = '#a89984', fg = '#add8e6' },
+            hint = { bg = '#a89984', fg = '#d3d3d3' },
+          },
+          sources = {
+            function()
+              return {}
+            end,
+          },
+        },
+      },
+      lualine_b = {},
+      lualine_c = {},
+      lualine_x = {},
+      lualine_y = {},
+      lualine_z = {},
+    }
+
+    it('does not show without diagnostics', function()
+      local conf = vim.deepcopy(diagnostics_conf)
+      require('lualine').setup(conf)
+      statusline:expect([===[
+      highlights = {
+          1: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+      }
+      |{1:                                                                                                                        }|
+      ]===])
+    end)
+
+    it('shows only positive diagnostics', function()
+      local conf = vim.deepcopy(diagnostics_conf)
+      conf.sections.lualine_a[1].sources[1] = function()
+        return { error = 0, warn = 0, info = 1, hint = 0 }
+      end
+      require('lualine').setup(conf)
+      statusline:expect([===[
+      highlights = {
+          1: lualine_a_diagnostics_info = { bg = "#a89984", fg = "#add8e6" }
+          2: lualine_transitional_lualine_a_diagnostics_info_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+      }
+      |{1: I:1 }
+      {2:}
+      {3:                                                                                                                  }|
+      ]===])
+    end)
+
+    it('shows all diagnostics with same background', function()
+      local conf = vim.deepcopy(diagnostics_conf)
+      conf.sections.lualine_a[1].sources[1] = function()
+        return { error = 1, warn = 2, info = 3, hint = 4 }
+      end
+      require('lualine').setup(conf)
+      statusline:expect([===[
+      highlights = {
+          1: lualine_a_diagnostics_error = { bg = "#a89984", fg = "#ff0000" }
+          2: lualine_a_diagnostics_warn = { bg = "#a89984", fg = "#ffa500" }
+          3: lualine_a_diagnostics_info = { bg = "#a89984", fg = "#add8e6" }
+          4: lualine_a_diagnostics_hint = { bg = "#a89984", fg = "#d3d3d3" }
+          5: lualine_transitional_lualine_a_diagnostics_hint_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          6: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+      }
+      |{1: E:1 }
+      {2:W:2 }
+      {3:I:3 }
+      {4:H:4 }
+      {5:}
+      {6:                                                                                                      }|
+      ]===])
+    end)
+
+    it('shows all diagnostics with padding when background changes', function()
+      local conf = vim.deepcopy(diagnostics_conf)
+      conf.sections.lualine_a[1].sources[1] = function()
+        return { error = 1, warn = 2, info = 3, hint = 4 }
+      end
+      conf.sections.lualine_a[1].diagnostics_color = {
+        error = { bg = '#ff0000', fg = '#a89984' },
+        warn = { bg = '#ffa500', fg = '#a89984' },
+        info = { bg = '#add8e6', fg = '#a89984' },
+        hint = { bg = '#add8e6', fg = '#a89984' },
+      }
+      require('lualine').setup(conf)
+      statusline:expect([===[
+      highlights = {
+          1: lualine_a_diagnostics_error = { bg = "#ff0000", fg = "#a89984" }
+          2: lualine_a_diagnostics_warn = { bg = "#ffa500", fg = "#a89984" }
+          3: lualine_a_diagnostics_info = { bg = "#add8e6", fg = "#a89984" }
+          4: lualine_a_diagnostics_hint = { bg = "#add8e6", fg = "#a89984" }
+          5: lualine_transitional_lualine_a_diagnostics_hint_to_lualine_c_normal = { bg = "#3c3836", fg = "#add8e6" }
+          6: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+      }
+      |{1: E:1 }
+      {2: W:2 }
+      {3: I:3 }
+      {4:H:4 }
+      {5:}
+      {6:                                                                                                    }|
+      ]===])
     end)
   end)
 end)

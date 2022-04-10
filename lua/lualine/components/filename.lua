@@ -55,7 +55,7 @@ M.update_status = function(self)
   end
 
   if self.options.shorting_target ~= 0 then
-    local windwidth = vim.fn.winwidth(0)
+    local windwidth = self.options.globalstatus and vim.go.columns or vim.fn.winwidth(0)
     local estimated_space_available = windwidth - self.options.shorting_target
 
     local path_separator = package.config:sub(1, 1)

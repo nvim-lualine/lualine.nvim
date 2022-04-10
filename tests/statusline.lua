@@ -5,23 +5,23 @@
 ---
 --- ###Uses:
 ---
---- Create a new instence with status width 120 & for active statusline
+--- Create a new instance with status width 120 & for active statusline
 --- like following.
 ---
 --- ``lua
 --- local statusline = require('tests.statusline').new(120, 'active')
 --- ```
 ---
---- To create a new instence with status width 80 & for inactive statusline use following.
+--- To create a new instance with status width 80 & for inactive statusline use following.
 ---
 --- ``lua
 --- local statusline = require('tests.statusline').new(120, 'inactive')
 --- ```
 ---
 --- Now setup the state you want to test.
---- To test you'll call `expect` pmethod on statusline for example.
+--- To test you'll call `expect` method on statusline for example.
 ---
---- To create a new instence with status width 80 & tabline
+--- To create a new instance with status width 80 & tabline
 ---
 --- ``lua
 --- local statusline = require('tests.statusline').new(120, 'tabline')
