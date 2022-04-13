@@ -3,16 +3,16 @@
 local function filesize()
   local size = vim.fn.wordcount().bytes
 
-  local sufixes = { 'b', 'k', 'm', 'g' }
+  local suffixes = { 'b', 'k', 'm', 'g' }
 
   local i = 1
-  while size > 1024 and i < #sufixes do
+  while size > 1024 and i < #suffixes do
     size = size / 1024
     i = i + 1
   end
 
   local format = i == 1 and '%d%s' or '%.1f%s'
-  return string.format(format, size, sufixes[i])
+  return string.format(format, size, suffixes[i])
 end
 
 return filesize
