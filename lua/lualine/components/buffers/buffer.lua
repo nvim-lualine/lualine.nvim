@@ -10,6 +10,7 @@ local modules = require('lualine_require').lazy_require {
 function Buffer:init(opts)
   assert(opts.bufnr, 'Cannot create Buffer without bufnr')
   self.bufnr = opts.bufnr
+  self.buf_index = opts.buf_index
   self.options = opts.options
   self.highlights = opts.highlights
   self:get_props()
@@ -162,10 +163,10 @@ function Buffer:apply_mode(name)
   end
 
   if self.options.mode == 1 then
-    return string.format('%s %s%s', self.bufnr, self.icon, self.modified_icon)
+    return string.format('%s %s%s', self.buf_index or '', self.icon, self.modified_icon)
   end
 
-  return string.format('%s %s%s%s', self.bufnr, self.icon, name, self.modified_icon)
+  return string.format('%s %s%s%s', self.buf_index or '', self.icon, name, self.modified_icon)
 end
 
 return Buffer
