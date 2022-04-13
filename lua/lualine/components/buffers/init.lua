@@ -7,6 +7,7 @@ local highlight = require('lualine.highlight')
 
 local default_options = {
   show_filename_only = true,
+  hide_filename_extension = false,
   show_modified_status = true,
   mode = 0,
   max_length = 0,

@@ -132,8 +132,17 @@ function Buffer:name()
   elseif self.file == '' then
     return '[No Name]'
   end
-  return self.options.show_filename_only and vim.fn.fnamemodify(self.file, ':t')
-    or vim.fn.pathshorten(vim.fn.fnamemodify(self.file, ':p:.'))
+
+  local name
+  if self.options.show_filename_only then
+    name = vim.fn.fnamemodify(self.file, ':t')
+  else
+    name = vim.fn.pathshorten(vim.fn.fnamemodify(self.file, ':p:.'))
+  end
+  if self.options.hide_filename_extension then
+    name = vim.fn.fnamemodify(name, ':r')
+  end
+  return name
 end
 
 ---adds spaces to left and right
