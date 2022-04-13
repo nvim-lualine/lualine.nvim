@@ -19,6 +19,7 @@ function M:init(options)
   -- Run super()
   M.super.init(self, options)
   -- Apply default options
+  modules.default_config.apply_default_colors(self.options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, modules.default_config.options)
   -- Apply default symbols
   self.symbols = vim.tbl_extend(

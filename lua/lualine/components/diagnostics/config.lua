@@ -20,7 +20,10 @@ M.options = {
   always_visible = false,
   sources = { vim.fn.has('nvim-0.6') == 1 and 'nvim_diagnostic' or 'nvim_lsp', 'coc' },
   sections = { 'error', 'warn', 'info', 'hint' },
-  diagnostics_color = {
+}
+
+function M.apply_default_colors(opts)
+  local default_diagnostics_color = {
     error = {
       fg = utils.extract_color_from_hllist(
         'fg',
@@ -49,7 +52,8 @@ M.options = {
         '#273faf'
       ),
     },
-  },
-}
+  }
+  opts.diagnostics_color = vim.tbl_deep_extend('keep', opts.diagnostics_color or {}, default_diagnostics_color)
+end
 
 return M

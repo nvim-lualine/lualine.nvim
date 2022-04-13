@@ -12,7 +12,10 @@ local M = lualine_require.require('lualine.component'):extend()
 local default_options = {
   colored = true,
   symbols = { added = '+', modified = '~', removed = '-' },
-  diff_color = {
+}
+
+local function apply_default_colors(opts)
+  local default_diff_color = {
     added = {
       fg = modules.utils.extract_color_from_hllist(
         'fg',
@@ -34,12 +37,14 @@ local default_options = {
         '#ff0038'
       ),
     },
-  },
-}
+  }
+  opts.diff_color = vim.tbl_deep_extend('keep', opts.diff_color or {}, default_diff_color)
+end
 
 -- Initializer
 function M:init(options)
   M.super.init(self, options)
+  apply_default_colors(self.options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
   -- create highlights and save highlight_name in highlights table
   if self.options.colored then
