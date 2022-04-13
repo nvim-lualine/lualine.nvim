@@ -11,7 +11,8 @@ local function filesize()
     i = i + 1
   end
 
-  return string.format('%.1f%s', size, sufixes[i])
+  local format = i == 1 and '%d%s' or '%.1f%s'
+  return string.format(format, size, sufixes[i])
 end
 
 return filesize
