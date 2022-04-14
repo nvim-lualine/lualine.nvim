@@ -41,18 +41,8 @@ function M:init(options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
   -- stylua: ignore
   self.highlights = {
-    active = highlight.create_component_highlight_group(
-      self.options.tabs_color.active,
-      'tabs_active',
-      self.options,
-      false
-    ),
-    inactive = highlight.create_component_highlight_group(
-      self.options.tabs_color.inactive,
-      'tabs_inactive',
-      self.options,
-      false
-    ),
+    active = self:create_hl( self.options.tabs_color.active, 'active'),
+    inactive = self:create_hl( self.options.tabs_color.inactive, 'inactive'),
   }
 end
 

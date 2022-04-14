@@ -41,16 +41,11 @@ function M:apply_icon()
         local default_highlight = self:get_default_hl()
         local icon_highlight = self.icon_hl_cache[highlight_color]
         if not icon_highlight or not modules.highlight.highlight_exists(icon_highlight.name .. '_normal') then
-          icon_highlight = modules.highlight.create_component_highlight_group(
-            { fg = highlight_color },
-            icon_highlight_group,
-            self.options,
-            false
-          )
+          icon_highlight = self:create_hl({ fg = highlight_color }, icon_highlight_group)
           self.icon_hl_cache[highlight_color] = icon_highlight
         end
 
-        icon = modules.highlight.component_format_highlight(icon_highlight) .. icon .. default_highlight
+        icon = self:format_hl(icon_highlight) .. icon .. default_highlight
       end
     end
   else

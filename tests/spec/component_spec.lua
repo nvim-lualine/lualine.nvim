@@ -311,7 +311,7 @@ describe('Filetype component', function()
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
     assert.stub(hl.create_component_highlight_group).was_called_with(
       { fg = '#000' },
-      'test_highlight_group',
+      'filetype_test_highlight_group',
       opts,
       false
     )
