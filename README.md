@@ -678,6 +678,8 @@ of buffer in buffers component.
 ```vim
   :LualineBuffersJump 2  " Jumps to 2nd buffer in buffers component.
   :LualineBuffersJump $  " Jumps to last buffer in buffers component.
+  :LualineBuffersCycle 1  " Move to the next buffer in buffers component.
+  :LualineBuffersCycle -1  " Move to the previous buffer in buffers component.
 ```
 
 #### Tabs
