@@ -68,7 +68,7 @@ function Buffer:render()
     name = self.options.fmt(name or '')
   end
 
-  if self.ellipse then -- show elipsis
+  if self.ellipse then -- show ellipsis
     name = '...'
   else
     name = self:apply_mode(name)

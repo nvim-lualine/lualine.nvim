@@ -183,7 +183,7 @@ function M:update_status()
       data[#data + 1] = rendered_after
     end
   end
-  -- draw elipsis (...) on relevent sides if all buffers don't fit in max_length
+  -- draw ellipsis (...) on relevant sides if all buffers don't fit in max_length
   if total_length > max_length then
     if before ~= nil then
       before.ellipse = true
@@ -228,12 +228,31 @@ function M.buffer_jump(buf_pos)
   vim.api.nvim_set_current_buf(M.bufpos2nr[buf_pos])
 end
 
+function M.buffer_cycle(direction)
+
+  local index = vim.api.nvim_get_current_buf()
+
+  local length = #M.bufpos2nr
+  local next_index = index + direction
+
+  if next_index <= length and next_index >= 1 then
+    next_index = index + direction
+  elseif index + direction <= 0 then
+    next_index = length
+  else
+    next_index = 1
+  end
+
+  M.buffer_jump(next_index)
+end
+
 vim.cmd([[
   function! LualineSwitchBuffer(bufnr, mouseclicks, mousebutton, modifiers)
     execute ":buffer " . a:bufnr
   endfunction
 
   command! -nargs=1 LualineBuffersJump call v:lua.require'lualine.components.buffers'.buffer_jump(<f-args>)
+  command! -nargs=1 LualineBuffersCycle call v:lua.require'lualine.components.buffers'.buffer_cycle(<f-args>)
 ]])
 
 return M
