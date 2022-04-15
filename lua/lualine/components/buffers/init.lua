@@ -10,6 +10,7 @@ local default_options = {
   hide_filename_extension = false,
   show_modified_status = true,
   mode = 0,
+  first_index = 1,
   max_length = 0,
   filetype_names = {
     TelescopePrompt = 'Telescope',
@@ -48,7 +49,11 @@ function M:init(options)
     active = get_hl('lualine_' .. options.self.section, true),
     inactive = get_hl('lualine_' .. options.self.section, false),
   }
+
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
+  self.options.index_offset = self.options.first_index - 1
+  M.options = self.options
+
   if self.options.component_name == 'buffers' then
     self.highlights = {
       active = highlight.create_component_highlight_group(
@@ -83,8 +88,8 @@ function M:buffers()
   M.bufpos2nr = {}
   for b = 1, vim.fn.bufnr('$') do
     if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
-      buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1)
-      M.bufpos2nr[#buffers] = b
+      buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1 + self.options.index_offset)
+      M.bufpos2nr[#buffers + self.options.index_offset] = b
     end
   end
 
@@ -222,7 +227,10 @@ function M.buffer_jump(buf_pos)
   else
     buf_pos = tonumber(buf_pos)
   end
-  if buf_pos < 1 or buf_pos > #M.bufpos2nr then
+
+  sizeof = require("lualine.utils.utils").list_count
+
+  if buf_pos < 1 or buf_pos > sizeof(M.bufpos2nr) + M.options.index_offset then
     error('Error: Unable to jump buffer position out of range')
   end
   vim.api.nvim_set_current_buf(M.bufpos2nr[buf_pos])

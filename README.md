@@ -441,6 +441,7 @@ sections = {
                 -- 1: Shows buffer index
                 -- 2: Shows buffer name + buffer index
 
+      first_index = 1,  -- Start counting buffer indices from this number
       max_length = vim.o.columns * 2 / 3, -- Maximum width of buffers component,
                                           -- it can also be a function that returns
                                           -- the value of `max_length` dynamically.

@@ -183,4 +183,15 @@ function M.stl_escape(str)
   return str:gsub('%%', '%%%%')
 end
 
+---Count the number of non-nil values in table
+---@param table table
+---@return integer
+function M.list_count(table)
+  local size = 0
+  for k, v in pairs(table) do
+    size = size + 1
+  end
+  return size
+end
+
 return M
