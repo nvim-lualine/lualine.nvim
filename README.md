@@ -62,9 +62,9 @@ on specific plugin. These numbers are the average of 20 runs.
 
 | control  |  lualine  | lightline |  airline  |
 | :------: | :-------: | :-------: | :-------: |
-| 8.943 ms | 10.140 ms | 12.522 ms | 38.850 ms |
+| 17.2 ms  |  24.8 ms  |  25.5 ms  |  79.9 ms  |
 
-Last Updated On: 20-09-2021
+Last Updated On: 18-04-2022
 
 ## Installation
 
