@@ -6,7 +6,7 @@ local M = {}
 M.sources = {
   nvim_lsp = function()
     local error_count, warning_count, info_count, hint_count
-    if vim.fn.has('nvim-0.6') == 1 then
+    if 5 < tonumber(vim.version().minor) then
       -- On nvim 0.6+ use vim.diagnostic to get lsp generated diagnostic count.
       local diagnostics = vim.diagnostic.get(0)
       local count = { 0, 0, 0, 0 }
