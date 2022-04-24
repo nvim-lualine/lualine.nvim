@@ -7,7 +7,7 @@ local default_options = {
 }
 
 function M:init(options)
-  options.buffers_color = nil -- bufers_color isn't windpws option.
+  options.buffers_color = nil -- bufers_color isn't windpws option.
   M.super.init(self, options)
 
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
