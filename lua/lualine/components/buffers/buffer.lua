@@ -20,6 +20,10 @@ function Buffer:is_current()
   return vim.api.nvim_get_current_buf() == self.bufnr
 end
 
+function Buffer:is_alternate_file()
+  return vim.fn.bufnr('#') == self.bufnr and not self:is_current()
+end
+
 ---setup icons, modified status for buffer
 function Buffer:get_props()
   self.file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(self.bufnr))
@@ -28,6 +32,7 @@ function Buffer:get_props()
   local modified = self.options.show_modified_status and vim.api.nvim_buf_get_option(self.bufnr, 'modified')
   local modified_icon = self.options.icons_enabled and ' ●' or ' +'
   self.modified_icon = modified and modified_icon or ''
+  self.alternate_file_icon = (self.options.icons_enabled and self:is_alternate_file()) and ' #' or ''
   self.icon = ''
   if self.options.icons_enabled then
     local dev
@@ -158,15 +163,16 @@ function Buffer.apply_padding(str, padding)
 end
 
 function Buffer:apply_mode(name)
+  local bufnr = self.options.show_bufnr and ' [' .. self.bufnr .. self.alternate_file_icon .. ']' or ''
   if self.options.mode == 0 then
-    return string.format('%s%s%s', self.icon, name, self.modified_icon)
+    return string.format('%s%s%s%s', self.icon, name, self.modified_icon, bufnr)
   end
 
   if self.options.mode == 1 then
-    return string.format('%s %s%s', self.buf_index or '', self.icon, self.modified_icon)
+    return string.format('%s %s%s%s', self.buf_index or '', self.icon, self.modified_icon, bufnr)
   end
 
-  return string.format('%s %s%s%s', self.buf_index or '', self.icon, name, self.modified_icon)
+  return string.format('%s %s%s%s%s', self.buf_index or '', self.icon, name, self.modified_icon, bufnr)
 end
 
 return Buffer
