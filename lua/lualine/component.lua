@@ -76,7 +76,9 @@ function M:apply_padding()
       -- When component has changed the highlight at begining
       -- we will add the padding after the highlight
       local pre_highlight = vim.fn.matchlist(self.status, [[\(%#.\{-\}#\)]])[2]
-      self.status = pre_highlight .. string.rep(' ', l_padding) .. self.status:sub(#pre_highlight + 1, #self.status)
+      self.status = pre_highlight
+        .. string.rep(' ', l_padding)
+        .. self.status:sub(#pre_highlight + 1, #self.status)
     else
       self.status = string.rep(' ', l_padding) .. self.status
     end
@@ -108,7 +110,7 @@ function M:apply_highlights(default_highlight)
   end
 end
 
----apply icon in front of component (prepemds component with icon)
+---apply icon to component (appends/prepemds component with icon)
 function M:apply_icon()
   local icon = self.options.icon
   if self.options.icons_enabled and icon then
@@ -116,14 +118,14 @@ function M:apply_icon()
       icon = icon[1]
     end
     if self.options.icon_color_highlight then
-      self.status = table.concat {
+      self.status = table.concat({
         self:format_hl(self.options.icon_color_highlight),
         icon,
         self:get_default_hl(),
         ' ',
         self.status,
-      }
-    elseif self.options.icon_right then
+      })
+    elseif self.options.icon_alignment == 'right' then
       self.status = table.concat({ self.status, icon }, ' ')
     else
       self.status = table.concat({ icon, self.status }, ' ')

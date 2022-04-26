@@ -61,7 +61,7 @@ function M:apply_icon()
 
   if self.options.icon_only then
     self.status = icon
-  elseif self.options.icon_right then
+  elseif self.options.icon_alignment == 'right' then
     self.status = self.status .. ' ' .. icon
   else
     self.status = icon .. ' ' .. self.status
