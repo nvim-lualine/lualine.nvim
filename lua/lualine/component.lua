@@ -115,16 +115,25 @@ function M:apply_icon()
   local icon = self.options.icon
   if self.options.icons_enabled and icon then
     if type(icon) == 'table' then
+      self.options.icon_alignment = icon.align
       icon = icon[1]
     end
-    if self.options.icon_color_highlight then
-      self.status = table.concat({
+    if self.options.icon_color_highlight and self.options.icon_alignment == 'right' then
+      self.status = table.concat {
+        self.status,
+        ' ',
+        self:format_hl(self.options.icon_color_highlight),
+        icon,
+        self:get_default_hl(),
+      }
+    elseif self.options.icon_color_highlight then
+      self.status = table.concat {
         self:format_hl(self.options.icon_color_highlight),
         icon,
         self:get_default_hl(),
         ' ',
         self.status,
-      })
+      }
     elseif self.options.icon_alignment == 'right' then
       self.status = table.concat({ self.status, icon }, ' ')
     else
