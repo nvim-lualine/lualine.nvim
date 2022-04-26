@@ -123,6 +123,8 @@ function M:apply_icon()
         ' ',
         self.status,
       }
+    elseif self.options.icon_right then
+      self.status = table.concat({ self.status, icon }, ' ')
     else
       self.status = table.concat({ icon, self.status }, ' ')
     end
