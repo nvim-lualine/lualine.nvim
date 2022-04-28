@@ -76,9 +76,7 @@ function M:apply_padding()
       -- When component has changed the highlight at begining
       -- we will add the padding after the highlight
       local pre_highlight = vim.fn.matchlist(self.status, [[\(%#.\{-\}#\)]])[2]
-      self.status = pre_highlight
-        .. string.rep(' ', l_padding)
-        .. self.status:sub(#pre_highlight + 1, #self.status)
+      self.status = pre_highlight .. string.rep(' ', l_padding) .. self.status:sub(#pre_highlight + 1, #self.status)
     else
       self.status = string.rep(' ', l_padding) .. self.status
     end
