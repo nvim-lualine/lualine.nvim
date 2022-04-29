@@ -113,7 +113,6 @@ function M:apply_icon()
   local icon = self.options.icon
   if self.options.icons_enabled and icon then
     if type(icon) == 'table' then
-      self.options.icon.align = icon.align
       icon = icon[1]
     end
     if self.options.icon_color_highlight and type(self.options.icon) == 'table' and self.options.icon.align == 'right' then
