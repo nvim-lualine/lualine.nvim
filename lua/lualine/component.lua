@@ -115,7 +115,11 @@ function M:apply_icon()
     if type(icon) == 'table' then
       icon = icon[1]
     end
-    if self.options.icon_color_highlight and type(self.options.icon) == 'table' and self.options.icon.align == 'right' then
+    if
+      self.options.icon_color_highlight
+      and type(self.options.icon) == 'table'
+      and self.options.icon.align == 'right'
+    then
       self.status = table.concat {
         self.status,
         ' ',
