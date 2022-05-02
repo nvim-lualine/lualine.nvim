@@ -741,6 +741,7 @@ extensions = {'quickfix'}
 - fugitive
 - fzf
 - nerdtree
+- neo-tree
 - nvim-tree
 - quickfix
 - symbols-outline
