@@ -439,7 +439,9 @@ sections = {
 
       mode = 0, -- 0: Shows buffer name
                 -- 1: Shows buffer index
-                -- 2: Shows buffer name + buffer index
+                -- 2: Shows buffer name + buffer index 
+                -- 3: Shows buffer number
+                -- 4: Shows buffer nmae + buffer number
 
       max_length = vim.o.columns * 2 / 3, -- Maximum width of buffers component,
                                           -- it can also be a function that returns
@@ -456,6 +458,12 @@ sections = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active buffer.
         inactive = 'lualine_{section}_inactive', -- Color for inactive buffer.
+      },
+
+      symbols = {
+        modified = ' ●'       -- Text to show when the buffer is modified
+        alternate_file = '#', -- Text to show to indify the alternate file
+        directory =  '',     -- Text to show when the buffer is a directory
       },
     }
   }

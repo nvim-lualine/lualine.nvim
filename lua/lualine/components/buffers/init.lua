@@ -22,6 +22,11 @@ local default_options = {
     active = nil,
     inactive = nil,
   },
+  symbols = {
+    modified = ' ●',
+    alternate_file = '#',
+    directory =  '',
+  }
 }
 
 -- This function is duplicated in tabs
