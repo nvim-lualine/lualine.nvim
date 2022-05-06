@@ -1,7 +1,14 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local function filesize()
-  local size = vim.fn.wordcount().bytes
+  local file = vim.fn.expand('%:p')
+  if file == nil or #file == 0 then
+    return ''
+  end
+  local size = vim.fn.getfsize(file)
+  if size <= 0 then
+    return ''
+  end
 
   local suffixes = { 'b', 'k', 'm', 'g' }
 
