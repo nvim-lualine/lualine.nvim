@@ -304,16 +304,17 @@ end
 function M.create_component_highlight_group(color, highlight_tag, options, apply_no_default)
   local section = options.self.section
   local tag_id = 0
+  local highlight_tag_counted = highlight_tag
   while
-    M.highlight_exists(table.concat({ 'lualine', section, highlight_tag }, '_'))
-    or (section and M.highlight_exists(table.concat({ 'lualine', section, highlight_tag, 'normal' }, '_')))
+    M.highlight_exists(table.concat({ 'lualine', section, highlight_tag_counted }, '_'))
+    or (section and M.highlight_exists(table.concat({ 'lualine', section, highlight_tag_counted, 'normal' }, '_')))
   do
-    highlight_tag = highlight_tag .. '_' .. tostring(tag_id)
+    highlight_tag_counted = highlight_tag .. '_' .. tostring(tag_id)
     tag_id = tag_id + 1
   end
 
   if type(color) == 'string' then
-    local highlight_group_name = table.concat({ 'lualine', section, highlight_tag }, '_')
+    local highlight_group_name = table.concat({ 'lualine', section, highlight_tag_counted }, '_')
     M.highlight(highlight_group_name, nil, nil, nil, color) -- l8nk to group
     return {
       name = highlight_group_name,
@@ -329,7 +330,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   if type(color) ~= 'function' and (apply_no_default or (color.bg and color.fg)) then
     -- When bg and fg are both present we donn't need to set highlighs for
     -- each mode as they will surely look the same. So we can work without options
-    local highlight_group_name = table.concat({ 'lualine', section, highlight_tag }, '_')
+    local highlight_group_name = table.concat({ 'lualine', section, highlight_tag_counted }, '_')
     M.highlight(highlight_group_name, color.fg, color.bg, color.gui, nil)
     return {
       name = highlight_group_name,
@@ -351,7 +352,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
     'inactive',
   }
   for _, mode in ipairs(modes) do
-    local hl_name = table.concat({ 'lualine', section, highlight_tag, mode }, '_')
+    local hl_name = table.concat({ 'lualine', section, highlight_tag_counted, mode }, '_')
     local cl = color
     if type(color) == 'function' then
       cl = color { section = section } or {}
@@ -364,7 +365,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
     M.highlight(hl_name, cl.fg, cl.bg, cl.gui, cl.link)
   end
   return {
-    name = table.concat({ 'lualine', section, highlight_tag }, '_'),
+    name = table.concat({ 'lualine', section, highlight_tag_counted }, '_'),
     fn = type(color) == 'function' and color,
     no_mode = false,
     link = false,
