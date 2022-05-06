@@ -1,4 +1,4 @@
--- K
+-- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local M = require('lualine.component'):extend()
 
