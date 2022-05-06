@@ -162,6 +162,10 @@ function Buffer.apply_padding(str, padding)
 end
 
 function Buffer:apply_mode(name)
+  if self.options.mode == 0 then
+    return string.format('%s%s%s%s', self.alternate_file_icon, self.icon, name, self.modified_icon)
+  end
+
   if self.options.mode == 1 then
     return string.format('%s%s %s%s', self.alternate_file_icon, self.buf_index or '', self.icon, self.modified_icon)
   end
