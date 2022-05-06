@@ -51,21 +51,11 @@ end
 function M:create_option_highlights()
   -- set custom highlights
   if self.options.color then
-    self.options.color_highlight = highlight.create_component_highlight_group(
-      self.options.color,
-      self.options.component_name,
-      self.options,
-      false
-    )
+    self.options.color_highlight = self:create_hl(self.options.color)
   end
   -- setup icon highlight
   if type(self.options.icon) == 'table' and self.options.icon.color then
-    self.options.icon_color_highlight = highlight.create_component_highlight_group(
-      self.options.icon.color,
-      self.options.component_name .. 'icon',
-      self.options,
-      false
-    )
+    self.options.icon_color_highlight = self:create_hl(self.options.icon.color)
   end
 end
 
@@ -100,7 +90,7 @@ end
 function M:apply_highlights(default_highlight)
   if self.options.color_highlight then
     local hl_fmt
-    hl_fmt, M.color_fn_cache = highlight.component_format_highlight(self.options.color_highlight)
+    hl_fmt, M.color_fn_cache = self:format_hl(self.options.color_highlight)
     self.status = hl_fmt .. self.status
   end
   if type(self.options.separator) ~= 'table' and self.status:find('%%#') then
@@ -118,21 +108,35 @@ function M:apply_highlights(default_highlight)
   end
 end
 
----apply icon in front of component (prepemds component with icon)
+---apply icon to component (appends/prepemds component with icon)
 function M:apply_icon()
   local icon = self.options.icon
   if self.options.icons_enabled and icon then
     if type(icon) == 'table' then
       icon = icon[1]
     end
-    if self.options.icon_color_highlight then
+    if
+      self.options.icon_color_highlight
+      and type(self.options.icon) == 'table'
+      and self.options.icon.align == 'right'
+    then
       self.status = table.concat {
-        highlight.component_format_highlight(self.options.icon_color_highlight),
+        self.status,
+        ' ',
+        self:format_hl(self.options.icon_color_highlight),
+        icon,
+        self:get_default_hl(),
+      }
+    elseif self.options.icon_color_highlight then
+      self.status = table.concat {
+        self:format_hl(self.options.icon_color_highlight),
         icon,
         self:get_default_hl(),
         ' ',
         self.status,
       }
+    elseif type(self.options.icon) == 'table' and self.options.icon.align == 'right' then
+      self.status = table.concat({ self.status, icon }, ' ')
     else
       self.status = table.concat({ icon, self.status }, ' ')
     end
@@ -187,12 +191,28 @@ end
 
 function M:get_default_hl()
   if self.options.color_highlight then
-    return highlight.component_format_highlight(self.options.color_highlight)
+    return self:format_hl(self.options.color_highlight)
   elseif self.default_hl then
     return self.default_hl
   else
     return highlight.format_highlight(self.options.self.section)
   end
+end
+
+---create a lualine highlight for color
+---@param color table|string|function defined color for hl
+---@param hint string|nil hint for hl name
+---@return table an identifier to later retrive the hl for application
+function M:create_hl(color, hint)
+  hint = hint and self.options.component_name .. '_' .. hint or self.options.component_name
+  return highlight.create_component_highlight_group(color, hint, self.options, false)
+end
+
+---Get stl formated hl group for hl_token
+---@param hl_token table indentifier received from create_hl or create_component_highlight_group
+---@return string stl formated hl group for hl_token
+function M:format_hl(hl_token)
+  return highlight.component_format_highlight(hl_token)
 end
 
 -- luacheck: push no unused args
@@ -201,6 +221,9 @@ function M:update_status(is_focused) end
 -- luacheck: pop
 
 ---driver code of the class
+---@param default_highlight string default hl group of section where component resides
+---@param is_focused boolean|number whether drawing for active or inactive statusline.
+---@return string stl formated rendering string for component
 function M:draw(default_highlight, is_focused)
   self.status = ''
   self.applied_separator = ''

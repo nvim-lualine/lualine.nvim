@@ -62,9 +62,9 @@ on specific plugin. These numbers are the average of 20 runs.
 
 | control  |  lualine  | lightline |  airline  |
 | :------: | :-------: | :-------: | :-------: |
-| 8.943 ms | 10.140 ms | 12.522 ms | 38.850 ms |
+| 17.2 ms  |  24.8 ms  |  25.5 ms  |  79.9 ms  |
 
-Last Updated On: 20-09-2021
+Last Updated On: 18-04-2022
 
 ## Installation
 
@@ -362,6 +362,9 @@ sections = {
       -- As table it must contain the icon as first entry and can use
       -- color option to custom color the icon. Example:
       -- {'branch', icon = ''} / {'branch', icon = {'', color={fg='green'}}}
+
+      -- icon position can also be set to the right side from table. Example:
+      -- {'branch', icon = {'', align='right', color={fg='green'}}}
       icon = nil,
 
       separator = nil,      -- Determines what separator to use for the component.
@@ -568,7 +571,10 @@ sections = {
     {
       'filetype',
       colored = true,   -- Displays filetype icon in color if set to true
-      icon_only = false -- Display only an icon for filetype
+      icon_only = false, -- Display only an icon for filetype
+      icon = { align = 'right' }, -- Display filetype icon on the right hand side
+      -- icon =    {'X', align='right'}
+      -- Icon string ^ in table is ignored in filetype component
     }
   }
 }
@@ -735,6 +741,7 @@ extensions = {'quickfix'}
 - fugitive
 - fzf
 - nerdtree
+- neo-tree
 - nvim-tree
 - quickfix
 - symbols-outline

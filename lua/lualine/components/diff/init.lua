@@ -49,24 +49,9 @@ function M:init(options)
   -- create highlights and save highlight_name in highlights table
   if self.options.colored then
     self.highlights = {
-      added = modules.highlight.create_component_highlight_group(
-        self.options.diff_color.added,
-        'diff_added',
-        self.options,
-        false
-      ),
-      modified = modules.highlight.create_component_highlight_group(
-        self.options.diff_color.modified,
-        'diff_modified',
-        self.options,
-        false
-      ),
-      removed = modules.highlight.create_component_highlight_group(
-        self.options.diff_color.removed,
-        'diff_removed',
-        self.options,
-        false
-      ),
+      added = self:create_hl(self.options.diff_color.added, 'added'),
+      modified = self:create_hl(self.options.diff_color.modified, 'modified'),
+      removed = self:create_hl(self.options.diff_color.removed, 'removed'),
     }
   end
   modules.git_diff.init(self.options)
@@ -83,7 +68,7 @@ function M:update_status(is_focused)
   if self.options.colored then
     -- load the highlights and store them in colors table
     for name, highlight_name in pairs(self.highlights) do
-      colors[name] = modules.highlight.component_format_highlight(highlight_name)
+      colors[name] = self:format_hl(highlight_name)
     end
   end
 
