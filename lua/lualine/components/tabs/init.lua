@@ -41,16 +41,17 @@ function M:init(options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
   -- stylua: ignore
   self.highlights = {
-    active = self:create_hl( self.options.tabs_color.active, 'active'),
-    inactive = self:create_hl( self.options.tabs_color.inactive, 'inactive'),
+    active = self:create_hl(self.options.tabs_color.active, 'active'),
+    inactive = self:create_hl(self.options.tabs_color.inactive, 'inactive'),
   }
+  self.icon_hl_cache = {}
 end
 
 function M:update_status()
   local data = {}
   local tabs = {}
   for nr, id in ipairs(vim.api.nvim_list_tabpages()) do
-    tabs[#tabs + 1] = Tab { tabId = id, tabnr = nr, options = self.options, highlights = self.highlights }
+    tabs[#tabs + 1] = self:buildTab(id, nr)
   end
   -- mark the first, last, current, before current, after current tabpages
   -- for rendering
@@ -85,12 +86,7 @@ function M:update_status()
   -- start drawing from current tab and draw left and right of it until
   -- all tabpages are drawn or max_length has been reached.
   if current_tab == nil then -- maybe redundent code
-    local t = Tab {
-      tabId = vim.api.nvim_get_current_tabpage(),
-      tabnr = vim.fn.tabpagenr(),
-      options = self.options,
-      highlights = self.highlights,
-    }
+    local t = Tab { vim.api.nvim_get_current_tabpage(), vim.fn.tabpagenr() }
     t.current = true
     t.last = true
     data[#data + 1] = t:render()
@@ -160,18 +156,33 @@ function M:draw()
   return self.status
 end
 
+function M:buildTab(tabId, tabnr)
+  return Tab {
+    tabId = tabId,
+    tabnr = tabnr,
+    options = self.options,
+    highlights = self.highlights,
+    icon_hl_for = function(highlight_color)
+      return self.icon_hl_cache[highlight_color]
+    end,
+    save_icon_hl_for = function(highlight_color, new_highlight)
+      self.icon_hl_cache[highlight_color] = new_highlight
+    end
+  }
+end
+
 vim.cmd([[
   function! LualineSwitchTab(tabnr, mouseclicks, mousebutton, modifiers)
-    execute a:tabnr . "tabnext"
+  execute a:tabnr . "tabnext"
   endfunction
 
   function! LualineRenameTab(...)
-    if a:0 == 1
-      let t:tabname = a:1
-    else
-      unlet t:tabname
-    end
-    redrawtabline
+  if a:0 == 1
+  let t:tabname = a:1
+  else
+  unlet t:tabname
+  end
+  redrawtabline
   endfunction
 
   command! -nargs=? LualineRenameTab call LualineRenameTab("<args>")

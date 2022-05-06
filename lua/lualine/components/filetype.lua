@@ -28,30 +28,43 @@ function M:apply_icon()
     return
   end
 
-  local icon, icon_highlight_group
+  local icon_char, icon, icon_highlight_group
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if ok then
-    local f_name, f_extension = vim.fn.expand('%:t'), vim.fn.expand('%:e')
-    f_extension = f_extension ~= '' and f_extension or vim.bo.filetype
-    icon, icon_highlight_group = devicons.get_icon(f_name, f_extension)
+    local f_name = self.f_name or vim.fn.expand('%:t')
+    local f_extension
 
-    if icon and self.options.colored then
+    if self.f_extension then
+      f_extension = self.f_extension
+    else
+      f_extension = vim.fn.expand('%:e')
+      f_extension = f_extension ~= '' and f_extension or vim.bo.filetype
+    end
+
+    icon_char, icon_highlight_group = devicons.get_icon(
+      f_name,
+      f_extension,
+      { default = type(self.options.icon) == 'table' and self.options.icon.use_default or false }
+    )
+
+    if icon_char and self.options.colored then
       local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
       if highlight_color then
         local default_highlight = self:get_default_hl()
-        local icon_highlight = self.icon_hl_cache[highlight_color]
-        if not icon_highlight or not modules.highlight.highlight_exists(icon_highlight.name .. '_normal') then
+        local icon_highlight = self:icon_hl_for(highlight_color)
+        if not icon_highlight or not modules.highlight.highlight_exists(icon_highlight.name .. '_' .. self:mode()) then
           icon_highlight = self:create_hl({ fg = highlight_color }, icon_highlight_group)
-          self.icon_hl_cache[highlight_color] = icon_highlight
+          self:save_icon_hl_for(highlight_color, icon_highlight)
         end
 
-        icon = self:format_hl(icon_highlight) .. icon .. default_highlight
+        icon = self:format_hl(icon_highlight, self:is_focused()) .. icon_char .. default_highlight
       end
     end
   else
     ok = vim.fn.exists('*WebDevIconsGetFileTypeSymbol')
     if ok ~= 0 then
-      icon = vim.fn.WebDevIconsGetFileTypeSymbol()
+      icon_char = vim.fn.WebDevIconsGetFileTypeSymbol()
+      icon = icon_char
     end
   end
 
@@ -61,11 +74,31 @@ function M:apply_icon()
 
   if self.options.icon_only then
     self.status = icon
-  elseif type(self.options.icon) == 'table' and self.options.icon.align == 'right' then
-    self.status = self.status .. ' ' .. icon
+    self.len = self.len and vim.fn.strdisplaywidth(icon_char)
   else
-    self.status = icon .. ' ' .. self.status
+    self.len = self.len and self.len + vim.fn.strdisplaywidth(icon_char) + 1
+    if type(self.options.icon) == 'table' and self.options.icon.align == 'right' then
+      self.status = self.status .. ' ' .. icon
+    else
+      self.status = icon .. ' ' .. self.status
+    end
   end
+end
+
+function M:icon_hl_for(highlight_color)
+  return self.icon_hl_cache[highlight_color]
+end
+
+function M:save_icon_hl_for(highlight_color, highlight)
+  self.icon_hl_cache[highlight_color] = highlight
+end
+
+function M:is_focused()
+  return false
+end
+
+function M:mode()
+  return self:is_focused() and 'normal' or 'inactive'
 end
 
 return M

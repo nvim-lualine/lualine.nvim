@@ -1,18 +1,24 @@
-local Tab = require('lualine.utils.class'):extend()
+local lualine_require = require('lualine_require')
+local Tab = lualine_require.require('lualine.components.filetype'):extend()
 
-local modules = require('lualine_require').lazy_require {
+local modules = lualine_require.lazy_require {
   highlight = 'lualine.highlight',
   utils = 'lualine.utils.utils',
 }
 
+local default_options = {
+  colored = true,
+}
 ---intialize a new tab from opts
 ---@param opts table
 function Tab:init(opts)
   assert(opts.tabnr, 'Cannot create Tab without tabnr')
   self.tabnr = opts.tabnr
   self.tabId = opts.tabId
-  self.options = opts.options
+  self.options = vim.tbl_deep_extend('keep', opts.options or {}, default_options)
   self.highlights = opts.highlights
+  self.tabs_icon_hl_for = opts.icon_hl_for
+  self.tabs_save_icon_hl_for = opts.save_icon_hl_for
 end
 
 ---returns name for tab. tabs name is the name of buffer in last active window
@@ -26,11 +32,9 @@ function Tab:label()
   if custom_tabname and custom_tabname ~= '' then
     return modules.utils.stl_escape(custom_tabname)
   end
-  local buflist = vim.fn.tabpagebuflist(self.tabnr)
-  local winnr = vim.fn.tabpagewinnr(self.tabnr)
-  local bufnr = buflist[winnr]
-  local file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(bufnr))
-  local buftype = vim.fn.getbufvar(bufnr, '&buftype')
+
+  local file = modules.utils.stl_escape(self.f_name)
+  local buftype = vim.fn.getbufvar(self.bufnr, '&buftype')
   if buftype == 'help' then
     return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
   elseif buftype == 'terminal' then
@@ -47,30 +51,44 @@ end
 ---returns rendered tab
 ---@return string
 function Tab:render()
-  local name = self:label()
+  local buflist = vim.fn.tabpagebuflist(self.tabnr)
+  local winnr = vim.fn.tabpagewinnr(self.tabnr)
+
+  self.bufnr = buflist[winnr]
+  self.f_name = vim.api.nvim_buf_get_name(self.bufnr)
+  self.f_extension = vim.fn.fnamemodify(self.f_name, ':e')
+
+  self.status = self:label()
   if self.options.fmt then
-    name = self.options.fmt(name or '')
+    self.status = self.options.fmt(self.status or '')
   end
   if self.ellipse then -- show elipsis
-    name = '...'
+    self.status = '...'
   else
     -- different formats for different modes
     if self.options.mode == 0 then
-      name = tostring(self.tabnr)
+      self.status = tostring(self.tabnr)
     elseif self.options.mode == 1 then
-      name = name
+      self.status = self.status
     else
-      name = string.format('%s %s', tostring(self.tabnr), name)
+      self.status = string.format('%s %s', tostring(self.tabnr), self.status)
     end
   end
-  name = Tab.apply_padding(name, self.options.padding)
-  self.len = vim.fn.strchars(name)
+
+  self.len = vim.fn.strchars(self.status)
+
+  if not self.ellipse then
+    self:apply_icon()
+    self:apply_modification_icons()
+  end
+
+  self:apply_padding()
 
   -- setup for mouse clicks
-  local line = string.format('%%%s@LualineSwitchTab@%s%%T', self.tabnr, name)
+  local line = string.format('%%%s@LualineSwitchTab@%s%%T', self.tabnr, self.status)
   -- apply highlight
   line = modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')])
-    .. line
+      .. line
 
   -- apply separators
   if self.options.self.section < 'x' and not self.first then
@@ -106,14 +124,52 @@ function Tab:separator_after()
 end
 
 ---adds spaces to left and right
-function Tab.apply_padding(str, padding)
-  local l_padding, r_padding = 1, 1
+function Tab:apply_padding()
+  local l_padding, r_padding, padding = 1, 1, self.options.padding
   if type(padding) == 'number' then
     l_padding, r_padding = padding, padding
   elseif type(padding) == 'table' then
     l_padding, r_padding = padding.left or 0, padding.right or 0
   end
-  return string.rep(' ', l_padding) .. str .. string.rep(' ', r_padding)
+  self.len = self.len + l_padding + r_padding
+  self.status = string.rep(' ', l_padding) .. self.status .. string.rep(' ', r_padding)
+end
+
+function Tab:apply_modification_icons()
+  if not self.options.modification_icons_enabled then
+    return
+  end
+
+  local elements = {}
+
+  if vim.fn.getbufvar(self.bufnr, '&modified') == 1 then table.insert(elements, '\u{f448}') end
+  if vim.fn.getbufvar(self.bufnr, '&modifiable') ~= 1 then table.insert(elements, '\u{f83d}') end
+
+  local status = table.concat(elements, ' ')
+
+  self.len = self.len + vim.fn.strdisplaywidth(status) + 1
+
+  if type(self.options.icon) == 'table' and self.options.icon.align == 'right' then
+    self.status = self.status .. ' ' .. status
+  else
+    self.status = status .. ' ' .. self.status
+  end
+end
+
+function Tab:icon_hl_for(highlight_color)
+  return self.tabs_icon_hl_for(highlight_color)
+end
+
+function Tab:save_icon_hl_for(highlight_color, highlight)
+  self.tabs_save_icon_hl_for(highlight_color, highlight)
+end
+
+function Tab:get_default_hl()
+  return "%#" .. self.highlights[(self.current and 'active' or 'inactive')].name .. "#"
+end
+
+function Tab:is_focused()
+  return not not self.current
 end
 
 return Tab

@@ -211,8 +211,8 @@ end
 ---Get stl formated hl group for hl_token
 ---@param hl_token table indentifier received from create_hl or create_component_highlight_group
 ---@return string stl formated hl group for hl_token
-function M:format_hl(hl_token)
-  return highlight.component_format_highlight(hl_token)
+function M:format_hl(hl_token, is_focused)
+  return highlight.component_format_highlight(hl_token, is_focused)
 end
 
 -- luacheck: push no unused args
