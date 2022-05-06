@@ -558,12 +558,12 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: a.txt }
+        |{1: #4 a.txt }
         {2:}
-        {3: b.txt }
+        {3: 5 b.txt }
         {4:}
-        {1: [No Name] }
-        {5:                                                                                             }|
+        {1: 6 [No Name] }
+        {MATCH:{5:%s+}|}|
         ]===])
 
         vim.cmd('tabprev')
@@ -574,11 +574,11 @@ describe('Lualine', function()
             3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: a.txt }
+        |{1: 4 a.txt }
         {2:}
-        {3: b.txt }
-        {3: [No Name] }
-        {4:                                                                                             }|
+        {3: 5 b.txt }
+        {3: #6 [No Name] }
+        {MATCH:{4:%s+}|}|
         ]===])
 
         vim.cmd('tabprev')
@@ -590,12 +590,12 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: a.txt }
-        {1: b.txt }
+        |{1: 4 a.txt }
+        {1: #5 b.txt }
         {2:}
-        {3: [No Name] }
+        {3: 6 [No Name] }
         {4:}
-        {5:                                                                                            }|
+        {MATCH:{5:%s+}|}|
         ]===])
       end)
 
@@ -614,10 +614,10 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        {MATCH:|{1: %d+ }}
-        {MATCH:{1: %d+ }}
+        {MATCH:|{1: 1 }}
+        {MATCH:{1: 2 }}
         {2:}
-        {MATCH:{3: %d+ }}
+        {MATCH:{3: 3 }}
         {4:}
         {MATCH:{5:%s+}|}
         ]===])
@@ -633,11 +633,11 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        {MATCH:|{1: %d+  }}
+        {MATCH:|{1: #1  }}
         {2:}
-        {MATCH:{3: %d+  }}
+        {MATCH:{3: 2  }}
         {4:}
-        {MATCH:{1: %d+  }}
+        {MATCH:{1: 3  }}
         {MATCH:{5:%s+}|}
         ]===])
 
@@ -652,11 +652,11 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        {MATCH:|{1: %d+ a.txt }}
+        {MATCH:|{1: #1 a.txt }}
         {2:}
-        {MATCH:{3: %d+ b.txt }}
+        {MATCH:{3: 2 b.txt }}
         {4:}
-        {MATCH:{1: %d+ %[No Name%] }}
+        {MATCH:{1: 3 %[No Name%] }}
         {MATCH:{5:%s+}|}
         ]===])
       end)
@@ -672,9 +672,9 @@ describe('Lualine', function()
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: [No Name] }
+        |{1: 6 [No Name] }
         {2:}
-        {3:                                                                                                            }|
+        {MATCH:{3:%s+}|}|
         ]===])
 
         vim.bo.modified = true
@@ -684,9 +684,9 @@ describe('Lualine', function()
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: [No Name] + }
+        |{1: 6 [No Name] ● }
         {2:}
-        {3:                                                                                                          }|
+        {MATCH:{3:%s+}|}|
         ]===])
         vim.bo.modified = false
       end)
@@ -705,16 +705,16 @@ describe('Lualine', function()
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: a/b/c/d/e/f/g/asdf.txt }
+        |{1: 6 a/b/c/d/e/f/g/asdf.txt }
         {2:}
-        {3:                                                                                               }|
+        {MATCH:{3:%s+}|}|
         ]===])
         vim.fn.delete(path:match('(%w+)/.*'), 'rf')
       end)
 
       it('can show ellipsis when max_width is crossed', function()
         local conf = vim.deepcopy(tab_conf)
-        conf.tabline.lualine_a = { { 'buffers', max_length = 1 } }
+        conf.tabline.lualine_a = { { 'buffers', max_length = 1, } }
         vim.cmd('tabe a.txt')
         vim.cmd('tabe b.txt')
         vim.cmd('tabprev')
@@ -727,10 +727,10 @@ describe('Lualine', function()
             3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1:  a.txt }
+        |{1: 4  a.txt }
         {2:}
         {3: ... }
-        {4:                                                                                                         }|
+        {MATCH:{4:%s+}|}|
         ]===])
       end)
 
@@ -746,9 +746,9 @@ describe('Lualine', function()
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1:  t.lua }
+        |{1: 7  t.lua }
         {2:}
-        {3:                                                                                                              }|
+        {MATCH:{3:%s+}|}|
         ]===])
       end)
     end)
