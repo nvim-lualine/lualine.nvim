@@ -558,12 +558,12 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: a.txt }
+        |{1: #a.txt }
         {2:}
         {3: b.txt }
         {4:}
         {1: [No Name] }
-        {5:                                                                                             }|
+        {MATCH:{5:%s+}|}
         ]===])
 
         vim.cmd('tabprev')
@@ -577,8 +577,8 @@ describe('Lualine', function()
         |{1: a.txt }
         {2:}
         {3: b.txt }
-        {3: [No Name] }
-        {4:                                                                                             }|
+        {3: #[No Name] }
+        {MATCH:{4:%s+}|}
         ]===])
 
         vim.cmd('tabprev')
@@ -591,11 +591,11 @@ describe('Lualine', function()
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
         |{1: a.txt }
-        {1: b.txt }
+        {1: #b.txt }
         {2:}
         {3: [No Name] }
         {4:}
-        {5:                                                                                            }|
+        {MATCH:{5:%s+}|}
         ]===])
       end)
 
@@ -615,7 +615,6 @@ describe('Lualine', function()
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
         {MATCH:|{1: %d+ }}
-        {MATCH:{1: %d+ }}
         {2:}
         {MATCH:{3: %d+ }}
         {4:}
@@ -684,7 +683,7 @@ describe('Lualine', function()
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: [No Name] + }
+        |{1: [No Name] ● }
         {2:}
         {3:                                                                                                          }|
         ]===])
