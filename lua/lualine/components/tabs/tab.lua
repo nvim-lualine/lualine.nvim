@@ -34,10 +34,9 @@ function Tab:label()
   end
 
   local file = modules.utils.stl_escape(self.f_name)
-  local buftype = vim.fn.getbufvar(self.bufnr, '&buftype')
-  if buftype == 'help' then
+  if self.buftype == 'help' then
     return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
-  elseif buftype == 'terminal' then
+  elseif self.buftype == 'terminal' then
     local match = string.match(vim.split(file, ' ')[1], 'term:.*:(%a+)')
     return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ':t')
   elseif vim.fn.isdirectory(file) == 1 then
@@ -55,6 +54,8 @@ function Tab:render()
   local winnr = vim.fn.tabpagewinnr(self.tabnr)
 
   self.bufnr = buflist[winnr]
+  self.buftype = vim.fn.getbufvar(self.bufnr, '&buftype')
+  self.filetype = vim.fn.getbufvar(self.bufnr, '&filetype')
   self.f_name = vim.api.nvim_buf_get_name(self.bufnr)
   self.f_extension = vim.fn.fnamemodify(self.f_name, ':e')
 

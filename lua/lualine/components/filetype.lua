@@ -31,21 +31,7 @@ function M:apply_icon()
   local icon_char, icon, icon_highlight_group
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if ok then
-    local f_name = self.f_name or vim.fn.expand('%:t')
-    local f_extension
-
-    if self.f_extension then
-      f_extension = self.f_extension
-    else
-      f_extension = vim.fn.expand('%:e')
-      f_extension = f_extension ~= '' and f_extension or vim.bo.filetype
-    end
-
-    icon_char, icon_highlight_group = devicons.get_icon(
-      f_name,
-      f_extension,
-      { default = type(self.options.icon) == 'table' and self.options.icon.use_default or false }
-    )
+    icon_char, icon_highlight_group = self:extract_icons(devicons)
 
     if icon_char and self.options.colored then
       local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
@@ -83,6 +69,26 @@ function M:apply_icon()
       self.status = icon .. ' ' .. self.status
     end
   end
+end
+
+function M:extract_icons(devicons)
+  local f_name = self.f_name or vim.fn.expand('%:t')
+  local f_extension = self.f_extension or vim.fn.expand('%:e')
+  local filetype = self.filetype or vim.bo.filetype
+  local buftype = self.buftype or vim.bo.buftype
+
+  local icon_char, icon_highlight_group = devicons.get_icon(f_name, f_extension)
+  if not icon_char then
+    icon_char, icon_highlight_group = devicons.get_icon_by_filetype(filetype)
+  end
+  if not icon_char then
+    icon_char, icon_highlight_group = devicons.get_icon_by_filetype(buftype)
+  end
+  if not icon_char and type(self.options.icon) == 'table' and self.options.icon.use_default then
+    icon_char, icon_highlight_group = devicons.get_icon('', '', { default = true })
+  end
+
+  return icon_char, icon_highlight_group
 end
 
 function M:icon_hl_for(highlight_color)
