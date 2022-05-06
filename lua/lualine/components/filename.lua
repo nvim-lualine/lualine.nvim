@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 shadmansaleh
+-- K
 -- MIT license, see LICENSE for more details.
 local M = require('lualine.component'):extend()
 
@@ -43,6 +43,10 @@ M.update_status = function(self)
   elseif self.options.path == 2 then
     -- absolute path
     data = vim.fn.expand('%:p')
+  elseif self.options.path == 3 then
+    -- absolute path, with tilde
+    local home_dir = os.getenv('HOME')
+    data = '~/' .. string.sub(vim.fn.expand('%:p'), #home_dir + 2)
   else
     -- just filename
     data = vim.fn.expand('%:t')
