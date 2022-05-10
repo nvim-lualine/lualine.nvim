@@ -441,7 +441,7 @@ sections = {
                 -- 1: Shows buffer index
                 -- 2: Shows buffer name + buffer index 
                 -- 3: Shows buffer number
-                -- 4: Shows buffer nmae + buffer number
+                -- 4: Shows buffer name + buffer number
 
       max_length = vim.o.columns * 2 / 3, -- Maximum width of buffers component,
                                           -- it can also be a function that returns
