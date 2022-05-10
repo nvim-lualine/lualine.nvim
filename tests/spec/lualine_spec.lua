@@ -615,6 +615,7 @@ describe('Lualine', function()
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
         {MATCH:|{1: %d+ }}
+        {MATCH:{1: %d+ }}
         {2:}
         {MATCH:{3: %d+ }}
         {4:}
@@ -632,7 +633,7 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        {MATCH:|{1: %d+  }}
+        {MATCH:|{1: #%d+  }}
         {2:}
         {MATCH:{3: %d+  }}
         {4:}
@@ -651,7 +652,7 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        {MATCH:|{1: %d+ a.txt }}
+        {MATCH:|{1: #%d+ a.txt }}
         {2:}
         {MATCH:{3: %d+ b.txt }}
         {4:}
