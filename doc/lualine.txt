@@ -167,10 +167,10 @@ how to do it <./CONTRIBUTING.md>.
 
 >
     local custom_gruvbox = require'lualine.themes.gruvbox'
-
+    
     -- Change the background of lualine_c section for normal mode
     custom_gruvbox.normal.c.bg = '#112233'
-
+    
     require('lualine').setup {
       options = { theme  = custom_gruvbox },
       ...
@@ -375,11 +375,11 @@ General component options              These are options that control behavior
           -- As table it must contain the icon as first entry and can use
           -- color option to custom color the icon. Example:
           -- {'branch', icon = ''} / {'branch', icon = {'', color={fg='green'}}}
-
+    
           -- icon position can also be set to the right side from table. Example:
           -- {'branch', icon = {'', align='right', color={fg='green'}}}
           icon = nil,
-
+    
           separator = nil,      -- Determines what separator to use for the component.
                                 -- Note:
                                 --  When a string is provided it's treated as component_separator.
@@ -395,9 +395,9 @@ General component options              These are options that control behavior
                                 -- Where left will be placed on left side of component,
                                 -- and right will be placed on its right.
                                 --
-
+    
           cond = nil,           -- Condition function, the component is loaded when the function returns `true`.
-
+    
           -- Defines a custom color for the component:
           --
           -- 'highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' } | function
@@ -414,7 +414,7 @@ General component options              These are options that control behavior
           --      return { fg = vim.bo.modified and '#aa3355' or '#33aa88' }
           --   end,
           color = nil, -- The default is your theme's color for that section and mode.
-
+    
           -- Specify what type a component is, if omitted, lualine will guess it for you.
           --
           -- Available types are:
@@ -425,11 +425,11 @@ General component options              These are options that control behavior
           -- Note:
           -- lua_expr is short for lua-expression and vim_fun is short for vim-function.
           type = nil,
-
+    
           padding = 1, -- Adds padding to the left and right of components.
                        -- Padding can be specified to left or right independently, e.g.:
                        --   padding = { left = left_padding, right = right_padding }
-
+    
           fmt = nil,   -- Format function, formats the component's output.
         }
       }
@@ -456,11 +456,11 @@ Component specific options             These are options that are available on
           show_filename_only = true,   -- Shows shortened relative path when set to false.
           hide_filename_extension = false,   -- Hide filename extension when set to true.
           show_modified_status = true, -- Shows indicator when the buffer is modified.
-
+    
           mode = 0, -- 0: Shows buffer name
                     -- 1: Shows buffer index
                     -- 2: Shows buffer name + buffer index
-
+    
           max_length = vim.o.columns * 2 / 3, -- Maximum width of buffers component,
                                               -- it can also be a function that returns
                                               -- the value of `max_length` dynamically.
@@ -471,7 +471,7 @@ Component specific options             These are options that are available on
             fzf = 'FZF',
             alpha = 'Alpha'
           }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
-
+    
           buffers_color = {
             -- Same values as the general color option can be used here.
             active = 'lualine_{section}_normal',     -- Color for active buffer.
@@ -490,16 +490,16 @@ Component specific options             These are options that are available on
       lualine_a = {
         {
           'diagnostics',
-
+    
           -- Table of diagnostic sources, available sources are:
           --   'nvim_lsp', 'nvim_diagnostic', 'coc', 'ale', 'vim_lsp'.
           -- or a function that returns a table as such:
           --   { error=error_cnt, warn=warn_cnt, info=info_cnt, hint=hint_cnt }
           sources = { 'nvim_diagnostic', 'coc' },
-
+    
           -- Displays diagnostics for the defined severity types
           sections = { 'error', 'warn', 'info', 'hint' },
-
+    
           diagnostics_color = {
             -- Same values as the general color option can be used here.
             error = 'DiagnosticError', -- Changes diagnostics' error color.
@@ -571,8 +571,7 @@ Component specific options             These are options that are available on
           path = 0,                -- 0: Just the filename
                                    -- 1: Relative path
                                    -- 2: Absolute path
-                                   -- 3: Absolute path, with tilde as the home directory
-
+    
           shorting_target = 40,    -- Shortens path to leave 40 spaces in the window
                                    -- for other components. (terrible name, any suggestions?)
           symbols = {
@@ -618,7 +617,7 @@ Component specific options             These are options that are available on
           mode = 0, -- 0: Shows tab_nr
                     -- 1: Shows tab_name
                     -- 2: Shows tab_nr + tab_name
-
+    
           tabs_color = {
             -- Same values as the general color option can be used here.
             active = 'lualine_{section}_normal',     -- Color for active tab.
@@ -639,11 +638,11 @@ Component specific options             These are options that are available on
           'windows',
           show_filename_only = true,   -- Shows shortened relative path when set to false.
           show_modified_status = true, -- Shows indicator when the window is modified.
-
+    
           mode = 0, -- 0: Shows window name
                     -- 1: Shows window index
                     -- 2: Shows window name + window index
-
+    
           max_length = vim.o.columns * 2 / 3, -- Maximum width of windows component,
                                               -- it can also be a function that returns
                                               -- the value of `max_length` dynamically.
@@ -654,9 +653,9 @@ Component specific options             These are options that are available on
             fzf = 'FZF',
             alpha = 'Alpha'
           }, -- Shows specific window name for that filetype ( { `filetype` = `window_name`, ... } )
-
+    
           disabled_buftypes = { 'quickfix', 'prompt' }, -- Hide a window if its buffer's type is disabled
-
+    
           windows_color = {
             -- Same values as the general color option can be used here.
             active = 'lualine_{section}_normal',     -- Color for active window.
