@@ -63,7 +63,7 @@ M.update_status = function(self)
 
     local path_separator = package.config:sub(1, 1)
     for _ = 0, count(data, path_separator) do
-      if windwidth <= 84 or #data > estimated_space_available then
+      if #data > estimated_space_available then
         data = shorten_path(data, path_separator)
       end
     end
