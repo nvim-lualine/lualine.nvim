@@ -812,9 +812,23 @@ describe('Lualine', function()
         vim.cmd('e a.txt')
         vim.cmd('silent! bd #') -- NeoVim 0.5 does not create an unnamed buffer. This ensures consistent results between NeoVim versions.
         vim.cmd('e b.txt')
-        vim.cmd('e a.txt')
         local bufnr_a = vim.fn.bufnr('a.txt')
         local bufnr_b = vim.fn.bufnr('b.txt')
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: #]===] .. bufnr_a .. [===[  }
+        {2:}
+        {3: ]===] .. bufnr_b .. [===[  }
+        {4:}
+        {MATCH:{5:%s+}|}
+        ]===])
+        vim.cmd('e a.txt')
         tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
