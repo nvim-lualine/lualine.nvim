@@ -361,6 +361,24 @@ describe('Filetype component', function()
     assert_component('filetype', opts, '*')
     package.loaded['nvim-web-devicons'] = nil
   end)
+
+  it('displays right aligned icon when icon.align is "right"', function()
+    package.loaded['nvim-web-devicons'] = {
+      get_icon = function()
+        return '*', 'test_highlight_group'
+      end,
+    }
+
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      colored = false,
+      icon_only = false,
+      icon = { align = 'right' }
+    }
+    assert_component('filetype', opts, 'lua *')
+    package.loaded['nvim-web-devicons'] = nil
+  end)
 end)
 
 describe('Hostname component', function()

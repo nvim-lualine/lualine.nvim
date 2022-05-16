@@ -61,6 +61,8 @@ function M:apply_icon()
 
   if self.options.icon_only then
     self.status = icon
+  elseif type(self.options.icon) == 'table' and self.options.icon.align == 'right' then
+    self.status = self.status .. ' ' .. icon
   else
     self.status = icon .. ' ' .. self.status
   end
