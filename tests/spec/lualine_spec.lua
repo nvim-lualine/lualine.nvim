@@ -755,10 +755,14 @@ describe('Lualine', function()
       it('can show buffer numbers instead of indices without file names', function()
         local conf = vim.deepcopy(tab_conf)
         conf.tabline.lualine_a = { { 'buffers', mode = 3, max_length = 1e3, icons_enabled = false } }
-        vim.cmd('tabe ' .. 'a.txt')
-        vim.cmd('tabe ' .. 'b.txt')
         require('lualine').setup(conf)
         require('lualine').statusline()
+        vim.cmd('e ' .. 'a.txt')
+        vim.cmd('bprev')
+        vim.cmd('e ' .. 'b.txt')
+        local bufnr_a = vim.fn.bufnr('a.txt')
+        local bufnr_b = vim.fn.bufnr('b.txt')
+        local bufnr_unnamed = vim.fn.bufnr('#')
         tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
@@ -767,11 +771,11 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: #4  }
+        |{1: ]===] .. bufnr_a .. [===[  }
         {2:}
-        {3: 5  }
+        {3: ]===] .. bufnr_b .. [===[  }
         {4:}
-        {1: 8  }
+        {1: #]===] .. bufnr_unnamed .. [===[  }
         {MATCH:{5:%s+}|}
         ]===])
       end)
@@ -779,8 +783,12 @@ describe('Lualine', function()
       it('can show buffer numbers instead of indices with file names', function()
         local conf = vim.deepcopy(tab_conf)
         conf.tabline.lualine_a = { { 'buffers', mode = 4, max_length = 1e3, icons_enabled = false } }
-        vim.cmd('tabe ' .. 'a.txt')
-        vim.cmd('tabe ' .. 'b.txt')
+        vim.cmd('e ' .. 'a.txt')
+        vim.cmd('bprev')
+        vim.cmd('e ' .. 'b.txt')
+        local bufnr_a = vim.fn.bufnr('a.txt')
+        local bufnr_b = vim.fn.bufnr('b.txt')
+        local bufnr_unnamed = vim.fn.bufnr('#')
         require('lualine').setup(conf)
         require('lualine').statusline()
         tabline:expect([===[
@@ -791,11 +799,11 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: #4 a.txt }
+        |{1: ]===] .. bufnr_a .. [===[ a.txt }
         {2:}
-        {3: 5 b.txt }
+        {3: ]===] .. bufnr_b .. [===[ b.txt }
         {4:}
-        {1: 8 [No Name] }
+        {1: #]===] .. bufnr_unnamed .. [===[ [No Name] }
         {MATCH:{5:%s+}|}
         ]===])
       end)
