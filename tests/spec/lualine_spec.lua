@@ -752,7 +752,7 @@ describe('Lualine', function()
         ]===])
       end)
 
-      it('can show buffer numbers instead of indices without file names', function()
+      it('can show buffer numbers instead of indices (without file names)', function()
         local conf = vim.deepcopy(tab_conf)
         conf.tabline.lualine_a = { { 'buffers', mode = 3, max_length = 1e3, icons_enabled = false } }
         require('lualine').setup(conf)
@@ -780,7 +780,7 @@ describe('Lualine', function()
         ]===])
       end)
 
-      it('can show buffer numbers instead of indices with file names', function()
+      it('can show buffer numbers instead of indices (with file names)', function()
         local conf = vim.deepcopy(tab_conf)
         conf.tabline.lualine_a = { { 'buffers', mode = 4, max_length = 1e3, icons_enabled = false } }
         vim.cmd('e ' .. 'a.txt')
