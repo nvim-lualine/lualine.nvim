@@ -20,14 +20,18 @@ function Buffer:is_current()
   return vim.api.nvim_get_current_buf() == self.bufnr
 end
 
+function Buffer:is_alternate()
+  return vim.fn.bufnr('#') == self.bufnr and not self:is_current()
+end
+
 ---setup icons, modified status for buffer
 function Buffer:get_props()
   self.file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(self.bufnr))
   self.buftype = vim.api.nvim_buf_get_option(self.bufnr, 'buftype')
   self.filetype = vim.api.nvim_buf_get_option(self.bufnr, 'filetype')
   local modified = self.options.show_modified_status and vim.api.nvim_buf_get_option(self.bufnr, 'modified')
-  local modified_icon = self.options.icons_enabled and ' ●' or ' +'
-  self.modified_icon = modified and modified_icon or ''
+  self.modified_icon = modified and self.options.symbols.modified or ''
+  self.alternate_file_icon = self:is_alternate() and self.options.symbols.alternate_file or ''
   self.icon = ''
   if self.options.icons_enabled then
     local dev
@@ -43,7 +47,7 @@ function Buffer:get_props()
     elseif self.buftype == 'terminal' then
       dev, _ = require('nvim-web-devicons').get_icon('zsh')
     elseif vim.fn.isdirectory(self.file) == 1 then
-      dev, _ = '', nil
+      dev, _ = self.options.symbols.directory, nil
     else
       dev, _ = require('nvim-web-devicons').get_icon(self.file, vim.fn.expand('#' .. self.bufnr .. ':e'))
     end
@@ -159,14 +163,24 @@ end
 
 function Buffer:apply_mode(name)
   if self.options.mode == 0 then
-    return string.format('%s%s%s', self.icon, name, self.modified_icon)
+    return string.format('%s%s%s%s', self.alternate_file_icon, self.icon, name, self.modified_icon)
   end
 
   if self.options.mode == 1 then
-    return string.format('%s %s%s', self.buf_index or '', self.icon, self.modified_icon)
+    return string.format('%s%s %s%s', self.alternate_file_icon, self.buf_index or '', self.icon, self.modified_icon)
   end
 
-  return string.format('%s %s%s%s', self.buf_index or '', self.icon, name, self.modified_icon)
+  if self.options.mode == 2 then
+    return string.format('%s%s %s%s%s', self.alternate_file_icon, self.buf_index or '', self.icon, name, self.modified_icon)
+  end
+
+  if self.options.mode == 3 then
+    return string.format('%s%s %s%s', self.alternate_file_icon, self.bufnr or '', self.icon, self.modified_icon)
+  end
+
+  -- if self.options.mode == 4 then
+  return string.format('%s%s %s%s%s', self.alternate_file_icon, self.bufnr or '', self.icon, name, self.modified_icon)
+
 end
 
 return Buffer

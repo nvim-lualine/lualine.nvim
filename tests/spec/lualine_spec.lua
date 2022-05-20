@@ -558,12 +558,12 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: a.txt }
+        |{1: #a.txt }
         {2:}
         {3: b.txt }
         {4:}
         {1: [No Name] }
-        {5:                                                                                             }|
+        {MATCH:{5:%s+}|}
         ]===])
 
         vim.cmd('tabprev')
@@ -577,8 +577,8 @@ describe('Lualine', function()
         |{1: a.txt }
         {2:}
         {3: b.txt }
-        {3: [No Name] }
-        {4:                                                                                             }|
+        {3: #[No Name] }
+        {MATCH:{4:%s+}|}
         ]===])
 
         vim.cmd('tabprev')
@@ -591,11 +591,11 @@ describe('Lualine', function()
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
         |{1: a.txt }
-        {1: b.txt }
+        {1: #b.txt }
         {2:}
         {3: [No Name] }
         {4:}
-        {5:                                                                                            }|
+        {MATCH:{5:%s+}|}
         ]===])
       end)
 
@@ -633,7 +633,7 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        {MATCH:|{1: %d+  }}
+        {MATCH:|{1: #%d+  }}
         {2:}
         {MATCH:{3: %d+  }}
         {4:}
@@ -652,7 +652,7 @@ describe('Lualine', function()
             4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
             5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        {MATCH:|{1: %d+ a.txt }}
+        {MATCH:|{1: #%d+ a.txt }}
         {2:}
         {MATCH:{3: %d+ b.txt }}
         {4:}
@@ -684,7 +684,7 @@ describe('Lualine', function()
             2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
             3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1: [No Name] + }
+        |{1: [No Name] ● }
         {2:}
         {3:                                                                                                          }|
         ]===])
@@ -749,6 +749,112 @@ describe('Lualine', function()
         |{1:  t.lua }
         {2:}
         {3:                                                                                                              }|
+        ]===])
+      end)
+
+      it('can show buffer numbers instead of indices (without file names)', function()
+        local conf = vim.deepcopy(tab_conf)
+        conf.tabline.lualine_a = { { 'buffers', mode = 3, max_length = 1e3, icons_enabled = false } }
+        require('lualine').setup(conf)
+        require('lualine').statusline()
+        vim.cmd('e a.txt')
+        vim.cmd('silent! bd #') -- NeoVim 0.5 does not create an unnamed buffer. This ensures consistent results between NeoVim versions.
+        vim.cmd('e b.txt')
+        local bufnr_a = vim.fn.bufnr('a.txt')
+        local bufnr_b = vim.fn.bufnr('b.txt')
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: #]===] .. bufnr_a .. [===[  }
+        {2:}
+        {3: ]===] .. bufnr_b .. [===[  }
+        {4:}
+        {MATCH:{5:%s+}|}
+        ]===])
+      end)
+
+      it('can show buffer numbers instead of indices (with file names)', function()
+        local conf = vim.deepcopy(tab_conf)
+        conf.tabline.lualine_a = { { 'buffers', mode = 4, max_length = 1e3, icons_enabled = false } }
+        vim.cmd('e a.txt')
+        vim.cmd('silent! bd #') -- NeoVim 0.5 does not create an unnamed buffer. This ensures consistent results between NeoVim versions.
+        vim.cmd('e b.txt')
+        local bufnr_a = vim.fn.bufnr('a.txt')
+        local bufnr_b = vim.fn.bufnr('b.txt')
+        require('lualine').setup(conf)
+        require('lualine').statusline()
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: #]===] .. bufnr_a .. [===[ a.txt }
+        {2:}
+        {3: ]===] .. bufnr_b .. [===[ b.txt }
+        {4:}
+        {MATCH:{5:%s+}|}
+        ]===])
+      end)
+
+      it('displays alternate buffer correctly when switching buffers', function()
+        local conf = vim.deepcopy(tab_conf)
+        conf.tabline.lualine_a = { { 'buffers', mode = 3, max_length = 1e3, icons_enabled = false } }
+        require('lualine').setup(conf)
+        require('lualine').statusline()
+        vim.cmd('e a.txt')
+        vim.cmd('silent! bd #') -- NeoVim 0.5 does not create an unnamed buffer. This ensures consistent results between NeoVim versions.
+        vim.cmd('e b.txt')
+        local bufnr_a = vim.fn.bufnr('a.txt')
+        local bufnr_b = vim.fn.bufnr('b.txt')
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: #]===] .. bufnr_a .. [===[  }
+        {2:}
+        {3: ]===] .. bufnr_b .. [===[  }
+        {4:}
+        {MATCH:{5:%s+}|}
+        ]===])
+        vim.cmd('e a.txt')
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
+            3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
+            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: ]===] .. bufnr_a .. [===[  }
+        {2:}
+        {3: #]===] .. bufnr_b .. [===[  }
+        {MATCH:{4:%s+}|}
+        ]===])
+        vim.cmd('bprev')
+        tabline:expect([===[
+        highlights = {
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        }
+        |{1: #]===] .. bufnr_a .. [===[  }
+        {2:}
+        {3: ]===] .. bufnr_b .. [===[  }
+        {4:}
+        {MATCH:{5:%s+}|}
         ]===])
       end)
     end)
