@@ -25,8 +25,8 @@ local default_options = {
   symbols = {
     modified = ' ●',
     alternate_file = '#',
-    directory =  '',
-  }
+    directory = '',
+  },
 }
 
 -- This function is duplicated in tabs

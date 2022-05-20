@@ -171,7 +171,14 @@ function Buffer:apply_mode(name)
   end
 
   if self.options.mode == 2 then
-    return string.format('%s%s %s%s%s', self.alternate_file_icon, self.buf_index or '', self.icon, name, self.modified_icon)
+    return string.format(
+      '%s%s %s%s%s',
+      self.alternate_file_icon,
+      self.buf_index or '',
+      self.icon,
+      name,
+      self.modified_icon
+    )
   end
 
   if self.options.mode == 3 then
@@ -180,7 +187,6 @@ function Buffer:apply_mode(name)
 
   -- if self.options.mode == 4 then
   return string.format('%s%s %s%s%s', self.alternate_file_icon, self.bufnr or '', self.icon, name, self.modified_icon)
-
 end
 
 return Buffer
