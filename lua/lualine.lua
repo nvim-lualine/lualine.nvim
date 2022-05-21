@@ -280,6 +280,36 @@ local function set_statusline()
   end
 end
 
+--- Sets &winbar option to lualine
+--- adds auto command to redraw lualine on VimResized event
+local function set_winbar()
+  if next(config.winbar) ~= nil or next(config.inactive_winbar) ~= nil then
+    vim.go.winbar = "%{%v:lua.require'lualine'.winbar()%}"
+  end
+end
+
+-- lualine.winbar function
+--- Draw correct winbar for current window
+---@param focused boolean : force the value of is_focused . useful for debugging
+---@return string winbar string
+local function winbar_dispatch(focused)
+  local retval
+  local current_ft = vim.bo.filetype
+  local is_focused = focused ~= nil and focused or modules.utils.is_focused()
+  for _, ft in pairs(config.options.disabled_filetypes) do
+    -- disable on specific filetypes
+    if ft == current_ft then
+      return ''
+    end
+  end
+  if is_focused then
+    retval = statusline(config.winbar, is_focused)
+  else
+    retval = statusline(config.inactive_winbar, is_focused)
+  end
+  return retval
+end
+
 -- lualine.statusline function
 --- Draw correct statusline for current window
 ---@param focused boolean : force the value of is_focused . useful for debugging
@@ -331,6 +361,7 @@ local function setup(user_config)
   -- load components & extensions
   modules.loader.load_all(config)
   set_statusline()
+  set_winbar()
   set_tabline()
   if package.loaded['lualine.utils.notices'] then
     modules.utils_notices.notice_message_startup()
@@ -340,6 +371,7 @@ end
 return {
   setup = setup,
   statusline = status_dispatch,
+  winbar = winbar_dispatch,
   tabline = tabline,
   get_config = modules.config_module.get_config,
 }
