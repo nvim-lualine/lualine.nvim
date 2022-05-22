@@ -281,7 +281,6 @@ local function set_statusline()
 end
 
 --- Sets &winbar option to lualine
---- adds auto command to redraw lualine on VimResized event
 local function set_winbar()
   if next(config.winbar) ~= nil or next(config.inactive_winbar) ~= nil then
     vim.go.winbar = "%{%v:lua.require'lualine'.winbar()%}"
