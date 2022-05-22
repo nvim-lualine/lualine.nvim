@@ -47,6 +47,8 @@ describe('Lualine', function()
         lualine_y = {},
         lualine_z = {},
       },
+      winbar = {},
+      inactive_winbar = {},
       tabline = {},
       extensions = {},
     }
