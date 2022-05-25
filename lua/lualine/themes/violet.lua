@@ -1,15 +1,15 @@
 local colors = {
+  lightblue     = '#cacfd2',
+  gray_0        = '#c6c6c6',
   gray_1        = '#bcbcbc',
-  darkpurple  = '#875faf',
-  purple      = '#d75fd7',
-  gray_0   = '#c6c6c6',
-  gray_3    = '#3a3a3a',
-  lightblue   = '#cacfd2',
-  aqua        = '#009966',
-  accent      = '#5f0000',
-  pink   = '#ff5faf',
-  rose        = '#ce537a',
-  gray_2       = '#4e4e4e'
+  gray_2        = '#4e4e4e',
+  gray_3        = '#3a3a3a',
+  accent        = '#5f0000',
+  rose          = '#ce537a',
+  pink          = '#ff5faf',
+  purple        = '#d75fd7',
+  darkpurple    = '#875faf',
+  aqua          = '#009966',
 }
 
 return {
@@ -44,4 +44,3 @@ return {
     c = {bg = colors.gray_0, fg = colors.gray_3}
   }
 }
-require('lualine').setup {options = {theme = violet}}
