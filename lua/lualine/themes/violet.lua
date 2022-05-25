@@ -28,7 +28,7 @@ return {
   },
   insert = {
     a = {bg = colors.aqua, fg = colors.white, gui = 'bold'},
-    b = {bg = colors.dark_4, fg = colors.purple},
+    b = {bg = colors.gray_4, fg = colors.purple},
     c = {bg = colors.purple, fg = colors.white},
     x = {bg = colors.purple, fg = colors.gray_3},
     y = {bg = colors.gray_4, fg = colors.white},
@@ -37,13 +37,13 @@ return {
   visual = {
     a = {bg = colors.yellow, fg = colors.gray_4, gui = 'bold'},
     b = {bg = colors.darkpurple, fg = colors.lightblue},
-    c = {bg = colors.purple, fg = colors.dark_4}
+    c = {bg = colors.purple, fg = colors.gray_4}
   },
   replace = {
     a = {bg = colors.dark_4, fg = colors.purple, gui = 'bold'},
     b = {bg = colors.purple, fg = colors.gray_4},
     c = {bg = colors.purple, fg = colors.white},
-    z = {bg = colors.rose, fg = colors.dark_4},
+    z = {bg = colors.rose, fg = colors.gray_4},
   },
   command = {
     a = {bg = colors.accent, fg = colors.white, gui = 'bold'},
