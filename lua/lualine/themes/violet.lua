@@ -35,8 +35,8 @@ return {
     z = {bg = colors.aqua, fg = colors.white, gui = 'bold'},
   },
   visual = {
-    a = {bg = colors.yellow, fg = colors.white, gui = 'bold'},
-    b = {bg = colors.purple, fg = colors.gray_4},
+    a = {bg = colors.yellow, fg = colors.gray_4, gui = 'bold'},
+    b = {bg = colors.darkpurple, fg = colors.white},
     c = {bg = colors.purple, fg = colors.white}
   },
   replace = {
@@ -45,11 +45,11 @@ return {
     c = {bg = colors.purple, fg = colors.white},
   },
   command = {
-    a = {bg = colors.aqua, fg = colors.white, gui = 'bold'},
+    a = {bg = colors.accent, fg = colors.white, gui = 'bold'},
     b = {bg = colors.darkpurple, fg = colors.gray_4},
     c = {bg = colors.gray_4, fg = colors.lightblue},
     x = {bg = colors.gray_4, fg = colors.pink}, y = {bg = colors.gray_4, fg = colors.white},
-    z = {bg = colors.aqua, fg = colors.white, gui = 'bold'},
+    z = {bg = colors.accent, fg = colors.white, gui = 'bold'},
   },
   inactive = {
     a = {bg = colors.accent, fg = colors.lightblue, gui = 'bold'},
