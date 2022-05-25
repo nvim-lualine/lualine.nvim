@@ -14,33 +14,25 @@ local colors = {
 
 return {
   normal = {
-    a = {bg = colors.gray_1, fg = colors.darkpurple, gui = 'bold'},
-    b = {bg = colors.purple, fg = colors.gray_2},
-    c = {bg = colors.gray_0, fg = colors.gray_3}
+    a = {bg = colors.darkpurple, fg = colors.gray_1, gui = 'bold'},
+    b = {bg = colors.gray_2, fg = colors.purple},
+    c = {bg = colors.gray_3, fg = colors.gray_0}
   },
   insert = {
-    a = {bg = colors.lightblue, fg = colors.aqua, gui = 'bold'},
-    b = {bg = colors.purple, fg = colors.gray_2},
-    c = {bg = colors.gray_0, fg = colors.gray_3}
+    a = {bg = colors.aqua, fg = colors.lightblue, gui = 'bold'},
+    b = {bg = colors.gray_2, fg = colors.purple},
+    c = {bg = colors.gray_3, fg = colors.gray_0}
   },
   visual = {
-    a = {bg = colors.accent, fg = colors.pink, gui = 'bold'},
-    b = {bg = colors.purple, fg = colors.gray_2},
-    c = {bg = colors.gray_0, fg = colors.gray_3}
+    a = {bg = colors.pink, fg = colors.accent, gui = 'bold'},
   },
   replace = {
-    a = {bg = colors.gray_0, fg = colors.rose, gui = 'bold'},
-    b = {bg = colors.purple, fg = colors.gray_2},
-    c = {bg = colors.gray_0, fg = colors.gray_3}
+    a = {bg = colors.rose, fg = colors.gray_0, gui = 'bold'},
   },
   command = {
-    a = {bg = colors.aqua, fg = colors.gray_3, gui = 'bold'},
-    b = {bg = colors.purple, fg = colors.gray_2},
-    c = {bg = colors.gray_0, fg = colors.gray_3}
+    a = {bg = colors.gray_3, fg = colors.aqua, gui = 'bold'},
   },
   inactive = {
     a = {bg = colors.gray_3, fg = colors.rose, gui = 'bold'},
-    b = {bg = colors.purple, fg = colors.gray_2},
-    c = {bg = colors.gray_0, fg = colors.gray_3}
   }
 }
