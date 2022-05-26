@@ -30,17 +30,17 @@ return {
     a = {bg = colors.aqua, fg = colors.white, gui = 'bold'},
     b = {bg = colors.gray_4, fg = colors.purple},
     c = {bg = colors.purple, fg = colors.white},
-    x = {bg = colors.purple, fg = colors.gray_3},
-    y = {bg = colors.gray_4, fg = colors.white},
+    x = {bg = colors.purple, fg = colors.white},
+    y = {bg = colors.darkpurple, fg = colors.white},
     z = {bg = colors.rose, fg = colors.white, gui = 'bold'},
   },
   visual = {
     a = {bg = colors.yellow, fg = colors.gray_4, gui = 'bold'},
-    b = {bg = colors.darkpurple, fg = colors.lightblue},
-    c = {bg = colors.purple, fg = colors.gray_4}
+    b = {bg = colors.darkpurple, fg = colors.white, gui = 'bold'},
+    c = {bg = colors.purple, fg = colors.gray_4, gui = 'bold'}
   },
   replace = {
-    a = {bg = colors.dark_4, fg = colors.purple, gui = 'bold'},
+    a = {bg = colors.gray_4, fg = colors.purple, gui = 'bold'},
     b = {bg = colors.purple, fg = colors.gray_4},
     c = {bg = colors.purple, fg = colors.white},
     z = {bg = colors.rose, fg = colors.gray_4},
@@ -49,7 +49,7 @@ return {
     a = {bg = colors.accent, fg = colors.white, gui = 'bold'},
     b = {bg = colors.darkpurple, fg = colors.gray_4},
     c = {bg = colors.gray_4, fg = colors.lightblue},
-    x = {bg = colors.gray_4, fg = colors.yellow},
+    x = {bg = colors.gray_4, fg = colors.white},
     y = {bg = colors.gray_4, fg = colors.white},
     z = {bg = colors.accent, fg = colors.white, gui = 'bold'},
   },
