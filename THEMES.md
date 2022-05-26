@@ -186,6 +186,12 @@ them based you your `background` option.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648981-bdaf7b80-74bc-11eb-86d4-6c44c3764a70.png'/>
 </p>
 
+### new_violet
+![Normal](https://github.com/olekatpyle/lualine.nvim/tree/main/.github/images/N.png)
+![Insert](https://github.com/olekatpyle/lualine.nvim/tree/main/.github/images/I.png)
+![Visual](https://github.com/olekatpyle/lualine.nvim/tree/main/.github/images/V.png)
+![Replace](https://github.com/olekatpyle/lualine.nvim/tree/main/.github/images/R.png)
+
 ### nord
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649007-cbfd9780-74bc-11eb-87be-a9edc714e57a.png'/>
