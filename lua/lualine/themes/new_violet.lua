@@ -37,7 +37,7 @@ return {
   visual = {
     a = {bg = colors.yellow, fg = colors.gray_4, gui = 'bold'},
     b = {bg = colors.purple, fg = colors.white},
-    c = {bg = colors.purple, fg = colors.gray_4}
+    c = {bg = colors.darkpurple, fg = colors.white}
   },
   replace = {
     a = {bg = colors.gray_4, fg = colors.purple, gui = 'bold'},
