@@ -37,7 +37,7 @@ return {
     y = {bg = colors.darkpurple, fg = colors.white},
   },
   replace = {
-    a = {bg = colors.gray_1, fg = colors.purple, gui = 'bold'},
+    a = {bg = colors.gray_1, fg = colors.white, gui = 'bold'},
     b = {bg = colors.aqua, fg = colors.white},
     c = {bg = colors.aqua, fg = colors.white},
     z = {bg = colors.rose, fg = colors.gray_1},
@@ -51,8 +51,9 @@ return {
     z = {bg = colors.aqua, fg = colors.white, gui = 'bold'},
   },
   inactive = {
-    a = {bg = colors.accent, fg = colors.lightblue, gui = 'bold'},
-    b = {bg = colors.purple, fg = colors.gray_1},
-    c = {bg = colors.purple, fg = colors.white},
+    a = {bg = colors.gray_1, fg = colors.white, gui = 'bold'},
+    b = {bg = colors.gray_0, fg = colors.lightblue},
+    c = {bg = colors.gray_0, fg = colors.lightblue},
+    z = {bg = colors.aqua, fg = colors.pink},
   }
 }
