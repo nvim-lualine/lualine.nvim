@@ -1,5 +1,5 @@
 ------
--- Violet theme inspired by the 'violet' airline theme, that was even nicer with a bug
+-- Violet theme inspired by the 'violet' airline theme, that was even nicer with a bug.
 ------
 
 local colors = {
