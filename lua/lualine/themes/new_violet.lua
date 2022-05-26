@@ -41,17 +41,17 @@ return {
   },
   replace = {
     a = {bg = colors.gray_4, fg = colors.purple, gui = 'bold'},
-    b = {bg = colors.purple, fg = colors.gray_4},
-    c = {bg = colors.purple, fg = colors.white},
+    b = {bg = colors.aqua, fg = colors.white},
+    c = {bg = colors.aqua, fg = colors.white},
     z = {bg = colors.rose, fg = colors.gray_4},
   },
   command = {
-    a = {bg = colors.accent, fg = colors.white, gui = 'bold'},
+    a = {bg = colors.aqua, fg = colors.white, gui = 'bold'},
     b = {bg = colors.darkpurple, fg = colors.white},
     c = {bg = colors.gray_4, fg = colors.white},
     x = {bg = colors.gray_4, fg = colors.white},
     y = {bg = colors.gray_4, fg = colors.white},
-    z = {bg = colors.accent, fg = colors.white, gui = 'bold'},
+    z = {bg = colors.aqua, fg = colors.white, gui = 'bold'},
   },
   inactive = {
     a = {bg = colors.accent, fg = colors.lightblue, gui = 'bold'},
