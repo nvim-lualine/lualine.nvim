@@ -217,13 +217,13 @@ Also provide what colorscheme you're using.
   modules.utils_notices.add_notice(string.format(message_template, theme_name))
 end
 
---- sets up theme by defining hl groups and setting theme cache in highlight.lua
---- uses options.theme option for theme if it's a string loads theme of that name
---- if it's a table, it'll be directly bused.
---- when theme load fails this falls back to 'auto' theme if even that fails
---- this falls back to 'gruvbox' theme
---- also sets up auto command to reload lualine on ColorScheme or background
----  change on
+--- Sets up theme by defining hl groups and setting theme cache in 'highlight.lua'.
+--- Uses 'options.theme' variable to apply the theme:
+--- - If the value is a string, it'll load a theme of that name.
+--- - If it's a table, it's directly used as the theme.
+--- If loading the theme fails, this falls back to 'auto' theme.
+--- If the 'auto' theme also fails, this falls back to 'gruvbox' theme.
+--- Also sets up auto command to reload lualine on ColorScheme or background changes.
 local function setup_theme()
   local function get_theme_from_config()
     local theme_name = config.options.theme
