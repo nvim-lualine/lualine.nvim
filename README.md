@@ -465,7 +465,7 @@ sections = {
 
       symbols = {
         modified = ' ●',      -- Text to show when the buffer is modified
-        alternate_file = '#', -- Text to show to indify the alternate file
+        alternate_file = '#', -- Text to show to identify the alternate file
         directory =  '',     -- Text to show when the buffer is a directory
       },
     }
@@ -685,17 +685,20 @@ tabline = {
 ```
 
 #### Buffers
+
 Shows currently open buffers. Like bufferline . See
 [buffers options](#buffers-component-options)
 for all builtin behaviors of buffers component.
 You can use `:LualineBuffersJump` to jump to buffer based on index
 of buffer in buffers component.
+
 ```vim
   :LualineBuffersJump 2  " Jumps to 2nd buffer in buffers component.
   :LualineBuffersJump $  " Jumps to last buffer in buffers component.
 ```
 
 #### Tabs
+
 Shows currently open tab. Like usual tabline. See
 [tabs options](#tabs-component-options)
 for all builtin behaviors of tabs component.
@@ -705,7 +708,7 @@ For example:
 :LualineRenameTab Project_K
 ````
 It's useful when you're using rendering mode 2/3 in tabs.
-To unname a tablage run `:LualineRenameTab` without argument.
+To rename/unname a tabpage run `:LualineRenameTab` without argument.
 
 #### Tabline as statusline
 You can also completely move your statusline to a tabline by configuring
@@ -797,6 +800,7 @@ If you want to extend lualine with plugins or want to know
 which ones already do, [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
 
 ### Support
+
 If you appreciate my work you can buy me a coffee.
 
 <a href="https://www.buymeacoffee.com/shadmansalJ" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-black.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;"></a>
