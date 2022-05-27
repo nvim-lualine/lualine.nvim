@@ -70,24 +70,24 @@ end
 
 --- Check if a auto command is already defined
 ---@param event string
----@param patern string
+---@param pattern string
 ---@param command_str string
 ---@return boolean whether autocmd is already defined
-local function autocmd_is_defined(event, patern, command_str)
-  return vim.api.nvim_exec(string.format('au lualine %s %s', event, patern), true):find(command_str) ~= nil
+local function autocmd_is_defined(event, pattern, command_str)
+  return vim.api.nvim_exec(string.format('au lualine %s %s', event, pattern), true):find(command_str) ~= nil
 end
 
 --- Define a auto command if it's not already defined
 ---@param event  string event name
----@param patern string event patern
+---@param pattern string event pattern
 ---@param cmd    string command to run on event
-function M.define_autocmd(event, patern, cmd)
+function M.define_autocmd(event, pattern, cmd)
   if not cmd then
-    cmd = patern
-    patern = '*'
+    cmd = pattern
+    pattern = '*'
   end
-  if not autocmd_is_defined(event, patern, cmd) then
-    vim.cmd(string.format('autocmd lualine %s %s %s', event, patern, cmd))
+  if not autocmd_is_defined(event, pattern, cmd) then
+    vim.cmd(string.format('autocmd lualine %s %s %s', event, pattern, cmd))
   end
 end
 
