@@ -3,11 +3,13 @@
 All available themes are only best effort ports by myself/ other users. If you find a theme to be weird/ wrong please open an issue/ pr.
 
 ### auto
+
 auto is a special theme. It will automatically load theme for your colorscheme.
 If there's no theme available for your colorscheme then
 it'll try it's best to generate one.
 
 ### 16color
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648240-02d2ae00-74bb-11eb-9ac1-495849621366.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648219-f77f8280-74ba-11eb-84e4-978bf918c21f.png'/>
@@ -16,6 +18,7 @@ it'll try it's best to generate one.
 </p>
 
 ### ayu_dark
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648314-357ca680-74bb-11eb-83de-ec94c3a75d99.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648329-3e6d7800-74bb-11eb-901b-41e1f01315f0.png'/>
@@ -24,6 +27,7 @@ it'll try it's best to generate one.
 </p>
 
 ### ayu_light
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648508-b5a30c00-74bb-11eb-80f7-0bce969d35ea.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648511-b89dfc80-74bb-11eb-9868-f63d7752fe83.png'/>
@@ -32,6 +36,7 @@ it'll try it's best to generate one.
 </p>
 
 ### ayu_mirage
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648535-c6538200-74bb-11eb-815b-53f4b3274602.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648537-c784af00-74bb-11eb-8da5-d91bfc61a967.png'/>
@@ -40,6 +45,7 @@ it'll try it's best to generate one.
 </p>
 
 ### ayu
+
 It's a combination of ayu_light, ayu_dark & ayu_mirage. If `g:ayucolor` exists,
 it loads one of these based on your `g:ayucolor` option. Otherwise, it will
 load ayu_light when background=light and ayu_dark when background=dark
@@ -59,6 +65,7 @@ The following example is using the `tomorrow-night` colorscheme:
 </p>
 
 ### codedark
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648568-dff4c980-74bb-11eb-9d16-b68ac68f2ab2.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648569-e125f680-74bb-11eb-8782-db9a6c2a3153.png'/>
@@ -67,6 +74,7 @@ The following example is using the `tomorrow-night` colorscheme:
 </p>
 
 ### dracula
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648594-f0a53f80-74bb-11eb-9018-9ee12260750e.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648600-f26f0300-74bb-11eb-82a4-f732b3e7eeff.png'/>
@@ -75,6 +83,7 @@ The following example is using the `tomorrow-night` colorscheme:
 </p>
 
 ### everforest
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648663-1cc0c080-74bc-11eb-8cc1-36266a0385e3.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648667-1df1ed80-74bc-11eb-9ef8-dfd2e8401f0c.png'/>
@@ -83,6 +92,7 @@ The following example is using the `tomorrow-night` colorscheme:
 </p>
 
 ### gruvbox_dark
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648685-2b0edc80-74bc-11eb-9ec9-9aac3677df43.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648693-2ea26380-74bc-11eb-831a-9ebbe4f3dd83.png'/>
@@ -91,6 +101,7 @@ The following example is using the `tomorrow-night` colorscheme:
 </p>
 
 ### gruvbox_light
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/34294427/118757012-5d9b5c00-b896-11eb-8e4f-c0c28f774cf6.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/34294427/118757009-5bd19880-b896-11eb-9846-d02b16653ab0.png'/>
@@ -99,10 +110,12 @@ The following example is using the `tomorrow-night` colorscheme:
 </p>
 
 ### gruvbox
+
 It's a combination of gruvbox_light and gruvbox_dark. It loads either of
 them based you your `background` option.
 
 ### gruvbox-material
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648725-3f52d980-74bc-11eb-8fa5-a77b0a21cdea.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648728-41b53380-74bc-11eb-99cf-001eab6cc51b.png'/>
@@ -111,6 +124,7 @@ them based you your `background` option.
 </p>
 
 ### horizon
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/69089176/118903813-70527700-b910-11eb-9d45-1785790ce8e8.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/69089176/118902058-bc9bb800-b90c-11eb-99b8-3b98cbdd01d7.png'/>
@@ -119,6 +133,7 @@ them based you your `background` option.
 </p>
 
 ### iceberg_dark
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648796-614c5c00-74bc-11eb-8398-cde120ec7746.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648813-64474c80-74bc-11eb-986b-432498dd6245.png'/>
@@ -127,6 +142,7 @@ them based you your `background` option.
 </p>
 
 ### iceberg_light
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648848-71fcd200-74bc-11eb-8910-e12ae9ce619f.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648849-73c69580-74bc-11eb-93f9-d6f75a2bdd97.png'/>
@@ -135,10 +151,12 @@ them based you your `background` option.
 </p>
 
 ### iceberg
+
 It's a combination of iceberg_light and iceberg_dark. It loads either of
 them based you your `background` option.
 
 ### jellybeans
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648882-82ad4800-74bc-11eb-91e8-4d38fcdec134.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648883-850fa200-74bc-11eb-8d9b-54116accd2f8.png'/>
@@ -147,6 +165,7 @@ them based you your `background` option.
 </p>
 
 ### material
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648925-9e185300-74bc-11eb-9263-842fe2d56ba8.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648927-9f498000-74bc-11eb-8a15-4ba68403037a.png'/>
@@ -155,6 +174,7 @@ them based you your `background` option.
 </p>
 
 ### modus-vivendi
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/9327361/114389966-58176b80-9b9e-11eb-944e-1e0079527d74.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/9327361/114390000-606fa680-9b9e-11eb-97dd-ef5bbc23049a.png'/>
@@ -163,6 +183,7 @@ them based you your `background` option.
 </p>
 
 ### molokai
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648944-ab354200-74bc-11eb-85fd-71a40102384b.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648946-acff0580-74bc-11eb-9aae-36a869b855e5.png'/>
@@ -171,6 +192,7 @@ them based you your `background` option.
 </p>
 
 ### moonfly
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/11382509/129304429-cd2af22d-3b88-4c17-bf99-99f7608576d4.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/11382509/129304441-81a6c88e-364c-476a-9050-0ada4cae1e3b.png'/>
@@ -179,6 +201,7 @@ them based you your `background` option.
 </p>
 
 ### nightfly
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648974-b9835e00-74bc-11eb-9c52-c5187aa3ff2c.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648977-bab48b00-74bc-11eb-96b3-7f51fc73d8e8.png'/>
@@ -187,6 +210,7 @@ them based you your `background` option.
 </p>
 
 ### nord
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649007-cbfd9780-74bc-11eb-87be-a9edc714e57a.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649010-cd2ec480-74bc-11eb-9d9b-54fadee2abef.png'/>
@@ -195,6 +219,7 @@ them based you your `background` option.
 </p>
 
 ### OceanicNext
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649039-d7e95980-74bc-11eb-9a33-df413936c645.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649043-d91a8680-74bc-11eb-9b1b-9c2e88ede3aa.png'/>
@@ -203,6 +228,7 @@ them based you your `background` option.
 </p>
 
 ### onedark
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/8293386/150810955-ef6bf575-4a96-439c-a708-37dd25c63a47.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/8293386/150811104-31fbc04c-1500-4779-a079-98bd1e56701d.png'/>
@@ -211,6 +237,7 @@ them based you your `background` option.
 </p>
 
 ### onelight
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/8293386/150809518-b596f9bc-c351-4e71-9dec-e1856efaff8a.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/8293386/150809979-237c6414-4278-447d-a00f-0a32e2770195.png'/>
@@ -219,6 +246,7 @@ them based you your `background` option.
 </p>
 
 ### palenight
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/7190144/109406548-3e1d2300-797a-11eb-8fdb-c3882ae08625.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/7190144/109406547-3e1d2300-797a-11eb-9b72-43ba7145355d.png'/>
@@ -227,6 +255,7 @@ them based you your `background` option.
 </p>
 
 ### papercolor_dark
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649104-fd766300-74bc-11eb-8c5c-40e7191a81f7.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649106-fe0ef980-74bc-11eb-93f7-f98e0b89d5c9.png'/>
@@ -235,6 +264,7 @@ them based you your `background` option.
 </p>
 
 ### papercolor_light
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649126-07986180-74bd-11eb-9a25-c6ce762d37d2.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649129-08c98e80-74bd-11eb-93d4-5bc109ac9ee9.png'/>
@@ -243,10 +273,12 @@ them based you your `background` option.
 </p>
 
 ### PaperColor
+
 It's a combination of papercolor_light and papercolor_dark. It loads either of
 them based you your `background` option.
 
 ### powerline
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649147-14b55080-74bd-11eb-9670-713185342eb2.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649150-15e67d80-74bd-11eb-8815-194c51d96016.png'/>
@@ -255,6 +287,7 @@ them based you your `background` option.
 </p>
 
 ### powerline_dark
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/59497618/131224416-851aedd4-27bb-47fd-a9a6-5332aa42ce60.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/59497618/131224418-7bec491b-1183-4ec7-8089-3dbe460cc1e4.png'/>
@@ -263,6 +296,7 @@ them based you your `background` option.
 </p>
 
 ### pywal
+
 pywal is another special theme. It will load the colors from your current [pywal](https://github.com/dylanaraps/pywal) cache, specifically `~/.cache/wal/colors.sh` and generate a theme.
 
 #### `wal --theme ashes`
@@ -282,6 +316,7 @@ pywal is another special theme. It will load the colors from your current [pywal
 <img width='700' src='https://user-images.githubusercontent.com/36740602/132101621-505e5bb6-d18a-434c-a0f8-a3904a5c71f2.png'/>
 
 ### seoul256
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649194-2c8cd480-74bd-11eb-8fbc-935d7e0fe921.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649198-2d256b00-74bd-11eb-9894-7ffdead0297c.png'/>
@@ -290,6 +325,7 @@ pywal is another special theme. It will load the colors from your current [pywal
 </p>
 
 ### solarized_dark
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649216-37476980-74bd-11eb-8f3b-2a7fc368388d.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649217-38789680-74bd-11eb-8337-5e3005c5e261.png'/>
@@ -298,6 +334,7 @@ pywal is another special theme. It will load the colors from your current [pywal
 </p>
 
 ### solarized_light
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649246-44645880-74bd-11eb-92c9-120798dc0452.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649251-462e1c00-74bd-11eb-953d-2857296997cc.png'/>
@@ -306,6 +343,7 @@ pywal is another special theme. It will load the colors from your current [pywal
 </p>
 
 ### Tomorrow
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649275-51814780-74bd-11eb-881b-1e137a0cbfe0.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649297-59d98280-74bd-11eb-92a5-a8c4af150106.png'/>
@@ -314,6 +352,7 @@ pywal is another special theme. It will load the colors from your current [pywal
 </p>
 
 ### wombat
+
 <p>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649337-65c54480-74bd-11eb-9ea1-fab2e679c56b.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649411-8db4a800-74bd-11eb-962a-8b73f9fb7124.png'/>
