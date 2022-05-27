@@ -708,7 +708,7 @@ For example:
 :LualineRenameTab Project_K
 ````
 It's useful when you're using rendering mode 2/3 in tabs.
-To rename/unname a tabpage run `:LualineRenameTab` without argument.
+To unname a tabpage run `:LualineRenameTab` without argument.
 
 #### Tabline as statusline
 You can also completely move your statusline to a tabline by configuring
