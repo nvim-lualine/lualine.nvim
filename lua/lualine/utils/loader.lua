@@ -110,7 +110,7 @@ Something like:
 
 This commonly occurs when you forget to pass table with option for component.
 When a component has option that component needs to be a table which holds
-the component as first element and the options as key value paris.
+the component as first element and the options as key value pairs.
 For example:
 ```lua
 lualine_c = {
