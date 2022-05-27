@@ -314,11 +314,11 @@ end
 -- lualine.setup function
 --- sets new user config
 --- This function doesn't load components/theme etc... They are done before
---- first statusline redraw after new config. This is more efficient when
---- lualine config is done in several setup calls in chunks. This way
---- we don't initialize components just to through them away .Instead they are
+--- first statusline redraw and after new config. This is more efficient when
+--- lualine config is done in several setup calls as chunks. This way
+--- we don't initialize components just to throw them away. Instead they are
 --- initialized when we know we will use them.
---- sets &last_status tl 2
+--- sets &last_status to 2
 ---@param user_config table table
 local function setup(user_config)
   if package.loaded['lualine.utils.notices'] then
