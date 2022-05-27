@@ -12,8 +12,8 @@ If you're not sure where to help? You can try these:
   *We could really use some help with tests & docs they are currently lacking :)*
 - You can add an exciting new component, extension or theme.
   Note: Currently we aren't adding regular colorscheme based themes.
-   We think they make more sense with colorschemes as they tend not to get
-   updated once added here. But if you have some unique themes idea like [auto](https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md#auto) or [pywal](https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md#pywal) feel free to open an PR or issue.
+  We think they make more sense with colorschemes as they tend not to get
+  updated once added here. But if you have some unique themes idea like [auto](https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md#auto) or [pywal](https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md#pywal) feel free to open an PR or issue.
 - Feel free to open issues or unfinished PRs for help.
   I'd actually recommend you to open an issue first for bigger PRs to discuss
   the feature with a maintainer beforehand. That way you can know if the
