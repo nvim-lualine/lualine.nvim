@@ -12,8 +12,8 @@ local modules = lualine_require.lazy_require {
 local config -- Stores currently applied config
 
 -- Helper for apply_transitional_separators()
---- finds first applied highlight group fter str_checked in status
----@param status string : unprossed statusline string
+--- finds first applied highlight group after str_checked in status
+---@param status string : unprocessed statusline string
 ---@param str_checked number : position of how far status has been checked
 ---@return string|nil the hl group name or nil
 local function find_next_hl(status, str_checked)
@@ -36,11 +36,11 @@ end
 
 -- Helper for apply_transitional_separators()
 --- applies transitional separator highlight + transitional separator
----@param status string : unprossed statusline string
+---@param status string : unprocessed statusline string
 ---@param str_checked number : position of how far status has been checked
 ---@param last_hl string : last applied hl group name before str_checked
 ---@param reverse boolean : reverse the hl group ( true for right separators )
----@return string|nil concated separator highlight and transitional separator
+---@return string|nil concatenate separator highlight and transitional separator
 local function fill_section_separator(status, is_focused, str_checked, last_hl, sep, reverse)
   -- Inserts transitional separator along with transitional highlight
   local next_hl = find_next_hl(status, str_checked)
@@ -63,12 +63,12 @@ end
 
 --- processes statusline string
 --- replaces %s/S{sep} with proper left/right separator highlight + sep
----@param status string : unprossed statusline string
+---@param status string : unprocessed statusline string
 ---@return string : processed statusline string
 local function apply_transitional_separators(status, is_focused)
-  local status_applied = {} -- Collects all the pieces for concatation
-  local last_hl -- Stores lash highligjt group that we found
-  local last_hl_reseted = false -- Whether last_hl is nil because we reseted
+  local status_applied = {} -- Collects all the pieces for concatenation
+  local last_hl -- Stores last highlight group that we found
+  local last_hl_reseted = false -- Whether last_hl is nil after reset
   -- it after %=
   local copied_pos = 1 -- Tracks how much we've copied over to status_applied
   local str_checked = 1 -- Tracks where the searcher head is at
@@ -120,10 +120,10 @@ local function apply_transitional_separators(status, is_focused)
       str_checked = str_checked + 2 -- Skip the following % too
     elseif next_char == '=' and last_hl and (last_hl:find('^lualine_a') or last_hl:find('^lualine_b')) then
       -- TODO: Fix this properly
-      -- This check for lualine_a and lualine_b is dumb. It doesn't garantee
-      -- c or x section isn't present. Worst case sinario after this patch
+      -- This check for lualine_a and lualine_b is dumb. It doesn't guarantee
+      -- c or x section isn't present. Worst case scenario after this patch
       -- we have another visual bug that occurs less frequently.
-      -- Annoying Edge Cases............................................
+      -- Annoying Edge Cases
       last_hl = nil
       last_hl_reseted = true
       str_checked = str_checked + 1 -- Skip the following % too
@@ -138,7 +138,7 @@ end
 --- creates the statusline string
 ---@param sections table : section config where components are replaced with
 ---      component objects
----@param is_focused boolean : whether being evsluated for focused window or not
+---@param is_focused boolean : whether being evaluated for focused window or not
 ---@return string statusline string
 local statusline = modules.utils.retry_call_wrap(function(sections, is_focused)
   -- The sequence sections should maintain [SECTION_SEQUENCE]
@@ -176,10 +176,10 @@ end)
 
 --- check if any extension matches the filetype and return proper sections
 ---@param current_ft string : filetype name of current file
----@param is_focused boolean : whether being evsluated for focused window or not
+---@param is_focused boolean : whether being evaluated for focused window or not
 ---@return table : (section_table) section config where components are replaced with
 ---      component objects
--- TODO: change this so it uses a hash table instead of iteration over lisr
+-- TODO: change this so it uses a hash table instead of iteration over list
 --       to improve redraws. Add buftype / bufname for extensions
 --       or some kind of cond ?
 local function get_extension_sections(current_ft, is_focused)
@@ -219,8 +219,8 @@ end
 
 --- sets up theme by defining hl groups and setting theme cache in highlight.lua
 --- uses options.theme option for theme if it's a string loads theme of that name
---- if it's a table directlybuses it .
---- when theme load fails this fallsback to 'auto' theme if even that fails
+--- if it's a table it directly buses it.
+--- when theme load fails this falls back to 'auto' theme if even that fails
 --- this falls back to 'gruvbox' theme
 --- also sets up auto command to reload lualine on ColorScheme or background
 ---  change on
@@ -263,7 +263,7 @@ local function set_tabline()
   end
 end
 
---- Sets &ststusline option to lualine
+--- Sets &statusline option to lualine
 --- adds auto command to redraw lualine on VimResized event
 local function set_statusline()
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
@@ -282,7 +282,7 @@ end
 
 -- lualine.statusline function
 --- Draw correct statusline for current window
----@param focused boolean : force the value of is_focused . useful for debugging
+---@param focused boolean : force the value of is_focused . Useful for debugging
 ---@return string statusline string
 local function status_dispatch(focused)
   local retval
@@ -313,10 +313,10 @@ end
 
 -- lualine.setup function
 --- sets new user config
---- This function doesn't load components/theme etc.. they are done before
+--- This function doesn't load components/theme etc... They are done before
 --- first statusline redraw after new config. This is more efficient when
 --- lualine config is done in several setup calls in chunks. This way
---- we don't intialize components just to throgh them away .Instead they are
+--- we don't initialize components just to through them away .Instead they are
 --- initialized when we know we will use them.
 --- sets &last_status tl 2
 ---@param user_config table table

@@ -7,7 +7,7 @@ USAGE="Usage nvim_isolated_conf.sh [OPTIONS] Directory
 A tool to easily test isolated neovim config
 
 Options:
-  -c       Create a mimimal config tree at Directory
+  -c       Create a minimal config tree at Directory
   -e       Edit init.vim of config in Directory
   -h       Show this message
   -l       Load neovim with config from Directory

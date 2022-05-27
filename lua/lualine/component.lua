@@ -34,7 +34,7 @@ function M:init(options)
 end
 
 ---sets the default separator for component based on whether the component
----is in left sections or right sections when separator option is omited.
+---is in left sections or right sections when separator option is omitted.
 function M:set_separator()
   if self.options.separator == nil then
     if self.options.component_separators then
@@ -73,7 +73,7 @@ function M:apply_padding()
   end
   if l_padding then
     if self.status:find('%%#.*#') == 1 then
-      -- When component has changed the highlight at begining
+      -- When component has changed the highlight at beginning
       -- we will add the padding after the highlight
       local pre_highlight = vim.fn.matchlist(self.status, [[\(%#.\{-\}#\)]])[2]
       self.status = pre_highlight .. string.rep(' ', l_padding) .. self.status:sub(#pre_highlight + 1, #self.status)
@@ -95,10 +95,10 @@ function M:apply_highlights(default_highlight)
   end
   if type(self.options.separator) ~= 'table' and self.status:find('%%#') then
     -- Apply default highlight only when we aren't applying trans sep and
-    -- the component has changed it's hl. since we won't be applying
-    -- regular sep in those cases so ending with default hl isn't neccessay
+    -- the component has changed it's hl. Since we won't be applying
+    -- regular sep in those cases so ending with default hl isn't necessary
     self.status = self.status .. default_highlight
-    -- Also put it in applied sep so when sep get struped so does the hl
+    -- Also put it in applied sep so when sep get striped so does the hl
     self.applied_separator = default_highlight
   end
   -- Prepend default hl when the component doesn't start with hl otherwise
@@ -108,7 +108,7 @@ function M:apply_highlights(default_highlight)
   end
 end
 
----apply icon to component (appends/prepemds component with icon)
+---apply icon to component (appends/prepends component with icon)
 function M:apply_icon()
   local icon = self.options.icon
   if self.options.icons_enabled and icon then
@@ -202,15 +202,15 @@ end
 ---create a lualine highlight for color
 ---@param color table|string|function defined color for hl
 ---@param hint string|nil hint for hl name
----@return table an identifier to later retrive the hl for application
+---@return table an identifier to later retrieve the hl for application
 function M:create_hl(color, hint)
   hint = hint and self.options.component_name .. '_' .. hint or self.options.component_name
   return highlight.create_component_highlight_group(color, hint, self.options, false)
 end
 
----Get stl formated hl group for hl_token
----@param hl_token table indentifier received from create_hl or create_component_highlight_group
----@return string stl formated hl group for hl_token
+---Get stl formatted hl group for hl_token
+---@param hl_token table identifier received from create_hl or create_component_highlight_group
+---@return string stl formatted hl group for hl_token
 function M:format_hl(hl_token)
   return highlight.component_format_highlight(hl_token)
 end
@@ -223,7 +223,7 @@ function M:update_status(is_focused) end
 ---driver code of the class
 ---@param default_highlight string default hl group of section where component resides
 ---@param is_focused boolean|number whether drawing for active or inactive statusline.
----@return string stl formated rendering string for component
+---@return string stl formatted rendering string for component
 function M:draw(default_highlight, is_focused)
   self.status = ''
   self.applied_separator = ''

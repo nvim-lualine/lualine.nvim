@@ -11,7 +11,7 @@ if color_name then
   end
 
   -- Check if there's a theme for current colorscheme
-  -- If there is load that instead of genarating a new one
+  -- If there is load that instead of generating a new one
   local ok, theme = pcall(loader.load_theme, color_name)
   if ok and theme then
     return theme
@@ -19,14 +19,14 @@ if color_name then
 end
 
 ---------------
--- Constents --
+-- Constants --
 ---------------
 -- fg and bg must have this much contrast range 0 < contrast_threshold < 0.5
 local contrast_threshold = 0.3
 -- how much brightness is changed in percentage for light and dark themes
 local brightness_modifier_parameter = 10
 
--- truns #rrggbb -> { red, green, blue }
+-- Turns #rrggbb -> { red, green, blue }
 local function rgb_str2num(rgb_color_str)
   if rgb_color_str:find('#') == 1 then
     rgb_color_str = rgb_color_str:sub(2, #rgb_color_str)
@@ -37,14 +37,14 @@ local function rgb_str2num(rgb_color_str)
   return { red = red, green = green, blue = blue }
 end
 
--- turns { red, green, blue } -> #rrggbb
+-- Turns { red, green, blue } -> #rrggbb
 local function rgb_num2str(rgb_color_num)
   local rgb_color_str = string.format('#%02x%02x%02x', rgb_color_num.red, rgb_color_num.green, rgb_color_num.blue)
   return rgb_color_str
 end
 
--- returns brightness lavel of color in range 0 to 1
--- arbitary value it's basicaly an weighted average
+-- Returns brightness level of color in range 0 to 1
+-- arbitrary value it's basically an weighted average
 local function get_color_brightness(rgb_color)
   local color = rgb_str2num(rgb_color)
   local brightness = (color.red * 2 + color.green * 3 + color.blue) / 6
@@ -52,13 +52,13 @@ local function get_color_brightness(rgb_color)
 end
 
 -- returns average of colors in range 0 to 1
--- used to ditermine contrast lavel
+-- used to determine contrast level
 local function get_color_avg(rgb_color)
   local color = rgb_str2num(rgb_color)
   return (color.red + color.green + color.blue) / 3 / 256
 end
 
--- clamps the val between left and right
+-- Clamps the val between left and right
 local function clamp(val, left, right)
   if val > right then
     return right
@@ -69,7 +69,7 @@ local function clamp(val, left, right)
   return val
 end
 
--- changes braghtness of rgb_color by percentage
+-- Changes brightness of rgb_color by percentage
 local function brightness_modifier(rgb_color, parcentage)
   local color = rgb_str2num(rgb_color)
   color.red = clamp(color.red + (color.red * parcentage / 100), 0, 255)
@@ -78,7 +78,7 @@ local function brightness_modifier(rgb_color, parcentage)
   return rgb_num2str(color)
 end
 
--- changes contrast of rgb_color by amount
+-- Changes contrast of rgb_color by amount
 local function contrast_modifier(rgb_color, amount)
   local color = rgb_str2num(rgb_color)
   color.red = clamp(color.red + amount, 0, 255)
@@ -87,7 +87,7 @@ local function contrast_modifier(rgb_color, amount)
   return rgb_num2str(color)
 end
 
--- Changes brightness of foreground color to achive contrast
+-- Changes brightness of foreground color to achieve contrast
 -- without changing the color
 local function apply_contrast(highlight)
   local hightlight_bg_avg = get_color_avg(highlight.bg)
@@ -97,7 +97,7 @@ local function apply_contrast(highlight)
     contranst_change_step = -contranst_change_step
   end
 
-  -- donn't waste too much time here max 25 interation should be more than enough
+  -- Don't waste too much time here max 25 iteration should be more than enough
   local iteration_count = 1
   while
     math.abs(get_color_avg(highlight.fg) - hightlight_bg_avg) < contrast_threshold_config and iteration_count < 25
@@ -121,8 +121,7 @@ local colors = {
 }
 
 -- Change brightness of colors
--- darken incase of light theme lighten incase of dark theme
-
+-- Darken if light theme (or) Lighten if dark theme
 local normal_color = utils.extract_highlight_colors('Normal', 'bg')
 if normal_color ~= nil then
   if get_color_brightness(normal_color) > 0.5 then
@@ -133,7 +132,7 @@ if normal_color ~= nil then
   end
 end
 
--- basic theme defination
+-- Basic theme definition
 local M = {
   normal = {
     a = { bg = colors.normal, fg = colors.back1, gui = 'bold' },
@@ -165,7 +164,7 @@ local M = {
 M.terminal = M.command
 M.inactive = M.normal
 
--- Apply prpper contrast so text is readable
+-- Apply proper contrast so text is readable
 for _, section in pairs(M) do
   for _, highlight in pairs(section) do
     apply_contrast(highlight)

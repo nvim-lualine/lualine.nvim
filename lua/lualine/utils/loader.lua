@@ -12,7 +12,7 @@ local sep = lualine_require.sep
 
 --- function that loads specific type of component
 local component_types = {
-  -- loads custion component
+  -- loads custom component
   custom = function(component)
     return component[1](component)
   end,
@@ -42,7 +42,7 @@ local component_types = {
     end
     return require('lualine.components.special.function_component')(component)
   end,
-  --- loads variables & options (g:,go:,b:,bo:...) as componenta
+  --- loads variables & options (g:,go:,b:,bo:...) as components
   var = function(component)
     return require('lualine.components.special.vim_var_component')(component)
   end,
@@ -52,7 +52,7 @@ local component_types = {
   end,
 }
 
----load a component from component confif
+---load a component from component config
 ---@param component table component + component options
 ---@return table the loaded & initialized component
 local function component_loader(component)
@@ -159,7 +159,7 @@ local function load_components(config)
 end
 
 ---loads all the extensions
----@param config table user confif
+---@param config table user config
 local function load_extensions(config)
   local loaded_extensions = {}
   for _, extension in pairs(config.extensions) do
@@ -207,9 +207,9 @@ local function load_all(config)
 end
 
 ---loads a theme from lua module
----priotizes external themes (from user config or other plugins) over the bundled ones
+---prioritizes external themes (from user config or other plugins) over the bundled ones
 ---@param theme_name string
----@return table theme defination from module
+---@return table theme definition from module
 local function load_theme(theme_name)
   assert(is_valid_filename(theme_name), 'Invalid filename')
   local retval

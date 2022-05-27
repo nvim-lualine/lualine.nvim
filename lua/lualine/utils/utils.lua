@@ -6,8 +6,8 @@ local M = {}
 -- attr parameter like bold/italic/reverse
 ---@param color_group string hl_group name
 ---@param scope       string bg | fg
----@return table|string returns #rrggbb formated color when scope is specified
-----                       or comolete color table when scope isn't specified
+---@return table|string returns #rrggbb formatted color when scope is specified
+----                       or complete color table when scope isn't specified
 function M.extract_highlight_colors(color_group, scope)
   local color = require('lualine.highlight').get_lualine_hl(color_group)
   if not color then
@@ -30,7 +30,7 @@ function M.extract_highlight_colors(color_group, scope)
   return color
 end
 
---- retrives color value from highlight group name in syntax_list
+--- retrieves color value from highlight group name in syntax_list
 --- first present highlight is returned
 ---@param scope string
 ---@param syntaxlist table
@@ -96,10 +96,10 @@ function M.is_focused()
   return tonumber(vim.g.actual_curwin) == vim.api.nvim_get_current_win()
 end
 
---- Check what's the charecter at pos
+--- Check what's the character at pos
 ---@param str string
 ---@param pos number
----@return string charecter at position pos in string str
+---@return string character at position pos in string str
 function M.charAt(str, pos)
   return string.char(str:byte(pos))
 end
@@ -166,7 +166,7 @@ end
 --- Wrap a function in retry_call
 ---@param fn function Function to call.
 ---@param times number Number of times to retry on error.
----@return function retry call wraped function
+---@return function retry call wrapped function
 function M.retry_call_wrap(fn, times)
   return function(...)
     return M.retry_call(fn, { ... }, times)

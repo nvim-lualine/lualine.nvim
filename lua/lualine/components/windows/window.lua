@@ -1,6 +1,6 @@
 local Window = require('lualine.components.buffers.buffer'):extend()
 
----intialize a new buffer from opts
+---initialize a new buffer from opts
 ---@param opts table
 function Window:init(opts)
   assert(opts.winnr, 'Cannot create Window without winnr')

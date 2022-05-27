@@ -28,7 +28,7 @@ function M.init_component(component, opts)
   return comp
 end
 
--- Checks ouput of a component
+-- Checks output of a component
 M.assert_component = function(component, opts, result, is_active)
   local comp = M.init_component(component, opts)
   -- for testing global options

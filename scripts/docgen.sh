@@ -11,7 +11,7 @@ PANVIMDOC_VERSION="NVIM v0.5.0"
 PANVIMDOC_TOC=true
 PANDOC_OUTPUT="doc/lualine.txt"
 
-PANVIMDOC_INSTALLED=false # Whther panvimdoc was installed by this script
+PANVIMDOC_INSTALLED=false # Whether panvimdoc was installed by this script
 
 if [ ! -d "panvimdoc/" ];then
   # Grab panvimdoc if not present
@@ -22,7 +22,7 @@ if [ ! -d "panvimdoc/" ];then
     "https://github.com/kdheepak/panvimdoc" "panvimdoc"
 fi
 
-echo "Genarating docs"
+echo "Generating docs"
 pandoc --metadata=project:"${PANVIMDOC_VIMDOC}"\
        --metadata=toc:${PANVIMDOC_TOC}\
        --metadata=vimversion:"${PANVIMDOC_VERSION}"\

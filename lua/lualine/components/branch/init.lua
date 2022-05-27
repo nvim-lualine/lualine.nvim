@@ -7,7 +7,7 @@ local modules = require('lualine_require').lazy_require {
   utils = 'lualine.utils.utils',
 }
 
--- Initilizer
+-- Initializer
 M.init = function(self, options)
   M.super.init(self, options)
   if not self.options.icon then

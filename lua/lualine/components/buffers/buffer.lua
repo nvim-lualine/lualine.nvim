@@ -5,7 +5,7 @@ local modules = require('lualine_require').lazy_require {
   utils = 'lualine.utils.utils',
 }
 
----intialize a new buffer from opts
+---initialize a new buffer from opts
 ---@param opts table
 function Buffer:init(opts)
   assert(opts.bufnr, 'Cannot create Buffer without bufnr')
@@ -72,7 +72,7 @@ function Buffer:render()
     name = self.options.fmt(name or '')
   end
 
-  if self.ellipse then -- show elipsis
+  if self.ellipse then -- show ellipsis
     name = '...'
   else
     name = self:apply_mode(name)
