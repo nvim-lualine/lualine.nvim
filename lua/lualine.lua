@@ -219,7 +219,7 @@ end
 
 --- sets up theme by defining hl groups and setting theme cache in highlight.lua
 --- uses options.theme option for theme if it's a string loads theme of that name
---- if it's a table it directly buses it.
+--- if it's a table, it'll be directly bused.
 --- when theme load fails this falls back to 'auto' theme if even that fails
 --- this falls back to 'gruvbox' theme
 --- also sets up auto command to reload lualine on ColorScheme or background
