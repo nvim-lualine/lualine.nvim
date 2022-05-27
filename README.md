@@ -704,13 +704,16 @@ Shows currently open tab. Like usual tabline. See
 for all builtin behaviors of tabs component.
 You can also use `:LualineRenameTab` to set a name for a tabpage.
 For example:
+
 ```vim
 :LualineRenameTab Project_K
-````
+```
+
 It's useful when you're using rendering mode 2/3 in tabs.
 To unname a tabpage run `:LualineRenameTab` without argument.
 
 #### Tabline as statusline
+
 You can also completely move your statusline to a tabline by configuring
 `lualine.tabline` and disabling `lualine.sections` and `lualine.inactive_sections`:
 
