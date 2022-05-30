@@ -482,7 +482,7 @@ Component specific options             These are options that are available on
     
           symbols = {
             modified = ' ●',      -- Text to show when the buffer is modified
-            alternate_file = '#', -- Text to show to indify the alternate file
+            alternate_file = '#', -- Text to show to identify the alternate file
             directory =  '',     -- Text to show when the buffer is a directory
           },
         }
@@ -745,7 +745,7 @@ Tabs                                   Shows currently open tab. Like usual
 
 
 It’s useful when you’re using rendering mode 2/3 in tabs. To unname a
-tablage run `:LualineRenameTab` without argument.
+tabpage run `:LualineRenameTab` without argument.
 
                                                *lualine-Tabline-as-statusline*
 
