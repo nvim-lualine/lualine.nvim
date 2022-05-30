@@ -5,7 +5,7 @@ local modules = require('lualine_require').lazy_require {
   utils = 'lualine.utils.utils',
 }
 
----intialize a new tab from opts
+---initialize a new tab from opts
 ---@param opts table
 function Tab:init(opts)
   assert(opts.tabnr, 'Cannot create Tab without tabnr')
@@ -15,7 +15,7 @@ function Tab:init(opts)
   self.highlights = opts.highlights
 end
 
----returns name for tab. tabs name is the name of buffer in last active window
+---returns name for tab. Tabs name is the name of buffer in last active window
 --- of the tab.
 ---@return string
 function Tab:label()
@@ -51,7 +51,7 @@ function Tab:render()
   if self.options.fmt then
     name = self.options.fmt(name or '')
   end
-  if self.ellipse then -- show elipsis
+  if self.ellipse then -- show ellipsis
     name = '...'
   else
     -- different formats for different modes

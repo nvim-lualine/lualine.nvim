@@ -17,7 +17,7 @@ function M:init(options)
   self.symbols = vim.tbl_extend('keep', self.options.symbols or {}, symbols)
 end
 
--- Function that runs everytime statusline is updated
+-- Function that runs every time statusline is updated
 function M:update_status()
   local format = vim.bo.fileformat
   if self.options.icons_enabled then

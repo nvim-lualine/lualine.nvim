@@ -8,7 +8,7 @@ Object.__index = Object
 function Object:init(...) end
 -- luacheck: pop
 
----Extened base class to create a child class
+---Extend base class to create a child class
 function Object:extend()
   local cls = {}
   for k, v in pairs(self) do

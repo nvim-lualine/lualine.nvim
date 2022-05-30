@@ -30,7 +30,7 @@ local default_options = {
 }
 
 -- This function is duplicated in tabs
----returns the proper hl for buffer in section. used for setting default highlights
+---returns the proper hl for buffer in section. Used for setting default highlights
 ---@param section string name of section buffers component is in
 ---@param is_active boolean
 ---@return string hl name
@@ -178,7 +178,7 @@ function M:update_status()
       data[#data + 1] = rendered_after
     end
   end
-  -- draw elipsis (...) on relevent sides if all buffers don't fit in max_length
+  -- draw ellipsis (...) on relevant sides if all buffers don't fit in max_length
   if total_length > max_length then
     if before ~= nil then
       before.ellipse = true

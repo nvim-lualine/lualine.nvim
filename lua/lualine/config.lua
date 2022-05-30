@@ -48,7 +48,7 @@ local function fix_separators(separators)
   return separators
 end
 
----extends config based on configtable
+---extends config based on config_table
 ---@param config_table table
 ---@return table copy of config
 local function apply_configuration(config_table)
