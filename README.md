@@ -755,6 +755,7 @@ extensions = {'quickfix'}
 - fern
 - fugitive
 - fzf
+- man
 - nerdtree
 - neo-tree
 - nvim-tree
