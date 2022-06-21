@@ -755,13 +755,13 @@ extensions = {'quickfix'}
 - fern
 - fugitive
 - fzf
-- nerdtree
 - neo-tree
+- nerdtree
+- nvim-dap-ui 
 - nvim-tree
 - quickfix
 - symbols-outline
 - toggleterm
-- nvim-dap-ui 
 
 #### Custom extensions
 
