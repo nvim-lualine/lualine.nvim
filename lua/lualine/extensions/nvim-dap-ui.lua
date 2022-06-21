@@ -3,7 +3,7 @@
 local M = {}
 
 M.sections = {
-  lualine_a = { 'filename' }
+    lualine_a = { { 'filename', file_status = false } }
 }
 
 M.filetypes = {
