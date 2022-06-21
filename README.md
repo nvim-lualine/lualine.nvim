@@ -756,8 +756,9 @@ extensions = {'quickfix'}
 - fugitive
 - fzf
 - man
-- nerdtree
 - neo-tree
+- nerdtree
+- nvim-dap-ui 
 - nvim-tree
 - quickfix
 - symbols-outline
