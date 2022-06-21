@@ -799,6 +799,7 @@ extensions with:
 - fern
 - fugitive
 - fzf
+- man
 - nerdtree
 - neo-tree
 - nvim-tree
