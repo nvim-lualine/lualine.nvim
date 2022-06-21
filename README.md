@@ -761,6 +761,7 @@ extensions = {'quickfix'}
 - quickfix
 - symbols-outline
 - toggleterm
+- nvim-dap-ui 
 
 #### Custom extensions
 
