@@ -76,7 +76,12 @@ end
 function M:buffers()
   local buffers = {}
   M.bufpos2nr = {}
-  for b = 1, vim.fn.bufnr('$') do
+  local blist = vim.split(vim.api.nvim_exec("ls t", true), "\n")
+  for i = 1, #blist do
+    -- get buffer number
+    local current = vim.trim(blist[i])
+    local bstring = current:gsub("^(%d+).*", "%1")
+    local b = tonumber(bstring)
     if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
       buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1)
       M.bufpos2nr[#buffers] = b
