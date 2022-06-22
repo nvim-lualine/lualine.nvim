@@ -83,7 +83,7 @@ function M:buffers()
     local bstring = current:gsub("^(%d+).*", "%1")
     local b = tonumber(bstring)
     if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
-      buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1)
+      buffers[#buffers + 1] = self:new_buffer(b, b)
       M.bufpos2nr[#buffers] = b
     end
   end
