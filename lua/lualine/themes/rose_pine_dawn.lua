@@ -1,12 +1,14 @@
+-- Credits:
+-- @atahabaki for implementing this theme,
 local colors = {
-  gray       = '#fffaf3',
-  lightgray  = '#f2e9e1',
-  orange     = '#d7827e',
-  red        = '#b4637a',
-  yellow     = '#ea9d34',
-  green      = '#56949f',
-  white      = '#575279',
-  black      = '#faf4ed',
+  gray       = '#fffaf3', -- palette: Surface
+  lightgray  = '#f2e9e1', -- palette: Overlay
+  orange     = '#d7827e', -- palette: Rose
+  red        = '#b4637a', -- palette: Love
+  yellow     = '#ea9d34', -- palette: Gold
+  green      = '#56949f', -- palette: Foam
+  white      = '#575279', -- palette: Text
+  black      = '#faf4ed', -- palette: Base
 }
 
 return {
