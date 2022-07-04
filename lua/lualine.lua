@@ -183,6 +183,9 @@ end)
 --       to improve redraws. Add buftype / bufname for extensions
 --       or some kind of cond ?
 local function get_extension_sections(current_ft, is_focused)
+  if config.extensions == nil or config.extensions.filetypes == nil then
+    return nil
+  end
   for _, extension in ipairs(config.extensions) do
     for _, filetype in ipairs(extension.filetypes) do
       if current_ft == filetype then
