@@ -9,6 +9,7 @@ local default_options = {
   show_filename_only = true,
   hide_filename_extension = false,
   show_modified_status = true,
+  sort_last_accessed = false,
   mode = 0,
   max_length = 0,
   filetype_names = {
@@ -76,18 +77,29 @@ end
 function M:buffers()
   local buffers = {}
   M.bufpos2nr = {}
-  local blist = vim.split(vim.api.nvim_exec("ls t", true), "\n")
-  for i = 1, #blist do
-    -- get buffer number
-    local current = vim.trim(blist[i])
-    local bstring = current:gsub("^(%d+).*", "%1")
-    local b = tonumber(bstring)
-    if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
-      buffers[#buffers + 1] = self:new_buffer(b, b)
-      M.bufpos2nr[#buffers] = b
-    end
+  -- check sorting
+  if self.options.sort_last_accessed then
+      -- sort by last accessed
+      local blist = vim.split(vim.api.nvim_exec("ls t", true), "\n")
+      for i = 1, #blist do
+        -- get buffer number
+        local current = vim.trim(blist[i])
+        local bstring = current:gsub("^(%d+).*", "%1")
+        local b = tonumber(bstring)
+        if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
+          buffers[#buffers + 1] = self:new_buffer(b, b)
+          M.bufpos2nr[#buffers] = b
+        end
+      end
+  else
+      -- sort by buffer nr
+      for b = 1, vim.fn.bufnr('$') do
+        if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
+          buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1)
+          M.bufpos2nr[#buffers] = b
+        end
+      end
   end
-
   return buffers
 end
 
