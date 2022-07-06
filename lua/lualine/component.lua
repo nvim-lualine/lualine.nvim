@@ -6,6 +6,9 @@ local M = require('lualine.utils.class'):extend()
 
 -- Used to provide a unique id for each component
 local component_no = 1
+function M._reset_component_id()
+  component_no = 1
+end
 
 -- variable to store component output for manipulation
 M.status = ''
