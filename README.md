@@ -439,6 +439,7 @@ sections = {
       show_filename_only = true,   -- Shows shortened relative path when set to false.
       hide_filename_extension = false,   -- Hide filename extension when set to true.
       show_modified_status = true, -- Shows indicator when the buffer is modified.
+      sort_last_accessed = false, -- Sorts buffers by the time they were last accessed when set to true.
 
       mode = 0, -- 0: Shows buffer name
                 -- 1: Shows buffer index
