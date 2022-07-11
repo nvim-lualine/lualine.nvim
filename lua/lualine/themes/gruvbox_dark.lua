@@ -2,47 +2,47 @@
 -- MIT license, see LICENSE for more details.
 -- stylua: ignore
 local colors = {
-  black        = '#282828',
-  white        = '#ebdbb2',
-  red          = '#fb4934',
-  green        = '#b8bb26',
-  blue         = '#83a598',
-  yellow       = '#fe8019',
-  gray         = '#a89984',
-  darkgray     = '#3c3836',
-  lightgray    = '#504945',
-  inactivegray = '#7c6f64',
+  fg1    = "#ebdbb2",
+  fg4    = "#a89984",
+  bg0    = "#282828",
+  bg1    = "#3c3836",
+  bg2    = "#504945",
+  bg4    = "#7c6f64",
+  green  = "#b8bb26",
+  blue   = "#83a598",
+  aqua   = "#8ec07c",
+  orange = "#fe8019",
 }
 
 return {
   normal = {
-    a = { bg = colors.gray, fg = colors.black, gui = 'bold' },
-    b = { bg = colors.lightgray, fg = colors.white },
-    c = { bg = colors.darkgray, fg = colors.gray },
+    a = { fg = colors.bg0, bg = colors.fg4 , gui = "bold", },
+    b = { fg = colors.fg4, bg = colors.bg2 },
+    c = { fg = colors.fg4, bg = colors.bg1 },
   },
   insert = {
-    a = { bg = colors.blue, fg = colors.black, gui = 'bold' },
-    b = { bg = colors.lightgray, fg = colors.white },
-    c = { bg = colors.lightgray, fg = colors.white },
+    a = { fg = colors.bg0, bg = colors.blue , gui = "bold", },
+    b = { fg = colors.fg1, bg = colors.bg2 },
+    c = { fg = colors.fg4, bg = colors.bg1 },
   },
   visual = {
-    a = { bg = colors.yellow, fg = colors.black, gui = 'bold' },
-    b = { bg = colors.lightgray, fg = colors.white },
-    c = { bg = colors.inactivegray, fg = colors.black },
+    a = { fg = colors.bg0, bg = colors.orange , gui = "bold", },
+    b = { fg = colors.bg0, bg = colors.bg4 },
+    c = { fg = colors.fg4, bg = colors.bg1 },
   },
   replace = {
-    a = { bg = colors.red, fg = colors.black, gui = 'bold' },
-    b = { bg = colors.lightgray, fg = colors.white },
-    c = { bg = colors.black, fg = colors.white },
+    a = { fg = colors.bg0, bg = colors.aqua , gui = "bold", },
+    b = { fg = colors.fg1, bg = colors.bg2 },
+    c = { fg = colors.fg4, bg = colors.bg1 },
   },
-  command = {
-    a = { bg = colors.green, fg = colors.black, gui = 'bold' },
-    b = { bg = colors.lightgray, fg = colors.white },
-    c = { bg = colors.inactivegray, fg = colors.black },
+  terminal = {
+    a = { fg = colors.bg0, bg = colors.green , gui = "bold", },
+    b = { fg = colors.fg1, bg = colors.bg2 },
+    c = { fg = colors.fg4, bg = colors.bg1 },
   },
   inactive = {
-    a = { bg = colors.darkgray, fg = colors.gray, gui = 'bold' },
-    b = { bg = colors.darkgray, fg = colors.gray },
-    c = { bg = colors.darkgray, fg = colors.gray },
+    a = { fg = colors.bg4, bg = colors.bg1 , gui = "bold", },
+    b = { fg = colors.bg4, bg = colors.bg1 },
+    c = { fg = colors.bg4, bg = colors.bg1 },
   },
 }
