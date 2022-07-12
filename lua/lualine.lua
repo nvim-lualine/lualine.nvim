@@ -347,7 +347,9 @@ local refresh = function(opts)
   end
   if vim.tbl_contains(opts.place, 'winbar') then
     for _, win in ipairs(wins) do
-      vim.api.nvim_win_set_option(win, 'wbr', vim.api.nvim_win_call(win, winbar_dispatch))
+      if vim.api.nvim_win_get_height(win) > 1 then
+        vim.api.nvim_win_set_option(win, 'wbr', vim.api.nvim_win_call(win, winbar_dispatch))
+      end
     end
   end
   if vim.tbl_contains(opts.place, 'tabline') then
