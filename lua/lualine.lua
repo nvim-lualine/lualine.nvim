@@ -336,7 +336,6 @@ end
 local function set_statusline()
   vim.loop.timer_stop(timers.stl_timer)
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
-    vim.cmd("autocmd lualine VimResized * call v:lua.require'lualine'.refresh()")
     vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline, refresh)
     if config.options.globalstatus then
       vim.go.laststatus = 3
@@ -365,6 +364,8 @@ local function setup(user_config)
   end
   config = modules.config_module.apply_configuration(user_config)
   vim.cmd([[augroup lualine | exe "autocmd!" | augroup END]])
+  modules.utils.define_autocmd('VimResized,WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost',
+                               '*', "call v:lua.require'lualine'.refresh()")
   setup_theme()
   -- load components & extensions
   modules.loader.load_all(config)
