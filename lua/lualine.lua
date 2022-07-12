@@ -381,15 +381,23 @@ local function set_statusline()
   vim.loop.timer_stop(timers.stl_timer)
   vim.cmd([[augroup lualine_stl_refresh | exe "autocmd!" | augroup END]])
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
-    vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline,
-                         modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function ()
-                          refresh({kind='tabpage', place={'statusline'}})
-                         end, 3, "lualine: Failed to refresh statusline"))
-    modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
-                               '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['statusline']})",
-                               'lualine_stl_refresh')
     if config.options.globalstatus then
       vim.go.laststatus = 3
+      vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline,
+                           modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function ()
+                            refresh({kind='window', place={'statusline'}})
+                           end, 3, "lualine: Failed to refresh statusline"))
+      modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
+                                 '*', "call v:lua.require'lualine'.refresh({'kind': 'window', 'place': ['statusline']})",
+                                 'lualine_stl_refresh')
+    else
+      vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline,
+                           modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function ()
+                            refresh({kind='tabpage', place={'statusline'}})
+                           end, 3, "lualine: Failed to refresh statusline"))
+      modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
+                                 '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['statusline']})",
+                                 'lualine_stl_refresh')
     end
   else
     vim.go.statusline = ''
