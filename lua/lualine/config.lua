@@ -59,6 +59,13 @@ end
 ---@param config_table table
 ---@return table copy of config
 local function apply_configuration(config_table)
+  if vim.fn.has('nvim-0.8') == 0 and (config_table.winbar or config_table.inactive_winbar) then
+    modules.utils_notices.add_notice(
+      '### winbar\nSorry `winbar can only be used in neovim 0.8 or higher.\n'
+    )
+    config_table.winbar = nil
+    config_table.inactive_winbar = nil
+  end
   if not config_table then
     return utils.deepcopy(config)
   end

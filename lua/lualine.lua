@@ -422,7 +422,7 @@ local function set_winbar()
     modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
                                '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['winbar']})",
                                'lualine_wb_refresh')
-  else
+  elseif vim.fn.has('nvim-0.8') == 1 then
     vim.go.winbar = ''
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       vim.api.nvim_win_set_option(win, 'winbar', '')
