@@ -145,7 +145,7 @@ end
 ---      component objects
 ---@param is_focused boolean : whether being evaluated for focused window or not
 ---@return string statusline string
-local statusline = modules.utils.retry_call_wrap(function(sections, is_focused)
+local statusline = modules.utils.retry_call_wrap(function(sections, is_focused, is_winbar)
   -- The sequence sections should maintain [SECTION_SEQUENCE]
   local section_sequence = { 'a', 'b', 'c', 'x', 'y', 'z' }
   local status = {}
@@ -172,7 +172,7 @@ local statusline = modules.utils.retry_call_wrap(function(sections, is_focused)
       end
     end
   end
-  if applied_midsection_divider == false and config.options.always_divide_middle ~= false then
+  if applied_midsection_divider == false and config.options.always_divide_middle ~= false and not is_winbar then
     -- When non of section x,y,z is present
     table.insert(status, modules.highlight.format_highlight('c', is_focused) .. '%=')
   end
@@ -306,15 +306,15 @@ local function winbar_dispatch(focused)
   local extension_sections = get_extension_sections(current_ft, is_focused)
   if is_focused then
     if extension_sections ~= nil then
-      retval = statusline(extension_sections, is_focused)
+      retval = statusline(extension_sections, is_focused, true)
     else
-      retval = statusline(config.winbar, is_focused)
+      retval = statusline(config.winbar, is_focused, true)
     end
   else
     if extension_sections ~= nil then
-      retval = statusline(extension_sections, is_focused)
+      retval = statusline(extension_sections, is_focused, true)
     else
-      retval = statusline(config.inactive_winbar, is_focused)
+      retval = statusline(config.inactive_winbar, is_focused, true)
     end
   end
   return retval
