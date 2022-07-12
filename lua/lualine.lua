@@ -10,6 +10,11 @@ local modules = lualine_require.lazy_require {
   config_module = 'lualine.config',
 }
 local config -- Stores currently applied config
+local timers = {
+  stl_timer = vim.loop.new_timer(),
+  tal_timer = vim.loop.new_timer(),
+  wb_timer = vim.loop.new_timer(),
+}
 
 -- Helper for apply_transitional_separators()
 --- finds first applied highlight group after str_checked in status
@@ -252,34 +257,6 @@ local function setup_theme()
     autocmd lualine OptionSet background lua require'lualine'.setup()]])
 end
 
---- Sets &tabline option to lualine
-local function set_tabline()
-  if next(config.tabline) ~= nil then
-    vim.go.tabline = "%{%v:lua.require'lualine'.tabline()%}"
-    vim.go.showtabline = 2
-  elseif vim.go.tabline == "%{%v:lua.require'lualine'.tabline()%}" then
-    vim.go.tabline = ''
-    vim.go.showtabline = 1
-  end
-end
-
---- Sets &statusline option to lualine
---- adds auto command to redraw lualine on VimResized event
-local function set_statusline()
-  if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
-    vim.cmd('autocmd lualine VimResized * redrawstatus')
-    vim.go.statusline = "%{%v:lua.require'lualine'.statusline()%}"
-    if config.options.globalstatus then
-      vim.go.laststatus = 3
-    end
-  elseif vim.go.statusline == "%{%v:lua.require'lualine'.statusline()%}" then
-    vim.go.statusline = ''
-    if config.options.globalstatus then
-      vim.go.laststatus = 2
-    end
-  end
-end
-
 -- lualine.statusline function
 --- Draw correct statusline for current window
 ---@param focused boolean : force the value of is_focused . Useful for debugging
@@ -309,6 +286,67 @@ local function status_dispatch(focused)
     end
   end
   return retval
+end
+
+local refresh = vim.schedule_wrap(function(opts)
+  if opts == nil then
+    opts = {kind = 'tabpage', place = {'statusline', 'winbar', 'tabline'}}
+  end
+  local wins = {}
+  local old_actual_curwin = vim.g.actual_curwin
+  vim.g.actual_curwin = tostring(vim.api.nvim_get_current_win())
+  if opts.kind == 'all' then
+    if vim.tbl_contains(opts.place, 'statusline')
+      or vim.tbl_contains(opts.place, 'winbar') then
+      wins = vim.api.nvim_list_wins()
+    end
+  elseif opts.kind == 'tabpage' then
+    if vim.tbl_contains(opts.place, 'statusline')
+      or vim.tbl_contains(opts.place, 'winbar') then
+      wins = vim.api.nvim_tabpage_list_wins(0)
+    end
+  elseif opts.kind == 'window' then
+    wins = {vim.api.nvim_get_current_win()}
+  end
+  if vim.tbl_contains(opts.place, 'statusline') then
+    for _, win in ipairs(wins) do
+      vim.api.nvim_win_set_option(win, 'stl', vim.api.nvim_win_call(win, status_dispatch))
+    end
+  end
+  if vim.tbl_contains(opts.place, 'tabline') then
+    vim.api.nvim_set_option('tal', vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline))
+  end
+  vim.g.actual_curwin = old_actual_curwin
+end)
+
+--- Sets &tabline option to lualine
+local function set_tabline()
+  vim.loop.timer_stop(timers.tal_timer)
+  if next(config.tabline) ~= nil then
+    vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline, refresh)
+    vim.go.showtabline = 2
+  else
+    vim.go.tabline = ''
+    vim.go.showtabline = 1
+  end
+end
+
+--- Sets &statusline option to lualine
+--- adds auto command to redraw lualine on VimResized event
+local function set_statusline()
+  vim.loop.timer_stop(timers.stl_timer)
+  if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
+    vim.cmd("autocmd lualine VimResized * call v:lua.require'lualine'.refresh()")
+    vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline, refresh)
+    if config.options.globalstatus then
+      vim.go.laststatus = 3
+    end
+  else
+    vim.go.statusline = ''
+    if config.options.globalstatus then
+      vim.go.laststatus = 2
+    end
+  end
 end
 
 -- lualine.setup function
@@ -342,4 +380,5 @@ return {
   statusline = status_dispatch,
   tabline = tabline,
   get_config = modules.config_module.get_config,
+  refresh = refresh,
 }
