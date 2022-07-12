@@ -475,7 +475,7 @@ end
 --- we don't initialize components just to throw them away. Instead they are
 --- initialized when we know we will use them.
 --- sets &last_status to 2
----@param user_config table table
+---@param user_config LualineConfig
 local function setup(user_config)
   if package.loaded['lualine.utils.notices'] then
     -- When notices module is not loaded there are no notices to clear.
