@@ -257,7 +257,7 @@ local function setup_theme()
     autocmd lualine OptionSet background lua require'lualine'.setup()]])
 end
 
--- lualine.statusline function
+--- lualine.statusline function
 --- Draw correct statusline for current window
 ---@param focused boolean : force the value of is_focused . Useful for debugging
 ---@return string statusline string
@@ -288,7 +288,7 @@ local function status_dispatch(focused)
   return retval
 end
 
-local refresh = vim.schedule_wrap(function(opts)
+local refresh = function(opts)
   if opts == nil then
     opts = {kind = 'tabpage', place = {'statusline', 'winbar', 'tabline'}}
   end
@@ -317,13 +317,20 @@ local refresh = vim.schedule_wrap(function(opts)
     vim.api.nvim_set_option('tal', vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline))
   end
   vim.g.actual_curwin = old_actual_curwin
-end)
+end
 
 --- Sets &tabline option to lualine
 local function set_tabline()
   vim.loop.timer_stop(timers.tal_timer)
+  vim.cmd([[augroup lualine_tal_refresh | exe "autocmd!" | augroup END]])
   if next(config.tabline) ~= nil then
-    vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline, refresh)
+    vim.loop.timer_start(timers.tal_timer, 0, config.options.refresh.tabline,
+                         modules.utils.timer_call(timers.stl_timer, 'lualine_tal_refresh', function ()
+                          refresh({kind='tabpage', place={'tabline'}})
+                         end, 3, "lualine: Failed to refresh tabline"))
+    modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
+                                 '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['tabline']})",
+                                 'lualine_tal_refresh')
     vim.go.showtabline = 2
   else
     vim.go.tabline = ''
@@ -335,8 +342,15 @@ end
 --- adds auto command to redraw lualine on VimResized event
 local function set_statusline()
   vim.loop.timer_stop(timers.stl_timer)
+  vim.cmd([[augroup lualine_stl_refresh | exe "autocmd!" | augroup END]])
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
-    vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline, refresh)
+    vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline,
+                         modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function ()
+                          refresh({kind='tabpage', place={'statusline'}})
+                         end, 3, "lualine: Failed to refresh statusline"))
+    modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
+                               '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['statusline']})",
+                               'lualine_stl_refresh')
     if config.options.globalstatus then
       vim.go.laststatus = 3
     end
@@ -364,8 +378,6 @@ local function setup(user_config)
   end
   config = modules.config_module.apply_configuration(user_config)
   vim.cmd([[augroup lualine | exe "autocmd!" | augroup END]])
-  modules.utils.define_autocmd('VimResized,WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost',
-                               '*', "call v:lua.require'lualine'.refresh()")
   setup_theme()
   -- load components & extensions
   modules.loader.load_all(config)
