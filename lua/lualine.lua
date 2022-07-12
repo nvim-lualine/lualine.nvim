@@ -401,6 +401,9 @@ local function set_statusline()
     end
   else
     vim.go.statusline = ''
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      vim.api.nvim_win_set_option(win, 'stl', '')
+    end
     if config.options.globalstatus then
       vim.go.laststatus = 2
     end
@@ -419,6 +422,11 @@ local function set_winbar()
     modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
                                '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['winbar']})",
                                'lualine_wb_refresh')
+  else
+    vim.go.winbar = ''
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      vim.api.nvim_win_set_option(win, 'winbar', '')
+    end
   end
 end
 
