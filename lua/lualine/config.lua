@@ -38,6 +38,8 @@ local config = {
     lualine_z = {},
   },
   tabline = {},
+  winbar = {},
+  inactive_winbar = {},
   extensions = {},
 }
 
@@ -82,6 +84,8 @@ local function apply_configuration(config_table)
   parse_sections('sections')
   parse_sections('inactive_sections')
   parse_sections('tabline')
+  parse_sections('winbar')
+  parse_sections('inactive_winbar')
   if config_table.extensions then
     config.extensions = utils.deepcopy(config_table.extensions)
   end

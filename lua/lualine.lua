@@ -187,14 +187,15 @@ end)
 -- TODO: change this so it uses a hash table instead of iteration over list
 --       to improve redraws. Add buftype / bufname for extensions
 --       or some kind of cond ?
-local function get_extension_sections(current_ft, is_focused)
+local function get_extension_sections(current_ft, is_focused, is_winbar)
   for _, extension in ipairs(config.extensions) do
     for _, filetype in ipairs(extension.filetypes) do
       if current_ft == filetype then
-        if is_focused == false and extension.inactive_sections then
+        if is_focused == false and
+          (not is_winbar and extension.inactive_sections or extension.inactive_winbar) then
           return extension.inactive_sections
         end
-        return extension.sections
+        return not is_winbar and extension.sections or extension.winbar
       end
     end
   end
@@ -288,6 +289,37 @@ local function status_dispatch(focused)
   return retval
 end
 
+-- lualine.winbar function
+--- Draw correct winbar for current window
+---@param focused boolean : force the value of is_focused . useful for debugging
+---@return string winbar string
+local function winbar_dispatch(focused)
+  local retval
+  local current_ft = vim.bo.filetype
+  local is_focused = focused ~= nil and focused or modules.utils.is_focused()
+  for _, ft in pairs(config.options.disabled_filetypes) do
+    -- disable on specific filetypes
+    if ft == current_ft then
+      return ''
+    end
+  end
+  local extension_sections = get_extension_sections(current_ft, is_focused)
+  if is_focused then
+    if extension_sections ~= nil then
+      retval = statusline(extension_sections, is_focused)
+    else
+      retval = statusline(config.winbar, is_focused)
+    end
+  else
+    if extension_sections ~= nil then
+      retval = statusline(extension_sections, is_focused)
+    else
+      retval = statusline(config.inactive_winbar, is_focused)
+    end
+  end
+  return retval
+end
+
 local refresh = function(opts)
   if opts == nil then
     opts = {kind = 'tabpage', place = {'statusline', 'winbar', 'tabline'}}
@@ -311,6 +343,11 @@ local refresh = function(opts)
   if vim.tbl_contains(opts.place, 'statusline') then
     for _, win in ipairs(wins) do
       vim.api.nvim_win_set_option(win, 'stl', vim.api.nvim_win_call(win, status_dispatch))
+    end
+  end
+  if vim.tbl_contains(opts.place, 'winbar') then
+    for _, win in ipairs(wins) do
+      vim.api.nvim_win_set_option(win, 'wbr', vim.api.nvim_win_call(win, winbar_dispatch))
     end
   end
   if vim.tbl_contains(opts.place, 'tabline') then
@@ -362,6 +399,21 @@ local function set_statusline()
   end
 end
 
+--- Sets &winbar option to lualine
+local function set_winbar()
+  vim.loop.timer_stop(timers.wb_timer)
+  vim.cmd([[augroup lualine_wb_refresh | exe "autocmd!" | augroup END]])
+  if next(config.winbar) ~= nil or next(config.inactive_winbar) ~= nil then
+    vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.winbar,
+                         modules.utils.timer_call(timers.stl_timer, 'lualine_wb_refresh', function ()
+                          refresh({kind='tabpage', place={'winbar'}})
+                         end, 3, "lualine: Failed to refresh winbar"))
+    modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
+                               '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['winbar']})",
+                               'lualine_wb_refresh')
+  end
+end
+
 -- lualine.setup function
 --- sets new user config
 --- This function doesn't load components/theme etc... They are done before
@@ -383,6 +435,7 @@ local function setup(user_config)
   modules.loader.load_all(config)
   set_statusline()
   set_tabline()
+  set_winbar()
   if package.loaded['lualine.utils.notices'] then
     modules.utils_notices.notice_message_startup()
   end
@@ -394,4 +447,5 @@ return {
   tabline = tabline,
   get_config = modules.config_module.get_config,
   refresh = refresh,
+  winbar = winbar_dispatch,
 }

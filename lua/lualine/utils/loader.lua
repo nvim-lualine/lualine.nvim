@@ -156,6 +156,8 @@ local function load_components(config)
   load_sections(config.sections, config.options)
   load_sections(config.inactive_sections, config.options)
   load_sections(config.tabline, config.options)
+  load_sections(config.winbar, config.options)
+  load_sections(config.inactive_winbar, config.options)
 end
 
 ---loads all the extensions
