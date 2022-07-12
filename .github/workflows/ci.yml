@@ -27,6 +27,10 @@ jobs:
             runner: ubuntu-20.04
             os: linux
             nvim_version: v0.6.0
+          - flavor: nvim-0.7
+            runner: ubuntu-20.04
+            os: linux
+            nvim_version: v0.7.0
           - flavor: nvim-nightly
             runner: ubuntu-20.04
             os: linux
