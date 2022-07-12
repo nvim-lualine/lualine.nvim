@@ -16,6 +16,11 @@ local timers = {
   wb_timer = vim.loop.new_timer(),
 }
 
+-- The events on which lualine redraws itself
+local default_refresh_events = 'WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized'
+if vim.fn.has('nvim-0.7') == 1 then -- utilize ModeChanged event introduced in 0.7
+  default_refresh_events = default_refresh_events..',ModeChanged'
+end
 -- Helper for apply_transitional_separators()
 --- finds first applied highlight group after str_checked in status
 ---@param status string : unprocessed statusline string
@@ -367,7 +372,7 @@ local function set_tabline()
                          modules.utils.timer_call(timers.stl_timer, 'lualine_tal_refresh', function ()
                           refresh({kind='tabpage', place={'tabline'}})
                          end, 3, "lualine: Failed to refresh tabline"))
-    modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
+    modules.utils.define_autocmd(default_refresh_events,
                                  '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['tabline']})",
                                  'lualine_tal_refresh')
     vim.go.showtabline = 2
@@ -389,7 +394,7 @@ local function set_statusline()
                            modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function ()
                             refresh({kind='window', place={'statusline'}})
                            end, 3, "lualine: Failed to refresh statusline"))
-      modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
+      modules.utils.define_autocmd(default_refresh_events,
                                  '*', "call v:lua.require'lualine'.refresh({'kind': 'window', 'place': ['statusline']})",
                                  'lualine_stl_refresh')
     else
@@ -397,7 +402,7 @@ local function set_statusline()
                            modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function ()
                             refresh({kind='tabpage', place={'statusline'}})
                            end, 3, "lualine: Failed to refresh statusline"))
-      modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
+      modules.utils.define_autocmd(default_refresh_events,
                                  '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['statusline']})",
                                  'lualine_stl_refresh')
     end
@@ -421,7 +426,7 @@ local function set_winbar()
                          modules.utils.timer_call(timers.stl_timer, 'lualine_wb_refresh', function ()
                           refresh({kind='tabpage', place={'winbar'}})
                          end, 3, "lualine: Failed to refresh winbar"))
-    modules.utils.define_autocmd('WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized',
+    modules.utils.define_autocmd(default_refresh_events,
                                '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['winbar']})",
                                'lualine_wb_refresh')
   elseif vim.fn.has('nvim-0.8') == 1 then
