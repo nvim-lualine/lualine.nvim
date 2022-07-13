@@ -197,7 +197,7 @@ Theme structure is available [here](https://github.com/nvim-lualine/lualine.nvim
 lualine defines two kinds of separators:
 
 - `section_separators`    - separators between sections
-- `components_separators` - separators between the different components in sections
+- `component_separators` - separators between the different components in sections
 
 **Note**: if viewing this README in a browser, chances are the characters below will not be visible.
 
