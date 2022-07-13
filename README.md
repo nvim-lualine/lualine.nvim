@@ -442,7 +442,7 @@ sections = {
 
       mode = 0, -- 0: Shows buffer name
                 -- 1: Shows buffer index
-                -- 2: Shows buffer name + buffer index 
+                -- 2: Shows buffer name + buffer index
                 -- 3: Shows buffer number
                 -- 4: Shows buffer name + buffer number
 
@@ -756,9 +756,10 @@ extensions = {'quickfix'}
 - fugitive
 - fzf
 - man
+- mundo
 - neo-tree
 - nerdtree
-- nvim-dap-ui 
+- nvim-dap-ui
 - nvim-tree
 - quickfix
 - symbols-outline
