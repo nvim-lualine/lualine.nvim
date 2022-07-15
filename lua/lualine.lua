@@ -8,6 +8,7 @@ local modules = lualine_require.lazy_require {
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
   config_module = 'lualine.config',
+  nvim_opts = 'lualine.utils.nvim_opts'
 }
 local config -- Stores currently applied config
 local timers = {
@@ -332,6 +333,7 @@ local refresh = function(opts)
   local wins = {}
   local old_actual_curwin = vim.g.actual_curwin
   vim.g.actual_curwin = tostring(vim.api.nvim_get_current_win())
+  -- gather which windows needs update
   if opts.kind == 'all' then
     if vim.tbl_contains(opts.place, 'statusline')
       or vim.tbl_contains(opts.place, 'winbar') then
@@ -349,20 +351,26 @@ local refresh = function(opts)
   elseif opts.kind == 'window' then
     wins = {vim.api.nvim_get_current_win()}
   end
+
+  -- update them
   if vim.tbl_contains(opts.place, 'statusline') then
     for _, win in ipairs(wins) do
-      vim.api.nvim_win_set_option(win, 'stl', vim.api.nvim_win_call(win, status_dispatch))
+      modules.nvim_opts.set('statusline',
+                    vim.api.nvim_win_call(win, status_dispatch), {window=win})
     end
   end
   if vim.tbl_contains(opts.place, 'winbar') then
     for _, win in ipairs(wins) do
       if vim.api.nvim_win_get_height(win) > 1 then
-        vim.api.nvim_win_set_option(win, 'wbr', vim.api.nvim_win_call(win, winbar_dispatch))
+      modules.nvim_opts.set('winbar',
+                    vim.api.nvim_win_call(win, winbar_dispatch), {window=win})
       end
     end
   end
   if vim.tbl_contains(opts.place, 'tabline') then
-    vim.api.nvim_set_option('tal', vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline))
+    modules.nvim_opts.set('tabline',
+                    vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline),
+                    {global=true})
   end
   vim.g.actual_curwin = old_actual_curwin
 end
@@ -379,10 +387,10 @@ local function set_tabline()
     modules.utils.define_autocmd(default_refresh_events,
                                  '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['tabline']})",
                                  'lualine_tal_refresh')
-    vim.go.showtabline = 2
+    modules.nvim_opts.set('showtabline', 2, {global=true})
   else
-    vim.go.tabline = ''
-    vim.go.showtabline = 1
+    modules.nvim_opts.restore('tabline', {global=true})
+    modules.nvim_opts.restore('showtabline', {global=true})
   end
 end
 
@@ -393,7 +401,7 @@ local function set_statusline()
   vim.cmd([[augroup lualine_stl_refresh | exe "autocmd!" | augroup END]])
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     if config.options.globalstatus then
-      vim.go.laststatus = 3
+      modules.nvim_opts.set('laststatus', 3, {global=true})
       vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline,
                            modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function ()
                             refresh({kind='window', place={'statusline'}})
@@ -411,13 +419,11 @@ local function set_statusline()
                                  'lualine_stl_refresh')
     end
   else
-    vim.go.statusline = ''
+    modules.nvim_opts.restore('statusline', {global=true})
     for _, win in ipairs(vim.api.nvim_list_wins()) do
-      vim.api.nvim_win_set_option(win, 'stl', '')
+      modules.nvim_opts.restore('statusline', {window=win})
     end
-    if config.options.globalstatus then
-      vim.go.laststatus = 2
-    end
+    modules.nvim_opts.restore('laststatus', {global=true})
   end
 end
 
@@ -434,9 +440,9 @@ local function set_winbar()
                                '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['winbar']})",
                                'lualine_wb_refresh')
   elseif vim.fn.has('nvim-0.8') == 1 then
-    vim.go.winbar = ''
+    modules.nvim_opts.restore('winbar', {global=true})
     for _, win in ipairs(vim.api.nvim_list_wins()) do
-      vim.api.nvim_win_set_option(win, 'winbar', '')
+      modules.nvim_opts.restore('winbar', {window=win})
     end
   end
 end
