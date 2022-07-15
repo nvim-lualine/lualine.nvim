@@ -202,7 +202,7 @@ end
 ---loads sections and extensions or entire user config
 ---@param config table user config
 local function load_all(config)
-  require('lualine.component')._reset_component_id()
+  require('lualine.component')._reset_components()
   load_components(config)
   load_extensions(config)
 end
