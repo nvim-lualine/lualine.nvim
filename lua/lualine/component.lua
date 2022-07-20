@@ -13,7 +13,6 @@ local modules = lualine_require.lazy_require {
 local component_no = 1
 function M._reset_components()
   component_no = 1
-  modules.fn_store.clear_fns()
 end
 
 -- variable to store component output for manipulation

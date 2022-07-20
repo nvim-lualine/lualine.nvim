@@ -6,6 +6,7 @@ local require = lualine_require.require
 local modules = lualine_require.lazy_require {
   utils = 'lualine.utils.utils',
   notice = 'lualine.utils.notices',
+  fn_store = 'lualine.utils.fn_store',
 }
 local is_valid_filename = lualine_require.is_valid_filename
 local sep = lualine_require.sep
@@ -203,6 +204,7 @@ end
 ---@param config table user config
 local function load_all(config)
   require('lualine.component')._reset_components()
+  modules.fn_store.clear_fns()
   load_components(config)
   load_extensions(config)
 end
