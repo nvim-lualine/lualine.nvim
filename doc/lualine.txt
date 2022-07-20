@@ -431,6 +431,11 @@ General component options              These are options that control behavior
                        --   padding = { left = left_padding, right = right_padding }
     
           fmt = nil,   -- Format function, formats the component's output.
+          on_click = nil, -- takes a function that is called when component is clicked with mouse.
+                       -- the function receives several arguments
+                       -- - number of clicks incase of multiple clicks
+                       -- - mouse button used (l(left)/r(right)/m(middle)/...)
+                       -- - modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
         }
       }
     }
