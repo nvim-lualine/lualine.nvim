@@ -73,8 +73,8 @@ function M:set_on_click()
   if self.options.on_click ~= nil then
     if vim.fn.has('nvim-0.8') == 0 then
       modules.utils_notices.add_notice(
-      '### Options.on_click\nSorry `on_click` can only be used in neovim 0.8 or higher.\n'
-    )
+        '### Options.on_click\nSorry `on_click` can only be used in neovim 0.8 or higher.\n'
+      )
       self.options.on_click = nil
       return
     end

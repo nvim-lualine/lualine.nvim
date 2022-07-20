@@ -6,10 +6,10 @@ local fns = {}
 ---@param fn function the actual function to store.
 ---@return number same id that was provided.
 function M.register_fn(id, fn)
-  vim.validate({
-    id = {id, 'n'},
-    fn = {fn, 'f'}
-  })
+  vim.validate {
+    id = { id, 'n' },
+    fn = { fn, 'f' },
+  }
   fns[id] = fn
   return id
 end
@@ -18,8 +18,8 @@ end
 ---@param id number id of the fn to retrive
 ---@return function
 function M.get_fn(id)
-  vim.validate({ id = {id, 'n'} })
-  return fns[id] or function () end
+  vim.validate { id = { id, 'n' } }
+  return fns[id] or function() end
 end
 
 ---Call the function of id with args
