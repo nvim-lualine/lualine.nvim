@@ -272,11 +272,10 @@ local function status_dispatch(sec_name)
     local retval
     local current_ft = vim.bo.filetype
     local is_focused = focused ~= nil and focused or modules.utils.is_focused()
-    for _, ft in pairs(config.options.disabled_filetypes) do
+    if vim.tbl_contains(config.options.disabled_filetypes[(sec_name == 'sections' and 'statusline' or sec_name)],
+                        current_ft) then
       -- disable on specific filetypes
-      if ft == current_ft then
-        return ''
-      end
+      return ''
     end
     local extension_sections = get_extension_sections(current_ft, is_focused, sec_name)
     if extension_sections ~= nil then

@@ -12,7 +12,10 @@ local config = {
     theme = 'auto',
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
-    disabled_filetypes = {},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {}
+    },
     always_divide_middle = true,
     globalstatus = vim.go.laststatus == 3,
     refresh = {
@@ -98,6 +101,18 @@ local function apply_configuration(config_table)
   end
   config.options.section_separators = fix_separators(config.options.section_separators)
   config.options.component_separators = fix_separators(config.options.component_separators)
+  -- copy raw disabled_filetypes to inner statusline & winbar tables.
+  if config.options.disabled_filetypes.statusline == nil then
+    config.options.disabled_filetypes.statusline = {}
+  end
+  if config.options.disabled_filetypes.winbar == nil then
+    config.options.disabled_filetypes.winbar = {}
+  end
+  for k, disabled_ft in ipairs(config.options.disabled_filetypes) do
+    table.insert(config.options.disabled_filetypes.statusline, disabled_ft)
+    table.insert(config.options.disabled_filetypes.winbar, disabled_ft)
+    config.options.disabled_filetypes[k] = nil
+  end
   return utils.deepcopy(config)
 end
 

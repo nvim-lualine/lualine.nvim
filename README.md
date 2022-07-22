@@ -121,7 +121,10 @@ require('lualine').setup {
     theme = 'auto',
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
-    disabled_filetypes = {},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
     always_divide_middle = true,
     globalstatus = false,
     refresh = {
@@ -343,7 +346,10 @@ options = {
   theme = 'auto', -- lualine theme
   component_separators = { left = '', right = '' },
   section_separators = { left = '', right = '' },
-  disabled_filetypes = {},     -- Filetypes to disable lualine for.
+  disabled_filetypes = {     -- Filetypes to disable lualine for.
+      statusline = {},       -- only ignores the ft for statusline.
+      winbar = {},           -- only ignores the ft for winbar.
+  },
 
   always_divide_middle = true, -- When set to true, left sections i.e. 'a','b' and 'c'
                                -- can't take over the entire statusline even
