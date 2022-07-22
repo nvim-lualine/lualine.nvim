@@ -201,7 +201,7 @@ function M.timer_call(timer, augroup, fn, max_err, err_msg)
       if augroup then
         vim.cmd(string.format([[augroup %s | exe "autocmd!" | augroup END]], augroup))
       end
-      error(err_msg..':\n'..tostring(ret))
+      error(err_msg .. ':\n' .. tostring(ret))
     end
     local ok
     ok, ret = pcall(fn, ...)

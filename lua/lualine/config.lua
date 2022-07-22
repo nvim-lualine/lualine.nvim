@@ -14,7 +14,7 @@ local config = {
     section_separators = { left = '', right = '' },
     disabled_filetypes = {
       statusline = {},
-      winbar = {}
+      winbar = {},
     },
     always_divide_middle = true,
     globalstatus = vim.go.laststatus == 3,
@@ -22,7 +22,7 @@ local config = {
       statusline = 1000,
       tabline = 1000,
       winbar = 1000,
-    }
+    },
   },
   sections = {
     lualine_a = { 'mode' },
@@ -62,7 +62,9 @@ end
 ---@param disabled_filetypes table
 ---@return table
 local function fix_disabled_filetypes(disabled_filetypes)
-  if disabled_filetypes == nil then return end
+  if disabled_filetypes == nil then
+    return
+  end
   if disabled_filetypes.statusline == nil then
     disabled_filetypes.statusline = {}
   end
@@ -102,9 +104,7 @@ local function apply_configuration(config_table)
     config_table.options.globalstatus = false
   end
   if vim.fn.has('nvim-0.8') == 0 and (next(config_table.winbar or {}) or next(config_table.inactive_winbar or {})) then
-    modules.utils_notices.add_notice(
-      '### winbar\nSorry `winbar can only be used in neovim 0.8 or higher.\n'
-    )
+    modules.utils_notices.add_notice('### winbar\nSorry `winbar can only be used in neovim 0.8 or higher.\n')
     config_table.winbar = {}
     config_table.inactive_winbar = {}
   end

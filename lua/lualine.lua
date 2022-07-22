@@ -10,7 +10,7 @@ local modules = lualine_require.lazy_require {
   utils = 'lualine.utils.utils',
   utils_notices = 'lualine.utils.notices',
   config_module = 'lualine.config',
-  nvim_opts = 'lualine.utils.nvim_opts'
+  nvim_opts = 'lualine.utils.nvim_opts',
 }
 local config -- Stores currently applied config
 local timers = {
@@ -22,7 +22,7 @@ local timers = {
 -- The events on which lualine redraws itself
 local default_refresh_events = 'WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized'
 if vim.fn.has('nvim-0.7') == 1 then -- utilize ModeChanged event introduced in 0.7
-  default_refresh_events = default_refresh_events..',ModeChanged'
+  default_refresh_events = default_refresh_events .. ',ModeChanged'
 end
 -- Helper for apply_transitional_separators()
 --- finds first applied highlight group after str_checked in status
@@ -272,8 +272,12 @@ local function status_dispatch(sec_name)
     local retval
     local current_ft = vim.bo.filetype
     local is_focused = focused ~= nil and focused or modules.utils.is_focused()
-    if vim.tbl_contains(config.options.disabled_filetypes[(sec_name == 'sections' and 'statusline' or sec_name)],
-                        current_ft) then
+    if
+      vim.tbl_contains(
+        config.options.disabled_filetypes[(sec_name == 'sections' and 'statusline' or sec_name)],
+        current_ft
+      )
+    then
       -- disable on specific filetypes
       return ''
     end
@@ -281,7 +285,7 @@ local function status_dispatch(sec_name)
     if extension_sections ~= nil then
       retval = statusline(extension_sections, is_focused, sec_name == 'winbar')
     else
-      retval = statusline(config[(is_focused and '' or 'inactive_')..sec_name], is_focused, sec_name == 'winbar')
+      retval = statusline(config[(is_focused and '' or 'inactive_') .. sec_name], is_focused, sec_name == 'winbar')
     end
     return retval
   end
@@ -303,22 +307,23 @@ end
 ---@param opts LualineRefreshOpts
 local function refresh(opts)
   if opts == nil then
-    opts = {kind = 'tabpage', place = {'statusline', 'winbar', 'tabline'}, trigger='unknown'}
+    opts = { kind = 'tabpage', place = { 'statusline', 'winbar', 'tabline' }, trigger = 'unknown' }
   end
 
   -- workaround for https://github.com/neovim/neovim/issues/19464
-  if (opts.trigger == 'autocmd'
-      and vim.api.nvim_win_get_height(vim.api.nvim_get_current_win()) <= 1
-      and vim.tbl_contains(opts.place, 'winbar')
-     ) then
-     local id
-     for index, value in ipairs(opts.place) do
-       if value == 'winbar' then
-         id = index
-         break
-       end
-     end
-     table.remove(opts.place, id)
+  if
+    opts.trigger == 'autocmd'
+    and vim.api.nvim_win_get_height(vim.api.nvim_get_current_win()) <= 1
+    and vim.tbl_contains(opts.place, 'winbar')
+  then
+    local id
+    for index, value in ipairs(opts.place) do
+      if value == 'winbar' then
+        id = index
+        break
+      end
+    end
+    table.remove(opts.place, id)
   end
 
   local wins = {}
@@ -326,47 +331,40 @@ local function refresh(opts)
   vim.g.actual_curwin = vim.api.nvim_get_current_win()
   -- gather which windows needs update
   if opts.kind == 'all' then
-    if vim.tbl_contains(opts.place, 'statusline')
-      or vim.tbl_contains(opts.place, 'winbar') then
-      wins = vim.tbl_filter(function (win)
+    if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
+      wins = vim.tbl_filter(function(win)
         return vim.fn.win_gettype(win) ~= 'popup'
       end, vim.api.nvim_list_wins())
     end
   elseif opts.kind == 'tabpage' then
-    if vim.tbl_contains(opts.place, 'statusline')
-      or vim.tbl_contains(opts.place, 'winbar') then
-      wins = vim.tbl_filter(function (win)
+    if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
+      wins = vim.tbl_filter(function(win)
         return vim.fn.win_gettype(win) ~= 'popup'
       end, vim.api.nvim_tabpage_list_wins(0))
     end
   elseif opts.kind == 'window' then
-    wins = {vim.api.nvim_get_current_win()}
+    wins = { vim.api.nvim_get_current_win() }
   end
 
   -- update them
   if vim.tbl_contains(opts.place, 'statusline') then
     for _, win in ipairs(wins) do
-      modules.nvim_opts.set('statusline',
-                    vim.api.nvim_win_call(win, M.statusline), {window=win})
+      modules.nvim_opts.set('statusline', vim.api.nvim_win_call(win, M.statusline), { window = win })
     end
   end
   if vim.tbl_contains(opts.place, 'winbar') then
     for _, win in ipairs(wins) do
       if vim.api.nvim_win_get_height(win) > 1 then
-      modules.nvim_opts.set('winbar',
-                    vim.api.nvim_win_call(win, M.winbar), {window=win})
+        modules.nvim_opts.set('winbar', vim.api.nvim_win_call(win, M.winbar), { window = win })
       end
     end
   end
   if vim.tbl_contains(opts.place, 'tabline') then
-    modules.nvim_opts.set('tabline',
-                    vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline),
-                    {global=true})
+    modules.nvim_opts.set('tabline', vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline), { global = true })
   end
 
   -- call redraw
-  if vim.tbl_contains(opts.place, 'statusline')
-    or vim.tbl_contains(opts.place, 'winbar') then
+  if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
     vim.cmd('redrawstatus')
   elseif vim.tbl_contains(opts.place, 'tabline') then
     vim.cmd('redrawtabline')
@@ -380,17 +378,24 @@ local function set_tabline()
   vim.loop.timer_stop(timers.tal_timer)
   vim.cmd([[augroup lualine_tal_refresh | exe "autocmd!" | augroup END]])
   if next(config.tabline) ~= nil then
-    vim.loop.timer_start(timers.tal_timer, 0, config.options.refresh.tabline,
-                         modules.utils.timer_call(timers.stl_timer, 'lualine_tal_refresh', function ()
-                          refresh({kind='tabpage', place={'tabline'}, trigger='timer'})
-                         end, 3, "lualine: Failed to refresh tabline"))
-    modules.utils.define_autocmd(default_refresh_events,
-                                 '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['tabline'], 'trigger': 'autocmd'})",
-                                 'lualine_tal_refresh')
-    modules.nvim_opts.set('showtabline', 2, {global=true})
+    vim.loop.timer_start(
+      timers.tal_timer,
+      0,
+      config.options.refresh.tabline,
+      modules.utils.timer_call(timers.stl_timer, 'lualine_tal_refresh', function()
+        refresh { kind = 'tabpage', place = { 'tabline' }, trigger = 'timer' }
+      end, 3, 'lualine: Failed to refresh tabline')
+    )
+    modules.utils.define_autocmd(
+      default_refresh_events,
+      '*',
+      "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['tabline'], 'trigger': 'autocmd'})",
+      'lualine_tal_refresh'
+    )
+    modules.nvim_opts.set('showtabline', 2, { global = true })
   else
-    modules.nvim_opts.restore('tabline', {global=true})
-    modules.nvim_opts.restore('showtabline', {global=true})
+    modules.nvim_opts.restore('tabline', { global = true })
+    modules.nvim_opts.restore('showtabline', { global = true })
   end
 end
 
@@ -401,30 +406,44 @@ local function set_statusline()
   vim.cmd([[augroup lualine_stl_refresh | exe "autocmd!" | augroup END]])
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
     if config.options.globalstatus then
-      modules.nvim_opts.set('laststatus', 3, {global=true})
-      vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline,
-                           modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function ()
-                            refresh({kind='window', place={'statusline'}, trigger='timer'})
-                           end, 3, "lualine: Failed to refresh statusline"))
-      modules.utils.define_autocmd(default_refresh_events,
-                                 '*', "call v:lua.require'lualine'.refresh({'kind': 'window', 'place': ['statusline'], 'trigger': 'autocmd'})",
-                                 'lualine_stl_refresh')
+      modules.nvim_opts.set('laststatus', 3, { global = true })
+      vim.loop.timer_start(
+        timers.stl_timer,
+        0,
+        config.options.refresh.statusline,
+        modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function()
+          refresh { kind = 'window', place = { 'statusline' }, trigger = 'timer' }
+        end, 3, 'lualine: Failed to refresh statusline')
+      )
+      modules.utils.define_autocmd(
+        default_refresh_events,
+        '*',
+        "call v:lua.require'lualine'.refresh({'kind': 'window', 'place': ['statusline'], 'trigger': 'autocmd'})",
+        'lualine_stl_refresh'
+      )
     else
-      modules.nvim_opts.set('laststatus', 2, {global=true})
-      vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline,
-                           modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function ()
-                            refresh({kind='tabpage', place={'statusline'}, trigger='timer'})
-                           end, 3, "lualine: Failed to refresh statusline"))
-      modules.utils.define_autocmd(default_refresh_events,
-                                 '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['statusline'], 'trigger': 'autocmd'})",
-                                 'lualine_stl_refresh')
+      modules.nvim_opts.set('laststatus', 2, { global = true })
+      vim.loop.timer_start(
+        timers.stl_timer,
+        0,
+        config.options.refresh.statusline,
+        modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function()
+          refresh { kind = 'tabpage', place = { 'statusline' }, trigger = 'timer' }
+        end, 3, 'lualine: Failed to refresh statusline')
+      )
+      modules.utils.define_autocmd(
+        default_refresh_events,
+        '*',
+        "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['statusline'], 'trigger': 'autocmd'})",
+        'lualine_stl_refresh'
+      )
     end
   else
-    modules.nvim_opts.restore('statusline', {global=true})
+    modules.nvim_opts.restore('statusline', { global = true })
     for _, win in ipairs(vim.api.nvim_list_wins()) do
-      modules.nvim_opts.restore('statusline', {window=win})
+      modules.nvim_opts.restore('statusline', { window = win })
     end
-    modules.nvim_opts.restore('laststatus', {global=true})
+    modules.nvim_opts.restore('laststatus', { global = true })
   end
 end
 
@@ -433,17 +452,24 @@ local function set_winbar()
   vim.loop.timer_stop(timers.wb_timer)
   vim.cmd([[augroup lualine_wb_refresh | exe "autocmd!" | augroup END]])
   if next(config.winbar) ~= nil or next(config.inactive_winbar) ~= nil then
-    vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.winbar,
-                         modules.utils.timer_call(timers.stl_timer, 'lualine_wb_refresh', function ()
-                          refresh({kind='tabpage', place={'winbar'}, trigger='timer'})
-                         end, 3, "lualine: Failed to refresh winbar"))
-    modules.utils.define_autocmd(default_refresh_events,
-                               '*', "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['winbar'], 'trigger': 'autocmd'})",
-                               'lualine_wb_refresh')
+    vim.loop.timer_start(
+      timers.stl_timer,
+      0,
+      config.options.refresh.winbar,
+      modules.utils.timer_call(timers.stl_timer, 'lualine_wb_refresh', function()
+        refresh { kind = 'tabpage', place = { 'winbar' }, trigger = 'timer' }
+      end, 3, 'lualine: Failed to refresh winbar')
+    )
+    modules.utils.define_autocmd(
+      default_refresh_events,
+      '*',
+      "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['winbar'], 'trigger': 'autocmd'})",
+      'lualine_wb_refresh'
+    )
   elseif vim.fn.has('nvim-0.8') == 1 then
-    modules.nvim_opts.restore('winbar', {global=true})
+    modules.nvim_opts.restore('winbar', { global = true })
     for _, win in ipairs(vim.api.nvim_list_wins()) do
-      modules.nvim_opts.restore('winbar', {window=win})
+      modules.nvim_opts.restore('winbar', { window = win })
     end
   end
 end

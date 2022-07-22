@@ -154,7 +154,7 @@ end
 ---loads all the configs (active, inactive, tabline)
 ---@param config table user config
 local function load_components(config)
-  local sec_names = {'sections', 'inactive_sections', 'tabline', 'winbar', 'inactive_winbar'}
+  local sec_names = { 'sections', 'inactive_sections', 'tabline', 'winbar', 'inactive_winbar' }
   for _, section in ipairs(sec_names) do
     load_sections(config[section], config.options)
   end
@@ -164,7 +164,7 @@ end
 ---@param config table user config
 local function load_extensions(config)
   local loaded_extensions = {}
-  local sec_names = {'sections', 'inactive_sections', 'winbar', 'inactive_winbar'}
+  local sec_names = { 'sections', 'inactive_sections', 'winbar', 'inactive_winbar' }
   for _, extension in pairs(config.extensions) do
     if type(extension) == 'string' then
       local ok

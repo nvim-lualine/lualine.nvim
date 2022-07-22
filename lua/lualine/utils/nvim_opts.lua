@@ -24,7 +24,7 @@ local M = {}
 ---@field buffer table<number, LualineNvimOptCacheOpt[]>
 ---@field window table<number, LualineNvimOptCacheOpt[]>
 ---@type LualineNvimOptCache
-local options = {global={}, buffer={}, window={}}
+local options = { global = {}, buffer = {}, window = {} }
 
 -- helper function for M.set
 local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
@@ -32,9 +32,15 @@ local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
   -- the option wasn't set instead threw error.
   -- So we need pcall (probably just for test)
   local ok, cur = pcall(getter_fn, name)
-  if not ok then cur = nil end
-  if cur == val then return end
-  if cache_tbl[name] == nil then cache_tbl[name] = {} end
+  if not ok then
+    cur = nil
+  end
+  if cur == val then
+    return
+  end
+  if cache_tbl[name] == nil then
+    cache_tbl[name] = {}
+  end
   if cache_tbl[name].set ~= cur then
     cache_tbl[name].prev = cur
   end
@@ -54,18 +60,18 @@ function M.set(name, val, opts)
     if options.buffer[opts.buffer] == nil then
       options.buffer[opts.buffer] = {}
     end
-    set_opt(name, val, function (nm)
+    set_opt(name, val, function(nm)
       return vim.api.nvim_buf_get_option(opts.buffer, nm)
-    end, function (nm, vl)
+    end, function(nm, vl)
       vim.api.nvim_buf_set_option(opts.buffer, nm, vl)
     end, options.buffer[opts.buffer])
   elseif opts.window then
     if options.window[opts.window] == nil then
       options.window[opts.window] = {}
     end
-    set_opt(name, val, function (nm)
+    set_opt(name, val, function(nm)
       return vim.api.nvim_win_get_option(opts.window, nm)
-    end, function (nm, vl)
+    end, function(nm, vl)
       vim.api.nvim_win_set_option(opts.window, nm, vl)
     end, options.window[opts.window])
   end
@@ -80,15 +86,19 @@ function M.restore(name, opts)
       vim.api.nvim_set_option(name, options.global[name].prev)
     end
   elseif opts.buffer then
-    if options.buffer[opts.buffer] ~= nil
+    if
+      options.buffer[opts.buffer] ~= nil
       and options.buffer[opts.buffer][name] ~= nil
-      and options.buffer[opts.buffer][name].prev ~= nil then
+      and options.buffer[opts.buffer][name].prev ~= nil
+    then
       vim.api.nvim_buf_set_option(opts.buffer, name, options.buffer[opts.buffer][name].prev)
     end
   elseif opts.window then
-    if options.window[opts.window] ~= nil
+    if
+      options.window[opts.window] ~= nil
       and options.window[opts.window][name] ~= nil
-      and options.window[opts.window][name].prev ~= nil then
+      and options.window[opts.window][name].prev ~= nil
+    then
       vim.api.nvim_win_set_option(opts.window, name, options.window[opts.window][name].prev)
     end
   end
@@ -103,24 +113,27 @@ function M.get_cache(name, opts)
       return options.global[name].prev
     end
   elseif opts.buffer then
-    if options.buffer[opts.buffer] ~= nil
+    if
+      options.buffer[opts.buffer] ~= nil
       and options.buffer[opts.buffer][name] ~= nil
-      and options.buffer[opts.buffer][name].prev ~= nil then
+      and options.buffer[opts.buffer][name].prev ~= nil
+    then
       return options.buffer[opts.buffer][name].prev
     end
   elseif opts.window then
-    if options.window[opts.window] ~= nil
+    if
+      options.window[opts.window] ~= nil
       and options.window[opts.window][name] ~= nil
-      and options.window[opts.window][name].prev ~= nil then
+      and options.window[opts.window][name].prev ~= nil
+    then
       return options.window[opts.window][name].prev
     end
   end
-
 end
 
 -- resets cache for options
 function M.reset_cache()
-  options = {global={}, buffer={}, window={}}
+  options = { global = {}, buffer = {}, window = {} }
 end
 
 return M
