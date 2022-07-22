@@ -381,6 +381,7 @@ local function set_statusline()
                                  '*', "call v:lua.require'lualine'.refresh({'kind': 'window', 'place': ['statusline']})",
                                  'lualine_stl_refresh')
     else
+      modules.nvim_opts.set('laststatus', 2, {global=true})
       vim.loop.timer_start(timers.stl_timer, 0, config.options.refresh.statusline,
                            modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function ()
                             refresh({kind='tabpage', place={'statusline'}})

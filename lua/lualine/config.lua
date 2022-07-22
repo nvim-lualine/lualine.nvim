@@ -14,7 +14,7 @@ local config = {
     section_separators = { left = '', right = '' },
     disabled_filetypes = {},
     always_divide_middle = true,
-    globalstatus = false,
+    globalstatus = vim.go.laststatus == 3,
     refresh = {
       statusline = 1000,
       tabline = 1000,

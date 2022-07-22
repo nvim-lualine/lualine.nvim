@@ -85,6 +85,30 @@ function M.restore(name, opts)
   end
 end
 
+-- returns cache for the option name
+---@param name string
+---@param opts table|nil same as M.set
+function M.get_cache(name, opts)
+  if opts == nil or opts.global then
+    if options.global[name] ~= nil and options.global[name].prev ~= nil then
+      return options.global[name].prev
+    end
+  elseif opts.buffer then
+    if options.buffer[opts.buffer] ~= nil
+      and options.buffer[opts.buffer][name] ~= nil
+      and options.buffer[opts.buffer][name].prev ~= nil then
+      return options.buffer[opts.buffer][name].prev
+    end
+  elseif opts.window then
+    if options.window[opts.window] ~= nil
+      and options.window[opts.window][name] ~= nil
+      and options.window[opts.window][name].prev ~= nil then
+      return options.window[opts.window][name].prev
+    end
+  end
+
+end
+
 -- resets cache for options
 function M.reset_cache()
   options = {global={}, buffer={}, window={}}

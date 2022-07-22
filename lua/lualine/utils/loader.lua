@@ -154,11 +154,10 @@ end
 ---loads all the configs (active, inactive, tabline)
 ---@param config table user config
 local function load_components(config)
-  load_sections(config.sections, config.options)
-  load_sections(config.inactive_sections, config.options)
-  load_sections(config.tabline, config.options)
-  load_sections(config.winbar, config.options)
-  load_sections(config.inactive_winbar, config.options)
+  local sec_names = {'sections', 'inactive_sections', 'tabline', 'winbar', 'inactive_winbar'}
+  for _, section in ipairs(sec_names) do
+    load_sections(config[section], config.options)
+  end
 end
 
 ---loads all the extensions
