@@ -288,7 +288,20 @@ local function status_dispatch(sec_name)
   end
 end
 
-local refresh = function(opts)
+---@alias LualineRefreshOptsKind
+---| 'all'
+---| 'tabpage'
+---| 'window'
+---@alias LualineRefreshOptsPlace
+---| 'statusline'
+---| 'tabline'
+---| 'winbar'
+---@class LualineRefreshOpts
+---@field kind LualineRefreshOptsKind
+---@field place LualineRefreshOptsPlace[]
+--- Refresh contents of lualine
+---@param opts LualineRefreshOpts
+local function refresh(opts)
   if opts == nil then
     opts = {kind = 'tabpage', place = {'statusline', 'winbar', 'tabline'}}
   end

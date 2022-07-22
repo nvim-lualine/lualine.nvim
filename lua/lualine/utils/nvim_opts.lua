@@ -15,6 +15,15 @@ local M = {}
 --     win2 = <1>
 --   }
 -- }
+---@class LualineNvimOptCacheOptStore
+---@field prev any
+---@field set any
+---@alias LualineNvimOptCacheOpt table<string, LualineNvimOptCacheOptStore>
+---@class LualineNvimOptCache
+---@field global LualineNvimOptCacheOpt[]
+---@field buffer table<number, LualineNvimOptCacheOpt[]>
+---@field window table<number, LualineNvimOptCacheOpt[]>
+---@type LualineNvimOptCache
 local options = {global={}, buffer={}, window={}}
 
 -- helper function for M.set
