@@ -58,6 +58,24 @@ local function fix_separators(separators)
   return separators
 end
 
+---copy raw disabled_filetypes to inner statusline & winbar tables.
+---@param disabled_filetypes table
+---@return table
+local function fix_disabled_filetypes(disabled_filetypes)
+  if disabled_filetypes == nil then return end
+  if disabled_filetypes.statusline == nil then
+    disabled_filetypes.statusline = {}
+  end
+  if disabled_filetypes.winbar == nil then
+    disabled_filetypes.winbar = {}
+  end
+  for k, disabled_ft in ipairs(disabled_filetypes) do
+    table.insert(disabled_filetypes.statusline, disabled_ft)
+    table.insert(disabled_filetypes.winbar, disabled_ft)
+    disabled_filetypes[k] = nil
+  end
+  return disabled_filetypes
+end
 ---extends config based on config_table
 ---@param config_table table
 ---@return table copy of config
@@ -101,18 +119,7 @@ local function apply_configuration(config_table)
   end
   config.options.section_separators = fix_separators(config.options.section_separators)
   config.options.component_separators = fix_separators(config.options.component_separators)
-  -- copy raw disabled_filetypes to inner statusline & winbar tables.
-  if config.options.disabled_filetypes.statusline == nil then
-    config.options.disabled_filetypes.statusline = {}
-  end
-  if config.options.disabled_filetypes.winbar == nil then
-    config.options.disabled_filetypes.winbar = {}
-  end
-  for k, disabled_ft in ipairs(config.options.disabled_filetypes) do
-    table.insert(config.options.disabled_filetypes.statusline, disabled_ft)
-    table.insert(config.options.disabled_filetypes.winbar, disabled_ft)
-    config.options.disabled_filetypes[k] = nil
-  end
+  config.options.disabled_filetypes = fix_disabled_filetypes(config.options.disabled_filetypes)
   return utils.deepcopy(config)
 end
 
