@@ -197,7 +197,7 @@ Theme structure is available [here](https://github.com/nvim-lualine/lualine.nvim
 lualine defines two kinds of separators:
 
 - `section_separators`    - separators between sections
-- `components_separators` - separators between the different components in sections
+- `component_separators` - separators between the different components in sections
 
 **Note**: if viewing this README in a browser, chances are the characters below will not be visible.
 
@@ -418,6 +418,11 @@ sections = {
                    --   padding = { left = left_padding, right = right_padding }
 
       fmt = nil,   -- Format function, formats the component's output.
+      on_click = nil, -- takes a function that is called when component is clicked with mouse.
+                   -- the function receives several arguments
+                   -- - number of clicks incase of multiple clicks
+                   -- - mouse button used (l(left)/r(right)/m(middle)/...)
+                   -- - modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
     }
   }
 }
@@ -442,7 +447,7 @@ sections = {
 
       mode = 0, -- 0: Shows buffer name
                 -- 1: Shows buffer index
-                -- 2: Shows buffer name + buffer index 
+                -- 2: Shows buffer name + buffer index
                 -- 3: Shows buffer number
                 -- 4: Shows buffer name + buffer number
 
@@ -756,9 +761,10 @@ extensions = {'quickfix'}
 - fugitive
 - fzf
 - man
+- mundo
 - neo-tree
 - nerdtree
-- nvim-dap-ui 
+- nvim-dap-ui
 - nvim-tree
 - quickfix
 - symbols-outline

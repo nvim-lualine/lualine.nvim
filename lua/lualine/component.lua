@@ -1,12 +1,17 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
-local require = require('lualine_require').require
-local highlight = require('lualine.highlight')
+local lualine_require = require('lualine_require')
+local require = lualine_require.require
 local M = require('lualine.utils.class'):extend()
+local modules = lualine_require.lazy_require {
+  highlight = 'lualine.highlight',
+  utils_notices = 'lualine.utils.notices',
+  fn_store = 'lualine.utils.fn_store',
+}
 
 -- Used to provide a unique id for each component
 local component_no = 1
-function M._reset_component_id()
+function M._reset_components()
   component_no = 1
 end
 
@@ -34,6 +39,7 @@ function M:init(options)
   self.component_no = component_no
   self:set_separator()
   self:create_option_highlights()
+  self:set_on_click()
 end
 
 ---sets the default separator for component based on whether the component
@@ -59,6 +65,20 @@ function M:create_option_highlights()
   -- setup icon highlight
   if type(self.options.icon) == 'table' and self.options.icon.color then
     self.options.icon_color_highlight = self:create_hl(self.options.icon.color)
+  end
+end
+
+---Setup on click function so they can be added during drawing.
+function M:set_on_click()
+  if self.options.on_click ~= nil then
+    if vim.fn.has('nvim-0.8') == 0 then
+      modules.utils_notices.add_notice(
+        '### Options.on_click\nSorry `on_click` can only be used in neovim 0.8 or higher.\n'
+      )
+      self.options.on_click = nil
+      return
+    end
+    self.on_click_id = modules.fn_store.register_fn(self.component_no, self.options.on_click)
   end
 end
 
@@ -181,6 +201,13 @@ function M:apply_section_separators()
   end
 end
 
+---Add on click funtion description to already drawn item
+function M:apply_on_click()
+  if self.on_click_id then
+    self.status = self:format_fn(self.on_click_id, self.status)
+  end
+end
+
 ---remove separator from tail of this component.
 ---called by lualine.utils.sections.draw_section to manage unnecessary separators
 function M:strip_separator()
@@ -198,7 +225,7 @@ function M:get_default_hl()
   elseif self.default_hl then
     return self.default_hl
   else
-    return highlight.format_highlight(self.options.self.section)
+    return modules.highlight.format_highlight(self.options.self.section)
   end
 end
 
@@ -208,14 +235,22 @@ end
 ---@return table an identifier to later retrieve the hl for application
 function M:create_hl(color, hint)
   hint = hint and self.options.component_name .. '_' .. hint or self.options.component_name
-  return highlight.create_component_highlight_group(color, hint, self.options, false)
+  return modules.highlight.create_component_highlight_group(color, hint, self.options, false)
 end
 
 ---Get stl formatted hl group for hl_token
 ---@param hl_token table identifier received from create_hl or create_component_highlight_group
 ---@return string stl formatted hl group for hl_token
 function M:format_hl(hl_token)
-  return highlight.component_format_highlight(hl_token)
+  return modules.highlight.component_format_highlight(hl_token)
+end
+
+---Wrap str with click format for function of id
+---@param id number
+---@param str string
+---@return string
+function M:format_fn(id, str)
+  return string.format("%%%d@v:lua.require'lualine.utils.fn_store'.call_fn@%s%%T", id, str)
 end
 
 -- luacheck: push no unused args
@@ -244,6 +279,7 @@ function M:draw(default_highlight, is_focused)
     self:apply_icon()
     self:apply_padding()
     self:apply_highlights(default_highlight)
+    self:apply_on_click()
     self:apply_section_separators()
     self:apply_separator()
   end
