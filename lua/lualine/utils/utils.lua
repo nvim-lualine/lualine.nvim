@@ -81,13 +81,14 @@ end
 ---@param event  string event name
 ---@param pattern string event pattern
 ---@param cmd    string command to run on event
-function M.define_autocmd(event, pattern, cmd)
+---@param group   string group name defaults to lualine
+function M.define_autocmd(event, pattern, cmd, group)
   if not cmd then
     cmd = pattern
     pattern = '*'
   end
   if not autocmd_is_defined(event, pattern, cmd) then
-    vim.cmd(string.format('autocmd lualine %s %s %s', event, pattern, cmd))
+    vim.cmd(string.format('autocmd %s %s %s %s', group or 'lualine', event, pattern, cmd))
   end
 end
 
@@ -181,6 +182,36 @@ function M.stl_escape(str)
     return str
   end
   return str:gsub('%%', '%%%%')
+end
+
+---A safe call inside a timmer
+---@param timer userdata
+---@param augroup string|nil autocmd group to reset too on error.
+---@param fn function
+---@param max_err integer
+---@param err_msg string
+---@return function a wraped fn that can be called inside a timer and that
+---stops the timer after max_err errors in calling fn
+function M.timer_call(timer, augroup, fn, max_err, err_msg)
+  local err_cnt, ret = 0, nil
+  max_err = max_err or 3
+  return vim.schedule_wrap(function(...)
+    if err_cnt > max_err then
+      vim.loop.timer_stop(timer)
+      if augroup then
+        vim.cmd(string.format([[augroup %s | exe "autocmd!" | augroup END]], augroup))
+      end
+      error(err_msg..':\n'..tostring(ret))
+    end
+    local ok
+    ok, ret = pcall(fn, ...)
+    if ok then
+      err_cnt = 0
+    else
+      err_cnt = err_cnt + 1
+    end
+    return ret
+  end)
 end
 
 return M

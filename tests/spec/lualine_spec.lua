@@ -15,9 +15,17 @@ describe('Lualine', function()
         theme = 'gruvbox',
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
-        disabled_filetypes = {},
+        disabled_filetypes = {
+          statusline = {},
+          winbar = {},
+        },
         always_divide_middle = true,
         globalstatus = false,
+        refresh = {
+          statusline = 1000,
+          tabline = 1000,
+          winbar = 1000,
+        }
       },
       sections = {
         lualine_a = { 'mode' },
@@ -48,6 +56,8 @@ describe('Lualine', function()
         lualine_z = {},
       },
       tabline = {},
+      winbar = {},
+      inactive_winbar = {},
       extensions = {},
     }
 
