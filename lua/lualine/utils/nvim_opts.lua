@@ -19,7 +19,11 @@ local options = {global={}, buffer={}, window={}}
 
 -- helper function for M.set
 local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
-  local cur = getter_fn(name)
+  -- before nvim 0.7 nvim_win_get_option... didn't return default value when
+  -- the option wasn't set instead threw error.
+  -- So we need pcall (probably just for test)
+  local ok, cur = pcall(getter_fn, name)
+  if not ok then cur = nil end
   if cur == val then return end
   if cache_tbl[name] == nil then cache_tbl[name] = {} end
   if cache_tbl[name].set ~= cur then
