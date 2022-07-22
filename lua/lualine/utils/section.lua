@@ -47,11 +47,8 @@ function M.draw_section(section, section_name, is_focused)
           type(section[first_component_no].options.separator) ~= 'table'
           and (section[1].options.section_separators.left ~= nil and section[1].options.section_separators.left ~= '')
         then
-          status[component_no] = string.format(
-            '%s%%S{%s}',
-            status[component_no],
-            section[1].options.section_separators.left
-          )
+          status[component_no] =
+            string.format('%s%%S{%s}', status[component_no], section[1].options.section_separators.left)
         end
       end
     end

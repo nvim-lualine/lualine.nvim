@@ -396,13 +396,8 @@ function M.component_format_highlight(highlight, is_focused)
     elseif type(color) == 'table' then
       if not highlight.no_default and not (color.fg and color.bg) then
         hl_name = append_mode(highlight.name, is_focused)
-        color = get_default_component_color(
-          hl_name,
-          append_mode(''):sub(2),
-          highlight.section,
-          color,
-          highlight.options
-        )
+        color =
+          get_default_component_color(hl_name, append_mode(''):sub(2), highlight.section, color, highlight.options)
       end
       M.highlight(hl_name, color.fg, color.bg, color.gui, color.link)
       return '%#' .. hl_name .. '#', color
