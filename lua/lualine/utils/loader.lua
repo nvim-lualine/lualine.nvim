@@ -165,20 +165,12 @@ end
 ---@param config table user config
 local function load_extensions(config)
   local loaded_extensions = {}
+  local sec_names = {'sections', 'inactive_sections', 'winbar', 'inactive_winbar'}
   for _, extension in pairs(config.extensions) do
     if type(extension) == 'string' then
-      local ok, local_extension = pcall(require, 'lualine.extensions.' .. extension)
-      if ok then
-        local_extension = modules.utils.deepcopy(local_extension)
-        load_sections(local_extension.sections, config.options)
-        if local_extension.inactive_sections then
-          load_sections(local_extension.inactive_sections, config.options)
-        end
-        if type(local_extension.init) == 'function' then
-          local_extension.init()
-        end
-        table.insert(loaded_extensions, local_extension)
-      else
+      local ok
+      ok, extension = pcall(require, 'lualine.extensions.' .. extension)
+      if not ok then
         modules.notice.add_notice(string.format(
           [[
 ### Extensions
@@ -187,11 +179,13 @@ Extension named `%s` was not found . Check if spelling is correct.
           extension
         ))
       end
-    elseif type(extension) == 'table' then
+    end
+    if type(extension) == 'table' then
       local local_extension = modules.utils.deepcopy(extension)
-      load_sections(local_extension.sections, config.options)
-      if local_extension.inactive_sections then
-        load_sections(local_extension.inactive_sections, config.options)
+      for _, section in ipairs(sec_names) do
+        if local_extension[section] then
+          load_sections(local_extension[section], config.options)
+        end
       end
       if type(local_extension.init) == 'function' then
         local_extension.init()

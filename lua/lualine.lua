@@ -1,5 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
+local M = {}
+
 local lualine_require = require('lualine_require')
 local modules = lualine_require.lazy_require {
   highlight = 'lualine.highlight',
@@ -193,16 +195,10 @@ end)
 -- TODO: change this so it uses a hash table instead of iteration over list
 --       to improve redraws. Add buftype / bufname for extensions
 --       or some kind of cond ?
-local function get_extension_sections(current_ft, is_focused, is_winbar)
+local function get_extension_sections(current_ft, is_focused, sec_name)
   for _, extension in ipairs(config.extensions) do
-    for _, filetype in ipairs(extension.filetypes) do
-      if current_ft == filetype then
-        if is_focused == false and
-          (not is_winbar and extension.inactive_sections or extension.inactive_winbar) then
-          return extension.inactive_sections
-        end
-        return not is_winbar and extension.sections or extension.winbar
-      end
+    if vim.tbl_contains(extension.filetypes, current_ft) then
+      return extension[(is_focused and '' or 'inactive_') .. sec_name]
     end
   end
   return nil
@@ -264,66 +260,32 @@ local function setup_theme()
     autocmd lualine OptionSet background lua require'lualine'.setup()]])
 end
 
---- lualine.statusline function
---- Draw correct statusline for current window
----@param focused boolean : force the value of is_focused . Useful for debugging
----@return string statusline string
-local function status_dispatch(focused)
-  local retval
-  local current_ft = vim.bo.filetype
-  local is_focused = focused ~= nil and focused or modules.utils.is_focused()
-  for _, ft in pairs(config.options.disabled_filetypes) do
-    -- disable on specific filetypes
-    if ft == current_ft then
-      return ''
+---@alias StatusDispatchSecs
+---| 'sections'
+---| 'winbar'
+--- generates lualine.statusline & lualine.winbar function
+--- creates a closer that can draw sections of sec_name.
+---@param sec_name StatusDispatchSecs
+---@return function(focused:bool):string
+local function status_dispatch(sec_name)
+  return function(focused)
+    local retval
+    local current_ft = vim.bo.filetype
+    local is_focused = focused ~= nil and focused or modules.utils.is_focused()
+    for _, ft in pairs(config.options.disabled_filetypes) do
+      -- disable on specific filetypes
+      if ft == current_ft then
+        return ''
+      end
     end
-  end
-  local extension_sections = get_extension_sections(current_ft, is_focused)
-  if is_focused then
+    local extension_sections = get_extension_sections(current_ft, is_focused, sec_name)
     if extension_sections ~= nil then
-      retval = statusline(extension_sections, is_focused)
+      retval = statusline(extension_sections, is_focused, sec_name == 'winbar')
     else
-      retval = statusline(config.sections, is_focused)
+      retval = statusline(config[(is_focused and '' or 'inactive_')..sec_name], is_focused, sec_name == 'winbar')
     end
-  else
-    if extension_sections ~= nil then
-      retval = statusline(extension_sections, is_focused)
-    else
-      retval = statusline(config.inactive_sections, is_focused)
-    end
+    return retval
   end
-  return retval
-end
-
--- lualine.winbar function
---- Draw correct winbar for current window
----@param focused boolean : force the value of is_focused . useful for debugging
----@return string winbar string
-local function winbar_dispatch(focused)
-  local retval
-  local current_ft = vim.bo.filetype
-  local is_focused = focused ~= nil and focused or modules.utils.is_focused()
-  for _, ft in pairs(config.options.disabled_filetypes) do
-    -- disable on specific filetypes
-    if ft == current_ft then
-      return ''
-    end
-  end
-  local extension_sections = get_extension_sections(current_ft, is_focused)
-  if is_focused then
-    if extension_sections ~= nil then
-      retval = statusline(extension_sections, is_focused, true)
-    else
-      retval = statusline(config.winbar, is_focused, true)
-    end
-  else
-    if extension_sections ~= nil then
-      retval = statusline(extension_sections, is_focused, true)
-    else
-      retval = statusline(config.inactive_winbar, is_focused, true)
-    end
-  end
-  return retval
 end
 
 local refresh = function(opts)
@@ -356,14 +318,14 @@ local refresh = function(opts)
   if vim.tbl_contains(opts.place, 'statusline') then
     for _, win in ipairs(wins) do
       modules.nvim_opts.set('statusline',
-                    vim.api.nvim_win_call(win, status_dispatch), {window=win})
+                    vim.api.nvim_win_call(win, M.statusline), {window=win})
     end
   end
   if vim.tbl_contains(opts.place, 'winbar') then
     for _, win in ipairs(wins) do
       if vim.api.nvim_win_get_height(win) > 1 then
       modules.nvim_opts.set('winbar',
-                    vim.api.nvim_win_call(win, winbar_dispatch), {window=win})
+                    vim.api.nvim_win_call(win, M.winbar), {window=win})
       end
     end
   end
@@ -483,11 +445,13 @@ local function setup(user_config)
   end
 end
 
-return {
+M = {
   setup = setup,
-  statusline = status_dispatch,
+  statusline = status_dispatch('sections'),
   tabline = tabline,
   get_config = modules.config_module.get_config,
   refresh = refresh,
-  winbar = winbar_dispatch,
+  winbar = status_dispatch('winbar'),
 }
+
+return M
