@@ -332,7 +332,7 @@ local refresh = function(opts)
   end
   local wins = {}
   local old_actual_curwin = vim.g.actual_curwin
-  vim.g.actual_curwin = tostring(vim.api.nvim_get_current_win())
+  vim.g.actual_curwin = vim.api.nvim_get_current_win()
   -- gather which windows needs update
   if opts.kind == 'all' then
     if vim.tbl_contains(opts.place, 'statusline')
@@ -372,6 +372,15 @@ local refresh = function(opts)
                     vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline),
                     {global=true})
   end
+
+  -- call redraw
+  if vim.tbl_contains(opts.place, 'statusline')
+    or vim.tbl_contains(opts.place, 'winbar') then
+    vim.cmd('redrawstatus')
+  elseif vim.tbl_contains(opts.place, 'tabline') then
+    vim.cmd('redrawtabline')
+  end
+
   vim.g.actual_curwin = old_actual_curwin
 end
 

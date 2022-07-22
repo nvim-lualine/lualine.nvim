@@ -20,6 +20,7 @@ local options = {global={}, buffer={}, window={}}
 -- helper function for M.set
 local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
   local cur = getter_fn(name)
+  if cur == val then return end
   if cache_tbl[name] == nil then cache_tbl[name] = {} end
   if cache_tbl[name].set ~= cur then
     cache_tbl[name].prev = cur
