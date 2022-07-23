@@ -395,6 +395,9 @@ local function set_statusline()
   vim.loop.timer_stop(timers.stl_timer)
   vim.cmd([[augroup lualine_stl_refresh | exe "autocmd!" | augroup END]])
   if next(config.sections) ~= nil or next(config.inactive_sections) ~= nil then
+    if vim.go.statusline == '' then
+      modules.nvim_opts.set('statusline', '%#Normal#', { global = true })
+    end
     if config.options.globalstatus then
       modules.nvim_opts.set('laststatus', 3, { global = true })
       vim.loop.timer_start(
