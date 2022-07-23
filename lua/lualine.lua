@@ -360,13 +360,6 @@ local function refresh(opts)
     modules.nvim_opts.set('tabline', vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline), { global = true })
   end
 
-  -- call redraw
-  if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
-    vim.cmd('redrawstatus')
-  elseif vim.tbl_contains(opts.place, 'tabline') then
-    vim.cmd('redrawtabline')
-  end
-
   vim.g.actual_curwin = old_actual_curwin
 end
 
