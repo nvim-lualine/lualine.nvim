@@ -393,7 +393,7 @@ describe('Lualine', function()
       conf.inactive_sections = {}
       require('lualine').setup(conf)
       require('lualine').statusline()
-      eq('', vim.go.statusline)
+      eq('%#Normal#', vim.go.statusline)
 
       tabline:expect([===[
       highlights = {
