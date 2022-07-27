@@ -15,7 +15,7 @@ local default_options = {
 }
 
 -- This function is duplicated in buffers
----returns the proper hl for tab in section. used for setting default highlights
+---returns the proper hl for tab in section. Used for setting default highlights
 ---@param section string name of section tabs component is in
 ---@param is_active boolean
 ---@return string hl name
@@ -41,18 +41,8 @@ function M:init(options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
   -- stylua: ignore
   self.highlights = {
-    active = highlight.create_component_highlight_group(
-      self.options.tabs_color.active,
-      'tabs_active',
-      self.options,
-      false
-    ),
-    inactive = highlight.create_component_highlight_group(
-      self.options.tabs_color.inactive,
-      'tabs_inactive',
-      self.options,
-      false
-    ),
+    active = self:create_hl( self.options.tabs_color.active, 'active'),
+    inactive = self:create_hl( self.options.tabs_color.inactive, 'inactive'),
   }
 end
 
@@ -94,7 +84,7 @@ function M:update_status()
   local current_tab = tabs[current]
   -- start drawing from current tab and draw left and right of it until
   -- all tabpages are drawn or max_length has been reached.
-  if current_tab == nil then -- maybe redundent code
+  if current_tab == nil then -- maybe redundant code
     local t = Tab {
       tabId = vim.api.nvim_get_current_tabpage(),
       tabnr = vim.fn.tabpagenr(),
@@ -136,7 +126,7 @@ function M:update_status()
         data[#data + 1] = rendered_after
       end
     end
-    -- draw elipsis (...) on relevent sides if all tabs don't fit in max_length
+    -- draw ellipsis (...) on relevant sides if all tabs don't fit in max_length
     if total_length > max_length then
       if before ~= nil then
         before.ellipse = true

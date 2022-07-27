@@ -86,12 +86,12 @@ describe('config parsing', function()
     describe('disabled filetypes', function()
       it('default', function()
         local config = config_module.apply_configuration {}
-        eq(config.options.disabled_filetypes, {})
+        eq(config.options.disabled_filetypes, {statusline={}, winbar={}})
       end)
       it('custom', function()
         local config = { options = { disabled_filetypes = { 'lua' } } }
         config = config_module.apply_configuration(config)
-        eq(config.options.disabled_filetypes, { 'lua' })
+        eq(config.options.disabled_filetypes, {statusline={'lua'}, winbar={'lua'}})
       end)
     end)
 

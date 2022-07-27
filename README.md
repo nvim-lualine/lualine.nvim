@@ -62,9 +62,9 @@ on specific plugin. These numbers are the average of 20 runs.
 
 | control  |  lualine  | lightline |  airline  |
 | :------: | :-------: | :-------: | :-------: |
-| 8.943 ms | 10.140 ms | 12.522 ms | 38.850 ms |
+| 17.2 ms  |  24.8 ms  |  25.5 ms  |  79.9 ms  |
 
-Last Updated On: 20-09-2021
+Last Updated On: 18-04-2022
 
 ## Installation
 
@@ -121,9 +121,17 @@ require('lualine').setup {
     theme = 'auto',
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
-    disabled_filetypes = {},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
     always_divide_middle = true,
     globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
   },
   sections = {
     lualine_a = {'mode'},
@@ -142,6 +150,8 @@ require('lualine').setup {
     lualine_z = {}
   },
   tabline = {},
+  winbar = {},
+  inactive_winbar = {},
   extensions = {}
 }
 ```
@@ -197,7 +207,7 @@ Theme structure is available [here](https://github.com/nvim-lualine/lualine.nvim
 lualine defines two kinds of separators:
 
 - `section_separators`    - separators between sections
-- `components_separators` - separators between the different components in sections
+- `component_separators` - separators between the different components in sections
 
 **Note**: if viewing this README in a browser, chances are the characters below will not be visible.
 
@@ -241,6 +251,7 @@ sections = {lualine_a = {'mode'}}
 - `mode` (vim mode)
 - `progress` (%progress in file)
 - `tabs` (shows currently available tabs)
+- `windows` (shows currently available windows)
 
 #### Custom components
 
@@ -335,13 +346,28 @@ options = {
   theme = 'auto', -- lualine theme
   component_separators = { left = '', right = '' },
   section_separators = { left = '', right = '' },
-  disabled_filetypes = {},     -- Filetypes to disable lualine for.
+  disabled_filetypes = {     -- Filetypes to disable lualine for.
+      statusline = {},       -- only ignores the ft for statusline.
+      winbar = {},           -- only ignores the ft for winbar.
+  },
+
   always_divide_middle = true, -- When set to true, left sections i.e. 'a','b' and 'c'
                                -- can't take over the entire statusline even
                                -- if neither of 'x', 'y' or 'z' are present.
+
   globalstatus = false,        -- enable global statusline (have a single statusline
                                -- at bottom of neovim instead of one for  every window).
                                -- This feature is only available in neovim 0.7 and higher.
+
+  refresh = {                  -- sets how often lualine should refreash it's contents (in ms)
+    statusline = 1000,         -- The refresh option sets minimum time that lualine tries
+    tabline = 1000,            -- to maintain between refresh. It's not guarantied if situation
+    winbar = 1000              -- arises that lualine needs to refresh itself before this time
+                               -- it'll do it.
+
+                               -- Also you can force lualine's refresh by calling refresh function
+                               -- like require('lualine').refresh()
+  }
 }
 ```
 
@@ -361,6 +387,9 @@ sections = {
       -- As table it must contain the icon as first entry and can use
       -- color option to custom color the icon. Example:
       -- {'branch', icon = ''} / {'branch', icon = {'', color={fg='green'}}}
+
+      -- icon position can also be set to the right side from table. Example:
+      -- {'branch', icon = {'', align='right', color={fg='green'}}}
       icon = nil,
 
       separator = nil,      -- Determines what separator to use for the component.
@@ -414,6 +443,11 @@ sections = {
                    --   padding = { left = left_padding, right = right_padding }
 
       fmt = nil,   -- Format function, formats the component's output.
+      on_click = nil, -- takes a function that is called when component is clicked with mouse.
+                   -- the function receives several arguments
+                   -- - number of clicks incase of multiple clicks
+                   -- - mouse button used (l(left)/r(right)/m(middle)/...)
+                   -- - modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
     }
   }
 }
@@ -433,11 +467,14 @@ sections = {
     {
       'buffers',
       show_filename_only = true,   -- Shows shortened relative path when set to false.
+      hide_filename_extension = false,   -- Hide filename extension when set to true.
       show_modified_status = true, -- Shows indicator when the buffer is modified.
 
       mode = 0, -- 0: Shows buffer name
-                -- 1: Shows buffer index (bufnr)
-                -- 2: Shows buffer name + buffer index (bufnr)
+                -- 1: Shows buffer index
+                -- 2: Shows buffer name + buffer index
+                -- 3: Shows buffer number
+                -- 4: Shows buffer name + buffer number
 
       max_length = vim.o.columns * 2 / 3, -- Maximum width of buffers component,
                                           -- it can also be a function that returns
@@ -454,6 +491,12 @@ sections = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active buffer.
         inactive = 'lualine_{section}_inactive', -- Color for inactive buffer.
+      },
+
+      symbols = {
+        modified = ' ●',      -- Text to show when the buffer is modified
+        alternate_file = '#', -- Text to show to identify the alternate file
+        directory =  '',     -- Text to show when the buffer is a directory
       },
     }
   }
@@ -545,6 +588,7 @@ sections = {
       path = 0,                -- 0: Just the filename
                                -- 1: Relative path
                                -- 2: Absolute path
+                               -- 3: Absolute path, with tilde as the home directory
 
       shorting_target = 40,    -- Shortens path to leave 40 spaces in the window
                                -- for other components. (terrible name, any suggestions?)
@@ -566,7 +610,10 @@ sections = {
     {
       'filetype',
       colored = true,   -- Displays filetype icon in color if set to true
-      icon_only = false -- Display only an icon for filetype
+      icon_only = false, -- Display only an icon for filetype
+      icon = { align = 'right' }, -- Display filetype icon on the right hand side
+      -- icon =    {'X', align='right'}
+      -- Icon string ^ in table is ignored in filetype component
     }
   }
 }
@@ -591,6 +638,43 @@ sections = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active tab.
         inactive = 'lualine_{section}_inactive', -- Color for inactive tab.
+      },
+    }
+  }
+}
+```
+
+#### windows component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'windows',
+      show_filename_only = true,   -- Shows shortened relative path when set to false.
+      show_modified_status = true, -- Shows indicator when the window is modified.
+
+      mode = 0, -- 0: Shows window name
+                -- 1: Shows window index
+                -- 2: Shows window name + window index
+
+      max_length = vim.o.columns * 2 / 3, -- Maximum width of windows component,
+                                          -- it can also be a function that returns
+                                          -- the value of `max_length` dynamically.
+      filetype_names = {
+        TelescopePrompt = 'Telescope',
+        dashboard = 'Dashboard',
+        packer = 'Packer',
+        fzf = 'FZF',
+        alpha = 'Alpha'
+      }, -- Shows specific window name for that filetype ( { `filetype` = `window_name`, ... } )
+
+      disabled_buftypes = { 'quickfix', 'prompt' }, -- Hide a window if its buffer's type is disabled
+
+      windows_color = {
+        -- Same values as the general color option can be used here.
+        active = 'lualine_{section}_normal',     -- Color for active window.
+        inactive = 'lualine_{section}_inactive', -- Color for inactive window.
       },
     }
   }
@@ -630,24 +714,64 @@ tabline = {
 }
 ```
 
+### Winbar
+From neovim-0.8 you can customize your winbar with lualine.
+Winbar configuration is similar to statusline.
+```lua
+winbar = {
+  lualine_a = {},
+  lualine_b = {},
+  lualine_c = {'filename'},
+  lualine_x = {},
+  lualine_y = {},
+  lualine_z = {}
+}
+
+inactive_winbar = {
+  lualine_a = {},
+  lualine_b = {},
+  lualine_c = {'filename'},
+  lualine_x = {},
+  lualine_y = {},
+  lualine_z = {}
+}
+```
+Just like statusline you can separately specify winbar for active and inactive
+windows. Any lualine component can be placed in winbar. All kinds of custom
+components supported in statusline are also suported for winbar too. In general
+You can treat winbar as another lualine statusline that just appears on top
+of windows instead of at bottom.
+
 #### Buffers
+
 Shows currently open buffers. Like bufferline . See
 [buffers options](#buffers-component-options)
 for all builtin behaviors of buffers component.
+You can use `:LualineBuffersJump` to jump to buffer based on index
+of buffer in buffers component.
+
+```vim
+  :LualineBuffersJump 2  " Jumps to 2nd buffer in buffers component.
+  :LualineBuffersJump $  " Jumps to last buffer in buffers component.
+```
 
 #### Tabs
+
 Shows currently open tab. Like usual tabline. See
 [tabs options](#tabs-component-options)
 for all builtin behaviors of tabs component.
 You can also use `:LualineRenameTab` to set a name for a tabpage.
 For example:
+
 ```vim
 :LualineRenameTab Project_K
-````
+```
+
 It's useful when you're using rendering mode 2/3 in tabs.
-To unname a tablage run `:LualineRenameTab` without argument.
+To unname a tabpage run `:LualineRenameTab` without argument.
 
 #### Tabline as statusline
+
 You can also completely move your statusline to a tabline by configuring
 `lualine.tabline` and disabling `lualine.sections` and `lualine.inactive_sections`:
 
@@ -689,7 +813,11 @@ extensions = {'quickfix'}
 - fern
 - fugitive
 - fzf
+- man
+- mundo
+- neo-tree
 - nerdtree
+- nvim-dap-ui
 - nvim-tree
 - quickfix
 - symbols-outline
@@ -724,6 +852,8 @@ Thanks to these wonderful people, we enjoy this awesome plugin.
   <img src="https://contrib.rocks/image?repo=nvim-lualine/lualine.nvim" />
 </a>
 
+<!-- panvimdoc-ignore-end -->
+
 ### Wiki
 
 Check out the [wiki](https://github.com/nvim-lualine/lualine.nvim/wiki) for more info.
@@ -733,4 +863,8 @@ You can find some useful [configuration snippets](https://github.com/nvim-lualin
 If you want to extend lualine with plugins or want to know
 which ones already do, [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
 
-<!-- panvimdoc-ignore-end -->
+### Support
+
+If you appreciate my work you can buy me a coffee.
+
+<a href="https://www.buymeacoffee.com/shadmansalJ" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-black.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;"></a>

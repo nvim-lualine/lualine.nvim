@@ -12,7 +12,10 @@ local M = lualine_require.require('lualine.component'):extend()
 local default_options = {
   colored = true,
   symbols = { added = '+', modified = '~', removed = '-' },
-  diff_color = {
+}
+
+local function apply_default_colors(opts)
+  local default_diff_color = {
     added = {
       fg = modules.utils.extract_color_from_hllist(
         'fg',
@@ -34,40 +37,27 @@ local default_options = {
         '#ff0038'
       ),
     },
-  },
-}
+  }
+  opts.diff_color = vim.tbl_deep_extend('keep', opts.diff_color or {}, default_diff_color)
+end
 
 -- Initializer
 function M:init(options)
   M.super.init(self, options)
+  apply_default_colors(self.options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
   -- create highlights and save highlight_name in highlights table
   if self.options.colored then
     self.highlights = {
-      added = modules.highlight.create_component_highlight_group(
-        self.options.diff_color.added,
-        'diff_added',
-        self.options,
-        false
-      ),
-      modified = modules.highlight.create_component_highlight_group(
-        self.options.diff_color.modified,
-        'diff_modified',
-        self.options,
-        false
-      ),
-      removed = modules.highlight.create_component_highlight_group(
-        self.options.diff_color.removed,
-        'diff_removed',
-        self.options,
-        false
-      ),
+      added = self:create_hl(self.options.diff_color.added, 'added'),
+      modified = self:create_hl(self.options.diff_color.modified, 'modified'),
+      removed = self:create_hl(self.options.diff_color.removed, 'removed'),
     }
   end
   modules.git_diff.init(self.options)
 end
 
--- Function that runs everytime statusline is updated
+-- Function that runs every time statusline is updated
 function M:update_status(is_focused)
   local git_diff = modules.git_diff.get_sign_count((not is_focused and vim.api.nvim_get_current_buf()))
   if git_diff == nil then
@@ -78,7 +68,7 @@ function M:update_status(is_focused)
   if self.options.colored then
     -- load the highlights and store them in colors table
     for name, highlight_name in pairs(self.highlights) do
-      colors[name] = modules.highlight.component_format_highlight(highlight_name)
+      colors[name] = self:format_hl(highlight_name)
     end
   end
 

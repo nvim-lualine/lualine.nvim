@@ -19,6 +19,7 @@ function M:init(options)
   -- Run super()
   M.super.init(self, options)
   -- Apply default options
+  modules.default_config.apply_default_colors(self.options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, modules.default_config.options)
   -- Apply default symbols
   self.symbols = vim.tbl_extend(
@@ -30,30 +31,10 @@ function M:init(options)
   -- Initialize highlight groups
   if self.options.colored then
     self.highlight_groups = {
-      error = modules.highlight.create_component_highlight_group(
-        self.options.diagnostics_color.error,
-        'diagnostics_error',
-        self.options,
-        false
-      ),
-      warn = modules.highlight.create_component_highlight_group(
-        self.options.diagnostics_color.warn,
-        'diagnostics_warn',
-        self.options,
-        false
-      ),
-      info = modules.highlight.create_component_highlight_group(
-        self.options.diagnostics_color.info,
-        'diagnostics_info',
-        self.options,
-        false
-      ),
-      hint = modules.highlight.create_component_highlight_group(
-        self.options.diagnostics_color.hint,
-        'diagnostics_hint',
-        self.options,
-        false
-      ),
+      error = self:create_hl(self.options.diagnostics_color.error, 'error'),
+      warn = self:create_hl(self.options.diagnostics_color.warn, 'warn'),
+      info = self:create_hl(self.options.diagnostics_color.info, 'info'),
+      hint = self:create_hl(self.options.diagnostics_color.hint, 'hint'),
     }
   end
 
@@ -106,7 +87,7 @@ function M:update_status()
   if self.options.colored then
     local colors, bgs = {}, {}
     for name, hl in pairs(self.highlight_groups) do
-      colors[name] = modules.highlight.component_format_highlight(hl)
+      colors[name] = self:format_hl(hl)
       bgs[name] = modules.utils.extract_highlight_colors(colors[name]:match('%%#(.-)#'), 'bg')
     end
     local previous_section, padding

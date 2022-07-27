@@ -311,7 +311,7 @@ describe('Filetype component', function()
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
     assert.stub(hl.create_component_highlight_group).was_called_with(
       { fg = '#000' },
-      'test_highlight_group',
+      'filetype_test_highlight_group',
       opts,
       false
     )
@@ -359,6 +359,24 @@ describe('Filetype component', function()
       icon_only = true,
     }
     assert_component('filetype', opts, '*')
+    package.loaded['nvim-web-devicons'] = nil
+  end)
+
+  it('displays right aligned icon when icon.align is "right"', function()
+    package.loaded['nvim-web-devicons'] = {
+      get_icon = function()
+        return '*', 'test_highlight_group'
+      end,
+    }
+
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      colored = false,
+      icon_only = false,
+      icon = { align = 'right' }
+    }
+    assert_component('filetype', opts, 'lua *')
     package.loaded['nvim-web-devicons'] = nil
   end)
 end)
@@ -565,6 +583,10 @@ describe('Vim option & variable component', function()
 end)
 
 describe('Branch component', function()
+  -- these tests are broken in wsl will look at them later
+  if vim.fn.has('wsl') == 1 then
+    return
+  end
   local tmpdir
   local file
   local git = function(...)

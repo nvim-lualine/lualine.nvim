@@ -53,7 +53,7 @@ end
 ---@param color string|number
 ---@return string
 local function sanitize_color(color)
-  if color == nil or color == '' then
+  if color == nil or color == '' or (type(color) == 'string' and color:lower() == 'none') then
     return 'None'
   end
   if type(color) == 'string' then
@@ -95,7 +95,7 @@ end
 ---@param name string
 ---@param foreground string|number: color
 ---@param background string|number: color
----@param gui table cterm/gui options like bold/italic ect
+---@param gui table cterm/gui options like bold/italic etc.
 ---@param link string hl_group name to link new hl to
 function M.highlight(name, foreground, background, gui, link)
   local command = { 'highlight!' }
@@ -132,10 +132,10 @@ function M.highlight(name, foreground, background, gui, link)
   local old_hl_def = loaded_highlights[name]
   if old_hl_def and next(old_hl_def.attached) then
     -- Update attached hl groups as they announced to depend on hl_group 'name'
-    -- 'hl' being in 'name'a attached table means 'hl'
+    -- 'hl' being in 'name's attached table means 'hl'
     -- depends of 'name'.
     -- 'hl' key in attached table will contain a table that
-    -- defines the reletaion between 'hl' & 'name'.
+    -- defines the relation between 'hl' & 'name'.
     -- name.attached.hl = { bg = 'fg' } means
     -- hl's fg is same as 'names' bg . So 'hl's fg should
     -- be updated when ever 'name' changes it's 'bg'
@@ -182,7 +182,7 @@ function M.highlight(name, foreground, background, gui, link)
   }
 end
 
----Attach an hl to another so attachee auto updated on change to hl it's attached too.
+---Attach a hl to another, so the attachee auto updates on change to hl that it's attached too.
 ---@param provider string the hl receiver is getting attached to
 ---@param receiver string the hl that will be auto updated upon change to provider
 ---@param provider_el_type string (fg/bg) what element receiver relates to of provider
@@ -282,7 +282,9 @@ local function get_default_component_color(hl_name, mode, section, color, option
     and options.color_highlight.name .. '_' .. mode ~= hl_name
   then
     apply_default(options.color, options.color_highlight.name .. '_' .. mode)
-  else
+  end
+
+  if not ret.fg or not ret.bg then
     apply_default(default_theme_color, string.format('lualine_%s_%s', section, mode))
   end
   ret.fg = sanitize_color(ret.fg)
@@ -394,13 +396,8 @@ function M.component_format_highlight(highlight, is_focused)
     elseif type(color) == 'table' then
       if not highlight.no_default and not (color.fg and color.bg) then
         hl_name = append_mode(highlight.name, is_focused)
-        color = get_default_component_color(
-          hl_name,
-          append_mode(''):sub(2),
-          highlight.section,
-          color,
-          highlight.options
-        )
+        color =
+          get_default_component_color(hl_name, append_mode(''):sub(2), highlight.section, color, highlight.options)
       end
       M.highlight(hl_name, color.fg, color.bg, color.gui, color.link)
       return '%#' .. hl_name .. '#', color
@@ -461,6 +458,16 @@ function M.get_transitional_highlights(left_hl, right_hl)
     attach_hl(right_hl, highlight_name, 'bg', 'bg')
   end
   return '%#' .. highlight_name .. '#'
+end
+
+function M.get_stl_default_hl(focused)
+  if focused == 3 then
+    return 'TabLineFill'
+  elseif not focused then
+    return 'StatusLineNC'
+  else
+    return 'StatusLine'
+  end
 end
 
 return M

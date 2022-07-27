@@ -6,8 +6,8 @@ local M = {}
 -- attr parameter like bold/italic/reverse
 ---@param color_group string hl_group name
 ---@param scope       string bg | fg
----@return table|string returns #rrggbb formated color when scope is specified
-----                       or comolete color table when scope isn't specified
+---@return table|string returns #rrggbb formatted color when scope is specified
+----                       or complete color table when scope isn't specified
 function M.extract_highlight_colors(color_group, scope)
   local color = require('lualine.highlight').get_lualine_hl(color_group)
   if not color then
@@ -30,7 +30,7 @@ function M.extract_highlight_colors(color_group, scope)
   return color
 end
 
---- retrives color value from highlight group name in syntax_list
+--- retrieves color value from highlight group name in syntax_list
 --- first present highlight is returned
 ---@param scope string
 ---@param syntaxlist table
@@ -70,24 +70,25 @@ end
 
 --- Check if a auto command is already defined
 ---@param event string
----@param patern string
+---@param pattern string
 ---@param command_str string
 ---@return boolean whether autocmd is already defined
-local function autocmd_is_defined(event, patern, command_str)
-  return vim.api.nvim_exec(string.format('au lualine %s %s', event, patern), true):find(command_str) ~= nil
+local function autocmd_is_defined(event, pattern, command_str)
+  return vim.api.nvim_exec(string.format('au lualine %s %s', event, pattern), true):find(command_str) ~= nil
 end
 
 --- Define a auto command if it's not already defined
 ---@param event  string event name
----@param patern string event patern
+---@param pattern string event pattern
 ---@param cmd    string command to run on event
-function M.define_autocmd(event, patern, cmd)
+---@param group   string group name defaults to lualine
+function M.define_autocmd(event, pattern, cmd, group)
   if not cmd then
-    cmd = patern
-    patern = '*'
+    cmd = pattern
+    pattern = '*'
   end
-  if not autocmd_is_defined(event, patern, cmd) then
-    vim.cmd(string.format('autocmd lualine %s %s %s', event, patern, cmd))
+  if not autocmd_is_defined(event, pattern, cmd) then
+    vim.cmd(string.format('autocmd %s %s %s %s', group or 'lualine', event, pattern, cmd))
   end
 end
 
@@ -96,10 +97,10 @@ function M.is_focused()
   return tonumber(vim.g.actual_curwin) == vim.api.nvim_get_current_win()
 end
 
---- Check what's the charecter at pos
+--- Check what's the character at pos
 ---@param str string
 ---@param pos number
----@return string charecter at position pos in string str
+---@return string character at position pos in string str
 function M.charAt(str, pos)
   return string.char(str:byte(pos))
 end
@@ -166,7 +167,7 @@ end
 --- Wrap a function in retry_call
 ---@param fn function Function to call.
 ---@param times number Number of times to retry on error.
----@return function retry call wraped function
+---@return function retry call wrapped function
 function M.retry_call_wrap(fn, times)
   return function(...)
     return M.retry_call(fn, { ... }, times)
@@ -181,6 +182,36 @@ function M.stl_escape(str)
     return str
   end
   return str:gsub('%%', '%%%%')
+end
+
+---A safe call inside a timmer
+---@param timer userdata
+---@param augroup string|nil autocmd group to reset too on error.
+---@param fn function
+---@param max_err integer
+---@param err_msg string
+---@return function a wraped fn that can be called inside a timer and that
+---stops the timer after max_err errors in calling fn
+function M.timer_call(timer, augroup, fn, max_err, err_msg)
+  local err_cnt, ret = 0, nil
+  max_err = max_err or 3
+  return vim.schedule_wrap(function(...)
+    if err_cnt > max_err then
+      vim.loop.timer_stop(timer)
+      if augroup then
+        vim.cmd(string.format([[augroup %s | exe "autocmd!" | augroup END]], augroup))
+      end
+      error(err_msg .. ':\n' .. tostring(ret))
+    end
+    local ok
+    ok, ret = pcall(fn, ...)
+    if ok then
+      err_cnt = 0
+    else
+      err_cnt = err_cnt + 1
+    end
+    return ret
+  end)
 end
 
 return M

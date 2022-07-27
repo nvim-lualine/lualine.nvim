@@ -4,7 +4,7 @@ local M = {}
 
 M.sep = package.config:sub(1, 1)
 
--- Figures ou full path of lualine installation
+-- Figures out full path of lualine installation
 local source = debug.getinfo(1, 'S').source
 if source:sub(1, 1) == '@' then
   local base_start = source:find(table.concat({ 'lualine.nvim', 'lua', 'lualine_require.lua' }, M.sep))

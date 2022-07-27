@@ -6,13 +6,14 @@ local require = lualine_require.require
 local modules = lualine_require.lazy_require {
   utils = 'lualine.utils.utils',
   notice = 'lualine.utils.notices',
+  fn_store = 'lualine.utils.fn_store',
 }
 local is_valid_filename = lualine_require.is_valid_filename
 local sep = lualine_require.sep
 
 --- function that loads specific type of component
 local component_types = {
-  -- loads custion component
+  -- loads custom component
   custom = function(component)
     return component[1](component)
   end,
@@ -42,7 +43,7 @@ local component_types = {
     end
     return require('lualine.components.special.function_component')(component)
   end,
-  --- loads variables & options (g:,go:,b:,bo:...) as componenta
+  --- loads variables & options (g:,go:,b:,bo:...) as components
   var = function(component)
     return require('lualine.components.special.vim_var_component')(component)
   end,
@@ -52,7 +53,7 @@ local component_types = {
   end,
 }
 
----load a component from component confif
+---load a component from component config
 ---@param component table component + component options
 ---@return table the loaded & initialized component
 local function component_loader(component)
@@ -110,7 +111,7 @@ Something like:
 
 This commonly occurs when you forget to pass table with option for component.
 When a component has option that component needs to be a table which holds
-the component as first element and the options as key value paris.
+the component as first element and the options as key value pairs.
 For example:
 ```lua
 lualine_c = {
@@ -153,29 +154,22 @@ end
 ---loads all the configs (active, inactive, tabline)
 ---@param config table user config
 local function load_components(config)
-  load_sections(config.sections, config.options)
-  load_sections(config.inactive_sections, config.options)
-  load_sections(config.tabline, config.options)
+  local sec_names = { 'sections', 'inactive_sections', 'tabline', 'winbar', 'inactive_winbar' }
+  for _, section in ipairs(sec_names) do
+    load_sections(config[section], config.options)
+  end
 end
 
 ---loads all the extensions
----@param config table user confif
+---@param config table user config
 local function load_extensions(config)
   local loaded_extensions = {}
+  local sec_names = { 'sections', 'inactive_sections', 'winbar', 'inactive_winbar' }
   for _, extension in pairs(config.extensions) do
     if type(extension) == 'string' then
-      local ok, local_extension = pcall(require, 'lualine.extensions.' .. extension)
-      if ok then
-        local_extension = modules.utils.deepcopy(local_extension)
-        load_sections(local_extension.sections, config.options)
-        if local_extension.inactive_sections then
-          load_sections(local_extension.inactive_sections, config.options)
-        end
-        if type(local_extension.init) == 'function' then
-          local_extension.init()
-        end
-        table.insert(loaded_extensions, local_extension)
-      else
+      local ok
+      ok, extension = pcall(require, 'lualine.extensions.' .. extension)
+      if not ok then
         modules.notice.add_notice(string.format(
           [[
 ### Extensions
@@ -184,11 +178,13 @@ Extension named `%s` was not found . Check if spelling is correct.
           extension
         ))
       end
-    elseif type(extension) == 'table' then
+    end
+    if type(extension) == 'table' then
       local local_extension = modules.utils.deepcopy(extension)
-      load_sections(local_extension.sections, config.options)
-      if local_extension.inactive_sections then
-        load_sections(local_extension.inactive_sections, config.options)
+      for _, section in ipairs(sec_names) do
+        if local_extension[section] then
+          load_sections(local_extension[section], config.options)
+        end
       end
       if type(local_extension.init) == 'function' then
         local_extension.init()
@@ -202,14 +198,17 @@ end
 ---loads sections and extensions or entire user config
 ---@param config table user config
 local function load_all(config)
+  require('lualine.component')._reset_components()
+  modules.fn_store.clear_fns()
+  require('lualine.utils.nvim_opts').reset_cache()
   load_components(config)
   load_extensions(config)
 end
 
 ---loads a theme from lua module
----priotizes external themes (from user config or other plugins) over the bundled ones
+---prioritizes external themes (from user config or other plugins) over the bundled ones
 ---@param theme_name string
----@return table theme defination from module
+---@return table theme definition from module
 local function load_theme(theme_name)
   assert(is_valid_filename(theme_name), 'Invalid filename')
   local retval

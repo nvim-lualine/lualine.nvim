@@ -16,9 +16,9 @@ describe('Utils', function()
     eq(utils.extract_highlight_colors('hl2'), nil)
     -- create highlight
     vim.cmd(string.format('hi hl2 guifg=%s guibg=%s gui=reverse', hl2.fg, hl2.bg))
-    -- Can retrive entire highlight table
+    -- Can retrieve entire highlight table
     eq(utils.extract_highlight_colors('hl2'), hl2)
-    -- Can retrive specific parts of highlight
+    -- Can retrieve specific parts of highlight
     eq(utils.extract_highlight_colors('hl2', 'fg'), hl2.fg)
     -- clear hl2
     vim.cmd('hi clear hl2')

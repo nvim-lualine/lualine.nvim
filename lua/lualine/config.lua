@@ -12,9 +12,17 @@ local config = {
     theme = 'auto',
     component_separators = { left = '', right = '' },
     section_separators = { left = '', right = '' },
-    disabled_filetypes = {},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
     always_divide_middle = true,
-    globalstatus = false,
+    globalstatus = vim.go.laststatus == 3,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    },
   },
   sections = {
     lualine_a = { 'mode' },
@@ -33,6 +41,8 @@ local config = {
     lualine_z = {},
   },
   tabline = {},
+  winbar = {},
+  inactive_winbar = {},
   extensions = {},
 }
 
@@ -48,7 +58,27 @@ local function fix_separators(separators)
   return separators
 end
 
----extends config based on configtable
+---copy raw disabled_filetypes to inner statusline & winbar tables.
+---@param disabled_filetypes table
+---@return table
+local function fix_disabled_filetypes(disabled_filetypes)
+  if disabled_filetypes == nil then
+    return
+  end
+  if disabled_filetypes.statusline == nil then
+    disabled_filetypes.statusline = {}
+  end
+  if disabled_filetypes.winbar == nil then
+    disabled_filetypes.winbar = {}
+  end
+  for k, disabled_ft in ipairs(disabled_filetypes) do
+    table.insert(disabled_filetypes.statusline, disabled_ft)
+    table.insert(disabled_filetypes.winbar, disabled_ft)
+    disabled_filetypes[k] = nil
+  end
+  return disabled_filetypes
+end
+---extends config based on config_table
 ---@param config_table table
 ---@return table copy of config
 local function apply_configuration(config_table)
@@ -73,15 +103,23 @@ local function apply_configuration(config_table)
     )
     config_table.options.globalstatus = false
   end
+  if vim.fn.has('nvim-0.8') == 0 and (next(config_table.winbar or {}) or next(config_table.inactive_winbar or {})) then
+    modules.utils_notices.add_notice('### winbar\nSorry `winbar can only be used in neovim 0.8 or higher.\n')
+    config_table.winbar = {}
+    config_table.inactive_winbar = {}
+  end
   parse_sections('options')
   parse_sections('sections')
   parse_sections('inactive_sections')
   parse_sections('tabline')
+  parse_sections('winbar')
+  parse_sections('inactive_winbar')
   if config_table.extensions then
     config.extensions = utils.deepcopy(config_table.extensions)
   end
   config.options.section_separators = fix_separators(config.options.section_separators)
   config.options.component_separators = fix_separators(config.options.component_separators)
+  config.options.disabled_filetypes = fix_disabled_filetypes(config.options.disabled_filetypes)
   return utils.deepcopy(config)
 end
 
