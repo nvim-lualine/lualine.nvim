@@ -307,20 +307,17 @@ local function refresh(opts)
     opts = { kind = 'tabpage', place = { 'statusline', 'winbar', 'tabline' }, trigger = 'unknown' }
   end
 
+  -- updating statusline in autocommands context seems to trigger 100 different bugs
+  -- lets just defer it to a timer context and update there
+  -- workaround for https://github.com/neovim/neovim/issues/15300
   -- workaround for https://github.com/neovim/neovim/issues/19464
-  if
-    opts.trigger == 'autocmd'
-    and vim.api.nvim_win_get_height(vim.api.nvim_get_current_win()) <= 1
-    and vim.tbl_contains(opts.place, 'winbar')
-  then
-    local id
-    for index, value in ipairs(opts.place) do
-      if value == 'winbar' then
-        id = index
-        break
-      end
-    end
-    table.remove(opts.place, id)
+  -- workaround for https://github.com/nvim-lualine/lualine.nvim/issues/753
+  -- workaround for https://github.com/nvim-lualine/lualine.nvim/issues/751
+  -- workaround for https://github.com/nvim-lualine/lualine.nvim/issues/755
+  if opts.trigger == 'autocmd' then
+    opts.trigger = 'timer'
+    vim.defer_fn(function() M.refresh(opts) end, 50)
+    return
   end
 
   local wins = {}
