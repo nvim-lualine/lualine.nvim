@@ -56,7 +56,7 @@ function M:update_status()
   local result = {}
   if self.options.update_in_insert or vim.api.nvim_get_mode().mode:sub(1, 1) ~= 'i' then
     local error_count, warning_count, info_count, hint_count = 0, 0, 0, 0
-    local diagnostic_data = modules.sources.get_diagnostics(self.options.sources)
+    local diagnostic_data = modules.sources.get_diagnostics(self.options)
     -- sum all the counts
     for _, data in pairs(diagnostic_data) do
       error_count = error_count + data.error

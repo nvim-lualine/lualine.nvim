@@ -4,11 +4,11 @@ local M = {}
 ---returns error_count:number, warning_count:number,
 ---        info_count:number, hint_count:number
 M.sources = {
-  nvim_lsp = function()
+  nvim_lsp = function(options)
     local error_count, warning_count, info_count, hint_count
     if vim.fn.has('nvim-0.6') == 1 then
       -- On nvim 0.6+ use vim.diagnostic to get lsp generated diagnostic count.
-      local diagnostics = vim.diagnostic.get(0)
+      local diagnostics = options.all_buffers == true and vim.diagnostic.get() or vim.diagnostic.get(0)
       local count = { 0, 0, 0, 0 }
       for _, diagnostic in ipairs(diagnostics) do
         if vim.startswith(vim.diagnostic.get_namespace(diagnostic.namespace).name, 'vim.lsp') then
@@ -30,8 +30,8 @@ M.sources = {
     end
     return error_count, warning_count, info_count, hint_count
   end,
-  nvim_diagnostic = function()
-    local diagnostics = vim.diagnostic.get(0)
+  nvim_diagnostic = function(options)
+    local diagnostics = options.all_buffers == true and vim.diagnostic.get() or vim.diagnostic.get(0)
     local count = { 0, 0, 0, 0 }
     for _, diagnostic in ipairs(diagnostics) do
       count[diagnostic.severity] = count[diagnostic.severity] + 1
@@ -68,13 +68,14 @@ M.sources = {
 }
 
 ---returns list of diagnostics count from all sources
----@param sources table list of sources
+---@param options table list of options for diagnostic
 ---@return table {{error_count, warning_count, info_count, hint_count}}
-M.get_diagnostics = function(sources)
+M.get_diagnostics = function(options)
+  local sources = options.sources
   local result = {}
   for index, source in ipairs(sources) do
     if type(source) == 'string' then
-      local error_count, warning_count, info_count, hint_count = M.sources[source]()
+      local error_count, warning_count, info_count, hint_count = M.sources[source](options)
       result[index] = {
         error = error_count,
         warn = warning_count,
