@@ -316,7 +316,9 @@ local function refresh(opts)
   -- workaround for https://github.com/nvim-lualine/lualine.nvim/issues/755
   if opts.trigger == 'autocmd' then
     opts.trigger = 'timer'
-    vim.defer_fn(function() M.refresh(opts) end, 50)
+    vim.defer_fn(function()
+      M.refresh(opts)
+    end, 50)
     return
   end
 
