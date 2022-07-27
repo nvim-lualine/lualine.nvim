@@ -30,6 +30,19 @@ M.sources = {
     end
     return error_count, warning_count, info_count, hint_count
   end,
+  nvim_workspace_diagnostic = function()
+    local diag_severity = vim.diagnostic.severity
+
+    local function workspace_diag(severity)
+      local count = vim.diagnostic.get(nil, {severity = severity})
+      return vim.tbl_count(count)
+    end
+
+    return workspace_diag(diag_severity.ERROR),
+      workspace_diag(diag_severity.WARN),
+      workspace_diag(diag_severity.HINT),
+      workspace_diag(diag_severity.INFO)
+  end,
   nvim_diagnostic = function()
     local diagnostics = vim.diagnostic.get(0)
     local count = { 0, 0, 0, 0 }
