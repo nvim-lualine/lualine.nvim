@@ -34,7 +34,7 @@ M.sources = {
     local diag_severity = vim.diagnostic.severity
 
     local function workspace_diag(severity)
-      local count = vim.diagnostic.get(nil, {severity = severity})
+      local count = vim.diagnostic.get(nil, { severity = severity })
       return vim.tbl_count(count)
     end
 
