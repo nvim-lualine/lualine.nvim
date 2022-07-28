@@ -28,17 +28,23 @@ end
 
 ---show setup :LuaLineNotices and show notification about error when there
 ---are notices available
+local notify_done = false
 function M.notice_message_startup()
-  if #notices > 0 or #persistent_notices > 0 then
-    vim.cmd('command! -nargs=0 LualineNotices lua require"lualine.utils.notices".show_notices()')
-    vim.schedule(function()
+  notify_done = false
+  vim.defer_fn(function()
+    if notify_done then
+      return
+    end
+    if #notices > 0 or #persistent_notices > 0 then
+      vim.cmd('command! -nargs=0 LualineNotices lua require"lualine.utils.notices".show_notices()')
       vim.notify(
         'lualine: There are some issues with your config. Run :LualineNotices for details',
         vim.log.levels.WARN,
         {}
       )
-    end)
-  end
+    end
+    notify_done = true
+  end, 2000)
 end
 
 ---create notice view
