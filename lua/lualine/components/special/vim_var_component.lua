@@ -1,6 +1,8 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
+local require = require('lualine_require').require
 local M = require('lualine.component'):extend()
+local utils = require('lualine.utils.utils')
 
 function M:update_status()
   local component = self.options[1]
@@ -29,7 +31,7 @@ function M:update_status()
   end
   local ok
   ok, return_val = pcall(tostring, return_val)
-  return ok and return_val or ''
+  return ok and utils.stl_escape(return_val) or ''
 end
 
 return M
