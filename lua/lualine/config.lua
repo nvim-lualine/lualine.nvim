@@ -94,7 +94,12 @@ local function apply_configuration(config_table)
       return
     end
     for section_name, section in pairs(config_table[section_group_name]) do
-      config[section_group_name][section_name] = utils.deepcopy(section)
+      if section_name == 'refresh' then
+        config[section_group_name][section_name] =
+          vim.tbl_deep_extend('force', config[section_group_name][section_name], utils.deepcopy(section))
+      else
+        config[section_group_name][section_name] = utils.deepcopy(section)
+      end
     end
   end
   if config_table.options and config_table.options.globalstatus and vim.fn.has('nvim-0.7') == 0 then
