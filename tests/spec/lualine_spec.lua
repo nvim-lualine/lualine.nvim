@@ -253,12 +253,7 @@ describe('Lualine', function()
     require('lualine').setup(config)
     local old_ft = vim.bo.ft
     vim.bo.ft = 'test_ft'
-    statusline:expect([===[
-    highlights = {
-        1: StatusLine = { bold = true, reverse = true }
-    }
-    ||
-    ]===])
+    statusline:expect(nil)
     vim.bo.ft = old_ft
   end)
 

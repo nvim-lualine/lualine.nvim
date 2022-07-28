@@ -210,6 +210,11 @@ local function eval_stl(stl_expr, width, eval_type)
 end
 
 function M:expect_expr(expect, expr)
+  if expr == nil then
+    -- test if both are nil when running expect against nil
+    assert.are.same(expect, nil)
+    return
+  end
   expect = helpers.dedent(expect)
   local actual = eval_stl(expr, self.width, self.type)
   local matched = true
