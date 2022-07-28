@@ -276,7 +276,7 @@ local function status_dispatch(sec_name)
       )
     then
       -- disable on specific filetypes
-      return ''
+      return nil
     end
     local extension_sections = get_extension_sections(current_ft, is_focused, sec_name)
     if extension_sections ~= nil then
@@ -299,7 +299,7 @@ end
 ---@class LualineRefreshOpts
 ---@field kind LualineRefreshOptsKind
 ---@field place LualineRefreshOptsPlace[]
----@field trigger 'autocmd'|'timer'|'unknown'
+---@field trigger 'autocmd'|'autocmd_redired|timer'|'unknown'
 --- Refresh contents of lualine
 ---@param opts LualineRefreshOpts
 local function refresh(opts)
@@ -315,7 +315,7 @@ local function refresh(opts)
   -- workaround for https://github.com/nvim-lualine/lualine.nvim/issues/751
   -- workaround for https://github.com/nvim-lualine/lualine.nvim/issues/755
   if opts.trigger == 'autocmd' then
-    opts.trigger = 'timer'
+    opts.trigger = 'autocmd_redired'
     vim.defer_fn(function()
       M.refresh(opts)
     end, 50)
@@ -345,18 +345,30 @@ local function refresh(opts)
   -- update them
   if vim.tbl_contains(opts.place, 'statusline') then
     for _, win in ipairs(wins) do
-      modules.nvim_opts.set('statusline', vim.api.nvim_win_call(win, M.statusline), { window = win })
+      local stl_cur = vim.api.nvim_win_call(win, M.statusline)
+      local stl_last = modules.nvim_opts.get_cache('statusline', { window = win })
+      if stl_cur or stl_last then
+        modules.nvim_opts.set('statusline', stl_cur, { window = win })
+      end
     end
   end
   if vim.tbl_contains(opts.place, 'winbar') then
     for _, win in ipairs(wins) do
       if vim.api.nvim_win_get_height(win) > 1 then
-        modules.nvim_opts.set('winbar', vim.api.nvim_win_call(win, M.winbar), { window = win })
+        local wbr_cur = vim.api.nvim_win_call(win, M.winbar)
+        local wbr_last = modules.nvim_opts.get_cache('winbar', { window = win })
+        if wbr_cur or wbr_last then
+          modules.nvim_opts.set('winbar', wbr_cur, { window = win })
+        end
       end
     end
   end
   if vim.tbl_contains(opts.place, 'tabline') then
-    modules.nvim_opts.set('tabline', vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline), { global = true })
+    local tbl_cur = vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline)
+    local tbl_last = modules.nvim_opts.get_cache('tabline', { global = true })
+    if tbl_cur or tbl_last then
+      modules.nvim_opts.set('tabline', tbl_cur, { global = true })
+    end
   end
 
   vim.g.actual_curwin = old_actual_curwin
