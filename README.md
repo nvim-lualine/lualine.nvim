@@ -125,6 +125,7 @@ require('lualine').setup {
       statusline = {},
       winbar = {},
     },
+    ignore_focus = {},
     always_divide_middle = true,
     globalstatus = false,
     refresh = {
@@ -337,7 +338,7 @@ Values set here are treated as default for other options
 that work in component level.
 
 For example even though `icons_enabled` is a general component option.
-you can set `icons_enabled` to `false` and icons will be disabled on all
+You can set `icons_enabled` to `false` and icons will be disabled on all
 component. You can still overwrite defaults set in option table by specifying
 the option value in component.
 
@@ -350,6 +351,13 @@ options = {
       statusline = {},       -- only ignores the ft for statusline.
       winbar = {},           -- only ignores the ft for winbar.
   },
+
+  ignore_focus = {},         -- If current filetype is in this list it'll
+                             -- always be drawn as inactive statusline
+                             -- and the last window will be drawn as active statusline.
+                             -- for example if you don't want statusline of
+                             -- your file tree / sidebar window to have active
+                             -- statusline you can add their filetypes here.
 
   always_divide_middle = true, -- When set to true, left sections i.e. 'a','b' and 'c'
                                -- can't take over the entire statusline even
