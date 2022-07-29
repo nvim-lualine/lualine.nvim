@@ -19,6 +19,9 @@ local timers = {
   wb_timer = vim.loop.new_timer(),
 }
 
+local last_focus = {}
+local refresh_real_curwin
+
 -- The events on which lualine redraws itself
 local default_refresh_events = 'WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized,Filetype'
 if vim.fn.has('nvim-0.7') == 1 then -- utilize ModeChanged event introduced in 0.7
@@ -187,7 +190,7 @@ end)
 --- check if any extension matches the filetype and return proper sections
 ---@param current_ft string : filetype name of current file
 ---@param is_focused boolean : whether being evaluated for focused window or not
----@return table : (section_table) section config where components are replaced with
+---@return table|nil : (section_table) section config where components are replaced with
 ---      component objects
 -- TODO: change this so it uses a hash table instead of iteration over list
 --       to improve redraws. Add buftype / bufname for extensions
@@ -195,7 +198,11 @@ end)
 local function get_extension_sections(current_ft, is_focused, sec_name)
   for _, extension in ipairs(config.extensions) do
     if vim.tbl_contains(extension.filetypes, current_ft) then
-      return extension[(is_focused and '' or 'inactive_') .. sec_name]
+      if is_focused then
+        return extension[sec_name]
+      else
+        return extension['inactive_' .. sec_name] or extension[sec_name]
+      end
     end
   end
   return nil
@@ -267,7 +274,9 @@ end
 local function status_dispatch(sec_name)
   return function(focused)
     local retval
-    local current_ft = vim.bo.filetype
+    local current_ft = refresh_real_curwin
+        and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(refresh_real_curwin), 'filetype')
+      or vim.bo.filetype
     local is_focused = focused ~= nil and focused or modules.utils.is_focused()
     if
       vim.tbl_contains(
@@ -299,7 +308,7 @@ end
 ---@class LualineRefreshOpts
 ---@field kind LualineRefreshOptsKind
 ---@field place LualineRefreshOptsPlace[]
----@field trigger 'autocmd'|'autocmd_redired|timer'|'unknown'
+---@field trigger 'autocmd'|'autocmd_redired'|'timer'|'unknown'
 --- Refresh contents of lualine
 ---@param opts LualineRefreshOpts
 local function refresh(opts)
@@ -324,7 +333,50 @@ local function refresh(opts)
 
   local wins = {}
   local old_actual_curwin = vim.g.actual_curwin
-  vim.g.actual_curwin = vim.api.nvim_get_current_win()
+
+  -- ignore focus on filetypes listes in options.ignore_focus
+  local curwin = vim.api.nvim_get_current_win()
+  local curtab = vim.api.nvim_get_current_tabpage()
+  if last_focus[curtab] == nil or not vim.api.nvim_win_is_valid(last_focus[curtab]) then
+    if
+      not vim.tbl_contains(
+        config.options.ignore_focus,
+        vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(curwin), 'filetype')
+      )
+    then
+      last_focus[curtab] = curwin
+    else
+      local tab_wins = vim.api.nvim_tabpage_list_wins(curtab)
+      if #tab_wins == 1 then
+        last_focus[curtab] = curwin
+      else
+        local focusable_win = curwin
+        for _, win in ipairs(tab_wins) do
+          if
+            not vim.tbl_contains(
+              config.options.ignore_focus,
+              vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(win), 'filetype')
+            )
+          then
+            focusable_win = win
+            break
+          end
+        end
+        last_focus[curtab] = focusable_win
+      end
+    end
+  else
+    if
+      not vim.tbl_contains(
+        config.options.ignore_focus,
+        vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(curwin), 'filetype')
+      )
+    then
+      last_focus[curtab] = curwin
+    end
+  end
+  vim.g.actual_curwin = last_focus[curtab]
+
   -- gather which windows needs update
   if opts.kind == 'all' then
     if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
@@ -339,13 +391,14 @@ local function refresh(opts)
       end, vim.api.nvim_tabpage_list_wins(0))
     end
   elseif opts.kind == 'window' then
-    wins = { vim.api.nvim_get_current_win() }
+    wins = { curwin }
   end
 
   -- update them
   if vim.tbl_contains(opts.place, 'statusline') then
     for _, win in ipairs(wins) do
-      local stl_cur = vim.api.nvim_win_call(win, M.statusline)
+      refresh_real_curwin = config.options.globalstatus and last_focus[curtab] or win
+      local stl_cur = vim.api.nvim_win_call(refresh_real_curwin, M.statusline)
       local stl_last = modules.nvim_opts.get_cache('statusline', { window = win })
       if stl_cur or stl_last then
         modules.nvim_opts.set('statusline', stl_cur, { window = win })
@@ -354,8 +407,9 @@ local function refresh(opts)
   end
   if vim.tbl_contains(opts.place, 'winbar') then
     for _, win in ipairs(wins) do
+      refresh_real_curwin = config.options.globalstatus and last_focus[curtab] or win
       if vim.api.nvim_win_get_height(win) > 1 then
-        local wbr_cur = vim.api.nvim_win_call(win, M.winbar)
+        local wbr_cur = vim.api.nvim_win_call(refresh_real_curwin, M.winbar)
         local wbr_last = modules.nvim_opts.get_cache('winbar', { window = win })
         if wbr_cur or wbr_last then
           modules.nvim_opts.set('winbar', wbr_cur, { window = win })
@@ -364,7 +418,8 @@ local function refresh(opts)
     end
   end
   if vim.tbl_contains(opts.place, 'tabline') then
-    local tbl_cur = vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline)
+    refresh_real_curwin = curwin
+    local tbl_cur = vim.api.nvim_win_call(curwin, tabline)
     local tbl_last = modules.nvim_opts.get_cache('tabline', { global = true })
     if tbl_cur or tbl_last then
       modules.nvim_opts.set('tabline', tbl_cur, { global = true })
@@ -372,6 +427,7 @@ local function refresh(opts)
   end
 
   vim.g.actual_curwin = old_actual_curwin
+  refresh_real_curwin = nil
 end
 
 --- Sets &tabline option to lualine

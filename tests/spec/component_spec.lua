@@ -400,7 +400,12 @@ describe('Location component', function()
       component_separators = { left = '', right = '' },
       padding = 0,
     }
-    assert_component('location', opts, '%3l:%-2v')
+    assert_component('location', opts, '  1:1 ')
+    vim.cmd('normal! 9o')
+    assert_component('location', opts, ' 10:1 ')
+    vim.api.nvim_win_set_cursor(0, {5, 0})
+    assert_component('location', opts, '  5:1 ')
+    vim.cmd('bdelete!')
   end)
 end)
 
@@ -410,7 +415,12 @@ describe('Progress component', function()
       component_separators = { left = '', right = '' },
       padding = 0,
     }
-    assert_component('progress', opts, '%3p%%')
+    assert_component('progress', opts, 'Top')
+    vim.cmd('normal! 9o')
+    assert_component('progress', opts, 'Bot')
+    vim.api.nvim_win_set_cursor(0, {5, 0})
+    assert_component('progress', opts, '50%%')
+    vim.cmd('bdelete!')
   end)
 end)
 

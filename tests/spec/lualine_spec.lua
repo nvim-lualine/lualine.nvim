@@ -19,6 +19,7 @@ describe('Lualine', function()
           statusline = {},
           winbar = {},
         },
+        ignore_focus = {},
         always_divide_middle = true,
         globalstatus = false,
         refresh = {
@@ -81,12 +82,12 @@ describe('Lualine', function()
     {3:  master }
     {4:}
     {5: [No Name] }
-    {5:                                                                      }
+    {5:                                                                       }
     {5:  }
     {4:}
-    {3: 100% }
+    {3: Top }
     {2:}
-    {1:   0:1  }|
+    {1:   1:1  }|
     ]===])
   end)
 
@@ -97,7 +98,7 @@ describe('Lualine', function()
     }
     |{1: [No Name] }
     {1:                                                                                                     }
-    {1:   0:1  }|
+    {1:   1:1  }|
     ]===])
   end)
 
@@ -120,12 +121,12 @@ describe('Lualine', function()
     |{1:  master }
     {2:}
     {3: [No Name] }
-    {3:                                                                               }
+    {3:                                                                                }
     {3:  }
     {2:}
-    {1: 100% }
+    {1: Top }
     {4:}
-    {5:   0:1  }|
+    {5:   1:1  }|
     ]===])
   end)
 
@@ -141,10 +142,10 @@ describe('Lualine', function()
     |{1: NORMAL }
     {2:  master }
     {3: [No Name] }
-    {3:                                                                          }
+    {3:                                                                           }
     {3:  }
-    {2: 100% }
-    {1:   0:1  }|
+    {2: Top }
+    {1:   1:1  }|
     ]===])
   end)
 
@@ -171,12 +172,12 @@ describe('Lualine', function()
     {3:  master }
     {4:}
     {5: [No Name] }
-    {5:                                            }
+    {5:                                             }
     {5:  }
     {4:}
-    {3: 100% }
+    {3: Top }
     {2:}
-    {1:   0:1  }
+    {1:   1:1  }
     {1: test_comp2 }|
     ]===])
 
@@ -196,12 +197,12 @@ describe('Lualine', function()
     {3:  master }
     {4:}
     {5: [No Name] }
-    {5:                                              }
+    {5:                                               }
     {5:  }
     {4:}
-    {3: 100% }
+    {3: Top }
     {2:}
-    {1:   0:1  }
+    {1:   1:1  }
     {1: test_comp2 }|
     ]===])
   end)
@@ -241,10 +242,10 @@ describe('Lualine', function()
     |{1: NORMAL }
     {2: master }
     {3: [No Name] }
-    {3:                                                                         }
+    {3:                                                                          }
     {3: unix }
-    {2: 100% }
-    {1:   0:1  }|
+    {2: Top }
+    {1:   1:1  }|
     ]===])
   end)
 
@@ -322,14 +323,13 @@ describe('Lualine', function()
     {3:  master }
     {4:}
     {5: [No Name] }
-    {5:                                                                      }
+    {5:                                                                       }
     {5:  }
     {4:}
-    {3: 100% }
+    {3: Top }
     {2:}
-    {1:   0:1  }|
+    {1:   1:1  }|
     ]===])
-
     vim.bo.ft = 'test_ft2'
     statusline:expect([===[
     highlights = {
@@ -403,12 +403,12 @@ describe('Lualine', function()
       {3:  master }
       {4:}
       {5: [No Name] }
-      {5:                                                                      }
+      {5:                                                                       }
       {5:  }
       {4:}
-      {3: 100% }
+      {3: Top }
       {2:}
-      {1:   0:1  }|
+      {1:   1:1  }|
       ]===])
     end)
     describe('tabs component', function()
