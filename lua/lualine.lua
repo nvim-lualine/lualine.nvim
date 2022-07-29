@@ -20,6 +20,7 @@ local timers = {
 }
 
 local last_focus = {}
+local refresh_real_curwin
 
 -- The events on which lualine redraws itself
 local default_refresh_events = 'WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized,Filetype'
@@ -273,8 +274,8 @@ end
 local function status_dispatch(sec_name)
   return function(focused)
     local retval
-    local current_ft = vim.g.real_curwin
-        and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(vim.g.real_curwin), 'filetype')
+    local current_ft = refresh_real_curwin
+        and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(refresh_real_curwin), 'filetype')
       or vim.bo.filetype
     local is_focused = focused ~= nil and focused or modules.utils.is_focused()
     if
@@ -390,45 +391,43 @@ local function refresh(opts)
       end, vim.api.nvim_tabpage_list_wins(0))
     end
   elseif opts.kind == 'window' then
-    wins = { vim.api.nvim_get_current_win() }
+    wins = { curwin }
   end
 
   -- update them
   if vim.tbl_contains(opts.place, 'statusline') then
     for _, win in ipairs(wins) do
-      vim.g.real_curwin = config.options.globalstatus and last_focus[curtab] or win
-      local stl_cur = vim.api.nvim_win_call(vim.g.real_curwin, M.statusline)
+      refresh_real_curwin = config.options.globalstatus and last_focus[curtab] or win
+      local stl_cur = vim.api.nvim_win_call(refresh_real_curwin, M.statusline)
       local stl_last = modules.nvim_opts.get_cache('statusline', { window = win })
       if stl_cur or stl_last then
         modules.nvim_opts.set('statusline', stl_cur, { window = win })
       end
-      vim.g.real_curwin = nil
     end
   end
   if vim.tbl_contains(opts.place, 'winbar') then
     for _, win in ipairs(wins) do
-      vim.g.real_curwin = config.options.globalstatus and last_focus[curtab] or win
+      refresh_real_curwin = config.options.globalstatus and last_focus[curtab] or win
       if vim.api.nvim_win_get_height(win) > 1 then
-        local wbr_cur = vim.api.nvim_win_call(vim.g.real_curwin, M.winbar)
+        local wbr_cur = vim.api.nvim_win_call(refresh_real_curwin, M.winbar)
         local wbr_last = modules.nvim_opts.get_cache('winbar', { window = win })
         if wbr_cur or wbr_last then
           modules.nvim_opts.set('winbar', wbr_cur, { window = win })
         end
       end
-      vim.g.real_curwin = nil
     end
   end
   if vim.tbl_contains(opts.place, 'tabline') then
-    vim.g.real_curwin = vim.api.nvim_get_current_win()
-    local tbl_cur = vim.api.nvim_win_call(vim.api.nvim_get_current_win(), tabline)
+    refresh_real_curwin = curwin
+    local tbl_cur = vim.api.nvim_win_call(curwin, tabline)
     local tbl_last = modules.nvim_opts.get_cache('tabline', { global = true })
     if tbl_cur or tbl_last then
       modules.nvim_opts.set('tabline', tbl_cur, { global = true })
     end
-    vim.g.real_curwin = nil
   end
 
   vim.g.actual_curwin = old_actual_curwin
+  refresh_real_curwin = nil
 end
 
 --- Sets &tabline option to lualine
