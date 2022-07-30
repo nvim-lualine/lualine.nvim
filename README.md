@@ -821,6 +821,7 @@ extensions = {'quickfix'}
 - fern
 - fugitive
 - fzf
+- import
 - man
 - mundo
 - neo-tree
