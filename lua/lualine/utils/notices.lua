@@ -12,6 +12,9 @@ function M.add_notice(notice)
   if type(notice) == 'string' then
     notice = vim.split(notice, '\n')
   end
+  if notice[#notice] ~= '' then
+    notice[#notice+1] = ''
+  end
   table.insert(notices, notice)
 end
 
