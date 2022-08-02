@@ -13,6 +13,7 @@ Mode.map = {
   ['niR']    = 'NORMAL',
   ['niV']    = 'NORMAL',
   ['nt']     = 'NORMAL',
+  ['ntT']    = 'NORMAL',
   ['v']      = 'VISUAL',
   ['vs']     = 'VISUAL',
   ['V']      = 'V-LINE',
