@@ -20,9 +20,9 @@ local M = {}
 ---@field set any
 ---@alias LualineNvimOptCacheOpt table<string, LualineNvimOptCacheOptStore>
 ---@class LualineNvimOptCache
----@field global LualineNvimOptCacheOpt[]
----@field buffer table<number, LualineNvimOptCacheOpt[]>
----@field window table<number, LualineNvimOptCacheOpt[]>
+---@field global LualineNvimOptCacheOptStore[]
+---@field buffer table<number, LualineNvimOptCacheOptStore[]>
+---@field window table<number, LualineNvimOptCacheOptStore[]>
 ---@type LualineNvimOptCache
 local options = { global = {}, buffer = {}, window = {} }
 
@@ -42,7 +42,9 @@ local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
     cache_tbl[name] = {}
   end
   if cache_tbl[name].set ~= cur then
-    cache_tbl[name].prev = cur
+    if type(cur) ~= 'string' or not cur:find('lualine') then
+      cache_tbl[name].prev = cur
+    end
   end
   cache_tbl[name].set = val
   setter_fn(name, val)
@@ -83,7 +85,11 @@ end
 function M.restore(name, opts)
   if opts == nil or opts.global then
     if options.global[name] ~= nil and options.global[name].prev ~= nil then
-      vim.api.nvim_set_option(name, options.global[name].prev)
+      local restore_to = options.global[name].prev
+      if type(restore_to) == 'string' and restore_to:find('lualine') then
+        restore_to = ''
+      end
+      vim.api.nvim_set_option(name, restore_to)
     end
   elseif opts.buffer then
     if
@@ -91,7 +97,11 @@ function M.restore(name, opts)
       and options.buffer[opts.buffer][name] ~= nil
       and options.buffer[opts.buffer][name].prev ~= nil
     then
-      vim.api.nvim_buf_set_option(opts.buffer, name, options.buffer[opts.buffer][name].prev)
+      local restore_to = options.buffer[opts.buffer][name].prev
+      if type(restore_to) == 'string' and restore_to:find('lualine') then
+        restore_to = ''
+      end
+      vim.api.nvim_buf_set_option(opts.buffer, name, restore_to)
     end
   elseif opts.window then
     if
@@ -99,7 +109,11 @@ function M.restore(name, opts)
       and options.window[opts.window][name] ~= nil
       and options.window[opts.window][name].prev ~= nil
     then
-      vim.api.nvim_win_set_option(opts.window, name, options.window[opts.window][name].prev)
+      local restore_to = options.window[opts.window][name].prev
+      if type(restore_to) == 'string' and restore_to:find('lualine') then
+        restore_to = ''
+      end
+      vim.api.nvim_win_set_option(opts.window, name, restore_to)
     end
   end
 end

@@ -871,6 +871,26 @@ You can disable lualine for specific filetypes:
 options = { disabled_filetypes = {'lua'} }
 ```
 
+You can also disable lualine completely.
+```lua
+  require('lualine').hide({
+    place = {'statusline', 'tabline', 'winbar'}, -- The segmentthis change applies to.
+    unhide = false,  -- whether to reenable lualine again/
+  })
+```
+The arguments show for hide above are default values.
+Which means even if the hide function is called without
+arguments it'll work as if these were passed.
+
+So in short to disable lualine completely you can do
+```lua
+require('lualine').hide()
+```
+To enable it again you can do
+```lua
+require('lualine').hide({unhide=true})
+```
+
 <!-- panvimdoc-ignore-start -->
 
 ### Contributors
