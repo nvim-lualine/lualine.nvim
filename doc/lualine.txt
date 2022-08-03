@@ -919,9 +919,8 @@ So you can simply do
 <
 
 
-to refresh. Also don’t call refresh inside components. As components are
-evaluated during refresh, calling refresh while refreshing can have undesirable
-effects.
+Avoid calling lualine.refresh inside components. Since components are evaluated
+during refresh, calling refresh while refreshing can have undesirable effects.
 
 DISABLING LUALINE ~
 

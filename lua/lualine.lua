@@ -17,7 +17,7 @@ local timers = {
   stl_timer = vim.loop.new_timer(),
   tal_timer = vim.loop.new_timer(),
   wb_timer = vim.loop.new_timer(),
-  halt_stl_refresh = false,  -- mutex ?
+  halt_stl_refresh = false, -- mutex ?
   halt_tal_refresh = false,
   halt_wb_refresh = false,
 }
@@ -321,7 +321,7 @@ local function refresh(opts)
   opts = vim.tbl_extend('keep', opts, {
     scope = 'tabpage',
     place = { 'statusline', 'winbar', 'tabline' },
-    trigger = 'unknown'
+    trigger = 'unknown',
   })
 
   -- updating statusline in autocommands context seems to trigger 100 different bugs
@@ -564,7 +564,7 @@ local function hide(opts)
     opts = {}
   end
   opts = vim.tbl_extend('keep', opts, {
-    place = {'statusline', 'tabline', 'winbar'},
+    place = { 'statusline', 'tabline', 'winbar' },
     unhide = false,
   })
   local hide_fn = {
