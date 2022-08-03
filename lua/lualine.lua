@@ -306,15 +306,20 @@ end
 ---| 'tabline'
 ---| 'winbar'
 ---@class LualineRefreshOpts
----@field kind LualineRefreshOptsKind
+---@field scope LualineRefreshOptsKind
 ---@field place LualineRefreshOptsPlace[]
 ---@field trigger 'autocmd'|'autocmd_redired'|'timer'|'unknown'
 --- Refresh contents of lualine
 ---@param opts LualineRefreshOpts
 local function refresh(opts)
   if opts == nil then
-    opts = { kind = 'tabpage', place = { 'statusline', 'winbar', 'tabline' }, trigger = 'unknown' }
+    opts = {}
   end
+  opts = vim.tbl_extend('keep', opts, {
+    scope = 'tabpage',
+    place = { 'statusline', 'winbar', 'tabline' },
+    trigger = 'unknown'
+  })
 
   -- updating statusline in autocommands context seems to trigger 100 different bugs
   -- lets just defer it to a timer context and update there
@@ -378,19 +383,19 @@ local function refresh(opts)
   vim.g.actual_curwin = last_focus[curtab]
 
   -- gather which windows needs update
-  if opts.kind == 'all' then
+  if opts.scope == 'all' then
     if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
       wins = vim.tbl_filter(function(win)
         return vim.fn.win_gettype(win) ~= 'popup'
       end, vim.api.nvim_list_wins())
     end
-  elseif opts.kind == 'tabpage' then
+  elseif opts.scope == 'tabpage' then
     if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
       wins = vim.tbl_filter(function(win)
         return vim.fn.win_gettype(win) ~= 'popup'
       end, vim.api.nvim_tabpage_list_wins(0))
     end
-  elseif opts.kind == 'window' then
+  elseif opts.scope == 'window' then
     wins = { curwin }
   end
 

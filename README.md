@@ -842,6 +842,27 @@ require('lualine').setup { extensions = { my_extension } }
 
 ---
 
+### Refreshing lualine
+By default lualine refreshes itself based on timer and some events. You can set
+the interval of the timer with refresh option. However you can also force
+lualine to refresh at any time by calling lualine.refresh function.
+```lua
+require('lualine').refresh({
+  scope = 'tabpage',  -- scope of refresh all/tabpage/window
+  place = { 'statusline', 'winbar', 'tabline' },  -- lualine segment ro refresh.
+})
+```
+The arguments shown here are default values. So not passing any of them will be
+treated as if a default value was passed.
+
+So you can simply do
+```lua
+require('lualine').refresh()
+```
+
+Avoid calling lualine.refresh inside components. Since components are evaluated
+during refresh, calling refresh while refreshing can have undesirable effects.
+
 ### Disabling lualine
 
 You can disable lualine for specific filetypes:
