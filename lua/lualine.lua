@@ -449,7 +449,7 @@ local function set_tabline(hide)
       timers.tal_timer,
       0,
       config.options.refresh.tabline,
-      modules.utils.timer_call(timers.stl_timer, 'lualine_tal_refresh', function()
+      modules.utils.timer_call(timers.tal_timer, 'lualine_tal_refresh', function()
         refresh { kind = 'tabpage', place = { 'tabline' }, trigger = 'timer' }
       end, 3, 'lualine: Failed to refresh tabline')
     )
@@ -529,10 +529,10 @@ local function set_winbar(hide)
   vim.cmd([[augroup lualine_wb_refresh | exe "autocmd!" | augroup END]])
   if not hide and (next(config.winbar) ~= nil or next(config.inactive_winbar) ~= nil) then
     vim.loop.timer_start(
-      timers.stl_timer,
+      timers.wb_timer,
       0,
       config.options.refresh.winbar,
-      modules.utils.timer_call(timers.stl_timer, 'lualine_wb_refresh', function()
+      modules.utils.timer_call(timers.wb_timer, 'lualine_wb_refresh', function()
         refresh { kind = 'tabpage', place = { 'winbar' }, trigger = 'timer' }
       end, 3, 'lualine: Failed to refresh winbar')
     )
