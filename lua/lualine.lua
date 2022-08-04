@@ -333,9 +333,9 @@ local function refresh(opts)
   -- workaround for https://github.com/nvim-lualine/lualine.nvim/issues/755
   if opts.trigger == 'autocmd' then
     opts.trigger = 'autocmd_redired'
-    vim.defer_fn(function()
+    vim.schedule(function()
       M.refresh(opts)
-    end, 50)
+    end)
     return
   end
 
@@ -406,10 +406,14 @@ local function refresh(opts)
   if not timers.halt_stl_refresh and vim.tbl_contains(opts.place, 'statusline') then
     for _, win in ipairs(wins) do
       refresh_real_curwin = config.options.globalstatus and last_focus[curtab] or win
+      local set_win = config.options.globalstatus
+          and vim.fn.win_gettype(refresh_real_curwin) == 'popup'
+          and refresh_real_curwin
+        or win
       local stl_cur = vim.api.nvim_win_call(refresh_real_curwin, M.statusline)
-      local stl_last = modules.nvim_opts.get_cache('statusline', { window = win })
+      local stl_last = modules.nvim_opts.get_cache('statusline', { window = set_win })
       if stl_cur or stl_last then
-        modules.nvim_opts.set('statusline', stl_cur, { window = win })
+        modules.nvim_opts.set('statusline', stl_cur, { window = set_win })
       end
     end
   end
