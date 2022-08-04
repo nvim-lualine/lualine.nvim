@@ -415,7 +415,7 @@ local function refresh(opts)
   end
   if not timers.halt_wb_refresh and vim.tbl_contains(opts.place, 'winbar') then
     for _, win in ipairs(wins) do
-      refresh_real_curwin = config.options.globalstatus and last_focus[curtab] or win
+      refresh_real_curwin = win
       if vim.api.nvim_win_get_height(win) > 1 then
         local wbr_cur = vim.api.nvim_win_call(refresh_real_curwin, M.winbar)
         local wbr_last = modules.nvim_opts.get_cache('winbar', { window = win })
