@@ -438,6 +438,13 @@ local function refresh(opts)
     end
   end
 
+  -- call redraw
+  if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
+    vim.cmd('redrawstatus')
+  elseif vim.tbl_contains(opts.place, 'tabline') then
+    vim.cmd('redrawtabline')
+  end
+
   vim.g.actual_curwin = old_actual_curwin
   refresh_real_curwin = nil
 end
