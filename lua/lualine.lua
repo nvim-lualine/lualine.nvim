@@ -438,11 +438,17 @@ local function refresh(opts)
     end
   end
 
-  -- call redraw
-  if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
-    vim.cmd('redrawstatus')
-  elseif vim.tbl_contains(opts.place, 'tabline') then
-    vim.cmd('redrawtabline')
+  -- call redraw on command mode unless &wildmode=list
+  -- workaround for
+  -- https://github.com/neovim/neovim/issues/19472
+  -- https://github.com/nvim-lualine/lualine.nvim/issues/781
+  -- Note when wildmode is set to list https://github.com/neovim/neovim/issues/19472 issue persists.
+  if vim.api.nvim_get_mode().mode == 'c' and not vim.go.wildmode:find('list') then
+    if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
+      vim.cmd('redrawstatus')
+    elseif vim.tbl_contains(opts.place, 'tabline') then
+      vim.cmd('redrawtabline')
+    end
   end
 
   vim.g.actual_curwin = old_actual_curwin
