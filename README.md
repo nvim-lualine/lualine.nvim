@@ -818,6 +818,7 @@ extensions = {'quickfix'}
 
 - aerial
 - chadtree
+- drex
 - fern
 - fugitive
 - fzf
