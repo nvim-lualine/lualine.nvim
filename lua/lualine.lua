@@ -326,12 +326,18 @@ local function refresh(opts)
 
   -- updating statusline in autocommands context seems to trigger 100 different bugs
   -- lets just defer it to a timer context and update there
-  -- workaround for https://github.com/neovim/neovim/issues/15300
-  -- workaround for https://github.com/neovim/neovim/issues/19464
-  -- workaround for https://github.com/nvim-lualine/lualine.nvim/issues/753
-  -- workaround for https://github.com/nvim-lualine/lualine.nvim/issues/751
-  -- workaround for https://github.com/nvim-lualine/lualine.nvim/issues/755
-  if opts.trigger == 'autocmd' then
+  -- Since updating stl in command mode doesn't take effect
+  -- refresh ModeChanged command in autocmd context as exception.
+  -- workaround for
+  --   https://github.com/neovim/neovim/issues/15300
+  --   https://github.com/neovim/neovim/issues/19464
+  --   https://github.com/nvim-lualine/lualine.nvim/issues/753
+  --   https://github.com/nvim-lualine/lualine.nvim/issues/751
+  --   https://github.com/nvim-lualine/lualine.nvim/issues/755
+  --   https://github.com/neovim/neovim/issues/19472
+  --   https://github.com/nvim-lualine/lualine.nvim/issues/791
+  if opts.trigger == 'autocmd'
+    and vim.v.event.new_mode ~= 'c' then
     opts.trigger = 'autocmd_redired'
     vim.schedule(function()
       M.refresh(opts)
