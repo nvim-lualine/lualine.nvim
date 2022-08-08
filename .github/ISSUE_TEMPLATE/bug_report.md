@@ -19,7 +19,7 @@ labels: bug
 - [ ] I didn't find the issue in exsisting issues or prs.
 
 ### How to reproduce the problem
-<!-- Add steps to reproduce with mini al config from below -->
+<!-- Add steps to reproduce with minimal config from below -->
 
 ### Expected behaviour
 
@@ -29,8 +29,6 @@ labels: bug
 
 ### Minimal config to reproduce the issue
 
-<details>
-<summary>Config</summary>
 <!--
   =================
   ### IMPORTENT ###
@@ -40,7 +38,7 @@ labels: bug
   of other plugins.
 
   Issues without proper format and a proper way to
-  reproduce might be ignored.
+  reproduce might be ignored and closed without any reply.
 
   This script can help you with that.
   https://github.com/nvim-lualine/lualine.nvim/blob/master/scripts/nvim_isolated_conf.sh
@@ -52,14 +50,21 @@ labels: bug
   Then modify the DirectoryName/.config/nvim/init.vim
   so you can reproduce the issue .
 
-  You can load the config to see if the issue is occuring with
+    `nvim_isolated_conf.sh -e DirectoryName`
+
+  will open DirectoryName/.config/nvim/init.vim in neovim.
+  the init.vim will have instructions on how and where to place
+  your config don't worry if you don't know viml you can get away
+  with lua even in a vim file.
+
+  Then you can load the config in an isolated environment to see
+  if the issue is occuring with
 
     `nvim_isolated_conf.sh -l DirectoryName`
 
-  Paste the DirectoryName/.config/init.vim without comments below
+  Paste the DirectoryName/.config/init.vim below
 -->
 
-</details>
 
 ### Aditional information
 
