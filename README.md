@@ -759,10 +759,14 @@ Shows currently open buffers. Like bufferline . See
 for all builtin behaviors of buffers component.
 You can use `:LualineBuffersJump` to jump to buffer based on index
 of buffer in buffers component.
+Jumping to non-existent buffer indices generates an error. To avoid these errors
+`LualineBuffersJump` provides `<bang>` support, meaning that you can call
+`:LualineBufferJump!` to ignore these errors.
 
 ```vim
   :LualineBuffersJump 2  " Jumps to 2nd buffer in buffers component.
   :LualineBuffersJump $  " Jumps to last buffer in buffers component.
+  :LualineBuffersJump! 3  " Attempts to jump to 3rd buffer, if it exists.
 ```
 
 #### Tabs
