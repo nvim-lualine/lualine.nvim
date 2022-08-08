@@ -211,14 +211,18 @@ function M:draw()
   return self.status
 end
 
-function M.buffer_jump(buf_pos)
+function M.buffer_jump(buf_pos, bang)
   if buf_pos == '$' then
     buf_pos = #M.bufpos2nr
   else
     buf_pos = tonumber(buf_pos)
   end
   if buf_pos < 1 or buf_pos > #M.bufpos2nr then
-    error('Error: Unable to jump buffer position out of range')
+    if bang ~= '!' then
+      error('Error: Unable to jump buffer position out of range')
+    else
+      return
+    end
   end
   vim.api.nvim_set_current_buf(M.bufpos2nr[buf_pos])
 end
@@ -228,7 +232,7 @@ vim.cmd([[
     execute ":buffer " . a:bufnr
   endfunction
 
-  command! -nargs=1 LualineBuffersJump call v:lua.require'lualine.components.buffers'.buffer_jump(<f-args>)
+  command! -nargs=1 -bang LualineBuffersJump call v:lua.require'lualine.components.buffers'.buffer_jump(<f-args>, "<bang>")
 ]])
 
 return M
