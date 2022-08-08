@@ -7,8 +7,14 @@ local modules = require('lualine_require').lazy_require {
 }
 
 local default_options = {
-  symbols = { modified = '[+]', readonly = '[-]', unnamed = '[No Name]' },
+  symbols = {
+    modified = '[+]',
+    readonly = '[-]',
+    unnamed = '[No Name]',
+    newfile = '[New]',
+  },
   file_status = true,
+  newfile_status = false,
   path = 0,
   shorting_target = 40,
 }
@@ -19,6 +25,11 @@ local default_options = {
 ---@return number
 local function count(base, pattern)
   return select(2, string.gsub(base, pattern, ''))
+end
+
+local function is_new_file()
+  local filename = vim.fn.expand('%')
+  return vim.bo.buftype == '' and vim.fn.filereadable(filename) == 0
 end
 
 ---shortens path by turning apple/orange -> a/orange
@@ -76,6 +87,10 @@ M.update_status = function(self)
     if vim.bo.modifiable == false or vim.bo.readonly == true then
       data = data .. self.options.symbols.readonly
     end
+  end
+
+  if self.options.newfile_status and is_new_file() then
+    data = data .. self.options.symbols.newfile
   end
   return data
 end
