@@ -336,8 +336,7 @@ local function refresh(opts)
   --   https://github.com/nvim-lualine/lualine.nvim/issues/755
   --   https://github.com/neovim/neovim/issues/19472
   --   https://github.com/nvim-lualine/lualine.nvim/issues/791
-  if opts.trigger == 'autocmd'
-    and vim.v.event.new_mode ~= 'c' then
+  if opts.trigger == 'autocmd' and vim.v.event.new_mode ~= 'c' then
     opts.trigger = 'autocmd_redired'
     vim.schedule(function()
       M.refresh(opts)
