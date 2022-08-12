@@ -68,6 +68,8 @@ M.update_status = function(self)
     data = self.options.symbols.unnamed
   end
 
+  data = data .. " "
+
   if self.options.shorting_target ~= 0 then
     local windwidth = self.options.globalstatus and vim.go.columns or vim.fn.winwidth(0)
     local estimated_space_available = windwidth - self.options.shorting_target
