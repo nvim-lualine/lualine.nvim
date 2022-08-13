@@ -34,11 +34,12 @@ function M:apply_icon()
     local f_name, f_extension = vim.fn.expand('%:t'), vim.fn.expand('%:e')
     f_extension = f_extension ~= '' and f_extension or vim.bo.filetype
     icon, icon_highlight_group = devicons.get_icon(f_name, f_extension)
+
     if icon == nil and icon_highlight_group == nil then
       icon = ''
       icon_highlight_group='DevIconDefault'
     end
-    if icon and self.options.colored then
+    if self.options.colored then
       local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
       if highlight_color then
         local default_highlight = self:get_default_hl()
@@ -56,6 +57,10 @@ function M:apply_icon()
     if ok ~= 0 then
       icon = vim.fn.WebDevIconsGetFileTypeSymbol()
     end
+  end
+
+  if not icon then
+    return
   end
 
   if self.options.icon_only then
