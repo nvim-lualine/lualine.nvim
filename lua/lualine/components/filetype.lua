@@ -37,7 +37,7 @@ function M:apply_icon()
 
     if icon == nil and icon_highlight_group == nil then
       icon = ''
-      icon_highlight_group='DevIconDefault'
+      icon_highlight_group = 'DevIconDefault'
     end
     if self.options.colored then
       local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
