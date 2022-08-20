@@ -35,7 +35,11 @@ function M:apply_icon()
     f_extension = f_extension ~= '' and f_extension or vim.bo.filetype
     icon, icon_highlight_group = devicons.get_icon(f_name, f_extension)
 
-    if icon and self.options.colored then
+    if icon == nil and icon_highlight_group == nil then
+      icon = ''
+      icon_highlight_group='DevIconDefault'
+    end
+    if self.options.colored then
       local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
       if highlight_color then
         local default_highlight = self:get_default_hl()
