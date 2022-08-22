@@ -32,6 +32,9 @@ function M:apply_icon()
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if ok then
     icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
+    if icon == nil then
+      icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
+    end
 
     if icon == nil and icon_highlight_group == nil then
       icon = ''

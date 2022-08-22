@@ -424,6 +424,42 @@ describe('Filetype component', function()
     hl.create_component_highlight_group:revert()
     vim.fn.expand:revert()
   end)
+
+  it('uses filetype lookup when file has no extension', function()
+    stub(vim.fn, 'expand')
+    vim.fn.expand.on_call_with('%:t').returns('test')
+
+    local hl = require('lualine.highlight')
+    stub(hl, 'create_component_highlight_group')
+
+    local utils = require('lualine.utils.utils')
+    stub(utils, 'extract_highlight_colors')
+
+    local devicons = require('nvim-web-devicons')
+    stub(devicons, 'get_icon')
+    devicons.get_icon.on_call_with('test').returns(nil)
+    stub(devicons, 'get_icon_by_filetype')
+    devicons.get_icon_by_filetype.on_call_with('lua').returns('*', 'test_highlight_group')
+
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      colored = false,
+      icon_only = false,
+    }
+    assert_component('filetype', opts, '* lua')
+    assert.stub(devicons.get_icon).was_called_with('test')
+    assert.stub(devicons.get_icon_by_filetype).was_called_with('lua')
+    assert.stub(utils.extract_highlight_colors).was_not_called()
+    assert.stub(hl.create_component_highlight_group).was_not_called()
+    assert.stub(vim.fn.expand).was_called_with('%:t')
+
+    devicons.get_icon_by_filetype:revert()
+    devicons.get_icon:revert()
+    utils.extract_highlight_colors:revert()
+    hl.create_component_highlight_group:revert()
+    vim.fn.expand:revert()
+  end)
 end)
 
 describe('Hostname component', function()
