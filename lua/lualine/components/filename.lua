@@ -80,19 +80,21 @@ M.update_status = function(self)
     end
   end
 
+  local symbols = {}
   if self.options.file_status then
     if vim.bo.modified then
-      data = data .. self.options.symbols.modified
+      table.insert(symbols, self.options.symbols.modified)
     end
     if vim.bo.modifiable == false or vim.bo.readonly == true then
-      data = data .. self.options.symbols.readonly
+      table.insert(symbols, self.options.symbols.readonly)
     end
   end
 
   if self.options.newfile_status and is_new_file() then
-    data = data .. self.options.symbols.newfile
+    table.insert(symbols, self.options.symbols.newfile)
   end
-  return data
+
+  return data .. (#symbols > 0 and ' ' .. table.concat(symbols, '') or '')
 end
 
 return M
