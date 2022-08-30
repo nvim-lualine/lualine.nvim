@@ -34,25 +34,25 @@ function Buffer:get_props()
   self.alternate_file_icon = self:is_alternate() and self.options.symbols.alternate_file or ''
   self.icon = ''
   if self.options.icons_enabled then
-    local dev
+    local dev, hl
     local status, _ = pcall(require, 'nvim-web-devicons')
     if not status then
-      dev, _ = '', ''
+      dev, hl = '', ''
     elseif self.filetype == 'TelescopePrompt' then
-      dev, _ = require('nvim-web-devicons').get_icon('telescope')
+      dev, hl = require('nvim-web-devicons').get_icon('telescope')
     elseif self.filetype == 'fugitive' then
-      dev, _ = require('nvim-web-devicons').get_icon('git')
+      dev, hl = require('nvim-web-devicons').get_icon('git')
     elseif self.filetype == 'vimwiki' then
-      dev, _ = require('nvim-web-devicons').get_icon('markdown')
+      dev, hl = require('nvim-web-devicons').get_icon('markdown')
     elseif self.buftype == 'terminal' then
-      dev, _ = require('nvim-web-devicons').get_icon('zsh')
+      dev, hl = require('nvim-web-devicons').get_icon('zsh')
     elseif vim.fn.isdirectory(self.file) == 1 then
-      dev, _ = self.options.symbols.directory, nil
+      dev, hl = self.options.symbols.directory, nil
     else
-      dev, _ = require('nvim-web-devicons').get_icon(self.file, vim.fn.expand('#' .. self.bufnr .. ':e'))
+      dev, hl = require('nvim-web-devicons').get_icon(self.file, vim.fn.expand('#' .. self.bufnr .. ':e'))
     end
     if dev then
-      self.icon = dev .. ' '
+      self.icon = '%#' .. hl .. '#' .. dev .. ' '
     end
   end
 end
@@ -163,7 +163,14 @@ end
 
 function Buffer:apply_mode(name)
   if self.options.mode == 0 then
-    return string.format('%s%s%s%s', self.alternate_file_icon, self.icon, name, self.modified_icon)
+    return string.format(
+      '%s%s%s%s%s',
+      self.alternate_file_icon,
+      self.icon,
+      modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')]),
+      name,
+      self.modified_icon
+    )
   end
 
   if self.options.mode == 1 then
