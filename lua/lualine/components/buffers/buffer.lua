@@ -174,26 +174,49 @@ function Buffer:apply_mode(name)
   end
 
   if self.options.mode == 1 then
-    return string.format('%s%s %s%s', self.alternate_file_icon, self.buf_index or '', self.icon, self.modified_icon)
-  end
-
-  if self.options.mode == 2 then
     return string.format(
       '%s%s %s%s%s',
       self.alternate_file_icon,
       self.buf_index or '',
       self.icon,
+      modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')]),
+      self.modified_icon
+    )
+  end
+
+  if self.options.mode == 2 then
+    return string.format(
+      '%s%s %s%s%s%s',
+      self.alternate_file_icon,
+      self.buf_index or '',
+      self.icon,
+      modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')]),
       name,
       self.modified_icon
     )
   end
 
   if self.options.mode == 3 then
-    return string.format('%s%s %s%s', self.alternate_file_icon, self.bufnr or '', self.icon, self.modified_icon)
+    return string.format(
+      '%s%s %s%s%s',
+      self.alternate_file_icon,
+      self.bufnr or '',
+      self.icon,
+      modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')]),
+      self.modified_icon
+    )
   end
 
   -- if self.options.mode == 4 then
-  return string.format('%s%s %s%s%s', self.alternate_file_icon, self.bufnr or '', self.icon, name, self.modified_icon)
+  return string.format(
+    '%s%s %s%s%s%s',
+    self.alternate_file_icon,
+    self.bufnr or '',
+    self.icon,
+    modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')]),
+    name,
+    self.modified_icon
+  )
 end
 
 return Buffer
