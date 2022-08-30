@@ -62,6 +62,7 @@ M.update_status = function(self)
     data = vim.fn.expand('%:t')
   end
 
+  data = data:gsub("%%5C", "")
   data = modules.utils.stl_escape(data)
 
   if data == '' then
