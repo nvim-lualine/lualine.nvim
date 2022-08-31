@@ -51,9 +51,21 @@ function Buffer:get_props()
     else
       dev, hl = require('nvim-web-devicons').get_icon(self.file, vim.fn.expand('#' .. self.bufnr .. ':e'))
     end
-    if dev then
-      self.icon = '%#' .. hl .. '#' .. dev .. ' '
+
+    if not dev then
+      return
     end
+
+    self.icon = dev .. ' '
+
+    if not hl then
+      hl = 'DevIconDefault'
+    end
+
+    self.icon_highlight = {
+      name = hl,
+      fg = modules.utils.extract_highlight_colors(hl, 'fg'),
+    }
   end
 end
 
@@ -162,56 +174,31 @@ function Buffer.apply_padding(str, padding)
 end
 
 function Buffer:apply_mode(name)
-  local base_highlight =
-    modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')])
   if self.options.mode == 0 then
-    return string.format('%s%s%s%s%s', self.alternate_file_icon, self.icon, base_highlight, name, self.modified_icon)
+    return string.format('%s%s%s%s', self.alternate_file_icon, self.icon, name, self.modified_icon)
   end
 
   if self.options.mode == 1 then
+    return string.format('%s%s %s%s', self.alternate_file_icon, self.buf_index or '', self.icon, self.modified_icon)
+  end
+
+  if self.options.mode == 2 then
     return string.format(
       '%s%s %s%s%s',
       self.alternate_file_icon,
       self.buf_index or '',
       self.icon,
-      base_highlight,
-      self.modified_icon
-    )
-  end
-
-  if self.options.mode == 2 then
-    return string.format(
-      '%s%s %s%s%s%s',
-      self.alternate_file_icon,
-      self.buf_index or '',
-      self.icon,
-      base_highlight,
       name,
       self.modified_icon
     )
   end
 
   if self.options.mode == 3 then
-    return string.format(
-      '%s%s %s%s%s',
-      self.alternate_file_icon,
-      self.bufnr or '',
-      self.icon,
-      base_highlight,
-      self.modified_icon
-    )
+    return string.format('%s%s %s%s', self.alternate_file_icon, self.bufnr or '', self.icon, self.modified_icon)
   end
 
   -- if self.options.mode == 4 then
-  return string.format(
-    '%s%s %s%s%s%s',
-    self.alternate_file_icon,
-    self.bufnr or '',
-    self.icon,
-    base_highlight,
-    name,
-    self.modified_icon
-  )
+  return string.format('%s%s %s%s%s', self.alternate_file_icon, self.bufnr or '', self.icon, name, self.modified_icon)
 end
 
 return Buffer

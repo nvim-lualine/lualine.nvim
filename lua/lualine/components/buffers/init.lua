@@ -4,6 +4,7 @@ local require = require('lualine_require').require
 local Buffer = require('lualine.components.buffers.buffer')
 local M = require('lualine.component'):extend()
 local highlight = require('lualine.highlight')
+local utils = require('lualine.utils.utils')
 
 local default_options = {
   show_filename_only = true,
@@ -49,6 +50,7 @@ end
 
 function M:init(options)
   M.super.init(self, options)
+  M.icon_hl_cache = {}
   default_options.buffers_color = {
     active = get_hl('lualine_' .. options.self.section, true),
     inactive = get_hl('lualine_' .. options.self.section, false),
@@ -84,6 +86,36 @@ function M:buffers()
   end
 
   return buffers
+end
+
+---Highlight buffer filetype icons
+---@param buffers {} buffers list
+function M:apply_icon_highlights(buffers)
+  for _, buffer in pairs(buffers) do
+    if not buffer.icon_highlight or not buffer.icon_highlight.fg then
+      goto apply_icon_highlights_loop_continue
+    end
+
+    print(buffer.current)
+    local default_hl = buffer.highlights[(buffer.current and 'active' or 'inactive')]
+    local icon_hl = self.icon_hl_cache[buffer.icon_highlight.fg]
+    if not icon_hl then
+      icon_hl = self:create_hl({
+        fg = buffer.icon_highlight.fg,
+        bg = utils.extract_highlight_colors(
+          self.options.buffers_color[buffer.current and 'active' or 'inactive'].name,
+          'bg'
+        ),
+      }, buffer.icon_highlight.name)
+      self.icon_hl_cache[buffer.icon_highlight.fg] = icon_hl
+    end
+
+    if icon_hl.name and default_hl then
+      buffer.icon = self:format_hl(icon_hl) .. buffer.icon .. self:format_hl(default_hl)
+    end
+
+    ::apply_icon_highlights_loop_continue::
+  end
 end
 
 function M:update_status()
@@ -146,6 +178,9 @@ function M:update_status()
       current = 1
     end
   end
+
+  self:apply_icon_highlights(buffers)
+
   local current_buffer = buffers[current]
   data[#data + 1] = current_buffer:render()
   total_length = current_buffer.len
