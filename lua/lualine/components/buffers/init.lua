@@ -96,7 +96,6 @@ function M:apply_icon_highlights(buffers)
       goto apply_icon_highlights_loop_continue
     end
 
-    print(buffer.current)
     local default_hl = buffer.highlights[(buffer.current and 'active' or 'inactive')]
     local icon_hl = self.icon_hl_cache[buffer.icon_highlight.fg]
     if not icon_hl then
