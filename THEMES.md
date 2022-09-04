@@ -245,6 +245,12 @@ them based you your `background` option.
 <img width='700' src='https://user-images.githubusercontent.com/8293386/150810514-81024b2c-3b80-466f-85ce-914e191bb4f9.png'/>
 </p>
 
+
+### one
+
+It's a combination of onelight and onedark. It loads either of
+them based you your `background` option.
+
 ### palenight
 
 <p>
