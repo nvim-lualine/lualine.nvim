@@ -12,6 +12,9 @@ M.sections = {
   lualine_z = { 'location' },
 }
 
+M.winbar = {}
+M.inactive_winbar = {}
+
 M.filetypes = { 'fugitive' }
 
 return M

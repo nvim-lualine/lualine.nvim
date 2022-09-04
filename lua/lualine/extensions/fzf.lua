@@ -10,6 +10,9 @@ M.sections = {
   lualine_a = { fzf_statusline },
 }
 
+M.winbar = {}
+M.inactive_winbar = {}
+
 M.filetypes = { 'fzf' }
 
 return M

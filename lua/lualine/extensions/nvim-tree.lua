@@ -6,6 +6,9 @@ local M = {}
 
 M.sections = vim.deepcopy(nerdtree.sections)
 
+M.winbar = {}
+M.inactive_winbar = {}
+
 M.filetypes = { 'NvimTree' }
 
 return M

@@ -10,6 +10,9 @@ M.sections = {
   lualine_a = { get_short_cwd },
 }
 
+M.winbar = {}
+M.inactive_winbar = {}
+
 M.filetypes = { 'nerdtree' }
 
 return M

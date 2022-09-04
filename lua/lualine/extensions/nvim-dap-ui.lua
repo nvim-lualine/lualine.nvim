@@ -6,6 +6,9 @@ M.sections = {
   lualine_a = { { 'filename', file_status = false } },
 }
 
+M.winbar = {}
+M.inactive_winbar = {}
+
 M.filetypes = {
   'dap-repl',
   'dapui_console',

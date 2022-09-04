@@ -11,6 +11,9 @@ M.sections = {
   lualine_a = { toggleterm_statusline },
 }
 
+M.winbar = {}
+M.inactive_winbar = {}
+
 M.filetypes = { 'toggleterm' }
 
 return M
