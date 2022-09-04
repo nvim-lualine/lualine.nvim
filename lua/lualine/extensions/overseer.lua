@@ -4,9 +4,13 @@
 local M = {}
 
 M.sections = {
-  lualine_a = { function() return "OverseerList" end },
+  lualine_a = {
+    function()
+      return 'OverseerList'
+    end,
+  },
 }
 
-M.filetypes = { "OverseerList" }
+M.filetypes = { 'OverseerList' }
 
 return M
