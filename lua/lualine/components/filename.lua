@@ -19,14 +19,6 @@ local default_options = {
   shorting_target = 40,
 }
 
----counts how many times pattern occur in base ( used for counting path-sep )
----@param base string
----@param pattern string
----@return number
-local function count(base, pattern)
-  return select(2, string.gsub(base, pattern, ''))
-end
-
 local function is_new_file()
   local filename = vim.fn.expand('%')
   return filename ~= '' and vim.bo.buftype == '' and vim.fn.filereadable(filename) == 0
@@ -35,10 +27,27 @@ end
 ---shortens path by turning apple/orange -> a/orange
 ---@param path string
 ---@param sep string path separator
+---@param max_len integer maximum length of the full filename string
 ---@return string
-local function shorten_path(path, sep)
-  -- ('([^/])[^/]+%/', '%1/', 1)
-  return path:gsub(string.format('([^%s])[^%s]+%%%s', sep, sep, sep), '%1' .. sep, 1)
+local function shorten_path(path, sep, max_len)
+  local len = #path
+  if len <= max_len then
+    return path
+  end
+
+  local segments = vim.split(path, sep)
+  for idx = 1, #segments - 1 do
+    if len <= max_len then
+      break
+    end
+
+    local segment = segments[idx]
+    local shortened = segment:sub(1, vim.startswith(segment, '.') and 2 or 1)
+    segments[idx] = shortened
+    len = len - (#segment - #shortened)
+  end
+
+  return table.concat(segments, sep)
 end
 
 M.init = function(self, options)
@@ -73,11 +82,7 @@ M.update_status = function(self)
     local estimated_space_available = windwidth - self.options.shorting_target
 
     local path_separator = package.config:sub(1, 1)
-    for _ = 0, count(data, path_separator) do
-      if windwidth <= 84 or #data > estimated_space_available then
-        data = shorten_path(data, path_separator)
-      end
-    end
+    data = shorten_path(data, path_separator, estimated_space_available)
   end
 
   if self.options.file_status then

@@ -455,19 +455,6 @@ describe('FileSize component', function()
 end)
 
 describe('Filename component', function()
-  local function shorten_path(path, target)
-    target = target and target or 40
-    local sep = package.config:sub(1, 1)
-    local winwidth = vim.fn.winwidth(0)
-    local segments = select(2, string.gsub(path, sep, ''))
-    for _ = 0, segments do
-      if winwidth <= 84 or #path > winwidth - target then
-        path = path:gsub(string.format('([^%s])[^%s]+%%%s', sep, sep, sep), '%1' .. sep, 1)
-      end
-    end
-    return path
-  end
-
   it('works', function()
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
@@ -506,7 +493,7 @@ describe('Filename component', function()
       path = 1,
     }
     vim.cmd(':e test-file.txt')
-    assert_component('filename', opts, shorten_path(vim.fn.expand('%:~:.')))
+    assert_component('filename', opts, vim.fn.expand('%:~:.'))
     vim.cmd(':bdelete!')
   end)
 
@@ -516,10 +503,74 @@ describe('Filename component', function()
       padding = 0,
       file_status = false,
       path = 2,
+      shorting_target = 0,
     }
     vim.cmd(':e test-file.txt')
-    assert_component('filename', opts, shorten_path(vim.fn.expand('%:p')))
+    assert_component('filename', opts, vim.fn.expand('%:p'))
     vim.cmd(':bdelete!')
+  end)
+
+  it('shortens path', function()
+    stub(vim.fn, 'expand')
+    vim.fn.expand.on_call_with('%:p').returns('/home/foobar/test/test.lua')
+    stub(vim.fn, 'winwidth')
+    vim.fn.winwidth.on_call_with(0).returns(100)
+
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      file_status = false,
+      path = 2,
+      shorting_target = 90,
+    }
+    vim.cmd(':e test-file.txt')
+    assert_component('filename', opts, '/h/f/t/test.lua')
+
+    vim.cmd(':bdelete!')
+    vim.fn.winwidth:revert()
+    vim.fn.expand:revert()
+  end)
+
+  it('shortens path with tilde', function()
+    stub(vim.fn, 'expand')
+    vim.fn.expand.on_call_with('%:p:~').returns('~/test/test.lua')
+    stub(vim.fn, 'winwidth')
+    vim.fn.winwidth.on_call_with(0).returns(100)
+
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      file_status = false,
+      path = 3,
+      shorting_target = 90,
+    }
+    vim.cmd(':e test-file.txt')
+    assert_component('filename', opts, '~/t/test.lua')
+
+    vim.cmd(':bdelete!')
+    vim.fn.winwidth:revert()
+    vim.fn.expand:revert()
+  end)
+
+  it('shortens path with hidden directory', function()
+    stub(vim.fn, 'expand')
+    vim.fn.expand.on_call_with('%:p').returns('/home/foobar/.test/test.lua')
+    stub(vim.fn, 'winwidth')
+    vim.fn.winwidth.on_call_with(0).returns(100)
+
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      file_status = false,
+      path = 2,
+      shorting_target = 90,
+    }
+    vim.cmd(':e test-file.txt')
+    assert_component('filename', opts, '/h/f/.t/test.lua')
+
+    vim.cmd(':bdelete!')
+    vim.fn.winwidth:revert()
+    vim.fn.expand:revert()
   end)
 end)
 
