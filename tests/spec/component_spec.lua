@@ -478,10 +478,25 @@ describe('Filename component', function()
     vim.bo.modified = false
     assert_component('filename', opts, 'test-file.txt')
     vim.bo.modified = true
-    assert_component('filename', opts, 'test-file.txt[+]')
-    vim.bo.modified = false
+    assert_component('filename', opts, 'test-file.txt [+]')
     vim.bo.ro = true
-    assert_component('filename', opts, 'test-file.txt[-]')
+    assert_component('filename', opts, 'test-file.txt [+][-]')
+    vim.bo.modified = false
+    assert_component('filename', opts, 'test-file.txt [-]')
+    vim.cmd(':bdelete!')
+  end)
+
+  it('can show new_file_status', function ()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      newfile_status = true,
+      path = 0,
+    }
+    vim.cmd(':e new-file.txt')
+    assert_component('filename', opts, 'new-file.txt [New]')
+    vim.bo.modified = true
+    assert_component('filename', opts, 'new-file.txt [+][New]')
     vim.cmd(':bdelete!')
   end)
 
