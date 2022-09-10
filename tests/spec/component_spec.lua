@@ -405,6 +405,12 @@ describe('Location component', function()
     assert_component('location', opts, ' 10:1 ')
     vim.api.nvim_win_set_cursor(0, {5, 0})
     assert_component('location', opts, '  5:1 ')
+    -- test column number
+    vim.cmd('normal! oTest')
+    assert_component('location', opts, '  6:4 ')
+    -- test column number in line containing cyrillic symbols
+    vim.cmd('normal! oТест')
+    assert_component('location', opts, '  7:4 ')
     vim.cmd('bdelete!')
   end)
 end)
