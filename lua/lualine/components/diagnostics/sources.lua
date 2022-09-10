@@ -40,8 +40,8 @@ M.sources = {
 
     return workspace_diag(diag_severity.ERROR),
       workspace_diag(diag_severity.WARN),
-      workspace_diag(diag_severity.HINT),
-      workspace_diag(diag_severity.INFO)
+      workspace_diag(diag_severity.INFO),
+      workspace_diag(diag_severity.HINT)
   end,
   nvim_diagnostic = function()
     local diagnostics = vim.diagnostic.get(0)
