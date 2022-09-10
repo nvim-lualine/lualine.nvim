@@ -78,6 +78,7 @@ function M.get_lualine_hl(name)
     local hl_def = {
       fg = hl.fg ~= 'None' and vim.deepcopy(hl.fg) or nil,
       bg = hl.bg ~= 'None' and vim.deepcopy(hl.bg) or nil,
+      sp = hl.sp ~= 'None' and vim.deepcopy(hl.sp) or nil,
     }
     if hl.gui then
       for _, flag in ipairs(vim.split(hl.gui, ',')) do

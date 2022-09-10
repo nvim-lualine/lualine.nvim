@@ -11,11 +11,11 @@ describe('Utils', function()
   local utils = require('lualine.utils.utils')
 
   it('can retrive highlight groups', function()
-    local hl2 = { fg = '#aabbcc', bg = '#889977', reverse = true }
+    local hl2 = { fg = '#aabbcc', bg = '#889977', sp = '#997788', reverse = true, undercurl = true }
     -- handles non existing hl groups
     eq(utils.extract_highlight_colors('hl2'), nil)
     -- create highlight
-    vim.cmd(string.format('hi hl2 guifg=%s guibg=%s gui=reverse', hl2.fg, hl2.bg))
+    vim.cmd(string.format('hi hl2 guifg=%s guibg=%s guisp=%s gui=reverse,undercurl', hl2.fg, hl2.bg, hl2.sp))
     -- Can retrieve entire highlight table
     eq(utils.extract_highlight_colors('hl2'), hl2)
     -- Can retrieve specific parts of highlight
