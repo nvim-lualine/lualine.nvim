@@ -26,28 +26,28 @@ function M.apply_default_colors(opts)
   local default_diagnostics_color = {
     error = {
       fg = utils.extract_color_from_hllist(
-        'fg',
+        { 'fg', 'sp' },
         { 'DiagnosticError', 'LspDiagnosticsDefaultError', 'DiffDelete' },
         '#e32636'
       ),
     },
     warn = {
       fg = utils.extract_color_from_hllist(
-        'fg',
+        { 'fg', 'sp' },
         { 'DiagnosticWarn', 'LspDiagnosticsDefaultWarning', 'DiffText' },
         '#ffa500'
       ),
     },
     info = {
       fg = utils.extract_color_from_hllist(
-        'fg',
+        { 'fg', 'sp' },
         { 'DiagnosticInfo', 'LspDiagnosticsDefaultInformation', 'Normal' },
         '#ffffff'
       ),
     },
     hint = {
       fg = utils.extract_color_from_hllist(
-        'fg',
+        { 'fg', 'sp' },
         { 'DiagnosticHint', 'LspDiagnosticsDefaultHint', 'DiffChange' },
         '#273faf'
       ),

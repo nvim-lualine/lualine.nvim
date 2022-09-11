@@ -36,23 +36,26 @@ end
 
 --- retrieves color value from highlight group name in syntax_list
 --- first present highlight is returned
----@param scope string
+---@param scope string|table
 ---@param syntaxlist table
 ---@param default string
 ---@return string|nil
 function M.extract_color_from_hllist(scope, syntaxlist, default)
+  scope = type(scope) == 'string' and { scope } or scope
   for _, highlight_name in ipairs(syntaxlist) do
     if vim.fn.hlexists(highlight_name) ~= 0 then
       local color = M.extract_highlight_colors(highlight_name)
-      if color.reverse then
-        if scope == 'bg' then
-          scope = 'fg'
-        else
-          scope = 'bg'
+      for _, sc in ipairs(scope) do
+        if color.reverse then
+          if sc == 'bg' then
+            sc = 'fg'
+          else
+            sc = 'bg'
+          end
         end
-      end
-      if color[scope] then
-        return color[scope]
+        if color[sc] then
+          return color[sc]
+        end
       end
     end
   end
