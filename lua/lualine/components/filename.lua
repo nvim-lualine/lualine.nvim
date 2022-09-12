@@ -16,7 +16,7 @@ local default_options = {
   file_status = true,
   newfile_status = false,
   path = 0,
-  shorting_target = 40,
+  min_free_space_path_shorting = 40,
 }
 
 local function is_new_file()
@@ -77,9 +77,9 @@ M.update_status = function(self)
     data = self.options.symbols.unnamed
   end
 
-  if self.options.shorting_target ~= 0 then
+  if self.options.min_free_space_path_shorting ~= 0 then
     local windwidth = self.options.globalstatus and vim.go.columns or vim.fn.winwidth(0)
-    local estimated_space_available = windwidth - self.options.shorting_target
+    local estimated_space_available = windwidth - self.options.min_free_space_path_shorting
 
     local path_separator = package.config:sub(1, 1)
     data = shorten_path(data, path_separator, estimated_space_available)
