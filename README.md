@@ -279,7 +279,7 @@ sections = { lualine_c = {'%=', '%t%m', '%3p'} }
 
 ##### Vim variables as lualine component
 
-Variables from `g:`, `v:`, `t:`, `w:`, `b:`, `o`, `go:`, `vo:`, `to:`, `wo:`, `bo:` scopes can be used.
+Variables from `g:`, `v:`, `t:`, `w:`, `b:`, `o:`, `to:`, `wo:`, `bo:` scopes can be used.
 
 See `:h lua-vim-variables` and `:h lua-vim-options` if you are not sure what to use.
 
