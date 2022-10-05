@@ -282,8 +282,8 @@ VIM’S STATUSLINE ITEMS AS LUALINE COMPONENT
 
 VIM VARIABLES AS LUALINE COMPONENT
 
-Variables from `g:`, `v:`, `t:`, `w:`, `b:`, `o`, `go:`, `vo:`, `to:`, `wo:`,
-`bo:` scopes can be used.
+Variables from `g:`, `v:`, `t:`, `w:`, `b:`, `o:`, `to:`, `wo:`, `bo:` scopes
+can be used.
 
 See `:h lua-vim-variables` and `:h lua-vim-options` if you are not sure what to
 use.
