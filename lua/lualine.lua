@@ -263,6 +263,9 @@ local function setup_theme()
     return modules.loader.load_theme('gruvbox')
   end
   local theme = get_theme_from_config()
+  -- make sure `select` is present ... if not specified then just use the
+  -- definition of `visual`.
+  theme.select = theme.select or theme.visual
   modules.highlight.create_highlight_groups(theme)
   vim.cmd([[autocmd lualine ColorScheme * lua require'lualine'.setup()
     autocmd lualine OptionSet background lua require'lualine'.setup()]])
