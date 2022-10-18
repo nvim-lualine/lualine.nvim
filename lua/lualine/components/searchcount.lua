@@ -3,7 +3,7 @@ local function searchcount()
     return ""
   end
 
-  local result = vim.fn.searchcount()
+  local result = vim.fn.searchcount({ maxcount = 999, timeout = 500 })
   local denominator = math.min(result.total, result.maxcount)
   return string.format("[%d/%d]", result.current, denominator)
 end
