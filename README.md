@@ -249,9 +249,9 @@ sections = {lualine_a = {'mode'}}
 - `filetype`
 - `hostname`
 - `location` (location in file in line:column format)
-- `searchcount` (number of search matches when hlsearch is active)
 - `mode` (vim mode)
 - `progress` (%progress in file)
+- `searchcount` (number of search matches when hlsearch is active)
 - `tabs` (shows currently available tabs)
 - `windows` (shows currently available windows)
 
