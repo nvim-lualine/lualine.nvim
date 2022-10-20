@@ -286,6 +286,15 @@ them based you your `background` option.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649158-18e16e00-74bd-11eb-8687-65b0ecbf20d2.png'/>
 </p>
 
+### powerline_cyan
+
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/45848083/197017237-0dae2f3f-fbcc-493f-bc47-5501b8f299be.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/45848083/197017276-ff9cba31-e28f-4326-8e34-009446a6dc77.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/45848083/197018856-ed9de79b-089e-4dfa-b0a1-234b8661538e.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/45848083/197019074-4d947ebb-ae53-454d-bc4a-2da95649463a.png'/>
+</p>
+
 ### powerline_dark
 
 <p>
