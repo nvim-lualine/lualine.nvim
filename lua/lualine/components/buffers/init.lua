@@ -9,7 +9,7 @@ local default_options = {
   show_filename_only = true,
   hide_filename_extension = false,
   show_modified_status = true,
-  sort_last_accessed = false,
+  ls_flags = '',
   mode = 0,
   max_length = 0,
   filetype_names = {
@@ -78,9 +78,9 @@ function M:buffers()
   local buffers = {}
   M.bufpos2nr = {}
   -- check sorting
-  if self.options.sort_last_accessed then
-      -- sort by last accessed
-      local blist = vim.split(vim.api.nvim_exec("ls t", true), "\n")
+  if self.options.ls_flags ~= '' then
+      -- sort by (:ls ...)
+      local blist = vim.split(vim.api.nvim_exec("ls " .. self.options.ls_flags, true), "\n")
       for i = 1, #blist do
         -- get buffer number
         local current = vim.trim(blist[i])
