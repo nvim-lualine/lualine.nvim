@@ -29,10 +29,10 @@ Good luck!
 *Let's introduce you to the tools we use.*
 
 - Your PR needs to pass tests & linter. We lint our codebase with [luacheck](https://github.com/mpeterv/luacheck)
-  and run tests with [plenary-test](https://github.com/nvim-lua/plenary.nvim)
-  these will be ran on CI. If you want you can run tests & linter locally with
-  `make test` & `make lint` respectively. Or `make check` to run both linter & tests.
-  For running tests you'll have to make sure both lualine.nvim and plenery.nvim are in same directory.
+  and run tests with [plenary-test][plenary.nvim] these will be ran on CI. If you want you can run tests & linter
+  locally with `make test` & `make lint` respectively. Or `make check` to run both linter & tests. For running
+  tests you'll have to make sure lualine.nvim, [plenary.nvim][plenary.nvim] and
+  [nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons) are in same directory.
 - Lua codebase gets formatted with [stylua](https://github.com/JohnnyMorganz/StyLua) in CI.
   So you can ignore formatting. But if you want to submit formatted
   PR you can run formatter locally with `make format`.
@@ -46,3 +46,5 @@ Good luck!
   & [luacov-console](https://github.com/spacewander/luacov-console) installed for that.
   If you want luacov's detailed report files, run the command with the `NOCLEAN` env set.
   For example `NOCLEAN=1 make testcov`
+
+[plenary.nvim]: https://github.com/nvim-lua/plenary.nvim
