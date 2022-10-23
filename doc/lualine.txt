@@ -941,11 +941,12 @@ You can disable lualine for specific filetypes:
 <
 
 
-You can also disable lualine completely.
+You can also disable lualine completely. Note that you need to call this after
+the setup
 
 >
       require('lualine').hide({
-        place = {'statusline', 'tabline', 'winbar'}, -- The segmentthis change applies to.
+        place = {'statusline', 'tabline', 'winbar'}, -- The segment this change applies to.
         unhide = false,  -- whether to reenable lualine again/
       })
 <
