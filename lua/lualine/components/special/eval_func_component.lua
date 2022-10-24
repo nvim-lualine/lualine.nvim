@@ -20,7 +20,6 @@ function M:update_status()
       status = M.vim_function(component)
     end
   end
-  
   status = string.gsub(status, "%%", "%%%%")
   return status
 end
