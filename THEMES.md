@@ -112,7 +112,7 @@ The following example is using the `tomorrow-night` colorscheme:
 ### gruvbox
 
 It's a combination of gruvbox_light and gruvbox_dark. It loads either of
-them based you your `background` option.
+them based on your `background` option.
 
 ### gruvbox-material
 
