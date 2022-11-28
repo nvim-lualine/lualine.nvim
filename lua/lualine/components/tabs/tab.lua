@@ -31,7 +31,7 @@ function Tab:label()
   local bufnr = buflist[winnr]
   local file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(bufnr))
   local buftype = vim.fn.getbufvar(bufnr, '&buftype')
-  if vim.bo.filetype == 'fugitive' then
+  if vim.api.nvim_buf_get_option(bufnr, 'filetype') == 'fugitive' then
     return 'fugitive: ' .. vim.fn.fnamemodify(file, ':h:h:t')
   elseif buftype == 'help' then
     return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
