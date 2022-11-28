@@ -824,16 +824,19 @@ extensions = {'quickfix'}
 #### Available extensions
 
 - aerial
+- alpha
 - chadtree
 - fern
 - fugitive
 - fzf
+- help
 - man
 - mundo
 - neo-tree
 - nerdtree
 - nvim-dap-ui
 - nvim-tree
+- pager
 - quickfix
 - symbols-outline
 - toggleterm
