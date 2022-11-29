@@ -32,7 +32,7 @@ Good luck!
   and run tests with [plenary-test][plenary.nvim] these will be ran on CI. If you want you can run tests & linter
   locally with `make test` & `make lint` respectively. Or `make check` to run both linter & tests. For running
   tests you'll have to make sure lualine.nvim, [plenary.nvim][plenary.nvim] and
-  [nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons) are in same directory.
+  [nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons) are in same directory.
 - Lua codebase gets formatted with [stylua](https://github.com/JohnnyMorganz/StyLua) in CI.
   So you can ignore formatting. But if you want to submit formatted
   PR you can run formatter locally with `make format`.
