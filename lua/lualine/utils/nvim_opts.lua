@@ -74,7 +74,7 @@ function M.set(name, val, opts)
     set_opt(name, val, function(nm)
       return vim.api.nvim_win_get_option(opts.window, nm)
     end, function(nm, vl)
-      vim.api.nvim_win_set_option(opts.window, nm, vl)
+      pcall(vim.api.nvim_win_set_option, opts.window, nm, vl)
     end, options.window[opts.window])
   end
 end
