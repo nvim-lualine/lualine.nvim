@@ -679,6 +679,7 @@ sections = {
   lualine_a = {
     {
       'tabs',
+      tab_max_length = 40,  -- Maximum width of each tab. The content will be shorten dynamically (example: apple/orange -> a/orange)
       max_length = vim.o.columns / 3, -- Maximum width of tabs component.
                                       -- Note:
                                       -- It can also be a function that returns
@@ -687,7 +688,7 @@ sections = {
                 -- 1: Shows tab_name
                 -- 2: Shows tab_nr + tab_name
 
-      path = 0  -- 0: just shows the filename
+      path = 0, -- 0: just shows the filename
                 -- 1: shows the relative path and shorten $HOME to ~
                 -- 2: shows the full path
                 -- 3: shows the full path and shorten $HOME to ~

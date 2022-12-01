@@ -57,10 +57,40 @@ function Tab:label()
   end
 end
 
+---shortens path by turning apple/orange -> a/orange
+---@param path string
+---@param sep string path separator
+---@param max_len integer maximum length of the full filename string
+---@return string
+local function shorten_path(path, sep, max_len)
+  local len = #path
+  if len <= max_len then
+    return path
+  end
+
+  local segments = vim.split(path, sep)
+  for idx = 1, #segments - 1 do
+    if len <= max_len then
+      break
+    end
+
+    local segment = segments[idx]
+    local shortened = segment:sub(1, vim.startswith(segment, '.') and 2 or 1)
+    segments[idx] = shortened
+    len = len - (#segment - #shortened)
+  end
+
+  return table.concat(segments, sep)
+end
+
 ---returns rendered tab
 ---@return string
 function Tab:render()
   local name = self:label()
+  if self.options.tab_max_length ~= 0 then
+    local path_separator = package.config:sub(1, 1)
+    name = shorten_path(name, path_separator, self.options.tab_max_length)
+  end
   if self.options.fmt then
     name = self.options.fmt(name or '', self)
   end
