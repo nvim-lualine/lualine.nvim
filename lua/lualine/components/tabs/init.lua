@@ -15,6 +15,10 @@ local default_options = {
     active = nil,
     inactive = nil,
   },
+  show_modified_status = true,
+  symbols = {
+    modified = '[+]',
+  },
 }
 
 -- This function is duplicated in buffers

@@ -13,6 +13,7 @@ function Tab:init(opts)
   self.tabId = opts.tabId
   self.options = opts.options
   self.highlights = opts.highlights
+  self.modified_icon = ''
   self:get_props()
 end
 
@@ -23,6 +24,16 @@ function Tab:get_props()
   self.file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(bufnr))
   self.filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
   self.buftype = vim.api.nvim_buf_get_option(bufnr, 'buftype')
+
+  if self.options.show_modified_status then
+    for _, b in ipairs(buflist) do
+      if vim.api.nvim_buf_get_option(b, 'modified') then
+        self.modified_icon = self.options.symbols.modified or ''
+        break
+      end
+    end
+  end
+
 end
 
 ---returns name for tab. Tabs name is the name of buffer in last active window
@@ -100,12 +111,18 @@ function Tab:render()
     -- different formats for different modes
     if self.options.mode == 0 then
       name = tostring(self.tabnr)
+      if self.modified_icon ~= '' then
+        name = string.format('%s%s', name, self.modified_icon)
+      end
     elseif self.options.mode == 1 then
-      name = name
+      if self.modified_icon ~= '' then
+        name = string.format('%s %s', self.modified_icon, name)
+      end
     else
-      name = string.format('%s %s', tostring(self.tabnr), name)
+      name = string.format('%s%s %s', tostring(self.tabnr), self.modified_icon, name)
     end
   end
+
   name = Tab.apply_padding(name, self.options.padding)
   self.len = vim.fn.strchars(name)
 

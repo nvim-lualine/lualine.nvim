@@ -702,6 +702,11 @@ sections = {
         inactive = 'lualine_{section}_inactive', -- Color for inactive tab.
       },
 
+      show_modified_status = true,  -- Shows a symbol next to the tab name if the file has been modified.
+      symbols = {
+        modified = '[+]',  -- Text to show when the file is modified.
+      },
+
       fmt = function(name, context)
         -- Show + if buffer is modified in tab
         local buflist = vim.fn.tabpagebuflist(context.tabnr)
