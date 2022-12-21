@@ -51,7 +51,7 @@ end
 function Tab:render()
   local name = self:label()
   if self.options.fmt then
-    name = self.options.fmt(name or '', self.tabnr)
+    name = self.options.fmt(name or '', self)
   end
   if self.ellipse then -- show ellipsis
     name = '...'
