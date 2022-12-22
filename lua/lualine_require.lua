@@ -60,6 +60,11 @@ function M.require(module)
     paths = vim.api.nvim_get_runtime_file(pattern_path, false)
   end
   if #paths > 0 then
+    -- put entries from user config path in front
+    local user_config_path = vim.fn.stdpath('config')
+    table.sort(paths, function(a, b)
+      return vim.startswith(a, user_config_path) or not vim.startswith(b, user_config_path)
+    end)
     local mod_result = dofile(paths[1])
     package.loaded[module] = mod_result
     return mod_result
