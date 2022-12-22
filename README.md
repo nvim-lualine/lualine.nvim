@@ -452,6 +452,11 @@ sections = {
                    --   padding = { left = left_padding, right = right_padding }
 
       fmt = nil,   -- Format function, formats the component's output.
+                   -- This function receives two arguments:
+                   -- - string that is going to be displayed and
+                   --   that can be changed, enhanced and etc.
+                   -- - context object with information you might
+                   --   need. E.g. tabnr if used with tabs.
       on_click = nil, -- takes a function that is called when component is clicked with mouse.
                    -- the function receives several arguments
                    -- - number of clicks incase of multiple clicks
@@ -650,6 +655,16 @@ sections = {
         active = 'lualine_{section}_normal',     -- Color for active tab.
         inactive = 'lualine_{section}_inactive', -- Color for inactive tab.
       },
+
+      fmt = function(name, context)
+        -- Show + if buffer is modified in tab
+        local buflist = vim.fn.tabpagebuflist(context.tabnr)
+        local winnr = vim.fn.tabpagewinnr(context.tabnr)
+        local bufnr = buflist[winnr]
+        local mod = vim.fn.getbufvar(bufnr, '&mod')
+
+        return name .. (mod == 1 and ' +' or '')
+      end
     }
   }
 }
