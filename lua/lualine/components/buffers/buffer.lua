@@ -69,7 +69,7 @@ end
 function Buffer:render()
   local name = self:name()
   if self.options.fmt then
-    name = self.options.fmt(name or '')
+    name = self.options.fmt(name or '', self)
   end
 
   if self.ellipse then -- show ellipsis
