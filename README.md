@@ -687,6 +687,11 @@ sections = {
                 -- 1: Shows tab_name
                 -- 2: Shows tab_nr + tab_name
 
+      path = 0  -- 0: just shows the filename
+                -- 1: shows the relative path and shorten $HOME to ~
+                -- 2: shows the full path
+                -- 3: shows the full path and shorten $HOME to ~
+
       -- Automatically updates active tab color to match color of other components (will be overidden if buffers_color is set)
       use_mode_colors = false,
 

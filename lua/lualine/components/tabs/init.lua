@@ -9,6 +9,7 @@ local default_options = {
   max_length = 0,
   mode = 0,
   use_mode_colors = false,
+  path = 0,
   tabs_color = {
     active = nil,
     inactive = nil,

@@ -13,6 +13,16 @@ function Tab:init(opts)
   self.tabId = opts.tabId
   self.options = opts.options
   self.highlights = opts.highlights
+  self:get_props()
+end
+
+function Tab:get_props()
+  local buflist = vim.fn.tabpagebuflist(self.tabnr)
+  local winnr = vim.fn.tabpagewinnr(self.tabnr)
+  local bufnr = buflist[winnr]
+  self.file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(bufnr))
+  self.filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+  self.buftype = vim.api.nvim_buf_get_option(bufnr, 'buftype')
 end
 
 ---returns name for tab. Tabs name is the name of buffer in last active window
@@ -26,24 +36,25 @@ function Tab:label()
   if custom_tabname and custom_tabname ~= '' then
     return modules.utils.stl_escape(custom_tabname)
   end
-  local buflist = vim.fn.tabpagebuflist(self.tabnr)
-  local winnr = vim.fn.tabpagewinnr(self.tabnr)
-  local bufnr = buflist[winnr]
-  local file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(bufnr))
-  local buftype = vim.fn.getbufvar(bufnr, '&buftype')
-  if vim.api.nvim_buf_get_option(bufnr, 'filetype') == 'fugitive' then
-    return 'fugitive: ' .. vim.fn.fnamemodify(file, ':h:h:t')
-  elseif buftype == 'help' then
-    return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
-  elseif buftype == 'terminal' then
-    local match = string.match(vim.split(file, ' ')[1], 'term:.*:(%a+)')
+  if self.filetype == 'fugitive' then
+    return 'fugitive: ' .. vim.fn.fnamemodify(self.file, ':h:h:t')
+  elseif self.buftype == 'help' then
+    return 'help:' .. vim.fn.fnamemodify(self.file, ':t:r')
+  elseif self.buftype == 'terminal' then
+    local match = string.match(vim.split(self.file, ' ')[1], 'term:.*:(%a+)')
     return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ':t')
-  elseif vim.fn.isdirectory(file) == 1 then
-    return vim.fn.fnamemodify(file, ':p:.')
-  elseif file == '' then
+  elseif self.file == '' then
     return '[No Name]'
   end
-  return vim.fn.fnamemodify(file, ':t')
+  if self.options.path == 1 then
+    return vim.fn.fnamemodify(self.file, ':~:.')
+  elseif self.options.path == 2 then
+    return vim.fn.fnamemodify(self.file, ':p')
+  elseif self.options.path == 3 then
+    return vim.fn.fnamemodify(self.file, ':p:~')
+  else
+    return vim.fn.fnamemodify(self.file, ':t')
+  end
 end
 
 ---returns rendered tab
