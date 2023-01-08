@@ -1,3 +1,7 @@
+-- Copyright (c) 2023 oxfist
+-- MIT license, see LICENSE for more details.
+-- LuaFormatter off
+
 local colors = {
   dark = '#010d18',
   light = '#d6deeb',
