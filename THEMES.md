@@ -209,6 +209,16 @@ them based you your `background` option.
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648981-bdaf7b80-74bc-11eb-86d4-6c44c3764a70.png'/>
 </p>
 
+
+### night-owl
+
+<p>
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/934679/211223704-89c399b4-d1a6-43a8-95a6-60c762e565b3.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/934679/211223740-640f3e9d-dfd4-4e37-b1a9-fbc1bd8b1851.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/934679/211223742-b27c8ff9-e1cc-4d45-8d2c-98ca0df3564e.png">
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/934679/211223746-c73b7a9c-d27f-4975-8525-c2a5175bc318.png">
+</p>
+
 ### nord
 
 <p>
