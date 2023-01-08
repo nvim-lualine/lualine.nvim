@@ -21,10 +21,21 @@ local M = {}
 function M.init()
   -- Make sure ft wf doesn't create a custom statusline
   vim.g.qf_disable_statusline = true
+  return {
+    ll = vim.api.nvim_get_hl_by_name('Constant', false).foreground,
+    qf = vim.api.nvim_get_hl_by_name('Identifier', false).foreground,
+  }
 end
 
 M.sections = {
-  lualine_a = { label },
+  lualine_a = {
+    {
+      label,
+      color = function()
+        return is_loclist() and { bg = M.init()['ll'] } or { bg = M.init()['qf'] }
+      end,
+    },
+  },
   lualine_b = { title },
   lualine_z = { 'location' },
 }
