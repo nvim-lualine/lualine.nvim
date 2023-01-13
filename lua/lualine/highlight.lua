@@ -32,6 +32,7 @@ local mode_to_highlight = {
   ['MORE'] = '_command',
   ['CONFIRM'] = '_command',
   ['TERMINAL'] = '_terminal',
+  ['O-PENDING'] = '_pending',
 }
 
 --- determine if an highlight exist and isn't cleared
@@ -349,6 +350,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
     'replace',
     'command',
     'terminal',
+    'pending',
     'inactive',
   }
   for _, mode in ipairs(modes) do
