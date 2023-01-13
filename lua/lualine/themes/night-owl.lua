@@ -1,5 +1,6 @@
 -- Copyright (c) 2023 oxfist
 -- MIT license, see LICENSE for more details.
+-- Credit: sdras (original theme), ChristianChiarulli (colorgen-nvim), haishanh (night-owl.vim)
 -- LuaFormatter off
 
 local colors = {
