@@ -9,6 +9,9 @@ local modules = lualine_require.lazy_require {
 }
 local M = lualine_require.require('lualine.component'):extend()
 
+-- variable to store the diff count and the symbol
+local diff_symbol = nil
+
 local default_options = {
   colored = true,
   symbols = { added = '+', modified = '~', removed = '-' },
@@ -77,7 +80,6 @@ function M:update_status(is_focused)
   -- loop though data and load available sections in result table
   for _, name in ipairs { 'added', 'modified', 'removed' } do
     if git_diff[name] and git_diff[name] > 0 then
-      local diff_symbol = ''
       if self.options.symbol_position == 'left' then
         diff_symbol = self.options.symbols[name] .. git_diff[name]
       else
