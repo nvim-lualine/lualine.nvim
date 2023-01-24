@@ -560,6 +560,7 @@ Component specific options             These are options that are available on
             hint  = 'DiagnosticHint',  -- Changes diagnostics' hint color.
           },
           symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'},
+          symbol_position = 'left'  -- Position the symbol to this side of the count
           colored = true,           -- Displays diagnostics status in color if set to true.
           update_in_insert = false, -- Update diagnostics in insert mode.
           always_visible = false,   -- Show diagnostics even if there are none.
@@ -584,6 +585,7 @@ Component specific options             These are options that are available on
             removed  = 'DiffDelete', -- Changes the diff's removed color you
           },
           symbols = {added = '+', modified = '~', removed = '-'}, -- Changes the symbols used by the diff.
+          symbol_position = 'left', -- Position the symbol to this side of the diff
           source = nil, -- A function that works as a data source for diff.
                         -- It must return a table as such:
                         --   { added = add_count, modified = modified_count, removed = removed_count }
