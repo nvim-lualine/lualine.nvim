@@ -20,6 +20,7 @@ M.options = {
   always_visible = false,
   sources = { vim.fn.has('nvim-0.6') == 1 and 'nvim_diagnostic' or 'nvim_lsp', 'coc' },
   sections = { 'error', 'warn', 'info', 'hint' },
+  symbol_position = 'left',
 }
 
 function M.apply_default_colors(opts)

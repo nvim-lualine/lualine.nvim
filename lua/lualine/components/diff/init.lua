@@ -12,6 +12,7 @@ local M = lualine_require.require('lualine.component'):extend()
 local default_options = {
   colored = true,
   symbols = { added = '+', modified = '~', removed = '-' },
+  symbol_position = 'left',
 }
 
 local function apply_default_colors(opts)
@@ -76,10 +77,17 @@ function M:update_status(is_focused)
   -- loop though data and load available sections in result table
   for _, name in ipairs { 'added', 'modified', 'removed' } do
     if git_diff[name] and git_diff[name] > 0 then
-      if self.options.colored then
-        table.insert(result, colors[name] .. self.options.symbols[name] .. git_diff[name])
+      local diff_symbol = ''
+      if self.options.symbol_position == 'left' then
+        diff_symbol = self.options.symbols[name] .. git_diff[name]
       else
-        table.insert(result, self.options.symbols[name] .. git_diff[name])
+        diff_symbol = git_diff[name] .. self.options.symbols[name]
+      end
+
+      if self.options.colored then
+        table.insert(result, colors[name] .. diff_symbol)
+      else
+        table.insert(result, diff_symbol)
       end
     end
   end
