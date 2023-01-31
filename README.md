@@ -417,6 +417,7 @@ sections = {
                             -- and right will be placed on its right.
                             --
 
+	    separator_always_visible = nil, -- Allows the component separator to always be visible even if the component output is empty
       cond = nil,           -- Condition function, the component is loaded when the function returns `true`.
 
       -- Defines a custom color for the component:

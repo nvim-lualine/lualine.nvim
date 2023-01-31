@@ -274,11 +274,13 @@ function M:draw(default_highlight, is_focused)
   if self.options.fmt then
     status = self.options.fmt(status or '', self)
   end
-  if type(status) == 'string' and #status > 0 then
+  if type(status) == 'string' and (#status > 0 or self.options.separator_always_visible) then
     self.status = status
-    self:apply_icon()
-    self:apply_padding()
-    self:apply_on_click()
+    if #status > 0 then
+      self:apply_icon()
+      self:apply_padding()
+      self:apply_on_click()
+    end
     self:apply_highlights(default_highlight)
     self:apply_section_separators()
     self:apply_separator()
