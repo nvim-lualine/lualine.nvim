@@ -60,9 +60,9 @@ In control just `vim-startuptime` and`vim-plug` is installed.
 And measured time is complete startuptime of vim not time spent
 on specific plugin. These numbers are the average of 20 runs.
 
-| control  |  lualine  | lightline |  airline  |
-| :------: | :-------: | :-------: | :-------: |
-| 17.2 ms  |  24.8 ms  |  25.5 ms  |  79.9 ms  |
+| control | lualine | lightline | airline |
+| :-----: | :-----: | :-------: | :-----: |
+| 17.2 ms | 24.8 ms |  25.5 ms  | 79.9 ms |
 
 Last Updated On: 18-04-2022
 
@@ -207,7 +207,7 @@ Theme structure is available [here](https://github.com/nvim-lualine/lualine.nvim
 
 lualine defines two kinds of separators:
 
-- `section_separators`    - separators between sections
+- `section_separators` - separators between sections
 - `component_separators` - separators between the different components in sections
 
 **Note**: if viewing this README in a browser, chances are the characters below will not be visible.
@@ -291,6 +291,7 @@ sections = { lualine_a = { 'g:coc_status', 'bo:filetype' } }
 ##### Lua expressions as lualine component
 
 You can use any valid lua expression as a component including:
+
 - oneliners
 - global variables
 - require statements
@@ -741,8 +742,10 @@ tabline = {
 ```
 
 ### Winbar
+
 From neovim-0.8 you can customize your winbar with lualine.
 Winbar configuration is similar to statusline.
+
 ```lua
 winbar = {
   lualine_a = {},
@@ -762,6 +765,7 @@ inactive_winbar = {
   lualine_z = {}
 }
 ```
+
 Just like statusline you can separately specify winbar for active and inactive
 windows. Any lualine component can be placed in winbar. All kinds of custom
 components supported in statusline are also supported for winbar too. In general
@@ -843,6 +847,7 @@ extensions = {'quickfix'}
 - fern
 - fugitive
 - fzf
+- lazy
 - man
 - mundo
 - neo-tree
@@ -865,19 +870,23 @@ require('lualine').setup { extensions = { my_extension } }
 ---
 
 ### Refreshing lualine
+
 By default lualine refreshes itself based on timer and some events. You can set
 the interval of the timer with refresh option. However you can also force
 lualine to refresh at any time by calling lualine.refresh function.
+
 ```lua
 require('lualine').refresh({
   scope = 'tabpage',  -- scope of refresh all/tabpage/window
   place = { 'statusline', 'winbar', 'tabline' },  -- lualine segment ro refresh.
 })
 ```
+
 The arguments shown here are default values. So not passing any of them will be
 treated as if a default value was passed.
 
 So you can simply do
+
 ```lua
 require('lualine').refresh()
 ```
@@ -895,21 +904,26 @@ options = { disabled_filetypes = {'lua'} }
 
 You can also disable lualine completely.
 Note that you need to call this after the setup
+
 ```lua
   require('lualine').hide({
     place = {'statusline', 'tabline', 'winbar'}, -- The segment this change applies to.
     unhide = false,  -- whether to re-enable lualine again/
   })
 ```
+
 The arguments show for hide above are default values.
 Which means even if the hide function is called without
 arguments it'll work as if these were passed.
 
 So in short to disable lualine completely you can do
+
 ```lua
 require('lualine').hide()
 ```
+
 To enable it again you can do
+
 ```lua
 require('lualine').hide({unhide=true})
 ```
