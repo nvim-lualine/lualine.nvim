@@ -635,6 +635,20 @@ sections = {
 }
 ```
 
+#### searchcount component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'searchcount',
+      maxcount = 999,
+      timeout = 500,
+    }
+  }
+}
+```
+
 #### tabs component options
 
 ```lua
