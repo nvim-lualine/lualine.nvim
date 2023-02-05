@@ -252,6 +252,7 @@ sections = {lualine_a = {'mode'}}
 - `mode` (vim mode)
 - `progress` (%progress in file)
 - `searchcount` (number of search matches when hlsearch is active)
+- `selectioncount` (number of selected characters or lines)
 - `tabs` (shows currently available tabs)
 - `windows` (shows currently available windows)
 
