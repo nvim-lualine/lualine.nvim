@@ -73,7 +73,7 @@ Last Updated On: 18-04-2022
 ```vim
 Plug 'nvim-lualine/lualine.nvim'
 " If you want to have icons in your statusline choose one of these
-Plug 'kyazdani42/nvim-web-devicons'
+Plug 'nvim-tree/nvim-web-devicons'
 ```
 
 ### [packer.nvim](https://github.com/wbthomason/packer.nvim)
@@ -81,7 +81,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 ```lua
 use {
   'nvim-lualine/lualine.nvim',
-  requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+  requires = { 'nvim-tree/nvim-web-devicons', opt = true }
 }
 ```
 
