@@ -40,7 +40,7 @@ return {
     a = { fg = colors.black, bg = colors.blue, gui = 'bold' },
     b = { fg = colors.orange, bg = colors.black },
     c = { fg = colors.blue, bg = colors.black },
-  },,
+  },
   command = {
     a = { fg = colors.black, bg = colors.orange_1, gui = 'bold' },
     b = { fg = colors.orange, bg = colors.black },
