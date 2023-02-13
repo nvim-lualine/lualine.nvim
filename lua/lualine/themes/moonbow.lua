@@ -10,7 +10,7 @@ local colors = {
   green  = '#b8bb26',
   orange = '#fe8019',
   yellow = '#fabd2f',
-  blue   = '#458588',
+  blue   = '#50A1CE',
 }
 
 return {
@@ -19,7 +19,7 @@ return {
     b = { fg = colors.white, bg = colors.black },
   },
   replace = {
-    a = { fg = colors.black, bg = colors.blue, gui = 'bold' },
+    a = { fg = colors.black, bg = colors.yellow, gui = 'bold' },
     b = { fg = colors.white, bg = colors.black },
   },
   inactive = {
@@ -28,10 +28,11 @@ return {
   },
   normal = {
     a = { fg = colors.black, bg = colors.yellow, gui = 'bold' },
-    b = { fg = colors.cyan, bg = colors.black },
+    b = { fg = colors.black, bg = colors.black },
   },
   insert = {
     a = { fg = colors.black, bg = colors.green, gui = 'bold' },
     b = { fg = colors.orange, bg = colors.black },
+    c = { fg = colors.blue, bg = colors.black },
   },
 }
