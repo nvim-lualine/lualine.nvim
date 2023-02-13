@@ -10,13 +10,14 @@ local colors = {
   green  = '#b8bb26',
   green_1 = '#8ec07c',
   orange = '#fe8019',
+  orange_1 = '#FF8F40',
   yellow = '#fabd2f',
   blue   = '#50A1CE',
 }
 
 return {
   visual = {
-    a = { fg = colors.black, bg = colors.green_1, gui = 'bold' },
+    a = { fg = colors.black, bg = colors.green, gui = 'bold' },
     b = { fg = colors.orange, bg = colors.black },
     c = { fg = colors.blue, bg = colors.black },
   },
@@ -37,6 +38,11 @@ return {
   },
   insert = {
     a = { fg = colors.black, bg = colors.blue, gui = 'bold' },
+    b = { fg = colors.orange, bg = colors.black },
+    c = { fg = colors.blue, bg = colors.black },
+  },,
+  command = {
+    a = { fg = colors.black, bg = colors.orange_1, gui = 'bold' },
     b = { fg = colors.orange, bg = colors.black },
     c = { fg = colors.blue, bg = colors.black },
   },
