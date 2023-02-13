@@ -1,6 +1,6 @@
 -- Copyright (c) 2020-2023 arturgoms
 -- MIT license, see LICENSE for more details.
--- Credit: this theme is inpired by morhetz(gruvbox) and Shatur(ayu) 
+-- Credit: this theme is inpired by morhetz(gruvbox) and Shatur(ayu)
 -- stylua: ignore
 local colors = {
   black  = '#0A0E14',
