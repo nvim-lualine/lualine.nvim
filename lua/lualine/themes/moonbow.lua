@@ -27,10 +27,10 @@ return {
   },
   normal = {
     a = { fg = colors.black, bg = colors.yellow, gui = 'bold' },
-    b = { fg = colors.white, bg = colors.black },
+    b = { fg = colors.green, bg = colors.black },
   },
   insert = {
     a = { fg = colors.black, bg = colors.green, gui = 'bold' },
-    b = { fg = colors.white, bg = colors.black },
+    b = { fg = colors.orange, bg = colors.black },
   },
 }
