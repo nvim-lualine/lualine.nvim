@@ -1,5 +1,6 @@
 -- Copyright (c) 2020-2021 arturgoms
 -- MIT license, see LICENSE for more details.
+-- Credit: this theme is inpired by morhetz(gruvbox) and Shatur(ayu) 
 -- stylua: ignore
 local colors = {
   black  = '#0A0E14',
@@ -27,7 +28,7 @@ return {
   },
   normal = {
     a = { fg = colors.black, bg = colors.yellow, gui = 'bold' },
-    b = { fg = colors.green, bg = colors.black },
+    b = { fg = colors.cyan, bg = colors.black },
   },
   insert = {
     a = { fg = colors.black, bg = colors.green, gui = 'bold' },
