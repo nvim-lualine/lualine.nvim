@@ -1,4 +1,4 @@
--- Copyright (c) 2020-2021 arturgoms
+-- Copyright (c) 2020-2023 arturgoms
 -- MIT license, see LICENSE for more details.
 -- Credit: this theme is inpired by morhetz(gruvbox) and Shatur(ayu) 
 -- stylua: ignore
@@ -8,7 +8,6 @@ local colors = {
   white  = '#f9f5d7',
   cyan   = '#83a598',
   green  = '#b8bb26',
-  green_1 = '#8ec07c',
   orange = '#fe8019',
   orange_1 = '#FF8F40',
   yellow = '#fabd2f',
