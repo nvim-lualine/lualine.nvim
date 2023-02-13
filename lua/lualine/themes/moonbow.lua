@@ -22,9 +22,8 @@ return {
     b = { fg = colors.white, bg = colors.black },
   },
   inactive = {
-    c = { fg = colors.white, bg = colors.black },
-    a = { fg = colors.white, bg = colors.gray, gui = 'bold' },
-    b = { fg = colors.white, bg = colors.gray },
+    a = { fg = colors.orange, bg = colors.black, gui = 'bold' },
+    b = { fg = colors.orange, bg = colors.black },
   },
   normal = {
     a = { fg = colors.black, bg = colors.yellow, gui = 'bold' },
