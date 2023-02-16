@@ -635,6 +635,20 @@ sections = {
 }
 ```
 
+#### datetime component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'datetime',
+      -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
+      style = 'default'
+    }
+  }
+}
+```
+
 #### tabs component options
 
 ```lua
