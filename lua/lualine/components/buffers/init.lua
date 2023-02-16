@@ -27,6 +27,7 @@ local default_options = {
     alternate_file = '#',
     directory = '',
   },
+  excludedFileTypes = {}
 }
 
 -- This function is duplicated in tabs
@@ -49,6 +50,7 @@ end
 
 function M:init(options)
   M.super.init(self, options)
+  self.excludedFT = {}
   default_options.buffers_color = {
     active = get_hl('lualine_' .. options.self.section, true),
     inactive = get_hl('lualine_' .. options.self.section, false),
@@ -59,6 +61,10 @@ function M:init(options)
       active = self:create_hl(self.options.buffers_color.active, 'active'),
       inactive = self:create_hl(self.options.buffers_color.inactive, 'inactive'),
     }
+  end
+  for _, ft in ipairs(options.excludedFileTypes) do
+      -- print(ft)
+      self.excludedFT[ft] = true;
   end
 end
 
@@ -77,7 +83,22 @@ function M:buffers()
   local buffers = {}
   M.bufpos2nr = {}
   for b = 1, vim.fn.bufnr('$') do
-    if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
+    local valid = vim.api.nvim_buf_is_valid(b)
+    local ft
+    if valid then
+      ft = vim.api.nvim_buf_get_option(b, 'filetype')
+    end
+    -- don't want the user cyclying into this buffer if they've listed it as an excluded filetype in their config
+    -- go ahead and mark it unlisted automatically
+    if valid and self.excludedFT[ft] then
+        vim.api.nvim_buf_set_option(b, 'buflisted', false)
+    end
+    local cond = vim.fn.buflisted(b) ~= 0
+                 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix'
+                 and self.excludedFT[ft] == nil
+                 and valid
+    if cond then
+      -- print('adding buffer ' .. b)
       buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1)
       M.bufpos2nr[#buffers] = b
     end
@@ -147,8 +168,14 @@ function M:update_status()
     end
   end
   local current_buffer = buffers[current]
-  data[#data + 1] = current_buffer:render()
-  total_length = current_buffer.len
+  local currentFT = vim.api.nvim_buf_get_option(current_buffer.bufnr, 'filetype')
+  if self.excludedFT[currentFT] == nil then
+    data[#data + 1] = current_buffer:render()
+    total_length = 0
+    total_length = current_buffer.len
+  else
+    total_length = 0
+  end
   local i = 0
   local before, after
   while true do

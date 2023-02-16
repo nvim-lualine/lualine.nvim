@@ -44,6 +44,9 @@ function Buffer:get_props()
       dev, _ = require('nvim-web-devicons').get_icon('git')
     elseif self.filetype == 'vimwiki' then
       dev, _ = require('nvim-web-devicons').get_icon('markdown')
+      -- Man pages don't get a devicon, but they really should look the same as the help windows.
+    elseif self.filetype == 'man' or self.filetype == 'help' then
+      dev, _ = ' ', nil
     elseif self.buftype == 'terminal' then
       dev, _ = require('nvim-web-devicons').get_icon('zsh')
     elseif vim.fn.isdirectory(self.file) == 1 then
@@ -126,6 +129,9 @@ function Buffer:name()
     return self.options.filetype_names[self.filetype]
   elseif self.buftype == 'help' then
     return 'help:' .. vim.fn.fnamemodify(self.file, ':t:r')
+    -- Man pages should be formatted the same as help
+  elseif self.filetype == 'man' then
+    return 'man:' .. vim.fn.fnamemodify(self.file, ':t:r')
   elseif self.buftype == 'terminal' then
     local match = string.match(vim.split(self.file, ' ')[1], 'term:.*:(%a+)')
     return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ':t')
