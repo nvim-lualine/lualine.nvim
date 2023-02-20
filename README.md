@@ -934,9 +934,3 @@ You can find some useful [configuration snippets](https://github.com/nvim-lualin
 
 If you want to extend lualine with plugins or want to know
 which ones already do, [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
-
-### Support
-
-If you appreciate my work you can buy me a coffee.
-
-<a href="https://www.buymeacoffee.com/shadmansalJ" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-black.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;"></a>
