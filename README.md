@@ -849,6 +849,7 @@ extensions = {'quickfix'}
 - nerdtree
 - nvim-dap-ui
 - nvim-tree
+- overseer
 - quickfix
 - symbols-outline
 - toggleterm
