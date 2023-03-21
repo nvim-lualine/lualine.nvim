@@ -70,11 +70,11 @@ local function clamp(val, left, right)
 end
 
 -- Changes brightness of rgb_color by percentage
-local function brightness_modifier(rgb_color, parcentage)
+local function brightness_modifier(rgb_color, percentage)
   local color = rgb_str2num(rgb_color)
-  color.red = clamp(color.red + (color.red * parcentage / 100), 0, 255)
-  color.green = clamp(color.green + (color.green * parcentage / 100), 0, 255)
-  color.blue = clamp(color.blue + (color.blue * parcentage / 100), 0, 255)
+  color.red = clamp(color.red + (color.red * percentage / 100), 0, 255)
+  color.green = clamp(color.green + (color.green * percentage / 100), 0, 255)
+  color.blue = clamp(color.blue + (color.blue * percentage / 100), 0, 255)
   return rgb_num2str(color)
 end
 
@@ -90,19 +90,17 @@ end
 -- Changes brightness of foreground color to achieve contrast
 -- without changing the color
 local function apply_contrast(highlight)
-  local hightlight_bg_avg = get_color_avg(highlight.bg)
+  local highlight_bg_avg = get_color_avg(highlight.bg)
   local contrast_threshold_config = clamp(contrast_threshold, 0, 0.5)
-  local contranst_change_step = 5
-  if hightlight_bg_avg > 0.5 then
-    contranst_change_step = -contranst_change_step
+  local contrast_change_step = 5
+  if highlight_bg_avg > 0.5 then
+    contrast_change_step = -contrast_change_step
   end
 
   -- Don't waste too much time here max 25 iteration should be more than enough
   local iteration_count = 1
-  while
-    math.abs(get_color_avg(highlight.fg) - hightlight_bg_avg) < contrast_threshold_config and iteration_count < 25
-  do
-    highlight.fg = contrast_modifier(highlight.fg, contranst_change_step)
+  while math.abs(get_color_avg(highlight.fg) - highlight_bg_avg) < contrast_threshold_config and iteration_count < 25 do
+    highlight.fg = contrast_modifier(highlight.fg, contrast_change_step)
     iteration_count = iteration_count + 1
   end
 end

@@ -201,7 +201,7 @@ function M:apply_section_separators()
   end
 end
 
----Add on click funtion description to already drawn item
+---Add on click function description to already drawn item
 function M:apply_on_click()
   if self.on_click_id then
     self.status = self:format_fn(self.on_click_id, self.status)

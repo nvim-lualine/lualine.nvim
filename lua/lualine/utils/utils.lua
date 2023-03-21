@@ -191,13 +191,13 @@ function M.stl_escape(str)
   return str:gsub('%%', '%%%%')
 end
 
----A safe call inside a timmer
+---A safe call inside a timer
 ---@param timer userdata
 ---@param augroup string|nil autocmd group to reset too on error.
 ---@param fn function
 ---@param max_err integer
 ---@param err_msg string
----@return function a wraped fn that can be called inside a timer and that
+---@return function a wrapped fn that can be called inside a timer and that
 ---stops the timer after max_err errors in calling fn
 function M.timer_call(timer, augroup, fn, max_err, err_msg)
   local err_cnt, ret = 0, nil

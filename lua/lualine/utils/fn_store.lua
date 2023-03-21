@@ -15,7 +15,7 @@ function M.register_fn(id, fn)
 end
 
 ---Get the function with id
----@param id number id of the fn to retrive
+---@param id number id of the fn to retrieve
 ---@return function
 function M.get_fn(id)
   vim.validate { id = { id, 'n' } }

@@ -73,7 +73,7 @@ local function ins_left(component)
   table.insert(config.sections.lualine_c, component)
 end
 
--- Inserts a component in lualine_x ot right section
+-- Inserts a component in lualine_x at right section
 local function ins_right(component)
   table.insert(config.sections.lualine_x, component)
 end
