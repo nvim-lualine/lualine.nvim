@@ -251,6 +251,9 @@ local function setup_theme()
     elseif type(theme_name) == 'table' then
       -- use the provided theme as-is
       return config.options.theme
+    elseif type(theme_name) == 'function' then
+      -- call function and use returned (dynamic) theme as-is
+      return config.options.theme()
     end
     if theme_name ~= 'auto' then
       notify_theme_error(theme_name)
