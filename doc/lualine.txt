@@ -297,8 +297,13 @@ use.
 
 LUA EXPRESSIONS AS LUALINE COMPONENT
 
-You can use any valid lua expression as a component including: - oneliners -
-global variables - require statements
+You can use any valid lua expression as a component including:
+
+
+- oneliners
+- global variables
+- require statements
+
 
 >
     sections = { lualine_c = { "os.date('%a')", 'data', "require'lsp-status'.status()" } }
@@ -937,6 +942,7 @@ extensions with:
 - fern
 - fugitive
 - fzf
+- lazy
 - man
 - mundo
 - neo-tree
