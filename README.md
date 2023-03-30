@@ -523,6 +523,20 @@ sections = {
 }
 ```
 
+#### datetime component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'datetime',
+      -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
+      style = 'default'
+    }
+  }
+}
+```
+
 #### diagnostics component options
 
 ```lua
@@ -636,20 +650,6 @@ sections = {
       icon = { align = 'right' }, -- Display filetype icon on the right hand side
       -- icon =    {'X', align='right'}
       -- Icon string ^ in table is ignored in filetype component
-    }
-  }
-}
-```
-
-#### datetime component options
-
-```lua
-sections = {
-  lualine_a = {
-    {
-      'datetime',
-      -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
-      style = 'default'
     }
   }
 }
