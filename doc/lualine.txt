@@ -679,6 +679,21 @@ Component specific options             These are options that are available on
 <
 
 
+                                       *lualine-searchcount-component-options*
+
+>
+    sections = {
+      lualine_a = {
+        {
+          'searchcount',
+          maxcount = 999,
+          timeout = 500,
+        }
+      }
+    }
+<
+
+
                                               *lualine-tabs-component-options*
 
 >
