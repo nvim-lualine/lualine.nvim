@@ -432,6 +432,9 @@ General component options              These are options that control behavior
     
           cond = nil,           -- Condition function, the component is loaded when the function returns `true`.
     
+          draw_empty = false,   -- Whether to draw component even if it's empty.
+                                -- Might be useful if you want just the separator.
+    
           -- Defines a custom color for the component:
           --
           -- 'highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' } | function
