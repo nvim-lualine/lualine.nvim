@@ -27,10 +27,7 @@ local refresh_real_curwin
 
 -- The events on which lualine redraws itself
 local default_refresh_events =
-  'WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized,Filetype,CursorMoved,CursorMovedI'
-if vim.fn.has('nvim-0.7') == 1 then -- utilize ModeChanged event introduced in 0.7
-  default_refresh_events = default_refresh_events .. ',ModeChanged'
-end
+  'WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized,Filetype,CursorMoved,CursorMovedI,ModeChanged'
 -- Helper for apply_transitional_separators()
 --- finds first applied highlight group after str_checked in status
 ---@param status string : unprocessed statusline string
@@ -599,6 +596,20 @@ local function hide(opts)
   end
 end
 
+--- Check neovim compatibilitu
+local function verify_nvim_version()
+  if vim.fn.has('nvim-0.7') == 1 then return true end
+  modules.utils_notices.add_notice([[
+### Incompatible Neovim version
+Lualine supports neovim 0.7 and up. It seems you're using a older version.
+Please update to newer version. Or if you have atleast neovim 0.5 you
+can use older compatible versions of lualine using compat tags like
+`compat-nvim-0.5`, `compat-nvim-0.6`.
+]]
+)
+  return false
+end
+
 -- lualine.setup function
 --- sets new user config
 --- This function doesn't load components/theme etc... They are done before
@@ -613,14 +624,16 @@ local function setup(user_config)
     -- When notices module is not loaded there are no notices to clear.
     modules.utils_notices.clear_notices()
   end
-  config = modules.config_module.apply_configuration(user_config)
-  vim.cmd([[augroup lualine | exe "autocmd!" | augroup END]])
-  setup_theme()
-  -- load components & extensions
-  modules.loader.load_all(config)
-  set_statusline()
-  set_tabline()
-  set_winbar()
+  if verify_nvim_version() then
+    config = modules.config_module.apply_configuration(user_config)
+    vim.cmd([[augroup lualine | exe "autocmd!" | augroup END]])
+    setup_theme()
+    -- load components & extensions
+    modules.loader.load_all(config)
+    set_statusline()
+    set_tabline()
+    set_winbar()
+  end
   if package.loaded['lualine.utils.notices'] then
     modules.utils_notices.notice_message_startup()
   end
