@@ -419,6 +419,9 @@ sections = {
 
       cond = nil,           -- Condition function, the component is loaded when the function returns `true`.
 
+      draw_empty = false,   -- Whether to draw component even if it's empty.
+                            -- Might be useful if you want just the separator.
+
       -- Defines a custom color for the component:
       --
       -- 'highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' } | function
@@ -470,7 +473,7 @@ sections = {
 #### Component specific options
 
 These are options that are available on specific components.
-For example you have option on `diagnostics` component to
+For example, you have option on `diagnostics` component to
 specify what your diagnostic sources will be.
 
 #### buffers component options
@@ -501,6 +504,9 @@ sections = {
         alpha = 'Alpha'
       }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
 
+      -- Automatically updates active buffer color to match color of other components (will be overidden if buffers_color is set)
+      use_mode_colors = false,
+
       buffers_color = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active buffer.
@@ -512,6 +518,20 @@ sections = {
         alternate_file = '#', -- Text to show to identify the alternate file
         directory =  '',     -- Text to show when the buffer is a directory
       },
+    }
+  }
+}
+```
+
+#### datetime component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'datetime',
+      -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
+      style = 'default'
     }
   }
 }
@@ -635,6 +655,20 @@ sections = {
 }
 ```
 
+#### searchcount component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'searchcount',
+      maxcount = 999,
+      timeout = 500,
+    }
+  }
+}
+```
+
 #### tabs component options
 
 ```lua
@@ -649,6 +683,9 @@ sections = {
       mode = 0, -- 0: Shows tab_nr
                 -- 1: Shows tab_name
                 -- 2: Shows tab_nr + tab_name
+
+      -- Automatically updates active tab color to match color of other components (will be overidden if buffers_color is set)
+      use_mode_colors = false,
 
       tabs_color = {
         -- Same values as the general color option can be used here.
@@ -696,6 +733,9 @@ sections = {
       }, -- Shows specific window name for that filetype ( { `filetype` = `window_name`, ... } )
 
       disabled_buftypes = { 'quickfix', 'prompt' }, -- Hide a window if its buffer's type is disabled
+
+      -- Automatically updates active window color to match color of other components (will be overidden if buffers_color is set)
+      use_mode_colors = false,
 
       windows_color = {
         -- Same values as the general color option can be used here.
@@ -849,6 +889,7 @@ extensions = {'quickfix'}
 - nerdtree
 - nvim-dap-ui
 - nvim-tree
+- overseer
 - quickfix
 - symbols-outline
 - toggleterm
@@ -867,7 +908,7 @@ require('lualine').setup { extensions = { my_extension } }
 ### Refreshing lualine
 By default lualine refreshes itself based on timer and some events. You can set
 the interval of the timer with refresh option. However you can also force
-lualine to refresh at any time by calling lualine.refresh function.
+lualine to refresh at any time by calling `lualine.refresh` function.
 ```lua
 require('lualine').refresh({
   scope = 'tabpage',  -- scope of refresh all/tabpage/window
@@ -882,7 +923,7 @@ So you can simply do
 require('lualine').refresh()
 ```
 
-Avoid calling lualine.refresh inside components. Since components are evaluated
+Avoid calling `lualine.refresh` inside components. Since components are evaluated
 during refresh, calling refresh while refreshing can have undesirable effects.
 
 ### Disabling lualine

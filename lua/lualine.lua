@@ -337,7 +337,17 @@ local function refresh(opts)
   --   https://github.com/nvim-lualine/lualine.nvim/issues/755
   --   https://github.com/neovim/neovim/issues/19472
   --   https://github.com/nvim-lualine/lualine.nvim/issues/791
-  if opts.trigger == 'autocmd' and vim.v.event.new_mode ~= 'c' then
+  if
+    opts.trigger == 'autocmd'
+    and vim.v.event.new_mode ~= 'c'
+    -- scheduling in op-pending mode seems to call the callback forever.
+    -- so this is restricted in op-pending mode.
+    -- https://github.com/neovim/neovim/issues/22263
+    -- https://github.com/nvim-lualine/lualine.nvim/issues/967
+    -- note this breaks mode component while switching to op-pending mode
+    and not vim.tbl_contains({ 'no', 'nov', 'noV' }, vim.v.event.new_mode)
+    and not vim.tbl_contains({ 'no', 'nov', 'noV' }, vim.v.event.old_mode)
+  then
     opts.trigger = 'autocmd_redired'
     vim.schedule(function()
       M.refresh(opts)
@@ -348,7 +358,7 @@ local function refresh(opts)
   local wins = {}
   local old_actual_curwin = vim.g.actual_curwin
 
-  -- ignore focus on filetypes listes in options.ignore_focus
+  -- ignore focus on filetypes listed in options.ignore_focus
   local curwin = vim.api.nvim_get_current_win()
   local curtab = vim.api.nvim_get_current_tabpage()
   if last_focus[curtab] == nil or not vim.api.nvim_win_is_valid(last_focus[curtab]) then

@@ -42,7 +42,7 @@
 ---]===])
 --- ```
 ---
---- For more flexibility you can match a patten in expect block.
+--- For more flexibility you can match a pattern in expect block.
 --- ``lua
 --- statusline:expect([===[
 ---    highlights = {

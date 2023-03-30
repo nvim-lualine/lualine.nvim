@@ -243,7 +243,7 @@ local function load_theme(theme_name)
     end
     if not file_found then
       -- This shouldn't happen but somehow we have multiple files but they
-      -- apear to be in lualines repo . Just run the first one
+      -- appear to be in lualines repo . Just run the first one
       retval = dofile(files[1])
     end
   end

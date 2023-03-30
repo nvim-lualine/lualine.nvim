@@ -35,7 +35,7 @@ M.assert_component = function(component, opts, result, is_active)
   eq(result, comp:draw(opts.hl, is_active or true))
 end
 
-function M.assert_component_instence(comp, result)
+function M.assert_component_instance(comp, result)
   eq(result, comp:draw(comp.options.hl))
 end
 -- sets defaults for component options

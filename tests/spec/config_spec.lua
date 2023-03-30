@@ -73,7 +73,7 @@ describe('config parsing', function()
           eq(config.options.section_separators, { left = 'b', right = 'a' })
         end)
       end)
-      it('no seprarators', function()
+      it('no separators', function()
         local config = {
           options = { component_separators = {}, section_separators = {} },
         }
