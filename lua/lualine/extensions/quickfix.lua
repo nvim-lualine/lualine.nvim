@@ -18,7 +18,7 @@ end
 
 local M = {}
 
-function M.init()
+function M.get_colours()
   -- Make sure ft wf doesn't create a custom statusline
   vim.g.qf_disable_statusline = true
   return {
@@ -32,7 +32,7 @@ M.sections = {
     {
       label,
       color = function()
-        return is_loclist() and { bg = M.init()['ll'] } or { bg = M.init()['qf'] }
+        return is_loclist() and { bg = M.get_colours()['ll'] } or { bg = M.get_colours()['qf'] }
       end,
     },
   },
