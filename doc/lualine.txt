@@ -953,6 +953,7 @@ extensions with:
 - quickfix
 - symbols-outline
 - toggleterm
+- trouble
 
 
                                                    *lualine-Custom-extensions*
