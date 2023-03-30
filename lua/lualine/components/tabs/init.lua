@@ -8,6 +8,7 @@ local highlight = require('lualine.highlight')
 local default_options = {
   max_length = 0,
   mode = 0,
+  use_mode_colors = false,
   tabs_color = {
     active = nil,
     inactive = nil,
@@ -20,7 +21,7 @@ local default_options = {
 ---@param is_active boolean
 ---@return string hl name
 local function get_hl(section, is_active)
-  local suffix = is_active and '_normal' or '_inactive'
+  local suffix = is_active and highlight.get_mode_suffix() or '_inactive'
   local section_redirects = {
     lualine_x = 'lualine_c',
     lualine_y = 'lualine_b',
@@ -34,15 +35,21 @@ end
 
 function M:init(options)
   M.super.init(self, options)
+  -- if use_mode_colors is set, use a function so that the colors update
+  local default_active = options.use_mode_colors
+      and function()
+        return get_hl('lualine_' .. options.self.section, true)
+      end
+    or get_hl('lualine_' .. options.self.section, true)
   default_options.tabs_color = {
-    active = get_hl('lualine_' .. options.self.section, true),
+    active = default_active,
     inactive = get_hl('lualine_' .. options.self.section, false),
   }
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
   -- stylua: ignore
   self.highlights = {
-    active = self:create_hl( self.options.tabs_color.active, 'active'),
-    inactive = self:create_hl( self.options.tabs_color.inactive, 'inactive'),
+    active = self:create_hl(self.options.tabs_color.active, 'active'),
+    inactive = self:create_hl(self.options.tabs_color.inactive, 'inactive'),
   }
 end
 

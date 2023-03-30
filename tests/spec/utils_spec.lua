@@ -10,7 +10,7 @@ local stub = require('luassert.stub')
 describe('Utils', function()
   local utils = require('lualine.utils.utils')
 
-  it('can retrive highlight groups', function()
+  it('can retrieve highlight groups', function()
     local hl2 = { fg = '#aabbcc', bg = '#889977', sp = '#997788', reverse = true, undercurl = true }
     -- handles non existing hl groups
     eq(utils.extract_highlight_colors('hl2'), nil)
@@ -79,7 +79,7 @@ describe('Utils', function()
   end)
 end)
 
-describe('Cterm genarator', function()
+describe('Cterm generator', function()
   local cterm = require('lualine.utils.color_utils')
 
   it('can convert rgb to cterm', function()
@@ -90,7 +90,7 @@ describe('Cterm genarator', function()
   end)
 end)
 
-describe('Section genarator', function()
+describe('Section generator', function()
   local hl = require('lualine.highlight')
   stub(hl, 'format_highlight')
   hl.format_highlight.returns('%#lualine_c_normal#')

@@ -201,7 +201,7 @@ function M:apply_section_separators()
   end
 end
 
----Add on click funtion description to already drawn item
+---Add on click function description to already drawn item
 function M:apply_on_click()
   if self.on_click_id then
     self.status = self:format_fn(self.on_click_id, self.status)
@@ -274,10 +274,12 @@ function M:draw(default_highlight, is_focused)
   if self.options.fmt then
     status = self.options.fmt(status or '', self)
   end
-  if type(status) == 'string' and #status > 0 then
+  if type(status) == 'string' and (#status > 0 or self.options.draw_empty) then
     self.status = status
-    self:apply_icon()
-    self:apply_padding()
+    if #status > 0 then
+      self:apply_icon()
+      self:apply_padding()
+    end
     self:apply_on_click()
     self:apply_highlights(default_highlight)
     self:apply_section_separators()

@@ -8,7 +8,7 @@ local function progress()
   elseif cur == total then
     return 'Bot'
   else
-    return math.floor(cur / total * 100) .. '%%'
+    return string.format('%2d%%%%', math.floor(cur / total * 100))
   end
 end
 

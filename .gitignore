@@ -55,3 +55,4 @@ tags
 
 # tests
 /tmp_home/
+.luarc.json
