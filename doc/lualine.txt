@@ -541,6 +541,21 @@ Component specific options             These are options that are available on
 <
 
 
+                                          *lualine-datetime-component-options*
+
+>
+    sections = {
+      lualine_a = {
+        {
+          'datetime',
+          -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
+          style = 'default'
+        }
+      }
+    }
+<
+
+
                                        *lualine-diagnostics-component-options*
 
 >
@@ -658,21 +673,6 @@ Component specific options             These are options that are available on
           icon = { align = 'right' }, -- Display filetype icon on the right hand side
           -- icon =    {'X', align='right'}
           -- Icon string ^ in table is ignored in filetype component
-        }
-      }
-    }
-<
-
-
-                                          *lualine-datetime-component-options*
-
->
-    sections = {
-      lualine_a = {
-        {
-          'datetime',
-          -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
-          style = 'default'
         }
       }
     }
