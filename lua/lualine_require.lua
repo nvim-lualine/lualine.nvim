@@ -16,7 +16,7 @@ if source:sub(1, 1) == '@' then
   end
 end
 
---- checks if name is valied
+--- checks if name is valid
 ---@param name string
 ---@return boolean
 function M.is_valid_filename(name)

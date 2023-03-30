@@ -29,7 +29,7 @@ Good luck!
 *Let's introduce you to the tools we use.*
 
 - Your PR needs to pass tests & linter. We lint our codebase with [luacheck](https://github.com/mpeterv/luacheck)
-  and run tests with [plenary-test][plenary.nvim] these will be ran on CI. If you want you can run tests & linter
+  and run tests with [plenary-test][plenary.nvim] these will be run on CI. If you want you can run tests & linter
   locally with `make test` & `make lint` respectively. Or `make check` to run both linter & tests. For running
   tests you'll have to make sure lualine.nvim, [plenary.nvim][plenary.nvim] and
   [nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons) are in same directory.

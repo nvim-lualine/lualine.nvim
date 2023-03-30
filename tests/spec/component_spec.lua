@@ -757,7 +757,7 @@ describe('Branch component', function()
       "git -c user.name='asdf' -c user.email='asdf@jlk.org' -C " .. tmpdir .. ' ' .. string.format(...)
     )
   end
-  local assert_comp_ins = helpers.assert_component_instence
+  local assert_comp_ins = helpers.assert_component_instance
 
   before_each(function()
     tmpdir = os.tmpname()

@@ -183,7 +183,7 @@ function M.highlight(name, foreground, background, gui, link)
   }
 end
 
----Attach a hl to another, so the attachee auto updates on change to hl that it's attached too.
+---Attach a hl to another, so the attached auto updates on change to hl that it's attached too.
 ---@param provider string the hl receiver is getting attached to
 ---@param receiver string the hl that will be auto updated upon change to provider
 ---@param provider_el_type string (fg/bg) what element receiver relates to of provider
@@ -328,7 +328,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   end
 
   if type(color) ~= 'function' and (apply_no_default or (color.bg and color.fg)) then
-    -- When bg and fg are both present we donn't need to set highlighs for
+    -- When bg and fg are both present we don't need to set highlights for
     -- each mode as they will surely look the same. So we can work without options
     local highlight_group_name = table.concat({ 'lualine', section, highlight_tag }, '_')
     M.highlight(highlight_group_name, color.fg, color.bg, color.gui, nil)

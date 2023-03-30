@@ -358,7 +358,7 @@ local function refresh(opts)
   local wins = {}
   local old_actual_curwin = vim.g.actual_curwin
 
-  -- ignore focus on filetypes listes in options.ignore_focus
+  -- ignore focus on filetypes listed in options.ignore_focus
   local curwin = vim.api.nvim_get_current_win()
   local curtab = vim.api.nvim_get_current_tabpage()
   if last_focus[curtab] == nil or not vim.api.nvim_win_is_valid(last_focus[curtab]) then

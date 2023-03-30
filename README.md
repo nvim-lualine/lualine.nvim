@@ -470,7 +470,7 @@ sections = {
 #### Component specific options
 
 These are options that are available on specific components.
-For example you have option on `diagnostics` component to
+For example, you have option on `diagnostics` component to
 specify what your diagnostic sources will be.
 
 #### buffers component options
@@ -867,7 +867,7 @@ require('lualine').setup { extensions = { my_extension } }
 ### Refreshing lualine
 By default lualine refreshes itself based on timer and some events. You can set
 the interval of the timer with refresh option. However you can also force
-lualine to refresh at any time by calling lualine.refresh function.
+lualine to refresh at any time by calling `lualine.refresh` function.
 ```lua
 require('lualine').refresh({
   scope = 'tabpage',  -- scope of refresh all/tabpage/window
@@ -882,7 +882,7 @@ So you can simply do
 require('lualine').refresh()
 ```
 
-Avoid calling lualine.refresh inside components. Since components are evaluated
+Avoid calling `lualine.refresh` inside components. Since components are evaluated
 during refresh, calling refresh while refreshing can have undesirable effects.
 
 ### Disabling lualine
