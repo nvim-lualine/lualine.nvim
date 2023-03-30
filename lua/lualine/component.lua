@@ -274,7 +274,7 @@ function M:draw(default_highlight, is_focused)
   if self.options.fmt then
     status = self.options.fmt(status or '', self)
   end
-  if type(status) == 'string' and #status > 0 then
+  if type(status) == 'string' and (#status > 0 or self.options.draw_empty) then
     self.status = status
     self:apply_icon()
     self:apply_padding()
