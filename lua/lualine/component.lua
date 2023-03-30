@@ -276,8 +276,10 @@ function M:draw(default_highlight, is_focused)
   end
   if type(status) == 'string' and (#status > 0 or self.options.draw_empty) then
     self.status = status
-    self:apply_icon()
-    self:apply_padding()
+    if #status > 0 then
+      self:apply_icon()
+      self:apply_padding()
+    end
     self:apply_on_click()
     self:apply_highlights(default_highlight)
     self:apply_section_separators()
