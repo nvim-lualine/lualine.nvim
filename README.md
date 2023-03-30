@@ -504,6 +504,9 @@ sections = {
         alpha = 'Alpha'
       }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
 
+      -- Automatically updates active buffer color to match color of other components (will be overidden if buffers_color is set)
+      use_mode_colors = false,
+
       buffers_color = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active buffer.
@@ -667,6 +670,9 @@ sections = {
                 -- 1: Shows tab_name
                 -- 2: Shows tab_nr + tab_name
 
+      -- Automatically updates active tab color to match color of other components (will be overidden if buffers_color is set)
+      use_mode_colors = false,
+
       tabs_color = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active tab.
@@ -713,6 +719,9 @@ sections = {
       }, -- Shows specific window name for that filetype ( { `filetype` = `window_name`, ... } )
 
       disabled_buftypes = { 'quickfix', 'prompt' }, -- Hide a window if its buffer's type is disabled
+
+      -- Automatically updates active window color to match color of other components (will be overidden if buffers_color is set)
+      use_mode_colors = false,
 
       windows_color = {
         -- Same values as the general color option can be used here.
