@@ -51,9 +51,11 @@ end
 function M:init(options)
   M.super.init(self, options)
   -- if use_mode_colors is set, use a function so that the colors update
-  local default_active = options.use_mode_colors and
-      function() return get_hl('lualine_' .. options.self.section, true) end
-      or get_hl('lualine_' .. options.self.section, true)
+  local default_active = options.use_mode_colors
+      and function()
+        return get_hl('lualine_' .. options.self.section, true)
+      end
+    or get_hl('lualine_' .. options.self.section, true)
   default_options.buffers_color = {
     active = default_active,
     inactive = get_hl('lualine_' .. options.self.section, false),
