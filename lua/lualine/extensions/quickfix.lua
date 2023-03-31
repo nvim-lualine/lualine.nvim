@@ -16,15 +16,16 @@ local function title()
   return vim.fn.getqflist({ title = 0 }).title
 end
 
+local qf_colours = {
+  ll = vim.api.nvim_get_hl_by_name('Constant', false).foreground,
+  qf = vim.api.nvim_get_hl_by_name('Identifier', false).foreground,
+}
+
 local M = {}
 
-function M.get_colours()
+function M.init()
   -- Make sure ft wf doesn't create a custom statusline
   vim.g.qf_disable_statusline = true
-  return {
-    ll = vim.api.nvim_get_hl_by_name('Constant', false).foreground,
-    qf = vim.api.nvim_get_hl_by_name('Identifier', false).foreground,
-  }
 end
 
 M.sections = {
@@ -32,7 +33,7 @@ M.sections = {
     {
       label,
       color = function()
-        return is_loclist() and { bg = M.get_colours()['ll'] } or { bg = M.get_colours()['qf'] }
+        return is_loclist() and { bg = qf_colours['ll'] } or { bg = qf_colours['qf'] }
       end,
     },
   },
