@@ -57,7 +57,7 @@ local function filename_and_parent(path, sep)
   elseif #segments == 1 then
     return segments[#segments]
   else
-    return table.concat({segments[#segments - 1], segments[#segments]}, sep)
+    return table.concat({ segments[#segments - 1], segments[#segments] }, sep)
   end
 end
 
