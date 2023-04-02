@@ -41,6 +41,6 @@ M.sections = {
   lualine_z = { 'location' },
 }
 
-M.filetypes = { 'qf' }
+M.filetypes = { 'qf', 'replacer' }
 
 return M
