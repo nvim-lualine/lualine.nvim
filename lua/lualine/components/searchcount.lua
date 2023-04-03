@@ -20,6 +20,10 @@ function M:update_status()
   end
 
   local result = vim.fn.searchcount { maxcount = self.options.maxcount, timeout = self.options.timeout }
+  if next(result) == nil then
+    return ''
+  end
+
   local denominator = math.min(result.total, result.maxcount)
   return string.format('[%d/%d]', result.current, denominator)
 end
