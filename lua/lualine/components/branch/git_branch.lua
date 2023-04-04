@@ -60,6 +60,11 @@ end
 ---@param dir_path string|nil
 ---@return string
 function M.find_git_dir(dir_path)
+  if M.user_git_dir then
+    current_git_dir = M.user_git_dir
+    update_branch()
+    return current_git_dir
+  end
   -- get file dir so we can search from that dir
   local file_dir = dir_path or vim.fn.expand('%:p:h')
   local root_dir = file_dir
@@ -109,7 +114,8 @@ function M.find_git_dir(dir_path)
 end
 
 ---initializes git_branch module
-function M.init()
+function M.init(opts)
+  M.user_git_dir = opts.git_dir and vim.fn.expand(opts.git_dir)
   -- run watch head on load so branch is present when component is loaded
   M.find_git_dir()
   -- update branch state of BufEnter as different Buffer may be on different repos
