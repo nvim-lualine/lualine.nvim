@@ -82,7 +82,7 @@ local function fill_section_separator(status, is_focused, str_checked, last_hl, 
 end
 
 --- processes statusline string
---- replaces %s/S{sep} with proper left/right separator highlight + sep
+--- replaces %z/Z{sep} with proper left/right separator highlight + sep
 ---@param status string : unprocessed statusline string
 ---@return string : processed statusline string
 local function apply_transitional_separators(status, is_focused)
@@ -93,7 +93,7 @@ local function apply_transitional_separators(status, is_focused)
   local copied_pos = 1 -- Tracks how much we've copied over to status_applied
   local str_checked = 1 -- Tracks where the searcher head is at
 
-  -- Process entire status replace the %s{sep} & %S{sep} placeholders
+  -- Process entire status replace the %z{sep} & %Z{sep} placeholders
   -- with proper transitional separator.
   while str_checked ~= nil do
     str_checked = status:find('%%', str_checked)
@@ -108,9 +108,9 @@ local function apply_transitional_separators(status, is_focused)
       -- %#hl_name# highlights
       last_hl = status:match('^%%#(.-)#', str_checked)
       str_checked = str_checked + #last_hl + 3
-    elseif next_char == 's' then
-      -- %s{sep} is marker for left separator and
-      local sep = status:match('^%%s{(.-)}', str_checked)
+    elseif next_char == 'z' then
+      -- %z{sep} is marker for left separator and
+      local sep = status:match('^%%z{(.-)}', str_checked)
       str_checked = str_checked + #sep + 4 -- 4 = len(%{})
       if not (last_hl == nil and last_hl_reseted) then
         local trans_sep = fill_section_separator(status, is_focused, str_checked, last_hl, sep, false)
@@ -122,11 +122,11 @@ local function apply_transitional_separators(status, is_focused)
         last_hl_reseted = false
       end
       copied_pos = str_checked
-    elseif next_char == 'S' then
-      -- %S{sep} is marker for right separator and
-      local sep = status:match('^%%S{(.-)}', str_checked)
+    elseif next_char == 'Z' then
+      -- %Z{sep} is marker for right separator and
+      local sep = status:match('^%%Z{(.-)}', str_checked)
       str_checked = str_checked + #sep + 4 -- 4 = len(%{})
-      if status:find('^%%s', str_checked) or status:find('^%%<%%s', str_checked) then
+      if status:find('^%%z', str_checked) or status:find('^%%<%%Z', str_checked) then
         -- When transitional right_sep and left_sep are right next to each other
         -- and in this exact order skip the left sep as we can't draw both.
         str_checked = status:find('}', str_checked) + 1

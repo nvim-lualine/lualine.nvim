@@ -193,11 +193,11 @@ function M:apply_section_separators()
     return
   end
   if self.options.separator.left ~= nil and self.options.separator.left ~= '' then
-    self.status = string.format('%%s{%s}%s', self.options.separator.left, self.status)
+    self.status = string.format('%%z{%s}%s', self.options.separator.left, self.status)
     self.strip_previous_separator = true
   end
   if self.options.separator.right ~= nil and self.options.separator.right ~= '' then
-    self.status = string.format('%s%%S{%s}', self.status, self.options.separator.right)
+    self.status = string.format('%s%%Z{%s}', self.status, self.options.separator.right)
   end
 end
 
