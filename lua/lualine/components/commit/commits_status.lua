@@ -3,6 +3,7 @@ local M = {}
 local os = require('os')
 local require = require('lualine_require').require
 local utils = require('lualine.utils.utils')
+local job = require('lualine.utils.job')
 
 local current_git_dir = ''
 -- os specific path separator
@@ -10,6 +11,50 @@ local sep = package.config:sub(1, 1)
 
 local git_dir_cache = {}  -- Stores git paths that we already know of, map file dir to git_dir
 local git_repo_cache = {} -- Stores information about git repository commits
+
+function fetchBranch(name, callback)
+    fetch_job = job({
+        cmd = string.format(
+            [[git fetch origin %s]],
+            name
+        ),
+        on_exit = function(_, exit_code)
+            if exit_code ~= 0 then
+                callback(false)
+                return
+            end
+            callback(true)
+        end
+    })
+    if fetch_job then
+        fetch_job:start()
+    end
+end
+
+function commitDiff(source, target, callback)
+    local diff_output = ''
+    diff_job = job({
+        cmd = string.format(
+            [[git log --oneline %s %s]],
+            source,
+            target
+        ),
+        on_stdout = function(_, data)
+            diff_output = diff_output .. table.concat(data, '\n')
+        end,
+        on_exit = function(_, exit_code)
+            if exit_code ~= 0 then
+                callback(false, -1)
+                return
+            end
+            local _, commit_count = diff_output:gsub('\n', '\n')
+            callback(true, commit_count)
+        end
+    })
+    if diff_job then
+        diff_job:start()
+    end
+end
 
 ---returns full path to git directory for dir_path or current directory
 ---@param dir_path string|nil
@@ -91,9 +136,50 @@ function M.watch_repo(dir_path)
         git_repo_cache[git_dir] = git_repo
 
         local start_timer = function(git_data)
-            timer:start(0, 10000, function()
-                local time = os.date("*t")
-            end)
+            timer:start(0, 10000, vim.schedule_wrap(function()
+                -- Diff against master
+                fetchBranch('master', function(success)
+                    if not success then
+                        print("failed to fetch branch master")
+                        return
+                    end
+
+                    commitDiff('origin/master', '^@', function(success, count)
+                        if not success then
+                            print("git log failed")
+                            return
+                        end
+
+                        git_data.master_commit_count = count
+                    end)
+                end)
+
+                -- Diff against current branch upstream
+                fetchBranch('@', function(success)
+                    if not success then
+                        print("failed to fetch branch @")
+                        return
+                    end
+
+                    commitDiff('@', '^@{upstream}', function(success, count)
+                        if not success then
+                            print("git log failed")
+                            return
+                        end
+
+                        git_data.unpushed_commit_count = count
+                    end)
+
+                    commitDiff('^@', '@{upstream}', function(success, count)
+                        if not success then
+                            print("git log failed")
+                            return
+                        end
+
+                        git_data.unpulled_commit_count = count
+                    end)
+                end)
+            end))
         end
         start_timer(git_repo)
         return
