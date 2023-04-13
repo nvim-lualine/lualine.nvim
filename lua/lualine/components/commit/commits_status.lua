@@ -143,7 +143,7 @@ function M.watch_repo(dir_path)
         git_repo_cache[git_dir] = git_repo
 
         local start_timer = function(git_data)
-            timer:start(0, 10000, vim.schedule_wrap(function()
+            timer:start(0, M.opts.interval, vim.schedule_wrap(function()
                 local cwd = git_data.dir:sub(1, -6)
                 -- Diff against master
                 fetchBranch(cwd, 'master', function(success)
@@ -197,7 +197,8 @@ function M.watch_repo(dir_path)
     git_repo.timer:again()
 end
 
-function M.init()
+function M.init(opts)
+    M.opts = opts
     M.watch_repo()
     utils.define_autocmd('BufEnter', "lua require'lualine.components.commit.commits_status'.watch_repo()")
 end
@@ -214,14 +215,15 @@ function M.status(bufnr)
 
     local git_dir = git_dir_cache[file_dir]
     if git_dir == nil then
-        return 'not a git dir'
+        return ''
     end
 
     local repo = git_repo_cache[git_dir]
 
-    return '⇢ ' ..
-        tostring(repo.master_commit_count) ..
-        ' ⇣ ' .. tostring(repo.unpulled_commit_count) .. ' ⇡ ' .. tostring(repo.unpushed_commit_count)
+    return (
+        M.opts.unpulled_master_icon .. tostring(repo.master_commit_count) ..
+        ' ' .. M.opts.unpulled_icon .. tostring(repo.unpulled_commit_count) ..
+        ' ' .. M.opts.unpushed_icon .. tostring(repo.unpushed_commit_count))
 end
 
 return M

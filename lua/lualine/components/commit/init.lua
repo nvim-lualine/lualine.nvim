@@ -11,7 +11,12 @@ M.init = function(self, options)
         self.options.icon = ''
     end
 
-    modules.commits_status.init()
+    modules.commits_status.init({
+        interval = self.options.internval or 10000,
+        unpulled_master_icon = self.options.unpulled_master_icon or '⇢ ',
+        unpulled_icon = self.options.unpulled_icon or '⇣ ',
+        unpushed_icon = self.options.unpushed_icon or '⇡ ',
+    })
 end
 
 M.update_status = function(_, is_focused)
