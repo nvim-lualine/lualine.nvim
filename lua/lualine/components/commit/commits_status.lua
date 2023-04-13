@@ -1,6 +1,5 @@
 local M = {}
 
-local os = require('os')
 local require = require('lualine_require').require
 local utils = require('lualine.utils.utils')
 local job = require('lualine.utils.job')
@@ -12,12 +11,14 @@ local sep = package.config:sub(1, 1)
 local git_dir_cache = {}  -- Stores git paths that we already know of, map file dir to git_dir
 local git_repo_cache = {} -- Stores information about git repository commits
 
-function fetchBranch(name, callback)
+function fetchBranch(cwd, name, callback)
     fetch_job = job({
-        cmd = string.format(
-            [[git fetch origin %s]],
-            name
-        ),
+        cmd = {
+            'sh', '-c',
+            string.format([[cd %s && git fetch origin %s]],
+                cwd,
+                name)
+        },
         on_exit = function(_, exit_code)
             if exit_code ~= 0 then
                 callback(false)
@@ -31,14 +32,17 @@ function fetchBranch(name, callback)
     end
 end
 
-function commitDiff(source, target, callback)
+function commitDiff(cwd, source, target, callback)
     local diff_output = ''
     diff_job = job({
-        cmd = string.format(
-            [[git log --oneline %s %s]],
-            source,
-            target
-        ),
+        cmd = {
+            'sh', '-c',
+            string.format(
+                [[cd %s && git log --oneline %s %s]],
+                cwd,
+                source,
+                target)
+        },
         on_stdout = function(_, data)
             diff_output = diff_output .. table.concat(data, '\n')
         end,
@@ -108,6 +112,9 @@ function M.watch_repo(dir_path)
     local git_dir = M.find_git_dir(dir_path)
 
     if git_dir == nil then
+        for _, v in pairs(git_repo_cache) do
+            v.timer:stop()
+        end
         return -- noting to do
     end
 
@@ -137,14 +144,15 @@ function M.watch_repo(dir_path)
 
         local start_timer = function(git_data)
             timer:start(0, 10000, vim.schedule_wrap(function()
+                local cwd = git_data.dir:sub(1, -6)
                 -- Diff against master
-                fetchBranch('master', function(success)
+                fetchBranch(cwd, 'master', function(success)
                     if not success then
                         print("failed to fetch branch master")
                         return
                     end
 
-                    commitDiff('origin/master', '^@', function(success, count)
+                    commitDiff(cwd, 'origin/master', '^@', function(success, count)
                         if not success then
                             print("git log failed")
                             return
@@ -155,13 +163,13 @@ function M.watch_repo(dir_path)
                 end)
 
                 -- Diff against current branch upstream
-                fetchBranch('@', function(success)
+                fetchBranch(cwd, '@', function(success)
                     if not success then
                         print("failed to fetch branch @")
                         return
                     end
 
-                    commitDiff('@', '^@{upstream}', function(success, count)
+                    commitDiff(cwd, '@', '^@{upstream}', function(success, count)
                         if not success then
                             print("git log failed")
                             return
@@ -170,7 +178,7 @@ function M.watch_repo(dir_path)
                         git_data.unpushed_commit_count = count
                     end)
 
-                    commitDiff('^@', '@{upstream}', function(success, count)
+                    commitDiff(cwd, '^@', '@{upstream}', function(success, count)
                         if not success then
                             print("git log failed")
                             return
