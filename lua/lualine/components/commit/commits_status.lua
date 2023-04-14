@@ -11,6 +11,30 @@ local sep = package.config:sub(1, 1)
 local git_dir_cache = {}  -- Stores git paths that we already know of, map file dir to git_dir
 local git_repo_cache = {} -- Stores information about git repository commits
 
+function getMasterName(cwd, callback)
+    local output = ''
+    fetch_job = job({
+        cmd = {
+            'sh', '-c',
+            string.format([[git remote show origin | grep 'HEAD branch' | cut -d' ' -f5]],
+                cwd)
+        },
+        on_stdout = function(_, data)
+            output = output .. table.concat(data, '')
+        end,
+        on_exit = function(_, exit_code)
+            if exit_code ~= 0 then
+                callback(false)
+                return
+            end
+            callback(true, output)
+        end
+    })
+    if fetch_job then
+        fetch_job:start()
+    end
+end
+
 function fetchBranch(cwd, name, callback)
     fetch_job = job({
         cmd = {
@@ -155,13 +179,14 @@ function M.watch_repo(dir_path)
         git_repo = {
             dir = git_dir,
             git_cwd = git_dir:sub(1, -6), -- cut  '/.git' suffix
+            master_name = M.opts.master_name or nil,
             timer = timer,
             file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
             master_commit_count = 0,
             unpushed_commit_count = 0,
             unpulled_commit_count = 0,
             update_master = function(self)
-                commitDiff(self.git_cwd, 'origin/' .. M.opts.master_name, '^@', function(success, count)
+                commitDiff(self.git_cwd, 'origin/' .. self.master_name, '^@', function(success, count)
                     if not success then
                         print("git log failed")
                         return
@@ -190,7 +215,7 @@ function M.watch_repo(dir_path)
                 end)
             end,
             sync_and_update_master = function(self)
-                fetchBranch(self.git_cwd, M.opts.master_name, function(success)
+                fetchBranch(self.git_cwd, self.master_name, function(success)
                     if not success then
                         print("failed to fetch branch" .. M.opts.master_name)
                         return
@@ -211,6 +236,25 @@ function M.watch_repo(dir_path)
         git_repo_cache[git_dir] = git_repo
 
         local start_watch = function(repo)
+            if M.opts.findout_master_name then
+                getMasterName(repo.git_cwd, function(success, master_name)
+                    if not success then
+                        print("unable to get master name")
+                        return
+                    end
+                    repo.maste_name = master_name
+
+                    M.watch_head(repo)
+                    timer:start(0, M.opts.interval, vim.schedule_wrap(function()
+                        if M.opts.diff_against_master then
+                            repo:sync_and_update_master()
+                        end
+                        repo:sync_and_update_current()
+                    end))
+                end)
+                return
+            end
+
             M.watch_head(repo)
             timer:start(0, M.opts.interval, vim.schedule_wrap(function()
                 if M.opts.diff_against_master then

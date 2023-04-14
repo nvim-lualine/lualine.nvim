@@ -13,6 +13,7 @@ M.init = function(self, options)
 
     modules.commits_status.init({
         master_name = self.options.master_name or 'master',
+        findout_master_name = self.options.findout_master_name or true,
         diff_against_master = self.options.diff_against_master or false,
         interval = self.options.internval or 60000,
         unpulled_master_icon = self.options.unpulled_master_icon or '⇢ ',
