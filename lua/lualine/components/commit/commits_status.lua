@@ -108,6 +108,23 @@ function M.find_git_dir(dir_path)
     return git_dir
 end
 
+function M.watch_head(repo)
+    -- Update the state of changed git repo here.
+    -- May not be the current buffer.
+    repo:update_master()
+    repo:update_current()
+
+    repo.file_changed:stop()
+    local head_file = repo.dir .. sep .. 'HEAD'
+    repo.file_changed:start(
+        head_file,
+        sep ~= '\\' and {} or 1000,
+        vim.schedule_wrap(function()
+            M.watch_head(repo)
+        end)
+    )
+end
+
 function M.watch_repo(dir_path)
     local git_dir = M.find_git_dir(dir_path)
 
@@ -135,61 +152,70 @@ function M.watch_repo(dir_path)
         local timer = vim.loop.new_timer()
         git_repo = {
             dir = git_dir,
+            git_cwd = git_dir:sub(1, -6), -- cut  '/.git' suffix
             timer = timer,
+            file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
             master_commit_count = 0,
             unpushed_commit_count = 0,
             unpulled_commit_count = 0,
-        }
-        git_repo_cache[git_dir] = git_repo
+            update_master = function(self)
+                commitDiff(self.git_cwd, 'origin/' .. M.opts.master_name, '^@', function(success, count)
+                    if not success then
+                        print("git log failed")
+                        return
+                    end
 
-        local start_timer = function(git_data)
-            timer:start(0, M.opts.interval, vim.schedule_wrap(function()
-                local cwd = git_data.dir:sub(1, -6)
-                -- Diff against master
-                fetchBranch(cwd, M.opts.master_name, function(success)
+                    self.master_commit_count = count
+                end)
+            end,
+            update_current = function(self)
+                commitDiff(self.git_cwd, '@', '^@{upstream}', function(success, count)
+                    if not success then
+                        print("git log failed")
+                        return
+                    end
+
+                    self.unpushed_commit_count = count
+                end)
+
+                commitDiff(self.git_cwd, '^@', '@{upstream}', function(success, count)
+                    if not success then
+                        print("git log failed")
+                        return
+                    end
+
+                    self.unpulled_commit_count = count
+                end)
+            end,
+            sync_and_update_master = function(self)
+                fetchBranch(self.git_cwd, M.opts.master_name, function(success)
                     if not success then
                         print("failed to fetch branch" .. M.opts.master_name)
                         return
                     end
-
-                    commitDiff(cwd, 'origin/' .. M.opts.master_name, '^@', function(success, count)
-                        if not success then
-                            print("git log failed")
-                            return
-                        end
-
-                        git_data.master_commit_count = count
-                    end)
+                    self:update_master()
                 end)
-
-                -- Diff against current branch upstream
-                fetchBranch(cwd, '@', function(success)
+            end,
+            sync_and_update_current = function(self)
+                fetchBranch(self.git_cwd, '@', function(success)
                     if not success then
                         print("failed to fetch branch @")
                         return
                     end
-
-                    commitDiff(cwd, '@', '^@{upstream}', function(success, count)
-                        if not success then
-                            print("git log failed")
-                            return
-                        end
-
-                        git_data.unpushed_commit_count = count
-                    end)
-
-                    commitDiff(cwd, '^@', '@{upstream}', function(success, count)
-                        if not success then
-                            print("git log failed")
-                            return
-                        end
-
-                        git_data.unpulled_commit_count = count
-                    end)
+                    self:update_current()
                 end)
+            end,
+        }
+        git_repo_cache[git_dir] = git_repo
+
+        local start_watch = function(repo)
+            M.watch_head(repo)
+            timer:start(0, M.opts.interval, vim.schedule_wrap(function()
+                repo:sync_and_update_master()
+                repo:sync_and_update_current()
             end))
         end
-        start_timer(git_repo)
+        start_watch(git_repo)
         return
     end
 
@@ -204,7 +230,6 @@ function M.init(opts)
 end
 
 function M.status(bufnr)
-    -- TODO: filter terminal, fugitive, telescope buffers etc...
     local file_dir
     if bufnr then
         local bufname = vim.fn.bufname(bufnr)
