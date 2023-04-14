@@ -111,7 +111,9 @@ end
 function M.watch_head(repo)
     -- Update the state of changed git repo here.
     -- May not be the current buffer.
-    repo:update_master()
+    if M.opts.diff_against_master then
+        repo:update_master()
+    end
     repo:update_current()
 
     repo.file_changed:stop()
@@ -211,7 +213,9 @@ function M.watch_repo(dir_path)
         local start_watch = function(repo)
             M.watch_head(repo)
             timer:start(0, M.opts.interval, vim.schedule_wrap(function()
-                repo:sync_and_update_master()
+                if M.opts.diff_against_master then
+                    repo:sync_and_update_master()
+                end
                 repo:sync_and_update_current()
             end))
         end
@@ -253,9 +257,9 @@ function M.status(bufnr)
         tostring(repo.unpushed_commit_count)
 
     return (
-        M.opts.unpulled_master_icon .. master_count ..
-        ' ' .. M.opts.unpulled_icon .. unpulled_count ..
-        ' ' .. M.opts.unpushed_icon .. unpushed_count)
+        (M.opts.diff_against_master and (M.opts.unpulled_master_icon .. master_count .. ' ') or '')
+        .. M.opts.unpulled_icon .. unpulled_count .. ' '
+        .. M.opts.unpushed_icon .. unpushed_count)
 end
 
 return M
