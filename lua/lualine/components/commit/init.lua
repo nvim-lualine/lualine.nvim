@@ -12,6 +12,7 @@ M.init = function(self, options)
     end
 
     modules.commits_status.init({
+        master_name = self.options.master_name or 'master',
         interval = self.options.internval or 10000,
         unpulled_master_icon = self.options.unpulled_master_icon or '⇢ ',
         unpulled_icon = self.options.unpulled_icon or '⇣ ',

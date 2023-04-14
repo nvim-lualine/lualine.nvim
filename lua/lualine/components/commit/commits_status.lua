@@ -146,13 +146,13 @@ function M.watch_repo(dir_path)
             timer:start(0, M.opts.interval, vim.schedule_wrap(function()
                 local cwd = git_data.dir:sub(1, -6)
                 -- Diff against master
-                fetchBranch(cwd, 'master', function(success)
+                fetchBranch(cwd, M.opts.master_name, function(success)
                     if not success then
-                        print("failed to fetch branch master")
+                        print("failed to fetch branch" .. M.opts.master_name)
                         return
                     end
 
-                    commitDiff(cwd, 'origin/master', '^@', function(success, count)
+                    commitDiff(cwd, 'origin/' .. M.opts.master_name, '^@', function(success, count)
                         if not success then
                             print("git log failed")
                             return
