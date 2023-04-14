@@ -293,17 +293,13 @@ function M.status(bufnr)
 
     local repo = git_repo_cache[git_dir]
 
-    local master_count = (M.opts.use_check_icon and repo.master_commit_count == 0) and M.opts.check_icon or
-        tostring(repo.master_commit_count)
-    local unpulled_count = (M.opts.use_check_icon and repo.unpulled_commit_count == 0) and M.opts.check_icon or
-        tostring(repo.unpulled_commit_count)
-    local unpushed_count = (M.opts.use_check_icon and repo.unpushed_commit_count == 0) and M.opts.check_icon or
-        tostring(repo.unpushed_commit_count)
-
-    return (
-        (M.opts.diff_against_master and (M.opts.unpulled_master_icon .. master_count .. ' ') or '')
-        .. M.opts.unpulled_icon .. unpulled_count .. ' '
-        .. M.opts.unpushed_icon .. unpushed_count)
+    local result = {}
+    if M.opts.diff_against_master then
+        table.insert(result, repo.master_commit_count)
+    end
+    table.insert(result, repo.unpulled_commit_count)
+    table.insert(result, repo.unpushed_commit_count)
+    return result
 end
 
 return M
