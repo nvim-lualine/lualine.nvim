@@ -15,6 +15,7 @@ local default_options = {
     unpushed_icon = '⇡ ',
     use_check_icon = true,
     check_icon = '󰸞',
+    show_only_diverged = false,
 }
 
 local function apply_default_colors(opts)
@@ -22,7 +23,7 @@ local function apply_default_colors(opts)
         insync = {
             fg = modules.utils.extract_color_from_hllist(
                 'fg',
-                { 'GitSignsAdd', 'GitGutterAdd', 'DiffAdded', 'DiffAdd' },
+                { 'lualine_a_inactive' },
                 '#90ee90'
             ),
         },
@@ -86,19 +87,21 @@ function M:update_status(_, is_focused)
     end
 
     for k, v in ipairs(status) do
-        local count = tostring(v)
-        if self.options.use_check_icon then
-            if v == 0 then
-                count = self.options.check_icon
+        if not (self.options.show_only_diverged and v == 0) then
+            local count = tostring(v)
+            if self.options.use_check_icon then
+                if v == 0 then
+                    count = self.options.check_icon
+                end
             end
-        end
 
-        local icon = icons[k]
-        if self.options.colored then
-            local color = (v > 0) and colors['diverged'] or colors['insync']
-            table.insert(result, color .. icon .. count)
-        else
-            table.insert(result, icon .. count)
+            local icon = icons[k]
+            if self.options.colored then
+                local color = (v > 0) and colors['diverged'] or colors['insync']
+                table.insert(result, color .. icon .. count)
+            else
+                table.insert(result, icon .. count)
+            end
         end
     end
 

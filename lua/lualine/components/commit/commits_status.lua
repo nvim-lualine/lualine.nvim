@@ -286,14 +286,14 @@ function M.status(bufnr)
         file_dir = vim.fn.expand('%:p:h')
     end
 
+    local result = {}
     local git_dir = git_dir_cache[file_dir]
     if git_dir == nil then
-        return ''
+        return result
     end
 
     local repo = git_repo_cache[git_dir]
 
-    local result = {}
     if M.opts.diff_against_master then
         table.insert(result, repo.master_commit_count)
     end
