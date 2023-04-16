@@ -1,6 +1,6 @@
 local _found, spectre = pcall(require, "spectre.state")
 if not _found then
-  vim.notify("spectre plugin not found", LOG.WARN)
+  vim.notify("spectre plugin not found", vim.log.levels.WARN)
   return
 end
 
