@@ -255,6 +255,7 @@ sections = {lualine_a = {'mode'}}
 - `selectioncount` (number of selected characters or lines)
 - `tabs` (shows currently available tabs)
 - `windows` (shows currently available windows)
+- `harpoon_files` (shows currently available harpoon files)
 
 #### Custom components
 
