@@ -42,15 +42,15 @@ function M:init(options)
         return get_hl('lualine_' .. options.self.section, true)
       end
       or get_hl('lualine_' .. options.self.section, true)
-  default_options.buffers_color = {
+  default_options.harpoon_files_color = {
     active = default_active,
     inactive = get_hl('lualine_' .. options.self.section, false),
   }
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
   if self.options.component_name == 'harpoon_files' then
     self.highlights = {
-      active = self:create_hl(self.options.buffers_color.active, 'active'),
-      inactive = self:create_hl(self.options.buffers_color.inactive, 'inactive'),
+      active = self:create_hl(self.options.harpoon_files_color.active, 'active'),
+      inactive = self:create_hl(self.options.harpoon_files_color.inactive, 'inactive'),
     }
   end
 end
