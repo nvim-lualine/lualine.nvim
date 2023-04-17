@@ -751,6 +751,32 @@ sections = {
 }
 ```
 
+#### harpoon_files component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'harpoon_files',
+      show_filename_only = true,   -- Shows shortened relative path when set to false.
+      hide_filename_extension = false,   -- Hide filename extension when set to true.
+
+      max_length = vim.o.columns * 2 / 3, -- Maximum width of harpoon_files component,
+                                          -- it can also be a function that returns
+                                          -- the value of `max_length` dynamically.
+      -- Automatically updates active harpoon file color to match color of other components
+      use_mode_colors = false,
+
+      harpoon_files_color = {
+        -- Same values as the general color option can be used here.
+        active = 'lualine_{section}_normal',     -- Color for active harpoon file.
+        inactive = 'lualine_{section}_inactive', -- Color for inactive harpoon file.
+      },
+    }
+  }
+}
+```
+
 ---
 
 ### Tabline
