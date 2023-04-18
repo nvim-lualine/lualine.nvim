@@ -142,11 +142,41 @@ function M.watch_head(repo)
 
     repo.file_changed:stop()
     local head_file = repo.dir .. sep .. 'HEAD'
+
+    local lines = {}
+    for line in io.lines(head_file) do
+        lines[#lines + 1] = line
+    end
+    local ref = lines[1]:gsub("ref: ", "")
+    if ref ~= repo.ref then
+        repo.ref = ref
+        -- if the head changes, we should reset the watch_ref
+        M.watch_ref(repo)
+    end
+
     repo.file_changed:start(
         head_file,
         sep ~= '\\' and {} or 1000,
         vim.schedule_wrap(function()
             M.watch_head(repo)
+        end)
+    )
+end
+
+function M.watch_ref(repo)
+    -- Not sure if the below is right in this case.
+    if M.opts.diff_against_master then
+        repo:update_master()
+    end
+    repo:update_current()
+
+    repo.branch_tip_changed:stop()
+    local branch_tip_file = repo.dir .. sep .. repo.ref
+    repo.branch_tip_changed:start(
+        branch_tip_file,
+        sep ~= '\\' and {} or 1000,
+        vim.schedule_wrap(function()
+            M.watch_ref(repo)
         end)
     )
 end
@@ -179,9 +209,11 @@ function M.watch_repo(dir_path)
         git_repo = {
             dir = git_dir,
             git_cwd = git_dir:sub(1, -6), -- cut  '/.git' suffix
+            ref = '',
             master_name = M.opts.master_name or nil,
             timer = timer,
             file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
+            branch_tip_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
             master_commit_count = 0,
             unpushed_commit_count = 0,
             unpulled_commit_count = 0,
@@ -236,6 +268,19 @@ function M.watch_repo(dir_path)
         git_repo_cache[git_dir] = git_repo
 
         local start_watch = function(repo)
+            local init = function()
+                M.watch_head(repo)
+                M.watch_ref(repo)
+
+                timer:start(0, M.opts.interval, vim.schedule_wrap(function()
+                    print("tick: ", repo.dir)
+                    if M.opts.diff_against_master then
+                        repo:sync_and_update_master()
+                    end
+                    repo:sync_and_update_current()
+                end))
+            end
+
             if M.opts.findout_master_name then
                 getMasterName(repo.git_cwd, function(success, master_name)
                     if not success then
@@ -243,24 +288,14 @@ function M.watch_repo(dir_path)
                         return
                     end
                     repo.maste_name = master_name
-
-                    M.watch_head(repo)
-                    timer:start(0, M.opts.interval, vim.schedule_wrap(function()
-                        if M.opts.diff_against_master then
-                            repo:sync_and_update_master()
-                        end
-                        repo:sync_and_update_current()
-                    end))
+                    init()
                 end)
                 return
             end
 
             M.watch_head(repo)
             timer:start(0, M.opts.interval, vim.schedule_wrap(function()
-                if M.opts.diff_against_master then
-                    repo:sync_and_update_master()
-                end
-                repo:sync_and_update_current()
+                init()
             end))
         end
         start_watch(git_repo)
