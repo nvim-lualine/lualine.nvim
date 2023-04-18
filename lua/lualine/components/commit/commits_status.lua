@@ -152,6 +152,7 @@ function M.watch_head(repo)
         repo.ref = ref
         -- if the head changes, we should reset the watch_ref
         M.watch_ref(repo)
+        M.watch_remote_ref(repo)
     end
 
     repo.file_changed:start(
@@ -177,6 +178,25 @@ function M.watch_ref(repo)
         sep ~= '\\' and {} or 1000,
         vim.schedule_wrap(function()
             M.watch_ref(repo)
+        end)
+    )
+end
+
+function M.watch_remote_ref(repo)
+    -- Not sure if the below is right in this case.
+    if M.opts.diff_against_master then
+        repo:update_master()
+    end
+    repo:update_current()
+    print("commit changed")
+
+    repo.remote_branch_tip_changed:stop()
+    local remote_branch_tip_file = repo.dir .. sep .. repo.ref:gsub("heads", "remotes/origin")
+    repo.remote_branch_tip_changed:start(
+        remote_branch_tip_file,
+        sep ~= '\\' and {} or 1000,
+        vim.schedule_wrap(function()
+            M.watch_remote_ref(repo)
         end)
     )
 end
@@ -214,6 +234,7 @@ function M.watch_repo(dir_path)
             timer = timer,
             file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
             branch_tip_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
+            remote_branch_tip_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
             master_commit_count = 0,
             unpushed_commit_count = 0,
             unpulled_commit_count = 0,
@@ -271,6 +292,7 @@ function M.watch_repo(dir_path)
             local init = function()
                 M.watch_head(repo)
                 M.watch_ref(repo)
+                M.watch_remote_ref(repo)
 
                 timer:start(0, M.opts.interval, vim.schedule_wrap(function()
                     print("tick: ", repo.dir)
