@@ -83,6 +83,7 @@ end
 
 function commitDiff(cwd, source, target, callback)
     local diff_output = ''
+    local err_output = ''
     diff_job = job({
         cmd = {
             'sh', '-c',
@@ -95,9 +96,12 @@ function commitDiff(cwd, source, target, callback)
         on_stdout = function(_, data)
             diff_output = diff_output .. table.concat(data, '\n')
         end,
+        on_stderr = function(_, data)
+            err_output = err_output .. table.concat(data, '\n')
+        end,
         on_exit = function(_, exit_code)
             if exit_code ~= 0 then
-                callback(false, -1)
+                callback(false, -1, err_output)
                 return
             end
             local _, commit_count = diff_output:gsub('\n', '\n')
@@ -177,6 +181,7 @@ function M.watch_head(repo)
     if ref ~= repo.ref then
         repo.ref = ref
         repo.branch_name = branch_name
+        repo.no_upstream = false -- reset as we don't know, check is done on first diff attempt
         -- if the head changes, we should reset the watch_ref
         M.watch_ref(repo)
         if repo.origin_set then
@@ -262,6 +267,7 @@ function M.watch_repo(dir_path)
             master_name = M.opts.master_name or nil,
             branch_name = '',
             origin_set = false,
+            no_upstream = false,
             timer = timer,
             file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
             branch_tip_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
@@ -300,13 +306,18 @@ function M.watch_repo(dir_path)
                 end)
             end,
             update_current = function(self)
-                if not self.origin_set then
+                if not self.origin_set or self.no_upstream then
                     -- there is noting to compare with
                     return
                 end
 
-                commitDiff(self.git_cwd, '@', '^@{upstream}', function(success, count)
+                commitDiff(self.git_cwd, '@', '^@{upstream}', function(success, count, err)
                     if not success then
+                        if string.find(err, "no upstream configured") then
+                            self.no_upstream = true
+                            self.unpushed_commit_count = -1
+                            return
+                        end
                         print("git log failed")
                         return
                     end
@@ -314,8 +325,13 @@ function M.watch_repo(dir_path)
                     self.unpushed_commit_count = count
                 end)
 
-                commitDiff(self.git_cwd, '^@', '@{upstream}', function(success, count)
+                commitDiff(self.git_cwd, '^@', '@{upstream}', function(success, count, err)
                     if not success then
+                        if string.find(err, "no upstream configured") then
+                            self.no_upstream = true
+                            self.unpulled_commit_count = -1
+                            return
+                        end
                         print("git log failed")
                         return
                     end
