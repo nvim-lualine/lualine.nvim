@@ -11,6 +11,31 @@ local sep = package.config:sub(1, 1)
 local git_dir_cache = {}  -- Stores git paths that we already know of, map file dir to git_dir
 local git_repo_cache = {} -- Stores information about git repository commits
 
+function checkOrigin(cwd, callback)
+    local output = ''
+    fetch_job = job({
+        cmd = {
+            'sh', '-c',
+            string.format([[git remote show]],
+                cwd)
+        },
+        on_stdout = function(_, data)
+            output = output .. table.concat(data, '')
+        end,
+        on_exit = function(_, exit_code)
+            if exit_code ~= 0 or output ~= 'origin' then
+                callback(false)
+                return
+            end
+
+            callback(true)
+        end
+    })
+    if fetch_job then
+        fetch_job:start()
+    end
+end
+
 function getMasterName(cwd, callback)
     local output = ''
     fetch_job = job({
@@ -231,6 +256,7 @@ function M.watch_repo(dir_path)
             git_cwd = git_dir:sub(1, -6), -- cut  '/.git' suffix
             ref = '',
             master_name = M.opts.master_name or nil,
+            origin_set = false,
             timer = timer,
             file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
             branch_tip_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
@@ -239,7 +265,14 @@ function M.watch_repo(dir_path)
             unpushed_commit_count = 0,
             unpulled_commit_count = 0,
             update_master = function(self)
-                commitDiff(self.git_cwd, 'origin/' .. self.master_name, '^@', function(success, count)
+                local source = 'origin/' .. self.master_name
+                if not self.origin_set then
+                    -- fallback to compare with local branch
+                    source = self.master_name
+                    return
+                end
+
+                commitDiff(self.git_cwd, source, '^@', function(success, count)
                     if not success then
                         print("git log failed")
                         return
@@ -249,6 +282,11 @@ function M.watch_repo(dir_path)
                 end)
             end,
             update_current = function(self)
+                if not self.origin_set then
+                    -- there is noting to compare with
+                    return
+                end
+
                 commitDiff(self.git_cwd, '@', '^@{upstream}', function(success, count)
                     if not success then
                         print("git log failed")
@@ -268,15 +306,27 @@ function M.watch_repo(dir_path)
                 end)
             end,
             sync_and_update_master = function(self)
+                if not self.origin_set then
+                    -- there is noting to sync with
+                    -- just update, curent branch may be not master
+                    self:update_master()
+                    return
+                end
+
                 fetchBranch(self.git_cwd, self.master_name, function(success)
                     if not success then
-                        print("failed to fetch branch" .. M.opts.master_name)
+                        print("failed to fetch branch " .. M.opts.master_name)
                         return
                     end
                     self:update_master()
                 end)
             end,
             sync_and_update_current = function(self)
+                if not self.origin_set then
+                    -- there is noting to sync and compare with
+                    return
+                end
+
                 fetchBranch(self.git_cwd, '@', function(success)
                     if not success then
                         print("failed to fetch branch @")
@@ -292,7 +342,12 @@ function M.watch_repo(dir_path)
             local init = function()
                 M.watch_head(repo)
                 M.watch_ref(repo)
-                M.watch_remote_ref(repo)
+
+                if repo.origin_set then
+                    -- don't watch for changes in remote branch tip if there is
+                    -- no origin.
+                    M.watch_remote_ref(repo)
+                end
 
                 timer:start(0, M.opts.interval, vim.schedule_wrap(function()
                     print("tick: ", repo.dir)
@@ -303,22 +358,27 @@ function M.watch_repo(dir_path)
                 end))
             end
 
-            if M.opts.findout_master_name then
-                getMasterName(repo.git_cwd, function(success, master_name)
-                    if not success then
-                        print("unable to get master name")
-                        return
-                    end
-                    repo.maste_name = master_name
-                    init()
-                end)
-                return
-            end
+            checkOrigin(repo.git_cwd, function(success)
+                if success then
+                    repo.origin_set = true
+                end
 
-            M.watch_head(repo)
-            timer:start(0, M.opts.interval, vim.schedule_wrap(function()
-                init()
-            end))
+                if M.opts.findout_master_name and repo.origin_set then
+                    getMasterName(repo.git_cwd, function(success, master_name)
+                        if not success then
+                            print("unable to get master name")
+                            return
+                        end
+                        repo.maste_name = master_name
+                        init()
+                    end)
+                    return
+                end
+
+                timer:start(0, M.opts.interval, vim.schedule_wrap(function()
+                    init()
+                end))
+            end)
         end
         start_watch(git_repo)
         return
