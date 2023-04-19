@@ -87,7 +87,7 @@ function M:update_status(_, is_focused)
     end
 
     for k, v in ipairs(status) do
-        if not (self.options.show_only_diverged and v == 0) then
+        if not (self.options.show_only_diverged and v == 0) and v ~= -1 then
             local count = tostring(v)
             if self.options.use_check_icon then
                 if v == 0 then

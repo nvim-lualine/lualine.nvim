@@ -269,7 +269,6 @@ function M.watch_repo(dir_path)
                 if not self.origin_set then
                     -- fallback to compare with local branch
                     source = self.master_name
-                    return
                 end
 
                 commitDiff(self.git_cwd, source, '^@', function(success, count)
@@ -361,6 +360,10 @@ function M.watch_repo(dir_path)
             checkOrigin(repo.git_cwd, function(success)
                 if success then
                     repo.origin_set = true
+                else
+                    -- set special values, as zero (in sync) is misleading
+                    repo.unpushed_commit_count = -1
+                    repo.unpulled_commit_count = -1
                 end
 
                 if M.opts.findout_master_name and repo.origin_set then
