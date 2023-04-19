@@ -16,7 +16,7 @@ function checkOrigin(cwd, callback)
     fetch_job = job({
         cmd = {
             'sh', '-c',
-            string.format([[git remote show]],
+            string.format([[cd %s && git remote show]],
                 cwd)
         },
         on_stdout = function(_, data)
@@ -41,7 +41,7 @@ function getMasterName(cwd, callback)
     fetch_job = job({
         cmd = {
             'sh', '-c',
-            string.format([[git remote show origin | grep 'HEAD branch' | cut -d' ' -f5]],
+            string.format([[cd %s && git remote show origin | grep 'HEAD branch' | cut -d' ' -f5]],
                 cwd)
         },
         on_stdout = function(_, data)
