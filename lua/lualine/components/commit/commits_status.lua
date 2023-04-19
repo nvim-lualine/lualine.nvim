@@ -173,11 +173,15 @@ function M.watch_head(repo)
         lines[#lines + 1] = line
     end
     local ref = lines[1]:gsub("ref: ", "")
+    local branch_name = ref:gsub("refs/heads/", "")
     if ref ~= repo.ref then
         repo.ref = ref
+        repo.branch_name = branch_name
         -- if the head changes, we should reset the watch_ref
         M.watch_ref(repo)
-        M.watch_remote_ref(repo)
+        if repo.origin_set then
+            M.watch_remote_ref(repo)
+        end
     end
 
     repo.file_changed:start(
@@ -256,6 +260,7 @@ function M.watch_repo(dir_path)
             git_cwd = git_dir:sub(1, -6), -- cut  '/.git' suffix
             ref = '',
             master_name = M.opts.master_name or nil,
+            branch_name = '',
             origin_set = false,
             timer = timer,
             file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
@@ -271,13 +276,27 @@ function M.watch_repo(dir_path)
                     source = self.master_name
                 end
 
+                -- current branch may not be set yet
+                if self.branch_name == '' or self.branch_name == self.master_name then
+                    -- no need to display sync with master info in this case.
+                    self.master_commit_count = -1
+                    return
+                end
+
                 commitDiff(self.git_cwd, source, '^@', function(success, count)
                     if not success then
                         print("git log failed")
                         return
                     end
 
-                    self.master_commit_count = count
+                    -- remove this if statement after implementing debounce on
+                    -- fs watch
+                    -- now, this function may return after figuring out the
+                    -- current branch name
+                    if not (self.branch_name == '' or self.branch_name == self.master_name) then
+                        -- no need to display sync with master info in this case.
+                        self.master_commit_count = count
+                    end
                 end)
             end,
             update_current = function(self)
