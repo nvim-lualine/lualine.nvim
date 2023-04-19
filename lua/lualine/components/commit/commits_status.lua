@@ -11,6 +11,66 @@ local sep = package.config:sub(1, 1)
 local git_dir_cache = {}  -- Stores git paths that we already know of, map file dir to git_dir
 local git_repo_cache = {} -- Stores information about git repository commits
 
+---Validates args for `throttle()` and  `debounce()`.
+local function td_validate(fn, ms)
+    vim.validate {
+        fn = { fn, 'f' },
+        ms = {
+            ms,
+            function(ms)
+                return type(ms) == 'number' and ms > 0
+            end,
+            "number > 0",
+        },
+    }
+end
+
+--- Throttles a function on the trailing edge. Automatically
+--- `schedule_wrap()`s.
+---
+--@param fn (function) Function to throttle
+--@param timeout (number) Timeout in ms
+--@param last (boolean, optional) Whether to use the arguments of the last
+---call to `fn` within the timeframe. Default: Use arguments of the first call.
+--@returns (function, timer) Throttled function and timer. Remember to call
+---`timer:close()` at the end or you will leak memory!
+function throttle_trailing(fn, ms, last)
+    td_validate(fn, ms)
+    local timer = vim.loop.new_timer()
+    local running = false
+
+    local wrapped_fn
+    if not last then
+        function wrapped_fn(...)
+            if not running then
+                local argv = { ... }
+                local argc = select('#', ...)
+
+                timer:start(ms, 0, function()
+                    running = false
+                    pcall(vim.schedule_wrap(fn), unpack(argv, 1, argc))
+                end)
+                running = true
+            end
+        end
+    else
+        local argv, argc
+        function wrapped_fn(...)
+            argv = { ... }
+            argc = select('#', ...)
+
+            if not running then
+                timer:start(ms, 0, function()
+                    running = false
+                    pcall(vim.schedule_wrap(fn), unpack(argv, 1, argc))
+                end)
+                running = true
+            end
+        end
+    end
+    return wrapped_fn, timer
+end
+
 function checkOrigin(cwd, callback)
     local output = ''
     fetch_job = job({
@@ -162,12 +222,7 @@ function M.find_git_dir(dir_path)
 end
 
 function M.watch_head(repo)
-    -- Update the state of changed git repo here.
-    -- May not be the current buffer.
-    if M.opts.diff_against_master then
-        repo:update_master()
-    end
-    repo:update_current()
+    repo:update()
 
     repo.file_changed:stop()
     local head_file = repo.dir .. sep .. 'HEAD'
@@ -199,11 +254,7 @@ function M.watch_head(repo)
 end
 
 function M.watch_ref(repo)
-    -- Not sure if the below is right in this case.
-    if M.opts.diff_against_master then
-        repo:update_master()
-    end
-    repo:update_current()
+    repo:update()
 
     repo.branch_tip_changed:stop()
     local branch_tip_file = repo.dir .. sep .. repo.ref
@@ -217,12 +268,7 @@ function M.watch_ref(repo)
 end
 
 function M.watch_remote_ref(repo)
-    -- Not sure if the below is right in this case.
-    if M.opts.diff_against_master then
-        repo:update_master()
-    end
-    repo:update_current()
-    print("commit changed")
+    repo:update()
 
     repo.remote_branch_tip_changed:stop()
     local remote_branch_tip_file = repo.dir .. sep .. repo.ref:gsub("heads", "remotes/origin")
@@ -275,6 +321,12 @@ function M.watch_repo(dir_path)
             master_commit_count = 0,
             unpushed_commit_count = 0,
             unpulled_commit_count = 0,
+            update = throttle_trailing(function(self)
+                if M.opts.diff_against_master then
+                    self:update_master()
+                end
+                self:update_current()
+            end, 50, false),
             update_master = function(self)
                 local source = 'origin/' .. self.master_name
                 if not self.origin_set then
