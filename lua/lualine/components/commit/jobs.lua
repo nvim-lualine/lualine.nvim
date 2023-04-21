@@ -65,9 +65,8 @@ function M.fetch_branch(cwd, name, callback)
 end
 
 function M.check_for_conflict(cwd, source, target, callback)
-    -- TODO: reduce command output size
     local cmd = string.format(
-        [[cd %s && git merge-tree `git merge-base %s %s` %s %s]],
+        [[cd %s && git merge-tree `git merge-base %s %s` %s %s | grep '<<<<<<<']],
         cwd,
         source,
         target,
@@ -75,13 +74,12 @@ function M.check_for_conflict(cwd, source, target, callback)
         source
     )
     M._run_job(cmd, function(exit_code, output, _)
-        local has_conflict = false
         if exit_code ~= 0 then
-            callback(false, has_conflict)
+            -- grep that finds nothing returns exit code 1
+            callback(true, false)
             return
         end
-        local conflict_matched = string.find(output, "<<<<<<<") or 0
-        callback(true, conflict_matched > 0)
+        callback(true, true)
     end)
 end
 
