@@ -2,7 +2,7 @@ local M = {}
 
 local require = require('lualine_require').require
 local utils = require('lualine.utils.utils')
-local job = require('lualine.utils.job')
+local jobs = require('lualine.components.commit.jobs')
 
 local current_git_dir = ''
 -- os specific path separator
@@ -69,139 +69,6 @@ function throttle_trailing(fn, ms, last)
         end
     end
     return wrapped_fn, timer
-end
-
-function checkOrigin(cwd, callback)
-    local output = ''
-    fetch_job = job({
-        cmd = {
-            'sh', '-c',
-            string.format([[cd %s && git remote show]],
-                cwd)
-        },
-        on_stdout = function(_, data)
-            output = output .. table.concat(data, '')
-        end,
-        on_exit = function(_, exit_code)
-            if exit_code ~= 0 or output ~= 'origin' then
-                callback(false)
-                return
-            end
-
-            callback(true)
-        end
-    })
-    if fetch_job then
-        fetch_job:start()
-    end
-end
-
-function getMasterName(cwd, callback)
-    local output = ''
-    fetch_job = job({
-        cmd = {
-            'sh', '-c',
-            string.format([[cd %s && git remote show origin | grep 'HEAD branch' | cut -d' ' -f5]],
-                cwd)
-        },
-        on_stdout = function(_, data)
-            output = output .. table.concat(data, '')
-        end,
-        on_exit = function(_, exit_code)
-            if exit_code ~= 0 then
-                callback(false)
-                return
-            end
-            callback(true, output)
-        end
-    })
-    if fetch_job then
-        fetch_job:start()
-    end
-end
-
-function fetchBranch(cwd, name, callback)
-    fetch_job = job({
-        cmd = {
-            'sh', '-c',
-            string.format([[cd %s && git fetch origin %s]],
-                cwd,
-                name)
-        },
-        on_exit = function(_, exit_code)
-            if exit_code ~= 0 then
-                callback(false)
-                return
-            end
-            callback(true)
-        end
-    })
-    if fetch_job then
-        fetch_job:start()
-    end
-end
-
-function checkConflict(cwd, source, target, callback)
-    local diff_output = ''
-    diff_job = job({
-        cmd = {
-            'sh', '-c',
-            string.format(
-                [[cd %s && git merge-tree `git merge-base %s %s` %s %s]],
-                cwd,
-                target,
-                source,
-                source,
-                target)
-        },
-        on_stdout = function(_, data)
-            diff_output = diff_output .. table.concat(data, '\n')
-        end,
-        on_exit = function(_, exit_code)
-            local has_conflict = false
-            if exit_code ~= 0 then
-                callback(false, has_conflict)
-                return
-            end
-            conflict_matched = string.find(diff_output, "<<<<<<<") or 0
-            callback(true, conflict_matched > 0)
-        end
-    })
-    if diff_job then
-        diff_job:start()
-    end
-end
-
-function commitDiff(cwd, source, target, callback)
-    local diff_output = ''
-    local err_output = ''
-    diff_job = job({
-        cmd = {
-            'sh', '-c',
-            string.format(
-                [[cd %s && git log --oneline %s %s]],
-                cwd,
-                source,
-                target)
-        },
-        on_stdout = function(_, data)
-            diff_output = diff_output .. table.concat(data, '\n')
-        end,
-        on_stderr = function(_, data)
-            err_output = err_output .. table.concat(data, '\n')
-        end,
-        on_exit = function(_, exit_code)
-            if exit_code ~= 0 then
-                callback(false, -1, err_output)
-                return
-            end
-            local _, commit_count = diff_output:gsub('\n', '\n')
-            callback(true, commit_count)
-        end
-    })
-    if diff_job then
-        diff_job:start()
-    end
 end
 
 ---returns full path to git directory for dir_path or current directory
@@ -375,7 +242,8 @@ function M.watch_repo(dir_path)
                     return
                 end
 
-                commitDiff(self.git_cwd, source, '^@', function(success, count)
+                jobs.commit_diff(self.git_cwd, source, '^@', function(success, count)
+                    print("master commit diff: ", success, count)
                     if not success then
                         print("git log failed")
                         return
@@ -392,7 +260,7 @@ function M.watch_repo(dir_path)
                 end)
 
                 if self.origin_set then
-                    checkConflict(self.git_cwd, source, '@', function(success, has_conflict)
+                    jobs.check_for_conflict(self.git_cwd, source, '@', function(success, has_conflict)
                         if not success then
                             print("failed to check for conflict")
                             return
@@ -407,7 +275,7 @@ function M.watch_repo(dir_path)
                     return
                 end
 
-                commitDiff(self.git_cwd, '@', '^@{upstream}', function(success, count, err)
+                jobs.commit_diff(self.git_cwd, '@', '^@{upstream}', function(success, count, err)
                     if not success then
                         if string.find(err, "no upstream configured") then
                             self.no_upstream = true
@@ -422,7 +290,7 @@ function M.watch_repo(dir_path)
                     self.unpushed_commit_count = count
                 end)
 
-                commitDiff(self.git_cwd, '^@', '@{upstream}', function(success, count, err)
+                jobs.commit_diff(self.git_cwd, '^@', '@{upstream}', function(success, count, err)
                     if not success then
                         if string.find(err, "no upstream configured") then
                             self.no_upstream = true
@@ -437,7 +305,7 @@ function M.watch_repo(dir_path)
                     self.unpulled_commit_count = count
                 end)
 
-                checkConflict(self.git_cwd, '@', '@{upstream}', function(success, has_conflict)
+                jobs.check_for_conflict(self.git_cwd, '@', '@{upstream}', function(success, has_conflict)
                     if not success then
                         print("failed to check for conflict on current branch")
                         return
@@ -453,7 +321,7 @@ function M.watch_repo(dir_path)
                     return
                 end
 
-                fetchBranch(self.git_cwd, self.master_name, function(success)
+                jobs.fetch_branch(self.git_cwd, self.master_name, function(success)
                     if not success then
                         print("failed to fetch branch " .. M.opts.master_name)
                         return
@@ -467,7 +335,7 @@ function M.watch_repo(dir_path)
                     return
                 end
 
-                fetchBranch(self.git_cwd, '@', function(success)
+                jobs.fetch_branch(self.git_cwd, '@', function(success)
                     if not success then
                         print("failed to fetch branch @")
                         return
@@ -497,7 +365,8 @@ function M.watch_repo(dir_path)
                 end))
             end
 
-            checkOrigin(repo.git_cwd, function(success)
+            jobs.check_origin(repo.git_cwd, function(success)
+                print("check origin: ", success)
                 if success then
                     repo.origin_set = true
                 else
@@ -507,7 +376,8 @@ function M.watch_repo(dir_path)
                 end
 
                 if M.opts.findout_master_name and repo.origin_set then
-                    getMasterName(repo.git_cwd, function(success, master_name)
+                    jobs.get_master_name(repo.git_cwd, function(success, master_name)
+                        print("get master name: ", success, master_name)
                         if not success then
                             print("unable to get master name")
                             return
