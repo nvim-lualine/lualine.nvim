@@ -72,35 +72,41 @@ function M:update_status(_, is_focused)
 
     local status = modules.commits_status.status(buf)
     local result = {}
-    local icons = {}
-    if #status == 2 then
-        icons = {
-            self.options.unpulled_icon,
-            self.options.unpushed_icon,
-        }
-    else
-        icons = {
-            self.options.unpulled_master_icon,
-            self.options.unpulled_icon,
-            self.options.unpushed_icon,
-        }
+    local icons = {
+        self.options.unpulled_master_icon,
+        self.options.unpulled_icon,
+        self.options.unpushed_icon,
+    }
+
+    if not self.options.diff_against_master then
+        result = table.remove(result, 1)
     end
 
     for k, v in ipairs(status) do
-        if not (self.options.show_only_diverged and v == 0) and v ~= -1 then
-            local count = tostring(v)
-            if self.options.use_check_icon then
-                if v == 0 then
-                    count = self.options.check_icon
+        local has_conflict = table.remove(v)
+        for k2, d in ipairs(v) do
+            if not (self.options.show_only_diverged and d == 0) and d ~= -1 then
+                local count = tostring(d)
+                if self.options.use_check_icon then
+                    if d == 0 then
+                        count = self.options.check_icon
+                    end
                 end
-            end
 
-            local icon = icons[k]
-            if self.options.colored then
-                local color = (v > 0) and colors['diverged'] or colors['insync']
-                table.insert(result, color .. icon .. count)
-            else
-                table.insert(result, icon .. count)
+                local icon_pos
+                if k == 1 then
+                    icon_pos = 1
+                else
+                    icon_pos = k2 + 1
+                end
+
+                local icon = icons[icon_pos]
+                if self.options.colored then
+                    local color = (d > 0) and colors['diverged'] or colors['insync']
+                    table.insert(result, color .. icon .. count .. (has_conflict and '!' or ''))
+                else
+                    table.insert(result, icon .. count .. (has_conflict and '!' or ''))
+                end
             end
         end
     end

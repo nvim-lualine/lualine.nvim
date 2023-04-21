@@ -141,6 +141,37 @@ function fetchBranch(cwd, name, callback)
     end
 end
 
+function checkConflict(cwd, source, target, callback)
+    local diff_output = ''
+    diff_job = job({
+        cmd = {
+            'sh', '-c',
+            string.format(
+                [[cd %s && git merge-tree `git merge-base %s %s` %s %s]],
+                cwd,
+                target,
+                source,
+                source,
+                target)
+        },
+        on_stdout = function(_, data)
+            diff_output = diff_output .. table.concat(data, '\n')
+        end,
+        on_exit = function(_, exit_code)
+            local has_conflict = false
+            if exit_code ~= 0 then
+                callback(false, has_conflict)
+                return
+            end
+            conflict_matched = string.find(diff_output, "<<<<<<<") or 0
+            callback(true, conflict_matched > 0)
+        end
+    })
+    if diff_job then
+        diff_job:start()
+    end
+end
+
 function commitDiff(cwd, source, target, callback)
     local diff_output = ''
     local err_output = ''
@@ -321,6 +352,8 @@ function M.watch_repo(dir_path)
             master_commit_count = 0,
             unpushed_commit_count = 0,
             unpulled_commit_count = 0,
+            current_branch_conflict = false,
+            master_branch_conflict = false,
             update = throttle_trailing(function(self)
                 if M.opts.diff_against_master then
                     self:update_master()
@@ -338,6 +371,7 @@ function M.watch_repo(dir_path)
                 if self.branch_name == '' or self.branch_name == self.master_name then
                     -- no need to display sync with master info in this case.
                     self.master_commit_count = -1
+                    self.master_branch_conflict = false
                     return
                 end
 
@@ -356,6 +390,16 @@ function M.watch_repo(dir_path)
                         self.master_commit_count = count
                     end
                 end)
+
+                if self.origin_set then
+                    checkConflict(self.git_cwd, source, '@', function(success, has_conflict)
+                        if not success then
+                            print("failed to check for conflict")
+                            return
+                        end
+                        self.master_branch_conflict = has_conflict
+                    end)
+                end
             end,
             update_current = function(self)
                 if not self.origin_set or self.no_upstream then
@@ -368,6 +412,7 @@ function M.watch_repo(dir_path)
                         if string.find(err, "no upstream configured") then
                             self.no_upstream = true
                             self.unpushed_commit_count = -1
+                            self.current_branch_conflict = false
                             return
                         end
                         print("git log failed")
@@ -382,6 +427,7 @@ function M.watch_repo(dir_path)
                         if string.find(err, "no upstream configured") then
                             self.no_upstream = true
                             self.unpulled_commit_count = -1
+                            self.current_branch_conflict = false
                             return
                         end
                         print("git log failed")
@@ -389,6 +435,14 @@ function M.watch_repo(dir_path)
                     end
 
                     self.unpulled_commit_count = count
+                end)
+
+                checkConflict(self.git_cwd, '@', '@{upstream}', function(success, has_conflict)
+                    if not success then
+                        print("failed to check for conflict on current branch")
+                        return
+                    end
+                    self.current_branch_conflict = has_conflict
                 end)
             end,
             sync_and_update_master = function(self)
@@ -501,11 +555,8 @@ function M.status(bufnr)
 
     local repo = git_repo_cache[git_dir]
 
-    if M.opts.diff_against_master then
-        table.insert(result, repo.master_commit_count)
-    end
-    table.insert(result, repo.unpulled_commit_count)
-    table.insert(result, repo.unpushed_commit_count)
+    table.insert(result, { repo.master_commit_count, repo.master_branch_conflict })
+    table.insert(result, { repo.unpulled_commit_count, repo.unpushed_commit_count, repo.current_branch_conflict })
     return result
 end
 
