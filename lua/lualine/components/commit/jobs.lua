@@ -69,10 +69,10 @@ function M.check_for_conflict(cwd, source, target, callback)
     local cmd = string.format(
         [[cd %s && git merge-tree `git merge-base %s %s` %s %s]],
         cwd,
+        source,
         target,
-        source,
-        source,
-        target
+        target,
+        source
     )
     M._run_job(cmd, function(exit_code, output, _)
         local has_conflict = false

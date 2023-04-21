@@ -243,7 +243,6 @@ function M.watch_repo(dir_path)
                 end
 
                 jobs.commit_diff(self.git_cwd, source, '^@', function(success, count)
-                    print("master commit diff: ", success, count)
                     if not success then
                         print("git log failed")
                         return
@@ -305,7 +304,7 @@ function M.watch_repo(dir_path)
                     self.unpulled_commit_count = count
                 end)
 
-                jobs.check_for_conflict(self.git_cwd, '@', '@{upstream}', function(success, has_conflict)
+                jobs.check_for_conflict(self.git_cwd, '@{upstream}', '@', function(success, has_conflict)
                     if not success then
                         print("failed to check for conflict on current branch")
                         return
@@ -366,7 +365,6 @@ function M.watch_repo(dir_path)
             end
 
             jobs.check_origin(repo.git_cwd, function(success)
-                print("check origin: ", success)
                 if success then
                     repo.origin_set = true
                 else
@@ -377,7 +375,6 @@ function M.watch_repo(dir_path)
 
                 if M.opts.findout_master_name and repo.origin_set then
                     jobs.get_master_name(repo.git_cwd, function(success, master_name)
-                        print("get master name: ", success, master_name)
                         if not success then
                             print("unable to get master name")
                             return
