@@ -30,6 +30,13 @@ local function apply_default_colors(opts)
         diverged = {
             fg = modules.utils.extract_color_from_hllist(
                 'fg',
+                { 'GitSignsChange', 'GitGutterChange', 'DiffChanged', 'DiffChange' },
+                '#f0e130'
+            ),
+        },
+        conflict = {
+            fg = modules.utils.extract_color_from_hllist(
+                'fg',
                 { 'GitSignsDelete', 'GitGutterDelete', 'DiffRemoved', 'DiffDelete' },
                 '#ff0038'
             ),
@@ -48,6 +55,7 @@ M.init = function(self, options)
         self.highlights = {
             insync = self:create_hl(self.options.color.insync, 'insync'),
             diverged = self:create_hl(self.options.color.diverged, 'diverged'),
+            conflict = self:create_hl(self.options.color.conflict, 'conflict'),
         }
     end
 
@@ -103,6 +111,10 @@ function M:update_status(_, is_focused)
                 local icon = icons[icon_pos]
                 if self.options.colored then
                     local color = (d > 0) and colors['diverged'] or colors['insync']
+                    if has_conflict then
+                        color = colors['conflict']
+                    end
+
                     table.insert(result, color .. icon .. count .. (has_conflict and '!' or ''))
                 else
                     table.insert(result, icon .. count .. (has_conflict and '!' or ''))

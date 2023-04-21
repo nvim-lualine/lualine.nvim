@@ -490,7 +490,6 @@ function M.watch_repo(dir_path)
                 end
 
                 timer:start(0, M.opts.interval, vim.schedule_wrap(function()
-                    print("tick: ", repo.dir)
                     if M.opts.diff_against_master then
                         repo:sync_and_update_master()
                     end
