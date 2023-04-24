@@ -884,24 +884,24 @@ extensions = {'quickfix'}
 
 #### Available extensions
 
-- [aerial](https://github.com/stevearc/aerial.nvim)
-- [chadtree](https://github.com/ms-jpq/chadtree)
-- [fern](https://github.com/lambdalisue/fern.vim)
-- [fugitive](https://github.com/tpope/vim-fugitive)
-- [fzf](https://github.com/junegunn/fzf.vim)
-- [lazy](https://github.com/folke/lazy.nvim)
+- aerial
+- chadtree
+- fern
+- fugitive
+- fzf
+- lazy
 - man
-- [mundo](https://github.com/simnalamburt/vim-mundo)
-- [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim)
-- [nerdtree](https://github.com/preservim/nerdtree)
-- [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui)
-- [nvim-tree](https://github.com/nvim-tree/nvim-tree.lua)
-- [overseer](https://github.com/stevearc/overseer.nvim)
-- [quickfix](https://neovim.io/doc/user/quickfix.html)
-- [spectre](https://github.com/nvim-pack/nvim-spectre)
-- [symbols-outline](https://github.com/simrat39/symbols-outline.nvim)
-- [toggleterm](https://github.com/akinsho/toggleterm.nvim)
-- [trouble](https://github.com/folke/trouble.nvim)
+- mundo
+- neo-tree
+- nerdtree
+- nvim-dap-ui
+- nvim-tree
+- overseer
+- quickfix
+- spectre
+- symbols-outline
+- toggleterm
+- trouble
 
 #### Custom extensions
 
