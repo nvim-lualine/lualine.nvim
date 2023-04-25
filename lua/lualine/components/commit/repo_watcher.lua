@@ -5,6 +5,7 @@ local find_git_dir = git_dir.find_git_dir
 
 -- os specific path separator
 local sep = package.config:sub(1, 1)
+local fs_watch_flags = sep ~= '\\' and {} or 1000
 
 ---Validates args for `throttle()` and  `debounce()`.
 local function td_validate(fn, ms)
@@ -91,7 +92,7 @@ function RepoWatcher:new(git_dir, options)
         origin_set = false,
         no_upstream = false,
         timer = timer,
-        file_changed = fs_event(),
+        head_changed = fs_event(),
         branch_tip_changed = fs_event(),
         remote_branch_tip_changed = fs_event(),
         master_commit_count = 0,
@@ -158,61 +159,73 @@ function RepoWatcher:start_watch()
     end)
 end
 
+-- watch_head starts filesystem watch on changes to the .git/HEAD file. Enables
+-- detaction of branch change outside of the editor.
 function RepoWatcher:watch_head()
-    self.file_changed:stop()
+    self.head_changed:stop()
 
     self:update()
 
+    -- Get HEAD branch name
     local head_file = self.dir .. sep .. 'HEAD'
-
     local lines = {}
     for line in io.lines(head_file) do
         lines[#lines + 1] = line
     end
     local ref = lines[1]:gsub("ref: ", "")
     local branch_name = ref:gsub("refs/heads/", "")
+
     if ref ~= self.ref then
         self.ref = ref
         self.branch_name = branch_name
-        self.no_upstream = false -- reset as we don't know, check is done on first diff attempt
-        -- if the head changes, we should reset the watch_ref
+        -- Reset the no_upstream flag, as we don't know yet.
+        -- The check is done at the first diff attempt.
+        self.no_upstream = false
+        -- Reset ref and remot ref file watchers
         self:watch_ref()
         if self.origin_set then
             self:watch_remote_ref()
         end
     end
 
-    self.file_changed:start(
+    self.head_changed:start(
         head_file,
-        sep ~= '\\' and {} or 1000,
+        fs_watch_flags,
         vim.schedule_wrap(function()
             self:watch_head()
         end)
     )
 end
 
+-- watch_ref starts filesystem watch on changes to the `self.ref`. Enables
+-- detection of branch head change, ex. new commits, moving head to different commit
+-- etc.
 function RepoWatcher:watch_ref()
+    self.branch_tip_changed:stop()
     self:update()
 
-    self.branch_tip_changed:stop()
     local branch_tip_file = self.dir .. sep .. self.ref
     self.branch_tip_changed:start(
         branch_tip_file,
-        sep ~= '\\' and {} or 1000,
+        fs_watch_flags,
         vim.schedule_wrap(function()
             self:watch_ref()
         end)
     )
 end
 
+-- watch_remote_ref starts filesystem watch on changes to the remote `self.ref`.
+-- Enables detection of new commits in the ref's remote usually through `git
+-- fetch`.
 function RepoWatcher:watch_remote_ref()
+    self.remote_branch_tip_changed:stop()
+
     self:update()
 
-    self.remote_branch_tip_changed:stop()
     local remote_branch_tip_file = self.dir .. sep .. self.ref:gsub("heads", "remotes/origin")
     self.remote_branch_tip_changed:start(
         remote_branch_tip_file,
-        sep ~= '\\' and {} or 1000,
+        fs_watch_flags,
         vim.schedule_wrap(function()
             self.watch_remote_ref()
         end)
@@ -220,7 +233,6 @@ function RepoWatcher:watch_remote_ref()
 end
 
 function RepoWatcher:restart_watch()
-    -- restart timer
     self.timer:again()
 end
 

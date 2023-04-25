@@ -44,6 +44,7 @@ function M.watch_repo(dir_path)
         return
     end
 
+    -- Repository is already watched, restart the watch to ge immediate update.
     git_repo:restart_watch()
 end
 
