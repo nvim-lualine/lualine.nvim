@@ -78,11 +78,17 @@ local default_options = {
 
 function RepoWatcher:new(git_dir, options)
     local o = vim.tbl_deep_extend('keep', options or {}, default_options)
-    local timer = vim.loop.new_timer()
 
     local fs_event = function()
         return sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
     end
+
+    local update, update_timer = throttle_trailing(function(self)
+        if self.diff_against_master then
+            self:_update_master()
+        end
+        self:_update_current()
+    end, 200, false)
 
     local repo = vim.tbl_deep_extend('force', o, {
         dir = git_dir,
@@ -91,7 +97,7 @@ function RepoWatcher:new(git_dir, options)
         branch_name = '',
         origin_set = false,
         no_upstream = false,
-        timer = timer,
+        fetch_timer = vim.loop.new_timer(),
         head_changed = fs_event(),
         branch_head_changed = fs_event(),
         remote_branch_head_changed = fs_event(),
@@ -100,12 +106,8 @@ function RepoWatcher:new(git_dir, options)
         unpulled_commit_count = 0,
         current_branch_conflict = false,
         master_branch_conflict = false,
-        update = throttle_trailing(function(self)
-            if self.diff_against_master then
-                self:_update_master()
-            end
-            self:_update_current()
-        end, 50, false)
+        update = update,
+        update_timer = update_timer,
     })
 
     setmetatable(repo, self)
@@ -126,11 +128,11 @@ function RepoWatcher:start_watch(restart)
     end
 
     if restart then
-        self.timer:again()
+        self.fetch_timer:again()
         return
     end
 
-    self.timer:start(0, self.fetch_interval, vim.schedule_wrap(function()
+    self.fetch_timer:start(0, self.fetch_interval, vim.schedule_wrap(function()
         if self.diff_against_master then
             self:sync_master()
         end
@@ -242,7 +244,8 @@ function RepoWatcher:restart_watch()
 end
 
 function RepoWatcher:stop_watch()
-    self.timer:stop()
+    self.fetch_timer:stop()
+    self.update_timer:stop()
     self.head_changed:stop()
     self.branch_head_changed:stop()
     self.remote_branch_head_changed:stop()
