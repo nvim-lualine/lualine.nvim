@@ -100,11 +100,11 @@ function RepoWatcher:new(git_dir, options)
         unpulled_commit_count = 0,
         current_branch_conflict = false,
         master_branch_conflict = false,
-        _update = throttle_trailing(function(self)
+        update = throttle_trailing(function(self)
             if self.diff_against_master then
-                self:update_master()
+                self:_update_master()
             end
-            self:update_current()
+            self:_update_current()
         end, 50, false)
     })
 
@@ -128,9 +128,9 @@ function RepoWatcher:start_watch()
 
         self.timer:start(0, self.fetch_interval, vim.schedule_wrap(function()
             if self.diff_against_master then
-                self:sync_and_update_master()
+                self:sync_master()
             end
-            self:sync_and_update_current()
+            self:sync_current()
         end))
     end
 
@@ -160,7 +160,7 @@ function RepoWatcher:start_watch()
 end
 
 -- watch_head starts filesystem watch on changes to the .git/HEAD file. Enables
--- detaction of branch change outside of the editor.
+-- detection of branch change outside of the editor.
 function RepoWatcher:watch_head()
     self.head_changed:stop()
 
@@ -181,7 +181,7 @@ function RepoWatcher:watch_head()
         -- Reset the no_upstream flag, as we don't know yet.
         -- The check is done at the first diff attempt.
         self.no_upstream = false
-        -- Reset ref and remot ref file watchers
+        -- Reset ref and remote ref file watchers
         self:watch_ref()
         if self.origin_set then
             self:watch_remote_ref()
@@ -236,11 +236,7 @@ function RepoWatcher:restart_watch()
     self.timer:again()
 end
 
-function RepoWatcher:update()
-    self:_update()
-end
-
-function RepoWatcher:update_master()
+function RepoWatcher:_update_master()
     local source = 'origin/' .. self.master_name
     if not self.origin_set then
         -- fallback to compare with local branch
@@ -260,15 +256,7 @@ function RepoWatcher:update_master()
             print("git log failed")
             return
         end
-
-        -- remove this if statement after implementing debounce on
-        -- fs watch
-        -- now, this function may return after figuring out the
-        -- current branch name
-        if not (self.branch_name == '' or self.branch_name == self.master_name) then
-            -- no need to display sync with master info in this case.
-            self.master_commit_count = count
-        end
+        self.master_commit_count = count
     end)
 
     if self.origin_set then
@@ -282,7 +270,7 @@ function RepoWatcher:update_master()
     end
 end
 
-function RepoWatcher:update_current()
+function RepoWatcher:_update_current()
     if not self.origin_set or self.no_upstream then
         -- there is noting to compare with
         return
@@ -327,11 +315,12 @@ function RepoWatcher:update_current()
     end)
 end
 
-function RepoWatcher:sync_and_update_master()
+function RepoWatcher:sync_master()
     if not self.origin_set then
         -- there is noting to sync with
-        -- just update, curent branch may be not master
-        self:update_master()
+        -- just update, current branch may not be master
+        -- we would like to compare local master with local branch
+        self:update()
         return
     end
 
@@ -340,11 +329,11 @@ function RepoWatcher:sync_and_update_master()
             print("failed to fetch branch " .. self.master_name)
             return
         end
-        self:update_master()
+        self:update()
     end)
 end
 
-function RepoWatcher:sync_and_update_current()
+function RepoWatcher:sync_current()
     if not self.origin_set then
         -- there is noting to sync and compare with
         return
@@ -355,7 +344,7 @@ function RepoWatcher:sync_and_update_current()
             print("failed to fetch branch @")
             return
         end
-        self:update_current()
+        self:update()
     end)
 end
 

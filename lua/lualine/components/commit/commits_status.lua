@@ -36,7 +36,7 @@ function M.watch_repo(dir_path)
     if git_repo == nil then
         git_repo = repo_watcher.RepoWatcher:new(git_dir, {
             master_name = M.opts.master_name,
-            fetch_internval = M.opts.internval,
+            fetch_interval = M.opts.fetch_interval,
             diff_against_master = M.opts.diff_against_master,
             findout_master_name = M.opts.findout_master_name,
         })

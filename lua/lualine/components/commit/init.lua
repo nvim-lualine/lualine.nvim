@@ -9,7 +9,7 @@ local default_options = {
     master_name = 'master',
     findout_master_name = false,
     diff_against_master = false,
-    interval = 60000,
+    fetch_interval = 60000,
     unpulled_master_icon = '⇢ ',
     unpulled_icon = '⇣ ',
     unpushed_icon = '⇡ ',
@@ -63,7 +63,7 @@ M.init = function(self, options)
         master_name = self.options.master_name,
         findout_master_name = self.options.findout_master_name,
         diff_against_master = self.options.diff_against_master,
-        interval = self.options.interval,
+        fetch_interval = self.options.fetch_interval,
     })
 end
 
