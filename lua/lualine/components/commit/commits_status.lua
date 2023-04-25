@@ -64,6 +64,9 @@ function M.status(bufnr)
     end
 
     local repo = git_repo_cache[git_dir]
+    if repo == nil then
+        return result
+    end
 
     table.insert(result, { repo.master_commit_count, repo.master_branch_conflict })
     table.insert(result, { repo.unpulled_commit_count, repo.unpushed_commit_count, repo.current_branch_conflict })
