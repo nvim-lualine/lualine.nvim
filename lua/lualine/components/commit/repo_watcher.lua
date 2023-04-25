@@ -68,33 +68,45 @@ end
 
 local RepoWatcher = {}
 
-function RepoWatcher:new(git_dir, master_name, opts)
+local default_options = {
+    master_name = 'master',
+    fetch_interval = 60000,
+    diff_against_master = false,
+    findout_master_name = false,
+}
+
+function RepoWatcher:new(git_dir, options)
+    local o = vim.tbl_deep_extend('keep', options or {}, default_options)
     local timer = vim.loop.new_timer()
-    local repo = {
-        opts = opts,
+
+    local fs_event = function()
+        return sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
+    end
+
+    local repo = vim.tbl_deep_extend('force', o, {
         dir = git_dir,
-        git_cwd = git_dir:sub(1, -6), -- cut  '/.git' suffix
+        git_cwd = vim.fs.dirname(git_dir),
         ref = '',
-        master_name = opts.master_name,
         branch_name = '',
         origin_set = false,
         no_upstream = false,
         timer = timer,
-        file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
-        branch_tip_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
-        remote_branch_tip_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll(),
+        file_changed = fs_event(),
+        branch_tip_changed = fs_event(),
+        remote_branch_tip_changed = fs_event(),
         master_commit_count = 0,
         unpushed_commit_count = 0,
         unpulled_commit_count = 0,
         current_branch_conflict = false,
         master_branch_conflict = false,
         _update = throttle_trailing(function(self)
-            if self.opts.diff_against_master then
+            if self.diff_against_master then
                 self:update_master()
             end
             self:update_current()
         end, 50, false)
-    }
+    })
+
     setmetatable(repo, self)
     self.__index = self
 
@@ -113,8 +125,8 @@ function RepoWatcher:start_watch()
             self:watch_remote_ref()
         end
 
-        self.timer:start(0, self.opts.interval, vim.schedule_wrap(function()
-            if self.opts.diff_against_master then
+        self.timer:start(0, self.fetch_interval, vim.schedule_wrap(function()
+            if self.diff_against_master then
                 self:sync_and_update_master()
             end
             self:sync_and_update_current()
@@ -130,7 +142,7 @@ function RepoWatcher:start_watch()
             self.unpulled_commit_count = -1
         end
 
-        if self.opts.findout_master_name and self.origin_set then
+        if self.findout_master_name and self.origin_set then
             jobs.get_master_name(self.git_cwd, function(success, master_name)
                 if not success then
                     print("unable to get master name")
@@ -313,7 +325,7 @@ function RepoWatcher:sync_and_update_master()
 
     jobs.fetch_branch(self.git_cwd, self.master_name, function(success)
         if not success then
-            print("failed to fetch branch " .. self.opts.master_name)
+            print("failed to fetch branch " .. self.master_name)
             return
         end
         self:update_master()
