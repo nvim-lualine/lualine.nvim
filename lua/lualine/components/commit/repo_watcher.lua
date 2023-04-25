@@ -93,8 +93,8 @@ function RepoWatcher:new(git_dir, options)
         no_upstream = false,
         timer = timer,
         head_changed = fs_event(),
-        branch_tip_changed = fs_event(),
-        remote_branch_tip_changed = fs_event(),
+        branch_head_changed = fs_event(),
+        remote_branch_head_changed = fs_event(),
         master_commit_count = 0,
         unpushed_commit_count = 0,
         unpulled_commit_count = 0,
@@ -111,29 +111,34 @@ function RepoWatcher:new(git_dir, options)
     setmetatable(repo, self)
     self.__index = self
 
-    repo:start_watch()
+    repo:init()
     return repo
 end
 
-function RepoWatcher:start_watch()
-    local init = function()
-        self:watch_head()
-        self:watch_ref()
+function RepoWatcher:start_watch(restart)
+    self:watch_head()
+    self:watch_ref()
 
-        if self.origin_set then
-            -- don't watch for changes in remote branch tip if there is
-            -- no origin.
-            self:watch_remote_ref()
-        end
-
-        self.timer:start(0, self.fetch_interval, vim.schedule_wrap(function()
-            if self.diff_against_master then
-                self:sync_master()
-            end
-            self:sync_current()
-        end))
+    if self.origin_set then
+        -- don't watch for changes in remote branch tip if there is
+        -- no origin.
+        self:watch_remote_ref()
     end
 
+    if restart then
+        self.timer:again()
+        return
+    end
+
+    self.timer:start(0, self.fetch_interval, vim.schedule_wrap(function()
+        if self.diff_against_master then
+            self:sync_master()
+        end
+        self:sync_current()
+    end))
+end
+
+function RepoWatcher:init()
     jobs.check_origin(self.git_cwd, function(success)
         if success then
             self.origin_set = true
@@ -150,12 +155,12 @@ function RepoWatcher:start_watch()
                     return
                 end
                 self.maste_name = master_name
-                init()
+                self:start_watch(false)
             end)
             return
         end
 
-        init()
+        self:start_watch(false)
     end)
 end
 
@@ -201,11 +206,11 @@ end
 -- detection of branch head change, ex. new commits, moving head to different commit
 -- etc.
 function RepoWatcher:watch_ref()
-    self.branch_tip_changed:stop()
+    self.branch_head_changed:stop()
     self:update()
 
     local branch_tip_file = self.dir .. sep .. self.ref
-    self.branch_tip_changed:start(
+    self.branch_head_changed:start(
         branch_tip_file,
         fs_watch_flags,
         vim.schedule_wrap(function()
@@ -218,12 +223,12 @@ end
 -- Enables detection of new commits in the ref's remote usually through `git
 -- fetch`.
 function RepoWatcher:watch_remote_ref()
-    self.remote_branch_tip_changed:stop()
+    self.remote_branch_head_changed:stop()
 
     self:update()
 
     local remote_branch_tip_file = self.dir .. sep .. self.ref:gsub("heads", "remotes/origin")
-    self.remote_branch_tip_changed:start(
+    self.remote_branch_head_changed:start(
         remote_branch_tip_file,
         fs_watch_flags,
         vim.schedule_wrap(function()
@@ -233,7 +238,14 @@ function RepoWatcher:watch_remote_ref()
 end
 
 function RepoWatcher:restart_watch()
-    self.timer:again()
+    self:start_watch(true)
+end
+
+function RepoWatcher:stop_watch()
+    self.timer:stop()
+    self.head_changed:stop()
+    self.branch_head_changed:stop()
+    self.remote_branch_head_changed:stop()
 end
 
 function RepoWatcher:_update_master()

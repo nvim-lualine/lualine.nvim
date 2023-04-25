@@ -15,7 +15,7 @@ function M.watch_repo(dir_path)
 
     if git_dir == nil then
         for _, v in pairs(git_repo_cache) do
-            v.timer:stop()
+            v:stop_watch()
         end
         return -- noting to do
     end
@@ -23,7 +23,7 @@ function M.watch_repo(dir_path)
     -- Stop all timers before watching new repository
     if git_dir ~= current_git_dir then
         for _, v in pairs(git_repo_cache) do
-            v.timer:stop()
+            v:stop_watch()
         end
     end
 
