@@ -1,6 +1,6 @@
 local M = require('lualine.component'):extend()
 local modules = require('lualine_require').lazy_require {
-    commits_status = 'lualine.components.commit.commits_status',
+    status = 'lualine.components.commit.status',
     utils = 'lualine.utils.utils',
 }
 
@@ -59,7 +59,7 @@ M.init = function(self, options)
         }
     end
 
-    modules.commits_status.init({
+    modules.status.init({
         master_name = self.options.master_name,
         findout_master_name = self.options.findout_master_name,
         diff_against_master = self.options.diff_against_master,
@@ -78,7 +78,7 @@ function M:update_status(_, is_focused)
         end
     end
 
-    local status = modules.commits_status.status(buf)
+    local status = modules.status.status(buf)
     local result = {}
     local icons = {
         self.options.unpulled_master_icon,

@@ -45,7 +45,7 @@ end
 function M.init(opts)
     M.opts = opts
     M.watch_repo()
-    utils.define_autocmd('BufEnter', "lua require'lualine.components.commit.commits_status'.watch_repo()")
+    utils.define_autocmd('BufEnter', "lua require'lualine.components.commit.status'.watch_repo()")
 end
 
 function M.status(bufnr)
