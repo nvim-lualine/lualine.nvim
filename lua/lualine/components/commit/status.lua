@@ -13,20 +13,16 @@ local current_git_dir = ''
 function M.watch_repo(dir_path)
     local git_dir = find_git_dir(dir_path)
 
-    if git_dir == nil then
+    if git_dir == nil or current_git_dir == git_dir then
         return -- noting to do
     end
 
-    -- Stop all timers before watching new repository
-    if git_dir ~= current_git_dir then
-        for _, v in pairs(git_repo_cache) do
-            v:stop_watch()
-        end
-        current_git_dir = git_dir
+
+    -- Stop watching on all repos before watching new repository
+    for _, v in pairs(git_repo_cache) do
+        v:stop_watch()
     end
-
     local git_repo = git_repo_cache[git_dir]
-
     if git_repo == nil then
         git_repo = repo_watcher.RepoWatcher:new(git_dir, {
             master_name = M.opts.master_name,
@@ -35,11 +31,11 @@ function M.watch_repo(dir_path)
             findout_master_name = M.opts.findout_master_name,
         })
         git_repo_cache[git_dir] = git_repo
-        return
+    else
+        git_repo:restart_watch()
     end
 
-    -- Repository is already watched, restart the watch to ge immediate update.
-    git_repo:restart_watch()
+    current_git_dir = git_dir
 end
 
 function M.init(opts)
