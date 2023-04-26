@@ -6,9 +6,8 @@ local git_dir = require('lualine.components.commit.find_git_dir')
 local find_git_dir = git_dir.find_git_dir
 local repo_watcher = require('lualine.components.commit.repo_watcher')
 
-local git_repo_cache = {}
-
-local current_git_dir = ''
+local git_repo_cache = {}  -- Stores initialized RepoWatchers
+local current_git_dir = '' -- Used to distinguish if the git_dir really changed
 
 function M.watch_repo(dir_path)
     local git_dir = find_git_dir(dir_path)
@@ -16,7 +15,6 @@ function M.watch_repo(dir_path)
     if git_dir == nil or current_git_dir == git_dir then
         return -- noting to do
     end
-
 
     -- Stop watching on all repos before watching new repository
     for _, v in pairs(git_repo_cache) do
