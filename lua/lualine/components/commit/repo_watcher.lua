@@ -7,7 +7,11 @@ local find_git_dir = git_dir.find_git_dir
 local sep = package.config:sub(1, 1)
 local fs_watch_flags = sep ~= '\\' and {} or 1000
 
----Validates args for `throttle()` and  `debounce()`.
+-- td_validate and throttle_trailing functions are taken from below gist
+-- https://gist.github.com/runiq/31aa5c4bf00f8e0843cd267880117201
+-- license MIT
+
+---Validates args for `throttle()`.
 local function td_validate(fn, ms)
     vim.validate {
         fn = { fn, 'f' },
