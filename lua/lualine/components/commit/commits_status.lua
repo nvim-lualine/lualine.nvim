@@ -14,9 +14,6 @@ function M.watch_repo(dir_path)
     local git_dir = find_git_dir(dir_path)
 
     if git_dir == nil then
-        for _, v in pairs(git_repo_cache) do
-            v:stop_watch()
-        end
         return -- noting to do
     end
 
@@ -25,9 +22,6 @@ function M.watch_repo(dir_path)
         for _, v in pairs(git_repo_cache) do
             v:stop_watch()
         end
-    end
-
-    if dir_path == nil and current_git_dir ~= git_dir then
         current_git_dir = git_dir
     end
 
