@@ -234,7 +234,7 @@ function RepoWatcher:watch_remote_ref()
         remote_branch_tip_file,
         fs_watch_flags,
         vim.schedule_wrap(function()
-            self.watch_remote_ref()
+            self:watch_remote_ref()
         end)
     )
 end
