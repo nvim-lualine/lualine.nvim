@@ -2,7 +2,7 @@ local job = require('lualine.utils.job')
 
 local M = {}
 
-function M._run_job(cmd, callback)
+function M._run_job(cmd, cwd, callback)
     local output = ''
     local err = ''
 
@@ -10,6 +10,7 @@ function M._run_job(cmd, callback)
         cmd = {
             'sh', '-c', cmd
         },
+        cwd = cwd,
         stdout_buffered = true,
         stderr_buffered = true,
         on_stdout = function(_, data)
@@ -29,8 +30,7 @@ function M._run_job(cmd, callback)
 end
 
 function M.check_origin(cwd, callback)
-    local cmd = string.format([[cd %s && git remote show]], cwd)
-    M._run_job(cmd, function(exit_code, output, _)
+    M._run_job('git remote show', cwd, function(exit_code, output, _)
         output = output:gsub('\n', '')
         if exit_code ~= 0 or output ~= 'origin' then
             callback(false)
@@ -42,8 +42,7 @@ function M.check_origin(cwd, callback)
 end
 
 function M.get_master_name(cwd, callback)
-    local cmd = string.format([[cd %s && git remote show origin | grep 'HEAD branch' | cut -d' ' -f5]], cwd)
-    M._run_job(cmd, function(exit_code, output, _)
+    M._run_job("git remote show origin | grep 'HEAD branch' | cut -d' ' -f5", cwd, function(exit_code, output, _)
         output = output:gsub('\n', '')
         if exit_code ~= 0 then
             callback(false)
@@ -54,8 +53,8 @@ function M.get_master_name(cwd, callback)
 end
 
 function M.fetch_branch(cwd, name, callback)
-    local cmd = string.format([[cd %s && git fetch origin %s]], cwd, name)
-    M._run_job(cmd, function(exit_code, _, _)
+    local cmd = string.format([[git fetch origin %s]], name)
+    M._run_job(cmd, cwd, function(exit_code, _, _)
         if exit_code ~= 0 then
             callback(false)
             return
@@ -66,14 +65,13 @@ end
 
 function M.check_for_conflict(cwd, source, target, callback)
     local cmd = string.format(
-        [[cd %s && git merge-tree `git merge-base %s %s` %s %s | grep '<<<<<<<']],
-        cwd,
+        [[git merge-tree `git merge-base %s %s` %s %s | grep '<<<<<<<']],
         source,
         target,
         target,
         source
     )
-    M._run_job(cmd, function(exit_code, output, _)
+    M._run_job(cmd, cwd, function(exit_code, output, _)
         if exit_code ~= 0 then
             -- grep that finds nothing returns exit code 1
             callback(true, false)
@@ -85,12 +83,11 @@ end
 
 function M.commit_diff(cwd, source, target, callback)
     local cmd = string.format(
-        [[cd %s && git log --oneline %s %s]],
-        cwd,
+        [[git log --oneline %s %s]],
         source,
         target
     )
-    M._run_job(cmd, function(exit_code, output, err)
+    M._run_job(cmd, cwd, function(exit_code, output, err)
         if exit_code ~= 0 then
             callback(false, -1, err)
             return
