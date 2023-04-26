@@ -87,7 +87,7 @@ function M:update_status(_, is_focused)
     }
 
     if not self.options.diff_against_master then
-        result = table.remove(result, 1)
+        table.remove(status, 1)
     end
 
     for k, v in ipairs(status) do
@@ -102,10 +102,14 @@ function M:update_status(_, is_focused)
                 end
 
                 local icon_pos
-                if k == 1 then
-                    icon_pos = 1
-                else
+                if not self.options.diff_against_master then
                     icon_pos = k2 + 1
+                else
+                    if k == 1 then
+                        icon_pos = 1
+                    else
+                        icon_pos = k2 + 1
+                    end
                 end
 
                 local icon = icons[icon_pos]
