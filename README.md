@@ -239,6 +239,7 @@ sections = {lualine_a = {'mode'}}
 #### Available components
 
 - `branch` (git branch)
+- `commit` (git commit difference between current branch and remote or master)
 - `buffers` (shows currently available buffers)
 - `diagnostics` (diagnostics count from your preferred source)
 - `diff` (git diff status)
@@ -745,6 +746,28 @@ sections = {
         active = 'lualine_{section}_normal',     -- Color for active window.
         inactive = 'lualine_{section}_inactive', -- Color for inactive window.
       },
+    }
+  }
+}
+```
+
+#### commit component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'commit',
+      master_name = 'master', -- Default master branch name, some repositories use `main`.
+      findout_master_name = false, -- Let's the component get the master branch name from origin HEAD branch.
+      diff_against_master = false, -- Compare current branch to remote and master branch.
+      fetch_interval = 60000, -- How ofter `git fetch` is done, in ms.
+      unpulled_master_icon = '⇢ ', -- Icon shown for unpulled changes from master branch.
+      unpulled_icon = '⇣ ', -- Icon shown for unpulled changes on current branch.
+      unpushed_icon = '⇡ ', -- Icon shown for unpushed changes on current branch.
+      use_check_icon = true, -- Use checkmark icon, instead of `0`.
+      check_icon = '󰸞', -- Icon to display check mark instead of `0`.
+      show_only_diverged = false, -- Don't show `0` or check mark if up to date.
     }
   }
 }
