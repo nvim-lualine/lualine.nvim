@@ -759,6 +759,7 @@ sections = {
     {
       'commit',
       master_name = 'master', -- Default master branch name, some repositories use `main`.
+      colored = true, -- Set to true displays safe to merge commits and conflicts in color.
       findout_master_name = false, -- Let's the component get the master branch name from origin HEAD branch.
       diff_against_master = false, -- Compare current branch to remote and master branch.
       fetch_interval = 60000, -- How ofter `git fetch` is done, in ms.

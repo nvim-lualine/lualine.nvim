@@ -7,6 +7,7 @@ local modules = require('lualine_require').lazy_require {
 local default_options = {
   icon = '',
   master_name = 'master',
+  colored = true,
   findout_master_name = false,
   diff_against_master = false,
   fetch_interval = 60000,
