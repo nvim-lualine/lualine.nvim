@@ -1,6 +1,5 @@
 local require = require('lualine_require').require
 local jobs = require('lualine.components.commit.jobs')
-local find_git_dir = require('lualine.components.commit.find_git_dir')
 
 -- os specific path separator
 local sep = package.config:sub(1, 1)
@@ -16,8 +15,8 @@ local function td_validate(fn, ms)
         fn = { fn, 'f' },
         ms = {
             ms,
-            function(ms)
-                return type(ms) == 'number' and ms > 0
+            function(duration)
+                return type(duration) == 'number' and duration > 0
             end,
             "number > 0",
         },
@@ -33,7 +32,7 @@ end
 ---call to `fn` within the timeframe. Default: Use arguments of the first call.
 --@returns (function, timer) Throttled function and timer. Remember to call
 ---`timer:close()` at the end or you will leak memory!
-function throttle_trailing(fn, ms, last)
+local function throttle_trailing(fn, ms, last)
     td_validate(fn, ms)
     local timer = vim.loop.new_timer()
     local running = false
@@ -86,11 +85,11 @@ function RepoWatcher:new(git_dir, options)
         return sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
     end
 
-    local update, update_timer = throttle_trailing(function(self)
-        if self.diff_against_master then
-            self:_update_master()
+    local update, update_timer = throttle_trailing(function(cls)
+        if cls.diff_against_master then
+            cls:_update_master()
         end
-        self:_update_current()
+        cls:_update_current()
     end, 200, false)
 
     local repo = vim.tbl_deep_extend('force', o, {
@@ -144,8 +143,8 @@ function RepoWatcher:start_watch(restart)
 end
 
 function RepoWatcher:init()
-    jobs.check_origin(self.git_cwd, function(success)
-        if success then
+    jobs.check_origin(self.git_cwd, function(check_origin_success)
+        if check_origin_success then
             self.origin_set = true
         else
             -- set special values, as zero (in sync) is misleading

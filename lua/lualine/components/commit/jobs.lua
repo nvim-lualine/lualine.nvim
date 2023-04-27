@@ -71,7 +71,7 @@ function M.check_for_conflict(cwd, source, target, callback)
         target,
         source
     )
-    M._run_job(cmd, cwd, function(exit_code, output, _)
+    M._run_job(cmd, cwd, function(exit_code, _, _)
         if exit_code ~= 0 then
             -- grep that finds nothing returns exit code 1
             callback(true, false)
