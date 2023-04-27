@@ -1,14 +1,12 @@
 -- os specific path separator
 local sep = package.config:sub(1, 1)
 
-local M = {}
-
 local git_dir_cache = {} -- Stores git paths that we already know of, map file dir to git_dir
 
 -- function taken from ../branch/git_branch.lua module. Code was adjusted to
 -- remove setting current_git_dir global variable and remove update_branch()
 -- call (component specific).
-function M.find_git_dir(dir_path)
+local function find_git_dir(dir_path)
     -- get file dir so we can search from that dir
     local file_dir = dir_path or vim.fn.expand('%:p:h')
     local root_dir = file_dir
@@ -53,4 +51,4 @@ function M.find_git_dir(dir_path)
     return git_dir
 end
 
-return M
+return find_git_dir

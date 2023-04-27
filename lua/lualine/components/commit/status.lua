@@ -2,9 +2,8 @@ local M = {}
 
 local require = require('lualine_require').require
 local utils = require('lualine.utils.utils')
-local git_dir = require('lualine.components.commit.find_git_dir')
-local find_git_dir = git_dir.find_git_dir
-local repo_watcher = require('lualine.components.commit.repo_watcher')
+local find_git_dir = require('lualine.components.commit.find_git_dir')
+local RepoWatcher = require('lualine.components.commit.repo_watcher')
 
 local git_repo_cache = {}  -- Stores initialized RepoWatchers
 local current_git_dir = '' -- Used to distinguish if the git_dir really changed
@@ -22,7 +21,7 @@ function M.watch_repo(dir_path)
     end
     local git_repo = git_repo_cache[git_dir]
     if git_repo == nil then
-        git_repo = repo_watcher.RepoWatcher:new(git_dir, {
+        git_repo = RepoWatcher:new(git_dir, {
             master_name = M.opts.master_name,
             fetch_interval = M.opts.fetch_interval,
             diff_against_master = M.opts.diff_against_master,

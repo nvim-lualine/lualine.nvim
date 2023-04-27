@@ -1,7 +1,6 @@
 local require = require('lualine_require').require
 local jobs = require('lualine.components.commit.jobs')
-local git_dir = require('lualine.components.commit.find_git_dir')
-local find_git_dir = git_dir.find_git_dir
+local find_git_dir = require('lualine.components.commit.find_git_dir')
 
 -- os specific path separator
 local sep = package.config:sub(1, 1)
@@ -367,4 +366,4 @@ function RepoWatcher:sync_current()
     end)
 end
 
-return { RepoWatcher = RepoWatcher }
+return RepoWatcher
