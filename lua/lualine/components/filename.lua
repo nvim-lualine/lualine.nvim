@@ -86,6 +86,13 @@ M.update_status = function(self)
     data = vim.fn.expand('%:t')
   end
 
+  -- This is to fix JDT (Java Development Tools) URIs by removing the query
+  -- parameters. The remaining data is enough to identify the buffer in the
+  -- window.
+  if vim.startswith(data, "jdt://") then
+    data = string.sub(data, 0, string.find(data, "?") - 1)
+  end
+
   data = modules.utils.stl_escape(data)
 
   if data == '' then
