@@ -14,9 +14,9 @@ labels: bug
 
 ### Self Checks
 
-<!-- Check these boxes by placeing an X in the middle -->
+<!-- Check these boxes by placing an X in the middle -->
 - [ ] I'm using the latest lualine.
-- [ ] I didn't find the issue in exsisting issues or prs.
+- [ ] I didn't find the issue in existing issues or PRs.
 
 ### How to reproduce the problem
 <!-- Add steps to reproduce with minimal config from below -->
@@ -31,7 +31,7 @@ labels: bug
 
 <!--
   =================
-  ### IMPORTENT ###
+  ### IMPORTANT ###
   =================
 
   You need to provide a way to reproduce the issue without influence
@@ -58,7 +58,7 @@ labels: bug
   with lua even in a vim file.
 
   Then you can load the config in an isolated environment to see
-  if the issue is occuring with
+  if the issue is occurring with
 
     `nvim_isolated_conf.sh -l DirectoryName`
 
@@ -66,5 +66,5 @@ labels: bug
 -->
 
 
-### Aditional information
+### Additional information
 

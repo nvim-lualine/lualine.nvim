@@ -211,6 +211,19 @@ describe('Component:', function()
       assert.stub(hl.component_format_highlight).was_called_with(comp2.options.color_highlight)
       hl.component_format_highlight:revert()
     end)
+
+    it('draw_empty', function()
+      local opts = build_component_opts {
+        component_separators = { left = '', right = '' },
+        padding = 0,
+        separator = '>',
+        fmt = function()
+          return ''
+        end,
+        draw_empty = true,
+      }
+      assert_component(nil, opts, '>')
+    end)
   end)
 end)
 
@@ -757,7 +770,7 @@ describe('Branch component', function()
       "git -c user.name='asdf' -c user.email='asdf@jlk.org' -C " .. tmpdir .. ' ' .. string.format(...)
     )
   end
-  local assert_comp_ins = helpers.assert_component_instence
+  local assert_comp_ins = helpers.assert_component_instance
 
   before_each(function()
     tmpdir = os.tmpname()

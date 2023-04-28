@@ -22,7 +22,7 @@ local colors = {
   cyan         = '#00DFFF',
 }
 
-return {
+local M = {
   normal = {
     a = { bg = colors.neon, fg = colors.black, gui = 'bold' },
     b = { bg = colors.gray, fg = colors.white },
@@ -54,3 +54,7 @@ return {
     c = { bg = colors.darkgray, fg = colors.gray },
   },
 }
+
+M.terminal = M.insert
+
+return M
