@@ -162,7 +162,7 @@ function RepoWatcher:init()
           print('unable to get master name')
           return
         end
-        self.maste_name = master_name
+        self.master_name = master_name
         self:start_watch(false)
       end)
       return
