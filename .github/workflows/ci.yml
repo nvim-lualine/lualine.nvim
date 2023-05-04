@@ -47,7 +47,7 @@ jobs:
         run: |
           mkdir -p ./tmp_home/nvim/pack/vendor/start
           git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ./tmp_home/nvim/pack/vendor/start/plenary.nvim
-          git clone --depth 1 https://github.com/kyazdani42/nvim-web-devicons ./tmp_home/nvim/pack/vendor/start/nvim-web-devicons
+          git clone --depth 1 https://github.com/nvim-tree/nvim-web-devicons ./tmp_home/nvim/pack/vendor/start/nvim-web-devicons
           ln -s $(pwd) ./tmp_home/nvim/pack/vendor/start
       - name: Setup neovim ${{matrix.nvim_version}}
         uses: rhysd/action-setup-vim@v1
