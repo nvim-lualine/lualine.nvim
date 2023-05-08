@@ -105,6 +105,12 @@ M.update_status = function(self)
   elseif self.options.path == 4 then
     -- filename and immediate parent
     data = filename_and_parent(vim.fn.expand('%:p:~'), path_separator)
+  elseif self.options.path == 5 then
+    -- fish style relative path
+    data = fish_style_path(vim.fn.expand('%:~:.'), path_separator)
+  elseif self.options.path == 6 then
+    -- fish style absolute path
+    data = fish_style_path(vim.fn.expand('%:p:~'), path_separator)
   else
     -- just filename
     data = vim.fn.expand('%:t')
