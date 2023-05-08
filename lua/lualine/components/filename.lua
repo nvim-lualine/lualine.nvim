@@ -61,6 +61,30 @@ local function filename_and_parent(path, sep)
   end
 end
 
+---@description Fish shell style path (`~/a/.b/c/filename.lua`)
+---@param path string
+---@param sep string
+---@return string
+local function fish_style_path(path, sep)
+  local segments = vim.split(path, sep)
+  local fish_path = ''
+
+  for index, segment in pairs(segments) do
+    if index ~= 1 then
+      fish_path = fish_path .. sep
+    end
+
+    if index == #segments then
+      fish_path = fish_path .. segment
+    elseif segment:sub(1, 1) == '.' then
+      fish_path = fish_path .. segment:sub(1, 2)
+    else
+      fish_path = fish_path .. segment:sub(1, 1)
+    end
+  end
+  return fish_path
+end
+
 M.init = function(self, options)
   M.super.init(self, options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
