@@ -4,7 +4,7 @@
 local M = require('lualine.component'):extend()
 
 local default_options = {
-	format_string = '%3d:%-2d'
+	format = '%3d:%-2d'
 }
 
 function M:init(options)
@@ -15,7 +15,7 @@ end
 function M:update_status()
   local line = vim.fn.line('.')
   local col = vim.fn.virtcol('.')
-  return string.format(self.options.format_string, line, col)
+  return string.format(self.options.format, line, col)
 end	
 
 return M
