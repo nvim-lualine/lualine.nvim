@@ -31,6 +31,10 @@ M.sources = {
     return error_count, warning_count, info_count, hint_count
   end,
   nvim_workspace_diagnostic = function()
+    if vim.fn.has('nvim-0.9') == 1 and vim.diagnostic.is_disabled(0) then
+      return 0, 0, 0, 0
+    end
+
     local diag_severity = vim.diagnostic.severity
 
     local function workspace_diag(severity)
@@ -44,6 +48,10 @@ M.sources = {
       workspace_diag(diag_severity.HINT)
   end,
   nvim_diagnostic = function()
+    if vim.fn.has('nvim-0.9') == 1 and vim.diagnostic.is_disabled(0) then
+      return 0, 0, 0, 0
+    end
+
     local diagnostics = vim.diagnostic.get(0)
     local count = { 0, 0, 0, 0 }
     for _, diagnostic in ipairs(diagnostics) do
