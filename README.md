@@ -68,6 +68,17 @@ Last Updated On: 18-04-2022
 
 ## Installation
 
+### [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+return {
+  'nvim-lualine/lualine.nvim',
+  event = { "BufRead", "BufNewFile", "VimEnter" },
+  dependencies = { 'nvim-tree/nvim-web-devicons', event = "VeryLazy" }
+  opts = {} -- lazy equivalent to setup({}) function
+}
+```
+
 ### [vim-plug](https://github.com/junegunn/vim-plug)
 
 ```vim
