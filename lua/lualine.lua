@@ -328,6 +328,13 @@ local function refresh(opts)
     trigger = 'unknown',
   })
 
+  -- Skip running while in command mode to avoid the following issues
+  --    https://github.com/neovim/neovim/issues/10121
+  --    https://github.com/nvim-lualine/lualine.nvim/issues/888
+  if vim.fn.mode(1) == 'c' then
+    return
+  end
+
   -- updating statusline in autocommands context seems to trigger 100 different bugs
   -- lets just defer it to a timer context and update there
   -- Since updating stl in command mode doesn't take effect
