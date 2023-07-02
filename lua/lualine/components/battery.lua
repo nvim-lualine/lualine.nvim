@@ -114,30 +114,30 @@ function M:update_status()
   --   end
   -- end
   -- result = ""
---
---   if charge >= 0 and charge < 10 then
---     result = icon.zeros.icon
--- elseif charge >= 10 and charge < 20 then
---     result = icon.tens.icon
--- elseif charge >= 20 and charge < 30 then
---     result = icon.twenties.icon
---   elseif charge >= 30 and charge < 40 then
---     result = icon.thirties.icon
---   elseif charge >= 40 and charge < 50 then
---     result = icon.forties.icon
---   elseif charge >= 50 and charge < 60 then
---     result = icon.fifties.icon
---   elseif charge >= 60 and charge < 70 then
---     result = icon.sixties.icon
---   elseif charge >= 70 and charge < 80 then
---     result = icon.seventies.icon
---   elseif charge >= 80 and charge < 90 then
---     result = icon.eighties.icon
---   elseif charge >= 90 and charge < 100 then
---     result = icon.nineties.icon
---   elseif charge >= 100 then
---     result = icon.hundred.icon
---   end
+  --
+  --   if charge >= 0 and charge < 10 then
+  --     result = icon.zeros.icon
+  -- elseif charge >= 10 and charge < 20 then
+  --     result = icon.tens.icon
+  -- elseif charge >= 20 and charge < 30 then
+  --     result = icon.twenties.icon
+  --   elseif charge >= 30 and charge < 40 then
+  --     result = icon.thirties.icon
+  --   elseif charge >= 40 and charge < 50 then
+  --     result = icon.forties.icon
+  --   elseif charge >= 50 and charge < 60 then
+  --     result = icon.fifties.icon
+  --   elseif charge >= 60 and charge < 70 then
+  --     result = icon.sixties.icon
+  --   elseif charge >= 70 and charge < 80 then
+  --     result = icon.seventies.icon
+  --   elseif charge >= 80 and charge < 90 then
+  --     result = icon.eighties.icon
+  --   elseif charge >= 90 and charge < 100 then
+  --     result = icon.nineties.icon
+  --   elseif charge >= 100 then
+  --     result = icon.hundred.icon
+  --   end
 
   if result == "" then
     result = self.options.status.unknown.icon
