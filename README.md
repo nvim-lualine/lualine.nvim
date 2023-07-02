@@ -539,6 +539,83 @@ sections = {
 }
 ```
 
+#### wifi module options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      "wifi",
+      status = {
+        connected = "󰤪",
+        disconnected = "󰤫",
+        show = true
+      },
+      essid = {
+        show = true
+      },
+      bit_rate = {
+        unit = "mbps", -- or dbm
+        show = true
+      }
+    }
+  }
+}
+```
+
+#### battery module options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      "battery",
+      show_percentage = true,
+      show_status_text = false,
+      view = {
+        charge = {
+          zeros = { icon = "󰂎 " },
+          tens = { icon = "󰁺 " },
+          twenties = { icon = "󰁻 " },
+          thirties = { icon = "󰁼 " },
+          forties = { icon = "󰁽 " },
+          fifties = { icon = "󰁾 " },
+          sixties = { icon = "󰁿 " },
+          seventies = { icon = "󰂀 " },
+          eighties = { icon = "󰂁 " },
+          nineties = { icon = "󰂂 " },
+          hundred = { icon = "󰁹 " },
+        },
+        status = {
+          enabled = true,
+          charging = { icon = " 󱐋" },
+          discharging = { icon = " 󱐌" },
+          not_charging = { icon = "  " },
+          full = { icon = "  " },
+          unknown = { icon = " " },
+          critical = { icon = " " },
+          percentage = { icon = " 󰏰" },
+        },
+      },
+    }
+  }
+}
+```
+
+
+#### ram module options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      icon = "󰍛",
+      show_percentage = true,
+    }
+  }
+}
+```
+
 #### diagnostics component options
 
 ```lua
