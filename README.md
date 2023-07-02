@@ -542,7 +542,7 @@ sections = {
 }
 ```
 
-#### wifi module options
+#### wifi component options
 
 ```lua
 sections = {
@@ -566,7 +566,7 @@ sections = {
 }
 ```
 
-#### battery module options
+#### battery component options
 
 ```lua
 sections = {
@@ -606,7 +606,7 @@ sections = {
 ```
 
 
-#### ram module options
+#### ram component options
 
 ```lua
 sections = {
