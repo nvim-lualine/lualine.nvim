@@ -248,6 +248,9 @@ sections = {lualine_a = {'mode'}}
 - `filesize`
 - `filetype`
 - `hostname`
+- `battery`
+- `wifi`
+- `ram`
 - `location` (location in file in line:column format)
 - `mode` (vim mode)
 - `progress` (%progress in file)
