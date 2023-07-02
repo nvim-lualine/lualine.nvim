@@ -96,9 +96,10 @@ function M:update_status()
   local total_ram = M.total_ram()
   local used_ram = M.used_ram()
   local perc_ram = M.perc_ram()
-  
+
   local result = used_ram .. "/" .. total_ram .. " "
   local perc_result = used_ram .. "/" .. total_ram .. " " .. "(" .. perc_ram .. ")"
+
   return percentage and perc_result or result
 end
 

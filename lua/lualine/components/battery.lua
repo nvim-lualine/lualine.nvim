@@ -85,8 +85,8 @@ function M:update_status()
   M.battery_capacity_job()
   M.battery_status_job()
   local result = tostring(vim.g.battery_status)
-  local capacity = tostring(vim.g.battery_capacity)
-  local charge = tonumber(capacity)
+  -- local capacity = tostring(vim.g.battery_capacity)
+  -- local charge = tonumber(capacity)
   local icon = self.options.view.charge
 
   local icons = {
