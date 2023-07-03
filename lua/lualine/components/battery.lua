@@ -73,7 +73,7 @@ function M:update_status()
 
         if output and #output > 0 then
           output = output:gsub("%s+", "") -- Remove whitespace
-          vim.g.battery_capacity = output
+          vim.g.battery_capacity = tostring(output)
         end
       end,
       stdout_buffered = true,
@@ -85,8 +85,7 @@ function M:update_status()
   M.battery_capacity_job()
   M.battery_status_job()
   local result = tostring(vim.g.battery_status)
-  -- local capacity = tostring(vim.g.battery_capacity)
-  -- local charge = tonumber(capacity)
+  local capacity = tostring(vim.g.battery_capacity)
   local icon = self.options.view.charge
 
   local icons = {
@@ -103,51 +102,6 @@ function M:update_status()
     icon.hundred.icon,
   }
 
-  if result == "Charging" then
-    return icons[os.date("%s") % #icons + 1]
-  end
-  -- if result == "Discharging" then
-  --   if charge == 12 or charge == 15 or charge == 20 or charge == 7 or charge == 8 or charge == 9 or charge == 10 then
-  --     print("Please plug in a charger, " .. charge .. "% remaining!")
-  --   elseif charge <= 6 then
-  --     vim.notify("Please plug in a charger, " .. charge .. "% remaining!")
-  --   end
-  -- end
-  -- result = ""
-  --
-  --   if charge >= 0 and charge < 10 then
-  --     result = icon.zeros.icon
-  -- elseif charge >= 10 and charge < 20 then
-  --     result = icon.tens.icon
-  -- elseif charge >= 20 and charge < 30 then
-  --     result = icon.twenties.icon
-  --   elseif charge >= 30 and charge < 40 then
-  --     result = icon.thirties.icon
-  --   elseif charge >= 40 and charge < 50 then
-  --     result = icon.forties.icon
-  --   elseif charge >= 50 and charge < 60 then
-  --     result = icon.fifties.icon
-  --   elseif charge >= 60 and charge < 70 then
-  --     result = icon.sixties.icon
-  --   elseif charge >= 70 and charge < 80 then
-  --     result = icon.seventies.icon
-  --   elseif charge >= 80 and charge < 90 then
-  --     result = icon.eighties.icon
-  --   elseif charge >= 90 and charge < 100 then
-  --     result = icon.nineties.icon
-  --   elseif charge >= 100 then
-  --     result = icon.hundred.icon
-  --   end
-
-  if result == "" then
-    result = self.options.status.unknown.icon
-  end
-
-  local charge_value = tostring(vim.g.battery_capacity)
-  result = result:gsub("\n", "")
-
-  local status_result = vim.g.battery_status
-  status_result = tostring(status_result)
   local status_res = ""
 
   local charge_icons = {
@@ -155,24 +109,23 @@ function M:update_status()
     self.options.view.status.discharging.icon,
   }
 
-  if status_result == "Charging" then
-    status_res = self.options.view.status.charging.icon
-  elseif status_result == "Not" then
+  if result == "Charging" then
+    status_res = icons[os.date("%s") % #icons + 1]
+  elseif result == "Not" then
     status_res = self.options.view.status.not_charging.icon
-  elseif status_result == "Full" then
+  elseif result == "Full" then
     status_res = self.options.view.status.full.icon
-  elseif status_result == "Discharging" then
-    return charge_icons[os.date("%s") % #icons + 1]
+  elseif result == "Discharging" then
+    return charge_icons[os.date("%s") % #charge_icons + 1]
   end
-  if status_result == "" then
+  if result == "" then
     status_res = self.options.view.status.unknown.icon
   end
   if self.options.show_status_text then
-    status_res = status_result .. status_res
+    status_res = result .. status_res
   end
-  -- return result .. " " .. status_res
 
-  return status_res .. " " .. result .. " " .. charge_value
+  return status_res .. " " .. capacity .. " 󰏰"
 end
 
 return M
