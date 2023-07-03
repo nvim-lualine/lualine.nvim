@@ -51,7 +51,7 @@ function M:update_status()
     stat = "cat /sys/class/power_supply/BAT0/status"
   end
 
-  function M.battery_status_job()
+  local function battery_job()
     local status_job_id = vim.fn.jobstart(stat, {
       on_stdout = function(_, data, _)
         local output = table.concat(data, "\n")
@@ -64,27 +64,23 @@ function M:update_status()
       stdout_buffered = true,
     })
 
-    vim.fn.jobwait({ status_job_id }, 0)
-  end
-
-  function M.battery_capacity_job()
     local capacity_job_id = vim.fn.jobstart(cap, {
       on_stdout = function(_, data, _)
         local output = table.concat(data, "\n")
 
         if output and #output > 0 then
           output = output:gsub("%s+", "")
-          vim.g.battery_capacity = tostring(output)
+          vim.g.battery_capacity = output
         end
       end,
       stdout_buffered = true,
     })
 
+    vim.fn.jobwait({ status_job_id }, 0)
     vim.fn.jobwait({ capacity_job_id }, 0)
   end
 
-  M.battery_capacity_job()
-  M.battery_status_job()
+  battery_job()
   local result, capacity
   if vim.g.battery_status ~= nil then result = tostring(vim.g.battery_status) else result = "Fetching" end
   if vim.g.battery_capacity ~= nil then capacity = tostring(vim.g.battery_capacity) .. " 󰏰" else capacity = "" end
