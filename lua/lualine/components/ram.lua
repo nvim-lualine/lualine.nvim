@@ -37,6 +37,7 @@ function M:update_status()
     vim.fn.jobwait({ job_id }, 0)
     local result
 
+    if vim.g.total_ram == nil then return "" end
     result = tostring(vim.g.total_ram)
 
     return result
@@ -61,10 +62,11 @@ function M:update_status()
     vim.fn.jobwait({ job_id }, 0)
     local result
 
+    if vim.g.perc_ram == nil then return "" end
     result = tostring(vim.g.perc_ram)
 
     if ram.show_percentage then
-      return result .. " 󰏰"
+      return "(" .. result .. " 󰏰)"
     end
     return ""
   end
@@ -88,6 +90,7 @@ function M:update_status()
     vim.fn.jobwait({ job_id }, 0)
     local result
 
+    if vim.g.used_ram == nil then return "" end
     result = tostring(vim.g.used_ram)
 
     return result
@@ -98,7 +101,7 @@ function M:update_status()
   local perc_ram = M.perc_ram()
 
   local result = used_ram .. "/" .. total_ram .. " "
-  local perc_result = used_ram .. "/" .. total_ram .. " " .. "(" .. perc_ram .. ")"
+  local perc_result = used_ram .. "/" .. total_ram .. " " .. perc_ram
 
   return percentage and perc_result or result
 end

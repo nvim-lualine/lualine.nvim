@@ -45,6 +45,7 @@ function M:update_status()
     stat = "acpi -b | awk -F \",\" '{ print $1 }' | awk -F \" \" '{ print $3 }'"
   elseif vim.fn.executable("pmset") == 1 then
     cap = 'pmset -g batt | grep -Eo "\\d+%"'
+    stat = ""
   else
     cap = "cat /sys/class/power_supply/BAT0/capacity"
     stat = "cat /sys/class/power_supply/BAT0/status"
@@ -56,7 +57,7 @@ function M:update_status()
         local output = table.concat(data, "\n")
 
         if output and #output > 0 then
-          output = output:gsub("%s+", "") -- Remove whitespace
+          output = output:gsub("%s+", "")
           vim.g.battery_status = output
         end
       end,
@@ -72,7 +73,7 @@ function M:update_status()
         local output = table.concat(data, "\n")
 
         if output and #output > 0 then
-          output = output:gsub("%s+", "") -- Remove whitespace
+          output = output:gsub("%s+", "")
           vim.g.battery_capacity = tostring(output)
         end
       end,
@@ -84,8 +85,11 @@ function M:update_status()
 
   M.battery_capacity_job()
   M.battery_status_job()
-  local result = tostring(vim.g.battery_status)
-  local capacity = tostring(vim.g.battery_capacity)
+  local result, capacity
+  if vim.g.battery_status == nil then result = "" end
+  if vim.g.battery_capacity == nil then capacity = "0" end
+  result = tostring(vim.g.battery_status)
+  capacity = tostring(vim.g.battery_capacity)
   local icon = self.options.view.charge
 
   local icons = {
@@ -122,7 +126,7 @@ function M:update_status()
     status_res = self.options.view.status.unknown.icon
   end
   if self.options.show_status_text then
-    status_res = result .. status_res
+    status_res = status_res .. result
   end
 
   return status_res .. " " .. capacity .. " 󰏰"
