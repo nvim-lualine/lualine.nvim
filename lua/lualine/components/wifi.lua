@@ -72,10 +72,8 @@ function M:update_status()
   vim.fn.jobwait({ job_id }, 0)
   local result, essid, bit_rate
 
-  if vim.g.essid == nil then essid = "" end
-  if vim.g.bit_rate == nil then bit_rate = "" end
-  essid = tostring(vim.g.essid)
-  bit_rate = tostring(vim.g.bit_rate)
+  if vim.g.essid ~= nil then essid = tostring(vim.g.essid) else essid = "" end
+  if vim.g.bit_rate ~= nil then bit_rate = tostring(vim.g.bit_rate) else bit_rate = "" end
 
   if essid == "" then
     result = self.options.status.disconnected

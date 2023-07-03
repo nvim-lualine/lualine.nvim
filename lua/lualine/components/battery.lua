@@ -86,10 +86,8 @@ function M:update_status()
   M.battery_capacity_job()
   M.battery_status_job()
   local result, capacity
-  if vim.g.battery_status == nil then result = "" end
-  if vim.g.battery_capacity == nil then capacity = "0" end
-  result = tostring(vim.g.battery_status)
-  capacity = tostring(vim.g.battery_capacity)
+  if vim.g.battery_status ~= nil then result = tostring(vim.g.battery_status) else result = "Fetching" end
+  if vim.g.battery_capacity ~= nil then capacity = tostring(vim.g.battery_capacity) .. " 󰏰" else capacity = "" end
   local icon = self.options.view.charge
 
   local icons = {
@@ -119,8 +117,10 @@ function M:update_status()
     status_res = self.options.view.status.not_charging.icon
   elseif result == "Full" then
     status_res = self.options.view.status.full.icon
+  elseif result == "Fetching" then
+    status_res = "..."
   elseif result == "Discharging" then
-    return charge_icons[os.date("%s") % #charge_icons + 1]
+    return charge_icons[os.date("%s") % #charge_icons + 1] .. " " .. capacity
   end
   if result == "" then
     status_res = self.options.view.status.unknown.icon
@@ -129,7 +129,7 @@ function M:update_status()
     status_res = status_res .. result
   end
 
-  return status_res .. " " .. capacity .. " 󰏰"
+  return status_res .. " " .. capacity
 end
 
 return M
