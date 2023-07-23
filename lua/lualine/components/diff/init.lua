@@ -11,6 +11,7 @@ local M = lualine_require.require('lualine.component'):extend()
 
 local default_options = {
   colored = true,
+  show_all_if_any = false,
   symbols = { added = '+', modified = '~', removed = '-' },
 }
 
@@ -73,17 +74,17 @@ function M:update_status(is_focused)
   end
 
   local result = {}
+  local has_any = false
   -- loop though data and load available sections in result table
   for _, name in ipairs { 'added', 'modified', 'removed' } do
-    if git_diff[name] and git_diff[name] > 0 then
-      if self.options.colored then
-        table.insert(result, colors[name] .. self.options.symbols[name] .. git_diff[name])
-      else
-        table.insert(result, self.options.symbols[name] .. git_diff[name])
-      end
+    local val = git_diff[name]
+    if val and (val > 0 or self.options.show_all_if_any) then
+      local color = self.options.colored and colors[name] or ''
+      table.insert(result, color .. self.options.symbols[name] .. val)
+      if val > 0 then has_any = true end
     end
   end
-  if #result > 0 then
+  if has_any then
     return table.concat(result, ' ')
   else
     return ''
