@@ -27,6 +27,7 @@ local mode_to_highlight = {
   ['REPLACE'] = '_replace',
   ['V-REPLACE'] = '_replace',
   ['INSERT'] = '_insert',
+  ['I_NORMAL'] = '_insert_ctrl_o',
   ['COMMAND'] = '_command',
   ['EX'] = '_command',
   ['MORE'] = '_command',
@@ -351,6 +352,7 @@ function M.create_component_highlight_group(color, highlight_tag, options, apply
   local modes = {
     'normal',
     'insert',
+    'insert_ctrl_o',
     'visual',
     'replace',
     'command',
