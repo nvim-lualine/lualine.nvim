@@ -31,7 +31,9 @@ function Tab:label()
   local bufnr = buflist[winnr]
   local file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(bufnr))
   local buftype = vim.fn.getbufvar(bufnr, '&buftype')
-  if buftype == 'help' then
+  if vim.api.nvim_buf_get_option(bufnr, 'filetype') == 'fugitive' then
+    return 'fugitive: ' .. vim.fn.fnamemodify(file, ':h:h:t')
+  elseif buftype == 'help' then
     return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
   elseif buftype == 'terminal' then
     local match = string.match(vim.split(file, ' ')[1], 'term:.*:(%a+)')
@@ -49,7 +51,7 @@ end
 function Tab:render()
   local name = self:label()
   if self.options.fmt then
-    name = self.options.fmt(name or '')
+    name = self.options.fmt(name or '', self)
   end
   if self.ellipse then -- show ellipsis
     name = '...'
@@ -89,7 +91,7 @@ end
 ---@return string
 function Tab:separator_before()
   if self.current or self.aftercurrent then
-    return '%S{' .. self.options.section_separators.left .. '}'
+    return '%Z{' .. self.options.section_separators.left .. '}'
   else
     return self.options.component_separators.left
   end
@@ -99,7 +101,7 @@ end
 ---@return string
 function Tab:separator_after()
   if self.current or self.beforecurrent then
-    return '%s{' .. self.options.section_separators.right .. '}'
+    return '%z{' .. self.options.section_separators.right .. '}'
   else
     return self.options.component_separators.right
   end

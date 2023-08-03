@@ -84,7 +84,7 @@ end
 
 ---updates the job args
 function M.update_diff_args()
-  -- Donn't show git diff when current buffer doesn't have a filename
+  -- Don't show git diff when current buffer doesn't have a filename
   active_bufnr = tostring(vim.api.nvim_get_current_buf())
   if #vim.fn.expand('%') == 0 then
     M.diff_args = nil
@@ -121,7 +121,7 @@ function M.update_diff_args()
   M.update_git_diff()
 end
 
----update git_diff veriable
+---update git_diff variable
 function M.update_git_diff()
   if M.diff_args then
     diff_output_cache = {}

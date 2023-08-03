@@ -12,7 +12,7 @@ local highlight = require('lualine.highlight')
 ---@param section table list of components
 ---@param section_name string used for getting proper hl
 ---@param is_focused boolean
----@return string formated string for a section
+---@return string formatted string for a section
 --TODO Clean this up this does lots of messy stuff.
 function M.draw_section(section, section_name, is_focused)
   local highlight_name = highlight.format_highlight(section_name, is_focused)
@@ -21,7 +21,7 @@ function M.draw_section(section, section_name, is_focused)
   for _, component in pairs(section) do
     -- load components into status table
     if type(component) ~= 'table' or (type(component) == 'table' and not component.component_no) then
-      return '' -- unknown element in section. section posibly not yet loaded
+      return '' -- unknown element in section. section possibly not yet loaded
     end
     table.insert(status, component:draw(highlight_name, is_focused))
   end
@@ -48,7 +48,7 @@ function M.draw_section(section, section_name, is_focused)
           and (section[1].options.section_separators.left ~= nil and section[1].options.section_separators.left ~= '')
         then
           status[component_no] =
-            string.format('%s%%S{%s}', status[component_no], section[1].options.section_separators.left)
+            string.format('%s%%Z{%s}', status[component_no], section[1].options.section_separators.left)
         end
       end
     end
@@ -81,15 +81,15 @@ function M.draw_section(section, section_name, is_focused)
     end
   end
 
-  local left_sparator_string = ''
+  local left_separator_string = ''
   if
     section_name > 'x'
     and section[first_component_no]
     and type(section[first_component_no].options.separator) ~= 'table'
     and (section[1].options.section_separators.right ~= nil and section[1].options.section_separators.right ~= '')
   then
-    left_sparator_string = string.format(
-      '%%s{%s}',
+    left_separator_string = string.format(
+      '%%z{%s}',
       section[first_component_no].options.ls_separator or section[1].options.section_separators.right
     )
   end
@@ -104,20 +104,20 @@ function M.draw_section(section, section_name, is_focused)
 
   local needs_hl
 
-  local find_start_trans_sep_start, find_start_trans_sep_end = status_str:find('^%%s{.-}')
+  local find_start_trans_sep_start, find_start_trans_sep_end = status_str:find('^%%z{.-}')
   if find_start_trans_sep_start then
     -- the section doesn't need to be prepended with default hl when sections
-    -- first component has trasitionals sep
+    -- first component has transitional sep
     needs_hl = status_str:find('^%%#', find_start_trans_sep_end + 1)
   else
     needs_hl = status_str:find('^%%#')
   end
 
   if needs_hl then
-    -- Don't prepend with old highlight when the component changes it imidiately
-    return left_sparator_string .. status_str
+    -- Don't prepend with old highlight when the component changes it immediately
+    return left_separator_string .. status_str
   else
-    return left_sparator_string .. highlight_name .. status_str
+    return left_separator_string .. highlight_name .. status_str
   end
 end
 

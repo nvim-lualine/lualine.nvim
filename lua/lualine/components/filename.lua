@@ -50,12 +50,24 @@ local function shorten_path(path, sep, max_len)
   return table.concat(segments, sep)
 end
 
+local function filename_and_parent(path, sep)
+  local segments = vim.split(path, sep)
+  if #segments == 0 then
+    return path
+  elseif #segments == 1 then
+    return segments[#segments]
+  else
+    return table.concat({ segments[#segments - 1], segments[#segments] }, sep)
+  end
+end
+
 M.init = function(self, options)
   M.super.init(self, options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
 end
 
 M.update_status = function(self)
+  local path_separator = package.config:sub(1, 1)
   local data
   if self.options.path == 1 then
     -- relative path
@@ -66,6 +78,9 @@ M.update_status = function(self)
   elseif self.options.path == 3 then
     -- absolute path, with tilde
     data = vim.fn.expand('%:p:~')
+  elseif self.options.path == 4 then
+    -- filename and immediate parent
+    data = filename_and_parent(vim.fn.expand('%:p:~'), path_separator)
   else
     -- just filename
     data = vim.fn.expand('%:t')
@@ -81,7 +96,6 @@ M.update_status = function(self)
     local windwidth = self.options.globalstatus and vim.go.columns or vim.fn.winwidth(0)
     local estimated_space_available = windwidth - self.options.shorting_target
 
-    local path_separator = package.config:sub(1, 1)
     data = shorten_path(data, path_separator, estimated_space_available)
   end
 

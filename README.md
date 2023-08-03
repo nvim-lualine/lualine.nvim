@@ -60,9 +60,9 @@ In control just `vim-startuptime` and`vim-plug` is installed.
 And measured time is complete startuptime of vim not time spent
 on specific plugin. These numbers are the average of 20 runs.
 
-| control  |  lualine  | lightline |  airline  |
-| :------: | :-------: | :-------: | :-------: |
-| 17.2 ms  |  24.8 ms  |  25.5 ms  |  79.9 ms  |
+| control | lualine | lightline | airline |
+| :-----: | :-----: | :-------: | :-----: |
+| 17.2 ms | 24.8 ms |  25.5 ms  | 79.9 ms |
 
 Last Updated On: 18-04-2022
 
@@ -73,7 +73,7 @@ Last Updated On: 18-04-2022
 ```vim
 Plug 'nvim-lualine/lualine.nvim'
 " If you want to have icons in your statusline choose one of these
-Plug 'kyazdani42/nvim-web-devicons'
+Plug 'nvim-tree/nvim-web-devicons'
 ```
 
 ### [packer.nvim](https://github.com/wbthomason/packer.nvim)
@@ -81,7 +81,7 @@ Plug 'kyazdani42/nvim-web-devicons'
 ```lua
 use {
   'nvim-lualine/lualine.nvim',
-  requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+  requires = { 'nvim-tree/nvim-web-devicons', opt = true }
 }
 ```
 
@@ -207,7 +207,7 @@ Theme structure is available [here](https://github.com/nvim-lualine/lualine.nvim
 
 lualine defines two kinds of separators:
 
-- `section_separators`    - separators between sections
+- `section_separators` - separators between sections
 - `component_separators` - separators between the different components in sections
 
 **Note**: if viewing this README in a browser, chances are the characters below will not be visible.
@@ -251,6 +251,8 @@ sections = {lualine_a = {'mode'}}
 - `location` (location in file in line:column format)
 - `mode` (vim mode)
 - `progress` (%progress in file)
+- `searchcount` (number of search matches when hlsearch is active)
+- `selectioncount` (number of selected characters or lines)
 - `tabs` (shows currently available tabs)
 - `windows` (shows currently available windows)
 
@@ -279,7 +281,7 @@ sections = { lualine_c = {'%=', '%t%m', '%3p'} }
 
 ##### Vim variables as lualine component
 
-Variables from `g:`, `v:`, `t:`, `w:`, `b:`, `o`, `go:`, `vo:`, `to:`, `wo:`, `bo:` scopes can be used.
+Variables from `g:`, `v:`, `t:`, `w:`, `b:`, `o:`, `to:`, `wo:`, `bo:` scopes can be used.
 
 See `:h lua-vim-variables` and `:h lua-vim-options` if you are not sure what to use.
 
@@ -290,6 +292,7 @@ sections = { lualine_a = { 'g:coc_status', 'bo:filetype' } }
 ##### Lua expressions as lualine component
 
 You can use any valid lua expression as a component including:
+
 - oneliners
 - global variables
 - require statements
@@ -367,7 +370,7 @@ options = {
                                -- at bottom of neovim instead of one for  every window).
                                -- This feature is only available in neovim 0.7 and higher.
 
-  refresh = {                  -- sets how often lualine should refreash it's contents (in ms)
+  refresh = {                  -- sets how often lualine should refresh it's contents (in ms)
     statusline = 1000,         -- The refresh option sets minimum time that lualine tries
     tabline = 1000,            -- to maintain between refresh. It's not guarantied if situation
     winbar = 1000              -- arises that lualine needs to refresh itself before this time
@@ -418,6 +421,9 @@ sections = {
 
       cond = nil,           -- Condition function, the component is loaded when the function returns `true`.
 
+      draw_empty = false,   -- Whether to draw component even if it's empty.
+                            -- Might be useful if you want just the separator.
+
       -- Defines a custom color for the component:
       --
       -- 'highlight_group_name' | { fg = '#rrggbb'|cterm_value(0-255)|'color_name(red)', bg= '#rrggbb', gui='style' } | function
@@ -451,9 +457,14 @@ sections = {
                    --   padding = { left = left_padding, right = right_padding }
 
       fmt = nil,   -- Format function, formats the component's output.
+                   -- This function receives two arguments:
+                   -- - string that is going to be displayed and
+                   --   that can be changed, enhanced and etc.
+                   -- - context object with information you might
+                   --   need. E.g. tabnr if used with tabs.
       on_click = nil, -- takes a function that is called when component is clicked with mouse.
                    -- the function receives several arguments
-                   -- - number of clicks incase of multiple clicks
+                   -- - number of clicks in case of multiple clicks
                    -- - mouse button used (l(left)/r(right)/m(middle)/...)
                    -- - modifiers pressed (s(shift)/c(ctrl)/a(alt)/m(meta)...)
     }
@@ -464,7 +475,7 @@ sections = {
 #### Component specific options
 
 These are options that are available on specific components.
-For example you have option on `diagnostics` component to
+For example, you have option on `diagnostics` component to
 specify what your diagnostic sources will be.
 
 #### buffers component options
@@ -495,6 +506,9 @@ sections = {
         alpha = 'Alpha'
       }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
 
+      -- Automatically updates active buffer color to match color of other components (will be overidden if buffers_color is set)
+      use_mode_colors = false,
+
       buffers_color = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active buffer.
@@ -506,6 +520,20 @@ sections = {
         alternate_file = '#', -- Text to show to identify the alternate file
         directory =  '',     -- Text to show when the buffer is a directory
       },
+    }
+  }
+}
+```
+
+#### datetime component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'datetime',
+      -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
+      style = 'default'
     }
   }
 }
@@ -593,11 +621,12 @@ sections = {
     {
       'filename',
       file_status = true,      -- Displays file status (readonly status, modified status)
-      newfile_status = false   -- Display new file status (new file means no write after created)
+      newfile_status = false,  -- Display new file status (new file means no write after created)
       path = 0,                -- 0: Just the filename
                                -- 1: Relative path
                                -- 2: Absolute path
                                -- 3: Absolute path, with tilde as the home directory
+                               -- 4: Filename and parent dir, with tilde as the home directory
 
       shorting_target = 40,    -- Shortens path to leave 40 spaces in the window
                                -- for other components. (terrible name, any suggestions?)
@@ -605,7 +634,7 @@ sections = {
         modified = '[+]',      -- Text to show when the file is modified.
         readonly = '[-]',      -- Text to show when the file is non-modifiable or readonly.
         unnamed = '[No Name]', -- Text to show for unnamed buffers.
-        newfile = '[New]',     -- Text to show for new created file before first writting
+        newfile = '[New]',     -- Text to show for newly created file before first write
       }
     }
   }
@@ -629,6 +658,20 @@ sections = {
 }
 ```
 
+#### searchcount component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'searchcount',
+      maxcount = 999,
+      timeout = 500,
+    }
+  }
+}
+```
+
 #### tabs component options
 
 ```lua
@@ -644,11 +687,24 @@ sections = {
                 -- 1: Shows tab_name
                 -- 2: Shows tab_nr + tab_name
 
+      -- Automatically updates active tab color to match color of other components (will be overidden if buffers_color is set)
+      use_mode_colors = false,
+
       tabs_color = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active tab.
         inactive = 'lualine_{section}_inactive', -- Color for inactive tab.
       },
+
+      fmt = function(name, context)
+        -- Show + if buffer is modified in tab
+        local buflist = vim.fn.tabpagebuflist(context.tabnr)
+        local winnr = vim.fn.tabpagewinnr(context.tabnr)
+        local bufnr = buflist[winnr]
+        local mod = vim.fn.getbufvar(bufnr, '&mod')
+
+        return name .. (mod == 1 and ' +' or '')
+      end
     }
   }
 }
@@ -680,6 +736,9 @@ sections = {
       }, -- Shows specific window name for that filetype ( { `filetype` = `window_name`, ... } )
 
       disabled_buftypes = { 'quickfix', 'prompt' }, -- Hide a window if its buffer's type is disabled
+
+      -- Automatically updates active window color to match color of other components (will be overidden if buffers_color is set)
+      use_mode_colors = false,
 
       windows_color = {
         -- Same values as the general color option can be used here.
@@ -725,8 +784,10 @@ tabline = {
 ```
 
 ### Winbar
+
 From neovim-0.8 you can customize your winbar with lualine.
 Winbar configuration is similar to statusline.
+
 ```lua
 winbar = {
   lualine_a = {},
@@ -746,9 +807,10 @@ inactive_winbar = {
   lualine_z = {}
 }
 ```
+
 Just like statusline you can separately specify winbar for active and inactive
 windows. Any lualine component can be placed in winbar. All kinds of custom
-components supported in statusline are also suported for winbar too. In general
+components supported in statusline are also supported for winbar too. In general
 You can treat winbar as another lualine statusline that just appears on top
 of windows instead of at bottom.
 
@@ -827,15 +889,18 @@ extensions = {'quickfix'}
 - fern
 - fugitive
 - fzf
+- lazy
 - man
 - mundo
 - neo-tree
 - nerdtree
 - nvim-dap-ui
 - nvim-tree
+- overseer
 - quickfix
 - symbols-outline
 - toggleterm
+- trouble
 
 #### Custom extensions
 
@@ -849,24 +914,28 @@ require('lualine').setup { extensions = { my_extension } }
 ---
 
 ### Refreshing lualine
+
 By default lualine refreshes itself based on timer and some events. You can set
 the interval of the timer with refresh option. However you can also force
-lualine to refresh at any time by calling lualine.refresh function.
+lualine to refresh at any time by calling `lualine.refresh` function.
+
 ```lua
 require('lualine').refresh({
   scope = 'tabpage',  -- scope of refresh all/tabpage/window
   place = { 'statusline', 'winbar', 'tabline' },  -- lualine segment ro refresh.
 })
 ```
+
 The arguments shown here are default values. So not passing any of them will be
 treated as if a default value was passed.
 
 So you can simply do
+
 ```lua
 require('lualine').refresh()
 ```
 
-Avoid calling lualine.refresh inside components. Since components are evaluated
+Avoid calling `lualine.refresh` inside components. Since components are evaluated
 during refresh, calling refresh while refreshing can have undesirable effects.
 
 ### Disabling lualine
@@ -878,21 +947,27 @@ options = { disabled_filetypes = {'lua'} }
 ```
 
 You can also disable lualine completely.
+Note that you need to call this after the setup
+
 ```lua
   require('lualine').hide({
-    place = {'statusline', 'tabline', 'winbar'}, -- The segmentthis change applies to.
-    unhide = false,  -- whether to reenable lualine again/
+    place = {'statusline', 'tabline', 'winbar'}, -- The segment this change applies to.
+    unhide = false,  -- whether to re-enable lualine again/
   })
 ```
+
 The arguments show for hide above are default values.
 Which means even if the hide function is called without
 arguments it'll work as if these were passed.
 
 So in short to disable lualine completely you can do
+
 ```lua
 require('lualine').hide()
 ```
+
 To enable it again you can do
+
 ```lua
 require('lualine').hide({unhide=true})
 ```
@@ -917,9 +992,3 @@ You can find some useful [configuration snippets](https://github.com/nvim-lualin
 
 If you want to extend lualine with plugins or want to know
 which ones already do, [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
-
-### Support
-
-If you appreciate my work you can buy me a coffee.
-
-<a href="https://www.buymeacoffee.com/shadmansalJ" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-black.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;"></a>

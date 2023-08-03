@@ -193,15 +193,15 @@ function M:apply_section_separators()
     return
   end
   if self.options.separator.left ~= nil and self.options.separator.left ~= '' then
-    self.status = string.format('%%s{%s}%s', self.options.separator.left, self.status)
+    self.status = string.format('%%z{%s}%s', self.options.separator.left, self.status)
     self.strip_previous_separator = true
   end
   if self.options.separator.right ~= nil and self.options.separator.right ~= '' then
-    self.status = string.format('%s%%S{%s}', self.status, self.options.separator.right)
+    self.status = string.format('%s%%Z{%s}', self.status, self.options.separator.right)
   end
 end
 
----Add on click funtion description to already drawn item
+---Add on click function description to already drawn item
 function M:apply_on_click()
   if self.on_click_id then
     self.status = self:format_fn(self.on_click_id, self.status)
@@ -272,12 +272,14 @@ function M:draw(default_highlight, is_focused)
   self.default_hl = default_highlight
   local status = self:update_status(is_focused)
   if self.options.fmt then
-    status = self.options.fmt(status or '')
+    status = self.options.fmt(status or '', self)
   end
-  if type(status) == 'string' and #status > 0 then
+  if type(status) == 'string' and (#status > 0 or self.options.draw_empty) then
     self.status = status
-    self:apply_icon()
-    self:apply_padding()
+    if #status > 0 then
+      self:apply_icon()
+      self:apply_padding()
+    end
     self:apply_on_click()
     self:apply_highlights(default_highlight)
     self:apply_section_separators()

@@ -19,7 +19,7 @@ local Colors = {
   gray10         = '#f0f0f0',
 }
 
-return {
+local M = {
   normal = {
     a = { fg = Colors.darkestgreen, bg = Colors.brightgreen, gui = 'bold' },
     b = { fg = Colors.gray10, bg = Colors.gray5 },
@@ -38,3 +38,7 @@ return {
     c = { bg = Colors.gray1, fg = Colors.gray5 },
   },
 }
+
+M.terminal = M.insert
+
+return M
