@@ -27,7 +27,7 @@ local refresh_real_curwin
 
 -- The events on which lualine redraws itself
 local default_refresh_events =
-  'WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized,Filetype,CursorMoved,CursorMovedI'
+  'WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized,Filetype'
 if vim.fn.has('nvim-0.7') == 1 then -- utilize ModeChanged event introduced in 0.7
   default_refresh_events = default_refresh_events .. ',ModeChanged'
 end
