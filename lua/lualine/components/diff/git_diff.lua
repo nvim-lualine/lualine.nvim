@@ -20,6 +20,9 @@ local diff_cache = {} -- Stores last known value of diff of a buffer
 ---initialize the module
 ---param opts table
 function M.init(opts)
+  M.git_dir = opts.git_dir and ' --git-dir ' .. vim.fn.expand(opts.git_dir) or ''
+  M.work_tree = opts.work_tree and ' --work-tree ' .. vim.fn.expand(opts.work_tree) or ''
+
   if type(opts.source) == 'function' then
     M.src = opts.source
   else
@@ -93,7 +96,9 @@ function M.update_diff_args()
   end
   M.diff_args = {
     cmd = string.format(
-      [[git -C %s --no-pager diff --no-color --no-ext-diff -U0 -- %s]],
+      [[git%s%s -C %s --no-pager diff --no-color --no-ext-diff -U0 -- %s]],
+      M.git_dir,
+      M.work_tree,
       vim.fn.expand('%:h'),
       vim.fn.expand('%:t')
     ),
