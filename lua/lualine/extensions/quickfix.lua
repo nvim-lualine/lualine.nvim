@@ -16,10 +16,12 @@ local function title()
   return vim.fn.getqflist({ title = 0 }).title
 end
 
-local qf_colours = {
-  ll = vim.api.nvim_get_hl_by_name('Constant', false).foreground,
-  qf = vim.api.nvim_get_hl_by_name('Identifier', false).foreground,
-}
+local function qf_colour()
+  local hl_group = is_loclist() and 'Identifier' or 'Constant'
+  return {
+    bg = vim.api.nvim_get_hl_by_name(hl_group, false).foreground,
+  }
+end
 
 local M = {}
 
@@ -32,9 +34,7 @@ M.sections = {
   lualine_a = {
     {
       label,
-      color = function()
-        return is_loclist() and { bg = qf_colours['ll'] } or { bg = qf_colours['qf'] }
-      end,
+      color = qf_colour,
     },
   },
   lualine_b = { title },
