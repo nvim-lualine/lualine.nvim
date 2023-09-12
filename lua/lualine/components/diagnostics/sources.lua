@@ -3,15 +3,12 @@ local M = {}
 local get_nvim_diagnostic_count = function(bufnr, namespace_filter)
   local count = { 0, 0, 0, 0 }
   for key, namespace in pairs(vim.diagnostic.get_namespaces()) do
-    if vim.diagnostic.is_disabled(bufnr, key) then
-      break
-    end
-    if namespace_filter ~= nil and not namespace_filter(key, namespace) then
-      break
-    end
-
-    for i, _ in ipairs(vim.diagnostic.severity) do
-      count[i] = vim.tbl_count(vim.diagnostic.get(bufnr, { namespace = key, severity = i }))
+    if not vim.diagnostic.is_disabled(bufnr, key) then
+      if namespace_filter == nil or namespace_filter(key, namespace) then
+        for i, _ in ipairs(vim.diagnostic.severity) do
+          count[i] = vim.tbl_count(vim.diagnostic.get(bufnr, { namespace = key, severity = i }))
+        end
+      end
     end
   end
   return count
