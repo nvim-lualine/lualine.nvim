@@ -1,5 +1,22 @@
 local M = {}
 
+local get_nvim_diagnostic_count = function(bufnr, namespace_filter)
+  local count = { 0, 0, 0, 0 }
+  for key, namespace in pairs(vim.diagnostic.get_namespaces()) do
+    if vim.diagnostic.is_disabled(bufnr, key) then
+      break
+    end
+    if namespace_filter ~= nil and not namespace_filter(key, namespace) then
+      break
+    end
+
+    for i, _ in ipairs(vim.diagnostic.severity) do
+      count[i] = vim.tbl_count(vim.diagnostic.get(bufnr, { namespace = key, severity = i }))
+    end
+  end
+  return count
+end
+
 ---functions that how how to retrieve diagnostics from specific source.
 ---returns error_count:number, warning_count:number,
 ---        info_count:number, hint_count:number
@@ -8,13 +25,10 @@ M.sources = {
     local error_count, warning_count, info_count, hint_count
     if vim.fn.has('nvim-0.6') == 1 then
       -- On nvim 0.6+ use vim.diagnostic to get lsp generated diagnostic count.
-      local diagnostics = vim.diagnostic.get(0)
-      local count = { 0, 0, 0, 0 }
-      for _, diagnostic in ipairs(diagnostics) do
-        if vim.startswith(vim.diagnostic.get_namespace(diagnostic.namespace).name, 'vim.lsp') then
-          count[diagnostic.severity] = count[diagnostic.severity] + 1
-        end
+      local namespace_filter = function(_, namespace)
+        return vim.startswith(namespace.name, 'vim.lsp')
       end
+      local count = get_nvim_diagnostic_count(0, namespace_filter)
       error_count = count[vim.diagnostic.severity.ERROR]
       warning_count = count[vim.diagnostic.severity.WARN]
       info_count = count[vim.diagnostic.severity.INFO]
@@ -31,24 +45,14 @@ M.sources = {
     return error_count, warning_count, info_count, hint_count
   end,
   nvim_workspace_diagnostic = function()
-    local diag_severity = vim.diagnostic.severity
-
-    local function workspace_diag(severity)
-      local count = vim.diagnostic.get(nil, { severity = severity })
-      return vim.tbl_count(count)
-    end
-
-    return workspace_diag(diag_severity.ERROR),
-      workspace_diag(diag_severity.WARN),
-      workspace_diag(diag_severity.INFO),
-      workspace_diag(diag_severity.HINT)
+    local count = get_nvim_diagnostic_count(nil)
+    return count[vim.diagnostic.severity.ERROR],
+      count[vim.diagnostic.severity.WARN],
+      count[vim.diagnostic.severity.INFO],
+      count[vim.diagnostic.severity.HINT]
   end,
   nvim_diagnostic = function()
-    local diagnostics = vim.diagnostic.get(0)
-    local count = { 0, 0, 0, 0 }
-    for _, diagnostic in ipairs(diagnostics) do
-      count[diagnostic.severity] = count[diagnostic.severity] + 1
-    end
+    local count = get_nvim_diagnostic_count(0)
     return count[vim.diagnostic.severity.ERROR],
       count[vim.diagnostic.severity.WARN],
       count[vim.diagnostic.severity.INFO],
