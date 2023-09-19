@@ -718,6 +718,12 @@ sections = {
         local mod = vim.fn.getbufvar(bufnr, '&mod')
 
         return name .. (mod == 1 and ' +' or '')
+        -- alternatively, return a highlighted table
+        return {
+          {highlight = "%#Visual#", name = bufnr .. ". "},
+          {text = name},
+          {highlight = "%#Visual#", text = (mod == 1 and ' +' or '')},
+        }
       end
     }
   }
