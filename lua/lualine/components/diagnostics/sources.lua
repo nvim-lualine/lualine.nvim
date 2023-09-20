@@ -3,7 +3,8 @@ local M = {}
 local get_nvim_diagnostic_count = function(bufnr, namespace_filter)
   local count = { 0, 0, 0, 0 }
   for key, namespace in pairs(vim.diagnostic.get_namespaces()) do
-    if not vim.diagnostic.is_disabled(bufnr, key) then
+    -- is_disabled was added in neovim 0.9
+    if vim.diagnostic.is_disabled == nil or not vim.diagnostic.is_disabled(bufnr, key) then
       if namespace_filter == nil or namespace_filter(key, namespace) then
         for i, _ in ipairs(vim.diagnostic.severity) do
           count[i] = vim.tbl_count(vim.diagnostic.get(bufnr, { namespace = key, severity = i }))
