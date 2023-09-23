@@ -17,8 +17,8 @@ local function title()
 end
 
 local qf_colours = {
-  ll = vim.api.nvim_get_hl_by_name('Constant', false).foreground,
-  qf = vim.api.nvim_get_hl_by_name('Identifier', false).foreground,
+  ll = vim.api.nvim_get_hl(0, {name = 'Constant'}).fg,
+  qf = vim.api.nvim_get_hl(0, {name = 'Identifier'}).fg,
 }
 
 local M = {}
@@ -33,7 +33,7 @@ M.sections = {
     {
       label,
       color = function()
-        return is_loclist() and { bg = qf_colours['ll'] } or { bg = qf_colours['qf'] }
+        return is_loclist() and { guibg = qf_colours['ll'] } or { guibg = qf_colours['qf'] }
       end,
     },
   },
