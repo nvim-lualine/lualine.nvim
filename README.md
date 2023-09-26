@@ -119,6 +119,7 @@ require('lualine').setup {
   options = {
     icons_enabled = true,
     theme = 'auto',
+    use_mode_colors = true,
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
     disabled_filetypes = {
