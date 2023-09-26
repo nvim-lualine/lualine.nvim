@@ -267,9 +267,17 @@ local function setup_theme()
   end
   local theme = get_theme_from_config()
   if config.options.use_mode_colors ~= nil then
-     if config.options.use_mode_colors == false then
-       theme = {normal = theme.normal,inactive = theme.inactive} 
-     end
+    if config.options.use_mode_colors == false then
+      theme = {
+        normal = theme.normal,
+        insert = theme.normal,
+        visual = theme.normal,
+        replace = theme.normal,
+        command = theme.normal,
+        terminal = theme.normal,
+        inactive = theme.inactive,
+      }
+    end
   end
   modules.highlight.create_highlight_groups(theme)
   vim.cmd([[autocmd lualine ColorScheme * lua require'lualine'.setup()
