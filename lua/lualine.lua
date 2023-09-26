@@ -266,6 +266,11 @@ local function setup_theme()
     return modules.loader.load_theme('gruvbox')
   end
   local theme = get_theme_from_config()
+  if config.options.use_mode_colors ~= nil then
+     if config.options.use_mode_colors == false then
+       theme = {normal = theme.normal,inactive = theme.inactive} 
+     end
+  end
   modules.highlight.create_highlight_groups(theme)
   vim.cmd([[autocmd lualine ColorScheme * lua require'lualine'.setup()
     autocmd lualine OptionSet background lua require'lualine'.setup()]])
