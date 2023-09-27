@@ -825,10 +825,15 @@ Jumping to non-existent buffer indices generates an error. To avoid these errors
 `LualineBuffersJump` provides `<bang>` support, meaning that you can call
 `:LualineBufferJump!` to ignore these errors.
 
+You can use `:LualineBuffersNext` and `:LualineBuffersPrev` to jump to the buffer
+to the right or left respectively.
+
 ```vim
   :LualineBuffersJump 2  " Jumps to 2nd buffer in buffers component.
   :LualineBuffersJump $  " Jumps to last buffer in buffers component.
   :LualineBuffersJump! 3  " Attempts to jump to 3rd buffer, if it exists.
+  :LualineBuffersNext  " Jumps to the buffer to the right. If last, jumps to first
+  :LualineBuffersPrev  " Jumps to the buffer to the left. If first, jumps to last.
 ```
 
 #### Tabs
