@@ -234,12 +234,34 @@ function M.buffer_jump(buf_pos, bang)
   vim.api.nvim_set_current_buf(M.bufpos2nr[buf_pos])
 end
 
+function M.buffer_move(dir)
+  dir = tonumber(dir)
+  local buffers = M.bufpos2nr
+  local last = #buffers
+  local next = 1
+  local curNr = vim.api.nvim_get_current_buf()
+  for i, buffer in ipairs(buffers) do
+    if buffer == curNr then
+      next = i + dir
+    end
+  end
+  if next > last then
+    next = 1
+  end
+  if next < 1 then
+    next = last
+  end
+  vim.api.nvim_set_current_buf(M.bufpos2nr[next])
+end
+
 vim.cmd([[
   function! LualineSwitchBuffer(bufnr, mouseclicks, mousebutton, modifiers)
     execute ":buffer " . a:bufnr
   endfunction
 
   command! -nargs=1 -bang LualineBuffersJump call v:lua.require'lualine.components.buffers'.buffer_jump(<f-args>, "<bang>")
+  command! LualineBuffersNext call v:lua.require'lualine.components.buffers'.buffer_move(1)
+  command! LualineBuffersPrev call v:lua.require'lualine.components.buffers'.buffer_move(-1)
 ]])
 
 return M
