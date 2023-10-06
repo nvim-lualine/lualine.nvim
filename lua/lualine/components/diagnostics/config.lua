@@ -5,10 +5,10 @@ local M = {}
 -- default symbols for diagnostics component
 M.symbols = {
   icons = {
-    error = ' ', -- xf659
-    warn = ' ', -- xf529
-    info = ' ', -- xf7fc
-    hint = ' ', -- xf835
+    error = '󰅚 ', -- x000f015a
+    warn = '󰀪 ', -- x000f002a
+    info = '󰋽 ', -- x000f02fd
+    hint = '󰌶 ', -- x000f0336
   },
   no_icons = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
 }
