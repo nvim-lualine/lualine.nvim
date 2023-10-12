@@ -56,14 +56,27 @@ local function update_branch()
   branch_cache[vim.api.nvim_get_current_buf()] = current_git_branch
 end
 
+---updates the current value of current_git_branch and sets up file watch on HEAD file if value changed
+local function update_current_git_dir(git_dir)
+  if current_git_dir ~= git_dir then
+    current_git_dir = git_dir
+    update_branch()
+  end
+end
+
 ---returns full path to git directory for dir_path or current directory
 ---@param dir_path string|nil
----@return string
+---@return string|nil
 function M.find_git_dir(dir_path)
+  local git_dir = vim.env.GIT_DIR
+  if git_dir then
+    update_current_git_dir(git_dir)
+    return git_dir
+  end
+
   -- get file dir so we can search from that dir
   local file_dir = dir_path or vim.fn.expand('%:p:h')
   local root_dir = file_dir
-  local git_dir
   -- Search upward for .git file or folder
   while root_dir do
     if git_dir_cache[root_dir] then
@@ -101,9 +114,8 @@ function M.find_git_dir(dir_path)
   end
 
   git_dir_cache[file_dir] = git_dir
-  if dir_path == nil and current_git_dir ~= git_dir then
-    current_git_dir = git_dir
-    update_branch()
+  if dir_path == nil then
+    update_current_git_dir(git_dir)
   end
   return git_dir
 end
