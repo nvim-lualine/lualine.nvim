@@ -33,7 +33,6 @@ function Tab:get_props()
       end
     end
   end
-
 end
 
 ---returns name for tab. Tabs name is the name of buffer in last active window
