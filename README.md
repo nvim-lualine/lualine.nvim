@@ -912,6 +912,7 @@ extensions = {'quickfix'}
 - symbols-outline
 - toggleterm
 - trouble
+- mason
 
 #### Custom extensions
 
