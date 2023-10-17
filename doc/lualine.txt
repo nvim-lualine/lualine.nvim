@@ -966,6 +966,7 @@ extensions with:
 - symbols-outline
 - toggleterm
 - trouble
+- mason
 
 
                                                    *lualine-Custom-extensions*
