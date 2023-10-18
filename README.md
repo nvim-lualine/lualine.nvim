@@ -9,7 +9,10 @@
 
 A blazing fast and easy to configure Neovim statusline written in Lua.
 
-`lualine.nvim` requires Neovim >= 0.5.
+`lualine.nvim` requires Neovim >= 0.7.
+
+For previous versoins of neovim please use compatability tags for example
+compat-nvim-0.5
 
 ## Contributing
 
