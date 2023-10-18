@@ -601,15 +601,16 @@ end
 
 --- Check neovim compatibilitu
 local function verify_nvim_version()
-  if vim.fn.has('nvim-0.7') == 1 then return true end
+  if vim.fn.has('nvim-0.7') == 1 then
+    return true
+  end
   modules.utils_notices.add_notice([[
 ### Incompatible Neovim version
 Lualine supports neovim 0.7 and up. It seems you're using a older version.
 Please update to newer version. Or if you have atleast neovim 0.5 you
 can use older compatible versions of lualine using compat tags like
 `compat-nvim-0.5`, `compat-nvim-0.6`.
-]]
-)
+]])
   return false
 end
 

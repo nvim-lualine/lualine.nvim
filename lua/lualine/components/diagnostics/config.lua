@@ -18,7 +18,7 @@ M.options = {
   colored = true,
   update_in_insert = false,
   always_visible = false,
-  sources = { 'nvim_diagnostic',  'coc' },
+  sources = { 'nvim_diagnostic', 'coc' },
   sections = { 'error', 'warn', 'info', 'hint' },
 }
 
