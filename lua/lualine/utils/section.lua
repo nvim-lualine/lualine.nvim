@@ -48,7 +48,7 @@ function M.draw_section(section, section_name, is_focused)
           and (section[1].options.section_separators.left ~= nil and section[1].options.section_separators.left ~= '')
         then
           status[component_no] =
-            string.format('%s%%S{%s}', status[component_no], section[1].options.section_separators.left)
+            string.format('%s%%Z{%s}', status[component_no], section[1].options.section_separators.left)
         end
       end
     end
@@ -89,7 +89,7 @@ function M.draw_section(section, section_name, is_focused)
     and (section[1].options.section_separators.right ~= nil and section[1].options.section_separators.right ~= '')
   then
     left_separator_string = string.format(
-      '%%s{%s}',
+      '%%z{%s}',
       section[first_component_no].options.ls_separator or section[1].options.section_separators.right
     )
   end
@@ -104,7 +104,7 @@ function M.draw_section(section, section_name, is_focused)
 
   local needs_hl
 
-  local find_start_trans_sep_start, find_start_trans_sep_end = status_str:find('^%%s{.-}')
+  local find_start_trans_sep_start, find_start_trans_sep_end = status_str:find('^%%z{.-}')
   if find_start_trans_sep_start then
     -- the section doesn't need to be prepended with default hl when sections
     -- first component has transitional sep
