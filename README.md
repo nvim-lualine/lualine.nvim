@@ -916,6 +916,7 @@ extensions = {'quickfix'}
 - toggleterm
 - trouble
 - mason
+- telescope
 
 #### Custom extensions
 
