@@ -13,6 +13,26 @@ function Tab:init(opts)
   self.tabId = opts.tabId
   self.options = opts.options
   self.highlights = opts.highlights
+  self.modified_icon = ''
+  self:get_props()
+end
+
+function Tab:get_props()
+  local buflist = vim.fn.tabpagebuflist(self.tabnr)
+  local winnr = vim.fn.tabpagewinnr(self.tabnr)
+  local bufnr = buflist[winnr]
+  self.file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(bufnr))
+  self.filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+  self.buftype = vim.api.nvim_buf_get_option(bufnr, 'buftype')
+
+  if self.options.show_modified_status then
+    for _, b in ipairs(buflist) do
+      if vim.api.nvim_buf_get_option(b, 'modified') then
+        self.modified_icon = self.options.symbols.modified or ''
+        break
+      end
+    end
+  end
 end
 
 ---returns name for tab. Tabs name is the name of buffer in last active window
@@ -26,30 +46,61 @@ function Tab:label()
   if custom_tabname and custom_tabname ~= '' then
     return modules.utils.stl_escape(custom_tabname)
   end
-  local buflist = vim.fn.tabpagebuflist(self.tabnr)
-  local winnr = vim.fn.tabpagewinnr(self.tabnr)
-  local bufnr = buflist[winnr]
-  local file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(bufnr))
-  local buftype = vim.fn.getbufvar(bufnr, '&buftype')
-  if vim.api.nvim_buf_get_option(bufnr, 'filetype') == 'fugitive' then
-    return 'fugitive: ' .. vim.fn.fnamemodify(file, ':h:h:t')
-  elseif buftype == 'help' then
-    return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
-  elseif buftype == 'terminal' then
-    local match = string.match(vim.split(file, ' ')[1], 'term:.*:(%a+)')
+  if self.filetype == 'fugitive' then
+    return 'fugitive: ' .. vim.fn.fnamemodify(self.file, ':h:h:t')
+  elseif self.buftype == 'help' then
+    return 'help:' .. vim.fn.fnamemodify(self.file, ':t:r')
+  elseif self.buftype == 'terminal' then
+    local match = string.match(vim.split(self.file, ' ')[1], 'term:.*:(%a+)')
     return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ':t')
-  elseif vim.fn.isdirectory(file) == 1 then
-    return vim.fn.fnamemodify(file, ':p:.')
-  elseif file == '' then
+  elseif self.file == '' then
     return '[No Name]'
   end
-  return vim.fn.fnamemodify(file, ':t')
+  if self.options.path == 1 then
+    return vim.fn.fnamemodify(self.file, ':~:.')
+  elseif self.options.path == 2 then
+    return vim.fn.fnamemodify(self.file, ':p')
+  elseif self.options.path == 3 then
+    return vim.fn.fnamemodify(self.file, ':p:~')
+  else
+    return vim.fn.fnamemodify(self.file, ':t')
+  end
+end
+
+---shortens path by turning apple/orange -> a/orange
+---@param path string
+---@param sep string path separator
+---@param max_len integer maximum length of the full filename string
+---@return string
+local function shorten_path(path, sep, max_len)
+  local len = #path
+  if len <= max_len then
+    return path
+  end
+
+  local segments = vim.split(path, sep)
+  for idx = 1, #segments - 1 do
+    if len <= max_len then
+      break
+    end
+
+    local segment = segments[idx]
+    local shortened = segment:sub(1, vim.startswith(segment, '.') and 2 or 1)
+    segments[idx] = shortened
+    len = len - (#segment - #shortened)
+  end
+
+  return table.concat(segments, sep)
 end
 
 ---returns rendered tab
 ---@return string
 function Tab:render()
   local name = self:label()
+  if self.options.tab_max_length ~= 0 then
+    local path_separator = package.config:sub(1, 1)
+    name = shorten_path(name, path_separator, self.options.tab_max_length)
+  end
   if self.options.fmt then
     name = self.options.fmt(name or '', self)
   end
@@ -59,12 +110,18 @@ function Tab:render()
     -- different formats for different modes
     if self.options.mode == 0 then
       name = tostring(self.tabnr)
+      if self.modified_icon ~= '' then
+        name = string.format('%s%s', name, self.modified_icon)
+      end
     elseif self.options.mode == 1 then
-      name = name
+      if self.modified_icon ~= '' then
+        name = string.format('%s %s', self.modified_icon, name)
+      end
     else
-      name = string.format('%s %s', tostring(self.tabnr), name)
+      name = string.format('%s%s %s', tostring(self.tabnr), self.modified_icon, name)
     end
   end
+
   name = Tab.apply_padding(name, self.options.padding)
   self.len = vim.fn.strchars(name)
 

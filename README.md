@@ -9,7 +9,10 @@
 
 A blazing fast and easy to configure Neovim statusline written in Lua.
 
-`lualine.nvim` requires Neovim >= 0.5.
+`lualine.nvim` requires Neovim >= 0.7.
+
+For previous versoins of neovim please use compatability tags for example
+compat-nvim-0.5
 
 ## Contributing
 
@@ -679,6 +682,7 @@ sections = {
   lualine_a = {
     {
       'tabs',
+      tab_max_length = 40,  -- Maximum width of each tab. The content will be shorten dynamically (example: apple/orange -> a/orange)
       max_length = vim.o.columns / 3, -- Maximum width of tabs component.
                                       -- Note:
                                       -- It can also be a function that returns
@@ -687,6 +691,11 @@ sections = {
                 -- 1: Shows tab_name
                 -- 2: Shows tab_nr + tab_name
 
+      path = 0, -- 0: just shows the filename
+                -- 1: shows the relative path and shorten $HOME to ~
+                -- 2: shows the full path
+                -- 3: shows the full path and shorten $HOME to ~
+
       -- Automatically updates active tab color to match color of other components (will be overidden if buffers_color is set)
       use_mode_colors = false,
 
@@ -694,6 +703,11 @@ sections = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active tab.
         inactive = 'lualine_{section}_inactive', -- Color for inactive tab.
+      },
+
+      show_modified_status = true,  -- Shows a symbol next to the tab name if the file has been modified.
+      symbols = {
+        modified = '[+]',  -- Text to show when the file is modified.
       },
 
       fmt = function(name, context)
@@ -901,6 +915,7 @@ extensions = {'quickfix'}
 - symbols-outline
 - toggleterm
 - trouble
+- mason
 
 #### Custom extensions
 

@@ -7,11 +7,17 @@ local highlight = require('lualine.highlight')
 
 local default_options = {
   max_length = 0,
+  tab_max_length = 40,
   mode = 0,
   use_mode_colors = false,
+  path = 0,
   tabs_color = {
     active = nil,
     inactive = nil,
+  },
+  show_modified_status = true,
+  symbols = {
+    modified = '[+]',
   },
 }
 
