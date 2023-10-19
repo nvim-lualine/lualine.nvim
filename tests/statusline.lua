@@ -71,109 +71,17 @@
 --- statusline:snapshot()
 --- ```
 
-local ffi = require('ffi')
 local helpers = require('tests.helpers')
 local stub = require('luassert.stub')
 
 local M = {}
 
-ffi.cdef([[
-typedef unsigned char char_u;
-typedef struct window_S win_T;
-extern win_T    *curwin;
-typedef struct {
-  char_u      *start;
-  int userhl;
-} stl_hlrec_t;
-typedef struct {
-} StlClickDefinition;
-typedef struct {
-  StlClickDefinition def;
-  const char *start;
-} StlClickRecord;
-int build_stl_str_hl(
-  win_T *wp,
-  char_u *out,
-  size_t outlen,
-  char_u *fmt,
-  int use_sandbox,
-  char_u fillchar,
-  int maxwidth,
-  stl_hlrec_t **hltab,
-  StlClickRecord **tabtab
-);
-]])
-
-local function process_hlrec(hltab, stlbuf, eval_type)
-  local function default_hl()
-    if eval_type == 'tabline' then
-      return 'TabLineFill'
-    elseif eval_type == 'inactive' then
-      return 'StatusLineNC'
-    else
-      return 'StatusLine'
-    end
-  end
-  local len = #ffi.string(stlbuf)
-  local hltab_data = hltab[0]
-  local result = {}
-  if hltab_data[0].start ~= stlbuf then
-    table.insert(result, {
-      group = default_hl(),
-      start = 0,
-    })
-  end
-
-  local n = 0
-  while hltab_data[n].start ~= nil do
-    local group_name
-    if hltab_data[n].userhl == 0 then
-      group_name = default_hl()
-    elseif hltab_data[n].userhl < 0 then
-      group_name = vim.fn.synIDattr(-1 * hltab_data[n].userhl, 'name')
-    else
-      group_name = string.format('User%d', hltab_data[n].userhl)
-    end
-
-    local hl_pos = { group = group_name }
-
-    if n == 0 then
-      hl_pos.start = hltab_data[n].start - stlbuf
-    else
-      hl_pos.start = result[#result].start + result[#result].len
-    end
-    if hltab_data[n + 1].start ~= nil then
-      hl_pos.len = hltab_data[n + 1].start - hltab_data[n].start
-    else
-      hl_pos.len = (stlbuf + len) - hltab_data[n].start
-    end
-    table.insert(result, hl_pos)
-    n = n + 1
-  end
-  return vim.tbl_filter(function(x)
-    return x.len ~= 0
-  end, result)
-end
-
-local function gen_stl(stl_fmt, width, eval_type)
-  local stlbuf = ffi.new('char_u [?]', width + 100)
-  local fmt = ffi.cast('char_u *', stl_fmt)
-  local fillchar = ffi.cast('char_u', 0x20)
-  local hltab = ffi.new('stl_hlrec_t *[1]', ffi.new('stl_hlrec_t *'))
-  ffi.C.build_stl_str_hl(ffi.C.curwin, stlbuf, width + 100, fmt, 0, fillchar, width, hltab, nil)
-  return { str = ffi.string(stlbuf), highlights = process_hlrec(hltab, stlbuf, eval_type) }
-end
-
 local function eval_stl(stl_expr, width, eval_type)
   local stl_buf, hl_list, stl_eval_res
-  if vim.fn.has('nvim-0.6') == 1 then
-    stl_eval_res = vim.api.nvim_eval_statusline(
-      stl_expr,
-      { maxwidth = width, highlights = true, fillchar = ' ', use_tabline = (eval_type == 'tabline') }
-    )
-  else
-    stl_eval_res = gen_stl(stl_expr, width, eval_type)
-  end
+  stl_eval_res = vim.api.nvim_eval_statusline(
+    stl_expr,
+    { maxwidth = width, highlights = true, fillchar = ' ', use_tabline = (eval_type == 'tabline') }
+  )
   stl_buf, hl_list = stl_eval_res.str, stl_eval_res.highlights
 
   local hl_map = {}
