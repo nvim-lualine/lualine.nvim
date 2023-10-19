@@ -966,6 +966,7 @@ extensions with:
 - nvim-tree
 - overseer
 - quickfix
+- spectre
 - symbols-outline
 - toggleterm
 - trouble

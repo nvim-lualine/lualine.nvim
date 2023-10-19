@@ -912,6 +912,7 @@ extensions = {'quickfix'}
 - nvim-tree
 - overseer
 - quickfix
+- spectre
 - symbols-outline
 - toggleterm
 - trouble
