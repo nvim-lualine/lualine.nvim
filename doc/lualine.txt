@@ -954,11 +954,13 @@ extensions with:
 
 - aerial
 - chadtree
+- ctrlspace
 - fern
 - fugitive
 - fzf
 - lazy
 - man
+- mason
 - mundo
 - neo-tree
 - nerdtree
@@ -969,7 +971,6 @@ extensions with:
 - symbols-outline
 - toggleterm
 - trouble
-- mason
 
 
                                                    *lualine-Custom-extensions*
