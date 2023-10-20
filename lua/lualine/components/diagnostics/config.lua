@@ -18,7 +18,7 @@ M.options = {
   colored = true,
   update_in_insert = false,
   always_visible = false,
-  sources = { vim.fn.has('nvim-0.6') == 1 and 'nvim_diagnostic' or 'nvim_lsp', 'coc' },
+  sources = { 'nvim_diagnostic', 'coc' },
   sections = { 'error', 'warn', 'info', 'hint' },
 }
 
