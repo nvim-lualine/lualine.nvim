@@ -783,7 +783,7 @@ sections = {
       unpushed_icon = '⇡ ', -- Icon shown for unpushed changes on current branch.
       use_check_icon = true, -- Use checkmark icon, instead of `0`.
       check_icon = '󰸞', -- Icon to display check mark instead of `0`.
-      show_only_diverged = false, -- Don't show `0` or check mark if up to date.
+      show_only_diverged = true, -- Don't show `0` or check mark if up to date.
     }
   }
 }

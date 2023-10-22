@@ -16,7 +16,7 @@ local default_options = {
   unpushed_icon = '⇡ ',
   use_check_icon = true,
   check_icon = '󰸞',
-  show_only_diverged = false,
+  show_only_diverged = true,
 }
 
 local function apply_default_colors(opts)
