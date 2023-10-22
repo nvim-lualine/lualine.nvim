@@ -772,6 +772,7 @@ sections = {
   lualine_a = {
     {
       'commit',
+      icon = '', -- Component icon
       master_name = 'master', -- Default master branch name, some repositories use `main`.
       colored = true, -- Set to true displays safe to merge commits and conflicts in color.
       findout_master_name = false, -- Let's the component get the master branch name from origin HEAD branch.
