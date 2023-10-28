@@ -915,6 +915,7 @@ extensions = {'quickfix'}
 - overseer
 - quickfix
 - symbols-outline
+- terminal
 - toggleterm
 - trouble
 
