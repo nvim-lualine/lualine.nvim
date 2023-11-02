@@ -34,9 +34,10 @@ function M:apply_icon()
   if ok then
     if self.options.get_icon_by == 'filetype' then
       icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
-    end
-
-    if icon == nil then
+      if icon == nil then
+        icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
+      end
+    else
       icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
       if icon == nil then
         icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
