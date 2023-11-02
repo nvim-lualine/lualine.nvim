@@ -10,6 +10,7 @@ local M = lualine_require.require('lualine.component'):extend()
 local default_options = {
   colored = true,
   icon_only = false,
+  get_icon_by = 'filename',
 }
 
 function M:init(options)
@@ -31,9 +32,15 @@ function M:apply_icon()
   local icon, icon_highlight_group
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if ok then
-    icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
-    if icon == nil then
+    if self.options.get_icon_by == 'filetype' then
       icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
+    end
+
+    if icon == nil then
+      icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
+      if icon == nil then
+        icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
+      end
     end
 
     if icon == nil and icon_highlight_group == nil then
