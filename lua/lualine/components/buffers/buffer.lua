@@ -87,14 +87,18 @@ function Buffer:render()
     .. line
 
   -- apply separators
+  local function sepchars(sep)
+    return vim.fn.strchars(sep:match('^%%[zZ]{(.+)}$') or sep)
+  end
+
   if self.options.self.section < 'x' and not self.first then
     local sep_before = self:separator_before()
     line = sep_before .. line
-    self.len = self.len + vim.fn.strchars(sep_before)
+    self.len = self.len + sepchars(sep_before)
   elseif self.options.self.section >= 'x' and not self.last then
     local sep_after = self:separator_after()
     line = line .. sep_after
-    self.len = self.len + vim.fn.strchars(sep_after)
+    self.len = self.len + sepchars(sep_after)
   end
   return line
 end
