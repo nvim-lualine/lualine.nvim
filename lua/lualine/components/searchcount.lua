@@ -19,8 +19,8 @@ function M:update_status()
     return ''
   end
 
-  local result = vim.fn.searchcount { maxcount = self.options.maxcount, timeout = self.options.timeout }
-  if next(result) == nil then
+  local ok, result = pcall(vim.fn.searchcount, { maxcount = self.options.maxcount, timeout = self.options.timeout })
+  if not ok or next(result) == nil then
     return ''
   end
 
