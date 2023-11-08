@@ -130,6 +130,7 @@ require('lualine').setup {
     },
     ignore_focus = {},
     always_divide_middle = true,
+    tabline_always_visible = true,
     globalstatus = false,
     refresh = {
       statusline = 1000,
@@ -368,6 +369,9 @@ options = {
   always_divide_middle = true, -- When set to true, left sections i.e. 'a','b' and 'c'
                                -- can't take over the entire statusline even
                                -- if neither of 'x', 'y' or 'z' are present.
+
+  tabline_always_visible = true, -- When set to false, tabline will be hidden
+                                 -- when there is no more than two tab pages
 
   globalstatus = false,        -- enable global statusline (have a single statusline
                                -- at bottom of neovim instead of one for  every window).
