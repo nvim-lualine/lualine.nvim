@@ -371,7 +371,7 @@ options = {
                                -- if neither of 'x', 'y' or 'z' are present.
 
   tabline_always_visible = true, -- When set to false, tabline will be hidden
-                                 -- when there is no more than two tab pages
+                                 -- when there are less than two tab pages
 
   globalstatus = false,        -- enable global statusline (have a single statusline
                                -- at bottom of neovim instead of one for  every window).
