@@ -274,7 +274,7 @@ function RepoWatcher:_update_master()
 
   jobs.commit_diff(self.git_cwd, source, '^@', function(success, count)
     if not success then
-      print('git log failed')
+      print('git commit diff failed')
       return
     end
     self.master_commit_count = count
@@ -305,7 +305,7 @@ function RepoWatcher:_update_current()
         self.current_branch_conflict = false
         return
       end
-      print('git log failed')
+      print('git commit diff failed', err)
       return
     end
 
@@ -320,7 +320,7 @@ function RepoWatcher:_update_current()
         self.current_branch_conflict = false
         return
       end
-      print('git log failed')
+      print('git commit diff failed', err)
       return
     end
 

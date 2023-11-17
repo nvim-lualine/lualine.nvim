@@ -77,14 +77,14 @@ function M.check_for_conflict(cwd, source, target, callback)
 end
 
 function M.commit_diff(cwd, source, target, callback)
-  local cmd = string.format([[git log --oneline %s %s]], source, target)
+  local cmd = string.format([[git rev-list --count --left-right %s %s]], source, target)
   M._run_job(cmd, cwd, function(exit_code, output, err)
     if exit_code ~= 0 then
       callback(false, -1, err)
       return
     end
-    local _, commit_count = output:gsub('\n', '\n')
-    callback(true, commit_count)
+    local commit_count = string.match(output, "%d+	(%d+)")
+    callback(true, tonumber(commit_count))
   end)
 end
 
