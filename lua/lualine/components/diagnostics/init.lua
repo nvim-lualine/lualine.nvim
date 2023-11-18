@@ -56,10 +56,10 @@ function M:init(options)
   self.lsp_working = false
   vim.lsp.handlers["$/progress"] = function(_, result)
     self.lsp_started = true
-    if result.value.kind == "end" then
-      self.lsp_working = false
-    else
+    if result.value.kind == "report" then
       self.lsp_working = true
+    elseif result.value.kind == "end" then
+      self.lsp_working = false
     end
   end
 end
