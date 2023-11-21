@@ -99,9 +99,32 @@ function M.define_autocmd(event, pattern, cmd, group)
   end
 end
 
+local focus_update_autocmd = {
+  'CmdlineEnter',
+  'CmdlineLeave',
+  'WinEnter',
+  'WinClosed',
+  'WinNew',
+}
+-- we do this instead of vim.g.actual_win because some ui replacement plugins open a win and take focus then bring focus back causing flicking
+local actual_win = vim.api.nvim_get_current_win()
+vim.api.nvim_create_autocmd(focus_update_autocmd, {
+  pattern = { '*' },
+  callback = function()
+    actual_win = vim.api.nvim_get_current_win()
+  end,
+})
+
+vim.api.nvim_create_autocmd({ 'CmdlineLeave' }, {
+  pattern = { '*' },
+  callback = function()
+    actual_win = vim.api.nvim_get_current_win()
+  end,
+})
+
 -- Check if statusline is on focused window or not
 function M.is_focused()
-  return tonumber(vim.g.actual_curwin) == vim.api.nvim_get_current_win()
+  return actual_win == vim.api.nvim_get_current_win()
 end
 
 --- Check what's the character at pos
