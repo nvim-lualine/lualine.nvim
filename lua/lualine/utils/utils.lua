@@ -108,17 +108,27 @@ local focus_update_autocmd = {
 }
 -- we do this instead of vim.g.actual_win because some ui replacement plugins open a win and take focus then bring focus back causing flicking
 local actual_win = vim.api.nvim_get_current_win()
+local focus_update_lock = false
 vim.api.nvim_create_autocmd(focus_update_autocmd, {
   pattern = { '*' },
   callback = function()
-    actual_win = vim.api.nvim_get_current_win()
+    if not focus_update_lock then
+      actual_win = vim.api.nvim_get_current_win()
+    end
   end,
 })
 
 vim.api.nvim_create_autocmd({ 'CmdlineLeave' }, {
   pattern = { '*' },
   callback = function()
-    actual_win = vim.api.nvim_get_current_win()
+    focus_update_lock = true
+  end,
+})
+
+vim.api.nvim_create_autocmd({ 'CmdlineLeave' }, {
+  pattern = { '*' },
+  callback = function()
+    focus_update_lock = false
   end,
 })
 
