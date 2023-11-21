@@ -88,6 +88,16 @@ use {
 }
 ```
 
+### [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+return {
+    'nvim-lualine/lualine.nvim',
+    lazy = false,
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
+}
+```
+
 You'll also need to have a patched font if you want icons.
 
 ## Usage and customization
