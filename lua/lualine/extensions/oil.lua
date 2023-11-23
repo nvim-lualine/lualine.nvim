@@ -10,7 +10,7 @@ local M = {}
 M.sections = {
   lualine_a = {
     function()
-      return vim.fn.fnamemodify(oil.get_current_dir(), ':~')
+      return vim.fn.fnamemodify(oil.get_current_dir(), ":~")
     end,
   },
 }
