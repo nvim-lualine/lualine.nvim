@@ -90,6 +90,8 @@ function M.restore(name, opts)
         restore_to = ''
       end
       vim.api.nvim_set_option(name, restore_to)
+    else
+      vim.o[name] = nil
     end
   elseif opts.buffer then
     if
