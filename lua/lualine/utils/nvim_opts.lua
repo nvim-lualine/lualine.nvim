@@ -91,7 +91,9 @@ function M.restore(name, opts)
       end
       vim.api.nvim_set_option(name, restore_to)
     else
-      vim.o[name] = nil
+      if type(vim.o[name]) == 'string' and vim.o[name]:find('lualine') then
+        vim.o[name] = nil
+      end
     end
   elseif opts.buffer then
     if
