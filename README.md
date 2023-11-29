@@ -925,11 +925,13 @@ extensions = {'quickfix'}
 
 - aerial
 - chadtree
+- ctrlspace
 - fern
 - fugitive
 - fzf
 - lazy
 - man
+- mason
 - mundo
 - neo-tree
 - nerdtree
@@ -940,7 +942,6 @@ extensions = {'quickfix'}
 - symbols-outline
 - toggleterm
 - trouble
-- mason
 
 #### Custom extensions
 
