@@ -34,7 +34,11 @@ end
 function M:update_status()
   local format = vim.bo.fileformat
   if self.options.icons_enabled then
-    return self:get_os_logo(format) or format
+    if not (self.os_logo == nil or self.os_logo == '') then
+      return self.os_logo
+    end
+    self.os_logo = self:get_os_logo(format)
+    return self.os_logo or format
   else
     return format
   end
