@@ -43,20 +43,18 @@ Mode.map = {
 }
 
 local last_mode = 'NORMAL'
-vim.api.nvim_create_autocmd({ 'CmdlineEnter' }, {
-  pattern = { '*' },
-  callback = function()
-    -- it's 1 when a : command is silent
-    if vim.fn.getcmdscreenpos() ~= 1 then
-      last_mode = Mode.map['c']
-    end
-  end,
+vim.api.nvim_create_autocmd({ 'CmdlineChanged' }, {
+    pattern = '*',
+    callback = function()
+        if vim.fn.getchar(1) == 0 then
+            require('lualine').refresh()
+            vim.cmd [[ redraws ]]
+        end
+    end,
 })
 
 ---@return string current mode name
 function Mode.get_mode()
-  -- if a mapping is not done don't react to mode changes
-  -- still reacts for command mappings that aren't silent see above
   if vim.fn.getchar(1) ~= 0 then
     return last_mode
   end
