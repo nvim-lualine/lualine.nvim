@@ -44,13 +44,13 @@ Mode.map = {
 
 local last_mode = 'NORMAL'
 vim.api.nvim_create_autocmd({ 'CmdlineChanged' }, {
-    pattern = '*',
-    callback = function()
-        if vim.fn.getchar(1) == 0 then
-            require('lualine').refresh()
-            vim.cmd [[ redraws ]]
-        end
-    end,
+  pattern = '*',
+  callback = function()
+    if vim.fn.getchar(1) == 0 then
+      require('lualine').refresh()
+      vim.cmd([[ redraws ]])
+    end
+  end,
 })
 
 ---@return string current mode name
