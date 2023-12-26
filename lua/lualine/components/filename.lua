@@ -86,8 +86,6 @@ M.update_status = function(self)
     data = vim.fn.expand('%:t')
   end
 
-  data = modules.utils.stl_escape(data)
-
   if data == '' then
     data = self.options.symbols.unnamed
   end
@@ -112,6 +110,8 @@ M.update_status = function(self)
   if self.options.newfile_status and is_new_file() then
     table.insert(symbols, self.options.symbols.newfile)
   end
+
+  data = modules.utils.stl_escape(data)
 
   return data .. (#symbols > 0 and ' ' .. table.concat(symbols, '') or '')
 end
