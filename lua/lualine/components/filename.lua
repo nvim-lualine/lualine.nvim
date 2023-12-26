@@ -97,6 +97,8 @@ M.update_status = function(self)
     data = shorten_path(data, path_separator, estimated_space_available)
   end
 
+  data = modules.utils.stl_escape(data)
+
   local symbols = {}
   if self.options.file_status then
     if vim.bo.modified then
@@ -110,8 +112,6 @@ M.update_status = function(self)
   if self.options.newfile_status and is_new_file() then
     table.insert(symbols, self.options.symbols.newfile)
   end
-
-  data = modules.utils.stl_escape(data)
 
   return data .. (#symbols > 0 and ' ' .. table.concat(symbols, '') or '')
 end
