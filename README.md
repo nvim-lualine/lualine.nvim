@@ -88,6 +88,15 @@ use {
 }
 ```
 
+### [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+{
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
+}
+```
+
 You'll also need to have a patched font if you want icons.
 
 ## Usage and customization
@@ -912,6 +921,7 @@ extensions = {'quickfix'}
 - nerdtree
 - nvim-dap-ui
 - nvim-tree
+- oil
 - overseer
 - quickfix
 - symbols-outline

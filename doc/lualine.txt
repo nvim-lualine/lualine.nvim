@@ -70,6 +70,16 @@ PACKER.NVIM <HTTPS://GITHUB.COM/WBTHOMASON/PACKER.NVIM> ~
 <
 
 
+LAZY.NVIM <HTTPS://GITHUB.COM/FOLKE/LAZY.NVIM> ~
+
+>
+    {
+        'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' }
+    }
+<
+
+
 You’ll also need to have a patched font if you want icons.
 
 USAGE AND CUSTOMIZATION                      *lualine-usage-and-customization*
@@ -966,6 +976,7 @@ extensions with:
 - nerdtree
 - nvim-dap-ui
 - nvim-tree
+- oil
 - overseer
 - quickfix
 - symbols-outline

@@ -113,6 +113,8 @@ M.update_status = function(self)
     table.insert(symbols, self.options.symbols.newfile)
   end
 
+  data = modules.utils.stl_escape(data)
+
   return data .. (#symbols > 0 and ' ' .. table.concat(symbols, '') or '')
 end
 
