@@ -91,9 +91,8 @@ use {
 ### [lazy.nvim](https://github.com/folke/lazy.nvim)
 
 ```lua
-return {
+{
     'nvim-lualine/lualine.nvim',
-    event = "VeryLazy",
     dependencies = { 'nvim-tree/nvim-web-devicons' }
 }
 ```
