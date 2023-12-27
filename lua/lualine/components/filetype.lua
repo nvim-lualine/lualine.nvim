@@ -59,7 +59,10 @@ function M:apply_icon()
   else
     ok = vim.fn.exists('*WebDevIconsGetFileTypeSymbol')
     if ok ~= 0 then
-      icon = vim.fn.WebDevIconsGetFileTypeSymbol() .. ' '
+      icon = vim.fn.WebDevIconsGetFileTypeSymbol()
+      if icon then
+        icon = icon .. ' '
+      end
     end
   end
 
