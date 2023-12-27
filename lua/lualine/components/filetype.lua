@@ -40,6 +40,9 @@ function M:apply_icon()
       icon = ''
       icon_highlight_group = 'DevIconDefault'
     end
+    if icon then
+      icon = icon .. ' '
+    end
     if self.options.colored then
       local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
       if highlight_color then
@@ -56,7 +59,7 @@ function M:apply_icon()
   else
     ok = vim.fn.exists('*WebDevIconsGetFileTypeSymbol')
     if ok ~= 0 then
-      icon = vim.fn.WebDevIconsGetFileTypeSymbol()
+      icon = vim.fn.WebDevIconsGetFileTypeSymbol() .. ' '
     end
   end
 
@@ -69,7 +72,7 @@ function M:apply_icon()
   elseif type(self.options.icon) == 'table' and self.options.icon.align == 'right' then
     self.status = self.status .. ' ' .. icon
   else
-    self.status = icon .. ' ' .. self.status
+    self.status = icon .. self.status
   end
 end
 
