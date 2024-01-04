@@ -285,6 +285,12 @@ sections = { lualine_a = { hello } }
 sections = { lualine_a = {'FugitiveHead'} }
 ```
 
+##### shell command as lualine component
+
+```lua
+sections =  { lualine_a = { function() return vim.fn.system("echo Hello")  end } }
+```
+
 ##### Vim's statusline items as lualine component
 
 ```lua
