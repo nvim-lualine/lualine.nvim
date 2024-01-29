@@ -48,6 +48,8 @@ function Buffer:get_props()
       dev, _ = require('nvim-web-devicons').get_icon('zsh')
     elseif vim.fn.isdirectory(self.file) == 1 then
       dev, _ = self.options.symbols.directory, nil
+    elseif require('nvim-web-devicons').get_icon_by_filetype(vim.bo.filetype) then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype(vim.bo.filetype)
     else
       dev, _ = require('nvim-web-devicons').get_icon(self.file, vim.fn.expand('#' .. self.bufnr .. ':e'))
     end

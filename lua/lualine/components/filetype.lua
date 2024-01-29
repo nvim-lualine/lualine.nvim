@@ -31,9 +31,9 @@ function M:apply_icon()
   local icon, icon_highlight_group
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if ok then
-    icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
+    icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
     if icon == nil then
-      icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
+      icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
     end
 
     if icon == nil and icon_highlight_group == nil then
