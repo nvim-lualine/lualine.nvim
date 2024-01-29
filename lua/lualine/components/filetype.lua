@@ -29,11 +29,14 @@ function M:apply_icon()
   end
 
   local icon, icon_highlight_group
+  local iconft, icon_highlight_groupft
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if ok then
-    icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
-    if icon == nil then
-      icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
+    icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
+    iconft, icon_highlight_groupft = devicons.get_icon_by_filetype(vim.bo.filetype)
+    if iconft ~= nil then
+      icon = iconft
+      icon_highlight_group = icon_highlight_groupft
     end
 
     if icon == nil and icon_highlight_group == nil then
