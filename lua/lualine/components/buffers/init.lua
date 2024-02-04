@@ -55,7 +55,7 @@ function M:init(options)
       and function()
         return get_hl('lualine_' .. options.self.section, true)
       end
-    or get_hl('lualine_' .. options.self.section, true)
+      or get_hl('lualine_' .. options.self.section, true)
   default_options.buffers_color = {
     active = default_active,
     inactive = get_hl('lualine_' .. options.self.section, false),
@@ -127,11 +127,6 @@ function M:update_status()
     max_length = math.floor(2 * vim.o.columns / 3)
   end
   local total_length
-  for i, buffer in pairs(buffers) do
-    if buffer.current then
-      current = i
-    end
-  end
   -- start drawing from current buffer and draw left and right of it until
   -- all buffers are drawn or max_length has been reached.
   if current == -2 then
