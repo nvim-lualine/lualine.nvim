@@ -5,10 +5,12 @@ works with both https://github.com/junegunn/fzf.vim and https://github.com/ibhag
 -- fzf-lua must be set-up in split mode
 ]]
 
-local fzf_lua, _ = pcall(require, 'fzf-lua')
+local function has_fzf()
+  return pcall(require, 'fzf-lua')
+end
 
 local function fzf_picker()
-  if not fzf_lua then
+  if not has_fzf() then
     return ''
   end
 
@@ -17,7 +19,7 @@ local function fzf_picker()
 end
 
 local function fzf_element()
-  if not fzf_lua then
+  if not has_fzf() then
     return ''
   end
 
