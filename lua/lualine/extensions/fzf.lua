@@ -21,12 +21,9 @@ local function fzf_element()
     return ''
   end
 
-  local info_string = vim.inspect(require('fzf-lua').get_info()['selected'])
-  local lines = {}
-  for w in info_string:gsub('"', ''):gmatch('%S+') do
-    table.insert(lines, w)
-  end
-  return lines[1]
+  local fzf = require('fzf-lua')
+  local selected = fzf.get_info().selected
+  return fzf.path.entry_to_file(selected).path
 end
 
 local function fzf_statusline()
