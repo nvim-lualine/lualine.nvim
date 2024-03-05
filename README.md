@@ -670,6 +670,26 @@ sections = {
 }
 ```
 
+#### selectioncount component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'selectioncount',
+      format = {
+        -- `%b`: bytes, `%c`: chars, `%l`: lines
+        single_line_no_multibyte = '[%c]',
+        single_line_multibyte = '[%c-%b]',
+        multi_line_no_multibyte = '[%c / %l]',
+        multi_line_multibyte = '[%c-%b / %l]',
+        visual_block_mode = '[%cx%l]',
+      }
+    }
+  }
+}
+```
+
 #### searchcount component options
 
 ```lua
