@@ -687,6 +687,27 @@ describe('Filename component', function()
     vim.fn.winwidth:revert()
     vim.fn.expand:revert()
   end)
+
+  it('shortens path with %', function()
+    stub(vim.fn, 'expand')
+    vim.fn.expand.on_call_with('%:p').returns('%dir1/%dir2/%actual_%file')
+    stub(vim.fn, 'winwidth')
+    vim.fn.winwidth.on_call_with(0).returns(100)
+
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      file_status = false,
+      path = 2,
+      shorting_target = 90,
+    }
+    vim.cmd(':e test-file.txt')
+    assert_component('filename', opts, '%%/%%/%%actual_%%file')
+
+    vim.cmd(':bdelete!')
+    vim.fn.winwidth:revert()
+    vim.fn.expand:revert()
+  end)
 end)
 
 describe('vim option & variable component', function()

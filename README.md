@@ -11,7 +11,7 @@ A blazing fast and easy to configure Neovim statusline written in Lua.
 
 `lualine.nvim` requires Neovim >= 0.7.
 
-For previous versoins of neovim please use compatability tags for example
+For previous versions of neovim please use compatability tags for example
 compat-nvim-0.5
 
 ## Contributing
@@ -85,6 +85,15 @@ Plug 'nvim-tree/nvim-web-devicons'
 use {
   'nvim-lualine/lualine.nvim',
   requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+}
+```
+
+### [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+{
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
 }
 ```
 
@@ -937,6 +946,7 @@ extensions = {'quickfix'}
 - nerdtree
 - nvim-dap-ui
 - nvim-tree
+- oil
 - overseer
 - quickfix
 - symbols-outline
