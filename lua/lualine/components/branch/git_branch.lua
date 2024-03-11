@@ -76,6 +76,12 @@ function M.find_git_dir(dir_path)
 
   -- get file dir so we can search from that dir
   local file_dir = dir_path or vim.fn.expand('%:p:h')
+
+  -- extract correct file dir from terminals
+  if file_dir and file_dir:match('term://.*') then
+    file_dir = vim.fn.expand(file_dir:gsub('term://(.+)//.+', "%1"))
+  end
+
   local root_dir = file_dir
   -- Search upward for .git file or folder
   while root_dir do
