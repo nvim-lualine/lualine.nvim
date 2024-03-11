@@ -79,7 +79,7 @@ function M.find_git_dir(dir_path)
 
   -- extract correct file dir from terminals
   if file_dir and file_dir:match('term://.*') then
-    file_dir = vim.fn.expand(file_dir:gsub('term://(.+)//.+', "%1"))
+    file_dir = vim.fn.expand(file_dir:gsub('term://(.+)//.+', '%1'))
   end
 
   local root_dir = file_dir
