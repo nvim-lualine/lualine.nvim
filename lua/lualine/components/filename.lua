@@ -87,8 +87,6 @@ M.update_status = function(self)
     data = vim.fn.expand('%:t')
   end
 
-  data = modules.utils.stl_escape(data)
-
   if data == '' then
     data = self.options.symbols.unnamed
   end
@@ -103,6 +101,8 @@ M.update_status = function(self)
 
     data = shorten_path(data, path_separator, estimated_space_available)
   end
+
+  data = modules.utils.stl_escape(data)
 
   local symbols = {}
   if self.options.file_status then

@@ -6,7 +6,7 @@
 local colors = {
   color2   = '#161821',
   color3   = '#b4be82',
-  color4   = '#6b7089',
+  color4   = '#c6c8d1',
   color5   = '#2e313f',
   color8   = '#e2a478',
   color9   = '#3e445e',
@@ -26,14 +26,14 @@ return {
     b = { fg = colors.color4, bg = colors.color5 },
   },
   inactive = {
-    c = { fg = colors.color9, bg = colors.color10 },
     a = { fg = colors.color9, bg = colors.color10, gui = 'bold' },
     b = { fg = colors.color9, bg = colors.color10 },
+    c = { fg = colors.color9, bg = colors.color10 },
   },
   normal = {
-    c = { fg = colors.color9, bg = colors.color10 },
     a = { fg = colors.color11, bg = colors.color12, gui = 'bold' },
     b = { fg = colors.color4, bg = colors.color5 },
+    c = { fg = colors.color4, bg = colors.color10 },
   },
   insert = {
     a = { fg = colors.color2, bg = colors.color15, gui = 'bold' },
