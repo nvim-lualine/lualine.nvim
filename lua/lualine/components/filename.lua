@@ -16,6 +16,7 @@ local default_options = {
   file_status = true,
   newfile_status = false,
   path = 0,
+  custom_shortener = nil,
   shorting_target = 40,
 }
 
@@ -90,6 +91,10 @@ M.update_status = function(self)
 
   if data == '' then
     data = self.options.symbols.unnamed
+  end
+
+  if self.options.custom_shortener then
+    data = self.options.custom_shortener(data, path_separator)
   end
 
   if self.options.shorting_target ~= 0 then
