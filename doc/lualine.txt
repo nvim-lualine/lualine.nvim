@@ -667,7 +667,6 @@ Component specific options             These are options that are available on
                                    -- 3: Absolute path, with tilde as the home directory
                                    -- 4: Filename and parent dir, with tilde as the home directory
     
-	  custom_shortener = nil   -- hook enabling custom post-processes path
           shorting_target = 40,    -- Shortens path to leave 40 spaces in the window
                                    -- for other components. (terrible name, any suggestions?)
           symbols = {
