@@ -97,16 +97,32 @@ end
 ---@return string
 function Tab:render()
   local name = self:label()
-  if self.options.tab_max_length ~= 0 then
-    local path_separator = package.config:sub(1, 1)
-    name = shorten_path(name, path_separator, self.options.tab_max_length)
-  end
+  local tab_highlight = modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')])
   if self.options.fmt then
     name = self.options.fmt(name or '', self)
   end
   if self.ellipse then -- show ellipsis
     name = '...'
+  elseif type(name) == "table" then
+    local fmt_name = name
+    name = ""
+    self.len = 0
+
+    for _, hl_name in ipairs(fmt_name) do
+      local text = hl_name.text or ""
+      local highlight = hl_name.highlight or ""
+
+      name = name .. highlight .. text .. tab_highlight
+      self.len = self.len + vim.fn.strchars(text)
+    end
+
+    name = Tab.apply_padding(name, self.options.padding)
   else
+    if self.options.tab_max_length ~= 0 then
+      local path_separator = package.config:sub(1, 1)
+      name = shorten_path(name, path_separator, self.options.tab_max_length)
+    end
+
     -- different formats for different modes
     if self.options.mode == 0 then
       name = tostring(self.tabnr)
@@ -117,18 +133,18 @@ function Tab:render()
       if self.modified_icon ~= '' then
         name = string.format('%s %s', self.modified_icon, name)
       end
-    else
+    elseif self.options.mode == 2 then
       name = string.format('%s%s %s', tostring(self.tabnr), self.modified_icon, name)
     end
-  end
 
-  name = Tab.apply_padding(name, self.options.padding)
-  self.len = vim.fn.strchars(name)
+    name = Tab.apply_padding(name, self.options.padding)
+    self.len = vim.fn.strchars(name)
+  end
 
   -- setup for mouse clicks
   local line = string.format('%%%s@LualineSwitchTab@%s%%T', self.tabnr, name)
   -- apply highlight
-  line = modules.highlight.component_format_highlight(self.highlights[(self.current and 'active' or 'inactive')])
+  line = tab_highlight
     .. line
 
   -- apply separators
