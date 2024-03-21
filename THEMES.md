@@ -351,6 +351,15 @@ pywal is another special theme. It will load the colors from your current [pywal
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649321-6067fa00-74bd-11eb-83bb-b1de7f5e62d6.png'/>
 </p>
 
+### wano
+
+<p>
+<img width='700' src='https://github-production-user-asset-6210df.s3.amazonaws.com/3690421/282333407-7170e963-03c3-4192-8300-626b06d1f30f.png'/>
+<img width='700' src='https://github-production-user-asset-6210df.s3.amazonaws.com/3690421/282333440-76e933c3-cf78-4617-91e2-541ef2424476.png'/>
+<img width='700' src='https://github-production-user-asset-6210df.s3.amazonaws.com/3690421/282333486-ad623ea3-3e8c-4dea-b148-4794c040ee7d.png'/>
+<img width='700' src='https://github-production-user-asset-6210df.s3.amazonaws.com/3690421/282333521-594b8964-cfc4-4a86-8a7f-81c7a5c0a274.png'/>
+</p>
+
 ### wombat
 
 <p>
