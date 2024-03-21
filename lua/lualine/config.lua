@@ -24,6 +24,7 @@ local config = {
       tabline = 1000,
       winbar = 1000,
     },
+    tabline_always_visible = true,
   },
   sections = {
     lualine_a = { 'mode' },
