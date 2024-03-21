@@ -64,6 +64,15 @@ The following example is using the `tomorrow-night` colorscheme:
 <img width='700' src='https://user-images.githubusercontent.com/11501572/156889566-17066e95-7f85-4bfd-8178-c4a34beab453.png'/>
 </p>
 
+### blue-moon
+
+<p>
+<img width='700' src='https://github.com/nvim-lualine/lualine.nvim/assets/4434640/72c0d20e-c6b6-4f9c-816a-f35231db4a8f'/>
+<img width='700' src='https://github.com/nvim-lualine/lualine.nvim/assets/4434640/a527eea6-e068-449e-abbd-c4e10282b714'/>
+<img width='700' src='https://github.com/nvim-lualine/lualine.nvim/assets/4434640/984cb5bb-d697-4da4-96d5-defa9bdf705b'/>
+<img width='700' src='https://github.com/nvim-lualine/lualine.nvim/assets/4434640/ad38b628-bf97-4446-a2ed-edece2286a96'/>
+</p>
+
 ### codedark
 
 <p>
