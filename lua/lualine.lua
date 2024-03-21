@@ -196,14 +196,19 @@ end)
 -- TODO: change this so it uses a hash table instead of iteration over list
 --       to improve redraws. Add buftype / bufname for extensions
 --       or some kind of cond ?
-local function get_extension_sections(current_ft, is_focused, sec_name)
-  for _, extension in ipairs(config.extensions) do
-    if vim.tbl_contains(extension.filetypes, current_ft) then
+local function get_extension_sections(current_bt, current_ft, is_focused, sec_name)
+  local _get_sections = function(extension)
       if is_focused then
         return extension[sec_name]
       else
         return extension['inactive_' .. sec_name] or extension[sec_name]
       end
+  end
+  for _, extension in ipairs(config.extensions) do
+    if extension.filetypes and vim.tbl_contains(extension.filetypes, current_ft) then
+      return _get_sections(extension)
+    elseif extension.buftypes and vim.tbl_contains(extension.buftypes, current_bt) then
+      return _get_sections(extension)
     end
   end
   return nil
@@ -281,6 +286,8 @@ local function status_dispatch(sec_name)
     local current_ft = refresh_real_curwin
         and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(refresh_real_curwin), 'filetype')
       or vim.bo.filetype
+    local current_bt = refresh_real_curwin and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(refresh_real_curwin), 'buftype')
+      or vim.bo.buftype
     local is_focused = focused ~= nil and focused or modules.utils.is_focused()
     if
       vim.tbl_contains(
@@ -291,7 +298,7 @@ local function status_dispatch(sec_name)
       -- disable on specific filetypes
       return nil
     end
-    local extension_sections = get_extension_sections(current_ft, is_focused, sec_name)
+    local extension_sections = get_extension_sections(current_bt, current_ft, is_focused, sec_name)
     if extension_sections ~= nil then
       retval = statusline(extension_sections, is_focused, sec_name == 'winbar')
     else
