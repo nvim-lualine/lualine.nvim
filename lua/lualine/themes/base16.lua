@@ -89,4 +89,22 @@ local function setup_base16()
   }
 end
 
-return setup_base16() or setup_default()
+local function setup_base16_vim()
+  if not vim.g.base16_gui00 then
+    return nil
+  end
+
+  return setup {
+    bg = vim.g.base16_gui01,
+    alt_bg = vim.g.base16_gui02,
+    dark_fg = vim.g.base16_gui03,
+    fg = vim.g.base16_gui04,
+    light_fg = vim.g.base16_gui05,
+    normal = vim.g.base16_gui0D,
+    insert = vim.g.base16_gui0B,
+    visual = vim.g.base16_gui0E,
+    replace = vim.g.base16_gui09,
+  }
+end
+
+return setup_base16_vim() or setup_base16() or setup_default()
