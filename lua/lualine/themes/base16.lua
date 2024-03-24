@@ -36,45 +36,38 @@ local function setup(colors)
   return theme
 end
 
-local function setup_default()
-  return setup {
-    bg = '#282a2e',
-    alt_bg = '#373b41',
-    dark_fg = '#969896',
-    fg = '#b4b7b4',
-    light_fg = '#c5c8c6',
-    normal = '#81a2be',
-    insert = '#b5bd68',
-    visual = '#b294bb',
-    replace = '#de935f',
-  }
-end
-
 local function setup_base16()
   local loaded, base16 = pcall(require, 'base16-colorscheme')
 
   if not loaded then
     add_notice(
-      'nvim-base16 is not currently present in your runtimepath, make sure it is properly installed,'
-        .. ' fallback to default colors.'
+      'nvim-base16 is not currently present in your runtimepath. If this is unintended, make sure it is properly installed.'
     )
 
-    return nil
+    error('nvim-base16 is not currently present in your runtimepath, make sure it is properly installed.')
   end
 
   if not base16.colors and not vim.env.BASE16_THEME then
     add_notice(
       'nvim-base16 is not loaded yet, you should update your configuration to load it before lualine'
-        .. ' so that the colors from your colorscheme can be used, fallback to "tomorrow-night" theme.'
+        .. ' so that the colors from your colorscheme can be used.'
+    )
+
+    error(
+      'nvim-base16 is not loaded yet, you should update your configuration to load it before lualine'
+        .. ' so that the colors from your colorscheme can be used.'
     )
   elseif not base16.colors and not base16.colorschemes[vim.env.BASE16_THEME] then
     add_notice(
-      'The colorscheme "%s" defined by the environment variable "BASE16_THEME" is not handled by'
-        .. ' nvim-base16, fallback to "tomorrow-night" theme.'
+      'The colorscheme "%s" defined by the environment variable "BASE16_THEME" is not handled by' .. ' nvim-base16.'
+    )
+
+    error(
+      'The colorscheme "%s" defined by the environment variable "BASE16_THEME" is not handled by' .. ' nvim-base16.'
     )
   end
 
-  local colors = base16.colors or base16.colorschemes[vim.env.BASE16_THEME or 'tomorrow-night']
+  local colors = base16.colors or base16.colorschemes[vim.env.BASE16_THEME]
 
   return setup {
     bg = colors.base01,
@@ -89,4 +82,4 @@ local function setup_base16()
   }
 end
 
-return setup_base16() or setup_default()
+return setup_base16()
