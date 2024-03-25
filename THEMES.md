@@ -6,7 +6,7 @@ All available themes are only best effort ports by myself/ other users. If you f
 
 auto is a special theme. It will automatically load theme for your colorscheme.
 If there's no theme available for your colorscheme then
-it'll try it's best to generate one.
+it'll try its best to generate one.
 
 ### 16color
 
