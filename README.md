@@ -733,6 +733,75 @@ sections = {
 }
 ```
 
+#### whitespace component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'whitespace',
+      symbols = {
+        trailing = 'trailing whitespace: ',
+        long_line = 'long line: ',
+        mixed_indent = 'mixed indent: ',
+        mixed_indent_file = 'mixed-indent file: ',
+        merge_conflict = 'merge conflict: ',
+
+        separator = ' - ', -- The separator between checks.
+      },
+
+      checks = {
+        trailing = true,          -- Whether some lines have trailing
+                                  -- whitespace.
+
+        long_line = true,         -- Whether some lines are longer than
+                                  -- &textwidth.
+
+        mixed_indent = true,      -- Whether some lines have mixed indent.
+
+        mixed_indent_file = true, -- Whether the file contains indentation that
+                                  -- doesn't match the value of expandtab.
+
+        merge_conflict = true,    -- Whether the file contains git merge
+                                  -- conflict markers.
+      }, -- Which checks to enable.
+
+      ft_checks = {
+        make = { mixed_indent = false, mixed_indent_file = false },
+        csv = { mixed_indent = false, mixed_indent_file = false },
+        mail = { trailing = false },
+      }, -- Per-filetype override for checks.
+
+      max_lines = 20000, -- Line count threshold to disable all checks.
+      timeout = 500,     -- Time before a check gives up, in milliseconds.
+
+      mixed_indent_mode = 0, -- 0: Strict (no mixed indent allowed).
+                             -- 1: Allow less than &tabstop spaces after tabs.
+                             --    This allows for comments in the form:
+                             --    /*
+                             --     *
+                             --     */
+                             -- 2: Allow spaces after tabs.
+                             --    This is for styles that use tabs for
+                             --    indentation, and spaces for alignment.
+
+      c_like_langs = {
+        'arduino',
+        'c',
+        'cpp',
+        'cuda',
+        'go',
+        'javascript',
+        'ld',
+        'php',
+      }, -- Filetypes for which the mixed-indent file check allows lines that
+         -- start with spaces before a *.
+         -- This is for /* */ comments as above.
+    }
+  }
+}
+```
+
 #### windows component options
 
 ```lua
