@@ -54,7 +54,7 @@ But if `g:ayuprefermirage` exists, it will load ayu_mirage instead when
 
 ### base16
 
-This theme will automatically use colors defined by your colorscheme using [RRethy/nvim-base16](https://github.com/RRethy/nvim-base16)] plugin.
+This theme will automatically use colors defined by your colorscheme using [tinted-theming/base16-vim](https://github.com/tinted-theming/base16-vim) or [RRethy/nvim-base16](https://github.com/RRethy/nvim-base16)] plugin.
 The following example is using the `tomorrow-night` colorscheme:
 
 <p>

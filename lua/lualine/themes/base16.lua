@@ -50,7 +50,8 @@ local function setup_default()
   }
 end
 
-local function setup_base16()
+local function setup_base16_nvim()
+  -- Continue to load nvim-base16
   local loaded, base16 = pcall(require, 'base16-colorscheme')
 
   if not loaded then
@@ -89,4 +90,23 @@ local function setup_base16()
   }
 end
 
-return setup_base16() or setup_default()
+local function setup_base16_vim()
+  -- Check if tinted-theming/base16-vim is already loaded
+  if vim.g.base16_gui00 and vim.g.base16_gui0F then
+    return setup {
+      bg = vim.g.base16_gui01,
+      alt_bg = vim.g.base16_gui02,
+      dark_fg = vim.g.base16_gui03,
+      fg = vim.g.base16_gui04,
+      light_fg = vim.g.base16_gui05,
+      normal = vim.g.base16_gui0D,
+      insert = vim.g.base16_gui0B,
+      visual = vim.g.base16_gui0E,
+      replace = vim.g.base16_gui09,
+    }
+  end
+
+  return nil
+end
+
+return setup_base16_vim() or setup_base16_nvim() or setup_default()
