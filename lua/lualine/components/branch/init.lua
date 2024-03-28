@@ -11,7 +11,7 @@ local modules = require('lualine_require').lazy_require {
 M.init = function(self, options)
   M.super.init(self, options)
   if not self.options.icon then
-    self.options.icon = '' -- e0a0
+    self.options.icon = '' -- f126
   end
   modules.git_branch.init()
 end
