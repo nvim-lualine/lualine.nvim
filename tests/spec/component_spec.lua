@@ -323,7 +323,7 @@ describe('Filetype component', function()
       colored = true,
       icon_only = false,
     }
-    assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# lua%#lualine_c_normal#')
+    assert_component('filetype', opts, '%#MyCompHl_normal#* %#lualine_c_normal#lua%#lualine_c_normal#')
     assert.stub(devicons.get_icon).was_called_with('test.lua')
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
     assert.stub(hl.create_component_highlight_group).was_called_with(
@@ -393,7 +393,7 @@ describe('Filetype component', function()
       colored = false,
       icon_only = true,
     }
-    assert_component('filetype', opts, '*')
+    assert_component('filetype', opts, '* ')
     assert.stub(devicons.get_icon).was_called_with('test.lua')
     assert.stub(utils.extract_highlight_colors).was_not_called()
     assert.stub(hl.create_component_highlight_group).was_not_called()
@@ -426,7 +426,7 @@ describe('Filetype component', function()
       icon_only = false,
       icon = { align = 'right' }
     }
-    assert_component('filetype', opts, 'lua *')
+    assert_component('filetype', opts, 'lua * ')
     assert.stub(devicons.get_icon).was_called_with('test.lua')
     assert.stub(utils.extract_highlight_colors).was_not_called()
     assert.stub(hl.create_component_highlight_group).was_not_called()
