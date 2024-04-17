@@ -323,7 +323,7 @@ describe('Filetype component', function()
       colored = true,
       icon_only = false,
     }
-    assert_component('filetype', opts, '%#MyCompHl_normal#*%#lualine_c_normal# lua%#lualine_c_normal#')
+    assert_component('filetype', opts, '%#MyCompHl_normal#* %#lualine_c_normal#lua%#lualine_c_normal#')
     assert.stub(devicons.get_icon).was_called_with('test.lua')
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
     assert.stub(hl.create_component_highlight_group).was_called_with(
@@ -393,7 +393,7 @@ describe('Filetype component', function()
       colored = false,
       icon_only = true,
     }
-    assert_component('filetype', opts, '*')
+    assert_component('filetype', opts, '* ')
     assert.stub(devicons.get_icon).was_called_with('test.lua')
     assert.stub(utils.extract_highlight_colors).was_not_called()
     assert.stub(hl.create_component_highlight_group).was_not_called()
@@ -426,7 +426,7 @@ describe('Filetype component', function()
       icon_only = false,
       icon = { align = 'right' }
     }
-    assert_component('filetype', opts, 'lua *')
+    assert_component('filetype', opts, 'lua * ')
     assert.stub(devicons.get_icon).was_called_with('test.lua')
     assert.stub(utils.extract_highlight_colors).was_not_called()
     assert.stub(hl.create_component_highlight_group).was_not_called()
@@ -682,6 +682,27 @@ describe('Filename component', function()
     }
     vim.cmd(':e test-file.txt')
     assert_component('filename', opts, '/h/f/.t/test.lua')
+
+    vim.cmd(':bdelete!')
+    vim.fn.winwidth:revert()
+    vim.fn.expand:revert()
+  end)
+
+  it('shortens path with %', function()
+    stub(vim.fn, 'expand')
+    vim.fn.expand.on_call_with('%:p').returns('%dir1/%dir2/%actual_%file')
+    stub(vim.fn, 'winwidth')
+    vim.fn.winwidth.on_call_with(0).returns(100)
+
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      file_status = false,
+      path = 2,
+      shorting_target = 90,
+    }
+    vim.cmd(':e test-file.txt')
+    assert_component('filename', opts, '%%/%%/%%actual_%%file')
 
     vim.cmd(':bdelete!')
     vim.fn.winwidth:revert()

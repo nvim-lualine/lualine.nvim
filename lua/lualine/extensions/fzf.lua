@@ -5,10 +5,12 @@ works with both https://github.com/junegunn/fzf.vim and https://github.com/ibhag
 -- fzf-lua must be set-up in split mode
 ]]
 
-local fzf_lua, _ = pcall(require, 'fzf-lua')
+local function has_fzf()
+  return pcall(require, 'fzf-lua')
+end
 
 local function fzf_picker()
-  if not fzf_lua then
+  if not has_fzf() then
     return ''
   end
 
@@ -17,16 +19,13 @@ local function fzf_picker()
 end
 
 local function fzf_element()
-  if not fzf_lua then
+  if not has_fzf() then
     return ''
   end
 
-  local info_string = vim.inspect(require('fzf-lua').get_info()['selected'])
-  local lines = {}
-  for w in info_string:gsub('"', ''):gmatch('%S+') do
-    table.insert(lines, w)
-  end
-  return lines[1]
+  local fzf = require('fzf-lua')
+  local selected = fzf.get_info().selected
+  return fzf.path.entry_to_file(selected).path
 end
 
 local function fzf_statusline()

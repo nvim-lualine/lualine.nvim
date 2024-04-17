@@ -78,6 +78,19 @@ local function sanitize_color(color)
   end
 end
 
+---converts color_name type colors to cterm format and let cterm color pass through
+---@param color string|number
+---@return string
+local function sanitize_color_for_cterm(color)
+  if type(color) == 'number' then
+    if color > 255 then
+      error("What's this it can't be higher then 255 and you've given " .. color)
+    end
+    return color
+  end
+  return modules.color_utils.rgb2cterm(sanitize_color(color))
+end
+
 function M.get_lualine_hl(name)
   local hl = loaded_highlights[name]
   if hl and not hl.empty then
@@ -115,24 +128,25 @@ function M.highlight(name, foreground, background, gui, link)
     end
     vim.list_extend(command, { 'link', name, link })
   else
-    foreground = sanitize_color(foreground)
-    background = sanitize_color(background)
+    local foreground_rgb = sanitize_color(foreground)
+    local background_rgb = sanitize_color(background)
     gui = (gui ~= nil and gui ~= '') and gui or 'None'
     if
       loaded_highlights[name]
-      and loaded_highlights[name].fg == foreground
-      and loaded_highlights[name].bg == background
+      and loaded_highlights[name].fg == foreground_rgb
+      and loaded_highlights[name].bg == background_rgb
       and loaded_highlights[name].gui == gui
     then
       return -- color is already defined why are we doing this anyway ?
     end
     table.insert(command, name)
-    table.insert(command, 'guifg=' .. foreground)
-    table.insert(command, 'guibg=' .. background)
+    table.insert(command, 'guifg=' .. foreground_rgb)
+    table.insert(command, 'guibg=' .. background_rgb)
     table.insert(command, 'gui=' .. gui)
     if create_cterm_colors then
-      table.insert(command, 'ctermfg=' .. modules.color_utils.rgb2cterm(foreground))
-      table.insert(command, 'ctermbg=' .. modules.color_utils.rgb2cterm(background))
+      -- Not setting color from xxxground_rgb to let possible user 256 number through
+      table.insert(command, 'ctermfg=' .. sanitize_color_for_cterm(foreground))
+      table.insert(command, 'ctermbg=' .. sanitize_color_for_cterm(background))
       table.insert(command, 'cterm=' .. gui)
     end
   end

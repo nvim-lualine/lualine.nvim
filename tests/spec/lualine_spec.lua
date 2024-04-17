@@ -732,7 +732,7 @@ describe('Lualine', function()
             3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
             4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
         }
-        |{1:  a.txt }
+        |{1: 󰈙 a.txt }
         {2:}
         {3: ... }
         {4:                                                                                                         }|
