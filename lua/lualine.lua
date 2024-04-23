@@ -479,7 +479,11 @@ local function set_tabline(hide)
       "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['tabline'], 'trigger': 'autocmd'})",
       'lualine_tal_refresh'
     )
-    modules.nvim_opts.set('showtabline', 2, { global = true })
+    if config.options.tabline_always_visible then
+      modules.nvim_opts.set('showtabline', 2, { global = true })
+    else
+      modules.nvim_opts.set('showtabline', 1, { global = true })
+    end
     timers.halt_tal_refresh = false
   else
     modules.nvim_opts.restore('tabline', { global = true })
