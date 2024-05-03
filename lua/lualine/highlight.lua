@@ -73,6 +73,8 @@ local function sanitize_color(color)
       error("What's this it can't be higher then 255 and you've given " .. color)
     end
     return modules.color_utils.cterm2rgb(color)
+  elseif type(color) == 'function' then
+    return sanitize_color(color())
   end
 end
 
