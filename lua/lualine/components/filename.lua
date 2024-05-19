@@ -69,21 +69,56 @@ end
 M.update_status = function(self)
   local path_separator = package.config:sub(1, 1)
   local data
+
+  local oil_ok, oil = pcall(require, 'oil')
+  local oil_enabled = oil_ok and vim.bo.filetype == 'oil'
+
+  local function oil_format(arg)
+    return vim.fn.fnamemodify(oil.get_current_dir(), arg)
+  end
+
   if self.options.path == 1 then
     -- relative path
-    data = vim.fn.expand('%:~:.')
+    local arg = ':~:.'
+    data = vim.fn.expand('%' .. arg)
+
+    if oil_enabled then
+      data = oil_format(arg)
+    end
   elseif self.options.path == 2 then
     -- absolute path
-    data = vim.fn.expand('%:p')
+    local arg = ':p'
+    data = vim.fn.expand('%' .. arg)
+
+    if oil_enabled then
+      data = oil_format(arg)
+    end
   elseif self.options.path == 3 then
     -- absolute path, with tilde
-    data = vim.fn.expand('%:p:~')
+    local arg = ':p:~'
+    data = vim.fn.expand('%' .. arg)
+
+    if oil_enabled then
+      data = oil_format(arg)
+    end
   elseif self.options.path == 4 then
     -- filename and immediate parent
-    data = filename_and_parent(vim.fn.expand('%:p:~'), path_separator)
+    local arg = ':p:~'
+    local path = vim.fn.expand('%' .. arg)
+
+    if oil_enabled then
+      path = oil_format(arg)
+    end
+
+    data = filename_and_parent(path, path_separator)
   else
     -- just filename
-    data = vim.fn.expand('%:t')
+    local arg = ':t'
+    data = vim.fn.expand('%' .. arg)
+
+    if oil_enabled then
+      data = oil_format(arg)
+    end
   end
 
   if data == '' then
