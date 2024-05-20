@@ -74,8 +74,13 @@ function M.find_git_dir(dir_path)
     return git_dir
   end
 
+  local oil_exists, oil = pcall(require, 'oil')
+
   -- get file dir so we can search from that dir
   local file_dir = dir_path or vim.fn.expand('%:p:h')
+  if vim.bo.filetype == 'oil' and oil_exists then
+    file_dir = vim.fn.fnamemodify(oil.get_current_dir(), ':p:h')
+  end
 
   -- extract correct file dir from terminals
   if file_dir and file_dir:match('term://.*') then
