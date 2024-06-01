@@ -1,4 +1,4 @@
-EXTENSION = {}
+local M = {}
 
 local function get_color_codes(name)
 	local hl = vim.api.nvim_get_hl(0, { name = name })
@@ -28,7 +28,7 @@ local function parse_control_element(element)
 	return color, "%" .. action_element
 end
 
-function EXTENSION.setup(config)
+function M.setup(config)
 	local dapui = {}
 	dapui.filetypes = {
 		"dap-repl",
@@ -94,4 +94,4 @@ function EXTENSION.setup(config)
 	return dapui
 end
 
-return EXTENSION
+return M
