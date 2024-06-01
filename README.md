@@ -928,16 +928,6 @@ extensions = {'quickfix'}
 - toggleterm
 - trouble
 
-#### nvim-dap-ui
-
-This Extension needs to be loaded with some arguments:
-```lua
-extensions = {require("lualine.extensions.nvim-dap-ui").setup({
-  active_separator = ">",
-  inactive_separator = "|",
-})}
-```
-
 #### Custom extensions
 
 You can define your own extensions. If you believe an extension may be useful to others, then please submit a PR.

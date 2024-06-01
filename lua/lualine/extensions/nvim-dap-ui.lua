@@ -1,97 +1,58 @@
 local M = {}
 
-local function get_color_codes(name)
-	local hl = vim.api.nvim_get_hl(0, { name = name })
-	local fg = string.format("#%06x", hl.fg and hl.fg or 0)
-	local bg = string.format("#%06x", hl.bg and hl.bg or 0)
-	return fg, bg
-end
+M.filetypes = {
+    "dap-repl",
+    "dapui_console",
+    "dapui_console",
+    "dapui_watches",
+    "dapui_stacks",
+    "dapui_breakpoints",
+    "dapui_scopes",
+}
 
 local function merge_colors(foreground, background)
-	local new_name = foreground .. background
-	local fg, _ = get_color_codes(foreground)
-	local _, bg = get_color_codes(background)
-	vim.api.nvim_set_hl(0, new_name, { fg = fg, bg = bg })
-	return string.format("%%#%s#", new_name)
-end
-local function inverse_color(name)
-	local fg, bg = get_color_codes(name)
-	local new_name = name .. "_inversed"
-	vim.api.nvim_set_hl(0, new_name, { fg = bg, bg = fg })
-	return string.format("%%#%s#", new_name)
-end
+    local new_name = foreground .. background
 
-local function parse_control_element(element)
-	local e = element:match("(.*)%%#0#$")
-	local color, action_element = e:match("^(.-)#%%(.+)$")
-	color = color:gsub("^%%#", "")
-	return color, "%" .. action_element
+    local hl_fg = vim.api.nvim_get_hl(0, { name = foreground })
+    local hl_bg = vim.api.nvim_get_hl(0, { name = background })
+
+    local fg = string.format("#%06x", hl_fg.fg and hl_fg.fg or 0)
+    local bg = string.format("#%06x", hl_bg.bg and hl_bg.bg or 0)
+
+    vim.api.nvim_set_hl(0, new_name, { fg = fg, bg = bg })
+    return new_name
 end
 
-function M.setup(config)
-	local dapui = {}
-	dapui.filetypes = {
-		"dap-repl",
-		"dapui_console",
-		"dapui_console",
-		"dapui_watches",
-		"dapui_stacks",
-		"dapui_breakpoints",
-		"dapui_scopes",
-	}
+local function get_dap_repl_winbar(active)
+    local get_mode = require("lualine.highlight").get_mode_suffix
 
-	local get_mode = require("lualine.highlight").get_mode_suffix
+    return function()
+        local filetype = vim.bo.filetype
+        local disabled_filetypes = { "dap-repl" }
 
-	local lualine_color = "lualine_a"
-	local lualine_inacitve = "_inactive"
-	local default_color = lualine_color .. lualine_inacitve
-	local color_start = "%#"
-	local color_end = "#"
+        if not vim.tbl_contains(disabled_filetypes, filetype) then
+            return ""
+        end
 
-	local function get_dap_repl_winbar(separator, active)
-		local background_color = string.format(lualine_color .. "%s", active and get_mode() or lualine_inacitve)
+        local background_color = string.format("lualine_b" .. "%s", active and get_mode() or "_inactive")
 
-		local controls_string = color_start .. default_color .. color_end .. " "
-		for control_element in require("dapui.controls").controls():gmatch("%S+") do
-			local color, action_element = parse_control_element(control_element)
-			local new_color = merge_colors(color, default_color)
-			local out = new_color .. action_element
-			controls_string = controls_string .. " " .. out
-		end
-		local separator_color = active and inverse_color(background_color) or color_start .. default_color .. color_end
-		return "DAP Repl " .. separator_color .. separator .. controls_string
-	end
-
-	local function get_dapui_winbar(separator, active)
-		local filetype = vim.bo.filetype
-		local disabled_filetypes = { "dap-repl" }
-		if vim.tbl_contains(disabled_filetypes, filetype) then
-			return get_dap_repl_winbar(separator, active)
-		else
-			return vim.fn.expand("%:t")
-		end
-	end
-
-	dapui.winbar = {
-		lualine_a = {
-			{
-				function()
-					return get_dapui_winbar(config.active_separator, true)
-				end,
-			},
-		},
-	}
-
-	dapui.inactive_winbar = {
-		lualine_a = {
-			{
-				function()
-					return get_dapui_winbar(config.inactive_separator, false)
-				end,
-			},
-		},
-	}
-	return dapui
+        local controls_string = "%#" .. background_color .. "#"
+        for element in require("dapui.controls").controls():gmatch("%S+") do
+            local color, action = string.match(element, "%%#(.*)#(%%.*)%%#0#")
+            controls_string = controls_string .. " %#" .. merge_colors(color, background_color) .. "#" .. action
+        end
+        return controls_string
+    end
 end
+
+M.winbar = {
+    lualine_a = { { "filename", file_status = false } },
+    lualine_b = { get_dap_repl_winbar(true) },
+}
+
+M.inactive_winbar = {
+    lualine_a = { { "filename", file_status = false } },
+    lualine_b = { get_dap_repl_winbar(false) },
+}
 
 return M
