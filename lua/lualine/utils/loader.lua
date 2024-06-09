@@ -229,7 +229,8 @@ local function load_theme(theme_name)
     -- put entries from user config path in front
     local user_config_path = vim.fn.stdpath('config')
     table.sort(files, function(a, b)
-      return vim.startswith(a, user_config_path) or not vim.startswith(b, user_config_path)
+      local pattern = table.concat { user_config_path, sep }
+      return string.match(a, pattern) or not string.match(b, pattern)
     end)
     -- More then 1 found . Use the first one that isn't in lualines repo
     local lualine_repo_pattern = table.concat({ 'lualine.nvim', 'lua', 'lualine' }, sep)
