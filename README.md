@@ -670,6 +670,20 @@ sections = {
 }
 ```
 
+#### location component options
+
+```lua
+sections = {
+  lualine_a {
+    {
+      'location',
+      format_string = '%3d:%-2d', -- string that contains two format specifiers
+                                  -- one for the line number, one for the column number
+    }
+  }
+}
+```
+
 #### searchcount component options
 
 ```lua
