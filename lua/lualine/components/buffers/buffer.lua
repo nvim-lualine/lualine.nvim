@@ -38,12 +38,94 @@ function Buffer:get_props()
     local status, _ = pcall(require, 'nvim-web-devicons')
     if not status then
       dev, _ = '', ''
+    elseif self.filetype == 'minideps-confirm' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('minideps-confirm')
+    elseif self.filetype == 'minifiles' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('minifiles')
+    elseif self.filetype == 'minifiles-help' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('minifiles-help')
+    elseif self.filetype == 'mininotify' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('mininotify')
+    elseif self.filetype == 'mininotify-history' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('mininotify-history')
+    elseif self.filetype == 'minipick' then
+      require('nvim-web-devicons').get_icon_by_filetype('minipick')
+    elseif self.filetype == 'ministarter' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('ministarter')
+    elseif self.filetype == 'neogitcommitselectview' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitcommitselectview')
+    elseif self.filetype == 'neogitcommitview' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitcommitview')
+    elseif self.filetype == 'neogitconsole' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitconsole')
+    elseif self.filetype == 'neogitdiffview' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitdiffview')
+    elseif self.filetype == 'neogitgitcommandhistory' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitgitcommandhistory')
+    elseif self.filetype == 'neogitlogview' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitlogview')
+    elseif self.filetype == 'neogitpopup' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitpopup')
+    elseif self.filetype == 'neogitrebasetodo' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitrebasetodo')
+    elseif self.filetype == 'neogitreflogview' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitreflogview')
+    elseif self.filetype == 'neogitrefsview' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitrefsview')
+    elseif self.filetype == 'neogitstatus' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neogitstatus')
+    elseif self.filetype == 'nvimtree' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('nvimtree')
+    elseif self.filetype == 'overseerform' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('overseerform')
+    elseif self.filetype == 'overseerlist' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('overseerlist')
+    elseif self.filetype == 'trouble' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('trouble')
+    elseif self.filetype == 'aerial' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('aerial')
+    elseif self.filetype == 'alpha' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('alpha')
+    elseif self.filetype == 'dapui_breakpoints' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('dapui_breakpoints')
+    elseif self.filetype == 'dapui_console' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('dapui_console')
+    elseif self.filetype == 'dapui_hover' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('dapui_hover')
+    elseif self.filetype == 'dapui_scopes' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('dapui_scopes')
+    elseif self.filetype == 'dapui_stacks' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('dapui_stacks')
+    elseif self.filetype == 'dapui_watches' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('dapui_watches')
+    elseif self.filetype == 'dashboard' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('dashboard')
+    elseif self.filetype == 'edgy' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('edgy')
+    elseif self.filetype == 'fzf' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('fzf')
+    elseif self.filetype == 'harpoon' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('harpoon')
+    elseif self.filetype == 'lazy' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('lazy')
+    elseif self.filetype == 'mason' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('mason')
+    elseif self.filetype == 'neo-tree' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neo-tree')
+    elseif self.filetype == 'neo-tree-popup' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neo-tree-popup')
+    elseif self.filetype == 'neotest-output-panel' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neotest-output-panel')
+    elseif self.filetype == 'neotest-summary' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('neotest-summary')
+    elseif self.filetype == 'oil' then
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('oil')
     elseif self.filetype == 'TelescopePrompt' then
-      dev, _ = require('nvim-web-devicons').get_icon('telescope')
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('TelescopePrompt')
     elseif self.filetype == 'fugitive' then
-      dev, _ = require('nvim-web-devicons').get_icon('git')
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('git')
     elseif self.filetype == 'vimwiki' then
-      dev, _ = require('nvim-web-devicons').get_icon('markdown')
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype('markdown')
     elseif self.buftype == 'terminal' then
       dev, _ = require('nvim-web-devicons').get_icon('zsh')
     elseif vim.fn.isdirectory(self.file) == 1 then
