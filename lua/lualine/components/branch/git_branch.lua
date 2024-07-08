@@ -81,7 +81,7 @@ function M.find_git_dir(dir_path)
   if oil_exists then
     local ok, dir = pcall(oil.get_current_dir)
     if ok and dir and dir ~= '' then
-      file_dir = vim.fn.fnamemodify(dir, ":p:h")
+      file_dir = vim.fn.fnamemodify(dir, ':p:h')
     end
   end
 
