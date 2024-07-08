@@ -33,8 +33,19 @@ M.sources = {
       workspace_diag(diag_severity.HINT)
   end,
   nvim_diagnostic = function()
+    local count
+
+    if vim.diagnostic.count ~= nil then -- neovim >= 0.10.0
+      count = vim.diagnostic.count(0)
+      return count[vim.diagnostic.severity.ERROR] or 0,
+        count[vim.diagnostic.severity.WARN] or 0,
+        count[vim.diagnostic.severity.INFO] or 0,
+        count[vim.diagnostic.severity.HINT] or 0
+    end
+
+    -- fallback
     local diagnostics = vim.diagnostic.get(0)
-    local count = { 0, 0, 0, 0 }
+    count = { 0, 0, 0, 0 }
     for _, diagnostic in ipairs(diagnostics) do
       count[diagnostic.severity] = count[diagnostic.severity] + 1
     end
