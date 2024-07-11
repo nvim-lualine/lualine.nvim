@@ -299,8 +299,6 @@ describe('Filetype component', function()
 
   it('colors nvim-web-devicons icons', function()
     vim.g.actual_curwin = tostring(vim.api.nvim_get_current_win())
-    stub(vim.fn, 'expand')
-    vim.fn.expand.on_call_with('%:t').returns('test.lua')
 
     local hl = require('lualine.highlight')
     stub(hl, 'create_component_highlight_group')
@@ -313,8 +311,8 @@ describe('Filetype component', function()
     utils.extract_highlight_colors.returns('#000')
 
     local devicons = require('nvim-web-devicons')
-    stub(devicons, 'get_icon')
-    devicons.get_icon.on_call_with('test.lua').returns('*', 'test_highlight_group')
+    stub(devicons, 'get_icon_by_filetype')
+    devicons.get_icon_by_filetype.on_call_with('lua').returns('*', 'test_highlight_group')
 
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
@@ -324,7 +322,7 @@ describe('Filetype component', function()
       icon_only = false,
     }
     assert_component('filetype', opts, '%#MyCompHl_normal#* %#lualine_c_normal#lua%#lualine_c_normal#')
-    assert.stub(devicons.get_icon).was_called_with('test.lua')
+    assert.stub(devicons.get_icon_by_filetype).was_called_with('lua')
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
     assert.stub(hl.create_component_highlight_group).was_called_with(
       { fg = '#000' },
@@ -332,20 +330,15 @@ describe('Filetype component', function()
       opts,
       false
     )
-    assert.stub(vim.fn.expand).was_called_with('%:t')
 
-    devicons.get_icon:revert()
+    devicons.get_icon_by_filetype:revert()
     utils.extract_highlight_colors:revert()
     hl.create_component_highlight_group:revert()
     hl.format_highlight:revert()
-    vim.fn.expand:revert()
     vim.g.actual_curwin = nil
   end)
 
   it("doesn't color when colored is false", function()
-    stub(vim.fn, 'expand')
-    vim.fn.expand.on_call_with('%:t').returns('test.lua')
-
     local hl = require('lualine.highlight')
     stub(hl, 'create_component_highlight_group')
 
@@ -353,8 +346,8 @@ describe('Filetype component', function()
     stub(utils, 'extract_highlight_colors')
 
     local devicons = require('nvim-web-devicons')
-    stub(devicons, 'get_icon')
-    devicons.get_icon.on_call_with('test.lua').returns('*', 'test_highlight_group')
+    stub(devicons, 'get_icon_by_filetype')
+    devicons.get_icon_by_filetype.on_call_with('lua').returns('*', 'test_highlight_group')
 
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
@@ -362,21 +355,16 @@ describe('Filetype component', function()
       colored = false,
     }
     assert_component('filetype', opts, '* lua')
-    assert.stub(devicons.get_icon).was_called_with('test.lua')
+    assert.stub(devicons.get_icon_by_filetype).was_called_with('lua')
     assert.stub(utils.extract_highlight_colors).was_not_called()
     assert.stub(hl.create_component_highlight_group).was_not_called()
-    assert.stub(vim.fn.expand).was_called_with('%:t')
 
-    devicons.get_icon:revert()
+    devicons.get_icon_by_filetype:revert()
     utils.extract_highlight_colors:revert()
     hl.create_component_highlight_group:revert()
-    vim.fn.expand:revert()
   end)
 
   it('displays only icon when icon_only is true', function()
-    stub(vim.fn, 'expand')
-    vim.fn.expand.on_call_with('%:t').returns('test.lua')
-
     local hl = require('lualine.highlight')
     stub(hl, 'create_component_highlight_group')
 
@@ -384,8 +372,8 @@ describe('Filetype component', function()
     stub(utils, 'extract_highlight_colors')
 
     local devicons = require('nvim-web-devicons')
-    stub(devicons, 'get_icon')
-    devicons.get_icon.on_call_with('test.lua').returns('*', 'test_highlight_group')
+    stub(devicons, 'get_icon_by_filetype')
+    devicons.get_icon_by_filetype.on_call_with('lua').returns('*', 'test_highlight_group')
 
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
@@ -394,21 +382,16 @@ describe('Filetype component', function()
       icon_only = true,
     }
     assert_component('filetype', opts, '* ')
-    assert.stub(devicons.get_icon).was_called_with('test.lua')
+    assert.stub(devicons.get_icon_by_filetype).was_called_with('lua')
     assert.stub(utils.extract_highlight_colors).was_not_called()
     assert.stub(hl.create_component_highlight_group).was_not_called()
-    assert.stub(vim.fn.expand).was_called_with('%:t')
 
-    devicons.get_icon:revert()
+    devicons.get_icon_by_filetype:revert()
     utils.extract_highlight_colors:revert()
     hl.create_component_highlight_group:revert()
-    vim.fn.expand:revert()
   end)
 
   it('displays right aligned icon when icon.align is "right"', function()
-    stub(vim.fn, 'expand')
-    vim.fn.expand.on_call_with('%:t').returns('test.lua')
-
     local hl = require('lualine.highlight')
     stub(hl, 'create_component_highlight_group')
 
@@ -416,8 +399,8 @@ describe('Filetype component', function()
     stub(utils, 'extract_highlight_colors')
 
     local devicons = require('nvim-web-devicons')
-    stub(devicons, 'get_icon')
-    devicons.get_icon.on_call_with('test.lua').returns('*', 'test_highlight_group')
+    stub(devicons, 'get_icon_by_filetype')
+    devicons.get_icon_by_filetype.on_call_with('lua').returns('*', 'test_highlight_group')
 
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
@@ -427,51 +410,13 @@ describe('Filetype component', function()
       icon = { align = 'right' }
     }
     assert_component('filetype', opts, 'lua * ')
-    assert.stub(devicons.get_icon).was_called_with('test.lua')
-    assert.stub(utils.extract_highlight_colors).was_not_called()
-    assert.stub(hl.create_component_highlight_group).was_not_called()
-    assert.stub(vim.fn.expand).was_called_with('%:t')
-
-    devicons.get_icon:revert()
-    utils.extract_highlight_colors:revert()
-    hl.create_component_highlight_group:revert()
-    vim.fn.expand:revert()
-  end)
-
-  it('uses filetype lookup when file has no extension', function()
-    stub(vim.fn, 'expand')
-    vim.fn.expand.on_call_with('%:t').returns('test')
-
-    local hl = require('lualine.highlight')
-    stub(hl, 'create_component_highlight_group')
-
-    local utils = require('lualine.utils.utils')
-    stub(utils, 'extract_highlight_colors')
-
-    local devicons = require('nvim-web-devicons')
-    stub(devicons, 'get_icon')
-    devicons.get_icon.on_call_with('test').returns(nil)
-    stub(devicons, 'get_icon_by_filetype')
-    devicons.get_icon_by_filetype.on_call_with('lua').returns('*', 'test_highlight_group')
-
-    local opts = build_component_opts {
-      component_separators = { left = '', right = '' },
-      padding = 0,
-      colored = false,
-      icon_only = false,
-    }
-    assert_component('filetype', opts, '* lua')
-    assert.stub(devicons.get_icon).was_called_with('test')
     assert.stub(devicons.get_icon_by_filetype).was_called_with('lua')
     assert.stub(utils.extract_highlight_colors).was_not_called()
     assert.stub(hl.create_component_highlight_group).was_not_called()
-    assert.stub(vim.fn.expand).was_called_with('%:t')
 
     devicons.get_icon_by_filetype:revert()
-    devicons.get_icon:revert()
     utils.extract_highlight_colors:revert()
     hl.create_component_highlight_group:revert()
-    vim.fn.expand:revert()
   end)
 end)
 
