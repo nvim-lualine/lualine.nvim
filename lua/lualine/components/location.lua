@@ -2,7 +2,7 @@
 -- MIT license, see LICENSE for more details.
 local function location()
   local line = vim.fn.line('.')
-  local col = vim.fn.virtcol('.')
+  local col = vim.fn.charcol('.')
   return string.format('%3d:%-2d', line, col)
 end
 
