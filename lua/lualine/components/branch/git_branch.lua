@@ -77,8 +77,8 @@ function M.find_git_dir(dir_path)
   -- get file dir so we can search from that dir
   local file_dir = dir_path or vim.fn.expand('%:p:h')
 
-  local oil_exists, oil = pcall(require, 'oil')
-  if oil_exists then
+  if package.loaded.oil then
+    local oil = require('oil')
     local ok, dir = pcall(oil.get_current_dir)
     if ok and dir and dir ~= '' then
       file_dir = vim.fn.fnamemodify(dir, ':p:h')
