@@ -699,6 +699,21 @@ Component specific options             These are options that are available on
 <
 
 
+                                          *lualine-encoding-component-options*
+
+>
+    sections = {
+      lualine_a = {
+        {
+          'encoding',
+          -- Show '[BOM]' when the file has a byte-order mark
+            show_bomb = false,
+        }
+      }
+    }
+<
+
+
                                        *lualine-searchcount-component-options*
 
 >
