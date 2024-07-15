@@ -242,6 +242,37 @@ describe('Encoding component', function()
     vim.cmd('bd!')
     os.remove(tmp_path)
   end)
+  it('works with BOM and default config', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+    }
+    local tmp_path = 'tmp.txt'
+    local tmp_fp = io.open(tmp_path, 'w')
+    tmp_fp:write('test file')
+    tmp_fp:close()
+    vim.cmd('e ' .. tmp_path)
+    vim.cmd('set bomb')
+    assert_component('encoding', opts, 'utf-8')
+    vim.cmd('bd!')
+    os.remove(tmp_path)
+  end)
+  it('works with BOM and option enabled', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      show_bomb = true
+    }
+    local tmp_path = 'tmp.txt'
+    local tmp_fp = io.open(tmp_path, 'w')
+    tmp_fp:write('test file')
+    tmp_fp:close()
+    vim.cmd('e ' .. tmp_path)
+    vim.cmd('set bomb')
+    assert_component('encoding', opts, 'utf-8 [BOM]')
+    vim.cmd('bd!')
+    os.remove(tmp_path)
+  end)
 end)
 
 describe('Fileformat component', function()
