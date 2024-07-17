@@ -810,7 +810,8 @@ sections = {
         dashboard = 'Dashboard',
         packer = 'Packer',
         fzf = 'FZF',
-        alpha = 'Alpha'
+        alpha = 'Alpha',
+        harpoon = "Harpoon"
       }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
 
       -- Automatically updates active buffer color to match color of other components (will be overidden if harpoons_colors is set)

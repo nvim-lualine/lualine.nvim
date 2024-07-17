@@ -18,6 +18,7 @@ local default_options = {
     packer = 'Packer',
     fzf = 'FZF',
     alpha = 'Alpha',
+    harpoon = 'Harpoon',
   },
   use_mode_colors = false,
   harpoons_color = {
