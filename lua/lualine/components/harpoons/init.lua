@@ -72,6 +72,12 @@ function M:init(options)
 end
 
 function M:new_harpoon(hpnr, bufnr)
+  if not bufnr or bufnr < 0 then
+    bufnr = nil
+    if not hpnr then
+      bufnr = vim.fn.bufnr()
+    end
+  end
   return Harpoon:new {
     hpnr = hpnr,
     bufnr = bufnr,
@@ -83,29 +89,25 @@ end
 function M:harpoons()
   local buffers = {}
   local harpoons = {}
-  for _, b in ipairs(vim.api.nvim_list_bufs()) do
+  for _, b in pairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_loaded(b) then
       table.insert(buffers, b)
     end
   end
 
   local currIsHarpoon = false
-  for i, h in pairs(harpoon_plug:list():display()) do
-    if h ~= '' then
-      local bufnr = nil
-      for _, buf in pairs(buffers) do
-        local bufPath = vim.api.nvim_buf_get_name(buf)
-        if string.find(bufPath, h, 1, true) then
-          bufnr = buf
-          currIsHarpoon = true
-        end
+  for i, h in pairs(harpoon_plug:list().items) do
+    if h ~= nil then
+      local bufnr = vim.fn.bufnr(vim.loop.fs_realpath(h.value))
+      if bufnr ~= -1 then
+        currIsHarpoon = true
       end
       harpoons[i] = self:new_harpoon(i, bufnr)
     end
   end
 
-  if not currIsHarpoon and vim.fn.bufnr() then
-    table.insert(harpoons, self:new_harpoon(nil, vim.fn.bufnr()))
+  if not currIsHarpoon then
+    table.insert(harpoons, self:new_harpoon())
   end
 
   return harpoons
@@ -154,7 +156,7 @@ function M:update_status()
   -- start drawing from current harpoon and draw left and right of it until
   -- all harpoons are drawn or max_length has been reached.
   if current == -2 then
-    local b = self:new_harpoon(nil, vim.fn.bufnr())
+    local b = self:new_harpoon()
     b.current = true
     if self.options.self.section < 'x' then
       b.last = true
