@@ -69,6 +69,17 @@ function M:init(options)
       inactive = self:create_hl(self.options.harpoons_color.inactive, 'inactive'),
     }
   end
+
+  -- refresh if harpoon makes changes
+  local function refresh_lualine()
+    require('lualine').refresh()
+  end
+  harpoon_plug:extend {
+    NAVIGATE = refresh_lualine,
+    ADD = refresh_lualine,
+    REMOVE = refresh_lualine,
+    REPLACE = refresh_lualine,
+  }
 end
 
 function M:new_harpoon(hpnr, bufnr)
