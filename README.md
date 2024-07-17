@@ -267,6 +267,7 @@ sections = {lualine_a = {'mode'}}
 - `selectioncount` (number of selected characters or lines)
 - `tabs` (shows currently available tabs)
 - `windows` (shows currently available windows)
+- `harpoons` (shows current harpoon list, be sure to include a dependency for harpoon)
 
 #### Custom components
 
@@ -781,6 +782,50 @@ sections = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active window.
         inactive = 'lualine_{section}_inactive', -- Color for inactive window.
+      },
+    }
+  }
+}
+```
+#### harpoons component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'harpoons',
+      show_filename_only = true,   -- Shows shortened relative path when set to false.
+      hide_filename_extension = false,   -- Hide filename extension when set to true.
+      show_modified_status = true, -- Shows indicator when the buffer is modified.
+
+      mode = 0, -- 0: Shows harpoon file name
+                -- 1: Shows harpoon index
+                -- 2: Shows harpoon file name + harpoon index
+
+      max_length = vim.o.columns * 2 / 3, -- Maximum width of harpoons component,
+                                          -- it can also be a function that returns
+                                          -- the value of `max_length` dynamically.
+      filetype_names = {
+        TelescopePrompt = 'Telescope',
+        dashboard = 'Dashboard',
+        packer = 'Packer',
+        fzf = 'FZF',
+        alpha = 'Alpha'
+      }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
+
+      -- Automatically updates active buffer color to match color of other components (will be overidden if harpoons_colors is set)
+      use_mode_colors = false,
+
+      harpoons_color = {
+        -- Same values as the general color option can be used here.
+        active = 'lualine_{section}_normal',     -- Color for active buffer.
+        inactive = 'lualine_{section}_inactive', -- Color for inactive buffer.
+      },
+
+      symbols = {
+        modified = ' ●',      -- Text to show when the buffer is modified
+        alternate_file = '#', -- Text to show to identify the alternate file
+        directory =  '',     -- Text to show when the buffer is a directory
       },
     }
   }
