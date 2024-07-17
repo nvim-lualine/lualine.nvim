@@ -102,7 +102,7 @@ function M:harpoons()
       if bufnr ~= -1 then
         currIsHarpoon = true
       end
-      harpoons[i] = self:new_harpoon(i, bufnr)
+      table.insert(harpoons, self:new_harpoon(i, bufnr))
     end
   end
 
