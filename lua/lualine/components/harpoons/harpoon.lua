@@ -25,14 +25,6 @@ function Harpoon:is_alternate()
   return vim.fn.bufnr('#') == self.hpnr and not self:is_current()
 end
 
-local function get_file_extension(url)
-  return url:match('^.+%.(.+)$')
-end
-
-local function starts_with(str, start)
-  return str:sub(1, #start) == start
-end
-
 ---setup icons, modified status for harpoon
 function Harpoon:get_props()
   if self.bufnr then
@@ -42,10 +34,7 @@ function Harpoon:get_props()
   else
     self.file = harpoon_plug:list().items[self.hpnr].value
     self.buftype = nil
-    self.filetype = get_file_extension(self.file)
-    if starts_with(self.file, 'oil') then
-      self.filetype = 'oil'
-    end
+    self.filetype = self.file:match('^.+%.(.+)$')
   end
 
   -- remove the oil prefix
