@@ -109,7 +109,11 @@ function M:harpoons()
   local currIsHarpoon = false
   for i, h in pairs(harpoon_plug:list().items) do
     if h ~= nil then
-      local bufnr = vim.fn.bufnr(vim.loop.fs_realpath(h.value))
+      local bufnr = -1
+      local hPath = vim.loop.fs_realpath(h.value)
+      if hPath then
+        bufnr = vim.fn.bufnr(hPath)
+      end
       if bufnr ~= -1 then
         currIsHarpoon = true
       end
