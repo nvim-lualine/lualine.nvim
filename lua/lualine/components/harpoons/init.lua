@@ -113,6 +113,12 @@ function M:harpoons()
       local hPath = vim.loop.fs_realpath(h.value)
       if hPath then
         bufnr = vim.fn.bufnr(hPath)
+      else
+        if string.sub(h.value, 1, 1) == '/' then
+          bufnr = vim.fn.bufnr(h.value)
+        else
+          bufnr = vim.fn.bufnr(vim.loop.fs_realpath('.') .. '/' .. h.value)
+        end
       end
       if bufnr ~= -1 then
         currIsHarpoon = true
