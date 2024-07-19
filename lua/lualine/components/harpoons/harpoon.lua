@@ -30,12 +30,11 @@ function Harpoon:get_props()
   if self.bufnr then
     self.file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(self.bufnr))
     self.buftype = vim.api.nvim_get_option_value('buftype', { buf = self.bufnr })
-    self.filetype = vim.api.nvim_get_option_value('filetype', { buf = self.bufnr })
   else
     self.file = harpoon_plug:list().items[self.hpnr].value
     self.buftype = nil
-    self.filetype = self.file:match('^.+%.(.+)$')
   end
+  self.filetype = self.file:match('^.+%.(.+)$')
 
   -- remove the oil prefix
   if self.filetype == 'oil' then
