@@ -95,7 +95,11 @@ function M:update_status()
       if diagnostics_count[section] ~= nil and (always_visible or diagnostics_count[section] > 0) then
         padding = previous_section and (bgs[previous_section] ~= bgs[section]) and ' ' or ''
         previous_section = section
-        table.insert(result, colors[section] .. padding .. self.symbols[section] .. diagnostics_count[section])
+        if self.options.symbol_position == 'left' then
+          table.insert(result, colors[section] .. padding .. self.symbols[section] .. diagnostics_count[section])
+        else
+          table.insert(result, colors[section] .. padding .. diagnostics_count[section] .. self.symbols[section])
+        end
       end
     end
   else
