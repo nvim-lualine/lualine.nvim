@@ -69,10 +69,10 @@ The following example is using the `tomorrow-night` colorscheme:
 This base16-inspired colorscheme that doesn't require installation of an external plugin
 
 <p>
-<img width="700" src="https://github.com/user-attachments/assets/b90b2e22-fec7-4f5c-a288-44f58642147e"/>
-<img width="700" src="https://github.com/user-attachments/assets/c8c73b21-d457-4b15-95f2-f038dbc384b0"/>
-<img width="700" src="https://github.com/user-attachments/assets/b9b814b6-4acf-4b5c-bb7d-45368897d525"/>
-<img width="700" src="https://github.com/user-attachments/assets/970bcc2e-5d6c-4690-842c-1c40f11dffa1"/>
+<img width="700" src="https://github.com/user-attachments/assets/263386e3-6921-49b5-950f-fbf0c98be870"/>
+<img width="700" src="https://github.com/user-attachments/assets/873effe3-2db7-4181-a819-a0b5dd2754e9"/>
+<img width="700" src="https://github.com/user-attachments/assets/d32957da-5730-40c5-90b4-c1648b97d9dd"/>
+<img width="700" src="https://github.com/user-attachments/assets/b369f535-c48a-4466-adc2-36e0536ec7ea"/>
 </p>
 
 ### codedark
