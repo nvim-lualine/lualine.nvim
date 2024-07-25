@@ -66,7 +66,7 @@ The following example is using the `tomorrow-night` colorscheme:
 
 ### base16-default
 
-This base16-inspired colorscheme that doesn't require installation of an external plugin
+A base16-inspired colorscheme that doesn't require installation of an external plugin
 
 <p>
 <img width="700" src="https://github.com/user-attachments/assets/263386e3-6921-49b5-950f-fbf0c98be870"/>
