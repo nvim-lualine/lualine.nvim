@@ -64,6 +64,17 @@ The following example is using the `tomorrow-night` colorscheme:
 <img width='700' src='https://user-images.githubusercontent.com/11501572/156889566-17066e95-7f85-4bfd-8178-c4a34beab453.png'/>
 </p>
 
+### base16-default
+
+A base16-inspired colorscheme that doesn't require installation of an external plugin
+
+<p>
+<img width="700" src="https://github.com/user-attachments/assets/263386e3-6921-49b5-950f-fbf0c98be870"/>
+<img width="700" src="https://github.com/user-attachments/assets/873effe3-2db7-4181-a819-a0b5dd2754e9"/>
+<img width="700" src="https://github.com/user-attachments/assets/d32957da-5730-40c5-90b4-c1648b97d9dd"/>
+<img width="700" src="https://github.com/user-attachments/assets/b369f535-c48a-4466-adc2-36e0536ec7ea"/>
+</p>
+
 ### codedark
 
 <p>
