@@ -344,6 +344,147 @@ describe('Lualine', function()
     vim.bo.ft = old_ft
   end)
 
+  describe('can filter extensions based on buftype', function ()
+    it('without filetypes filter being present', function()
+      table.insert(config.extensions, {
+        buftypes = { 'acwrite' },
+        sections = {
+          lualine_a = {
+            function()
+              return 'custom_extension_component'
+            end,
+          },
+        },
+      })
+      local old_buftype = vim.bo.buftype
+      -- We cannot set arbitrary values like ft, must be limited to
+      -- neovim known buf types
+      vim.bo.buftype = 'acwrite'
+      require('lualine').setup(config)
+      statusline:expect([===[
+      highlights = {
+          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
+          2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+      }
+      |{1: custom_extension_component }
+      {2:}
+      {3:                                                                                           }|
+      ]===])
+      vim.bo.buftype = old_buftype
+    end)
+
+    it('with empty filetypes filter', function()
+      table.insert(config.extensions, {
+        filetypes = {},
+        buftypes = { 'acwrite' },
+        sections = {
+          lualine_a = {
+            function()
+              return 'custom_extension_component'
+            end,
+          },
+        },
+      })
+      local old_buftype = vim.bo.buftype
+      -- We cannot set arbitrary values like ft, must be limited to
+      -- neovim known buf types
+      vim.bo.buftype = 'acwrite'
+      require('lualine').setup(config)
+      statusline:expect([===[
+      highlights = {
+          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
+          2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+      }
+      |{1: custom_extension_component }
+      {2:}
+      {3:                                                                                           }|
+      ]===])
+      vim.bo.buftype = old_buftype
+    end)
+
+    it('and does not apply on different type', function()
+      table.insert(config.extensions, {
+        filetypes = {},
+        buftypes = { 'terminal' },
+        sections = {
+          lualine_a = {
+            function()
+              return 'custom_extension_component'
+            end,
+          },
+        },
+      })
+      local old_buftype = vim.bo.buftype
+      -- We cannot set arbitrary values like ft, must be limited to
+      -- neovim known buf types
+      vim.bo.buftype = 'acwrite'
+      require('lualine').setup(config)
+      statusline:expect([===[
+      highlights = {
+          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
+          2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984" }
+          3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
+          4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
+          5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+      }
+      |{1: NORMAL }
+      {2:}
+      {3:  master }
+      {4:}
+      {5: [No Name] }
+      {5:                                                                       }
+      {5:  }
+      {4:}
+      {3: Top }
+      {2:}
+      {1:   1:1  }|
+      ]===])
+      vim.bo.buftype = old_buftype
+    end)
+
+    it('and is only checked after filetypes', function()
+      table.insert(config.extensions, {
+        buftypes = { 'quickfix' },
+        sections = {
+          lualine_a = {
+            function()
+              return 'custom_extension_component'
+            end,
+          },
+        },
+      })
+      table.insert(config.extensions, {
+        filetypes = { 'quickfix' },
+        sections = {
+          lualine_a = {
+            function()
+              return 'should_not_be_present'
+            end,
+          },
+        },
+      })
+
+      local old_buftype = vim.bo.buftype
+      -- We cannot set arbitrary values like ft, must be limited to
+      -- neovim known buf types
+      vim.bo.buftype = 'quickfix'
+      require('lualine').setup(config)
+      statusline:expect([===[
+      highlights = {
+          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
+          2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+      }
+      |{1: custom_extension_component }
+      {2:}
+      {3:                                                                                           }|
+      ]===])
+      vim.bo.buftype = old_buftype
+    end)
+  end)
+
   -- TODO: figure put why some of the tablines tests fail in CI
   describe('tabline', function()
     local tab_conf = vim.deepcopy(config)
