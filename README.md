@@ -854,7 +854,7 @@ of windows instead of at bottom.
 #### Buffers
 
 Shows currently open buffers. Like bufferline . See
-[buffers options](#buffers-component-options)
+[buffers component options](#buffers-component-options)
 for all builtin behaviors of buffers component.
 You can use `:LualineBuffersJump` to jump to buffer based on index
 of buffer in buffers component.
