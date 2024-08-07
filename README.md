@@ -671,6 +671,20 @@ sections = {
 }
 ```
 
+#### encoding component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'encoding',
+      -- Show '[BOM]' when the file has a byte-order mark
+        show_bomb = false,
+    }
+  }
+}
+```
+
 #### searchcount component options
 
 ```lua
