@@ -15,6 +15,21 @@ local sep = package.config:sub(1, 1)
 -- Windows doesn't like file watch for some reason.
 local file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
 local git_dir_cache = {} -- Stores git paths that we already know of
+local options = {max_length = 0}
+
+---truncates git branch name based on options.max_length.
+---also attempts to strip the last incomplete word after the last word separator (i.e. "-", "_")
+local function truncate_git_branch()
+  current_git_branch = current_git_branch:sub(1, options.max_length)
+  if not current_git_branch:find("[-_]") then
+    current_git_branch = current_git_branch .. '…'
+    return
+  end
+
+  -- make the truncated output nicer by cutting off the last incomplete word
+  local last_word_separator_idx = current_git_branch:len() - current_git_branch:reverse():find("[-_]")
+  current_git_branch = current_git_branch:sub(1, last_word_separator_idx) .. '…'
+end
 
 ---sets git_branch variable to branch name or commit hash if not on branch
 ---@param head_file string full path of .git/HEAD file
@@ -26,6 +41,9 @@ local function get_git_head(head_file)
     local branch = HEAD:match('ref: refs/heads/(.+)$')
     if branch then
       current_git_branch = branch
+      if options.max_length ~= 0 and current_git_branch:len() > options.max_length then
+        truncate_git_branch()
+      end
     else
       current_git_branch = HEAD:sub(1, 6)
     end
@@ -135,12 +153,17 @@ function M.find_git_dir(dir_path)
 end
 
 ---initializes git_branch module
-function M.init()
+function M.init(opts)
+  if opts.max_length then
+    options.max_length = opts.max_length
+  end
+
   -- run watch head on load so branch is present when component is loaded
   M.find_git_dir()
   -- update branch state of BufEnter as different Buffer may be on different repos
   utils.define_autocmd('BufEnter', "lua require'lualine.components.branch.git_branch'.find_git_dir()")
 end
+
 function M.get_branch(bufnr)
   if vim.g.actual_curbuf ~= nil and active_bufnr ~= vim.g.actual_curbuf then
     -- Workaround for https://github.com/nvim-lualine/lualine.nvim/issues/286

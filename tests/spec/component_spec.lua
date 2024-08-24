@@ -871,4 +871,31 @@ describe('Branch component', function()
     local rev = git('rev-parse --short=6 HEAD'):sub(1, 6)
     assert_component('branch', opts, rev)
   end)
+
+  it('works with max_length option', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      icons_enabled = false,
+      padding = 0,
+      max_length = 10,
+    }
+    local branch_comp = helpers.init_component('branch', opts)
+
+    local test = {
+      noseparator = "noseparato…",
+      separated_name = "separated…",
+      separatorafter_threshold = "separatora…",
+      short_name = "short_name",
+    }
+    -- hack to add a hyphenated key
+    test["other-sep-character"] = "other-sep…"
+
+    for input, expected in pairs(test) do
+      git('checkout -b ' .. input)
+      vim.cmd('e k')
+      vim.cmd('bd')
+      vim.cmd('e ' .. file)
+      assert_comp_ins(branch_comp, expected)
+    end
+  end)
 end)

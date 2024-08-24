@@ -490,6 +490,21 @@ These are options that are available on specific components.
 For example, you have option on `diagnostics` component to
 specify what your diagnostic sources will be.
 
+#### branch component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'branch',
+      max_length = 0, -- Maximum displayed characters of the branch name.
+                      -- Takes effect, if the value is larger than 0.
+                      -- Recommended setting: 30.
+    }
+  }
+}
+```
+
 #### buffers component options
 
 ```lua
@@ -608,6 +623,20 @@ sections = {
 }
 ```
 
+#### encoding component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'encoding',
+      -- Show '[BOM]' when the file has a byte-order mark
+        show_bomb = false,
+    }
+  }
+}
+```
+
 #### fileformat component options
 
 ```lua
@@ -665,20 +694,6 @@ sections = {
       icon = { align = 'right' }, -- Display filetype icon on the right hand side
       -- icon =    {'X', align='right'}
       -- Icon string ^ in table is ignored in filetype component
-    }
-  }
-}
-```
-
-#### encoding component options
-
-```lua
-sections = {
-  lualine_a = {
-    {
-      'encoding',
-      -- Show '[BOM]' when the file has a byte-order mark
-        show_bomb = false,
     }
   }
 }

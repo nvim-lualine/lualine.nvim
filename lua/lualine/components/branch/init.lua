@@ -13,7 +13,7 @@ M.init = function(self, options)
   if not self.options.icon then
     self.options.icon = '' -- e0a0
   end
-  modules.git_branch.init()
+  modules.git_branch.init(options)
 end
 
 M.update_status = function(_, is_focused)
