@@ -9,8 +9,10 @@ M.symbols = {
     warn = '󰀪 ', -- x000f002a
     info = '󰋽 ', -- x000f02fd
     hint = '󰌶 ', -- x000f0336
+    ok = '󰗡 ', -- x000f05e1
+    working = '󰮍 ', -- x00f0b8d
   },
-  no_icons = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
+  no_icons = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:', ok = 'OK', working = '..' },
 }
 
 -- default options for diagnostics component
@@ -50,6 +52,20 @@ function M.apply_default_colors(opts)
         { 'fg', 'sp' },
         { 'DiagnosticHint', 'LspDiagnosticsDefaultHint', 'DiffChange' },
         '#273faf'
+      ),
+    },
+    ok = {
+      fg = utils.extract_color_from_hllist(
+        { 'fg', 'sp' },
+        { 'DiagnosticOk', 'LspDiagnosticsDefaultOk', 'DiffAdd' },
+        '#a4cc35'
+      ),
+    },
+    working = {
+      fg = utils.extract_color_from_hllist(
+        { 'fg', 'sp' },
+        { 'DiagnosticWorking', 'LspDiagnosticsDefaultWorking', 'Title' },
+        '#66bfff'
       ),
     },
   }
