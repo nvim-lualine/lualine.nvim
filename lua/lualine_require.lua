@@ -54,16 +54,17 @@ function M.require(module)
   end
 
   pattern_path = table.concat { 'lua/', module:gsub('%.', '/'), '.lua' }
-  local paths = vim.api.nvim_get_runtime_file(pattern_path, false)
+  local paths = vim.api.nvim_get_runtime_file(pattern_path, true)
   if #paths <= 0 then
     pattern_path = table.concat { 'lua/', module:gsub('%.', '/'), '/init.lua' }
-    paths = vim.api.nvim_get_runtime_file(pattern_path, false)
+    paths = vim.api.nvim_get_runtime_file(pattern_path, true)
   end
   if #paths > 0 then
     -- put entries from user config path in front
     local user_config_path = vim.fn.stdpath('config')
     table.sort(paths, function(a, b)
-      return vim.startswith(a, user_config_path) or not vim.startswith(b, user_config_path)
+      local pattern = table.concat { user_config_path, M.sep }
+      return string.match(a, pattern) or not string.match(b, pattern)
     end)
     local mod_result = dofile(paths[1])
     package.loaded[module] = mod_result
