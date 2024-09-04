@@ -64,17 +64,6 @@ The following example is using the `tomorrow-night` colorscheme:
 <img width='700' src='https://user-images.githubusercontent.com/11501572/156889566-17066e95-7f85-4bfd-8178-c4a34beab453.png'/>
 </p>
 
-### base16-default
-
-A base16-inspired colorscheme that doesn't require installation of an external plugin
-
-<p>
-<img width="700" src="https://github.com/user-attachments/assets/263386e3-6921-49b5-950f-fbf0c98be870"/>
-<img width="700" src="https://github.com/user-attachments/assets/873effe3-2db7-4181-a819-a0b5dd2754e9"/>
-<img width="700" src="https://github.com/user-attachments/assets/d32957da-5730-40c5-90b4-c1648b97d9dd"/>
-<img width="700" src="https://github.com/user-attachments/assets/b369f535-c48a-4466-adc2-36e0536ec7ea"/>
-</p>
-
 ### codedark
 
 <p>
@@ -360,6 +349,15 @@ pywal is another special theme. It will load the colors from your current [pywal
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649297-59d98280-74bd-11eb-92a5-a8c4af150106.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649317-5e9e3680-74bd-11eb-95a4-fc018cb4a528.png'/>
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649321-6067fa00-74bd-11eb-83bb-b1de7f5e62d6.png'/>
+</p>
+
+### tomorrow_night
+
+<p>
+<img width="700" src="https://github.com/user-attachments/assets/1d61f5b8-266b-499e-b071-da8c14c65804"/>
+<img width="700" src="https://github.com/user-attachments/assets/7992fef4-4161-4e3a-a964-42bb22f77d08"/>
+<img width="700" src="https://github.com/user-attachments/assets/e26fa7a6-9c27-4171-a8e7-067785ab6fee"/>
+<img width="700" src="https://github.com/user-attachments/assets/b88b2767-8b93-4be6-a2f8-6528dd43089a"/>
 </p>
 
 ### wombat
