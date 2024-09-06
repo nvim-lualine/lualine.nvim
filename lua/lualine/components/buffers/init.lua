@@ -4,6 +4,15 @@ local require = require('lualine_require').require
 local Buffer = require('lualine.components.buffers.buffer')
 local M = require('lualine.component'):extend()
 local highlight = require('lualine.highlight')
+function M.all_buffers()
+  local buffers = {}
+  for b = 1, vim.fn.bufnr('$') do
+      if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
+          buffers[#buffers+1] = b
+      end
+  end
+  return buffers
+end
 
 local default_options = {
   show_filename_only = true,
@@ -28,6 +37,7 @@ local default_options = {
     alternate_file = '#',
     directory = '',
   },
+  show_buffers = M.all_buffers
 }
 
 -- This function is duplicated in tabs
@@ -82,14 +92,10 @@ end
 
 function M:buffers()
   local buffers = {}
-  M.bufpos2nr = {}
-  for b = 1, vim.fn.bufnr('$') do
-    if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
-      buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1)
-      M.bufpos2nr[#buffers] = b
-    end
+  M.bufpos2nr = self.options.show_buffers()
+  for i, b in pairs(M.bufpos2nr) do
+    buffers[i] = self:new_buffer(b, i)
   end
-
   return buffers
 end
 
