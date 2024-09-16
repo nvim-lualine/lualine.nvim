@@ -922,11 +922,13 @@ extensions = {'quickfix'}
 #### Available extensions
 
 - aerial
+- alpha
 - chadtree
 - ctrlspace
 - fern
 - fugitive
 - fzf
+- help
 - lazy
 - man
 - mason
@@ -937,6 +939,7 @@ extensions = {'quickfix'}
 - nvim-tree
 - oil
 - overseer
+- pager
 - quickfix
 - symbols-outline
 - toggleterm
