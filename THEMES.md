@@ -167,10 +167,11 @@ them based you your `background` option.
 ### kanagawa_dragon
 
 <p>
-<img width='700' src=''/>
-<img width='700' src=''/>
-<img width='700' src=''/>
-<img width='700' src=''/>
+<img width='700' src='https://github.com/user-attachments/assets/3745e725-e777-460d-859c-2e84b234956e'/>
+<img width='700' src='https://github.com/user-attachments/assets/5db6ec07-aa4e-47a5-bda3-627fe1889285'/>
+<img width='700' src='https://github.com/user-attachments/assets/9fe0bf90-922d-4930-b7f9-f65bef0f3815'/>
+<img width='700' src='https://github.com/user-attachments/assets/abf3d107-ac91-42ea-ad2c-17f5404b6995'/>
+<img width='700' src='https://github.com/user-attachments/assets/d209cc3a-7625-4fba-9ca5-f8a5c4a96c9e'/>
 </p>
 
 ### material
