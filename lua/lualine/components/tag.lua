@@ -8,7 +8,11 @@ end
 
 -- Function that runs every time statusline is updated
 function M:update_status()
-  return vim.fn.system("git tag --points-at | tr -d '\n'")
+  local tag = vim.fn.system("git tag --points-at | tr -d '\n'")
+  if string.find(tag, "error: ") or string.find(tag, "fatal: ") then
+    return ''
+  end
+  return tag
 end
 
 return M
