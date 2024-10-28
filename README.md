@@ -251,7 +251,6 @@ sections = {lualine_a = {'mode'}}
 #### Available components
 
 - `branch` (git branch)
-- `tag` (git tag)
 - `buffers` (shows currently available buffers)
 - `diagnostics` (diagnostics count from your preferred source)
 - `diff` (git diff status)
@@ -267,6 +266,7 @@ sections = {lualine_a = {'mode'}}
 - `searchcount` (number of search matches when hlsearch is active)
 - `selectioncount` (number of selected characters or lines)
 - `tabs` (shows currently available tabs)
+- `tag` (git tag)
 - `windows` (shows currently available windows)
 
 #### Custom components
