@@ -251,6 +251,7 @@ sections = {lualine_a = {'mode'}}
 #### Available components
 
 - `branch` (git branch)
+- `tag` (git tag)
 - `buffers` (shows currently available buffers)
 - `diagnostics` (diagnostics count from your preferred source)
 - `diff` (git diff status)
