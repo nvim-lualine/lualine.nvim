@@ -18,6 +18,7 @@ local config = {
     },
     ignore_focus = {},
     always_divide_middle = true,
+    always_show_tabline = true,
     globalstatus = vim.go.laststatus == 3,
     refresh = {
       statusline = 1000,
