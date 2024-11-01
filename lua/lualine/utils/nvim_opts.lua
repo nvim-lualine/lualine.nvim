@@ -1,6 +1,6 @@
 local M = {}
 
-local DEBOUNCE_DELAY = 100 -- debouce for 100ms
+local DEBOUNCE_DELAY = 50 -- debouce for 100ms
 
 -- keeps backup of options that we cahge so we can restore it.
 -- format:
@@ -20,7 +20,7 @@ local DEBOUNCE_DELAY = 100 -- debouce for 100ms
 ---@class LualineNvimOptCacheOptStore
 ---@field prev any
 ---@field set any
----@field to_set any
+---@field to_set any[]
 ---@alias LualineNvimOptCacheOpt table<string, LualineNvimOptCacheOptStore>
 ---@class LualineNvimOptCache
 ---@field global LualineNvimOptCacheOptStore[]
@@ -43,13 +43,34 @@ local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
     return
   end
   if cache_tbl[name] == nil then
-    cache_tbl[name] = {}
+    cache_tbl[name] = {prev = nil, set = nil, to_set = {}}
   end
-  cache_tbl[name].to_set = val
+  table.insert(cache_tbl[name].to_set, val)
 
   local defered_setter = function()
-    if cache_tbl[name].to_set ~= val then return end
-    cache_tbl[name].to_set = nil
+    if #cache_tbl[name].to_set > 1 then
+      local freq = {}
+      for _,v in ipairs(cache_tbl[name]) do
+        if freq[v] == nil then freq[v] = 0 end
+        freq[v] = freq[v] + 1
+      end
+      local prev = cache_tbl[name].prev
+      if prev ~= nil then
+        if freq[prev] == nil then freq[prev] = 0 end
+        freq[prev] = freq[prev] + 1
+      end
+
+      -- pick the most frequent set in the debouce period with bias toward prev
+      local most_freq = prev ~= nil and prev or cache_tbl[name][1]
+      for k, v in pairs(freq) do
+        if v  >= freq[most_freq] then
+          most_freq = k
+        end
+      end
+      cache_tbl[name].to_set = {most_freq}
+    end
+    if cache_tbl[name].to_set[#cache_tbl[name].to_set] ~= val then return end
+    cache_tbl[name].to_set = {}
     if cache_tbl[name].set ~= cur then
       if type(cur) ~= 'string' or not cur:find('lualine') then
         cache_tbl[name].prev = cur
