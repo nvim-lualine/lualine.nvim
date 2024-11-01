@@ -440,7 +440,7 @@ local function set_tabline(hide)
         refresh { kind = 'tabpage', place = { 'tabline' }, trigger = 'timer' }
       end, 3, 'lualine: Failed to refresh tabline')
     )
-    modules.nvim_opts.set('showtabline', 2, { global = true })
+    modules.nvim_opts.set('showtabline', config.options.always_show_tabline and 2 or 1, { global = true })
     timers.halt_tal_refresh = false
   else
     modules.nvim_opts.restore('tabline', { global = true })
