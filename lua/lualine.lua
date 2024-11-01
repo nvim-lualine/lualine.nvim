@@ -310,7 +310,7 @@ end
 ---@class LualineRefreshOpts
 ---@field scope LualineRefreshOptsKind
 ---@field place LualineRefreshOptsPlace[]
----@field trigger 'timer'|'unknown'
+---@field trigger 'timer' | 'init' |'unknown'
 --- Refresh contents of lualine
 ---@param opts LualineRefreshOpts
 local function refresh(opts)
@@ -442,6 +442,8 @@ local function set_tabline(hide)
     )
     modules.nvim_opts.set('showtabline', config.options.always_show_tabline and 2 or 1, { global = true })
     timers.halt_tal_refresh = false
+    -- imediately refresh upon load
+    refresh { kind = 'tabpage', place = { 'tabline' }, trigger = 'init' }
   else
     modules.nvim_opts.restore('tabline', { global = true })
     modules.nvim_opts.restore('showtabline', { global = true })
@@ -480,6 +482,12 @@ local function set_statusline(hide)
       )
     end
     timers.halt_stl_refresh = false
+    -- imediately refresh upon load
+    if config.options.globalstatus then
+      refresh { kind = 'window', place = { 'statusline' }, trigger = 'init' }
+    else
+      refresh { kind = 'tabpage', place = { 'statusline' }, trigger = 'init' }
+    end
   else
     modules.nvim_opts.restore('statusline', { global = true })
     for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -504,6 +512,8 @@ local function set_winbar(hide)
       end, 3, 'lualine: Failed to refresh winbar')
     )
     timers.halt_wb_refresh = false
+    -- imediately refresh upon load
+    refresh { kind = 'tabpage', place = { 'winbar' }, trigger = 'init' }
   elseif vim.fn.has('nvim-0.8') == 1 then
     modules.nvim_opts.restore('winbar', { global = true })
     for _, win in ipairs(vim.api.nvim_list_wins()) do
