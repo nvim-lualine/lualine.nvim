@@ -127,7 +127,7 @@ require('lualine').setup {
     },
     ignore_focus = {},
     always_divide_middle = true,
-    always_show_tabs = true,
+    always_show_tabline = true,
     globalstatus = false,
     refresh = {
       statusline = 1000,
@@ -367,7 +367,7 @@ options = {
                                -- can't take over the entire statusline even
                                -- if neither of 'x', 'y' or 'z' are present.
 
-  always_show_tabs = true -- When set to true, if you have configured lualine for displaying tabline
+  always_show_tabline = true -- When set to true, if you have configured lualine for displaying tabline
                           -- then tabline will always show. If set to false, then tabline will be displayed
                           -- only when there are more than 1 tab. (see :h showtabline)
 
