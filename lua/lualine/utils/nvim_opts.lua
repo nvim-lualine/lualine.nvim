@@ -103,8 +103,10 @@ function M.set(name, val, opts)
       options.buffer[opts.buffer] = {}
     end
     set_opt(name, val, function(nm)
+      if not vim.tbl_contains(vim.api.nvim_list_bufs(), opts.buffer) then return nil end
       return vim.api.nvim_buf_get_option(opts.buffer, nm)
     end, function(nm, vl)
+      if not vim.tbl_contains(vim.api.nvim_list_bufs(), opts.buffer) then return nil end
       vim.api.nvim_buf_set_option(opts.buffer, nm, vl)
     end, options.buffer[opts.buffer])
   elseif opts.window then
@@ -112,8 +114,10 @@ function M.set(name, val, opts)
       options.window[opts.window] = {}
     end
     set_opt(name, val, function(nm)
+      if not vim.tbl_contains(vim.api.nvim_list_wins(), opts.window) then return nil end
       return vim.api.nvim_win_get_option(opts.window, nm)
     end, function(nm, vl)
+      if not vim.tbl_contains(vim.api.nvim_list_wins(), opts.window) then return nil end
       vim.api.nvim_win_set_option(opts.window, nm, vl)
     end, options.window[opts.window])
   end
