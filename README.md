@@ -9,7 +9,10 @@
 
 A blazing fast and easy to configure Neovim statusline written in Lua.
 
-`lualine.nvim` requires Neovim >= 0.5.
+`lualine.nvim` requires Neovim >= 0.7.
+
+For previous versions of neovim please use compatability tags for example
+compat-nvim-0.5
 
 ## Contributing
 
@@ -82,6 +85,15 @@ Plug 'nvim-tree/nvim-web-devicons'
 use {
   'nvim-lualine/lualine.nvim',
   requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+}
+```
+
+### [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+{
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
 }
 ```
 
@@ -587,9 +599,9 @@ sections = {
       colored = true, -- Displays a colored diff status if set to true
       diff_color = {
         -- Same color values as the general color option can be used here.
-        added    = 'DiffAdd',    -- Changes the diff's added color
-        modified = 'DiffChange', -- Changes the diff's modified color
-        removed  = 'DiffDelete', -- Changes the diff's removed color you
+        added    = 'LuaLineDiffAdd',    -- Changes the diff's added color
+        modified = 'LuaLineDiffChange', -- Changes the diff's modified color
+        removed  = 'LuaLineDiffDelete', -- Changes the diff's removed color you
       },
       symbols = {added = '+', modified = '~', removed = '-'}, -- Changes the symbols used by the diff.
       source = nil, -- A function that works as a data source for diff.
@@ -663,6 +675,20 @@ sections = {
 }
 ```
 
+#### encoding component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'encoding',
+      -- Show '[BOM]' when the file has a byte-order mark
+        show_bomb = false,
+    }
+  }
+}
+```
+
 #### searchcount component options
 
 ```lua
@@ -684,6 +710,7 @@ sections = {
   lualine_a = {
     {
       'tabs',
+      tab_max_length = 40,  -- Maximum width of each tab. The content will be shorten dynamically (example: apple/orange -> a/orange)
       max_length = vim.o.columns / 3, -- Maximum width of tabs component.
                                       -- Note:
                                       -- It can also be a function that returns
@@ -692,6 +719,11 @@ sections = {
                 -- 1: Shows tab_name
                 -- 2: Shows tab_nr + tab_name
 
+      path = 0, -- 0: just shows the filename
+                -- 1: shows the relative path and shorten $HOME to ~
+                -- 2: shows the full path
+                -- 3: shows the full path and shorten $HOME to ~
+
       -- Automatically updates active tab color to match color of other components (will be overidden if buffers_color is set)
       use_mode_colors = false,
 
@@ -699,6 +731,11 @@ sections = {
         -- Same values as the general color option can be used here.
         active = 'lualine_{section}_normal',     -- Color for active tab.
         inactive = 'lualine_{section}_inactive', -- Color for inactive tab.
+      },
+
+      show_modified_status = true,  -- Shows a symbol next to the tab name if the file has been modified.
+      symbols = {
+        modified = '[+]',  -- Text to show when the file is modified.
       },
 
       fmt = function(name, context)
@@ -891,16 +928,19 @@ extensions = {'quickfix'}
 
 - aerial
 - chadtree
+- ctrlspace
 - fern
 - fugitive
 - fzf
 - lazy
 - man
+- mason
 - mundo
 - neo-tree
 - nerdtree
 - nvim-dap-ui
 - nvim-tree
+- oil
 - overseer
 - quickfix
 - symbols-outline

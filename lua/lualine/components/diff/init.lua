@@ -19,21 +19,21 @@ local function apply_default_colors(opts)
     added = {
       fg = modules.utils.extract_color_from_hllist(
         'fg',
-        { 'GitSignsAdd', 'GitGutterAdd', 'DiffAdded', 'DiffAdd' },
+        { 'LuaLineDiffAdd', 'GitSignsAdd', 'GitGutterAdd', 'DiffAdded', 'DiffAdd' },
         '#90ee90'
       ),
     },
     modified = {
       fg = modules.utils.extract_color_from_hllist(
         'fg',
-        { 'GitSignsChange', 'GitGutterChange', 'DiffChanged', 'DiffChange' },
+        { 'LuaLineDiffChange', 'GitSignsChange', 'GitGutterChange', 'DiffChanged', 'DiffChange' },
         '#f0e130'
       ),
     },
     removed = {
       fg = modules.utils.extract_color_from_hllist(
         'fg',
-        { 'GitSignsDelete', 'GitGutterDelete', 'DiffRemoved', 'DiffDelete' },
+        { 'LuaLineDiffDelete', 'GitSignsDelete', 'GitGutterDelete', 'DiffRemoved', 'DiffDelete' },
         '#ff0038'
       ),
     },

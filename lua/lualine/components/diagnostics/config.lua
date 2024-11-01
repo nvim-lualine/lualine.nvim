@@ -5,10 +5,10 @@ local M = {}
 -- default symbols for diagnostics component
 M.symbols = {
   icons = {
-    error = ' ', -- xf659
-    warn = ' ', -- xf529
-    info = ' ', -- xf7fc
-    hint = ' ', -- xf835
+    error = '󰅚 ', -- x000f015a
+    warn = '󰀪 ', -- x000f002a
+    info = '󰋽 ', -- x000f02fd
+    hint = '󰌶 ', -- x000f0336
   },
   no_icons = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
 }
@@ -18,7 +18,7 @@ M.options = {
   colored = true,
   update_in_insert = false,
   always_visible = false,
-  sources = { vim.fn.has('nvim-0.6') == 1 and 'nvim_diagnostic' or 'nvim_lsp', 'coc' },
+  sources = { 'nvim_diagnostic', 'coc' },
   sections = { 'error', 'warn', 'info', 'hint' },
 }
 
