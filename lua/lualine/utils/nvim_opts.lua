@@ -1,10 +1,12 @@
 local M = {}
 
+local DEBOUNCE_DELAY = 100 -- debouce for 100ms
+
 -- keeps backup of options that we cahge so we can restore it.
 -- format:
 -- options {
 --   global = <1> {
---     name = {prev, set}
+--     name = {prev, set, to_set}
 --   },
 --   buffer = {
 --     buf1 = <1>,
@@ -18,6 +20,7 @@ local M = {}
 ---@class LualineNvimOptCacheOptStore
 ---@field prev any
 ---@field set any
+---@field to_set any
 ---@alias LualineNvimOptCacheOpt table<string, LualineNvimOptCacheOptStore>
 ---@class LualineNvimOptCache
 ---@field global LualineNvimOptCacheOptStore[]
@@ -25,6 +28,7 @@ local M = {}
 ---@field window table<number, LualineNvimOptCacheOptStore[]>
 ---@type LualineNvimOptCache
 local options = { global = {}, buffer = {}, window = {} }
+
 
 -- helper function for M.set
 local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
@@ -41,13 +45,20 @@ local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
   if cache_tbl[name] == nil then
     cache_tbl[name] = {}
   end
-  if cache_tbl[name].set ~= cur then
-    if type(cur) ~= 'string' or not cur:find('lualine') then
-      cache_tbl[name].prev = cur
+  cache_tbl[name].to_set = val
+  vim.defer_fn(function()
+    if cache_tbl[name].to_set ~= val then return end
+    cache_tbl[name].to_set = nil
+    if cache_tbl[name].set ~= cur then
+      if type(cur) ~= 'string' or not cur:find('lualine') then
+        cache_tbl[name].prev = cur
+      end
     end
-  end
-  cache_tbl[name].set = val
-  setter_fn(name, val)
+    cache_tbl[name].set = val
+    setter_fn(name, val)
+    if name == 'statusline' or name == 'winbar' then vim.cmd('redrawstatus') end
+    if name == 'tabline' then vim.cmd('redrawtabline') end
+  end, DEBOUNCE_DELAY)
 end
 
 -- set a option value
