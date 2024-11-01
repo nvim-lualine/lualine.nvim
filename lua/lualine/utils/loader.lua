@@ -220,8 +220,10 @@ local function load_theme(theme_name)
   end
   local n_files = #files
   if n_files == 0 then
-    -- No match found
-    error(path .. ' Not found')
+    -- No match found on runtimepath. Fall back to package.path
+    local file =
+      assert(package.searchpath('lualine.themes.' .. theme_name, package.path), 'Theme ' .. theme_name .. ' not found')
+    retval = dofile(file)
   elseif n_files == 1 then
     -- when only one is found run that and return it's return value
     retval = dofile(files[1])
@@ -229,7 +231,8 @@ local function load_theme(theme_name)
     -- put entries from user config path in front
     local user_config_path = vim.fn.stdpath('config')
     table.sort(files, function(a, b)
-      return vim.startswith(a, user_config_path) or not vim.startswith(b, user_config_path)
+      local pattern = table.concat { user_config_path, sep }
+      return string.match(a, pattern) or not string.match(b, pattern)
     end)
     -- More then 1 found . Use the first one that isn't in lualines repo
     local lualine_repo_pattern = table.concat({ 'lualine.nvim', 'lua', 'lualine' }, sep)

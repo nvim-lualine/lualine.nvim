@@ -21,6 +21,7 @@ describe('Lualine', function()
         },
         ignore_focus = {},
         always_divide_middle = true,
+        always_show_tabline = true,
         globalstatus = false,
         refresh = {
           statusline = 1000,

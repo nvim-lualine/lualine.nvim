@@ -27,7 +27,7 @@ local refresh_real_curwin
 
 -- The events on which lualine redraws itself
 local default_refresh_events =
-  'WinEnter,BufEnter,SessionLoadPost,FileChangedShellPost,VimResized,Filetype,CursorMoved,CursorMovedI,ModeChanged'
+  'WinEnter,BufEnter,BufWritePost,SessionLoadPost,FileChangedShellPost,VimResized,Filetype,CursorMoved,CursorMovedI,ModeChanged'
 -- Helper for apply_transitional_separators()
 --- finds first applied highlight group after str_checked in status
 ---@param status string : unprocessed statusline string
@@ -479,7 +479,7 @@ local function set_tabline(hide)
       "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['tabline'], 'trigger': 'autocmd'})",
       'lualine_tal_refresh'
     )
-    modules.nvim_opts.set('showtabline', 2, { global = true })
+    modules.nvim_opts.set('showtabline', config.options.always_show_tabline and 2 or 1, { global = true })
     timers.halt_tal_refresh = false
   else
     modules.nvim_opts.restore('tabline', { global = true })

@@ -11,7 +11,7 @@ A blazing fast and easy to configure Neovim statusline written in Lua.
 
 `lualine.nvim` requires Neovim >= 0.7.
 
-For previous versoins of neovim please use compatability tags for example
+For previous versions of neovim please use compatability tags for example
 compat-nvim-0.5
 
 ## Contributing
@@ -88,6 +88,15 @@ use {
 }
 ```
 
+### [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+{
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
+}
+```
+
 You'll also need to have a patched font if you want icons.
 
 ## Usage and customization
@@ -130,6 +139,7 @@ require('lualine').setup {
     },
     ignore_focus = {},
     always_divide_middle = true,
+    always_show_tabline = true,
     globalstatus = false,
     refresh = {
       statusline = 1000,
@@ -368,6 +378,10 @@ options = {
   always_divide_middle = true, -- When set to true, left sections i.e. 'a','b' and 'c'
                                -- can't take over the entire statusline even
                                -- if neither of 'x', 'y' or 'z' are present.
+
+  always_show_tabline = true -- When set to true, if you have configured lualine for displaying tabline
+                          -- then tabline will always show. If set to false, then tabline will be displayed
+                          -- only when there are more than 1 tab. (see :h showtabline)
 
   globalstatus = false,        -- enable global statusline (have a single statusline
                                -- at bottom of neovim instead of one for  every window).
@@ -661,6 +675,20 @@ sections = {
 }
 ```
 
+#### encoding component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'encoding',
+      -- Show '[BOM]' when the file has a byte-order mark
+        show_bomb = false,
+    }
+  }
+}
+```
+
 #### searchcount component options
 
 ```lua
@@ -912,6 +940,7 @@ extensions = {'quickfix'}
 - nerdtree
 - nvim-dap-ui
 - nvim-tree
+- oil
 - overseer
 - quickfix
 - symbols-outline
