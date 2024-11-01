@@ -142,9 +142,9 @@ require('lualine').setup {
     always_show_tabline = true,
     globalstatus = false,
     refresh = {
-      statusline = 1000,
-      tabline = 1000,
-      winbar = 1000,
+      statusline = 100,
+      tabline = 100,
+      winbar = 100,
     }
   },
   sections = {
@@ -388,9 +388,9 @@ options = {
                                -- This feature is only available in neovim 0.7 and higher.
 
   refresh = {                  -- sets how often lualine should refresh it's contents (in ms)
-    statusline = 1000,         -- The refresh option sets minimum time that lualine tries
-    tabline = 1000,            -- to maintain between refresh. It's not guarantied if situation
-    winbar = 1000              -- arises that lualine needs to refresh itself before this time
+    statusline = 100,         -- The refresh option sets minimum time that lualine tries
+    tabline = 100,            -- to maintain between refresh. It's not guarantied if situation
+    winbar = 100              -- arises that lualine needs to refresh itself before this time
                                -- it'll do it.
 
                                -- Also you can force lualine's refresh by calling refresh function
