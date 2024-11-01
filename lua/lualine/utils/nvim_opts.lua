@@ -46,7 +46,8 @@ local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
     cache_tbl[name] = {}
   end
   cache_tbl[name].to_set = val
-  vim.defer_fn(function()
+
+  local defered_setter = function()
     if cache_tbl[name].to_set ~= val then return end
     cache_tbl[name].to_set = nil
     if cache_tbl[name].set ~= cur then
@@ -58,7 +59,14 @@ local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
     setter_fn(name, val)
     if name == 'statusline' or name == 'winbar' then vim.cmd('redrawstatus') end
     if name == 'tabline' then vim.cmd('redrawtabline') end
-  end, DEBOUNCE_DELAY)
+  end
+
+  if cache_tbl.prev == nil or cache_tbl.prev == '' then
+    -- when setting for the first time no need to delay
+    defered_setter()
+  else
+    vim.defer_fn(defered_setter, DEBOUNCE_DELAY)
+  end
 end
 
 -- set a option value
