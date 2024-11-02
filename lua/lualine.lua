@@ -27,7 +27,7 @@ local refresh_real_curwin
 
 -- The events on which lualine redraws itself
 local default_refresh_events =
-  'WinEnter,BufEnter,BufWritePost,SessionLoadPost,FileChangedShellPost,VimResized,Filetype,CursorMoved,CursorMovedI,ModeChanged'
+  'WinEnter,BufEnter,BufWritePost,SessionLoadPost,FileChangedShellPost,VimResized,Filetype,CursorMoved,CursorMovedI,ModeChanged,RecordingEnter,RecordingLeave'
 -- Helper for apply_transitional_separators()
 --- finds first applied highlight group after str_checked in status
 ---@param status string : unprocessed statusline string
