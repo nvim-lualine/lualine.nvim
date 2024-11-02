@@ -57,24 +57,40 @@ end
 ---                      when nil it's treated as {global = true}
 function M.set(name, val, opts)
   if opts == nil or opts.global then
-    set_opt(name, val, vim.api.nvim_get_option, vim.api.nvim_set_option, options.global)
+    set_opt(name, val, function(nm)
+      return vim.api.nvim_get_option_value(nm, {scope = 'global'}) end,
+      function(nm, vl)
+        vim.api.nvim_set_option_value(nm, vl, {scope = 'global'})
+      end, options.global)
   elseif opts.buffer then
     if options.buffer[opts.buffer] == nil then
       options.buffer[opts.buffer] = {}
     end
     set_opt(name, val, function(nm)
-      return vim.api.nvim_buf_get_option(opts.buffer, nm)
+      return vim.api.nvim_get_option_value(nm, {
+        scope = 'local',
+        buf = opts.buffer
+      })
     end, function(nm, vl)
-      vim.api.nvim_buf_set_option(opts.buffer, nm, vl)
+      vim.api.nvim_set_option_value(nm, vl, {
+        scope = 'local',
+        buf = opts.buffer
+      })
     end, options.buffer[opts.buffer])
   elseif opts.window then
     if options.window[opts.window] == nil then
       options.window[opts.window] = {}
     end
     set_opt(name, val, function(nm)
-      return vim.api.nvim_win_get_option(opts.window, nm)
+      return vim.api.nvim_get_option_value(nm, {
+        scope = 'local',
+        win = opts.window
+      })
     end, function(nm, vl)
-      vim.api.nvim_win_set_option(opts.window, nm, vl)
+      vim.api.nvim_set_option_value(nm, vl, {
+          scope = 'local',
+          win = opts.window
+        })
     end, options.window[opts.window])
   end
 end
