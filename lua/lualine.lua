@@ -25,7 +25,6 @@ local timers = {
 local last_focus = {}
 local refresh_real_curwin
 
-
 -- Helper for apply_transitional_separators()
 --- finds first applied highlight group after str_checked in status
 ---@param status string : unprocessed statusline string
