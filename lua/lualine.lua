@@ -431,6 +431,7 @@ local function set_tabline(hide)
   vim.loop.timer_stop(timers.tal_timer)
   timers.halt_tal_refresh = true
   if not hide and next(config.tabline) ~= nil then
+    modules.highlight.set_hl_to_normal('TabLine')
     vim.loop.timer_start(
       timers.tal_timer,
       0,
@@ -459,6 +460,8 @@ local function set_statusline(hide)
   vim.loop.timer_stop(timers.stl_timer)
   timers.halt_stl_refresh = true
   if not hide and (next(config.sections) ~= nil or next(config.inactive_sections) ~= nil) then
+    modules.highlight.set_hl_to_normal('StatusLine')
+    modules.highlight.set_hl_to_normal('StatusLineNC')
     if vim.go.statusline == '' then
       modules.nvim_opts.set('statusline', '%#Normal#', { global = true })
     end
@@ -508,6 +511,8 @@ local function set_winbar(hide)
   vim.loop.timer_stop(timers.wb_timer)
   timers.halt_wb_refresh = true
   if not hide and (next(config.winbar) ~= nil or next(config.inactive_winbar) ~= nil) then
+    modules.highlight.set_hl_to_normal('Winbar')
+    modules.highlight.set_hl_to_normal('WinbarNC')
     vim.loop.timer_start(
       timers.wb_timer,
       0,
