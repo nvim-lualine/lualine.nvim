@@ -49,11 +49,24 @@ local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
   end
   cache_tbl[name].set = val
   setter_fn(name, val)
-  if name == 'statusline' or name == 'winbar' then
-    vim.cmd('redrawstatus')
-  end
-  if name == 'tabline' then
-    vim.cmd('redrawtabline')
+
+  --  Mitigation for https://github.com/nvim-lualine/lualine.nvim/issues/1323
+  --  when redrawstatus is ran and winbar usues some eval syntax %{} for some
+  --  odd reason nvim renders the winbar in statusline first then actual statusline
+  --  replaces it. Also it doesn't happen on top window. Might be some bug in
+  --  neovims rendering. Also it doesn't seem to happend with laststatus=2 or
+  --  global status turned off in lualine. lualines rendering might be at fault
+  --  too. but we should never be evaluating an externally set winbar so that
+  --  doen't make much sense either.
+  --  Tested: nvim v0.9.5
+  --  TODO: Needs further investigation.
+  if vim.api.nvim_get_mode().mode == 'c' then
+    if name == 'statusline' or name == 'winbar' then
+      vim.cmd('redrawstatus')
+    end
+    if name == 'tabline' then
+      vim.cmd('redrawtabline')
+    end
   end
 end
 
