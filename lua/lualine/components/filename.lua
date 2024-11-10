@@ -17,6 +17,7 @@ local default_options = {
   newfile_status = false,
   path = 0,
   shorting_target = 40,
+  filename_map = nil
 }
 
 local function is_new_file()
@@ -98,6 +99,9 @@ M.update_status = function(self)
   end
 
   data = modules.utils.stl_escape(data)
+  if self.options.filename_map then
+      data = self.options.filename_map(data)
+  end
 
   local symbols = {}
   if self.options.file_status then
