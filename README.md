@@ -915,7 +915,7 @@ You can find a bigger list [here](https://github.com/rockerBOO/awesome-neovim#ta
 ### Extensions
 
 lualine extensions change statusline appearance for a window/buffer with
-specified filetypes.
+specified filetypes or buffertypes.
 
 By default no extensions are loaded to improve performance.
 You can load extensions with:
@@ -944,6 +944,7 @@ extensions = {'quickfix'}
 - overseer
 - quickfix
 - symbols-outline
+- terminal
 - toggleterm
 - trouble
 
@@ -955,6 +956,17 @@ You can define your own extensions. If you believe an extension may be useful to
 local my_extension = { sections = { lualine_a = {'mode'} }, filetypes = {'lua'} }
 require('lualine').setup { extensions = { my_extension } }
 ```
+
+To filter by buffer type, for instance, you can apply:
+
+```lua
+local terminal_sec = function() return 'TERMINAL' end
+local my_extension = { sections = { lualine_a = {terminal_sec} }, buftypes = {'terminal'} }
+require('lualine').setup { extensions = { my_extension } }
+```
+
+Note: `filetypes` takes prescedence over `buftypes`. If `filetypes` is present,
+the `buftypes` value is ignored.
 
 ---
 
