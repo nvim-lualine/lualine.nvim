@@ -585,6 +585,30 @@ describe('FileSize component', function()
   end)
 end)
 
+describe('Filepermissions componnet', function()
+  it('can show octal permissions', function()
+    local opts = build_component_opts {
+      octal = true,
+    }
+    vim.cmd(':e test-file.txt')
+    assert_component('filepermissions', opts, '')
+    vim.cmd(':w')
+    vim.fn.setfperm("test-file.txt", "rwxrwxrwx")
+    assert_component('filename', opts, 'o777')
+  end)
+
+  it('can show regular permissions', function()
+    local opts = build_component_opts {
+      octal = false,
+    }
+    vim.cmd(':e test-file.txt')
+    assert_component('filepermissions', opts, '')
+    vim.cmd(':w')
+    vim.fn.setfperm("test-file.txt", "rwxrwxrwx")
+    assert_component('filename', opts, 'rwxrwxrwx')
+  end)
+end)
+
 describe('Filename component', function()
   it('works', function()
     local opts = build_component_opts {
