@@ -48,15 +48,16 @@ local function get_git_branch()
   return branch ~= "" and branch or "HEAD"
 end
 
-local function is_remote_branch(ref)
-  local handle = io.popen(string.format("git branch -r --contains %s 2>/dev/null", ref))
-  if not handle then
-    return false
-  end
-  local remote = handle:read("*a"):match("%S+")
-  handle:close()
-  return remote and remote or false
-end
+-- Optional
+-- local function is_remote_branch(ref)
+--   local handle = io.popen(string.format("git branch -r --contains %s 2>/dev/null", ref))
+--   if not handle then
+--     return false
+--   end
+--   local remote = handle:read("*a"):match("%S+")
+--   handle:close()
+--   return remote and remote or false
+-- end
 
 local function get_all_branches_pointing_to(commit)
   local handle = io.popen(string.format("git branch -a --points-at %s 2>/dev/null", commit))
@@ -292,13 +293,16 @@ M.inactive_winbar = {
 -- Restrict to Diffview buffers
 -- M.buftypes = {''}
 M.filetypes = {
+  --Null
+  'null',
+
   -- Programming Languages
   'lua', 'python', 'javascript', 'typescript', 'html', 'css', 'json', 'yaml', 'yml',
   'markdown', 'md', 'c', 'cpp', 'cxx', 'h', 'hpp', 'java', 'ruby', 'go', 'php', 'rust',
   'sh', 'bash', 'vim', 'toml',
 
   -- Configuration & Build Files
-  'gitcommit', 'gitrebase', 'make', 'dockerfile', 'env', 'ini',
+  'gitcommit', 'gitrebase', 'make', 'dockerfile', 'env', 'ini', 'conf',
 
   -- Markup and Documentation
   'xml', 'tex', 'latex', 'asciidoc', 'rst',
