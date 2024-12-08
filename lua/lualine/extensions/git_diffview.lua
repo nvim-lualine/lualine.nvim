@@ -29,7 +29,7 @@ local function resolve_git_reference(ref)
 end
 
 local function get_relative_to_head(hash)
-  local handle = io.popen(string.format("git rev-list --count %s..HEAD 2>/dev/null", hash))
+  local handle = io.popen(string.format("git rev-list --count --first-parent %s..HEAD 2>/dev/null", hash))
   if not handle then
     return nil
   end
