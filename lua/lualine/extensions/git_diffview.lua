@@ -293,22 +293,52 @@ M.inactive_winbar = {
 -- Restrict to Diffview buffers
 -- M.buftypes = {''}
 M.filetypes = {
-  --Null
+  -- Null
   'null',
 
   -- Programming Languages
   'lua', 'python', 'javascript', 'typescript', 'html', 'css', 'json', 'yaml', 'yml',
   'markdown', 'md', 'c', 'cpp', 'cxx', 'h', 'hpp', 'java', 'ruby', 'go', 'php', 'rust',
-  'sh', 'bash', 'vim', 'toml',
+  'sh', 'bash', 'vim', 'toml', 'systemverilog', 'verilog', 'perl', 'swift', 'kotlin',
+  'scala', 'dart', 'r', 'sas', 'pascal', 'fortran', 'cobol', 'vhdl', 'assembly', 'asm',
+  'typescriptreact', 'javascriptreact', 'clojure', 'elixir', 'erlang', 'scheme', 'fsharp',
 
-  -- Configuration & Build Files
-  'gitcommit', 'gitrebase', 'make', 'dockerfile', 'env', 'ini', 'conf',
+  -- Scripting and Config Files
+  'ini', 'conf', 'env', 'config', 'properties', 'rc', 'toml', 'plist', 'bat', 'cmd', 'ps1',
 
   -- Markup and Documentation
-  'xml', 'tex', 'latex', 'asciidoc', 'rst',
+  'xml', 'tex', 'latex', 'asciidoc', 'rst', 'csv', 'tsv', 'docbook', 'jsonnet', 'dita',
+  'org', 'textile',
+
+  -- Specialized Hardware and Electronics
+  'systemverilog', 'verilog', 'spectre', 'spice', 'veriloga',
 
   -- Plugin/Framework Specific
   'NvimTree', 'dashboard', 'packer', 'quickfix', 'help', 'terminal', 'diff', 'TelescopePrompt',
-}
 
+  -- Build and Packaging Files
+  'make', 'cmake', 'ninja', 'dockerfile', 'gradle', 'maven', 'build', 'bazel',
+
+  -- Text and No Filetype
+  'text', 'plain', 'txt', 'log', 'unknown', 'none',
+
+  -- Git Related
+  'gitcommit', 'gitrebase', 'gitignore', 'gitattributes',
+
+  -- Shells and Terminals
+  'fish', 'zsh', 'csh', 'tcsh', 'ksh', 'ash', 'dash',
+
+  -- Other Formats
+  'sql', 'sqlite', 'protobuf', 'hcl', 'terraform', 'graphql', 'dot', 'plantuml', 'mermaid',
+  'lua', 'vimscript',
+
+  -- Graphics and Visual
+  'svg', 'eps', 'ai', 'psd', 'blend', 'obj', 'mtl', 'stl', 'fbx', 'gltf',
+
+  -- Archives and Compressed
+  'zip', 'tar', 'gz', 'bz2', 'xz', '7z', 'rar',
+
+  -- Miscellaneous
+  'ics', 'ical', 'vcard', 'yaml.sample', 'json.sample',
+}
 return M
