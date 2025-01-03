@@ -91,8 +91,8 @@ local function setup_base16_nvim()
 end
 
 local function setup_base16_vim()
-  -- Check if tinted-theming/base16-vim is already loaded
-  if vim.g.base16_gui00 and vim.g.base16_gui0F then
+  -- Check if tinted-theming/tinted-vim is already loaded
+  if (vim.g.base16_gui00 and vim.g.base16_gui0F) or (vim.g.tinted_gui00 and vim.g.tinted_gui0F) then
     return setup {
       bg = vim.g.base16_gui01,
       alt_bg = vim.g.base16_gui02,
