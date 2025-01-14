@@ -436,7 +436,7 @@ local function set_tabline(hide)
       0,
       config.options.refresh.tabline,
       modules.utils.timer_call(timers.tal_timer, 'lualine_tal_refresh', function()
-        refresh { kind = 'tabpage', place = { 'tabline' }, trigger = 'timer' }
+        refresh { scope = 'tabpage', place = { 'tabline' }, trigger = 'timer' }
       end, 3, 'lualine: Failed to refresh tabline')
     )
     modules.nvim_opts.set('showtabline', config.options.always_show_tabline and 2 or 1, { global = true })
@@ -444,7 +444,7 @@ local function set_tabline(hide)
     vim.schedule(function()
       -- imediately refresh upon load
       -- schedule needed so stuff like filetype detect can run first
-      refresh { kind = 'tabpage', place = { 'tabline' }, trigger = 'init' }
+      refresh { scope = 'tabpage', place = { 'tabline' }, trigger = 'init' }
     end)
   else
     modules.nvim_opts.restore('tabline', { global = true })
@@ -469,7 +469,7 @@ local function set_statusline(hide)
         0,
         config.options.refresh.statusline,
         modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function()
-          refresh { kind = 'window', place = { 'statusline' }, trigger = 'timer' }
+          refresh { scope = 'window', place = { 'statusline' }, trigger = 'timer' }
         end, 3, 'lualine: Failed to refresh statusline')
       )
     else
@@ -479,7 +479,7 @@ local function set_statusline(hide)
         0,
         config.options.refresh.statusline,
         modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function()
-          refresh { kind = 'tabpage', place = { 'statusline' }, trigger = 'timer' }
+          refresh { scope = 'tabpage', place = { 'statusline' }, trigger = 'timer' }
         end, 3, 'lualine: Failed to refresh statusline')
       )
     end
@@ -488,9 +488,9 @@ local function set_statusline(hide)
       -- imediately refresh upon load
       -- schedule needed so stuff like filetype detect can run first
       if config.options.globalstatus then
-        refresh { kind = 'window', place = { 'statusline' }, trigger = 'init' }
+        refresh { scope = 'window', place = { 'statusline' }, trigger = 'init' }
       else
-        refresh { kind = 'tabpage', place = { 'statusline' }, trigger = 'init' }
+        refresh { scope = 'tabpage', place = { 'statusline' }, trigger = 'init' }
       end
     end)
   else
@@ -513,14 +513,14 @@ local function set_winbar(hide)
       0,
       config.options.refresh.winbar,
       modules.utils.timer_call(timers.wb_timer, 'lualine_wb_refresh', function()
-        refresh { kind = 'tabpage', place = { 'winbar' }, trigger = 'timer' }
+        refresh { scope = 'tabpage', place = { 'winbar' }, trigger = 'timer' }
       end, 3, 'lualine: Failed to refresh winbar')
     )
     timers.halt_wb_refresh = false
     vim.schedule(function()
       -- imediately refresh upon load.
       -- schedule needed so stuff like filetype detect can run first
-      refresh { kind = 'tabpage', place = { 'winbar' }, trigger = 'init' }
+      refresh { scope = 'tabpage', place = { 'winbar' }, trigger = 'init' }
     end)
   elseif vim.fn.has('nvim-0.8') == 1 then
     modules.nvim_opts.restore('winbar', { global = true })
