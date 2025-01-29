@@ -73,6 +73,15 @@ The following example is using the `tomorrow-night` colorscheme:
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648582-e8e59b00-74bb-11eb-9239-edcc8e9c2c18.png'/>
 </p>
 
+### cosmicink
+
+<p>
+<img width='700' src='https://github.com/user-attachments/assets/5cf11f41-b551-4821-89f8-e9300f941167'/>
+<img width='700' src='https://github.com/user-attachments/assets/3afb2524-8326-4c6b-b431-3026c15573e5'/>
+<img width='700' src='https://github.com/user-attachments/assets/3ac23988-7a5c-4ed6-ba10-63eff1d71bee'/>
+<img width='700' src='https://github.com/user-attachments/assets/66d70f1a-3837-466d-b152-622bb0c226d3'/>
+</p>
+
 ### dracula
 
 <p>
