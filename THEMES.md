@@ -73,7 +73,7 @@ The following example is using the `tomorrow-night` colorscheme:
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108648582-e8e59b00-74bb-11eb-9239-edcc8e9c2c18.png'/>
 </p>
 
-### cosmicink
+### cosmic_ink
 
 <p>
 <img width='700' src='https://github.com/user-attachments/assets/5cf11f41-b551-4821-89f8-e9300f941167'/>
