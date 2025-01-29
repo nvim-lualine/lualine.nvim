@@ -262,7 +262,7 @@ return {
     --   cond = conditions.hide_in_width,
     -- }
 
-    for set_name, icons in pairs(icon_sets_list) do
+    for _, icons in pairs(icon_sets_list) do
       ins_left {
         function() return get_random_icon(icons) end,
         color = function()
