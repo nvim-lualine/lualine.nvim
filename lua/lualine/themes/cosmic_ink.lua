@@ -3,24 +3,67 @@ return {
   lazy = false,
   config = function()
     -- theme colors
+
+    local function read_wal_colors()
+      local colors = {}
+      local color_file = os.getenv("HOME") .. "/.cache/wal/colors"
+
+      -- Try to read from the colors file first
+      local file = io.open(color_file, "r")
+      if file then
+        for line in file:lines() do
+          table.insert(colors, line)
+        end
+        file:close()
+      end
+
+      return colors
+    end
+
+    local wal_colors = read_wal_colors()
+
     local colors = {
-      bg       = '#1c1b1b',
-      fg       = '#f2e7d5',
-      yellow   = '#e8b75f',
-      cyan     = '#5ad1b3',
-      darkblue = '#2b3e50',
-      green    = '#5eff73',
-      orange   = '#ff7733',
-      violet   = '#7a3ba8',
-      magenta  = '#d360aa',
-      blue     = '#4f9cff',
-      red      = '#ff3344',
+        bg       = wal_colors[1] or '#16181b', -- Dark background
+        fg       = wal_colors[8] or '#c5c4c4', -- Light foreground for contrast
+
+        -- Assigning colors while ensuring contrast and avoiding duplications
+        yellow   = wal_colors[3]  or '#cb1b1d', -- Stronger, vibrant color
+        cyan     = wal_colors[6]  or '#7793c4', -- Softer cyan tone
+        darkblue = wal_colors[2]  or '#2c3e7b', -- Strong deep blue
+        green    = wal_colors[4]  or '#7b7830', -- Muted green/yellow mix for balance
+        orange   = wal_colors[7]  or '#cbc98a', -- Softer orange tone
+        violet   = wal_colors[5]  or '#704880', -- Strong violet/purple tone
+        magenta  = wal_colors[10] or '#801216', -- Deep magenta/red mix
+        blue     = wal_colors[12] or '#466d84', -- Light-medium blue for balance
+        red      = wal_colors[9]  or '#cb1b1d', -- Strong red
     }
+    -- Ensure contrast between background and foreground
+    if colors.bg == colors.fg then
+        colors.fg = '#f2e7d5' -- Fallback to a light foreground
+    end
+
+    -- Ensure contrast between background and other colors
+    local function ensure_contrast(color, default)
+        if color == colors.bg or color == colors.fg then
+            return default
+        end
+        return color
+    end
+
+    colors.yellow   = ensure_contrast(colors.yellow, '#e8b75f')
+    colors.cyan     = ensure_contrast(colors.cyan, '#00bcd4')
+    colors.darkblue = ensure_contrast(colors.darkblue, '#2b3e50')
+    colors.green    = ensure_contrast(colors.green, '#00e676')
+    colors.orange   = ensure_contrast(colors.orange, '#ff7733')
+    colors.violet   = ensure_contrast(colors.violet, '#7a3ba8')
+    colors.magenta  = ensure_contrast(colors.magenta, '#d360aa')
+    colors.blue     = ensure_contrast(colors.blue, '#4f9cff')
+    colors.red      = ensure_contrast(colors.red, '#ff3344')
 
     local function get_mode_color()
       local mode_color = {
         n = colors.darkblue,
-        i = colors.magenta,
+        i = colors.violet,
         v = colors.red,
         [''] = colors.blue,
         V = colors.red,
@@ -30,8 +73,8 @@ return {
         S = colors.orange,
         [''] = colors.orange,
         ic = colors.yellow,
-        R = colors.violet,
-        Rv = colors.violet,
+        R = colors.orange,
+        Rv = colors.orange,
         cv = colors.red,
         ce = colors.red,
         r = colors.cyan,
@@ -44,19 +87,21 @@ return {
     end
 
     local function get_opposite_color(mode_color)
-      -- Define a mapping of mode colors to their opposites
+      -- Define a mapping of mode colors to their opposites (randomized)
       local opposite_colors = {
-        [colors.red] = colors.blue,
-        [colors.blue] = colors.red,
+        [colors.red] = colors.cyan,
+        [colors.blue] = colors.orange,
         [colors.green] = colors.magenta,
-        [colors.magenta] = colors.green,
-        [colors.orange] = colors.cyan,
-        [colors.cyan] = colors.orange,
-        [colors.violet] = colors.yellow,
-        [colors.yellow] = colors.violet,
+        [colors.magenta] = colors.darkblue,
+        [colors.orange] = colors.blue,
+        [colors.cyan] = colors.yellow,
+        [colors.violet] = colors.green,
+        [colors.yellow] = colors.red,
+        [colors.darkblue] = colors.violet,
       }
       return opposite_colors[mode_color] or colors.fg -- Default to fg if no opposite is found
     end
+
 
     -- checks the conditions
     local conditions = {
@@ -152,6 +197,18 @@ return {
     end
 
     -- Helper function to create a separator component
+    local function create_separator_mode(side)
+      return {
+        function()
+          return side == 'left' and '' or ''
+        end,
+        color = function()
+          local mode_color = get_mode_color()
+          return { fg = mode_color }
+        end,
+        padding = { left = 0 },
+      }
+    end
     local function create_separator(side)
       return {
         function()
@@ -182,24 +239,63 @@ return {
       }
     end
 
+    -- Mode indicator function
+    local function mode()
+      local mode_map = {
+         n = 'N',         -- Normal Mode
+         i = 'I',         -- Insert Mode
+         v = 'V',         -- Visual Mode
+         [''] = 'V',    -- Visual Block Mode
+         V = 'V',         -- Visual Line Mode
+         c = 'C',         -- Command Mode
+         no = 'N',        -- Operator-pending Mode
+         s = 'S',         -- Select Mode
+         S = 'S',         -- Select Mode
+         ic = 'I',        -- Insert Mode (Completion)
+         R = 'R',         -- Replace Mode
+         Rv = 'R',        -- Virtual Replace Mode
+         cv = 'C',        -- Command Mode
+         ce = 'C',        -- Command Mode
+         r = 'R',         -- Hit-enter Mode
+         rm = 'M',        -- More Mode
+         ['r?'] = '?',     -- Prompt Mode
+         ['!'] = '!',     -- Shell Mode
+         t = 'T',         -- Terminal Mode
+        -- n = "NORMAL",
+        -- i = "INSERT",
+        -- v = "VISUAL",
+        -- [''] = "V-BLOCK",
+        -- V = "V-LINE",
+        -- c = "COMMAND",
+        -- no = "N-OPERATOR",
+        -- s = "SELECT",
+        -- S = "S-LINE",
+        -- [''] = "S-BLOCK",
+        -- ic = "INSERT COMPL",
+        -- R = "REPLACE",
+        -- Rv = "V-REPLACE",
+        -- cv = "COMMAND",
+        -- ce = "COMMAND",
+        -- r = "PROMPT",
+        -- rm = "MORE",
+        -- ['r?'] = "CONFIRM",
+        -- ['!'] = "SHELL",
+        -- t = "TERMINAL",
+      }
+      return mode_map[vim.fn.mode()] or "[UNKNOWN]"
+    end
 
     -- LEFT
     ins_left {
-      function()
-        local shiftwidth = vim.api.nvim_buf_get_option(0, 'shiftwidth')
-        local expandtab = vim.api.nvim_buf_get_option(0, 'expandtab')
-        return (expandtab and ' s:' or ' t:') .. shiftwidth .. " "
-      end,
-      -- icon = '󰌒 ',
+      mode,
       color = function()
         local mode_color = get_mode_color()
-        return { fg = colors.bg, bg = get_opposite_color(mode_color), gui = 'bold' }
+        return { fg = colors.bg, bg = mode_color, gui = 'bold' }
       end,
-      padding = { left = 0 },
-      cond = conditions.hide_in_width,
+      padding = { left = 1, right = 1 },
     }
-    -- Left separator
-    ins_left(create_separator('left'))
+
+    ins_left(create_separator_mode('left'))
 
     ins_left {
       function()
@@ -221,7 +317,6 @@ return {
 
     ins_left(create_separator('left'))
 
-    -- Mode indicator
     ins_left {
       function()
         return '' -- 󱎶
@@ -345,7 +440,7 @@ return {
         return msg
       end,
       icon = ' ',
-      color = { fg = '#e1a95f', gui = 'bold' },
+      color = { fg = colors.yellow, gui = 'bold' },
     }
 
     ins_right {
@@ -377,6 +472,7 @@ return {
     }
 
     ins_right(create_separator('right'))
+
     ins_right(create_mode_based_component('progress', nil, colors.bg))
 
     require('lualine').setup(config)
