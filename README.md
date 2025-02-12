@@ -269,6 +269,7 @@ sections = {lualine_a = {'mode'}}
 - `selectioncount` (number of selected characters or lines)
 - `tabs` (shows currently available tabs)
 - `windows` (shows currently available windows)
+- `lsp_status` (shows active LSPs in the current buffer and a progress spinner)
 
 #### Custom components
 
@@ -788,6 +789,29 @@ sections = {
         active = 'lualine_{section}_normal',     -- Color for active window.
         inactive = 'lualine_{section}_inactive', -- Color for inactive window.
       },
+    }
+  }
+}
+```
+
+#### lsp status component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'lsp_status',
+      icon = '', -- f013
+      symbols = {
+        -- Standard unicode symbols to cycle through for LSP progress:
+        spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
+        -- Standard unicode symbol for when LSP is done:
+        done = '✓',
+        -- Delimiter inserted between LSP names:
+        separator = ' ',
+      },
+      -- List of LSP names to ignore (e.g., `null-ls`):
+      ignore_lsp = {},
     }
   }
 }
