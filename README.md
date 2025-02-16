@@ -48,6 +48,8 @@ For those who want to break the norms, you can create custom looks for lualine.
   <img width='700' src='https://user-images.githubusercontent.com/13149513/143395518-f6d6f748-c1ca-491b-9dab-246d0a8cf23f.png'/>
 - [bubbles](examples/bubbles.lua)
   <img width='700' src='https://user-images.githubusercontent.com/20235646/131350468-fc556196-5f46-4bfe-a72e-960f6a58db2c.png'/>
+- [mimi_lualine][examples/mimi_lualine.lua]<img width="1648" alt="Screenshot 2024-06-08 at 4 07 26 PM" src="https://github.com/nvim-lualine/lualine.nvim/assets/53974841/0a331c74-fa10-4a13-990b-a47a7b5969a9">
+
 
 <!-- panvimdoc-ignore-end -->
 
