@@ -41,6 +41,7 @@ local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
   if cache_tbl[name] == nil then
     cache_tbl[name] = {}
   end
+
   if cache_tbl[name].set ~= cur then
     if type(cur) ~= 'string' or not cur:find('lualine') then
       cache_tbl[name].prev = cur
@@ -48,6 +49,25 @@ local function set_opt(name, val, getter_fn, setter_fn, cache_tbl)
   end
   cache_tbl[name].set = val
   setter_fn(name, val)
+
+  --  Mitigation for https://github.com/nvim-lualine/lualine.nvim/issues/1323
+  --  when redrawstatus is ran and winbar usues some eval syntax %{} for some
+  --  odd reason nvim renders the winbar in statusline first then actual statusline
+  --  replaces it. Also it doesn't happen on top window. Might be some bug in
+  --  neovims rendering. Also it doesn't seem to happend with laststatus=2 or
+  --  global status turned off in lualine. lualines rendering might be at fault
+  --  too. but we should never be evaluating an externally set winbar so that
+  --  doen't make much sense either.
+  --  Tested: nvim v0.9.5
+  --  TODO: Needs further investigation.
+  if vim.api.nvim_get_mode().mode == 'c' then
+    if name == 'statusline' or name == 'winbar' then
+      vim.cmd('redrawstatus')
+    end
+    if name == 'tabline' then
+      vim.cmd('redrawtabline')
+    end
+  end
 end
 
 -- set a option value
@@ -63,8 +83,14 @@ function M.set(name, val, opts)
       options.buffer[opts.buffer] = {}
     end
     set_opt(name, val, function(nm)
+      if not vim.tbl_contains(vim.api.nvim_list_bufs(), opts.buffer) then
+        return nil
+      end
       return vim.api.nvim_buf_get_option(opts.buffer, nm)
     end, function(nm, vl)
+      if not vim.tbl_contains(vim.api.nvim_list_bufs(), opts.buffer) then
+        return nil
+      end
       vim.api.nvim_buf_set_option(opts.buffer, nm, vl)
     end, options.buffer[opts.buffer])
   elseif opts.window then
@@ -72,8 +98,14 @@ function M.set(name, val, opts)
       options.window[opts.window] = {}
     end
     set_opt(name, val, function(nm)
+      if not vim.tbl_contains(vim.api.nvim_list_wins(), opts.window) then
+        return nil
+      end
       return vim.api.nvim_win_get_option(opts.window, nm)
     end, function(nm, vl)
+      if not vim.tbl_contains(vim.api.nvim_list_wins(), opts.window) then
+        return nil
+      end
       vim.api.nvim_win_set_option(opts.window, nm, vl)
     end, options.window[opts.window])
   end
