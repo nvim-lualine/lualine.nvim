@@ -25,9 +25,6 @@ local timers = {
 local last_focus = {}
 local refresh_real_curwin
 
--- The events on which lualine redraws itself
-local default_refresh_events =
-  'WinEnter,BufEnter,BufWritePost,SessionLoadPost,FileChangedShellPost,VimResized,Filetype,CursorMoved,CursorMovedI,ModeChanged'
 -- Helper for apply_transitional_separators()
 --- finds first applied highlight group after str_checked in status
 ---@param status string : unprocessed statusline string
@@ -312,7 +309,7 @@ end
 ---@class LualineRefreshOpts
 ---@field scope LualineRefreshOptsKind
 ---@field place LualineRefreshOptsPlace[]
----@field trigger 'autocmd'|'autocmd_redired'|'timer'|'unknown'
+---@field trigger 'timer' | 'init' |'unknown'
 --- Refresh contents of lualine
 ---@param opts LualineRefreshOpts
 local function refresh(opts)
@@ -324,36 +321,6 @@ local function refresh(opts)
     place = { 'statusline', 'winbar', 'tabline' },
     trigger = 'unknown',
   })
-
-  -- updating statusline in autocommands context seems to trigger 100 different bugs
-  -- lets just defer it to a timer context and update there
-  -- Since updating stl in command mode doesn't take effect
-  -- refresh ModeChanged command in autocmd context as exception.
-  -- workaround for
-  --   https://github.com/neovim/neovim/issues/15300
-  --   https://github.com/neovim/neovim/issues/19464
-  --   https://github.com/nvim-lualine/lualine.nvim/issues/753
-  --   https://github.com/nvim-lualine/lualine.nvim/issues/751
-  --   https://github.com/nvim-lualine/lualine.nvim/issues/755
-  --   https://github.com/neovim/neovim/issues/19472
-  --   https://github.com/nvim-lualine/lualine.nvim/issues/791
-  if
-    opts.trigger == 'autocmd'
-    and vim.v.event.new_mode ~= 'c'
-    -- scheduling in op-pending mode seems to call the callback forever.
-    -- so this is restricted in op-pending mode.
-    -- https://github.com/neovim/neovim/issues/22263
-    -- https://github.com/nvim-lualine/lualine.nvim/issues/967
-    -- note this breaks mode component while switching to op-pending mode
-    and not vim.tbl_contains({ 'no', 'nov', 'noV' }, vim.v.event.new_mode)
-    and not vim.tbl_contains({ 'no', 'nov', 'noV' }, vim.v.event.old_mode)
-  then
-    opts.trigger = 'autocmd_redired'
-    vim.schedule(function()
-      M.refresh(opts)
-    end)
-    return
-  end
 
   local wins = {}
   local old_actual_curwin = vim.g.actual_curwin
@@ -463,24 +430,22 @@ end
 local function set_tabline(hide)
   vim.loop.timer_stop(timers.tal_timer)
   timers.halt_tal_refresh = true
-  vim.cmd([[augroup lualine_tal_refresh | exe "autocmd!" | augroup END]])
   if not hide and next(config.tabline) ~= nil then
     vim.loop.timer_start(
       timers.tal_timer,
       0,
       config.options.refresh.tabline,
       modules.utils.timer_call(timers.tal_timer, 'lualine_tal_refresh', function()
-        refresh { kind = 'tabpage', place = { 'tabline' }, trigger = 'timer' }
+        refresh { scope = 'tabpage', place = { 'tabline' }, trigger = 'timer' }
       end, 3, 'lualine: Failed to refresh tabline')
     )
-    modules.utils.define_autocmd(
-      default_refresh_events,
-      '*',
-      "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['tabline'], 'trigger': 'autocmd'})",
-      'lualine_tal_refresh'
-    )
-    modules.nvim_opts.set('showtabline', 2, { global = true })
+    modules.nvim_opts.set('showtabline', config.options.always_show_tabline and 2 or 1, { global = true })
     timers.halt_tal_refresh = false
+    vim.schedule(function()
+      -- imediately refresh upon load
+      -- schedule needed so stuff like filetype detect can run first
+      refresh { scope = 'tabpage', place = { 'tabline' }, trigger = 'init' }
+    end)
   else
     modules.nvim_opts.restore('tabline', { global = true })
     modules.nvim_opts.restore('showtabline', { global = true })
@@ -493,7 +458,6 @@ end
 local function set_statusline(hide)
   vim.loop.timer_stop(timers.stl_timer)
   timers.halt_stl_refresh = true
-  vim.cmd([[augroup lualine_stl_refresh | exe "autocmd!" | augroup END]])
   if not hide and (next(config.sections) ~= nil or next(config.inactive_sections) ~= nil) then
     if vim.go.statusline == '' then
       modules.nvim_opts.set('statusline', '%#Normal#', { global = true })
@@ -505,14 +469,8 @@ local function set_statusline(hide)
         0,
         config.options.refresh.statusline,
         modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function()
-          refresh { kind = 'window', place = { 'statusline' }, trigger = 'timer' }
+          refresh { scope = 'window', place = { 'statusline' }, trigger = 'timer' }
         end, 3, 'lualine: Failed to refresh statusline')
-      )
-      modules.utils.define_autocmd(
-        default_refresh_events,
-        '*',
-        "call v:lua.require'lualine'.refresh({'kind': 'window', 'place': ['statusline'], 'trigger': 'autocmd'})",
-        'lualine_stl_refresh'
       )
     else
       modules.nvim_opts.set('laststatus', 2, { global = true })
@@ -521,17 +479,20 @@ local function set_statusline(hide)
         0,
         config.options.refresh.statusline,
         modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function()
-          refresh { kind = 'tabpage', place = { 'statusline' }, trigger = 'timer' }
+          refresh { scope = 'tabpage', place = { 'statusline' }, trigger = 'timer' }
         end, 3, 'lualine: Failed to refresh statusline')
-      )
-      modules.utils.define_autocmd(
-        default_refresh_events,
-        '*',
-        "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['statusline'], 'trigger': 'autocmd'})",
-        'lualine_stl_refresh'
       )
     end
     timers.halt_stl_refresh = false
+    vim.schedule(function()
+      -- imediately refresh upon load
+      -- schedule needed so stuff like filetype detect can run first
+      if config.options.globalstatus then
+        refresh { scope = 'window', place = { 'statusline' }, trigger = 'init' }
+      else
+        refresh { scope = 'tabpage', place = { 'statusline' }, trigger = 'init' }
+      end
+    end)
   else
     modules.nvim_opts.restore('statusline', { global = true })
     for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -546,23 +507,21 @@ end
 local function set_winbar(hide)
   vim.loop.timer_stop(timers.wb_timer)
   timers.halt_wb_refresh = true
-  vim.cmd([[augroup lualine_wb_refresh | exe "autocmd!" | augroup END]])
   if not hide and (next(config.winbar) ~= nil or next(config.inactive_winbar) ~= nil) then
     vim.loop.timer_start(
       timers.wb_timer,
       0,
       config.options.refresh.winbar,
       modules.utils.timer_call(timers.wb_timer, 'lualine_wb_refresh', function()
-        refresh { kind = 'tabpage', place = { 'winbar' }, trigger = 'timer' }
+        refresh { scope = 'tabpage', place = { 'winbar' }, trigger = 'timer' }
       end, 3, 'lualine: Failed to refresh winbar')
     )
-    modules.utils.define_autocmd(
-      default_refresh_events,
-      '*',
-      "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['winbar'], 'trigger': 'autocmd'})",
-      'lualine_wb_refresh'
-    )
     timers.halt_wb_refresh = false
+    vim.schedule(function()
+      -- imediately refresh upon load.
+      -- schedule needed so stuff like filetype detect can run first
+      refresh { scope = 'tabpage', place = { 'winbar' }, trigger = 'init' }
+    end)
   elseif vim.fn.has('nvim-0.8') == 1 then
     modules.nvim_opts.restore('winbar', { global = true })
     for _, win in ipairs(vim.api.nvim_list_wins()) do
