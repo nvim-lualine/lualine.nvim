@@ -22,7 +22,7 @@ local default_options = {
 local function is_new_file()
   local filename = vim.fn.expand('%')
   return filename ~= ''
-    and filename:match("^%a+://") == nil
+    and filename:match('^%a+://') == nil
     and vim.bo.buftype == ''
     and vim.fn.filereadable(filename) == 0
 end
