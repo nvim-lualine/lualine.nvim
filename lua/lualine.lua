@@ -246,8 +246,20 @@ local function setup_theme()
       -- use the provided theme as-is
       return config.options.theme
     elseif type(theme_name) == 'function' then
-      -- call function and use returned (dynamic) theme as-is
-      return config.options.theme()
+      -- call function and use returned (dyanmic) theme, either as-is or as a string
+      local ok, dynamic_theme = pcall(theme_name)
+      if ok and (type(dynamic_theme) == 'string') then
+        local ok_string, theme = pcall(modules.loader.load_theme, dynamic_theme)
+        if ok_string and theme then
+          return theme
+        end
+      elseif ok and (type(dynamic_theme) == 'table') then
+        return dynamic_theme
+      else
+        local error_message = 'Invalid theme type returned from function: ' .. type(dynamic_theme)
+        notify_theme_error(error_message)
+        return dynamic_theme
+      end
     end
     if theme_name ~= 'auto' then
       notify_theme_error(theme_name)
