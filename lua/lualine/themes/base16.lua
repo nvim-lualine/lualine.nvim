@@ -106,6 +106,8 @@ local function setup_base16_vim()
     }
   end
 
+  -- base16-vim has been renamed to tinted-vim along with colors
+  -- context: https://github.com/nvim-lualine/lualine.nvim/pull/1352
   if vim.g.tinted_gui00 and vim.g.tinted_gui0F then
     return setup {
       bg = vim.g.tinted_gui01,
