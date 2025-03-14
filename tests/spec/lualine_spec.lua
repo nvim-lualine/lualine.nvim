@@ -1031,7 +1031,7 @@ describe('Lualine', function()
   describe('supports compound filetypes', function()
     it('disabled filetypes', function()
       local conf = require('lualine').get_config()
-      conf.options.disabled_filetypes = {'java'}
+      conf.options.disabled_filetypes = { 'java' }
       require('lualine').setup(conf)
       local old_ft = vim.bo.ft
       vim.bo.ft = 'lua.java'
