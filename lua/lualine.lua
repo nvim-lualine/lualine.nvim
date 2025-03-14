@@ -296,10 +296,7 @@ local function status_dispatch(sec_name)
     local is_focused = focused ~= nil and focused or modules.utils.is_focused()
     for _, ft in ipairs(current_ft_list) do
       if
-        vim.tbl_contains(
-          config.options.disabled_filetypes[(sec_name == 'sections' and 'statusline' or sec_name)],
-          ft
-        )
+        vim.tbl_contains(config.options.disabled_filetypes[(sec_name == 'sections' and 'statusline' or sec_name)], ft)
       then
         -- disable on specific filetypes
         return nil
