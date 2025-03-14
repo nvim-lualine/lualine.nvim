@@ -902,7 +902,9 @@ describe('lsp_status component', function()
   it('is empty when LSP is ignored', function()
     vim.cmd('edit ' .. file)
     stub(vim.lsp, 'get_clients')
-    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'null-ls' } }
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns {
+      { id = 2, name = 'null-ls' },
+    }
 
     assert_comp_ins(lsp_status_comp, '')
   end)
