@@ -186,20 +186,22 @@ local statusline = modules.utils.retry_call_wrap(function(sections, is_focused, 
 end)
 
 --- check if any extension matches the filetype and return proper sections
----@param current_ft string : filetype name of current file
+---@param current_ft_list string[] : filetype name of current file
 ---@param is_focused boolean : whether being evaluated for focused window or not
 ---@return table|nil : (section_table) section config where components are replaced with
 ---      component objects
 -- TODO: change this so it uses a hash table instead of iteration over list
 --       to improve redraws. Add buftype / bufname for extensions
 --       or some kind of cond ?
-local function get_extension_sections(current_ft, is_focused, sec_name)
-  for _, extension in ipairs(config.extensions) do
-    if vim.tbl_contains(extension.filetypes, current_ft) then
-      if is_focused then
-        return extension[sec_name]
-      else
-        return extension['inactive_' .. sec_name] or extension[sec_name]
+local function get_extension_sections(current_ft_list, is_focused, sec_name)
+  for _, ft in ipairs(current_ft_list) do
+    for _, extension in ipairs(config.extensions) do
+      if vim.tbl_contains(extension.filetypes, ft) then
+        if is_focused then
+          return extension[sec_name]
+        else
+          return extension['inactive_' .. sec_name] or extension[sec_name]
+        end
       end
     end
   end
@@ -290,17 +292,17 @@ local function status_dispatch(sec_name)
     local current_ft = refresh_real_curwin
         and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(refresh_real_curwin), 'filetype')
       or vim.bo.filetype
+    local current_ft_list = vim.split(current_ft, '%.') -- handle compound filetypes c.doxygen
     local is_focused = focused ~= nil and focused or modules.utils.is_focused()
-    if
-      vim.tbl_contains(
-        config.options.disabled_filetypes[(sec_name == 'sections' and 'statusline' or sec_name)],
-        current_ft
-      )
-    then
-      -- disable on specific filetypes
-      return nil
+    for _, ft in ipairs(current_ft_list) do
+      if
+        vim.tbl_contains(config.options.disabled_filetypes[(sec_name == 'sections' and 'statusline' or sec_name)], ft)
+      then
+        -- disable on specific filetypes
+        return nil
+      end
     end
-    local extension_sections = get_extension_sections(current_ft, is_focused, sec_name)
+    local extension_sections = get_extension_sections(current_ft_list, is_focused, sec_name)
     if extension_sections ~= nil then
       retval = statusline(extension_sections, is_focused, sec_name == 'winbar')
     else

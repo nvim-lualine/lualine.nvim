@@ -1027,4 +1027,45 @@ describe('Lualine', function()
       ]===])
     end)
   end)
+
+  describe('supports compound filetypes', function()
+    it('disabled filetypes', function()
+      local conf = require('lualine').get_config()
+      conf.options.disabled_filetypes = {'java'}
+      require('lualine').setup(conf)
+      local old_ft = vim.bo.ft
+      vim.bo.ft = 'lua.java'
+      vim.opt.filetype = 'lua.java'
+      statusline:expect(nil)
+      vim.bo.ft = old_ft
+    end)
+
+    it('extensions for work on compound filetypes', function()
+      local conf = require('lualine').get_config()
+      table.insert(conf.extensions, {
+        filetypes = { 'test_ft' },
+        sections = {
+          lualine_a = {
+            function()
+              return 'custom_extension_component'
+            end,
+          },
+        },
+      })
+      local old_ft = vim.bo.ft
+      vim.bo.ft = 'lua.test_ft'
+      require('lualine').setup(conf)
+      statusline:expect([===[
+      highlights = {
+          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
+          2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+      }
+      |{1: custom_extension_component }
+      {2:}
+      {3:                                                                                           }|
+      ]===])
+      vim.bo.ft = old_ft
+    end)
+  end)
 end)
