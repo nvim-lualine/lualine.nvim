@@ -872,3 +872,137 @@ describe('Branch component', function()
     assert_component('branch', opts, rev)
   end)
 end)
+
+describe('lsp_status component', function()
+  local assert_comp_ins = helpers.assert_component_instance
+  local tmpdir
+  local file
+  local opts = build_component_opts {
+    component_separators = { left = '', right = '' },
+    padding = 0,
+    ignore_lsp = { "null-ls" },
+  }
+  local lsp_status_comp
+
+  before_each(function()
+    require('lualine').setup {}
+    tmpdir = os.tmpname()
+    file = os.tmpname() .. '/test.lua'
+    vim.cmd([[
+      augroup lualine
+        autocmd!
+      augroup END
+    ]])
+    lsp_status_comp = helpers.init_component('lsp_status', opts)
+  end)
+
+  after_each(function()
+    os.remove(tmpdir)
+  end)
+
+  it('is empty when no LSP', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns {}
+
+    assert_comp_ins(lsp_status_comp, '')
+  end)
+
+  it('is empty when LSP is ignored', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'null-ls' } }
+
+    assert_comp_ins(lsp_status_comp, '')
+  end)
+
+  it('shows LSP name and icon when attached', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    vim.cmd('edit ' .. file)
+
+    assert_comp_ins(lsp_status_comp, ' lua_ls')
+  end)
+
+  it('shows LSP name and icon in older nvim version', function()
+    vim.cmd('edit ' .. file)
+    vim.lsp.get_clients = nil
+    stub(vim.lsp, 'get_active_clients')
+    ---@diagnostic disable-next-line: deprecated
+    vim.lsp.get_active_clients
+      .on_call_with({ bufnr = vim.api.nvim_get_current_buf() })
+      .returns { { id = 2, name = 'lua_ls' } }
+
+    assert_comp_ins(lsp_status_comp, ' lua_ls')
+  end)
+
+  it('shows LSP progress when supported with precise time measurement', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+    vim.uv = vim.uv or {}
+    stub(vim.uv, 'hrtime')
+    vim.uv.hrtime.on_call_with().returns(12 * 1e6 * 80)
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'begin' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      -- Use spinner symbol 12 (time) % 10 (symbol table size) = 2.
+      assert_comp_ins(lsp_status_comp, ' lua_ls ⠹')
+    end
+  end)
+
+  it('shows LSP progress when supported without precise time measurement', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+    vim.uv = nil
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'begin' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      -- We start from 0 and advanced by 1, so use spinner symbol 1.
+      assert_comp_ins(lsp_status_comp, ' lua_ls ⠙')
+    end
+  end)
+
+  it('shows LSP progress when supported with precise time measurement', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'end' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      assert_comp_ins(lsp_status_comp, ' lua_ls ✓')
+    end
+  end)
+
+  it('shows LSP done when supported', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'begin' } } },
+    }) and pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'end' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      assert_comp_ins(lsp_status_comp, ' lua_ls ✓')
+    end
+  end)
+end)
