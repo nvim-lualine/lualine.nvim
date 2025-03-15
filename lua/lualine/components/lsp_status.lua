@@ -14,19 +14,6 @@ local default_options = {
   ignore_lsp = {},
 }
 
----Advances the spinner every 80ms (or just once if precise time measurement is not supported) and returns the new
----spinner symbol.
-function M:__advance_spinner()
-  if vim.uv then
-    self.__spinner_index = math.floor(vim.uv.hrtime() / (1e6 * 80))
-  else
-    self.__spinner_index = (self.__spinner_index or 0) + 1
-  end
-  self.__spinner_index = self.__spinner_index % #self.symbols.spinner
-  -- The spinner symbols table is 1-indexed.
-  return self.symbols.spinner[self.__spinner_index + 1]
-end
-
 function M:init(options)
   -- Run `super()`.
   M.super.init(self, options)
@@ -65,20 +52,18 @@ function M:init(options)
 end
 
 function M:update_status()
-  local bufnr = vim.api.nvim_get_current_buf()
   local result = {}
 
-  -- Retrieve the active LSPs in the current buffer in a backwards-compatible way.
-  local clients
-  if vim.lsp.get_clients then
-    clients = vim.lsp.get_clients { bufnr = bufnr }
-  else
-    ---@diagnostic disable-next-line: deprecated
-    clients = vim.lsp.get_active_clients { bufnr = bufnr }
-  end
+  -- Backwards-compatible function to get the active LSP clients.
+  ---@diagnostic disable-next-line: deprecated
+  local get_lsp_clients = vim.lsp.get_clients or vim.lsp.get_active_clients
+  local clients = get_lsp_clients { bufnr = vim.api.nvim_get_current_buf() }
 
-  -- Advance the spinner only once, not for each client (otherwise the spinners will skip steps).
-  local spinner_symbol = self:__advance_spinner()
+  -- Backwards-compatible function to get the current time in nanoseconds.
+  local hrtime = (vim.uv or vim.loop).hrtime
+  -- Advance the spinner every 80ms only once, not for each client (otherwise the spinners will skip steps).
+  -- NOTE: the spinner symbols table is 1-indexed.
+  local spinner_symbol = self.symbols.spinner[math.floor(hrtime() / (1e6 * 80)) % #self.symbols.spinner + 1]
 
   for _, client in ipairs(clients) do
     local status
@@ -91,7 +76,6 @@ function M:update_status()
 
     -- Backwards-compatible function to check if a list contains a value.
     local list_contains = vim.list_contains or vim.tbl_contains
-
     -- Append the status to the LSP only if it supports progress reporting and is not ignored.
     if not list_contains(self.options.ignore_lsp, client.name) then
       table.insert(result, client.name .. (status and ' ' .. status or ''))
