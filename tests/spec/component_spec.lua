@@ -985,4 +985,25 @@ describe('lsp_status component', function()
       assert_comp_ins(lsp_status_comp, ' lua_ls ✓')
     end
   end)
+
+  it('does not add unnecessary space separator when LSP progress symbol is empty', function()
+    local opts_no_done = opts
+    opts_no_done.symbols = { done = '' }
+    local lsp_status_comp_no_done = helpers.init_component('lsp_status', opts)
+
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'begin' } } },
+    }) and pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'end' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      assert_comp_ins(lsp_status_comp_no_done, ' lua_ls')
+    end
+  end)
 end)
