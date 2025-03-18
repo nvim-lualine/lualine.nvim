@@ -1,3 +1,7 @@
+-- CosmicInk config for lualine
+-- Author: Yeeloman
+-- MIT license, see LICENSE for more details.
+
 -- Main configuration for setting up lualine.nvim statusline plugin
 return {
 	"nvim-lualine/lualine.nvim",
