@@ -4,6 +4,7 @@
 
 ![code size](https://img.shields.io/github/languages/code-size/nvim-lualine/lualine.nvim?style=flat-square)
 ![license](https://img.shields.io/github/license/nvim-lualine/lualine.nvim?style=flat-square)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-F7941D?style=plastic&logo=buy-me-a-coffee&logoColor=white)](https://buymeacoffee.com/shadmansalj)
 
 <!-- panvimdoc-ignore-end -->
 
@@ -268,6 +269,7 @@ sections = {lualine_a = {'mode'}}
 - `selectioncount` (number of selected characters or lines)
 - `tabs` (shows currently available tabs)
 - `windows` (shows currently available windows)
+- `lsp_status` (shows active LSPs in the current buffer and a progress spinner)
 
 #### Custom components
 
@@ -792,6 +794,29 @@ sections = {
 }
 ```
 
+#### lsp status component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'lsp_status',
+      icon = '', -- f013
+      symbols = {
+        -- Standard unicode symbols to cycle through for LSP progress:
+        spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
+        -- Standard unicode symbol for when LSP is done:
+        done = '✓',
+        -- Delimiter inserted between LSP names:
+        separator = ' ',
+      },
+      -- List of LSP names to ignore (e.g., `null-ls`):
+      ignore_lsp = {},
+    }
+  }
+}
+```
+
 ---
 
 ### Tabline
@@ -1037,3 +1062,11 @@ You can find some useful [configuration snippets](https://github.com/nvim-lualin
 
 If you want to extend lualine with plugins or want to know
 which ones already do, [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
+
+### Support
+
+If you find this project useful, consider supporting development:
+
+<a href="https://buymeacoffee.com/shadmansalj" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" width="200">
+</a>
