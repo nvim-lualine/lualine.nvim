@@ -957,6 +957,7 @@ extensions = {'quickfix'}
 - fern
 - fugitive
 - fzf
+- grapple
 - lazy
 - man
 - mason
