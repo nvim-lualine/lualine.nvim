@@ -1,4 +1,4 @@
-M = {}
+local M = {}
 
 -- Default Theme Colors: Define a set of base colors for your theme
 M.default_colors = {
@@ -117,8 +117,8 @@ end
 -- Function to interpolate between two colors for a smooth transition
 local function interpolate_color(color1, color2, step)
 	-- Blend two colors based on the given step factor (0.0 -> color1, 1.0 -> color2)
-	local blend = function(c1, c2, step)
-		return math.floor(c1 + (c2 - c1) * step)
+	local blend = function(c1, c2, stp)
+		return math.floor(c1 + (c2 - c1) * stp)
 	end
 	-- Extract the RGB values of both colors (in hex)
 	local r1, g1, b1 = tonumber(color1:sub(2, 3), 16), tonumber(color1:sub(4, 5), 16), tonumber(color1:sub(6, 7), 16)

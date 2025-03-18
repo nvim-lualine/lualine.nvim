@@ -1,5 +1,5 @@
 -- M table stores all the conditions for easier access
-M = {}
+local M = {}
 
 -- Condition: Check if the buffer is not empty
 -- This checks whether the current file's name is non-empty.
@@ -25,4 +25,3 @@ end
 
 -- Return the conditions table to be used by other modules
 return M
-

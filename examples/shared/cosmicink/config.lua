@@ -1,3 +1,5 @@
+local M = {}
+
 local ink_colors = require("shared.cosmicink.colors")
 local ink_utils = require("shared.cosmicink.utils")
 local ink_conditions = require("shared.cosmicink.conditions")
