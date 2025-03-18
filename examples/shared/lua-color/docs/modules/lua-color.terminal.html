@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Lua Color</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/lua-color.colors.X11.html">lua-color.colors.X11</a></li>
+  <li><a href="../modules/lua-color.colors.html">lua-color.colors</a></li>
+  <li><strong>lua-color.terminal</strong></li>
+</ul>
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><a href="../classes/Color.html">Color</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>lua-color.terminal</code></h1>
+<p>
+<h3>Style terminal output</h3>
+</p>
+<p> Standard colors:
+ <ul>
+  <li>black</li>
+  <li>red</li>
+  <li>green</li>
+  <li>yellow</li>
+  <li>blue</li>
+  <li>pink</li>
+  <li>cyan</li>
+  <li>white</li>
+  <li>default</li>
+ </ul></p>
+
+<p> <strong>!</strong> Not all terminals support all effects <br/>
+ <strong>!</strong> Generally you can expect the colors from the list above
+ to work on all *nix systems <br/>
+ <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_(Select_Graphic_Rendition)_parameters">More information</a></p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#set">set (options)</a></td>
+	<td class="summary">Set a format.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#reset">reset ()</a></td>
+	<td class="summary">Reset the format.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#apply">apply (options)</a></td>
+	<td class="summary">Set a format for a string.</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Effect">Effect</a></td>
+	<td class="summary">Effect flags</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "set"></a>
+    <strong>set (options)</strong>
+    </dt>
+    <dd>
+    Set a format.
+ <br><br>
+ Options table:
+ <ul>
+  <li><code>color</code>: Foreground color</li>
+  <li><code>bg</code> or <code>background</code>: Background color</li>
+  <li><code>font</code>: Number between 0 (default) and 9 to select font</li>
+  <li>An effect as <code>&lt;effect_name&gt; = true</code></li>
+  <li>Flags for effects as index 1</li>
+ </ul>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">options</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a>, <span class="type">number</span>, <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> or <a class="type" href="../classes/Color.html#">Color</a></span>
+         <ul>
+   <li><code>number</code>: Effect flag</li>
+   <li><a href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> or <a href="../classes/Color.html#">Color</a>: Foreground color</li>
+   <li><a href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a>: Options table (above)</li>
+  </ul>
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        Escape sequence
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="comment">-- Blue, underlined and italic
+</span><span class="keyword">local</span> tc = <span class="global">require</span> <span class="string">"lua-color.terminal"</span>
+<span class="global">print</span>(tc.set {
+  color = <span class="string">"blue"</span>,
+  tc.Effect.underline | tc.Effect.italic,
+} .. <span class="string">"Hello world!"</span> .. tc.reset())</pre></li>
+        <li><pre class="example"><span class="comment">-- Red background, font number 3 and underlined
+</span><span class="global">print</span>(tc.set {
+  bg = Color {<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>},
+  font = <span class="number">3</span>,
+  underline = <span class="keyword">true</span>,
+} .. <span class="string">"Hello world!"</span> .. tc.reset())</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "reset"></a>
+    <strong>reset ()</strong>
+    </dt>
+    <dd>
+    Reset the format.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        Escape sequence
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "apply"></a>
+    <strong>apply (options)</strong>
+    </dt>
+    <dd>
+    Set a format for a string. </p>
+
+<p> Sets the format before the string and resets it after.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">options</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         Same as the options for <a href="../modules/lua-color.terminal.html#set">set</a>,
+  but with a <code>to</code> option for the string
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        Escape sequence
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="comment">-- Red on green background
+</span><span class="keyword">local</span> tc = <span class="global">require</span> <span class="string">"lua-color.terminal"</span>
+<span class="global">print</span>(tc.apply {
+  color = <span class="string">"red"</span>,
+  bg = <span class="string">"green"</span>,
+  to = <span class="string">"Hello world!"</span>,
+})</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Fields"></a>Fields</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Effect"></a>
+    <strong>Effect</strong>
+    </dt>
+    <dd>
+    Effect flags  <ul>
+  <li>reset</li>
+  <li>bold</li>
+  <li>faint</li>
+  <li>italic</li>
+  <li>underline</li>
+  <li>blink</li>
+  <li>bright</li>
+  <li>invert</li>
+  <li>hide</li>
+  <li>strike</li>
+ </ul>
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2022-12-30 15:01:58 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

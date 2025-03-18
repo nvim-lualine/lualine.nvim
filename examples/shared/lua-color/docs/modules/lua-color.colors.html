@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Lua Color</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/lua-color.colors.X11.html">lua-color.colors.X11</a></li>
+  <li><strong>lua-color.colors</strong></li>
+  <li><a href="../modules/lua-color.terminal.html">lua-color.terminal</a></li>
+</ul>
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><a href="../classes/Color.html">Color</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>lua-color.colors</code></h1>
+<p>Get color names from files.</p>
+<p>
+
+</p>
+    <h3>See also:</h3>
+    <ul>
+         <a href="../classes/Color.html#Color.colorNames">Color.colorNames</a>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#load">load (file)</a></td>
+	<td class="summary">Load table from file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#loadCsv">loadCsv (file, nameColumn, valueColumn, separator, skipFirst)</a></td>
+	<td class="summary">Load table from csv file.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "load"></a>
+    <strong>load (file)</strong>
+    </dt>
+    <dd>
+    Load table from file. </p>
+
+<p> Uses <code>[:,;=]</code> as separator.
+ Lines that do not match the pattern are ignored.
+ Only the first occurence of the separator is parsed, other occurences are ignored.
+ <br>
+ Some valid formats are:<ul>
+  <li><code>color name: #ff0000</code></li>
+  <li><code>color name,rgba(88, 70, 30, .9)</code></li>
+  <li><code>color name;another color name in this file</code> (recursive or circular naming will cause a crash)</li>
+  <li><code>color name = #fffa</code></li>
+ </ul>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">file</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> or <span class="type">file</span></span>
+         Filename or open file descriptor
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">{[string]=string,...}</a></span>
+
+
+
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">Color.colorNames = colors.<span class="global">load</span> <span class="string">"my-colors.yaml"</span></pre></li>
+        <li><pre class="example"><span class="keyword">local</span> colors_file = <span class="global">assert</span>(<span class="global">io</span>.open(<span class="string">"my-colors.conf"</span>, <span class="string">"r"</span>))
+Color.colorNames = colors.<span class="global">load</span>(colors_file)
+colors_file:close()</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "loadCsv"></a>
+    <strong>loadCsv (file, nameColumn, valueColumn, separator, skipFirst)</strong>
+    </dt>
+    <dd>
+    Load table from csv file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">file</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> or <span class="type">file</span></span>
+         Filename or open file descriptor
+        </li>
+        <li><span class="parameter">nameColumn</span>
+            <span class="types">optional <span class="type">int</span></span>
+          Column index for the name (Default: 1)
+        </li>
+        <li><span class="parameter">valueColumn</span>
+            <span class="types"><span class="type">int</span> or <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         Column index for the value (Default: 2)
+  or table with column indices (and optionally divisors) for the color components
+        </li>
+        <li><span class="parameter">separator</span>
+            <span class="types">optional <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+           Column separator (Default: <code>,;</code>)
+        </li>
+        <li><span class="parameter">skipFirst</span>
+            <span class="types">optional <span class="type">bool</span></span>
+           Skip first line (Default: <code>false</code>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">{[string]=string,...}</a></span>
+
+
+
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example"><span class="comment">-- csv file: red,rgb 255 0 0
+</span>Color.colorNames = colors.loadCsv <span class="string">"my-colors.csv"</span></pre></li>
+        <li><pre class="example"><span class="comment">-- csv file: red,red is a color,255,0,0,0.5
+</span>Color.colorNames = colors.loadCsv(<span class="string">"my-colors.csv"</span>, <span class="number">1</span>, {
+  r = {<span class="number">3</span>, <span class="number">255</span>}, <span class="comment">-- load red component from column 3 and divide by 255
+</span>  g = {<span class="number">4</span>, <span class="number">255</span>},
+  b = {<span class="number">5</span>, <span class="number">255</span>},
+  a = <span class="number">6</span> <span class="comment">-- load alpha from column 6 (value is in [0;1] =&gt; no division required)
+</span>})</pre></li>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2022-12-30 15:01:58 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

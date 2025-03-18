@@ -1,0 +1,1429 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>Lua Color</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Fields">Fields</a></li>
+<li><a href="#Metamethods">Metamethods</a></li>
+<li><a href="#Methods">Methods</a></li>
+</ul>
+
+
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><strong>Color</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/lua-color.colors.X11.html">lua-color.colors.X11</a></li>
+  <li><a href="../modules/lua-color.colors.html">lua-color.colors</a></li>
+  <li><a href="../modules/lua-color.terminal.html">lua-color.terminal</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Class <code>Color</code></h1>
+<p>Parse, convert and manipulate color values.</p>
+<p>
+
+</p>
+
+
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Color.r">Color.r</a></td>
+	<td class="summary">Red component.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color.g">Color.g</a></td>
+	<td class="summary">Green component.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color.b">Color.b</a></td>
+	<td class="summary">Blue component.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color.a">Color.a</a></td>
+	<td class="summary">Alpha component.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color.colorNames">Color.colorNames</a></td>
+	<td class="summary">Table of color names.</td>
+	</tr>
+</table>
+<h2><a href="#Metamethods">Metamethods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Color:__call">Color:__call (value)</a></td>
+	<td class="summary">Color constructor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:__tostring">Color:__tostring ()</a></td>
+	<td class="summary">Get color in rgb hex notation.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:__eq">Color:__eq (other)</a></td>
+	<td class="summary">Check if colors are equal.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:__lt">Color:__lt (other)</a></td>
+	<td class="summary">Checks whether color is darker.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:__le">Color:__le (other)</a></td>
+	<td class="summary">Checks whether color is as dark or darker.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:__pairs">Color:__pairs ()</a></td>
+	<td class="summary">Iterate through color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:__unm">Color:__unm ()</a></td>
+	<td class="summary">Get inverted clone of color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:__add">Color:__add (a, b)</a></td>
+	<td class="summary">Mix two colors evenly.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:__sub">Color:__sub (a, b)</a></td>
+	<td class="summary">Complement of even mix.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:__band">Color:__band (a, b)</a></td>
+	<td class="summary">Apply rgb mask to color.</td>
+	</tr>
+</table>
+<h2><a href="#Methods">Methods</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Color:clone">Color:clone ()</a></td>
+	<td class="summary">Clone color</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:set">Color:set (value)</a></td>
+	<td class="summary">Set color to value.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:rgb">Color:rgb ()</a></td>
+	<td class="summary">Get rgb values.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:rgba">Color:rgba ()</a></td>
+	<td class="summary">Get rgba values.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:hsv">Color:hsv ()</a></td>
+	<td class="summary">Get hsv values.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:hsva">Color:hsva ()</a></td>
+	<td class="summary">Get hsv values.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:hsl">Color:hsl ()</a></td>
+	<td class="summary">Get hsl values.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:hsla">Color:hsla ()</a></td>
+	<td class="summary">Get hsl values.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:hwb">Color:hwb ()</a></td>
+	<td class="summary">Get hwb values.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:hwba">Color:hwba ()</a></td>
+	<td class="summary">Get hwb values.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:cmyk">Color:cmyk ()</a></td>
+	<td class="summary">Get cmyk values.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:rotate">Color:rotate (value)</a></td>
+	<td class="summary">Rotate hue of color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:invert">Color:invert ()</a></td>
+	<td class="summary">Invert the color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:grey">Color:grey ()</a></td>
+	<td class="summary">Reduce saturation to 0.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:blackOrWhite">Color:blackOrWhite (lightness)</a></td>
+	<td class="summary">Set to black or white depending on lightness.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:mix">Color:mix (other, strength)</a></td>
+	<td class="summary">Mix two colors together.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:complement">Color:complement ()</a></td>
+	<td class="summary">Generate complementary color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:analogous">Color:analogous ()</a></td>
+	<td class="summary">Generate analogous color scheme.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:triad">Color:triad ()</a></td>
+	<td class="summary">Generate triadic color scheme.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:tetrad">Color:tetrad ()</a></td>
+	<td class="summary">Generate tetradic color scheme.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:compound">Color:compound ()</a></td>
+	<td class="summary">Generate compound color scheme.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:evenlySpaced">Color:evenlySpaced (n, r)</a></td>
+	<td class="summary">Generate evenly spaced color scheme.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:tostring">Color:tostring (format)</a></td>
+	<td class="summary">Get string representation of color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:band">Color:band (a, b)</a></td>
+	<td class="summary">Apply rgb mask to color, providing backwards compatibility for Lua 5.1 and LuaJIT 2.1.0-beta3 (e.g.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Color:isColor">Color:isColor (color)</a></td>
+	<td class="summary">Check whether <code>color</code> is a Color.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Fields"></a>Fields</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Color.r"></a>
+    <strong>Color.r</strong>
+    </dt>
+    <dd>
+    Red component.
+
+
+    <ul>
+        <li><span class="parameter">r</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color.g"></a>
+    <strong>Color.g</strong>
+    </dt>
+    <dd>
+    Green component.
+
+
+    <ul>
+        <li><span class="parameter">g</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color.b"></a>
+    <strong>Color.b</strong>
+    </dt>
+    <dd>
+    Blue component.
+
+
+    <ul>
+        <li><span class="parameter">b</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color.a"></a>
+    <strong>Color.a</strong>
+    </dt>
+    <dd>
+    Alpha component.
+
+
+    <ul>
+        <li><span class="parameter">a</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color.colorNames"></a>
+    <strong>Color.colorNames</strong>
+    </dt>
+    <dd>
+    Table of color names.
+ <br>
+ Can be set to a table containing named colors to be used by <a href="../classes/Color.html#Color:set">Color:set</a>
+ <br>
+ Values must be compatible with <a href="../classes/Color.html#Color:set">Color:set</a>
+ <br>
+ Default: <code>nil</code>
+
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">Color.colorNames = { red = <span class="string">"#ff0000"</span>, green = <span class="string">"#00ff00"</span>, blue = <span class="string">"#0000ff"</span> }
+<span class="keyword">local</span> color = Color <span class="string">"green"</span></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Metamethods"></a>Metamethods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Color:__call"></a>
+    <strong>Color:__call (value)</strong>
+    </dt>
+    <dd>
+    Color constructor.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a>, <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a> or <a class="type" href="../classes/Color.html#">Color</a></span>
+         Color value (default: <code>nil</code>)
+        </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../classes/Color.html#Color:set">Color:set</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "Color:__tostring"></a>
+    <strong>Color:__tostring ()</strong>
+    </dt>
+    <dd>
+    Get color in rgb hex notation.
+ <br>
+ only adds alpha value if <code>color.a &lt; 1</code>
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        <code>#rrggbb</code> | <code>#rrggbbaa</code>
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../classes/Color.html#Color:tostring">Color:tostring</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "Color:__eq"></a>
+    <strong>Color:__eq (other)</strong>
+    </dt>
+    <dd>
+    Check if colors are equal.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">other</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        all values are equal
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:__lt"></a>
+    <strong>Color:__lt (other)</strong>
+    </dt>
+    <dd>
+    Checks whether color is darker.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">other</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        self is darker than other
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:__le"></a>
+    <strong>Color:__le (other)</strong>
+    </dt>
+    <dd>
+    Checks whether color is as dark or darker.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">other</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        self is as dark or darker than other
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:__pairs"></a>
+    <strong>Color:__pairs ()</strong>
+    </dt>
+    <dd>
+    Iterate through color. </p>
+
+<p> Iterates through r, g, b, and a.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:__unm"></a>
+    <strong>Color:__unm ()</strong>
+    </dt>
+    <dd>
+    Get inverted clone of color.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:__add"></a>
+    <strong>Color:__add (a, b)</strong>
+    </dt>
+    <dd>
+    Mix two colors evenly.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+         first color
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+         second color
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        new color
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../classes/Color.html#Color:mix">Color:mix</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "Color:__sub"></a>
+    <strong>Color:__sub (a, b)</strong>
+    </dt>
+    <dd>
+    Complement of even mix.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+         first color
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+         second color
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        new color
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <li><a href="../classes/Color.html#Color:mix">Color:mix</a></li>
+         <li><a href="../classes/Color.html#Color:__add">Color.__add</a></li>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "Color:__band"></a>
+    <strong>Color:__band (a, b)</strong>
+    </dt>
+    <dd>
+    Apply rgb mask to color.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a> or <span class="type">number</span></span>
+         color or mask
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a> or <span class="type">number</span></span>
+         color or mask (if a and b are colors b is used as mask)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        new color
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> new_col = color &amp; <span class="number">0xff00ff</span> <span class="comment">-- get new color without the green channel</span></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Methods"></a>Methods</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Color:clone"></a>
+    <strong>Color:clone ()</strong>
+    </dt>
+    <dd>
+    Clone color
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        copy
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:set"></a>
+    <strong>Color:set (value)</strong>
+    </dt>
+    <dd>
+    Set color to value.
+ <br>
+ Called by constructor
+ <br><br>
+ Possible value types:
+ <ul>
+  <li><a href="../classes/Color.html#">Color</a></li>
+  <li>color name as specified in <a href="../classes/Color.html#Color.colorNames">Color.colorNames</a></li>
+  <li>css style functions as string:<ul>
+   <li><code>rgb(r, g, b)</code></li>
+   <li><code>rgba(r, g, b, a)</code></li>
+   <li><code>hsl(h, s, l)</code></li>
+   <li><code>hsla(h, s, l, a)</code></li>
+   <li><code>hsv(h, s, v)</code></li>
+   <li><code>hsva(h, s, v, a)</code></li>
+   <li><code>hwb(h, w, b)</code></li>
+   <li><code>hwba(h, w, b, a)</code></li>
+   <li><code>cmyk(c, m, y, k)</code></li>
+   </ul>
+   Values are in the same ranges as in css ([0;255] for rgb, [0;1] for alpha, ...)<br>
+   functions can be specified in a simplified syntax: <code>rgb(r, g, b) == rgb r g b</code>
+  </li>
+  <li>NCol string: <code>R10, 50%, 50%</code></li>
+  <li>hex string: <code>#rgb</code> | <code>#rgba</code> | <code>#rrggbb</code> | <code>#rrggbbaa</code> (<code>#</code> can be omitted)</li>
+  <li>rgb values in [0;1]: <code>{r, g, b[, a]}</code> | <code>{r=r, g=g, b=b[, a=a]}</code></li>
+  <li>hsv values in [0;1]: <code>{h=h, s=s, v=v[, a=a]}</code></li>
+  <li>hsl values in [0;1]: <code>{h=h, s=s, l=l[, a=a]}</code></li>
+  <li>hwb values in [0;1]: <code>{h=h, w=w, b=b[, a=a]}</code></li>
+  <li>cmyk values in [0;1]: <code>{c=c, m=m, y=y, k=k}</code></li>
+  <li>single set mode, table with any combination of the following: <ul>
+   <li><code>red</code></li>
+   <li><code>green</code></li>
+   <li><code>blue</code></li>
+   <li><code>alpha</code></li>
+   <li><code>hue</code></li>
+   <li><code>saturation</code></li>
+   <li><code>value</code></li>
+   <li><code>lightness</code></li>
+   <li><code>whiteness</code></li>
+   <li><code>blackness</code></li>
+   <li><code>cyan</code></li>
+   <li><code>magenta</code></li>
+   <li><code>yellow</code></li>
+   <li><code>key</code></li>
+   </ul>
+   All values are in <code>[0;1]</code>.<br>
+   They will be applied in the order: <code>rgba -&gt; hsl -&gt; hwb -&gt; hsv -&gt; cmyk</code><br>
+   If <code>lightness</code> is given, saturation is treated as hsl saturation,
+   otherwise it will be treated as hsv saturation.
+  </li>
+ </ul>
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a>, <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a> or <a class="type" href="../classes/Color.html#">Color</a></span>
+         Color
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        self
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../classes/Color.html#Color:__call">Color:__call</a>
+    </ul>
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">color:set <span class="string">"#f1f1f1"</span></pre></li>
+        <li><pre class="example">color:set <span class="string">"rgba(241, 241, 241, 0.5)"</span></pre></li>
+        <li><pre class="example">color:set <span class="string">"hsl 180 100% 20%"</span></pre></li>
+        <li><pre class="example">color:set { r = <span class="number">0.255</span>, g = <span class="number">0.729</span>, b = <span class="number">0.412</span> }</pre></li>
+        <li><pre class="example">color:set { <span class="number">0.255</span>, <span class="number">0.729</span>, <span class="number">0.412</span> } <span class="comment">-- same as above</span></pre></li>
+        <li><pre class="example">color:set { h = <span class="number">0.389</span>, s = <span class="number">0.65</span>, v = <span class="number">0.73</span> }</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Color:rgb"></a>
+    <strong>Color:rgb ()</strong>
+    </dt>
+    <dd>
+    Get rgb values.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        red</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        green</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        blue</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:rgba"></a>
+    <strong>Color:rgba ()</strong>
+    </dt>
+    <dd>
+    Get rgba values.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        red</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        green</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        blue</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        alpha</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:hsv"></a>
+    <strong>Color:hsv ()</strong>
+    </dt>
+    <dd>
+    Get hsv values.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        hue</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        saturation</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        value</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:hsva"></a>
+    <strong>Color:hsva ()</strong>
+    </dt>
+    <dd>
+    Get hsv values.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        hue</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        saturation</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        value</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        alpha</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:hsl"></a>
+    <strong>Color:hsl ()</strong>
+    </dt>
+    <dd>
+    Get hsl values.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        hue</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        saturation</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        lightness</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:hsla"></a>
+    <strong>Color:hsla ()</strong>
+    </dt>
+    <dd>
+    Get hsl values.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        hue</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        saturation</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        lightness</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        alpha</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:hwb"></a>
+    <strong>Color:hwb ()</strong>
+    </dt>
+    <dd>
+    Get hwb values.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        hue</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        whiteness</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        blackness</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:hwba"></a>
+    <strong>Color:hwba ()</strong>
+    </dt>
+    <dd>
+    Get hwb values.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        hue</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        whiteness</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        blackness</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        alpha</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:cmyk"></a>
+    <strong>Color:cmyk ()</strong>
+    </dt>
+    <dd>
+    Get cmyk values.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        cyan</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        magenta</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        yellow</li>
+        <li>
+           <span class="types"><span class="type">number[0;1]</span></span>
+        key</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:rotate"></a>
+    <strong>Color:rotate (value)</strong>
+    </dt>
+    <dd>
+    Rotate hue of color.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">number[0;1]</span> or <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         Part of full turn or table containing degree or radians
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        self
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <li><pre class="example">color:rotate(<span class="number">0.5</span>)</pre></li>
+        <li><pre class="example">color:rotate {deg=<span class="number">180</span>}</pre></li>
+        <li><pre class="example">color:rotate {rad=<span class="global">math</span>.pi}</pre></li>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Color:invert"></a>
+    <strong>Color:invert ()</strong>
+    </dt>
+    <dd>
+    Invert the color.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:grey"></a>
+    <strong>Color:grey ()</strong>
+    </dt>
+    <dd>
+    Reduce saturation to 0.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:blackOrWhite"></a>
+    <strong>Color:blackOrWhite (lightness)</strong>
+    </dt>
+    <dd>
+    Set to black or white depending on lightness.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">lightness</span>
+            <span class="types">optional <span class="type">number[0;1]</span></span>
+         Cutoff point (Default: 0.5)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:mix"></a>
+    <strong>Color:mix (other, strength)</strong>
+    </dt>
+    <dd>
+    Mix two colors together.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">other</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">strength</span>
+            <span class="types">optional <span class="type">number</span></span>
+         0 results in self, 1 results in other (Default: 0.5)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:complement"></a>
+    <strong>Color:complement ()</strong>
+    </dt>
+    <dd>
+    Generate complementary color.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:analogous"></a>
+    <strong>Color:analogous ()</strong>
+    </dt>
+    <dd>
+    Generate analogous color scheme.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+</li>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        self</li>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:triad"></a>
+    <strong>Color:triad ()</strong>
+    </dt>
+    <dd>
+    Generate triadic color scheme.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        self</li>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+</li>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:tetrad"></a>
+    <strong>Color:tetrad ()</strong>
+    </dt>
+    <dd>
+    Generate tetradic color scheme.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        self</li>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+</li>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+</li>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:compound"></a>
+    <strong>Color:compound ()</strong>
+    </dt>
+    <dd>
+    Generate compound color scheme.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+</li>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        self</li>
+        <li>
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+
+
+</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:evenlySpaced"></a>
+    <strong>Color:evenlySpaced (n, r)</strong>
+    </dt>
+    <dd>
+    Generate evenly spaced color scheme.
+ <br>
+ Generalization of <a href="../classes/Color.html#Color:triad">triad</a> and <a href="../classes/Color.html#Color:tetrad">tetrad</a>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">n</span>
+            <span class="types"><span class="type">int</span></span>
+         Return n colors
+        </li>
+        <li><span class="parameter">r</span>
+            <span class="types">optional <span class="type">number</span></span>
+         Space colors over r rotations (Default: 1)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">{Color,...}</a></span>
+        Table with n colors including self at index 1
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Color:tostring"></a>
+    <strong>Color:tostring (format)</strong>
+    </dt>
+    <dd>
+    Get string representation of color. </p>
+
+<p> If <code>format</code> is <code>nil</code>, <code>color:tostring()</code> is the same as <code>tostring(color)</code>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">format</span>
+            <span class="types">optional <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         One of: <code>#fff</code>, <code>#ffff</code>, <code>#ffffff</code>, <code>#ffffffff</code>,
+  rgb, rgba, hsv, hsva, hsl, hsla, hwb, hwba, ncol, cmyk
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+    </ol>
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="../classes/Color.html#Color:__tostring">Color:__tostring</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "Color:band"></a>
+    <strong>Color:band (a, b)</strong>
+    </dt>
+    <dd>
+    Apply rgb mask to color, providing backwards compatibility for Lua 5.1 and LuaJIT 2.1.0-beta3 (e.g.  inside Neovim), which don't provide native support for bitwise operators.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a> or <span class="type">number</span></span>
+         color or mask
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><a class="type" href="../classes/Color.html#">Color</a> or <span class="type">number</span></span>
+         color or mask (if a and b are colors b is used as mask)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="../classes/Color.html#">Color</a></span>
+        new color
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> new_col = Color.band(color, <span class="number">0xff00ff</span>) <span class="comment">-- get new color without the green channel</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Color:isColor"></a>
+    <strong>Color:isColor (color)</strong>
+    </dt>
+    <dd>
+    Check whether <code>color</code> is a Color.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">color</span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        is a color
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">if</span> Color.isColor(color) <span class="keyword">then</span> <span class="global">print</span> <span class="string">"It's a color!"</span> <span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2022-12-30 15:01:58 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
