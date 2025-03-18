@@ -78,7 +78,7 @@ function M:update_status()
     local list_contains = vim.list_contains or vim.tbl_contains
     -- Append the status to the LSP only if it supports progress reporting and is not ignored.
     if not list_contains(self.options.ignore_lsp, client.name) then
-      table.insert(result, client.name .. (status and status ~= '' and ' ' .. status or ''))
+      table.insert(result, client.name .. ((status and status ~= '') and (' ' .. status) or ''))
     end
   end
   return table.concat(result, self.symbols.separator)
