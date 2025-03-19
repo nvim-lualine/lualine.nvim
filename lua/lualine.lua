@@ -312,6 +312,25 @@ local function status_dispatch(sec_name)
   end
 end
 
+---Determines if a focus event for this window should be ignored.
+---
+---@param user_config table The user's config
+---@param win number The Neovim window handle to check
+---@return boolean Whether focus events for this window should be ignored
+local function should_ignore_focus(user_config, win)
+  local ignore_focus = user_config.options.ignore_focus
+  if type(ignore_focus) == 'table' then
+    -- ignore focus on filetypes listed in options.ignore_focus
+    local buf = vim.api.nvim_win_get_buf(win)
+    local filetype = vim.api.nvim_buf_get_option(buf, 'filetype')
+    return vim.tbl_contains(ignore_focus, filetype)
+  elseif type(ignore_focus) == 'function' then
+    return vim.api.nvim_win_call(win, function() return ignore_focus(win) end)
+  else
+    return false
+  end
+end
+
 ---@alias LualineRefreshOptsKind
 ---| 'all'
 ---| 'tabpage'
@@ -339,16 +358,10 @@ local function refresh(opts)
   local wins = {}
   local old_actual_curwin = vim.g.actual_curwin
 
-  -- ignore focus on filetypes listed in options.ignore_focus
   local curwin = vim.api.nvim_get_current_win()
   local curtab = vim.api.nvim_get_current_tabpage()
   if last_focus[curtab] == nil or not vim.api.nvim_win_is_valid(last_focus[curtab]) then
-    if
-      not vim.tbl_contains(
-        config.options.ignore_focus,
-        vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(curwin), 'filetype')
-      )
-    then
+    if not should_ignore_focus(config, curwin) then
       last_focus[curtab] = curwin
     else
       local tab_wins = vim.api.nvim_tabpage_list_wins(curtab)
@@ -357,12 +370,7 @@ local function refresh(opts)
       else
         local focusable_win = curwin
         for _, win in ipairs(tab_wins) do
-          if
-            not vim.tbl_contains(
-              config.options.ignore_focus,
-              vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(win), 'filetype')
-            )
-          then
+          if not should_ignore_focus(config, win) then
             focusable_win = win
             break
           end
@@ -371,12 +379,7 @@ local function refresh(opts)
       end
     end
   else
-    if
-      not vim.tbl_contains(
-        config.options.ignore_focus,
-        vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(curwin), 'filetype')
-      )
-    then
+    if not should_ignore_focus(config, curwin) then
       last_focus[curtab] = curwin
     end
   end
