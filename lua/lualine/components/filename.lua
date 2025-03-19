@@ -116,7 +116,14 @@ M.update_status = function(self)
     table.insert(symbols, self.options.symbols.newfile)
   end
 
-  return data .. (#symbols > 0 and ' ' .. table.concat(symbols, '') or '')
+  local section = self.options.self.section
+  local is_right_justified = section == 'x' or section == 'y' or section == 'z'
+
+  if is_right_justified then
+    return (#symbols > 0 and table.concat(symbols, '') .. ' ' or '') .. data
+  else
+    return data .. (#symbols > 0 and ' ' .. table.concat(symbols, '') or '')
+  end
 end
 
 return M
