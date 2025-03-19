@@ -931,13 +931,17 @@ describe('lsp_status component', function()
     assert_comp_ins(lsp_status_comp, ' lua_ls')
   end)
 
-  it('shows LSP progress when supported with precise time measurement', function()
+  it('shows LSP progress when supported', function()
     vim.cmd('edit ' .. file)
     stub(vim.lsp, 'get_clients')
     vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
-    vim.uv = vim.uv or {}
-    stub(vim.uv, 'hrtime')
-    vim.uv.hrtime.on_call_with().returns(12 * 1e6 * 80)
+    if vim.uv and vim.uv.hrtime then
+      stub(vim.uv, 'hrtime')
+      vim.uv.hrtime.on_call_with().returns(12 * 1e6 * 80)
+    elseif vim.loop and vim.loop.hrtime then
+      stub(vim.loop, 'hrtime')
+      vim.loop.hrtime.on_call_with().returns(12 * 1e6 * 80)
+    end
 
     local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
       data = { client_id = 2, params = { value = { kind = 'begin' } } },
@@ -947,38 +951,6 @@ describe('lsp_status component', function()
     if ok then
       -- Use spinner symbol 12 (time) % 10 (symbol table size) = 2.
       assert_comp_ins(lsp_status_comp, ' lua_ls ⠹')
-    end
-  end)
-
-  it('shows LSP progress when supported without precise time measurement', function()
-    vim.cmd('edit ' .. file)
-    stub(vim.lsp, 'get_clients')
-    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
-    vim.uv = nil
-
-    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
-      data = { client_id = 2, params = { value = { kind = 'begin' } } },
-    })
-
-    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
-    if ok then
-      -- We start from 0 and advanced by 1, so use spinner symbol 1.
-      assert_comp_ins(lsp_status_comp, ' lua_ls ⠙')
-    end
-  end)
-
-  it('shows LSP progress when supported with precise time measurement', function()
-    vim.cmd('edit ' .. file)
-    stub(vim.lsp, 'get_clients')
-    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
-
-    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
-      data = { client_id = 2, params = { value = { kind = 'end' } } },
-    })
-
-    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
-    if ok then
-      assert_comp_ins(lsp_status_comp, ' lua_ls ✓')
     end
   end)
 
@@ -996,6 +968,42 @@ describe('lsp_status component', function()
     -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
     if ok then
       assert_comp_ins(lsp_status_comp, ' lua_ls ✓')
+    end
+  end)
+
+  it('shows LSP done when supported and no begin', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'end' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      assert_comp_ins(lsp_status_comp, ' lua_ls ✓')
+    end
+  end)
+
+  it('does not add unnecessary space separator when LSP progress symbol is empty', function()
+    local opts_no_done = opts
+    opts_no_done.symbols = { done = '' }
+    local lsp_status_comp_no_done = helpers.init_component('lsp_status', opts)
+
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'begin' } } },
+    }) and pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'end' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      assert_comp_ins(lsp_status_comp_no_done, ' lua_ls')
     end
   end)
 end)
