@@ -29,10 +29,11 @@ Good luck!
 *Let's introduce you to the tools we use.*
 
 - Your PR needs to pass tests & linter. We lint our codebase with [luacheck](https://github.com/mpeterv/luacheck)
-  and run tests with [plenary-test][plenary.nvim] these will be run on CI. If you want you can run tests & linter
-  locally with `make test` & `make lint` respectively. Or `make check` to run both linter & tests. For running
-  tests you'll have to make sure lualine.nvim, [plenary.nvim][plenary.nvim] and
-  [nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons) are in same directory.
+  and run tests with [plenary-test][plenary.nvim] these will be run on CI. 
+- If you want you can run tests & linter locally with `make test` & `make lint` respectively. Or `make check` to run both linter & tests. 
+  For running tests you'll have to make sure lualine.nvim, [plenary.nvim][plenary.nvim] and [nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons) are in same directory.
+  In case this is not possible or, for better local configuration, you can copy th test scripts ``tests/minimal_init.lua``and change the respective path to match your local configuration.
+  Rember to push the *ORIGINAL* ``tests/minimal_init.lua`` on remote to be run by CI.
 - Lua codebase gets formatted with [stylua](https://github.com/JohnnyMorganz/StyLua) in CI.
   So you can ignore formatting. But if you want to submit formatted
   PR you can run formatter locally with `make format`.
