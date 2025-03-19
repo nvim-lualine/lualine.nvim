@@ -325,7 +325,9 @@ local function should_ignore_focus(user_config, win)
     local filetype = vim.api.nvim_buf_get_option(buf, 'filetype')
     return vim.tbl_contains(ignore_focus, filetype)
   elseif type(ignore_focus) == 'function' then
-    return vim.api.nvim_win_call(win, function() return ignore_focus(win) end)
+    return vim.api.nvim_win_call(win, function()
+      return ignore_focus(win)
+    end)
   else
     return false
   end

@@ -390,6 +390,11 @@ in component.
                                  -- for example if you don't want statusline of
                                  -- your file tree / sidebar window to have active
                                  -- statusline you can add their filetypes here.
+                                 --
+                                 -- Can also be set to a function that takes the
+                                 -- currently focused window as its only argument
+                                 -- and returns a boolean representing whether the
+                                 -- window's statusline should be drawn as inactive.
     
       always_divide_middle = true, -- When set to true, left sections i.e. 'a','b' and 'c'
                                    -- can't take over the entire statusline even
