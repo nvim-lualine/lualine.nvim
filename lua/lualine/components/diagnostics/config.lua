@@ -2,13 +2,18 @@ local require = require('lualine_require').require
 local utils = require('lualine.utils.utils')
 local M = {}
 
+local function get_sign(name)
+    local sign = vim.fn.sign_getdefined("DiagnosticSign" .. name)[1]
+    return (sign and sign.text) or nil
+end
+
 -- default symbols for diagnostics component
 M.symbols = {
   icons = {
-    error = '󰅚 ', -- x000f015a
-    warn = '󰀪 ', -- x000f002a
-    info = '󰋽 ', -- x000f02fd
-    hint = '󰌶 ', -- x000f0336
+    error = get_sign('Error') or '󰅚 ', -- x000f015a
+    warn = get_sign('Warn') or '󰀪 ', -- x000f002a
+    info = get_sign('Info') or '󰋽 ', -- x000f02fd
+    hint = get_sign('Hint') or '󰌶 ', -- x000f0336
   },
   no_icons = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' },
 }
