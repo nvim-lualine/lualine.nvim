@@ -28,6 +28,7 @@ local default_options = {
     alternate_file = '#',
     directory = '',
   },
+  buffer_filter = nil,
 }
 
 -- This function is duplicated in tabs
@@ -85,8 +86,10 @@ function M:buffers()
   M.bufpos2nr = {}
   for b = 1, vim.fn.bufnr('$') do
     if vim.fn.buflisted(b) ~= 0 and vim.api.nvim_buf_get_option(b, 'buftype') ~= 'quickfix' then
-      buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1)
-      M.bufpos2nr[#buffers] = b
+      if not self.options.buffer_filter or type(self.options.buffer_filter) == 'function' and self.options.buffer_filter(b) then
+        buffers[#buffers + 1] = self:new_buffer(b, #buffers + 1)
+        M.bufpos2nr[#buffers] = b
+      end
     end
   end
 
