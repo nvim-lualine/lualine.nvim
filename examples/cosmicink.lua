@@ -132,9 +132,9 @@ end
 -- Condition: Check if the buffer is not empty
 -- This checks whether the current file's name is non-empty.
 -- If the file is open (i.e., has a name), it returns true, meaning the buffer is not empty.
-local function buffer_not_empty()
-	return vim.fn.empty(vim.fn.expand('%:t')) ~= 1 -- 'expand('%:t')' gets the file name
-end
+-- local function buffer_not_empty()
+-- 	return vim.fn.empty(vim.fn.expand('%:t')) ~= 1 -- 'expand('%:t')' gets the file name
+-- end
 
 -- Condition: Hide in width (only show the statusline when the window width is greater than 80)
 -- This ensures that the statusline will only appear if the current window width exceeds 80 characters.
@@ -145,11 +145,11 @@ end
 -- Condition: Check if the current workspace is inside a Git repository
 -- This function checks if the current file is inside a Git repository by looking for a `.git` directory
 -- in the current file's path. Returns true if the file is in a Git workspace.
-local function check_git_workspace()
-	local filepath = vim.fn.expand('%:p:h')               -- Get the current file's directory
-	local gitdir = vim.fn.finddir('.git', filepath .. ';') -- Search for a `.git` directory in the file path
-	return gitdir and #gitdir > 0 and #gitdir < #filepath -- Returns true if a `.git` directory is found
-end
+-- local function check_git_workspace()
+-- 	local filepath = vim.fn.expand('%:p:h')               -- Get the current file's directory
+-- 	local gitdir = vim.fn.finddir('.git', filepath .. ';') -- Search for a `.git` directory in the file path
+-- 	return gitdir and #gitdir > 0 and #gitdir < #filepath -- Returns true if a `.git` directory is found
+-- end
 
 
 -- -- Set random seed based on current time for randomness
