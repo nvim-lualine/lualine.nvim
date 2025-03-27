@@ -466,6 +466,8 @@ local function set_tabline(hide)
   vim.cmd([[augroup lualine_tal_refresh | exe "autocmd!" | augroup END]])
   if not hide and next(config.tabline) ~= nil then
     modules.highlight.set_hl_to_normal('TabLine')
+    modules.highlight.set_hl_to_normal('TabLineFill')
+    modules.highlight.set_hl_to_normal('TabLineSel')
     vim.loop.timer_start(
       timers.tal_timer,
       0,
