@@ -25,6 +25,7 @@ local config = {
       tabline = 100,
       winbar = 100,
     },
+    line_total_in_location = false,
   },
   sections = {
     lualine_a = { 'mode' },
