@@ -49,6 +49,8 @@ For those who want to break the norms, you can create custom looks for lualine.
   <img width='700' src='https://user-images.githubusercontent.com/13149513/143395518-f6d6f748-c1ca-491b-9dab-246d0a8cf23f.png'/>
 - [bubbles](examples/bubbles.lua)
   <img width='700' src='https://user-images.githubusercontent.com/20235646/131350468-fc556196-5f46-4bfe-a72e-960f6a58db2c.png'/>
+- [cosmicink](examples/cosmicink.lua)
+  <img width='700' src='https://github.com/user-attachments/assets/c8d3e4ba-4997-42e9-a1bb-d5e2a444bbfd'/>
 
 <!-- panvimdoc-ignore-end -->
 
