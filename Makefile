@@ -6,7 +6,7 @@ lint:
 	@luacheck examples/
 
 format:
-	@stylua --config-path=.stylua.toml lua/ examples/
+	@stylua --config-path=.stylua.toml lua/ examples/ tests/
 
 test:
 	@mkdir -p tmp_home

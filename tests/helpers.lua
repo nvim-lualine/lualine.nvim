@@ -74,6 +74,9 @@ M.P = function(t)
 end
 
 function M.dedent(str, leave_indent)
+  if str == nil then
+    return nil
+  end
   -- find minimum common indent across lines
   local indent = nil
   for line in str:gmatch('[^\n]+') do

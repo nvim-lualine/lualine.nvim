@@ -105,7 +105,13 @@ function M:apply_padding()
     end
   end
   if r_padding then
-    self.status = self.status .. string.rep(' ', r_padding)
+    if self.status:reverse():find('%*%%.*#.*#%%') == 1 then
+      -- When component has changed the highlight at the end
+      -- we will add the padding before the highlight terminates
+      self.status = self.status:sub(1, -3) .. string.rep(' ', r_padding) .. self.status:sub(-2, -1)
+    else
+      self.status = self.status .. string.rep(' ', r_padding)
+    end
   end
 end
 

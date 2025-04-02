@@ -78,6 +78,9 @@ local M = {}
 
 local function eval_stl(stl_expr, width, eval_type)
   local stl_buf, hl_list, stl_eval_res
+  if stl_expr == nil then
+    return nil
+  end
   stl_eval_res = vim.api.nvim_eval_statusline(
     stl_expr,
     { maxwidth = width, highlights = true, fillchar = ' ', use_tabline = (eval_type == 'tabline') }
@@ -123,12 +126,16 @@ function M:expect_expr(expect, expr)
     assert.are.same(expect, nil)
     return
   end
-  expect = helpers.dedent(expect)
   local actual = eval_stl(expr, self.width, self.type)
+  if expect == nil then
+    assert.are.same(expect, actual)
+    return
+  end
+  expect = helpers.dedent(expect)
   local matched = true
   local errmsg = {}
   if expect ~= actual then
-    expect = vim.split(expect, '\n')
+    expect = expect ~= nil and vim.split(expect, '\n')
     actual = vim.split(actual, '\n')
     if expect[#expect] == '' then
       expect[#expect] = nil
@@ -171,6 +178,10 @@ function M:snapshot_expr(expr)
     inactive = 'inactive_statusline',
     tabline = 'tabline',
   }
+  if expr == nil then
+    print((type_map[self.type] or 'statusline') .. ':expect(nil)')
+    return
+  end
   print((type_map[self.type] or 'statusline') .. ':expect([===[')
   print(eval_stl(expr, self.width, self.type) .. ']===])')
 end
