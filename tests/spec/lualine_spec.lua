@@ -72,11 +72,11 @@ describe('Lualine', function()
   it('shows active statusline', function()
     statusline:expect([===[
     highlights = {
-        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-        2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984" }
-        3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
-        4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
-        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+        2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984", nocombine = true }
+        3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2", nocombine = true }
+        4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945", nocombine = true }
+        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: NORMAL }
     {2:}
@@ -95,7 +95,7 @@ describe('Lualine', function()
   it('shows inactive statusline', function()
     inactive_statusline:expect([===[
     highlights = {
-        1: lualine_c_inactive = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_c_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: [No Name] }
     {1:                                                                                                     }
@@ -113,11 +113,11 @@ describe('Lualine', function()
     require('lualine').setup(conf)
     statusline:expect([===[
     highlights = {
-        1: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
-        2: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
-        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-        4: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984" }
-        5: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
+        1: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2", nocombine = true }
+        2: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945", nocombine = true }
+        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+        4: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984", nocombine = true }
+        5: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
     }
     |{1:  master }
     {2:}
@@ -136,9 +136,9 @@ describe('Lualine', function()
     require('lualine').setup(config)
     statusline:expect([===[
     highlights = {
-        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-        2: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
-        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+        2: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2", nocombine = true }
+        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: NORMAL }
     {2:  master }
@@ -161,11 +161,11 @@ describe('Lualine', function()
     require('lualine').setup(config)
     statusline:expect([===[
     highlights = {
-        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-        2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984" }
-        3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
-        4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
-        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+        2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984", nocombine = true }
+        3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2", nocombine = true }
+        4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945", nocombine = true }
+        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: NORMAL }
     {1: test_comp1 }
@@ -186,11 +186,11 @@ describe('Lualine', function()
     require('lualine').setup(config)
     statusline:expect([===[
     highlights = {
-        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-        2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984" }
-        3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
-        4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
-        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+        2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984", nocombine = true }
+        3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2", nocombine = true }
+        4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945", nocombine = true }
+        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: NORMAL }
     {1: test_comp1 }
@@ -216,11 +216,11 @@ describe('Lualine', function()
     require('lualine').setup(config)
     statusline:expect([===[
     highlights = {
-        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-        2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984" }
-        3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
-        4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
-        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+        2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984", nocombine = true }
+        3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2", nocombine = true }
+        4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945", nocombine = true }
+        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: NORMAL }
     {2:}
@@ -236,9 +236,9 @@ describe('Lualine', function()
     require('lualine').setup(config)
     statusline:expect([===[
     highlights = {
-        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-        2: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
-        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+        2: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2", nocombine = true }
+        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: NORMAL }
     {2: master }
@@ -275,9 +275,9 @@ describe('Lualine', function()
     require('lualine').setup(config)
     statusline:expect([===[
     highlights = {
-        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-        2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+        2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: custom_extension_component }
     {2:}
@@ -302,9 +302,9 @@ describe('Lualine', function()
     require('lualine').setup(config)
     statusline:expect([===[
     highlights = {
-        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-        2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+        2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: custom_extension_component }
     {2:}
@@ -313,11 +313,11 @@ describe('Lualine', function()
     vim.bo.ft = old_ft
     statusline:expect([===[
     highlights = {
-        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-        2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984" }
-        3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
-        4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
-        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+        2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984", nocombine = true }
+        3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2", nocombine = true }
+        4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945", nocombine = true }
+        5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: NORMAL }
     {2:}
@@ -334,9 +334,9 @@ describe('Lualine', function()
     vim.bo.ft = 'test_ft2'
     statusline:expect([===[
     highlights = {
-        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-        2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+        1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+        2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+        3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
     }
     |{1: custom_extension_component }
     {2:}
@@ -372,9 +372,9 @@ describe('Lualine', function()
       require('lualine').statusline()
       tabline:expect([===[
       highlights = {
-          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-          2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+          2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
       }
       |{1: tabline_component }
       {2:}
@@ -395,11 +395,11 @@ describe('Lualine', function()
 
       tabline:expect([===[
       highlights = {
-          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-          2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984" }
-          3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2" }
-          4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945" }
-          5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+          2: lualine_transitional_lualine_a_normal_to_lualine_b_normal = { bg = "#504945", fg = "#a89984", nocombine = true }
+          3: lualine_b_normal = { bg = "#504945", fg = "#ebdbb2", nocombine = true }
+          4: lualine_transitional_lualine_b_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#504945", nocombine = true }
+          5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
       }
       |{1: NORMAL }
       {2:}
@@ -424,11 +424,11 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: 1 }
         {1: 2 }
@@ -441,11 +441,11 @@ describe('Lualine', function()
         vim.cmd('tabprev')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_tabs_active_to_lualine_a_tabs_inactive = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_tabs_active_to_lualine_a_tabs_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: 1 }
         {2:}
@@ -458,10 +458,10 @@ describe('Lualine', function()
         vim.cmd('tabprev')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_tabs_active_to_lualine_a_tabs_inactive = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_tabs_active_to_lualine_a_tabs_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: 1 }
         {2:}
@@ -480,11 +480,11 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: 1 }
         {1: 2 }
@@ -496,11 +496,11 @@ describe('Lualine', function()
 
         tabline:expect([===[
         highlights = {
-            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: 1 }
         {1: 2 }
@@ -515,11 +515,11 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: [No Name] }
         {1: a.txt }
@@ -534,11 +534,11 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: 1 [No Name] }
         {1: 2 a.txt }
@@ -560,11 +560,11 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: #a.txt }
         {2:}
@@ -577,10 +577,10 @@ describe('Lualine', function()
         vim.cmd('tabprev')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: a.txt }
         {2:}
@@ -592,11 +592,11 @@ describe('Lualine', function()
         vim.cmd('tabprev')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: a.txt }
         {1: #b.txt }
@@ -616,11 +616,11 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_tabs_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_tabs_inactive_to_lualine_a_tabs_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_tabs_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_tabs_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         {MATCH:|{1: %d+ }}
         {MATCH:{1: %d+ }}
@@ -635,11 +635,11 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         {MATCH:|{1: #%d+  }}
         {2:}
@@ -654,11 +654,11 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         {MATCH:|{1: #%d+ a.txt }}
         {2:}
@@ -676,9 +676,9 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: [No Name] }
         {2:}
@@ -688,9 +688,9 @@ describe('Lualine', function()
         vim.bo.modified = true
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: [No Name] ● }
         {2:}
@@ -709,9 +709,9 @@ describe('Lualine', function()
         vim.cmd('e ' .. path .. '/asdf.txt')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: a/b/c/d/e/f/g/asdf.txt }
         {2:}
@@ -730,10 +730,10 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: 󰈙 a.txt }
         {2:}
@@ -750,9 +750,9 @@ describe('Lualine', function()
         vim.cmd('e t.lua')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1:  t.lua }
         {2:}
@@ -772,11 +772,11 @@ describe('Lualine', function()
         local bufnr_b = vim.fn.bufnr('b.txt')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: #]===] .. bufnr_a .. [===[  }
         {2:}
@@ -798,11 +798,11 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: #]===] .. bufnr_a .. [===[ a.txt }
         {2:}
@@ -824,11 +824,11 @@ describe('Lualine', function()
         local bufnr_b = vim.fn.bufnr('b.txt')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: #]===] .. bufnr_a .. [===[  }
         {2:}
@@ -839,10 +839,10 @@ describe('Lualine', function()
         vim.cmd('e a.txt')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: ]===] .. bufnr_a .. [===[  }
         {2:}
@@ -852,11 +852,11 @@ describe('Lualine', function()
         vim.cmd('bprev')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836" }
-            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            2: lualine_transitional_lualine_a_buffers_inactive_to_lualine_a_buffers_active = { bg = "#a89984", fg = "#3c3836", nocombine = true }
+            3: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            4: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: #]===] .. bufnr_a .. [===[  }
         {2:}
@@ -879,9 +879,9 @@ describe('Lualine', function()
         require('lualine').statusline()
         tabline:expect([===[
         highlights = {
-            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_windows_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_windows_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: 1 d.txt }
         {2:}
@@ -891,10 +891,10 @@ describe('Lualine', function()
         vim.cmd('tabprev')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_windows_active_to_lualine_a_windows_inactive = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_a_windows_inactive = { bg = "#3c3836", bold = true, fg = "#a89984" }
-            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_windows_active_to_lualine_a_windows_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_a_windows_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: 1 c.txt }
         {2:}
@@ -905,9 +905,9 @@ describe('Lualine', function()
         vim.cmd('tabprev')
         tabline:expect([===[
         highlights = {
-            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828" }
-            2: lualine_transitional_lualine_a_windows_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+            1: lualine_a_windows_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+            2: lualine_transitional_lualine_a_windows_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
         |{1: 1 a.txt }
         {2:}
@@ -949,7 +949,7 @@ describe('Lualine', function()
       require('lualine').setup(conf)
       statusline:expect([===[
       highlights = {
-          1: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          1: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
       }
       |{1:                                                                                                                        }|
       ]===])
@@ -963,9 +963,9 @@ describe('Lualine', function()
       require('lualine').setup(conf)
       statusline:expect([===[
       highlights = {
-          1: lualine_a_diagnostics_info = { bg = "#a89984", fg = "#add8e6" }
-          2: lualine_transitional_lualine_a_diagnostics_info_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          1: lualine_a_diagnostics_info = { bg = "#a89984", fg = "#add8e6", nocombine = true }
+          2: lualine_transitional_lualine_a_diagnostics_info_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
       }
       |{1: I:1 }
       {2:}
@@ -981,12 +981,12 @@ describe('Lualine', function()
       require('lualine').setup(conf)
       statusline:expect([===[
       highlights = {
-          1: lualine_a_diagnostics_error = { bg = "#a89984", fg = "#ff0000" }
-          2: lualine_a_diagnostics_warn = { bg = "#a89984", fg = "#ffa500" }
-          3: lualine_a_diagnostics_info = { bg = "#a89984", fg = "#add8e6" }
-          4: lualine_a_diagnostics_hint = { bg = "#a89984", fg = "#d3d3d3" }
-          5: lualine_transitional_lualine_a_diagnostics_hint_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-          6: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          1: lualine_a_diagnostics_error = { bg = "#a89984", fg = "#ff0000", nocombine = true }
+          2: lualine_a_diagnostics_warn = { bg = "#a89984", fg = "#ffa500", nocombine = true }
+          3: lualine_a_diagnostics_info = { bg = "#a89984", fg = "#add8e6", nocombine = true }
+          4: lualine_a_diagnostics_hint = { bg = "#a89984", fg = "#d3d3d3", nocombine = true }
+          5: lualine_transitional_lualine_a_diagnostics_hint_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+          6: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
       }
       |{1: E:1 }
       {2:W:2 }
@@ -1011,12 +1011,12 @@ describe('Lualine', function()
       require('lualine').setup(conf)
       statusline:expect([===[
       highlights = {
-          1: lualine_a_diagnostics_error = { bg = "#ff0000", fg = "#a89984" }
-          2: lualine_a_diagnostics_warn = { bg = "#ffa500", fg = "#a89984" }
-          3: lualine_a_diagnostics_info = { bg = "#add8e6", fg = "#a89984" }
-          4: lualine_a_diagnostics_hint = { bg = "#add8e6", fg = "#a89984" }
-          5: lualine_transitional_lualine_a_diagnostics_hint_to_lualine_c_normal = { bg = "#3c3836", fg = "#add8e6" }
-          6: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          1: lualine_a_diagnostics_error = { bg = "#ff0000", fg = "#a89984", nocombine = true }
+          2: lualine_a_diagnostics_warn = { bg = "#ffa500", fg = "#a89984", nocombine = true }
+          3: lualine_a_diagnostics_info = { bg = "#add8e6", fg = "#a89984", nocombine = true }
+          4: lualine_a_diagnostics_hint = { bg = "#add8e6", fg = "#a89984", nocombine = true }
+          5: lualine_transitional_lualine_a_diagnostics_hint_to_lualine_c_normal = { bg = "#3c3836", fg = "#add8e6", nocombine = true }
+          6: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
       }
       |{1: E:1 }
       {2: W:2 }
@@ -1057,9 +1057,9 @@ describe('Lualine', function()
       require('lualine').setup(conf)
       statusline:expect([===[
       highlights = {
-          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828" }
-          2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
-          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984" }
+          1: lualine_a_normal = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
+          2: lualine_transitional_lualine_a_normal_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+          3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
       }
       |{1: custom_extension_component }
       {2:}
