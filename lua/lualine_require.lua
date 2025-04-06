@@ -3,13 +3,14 @@
 local M = {}
 
 M.sep = package.config:sub(1, 1)
+local luv = vim.uv or vim.loop
 
 -- Figures out full path of lualine installation
 local source = debug.getinfo(1, 'S').source
 if source:sub(1, 1) == '@' then
   local base_start = source:find(table.concat({ 'lualine.nvim', 'lua', 'lualine_require.lua' }, M.sep))
   if base_start then
-    source = source:sub(2, base_start + 12 + 1 + 3) -- #lualine.nvim = 12 , #lua = 3.
+    source = source:sub(2, base_start + #'lualine.nvim/lua')
     if source then
       M.plugin_dir = source
     end
@@ -25,9 +26,14 @@ function M.is_valid_filename(name)
 end
 
 ---require module module
----@param module string mogule arraived
+---@param module string module_name
 ---@return any the required module
 function M.require(module)
+  if not package or not package.loaded then
+    -- Something wrong with execution environment. Maybe plugin manager cleared it.
+    -- Just let regular require handle. We'll use the cache next time.
+    return require(module)
+  end
   if package.loaded[module] then
     return package.loaded[module]
   end
@@ -37,13 +43,13 @@ function M.require(module)
     local path = M.plugin_dir .. pattern_path
     assert(M.is_valid_filename(module), 'Invalid filename')
     local file_stat, dir_stat
-    file_stat = vim.loop.fs_stat(path)
+    file_stat = luv.fs_stat(path)
     if not file_stat then
       path = M.plugin_dir .. pattern_dir
-      dir_stat = vim.loop.fs_stat(path)
+      dir_stat = luv.fs_stat(path)
       if dir_stat and dir_stat.type == 'directory' then
         path = path .. M.sep .. 'init.lua'
-        file_stat = vim.loop.fs_stat(path)
+        file_stat = luv.fs_stat(path)
       end
     end
     if file_stat and file_stat.type == 'file' then
