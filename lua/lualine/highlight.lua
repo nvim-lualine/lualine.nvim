@@ -48,12 +48,22 @@ function M.highlight_exists(highlight_name)
   return loaded_highlights[highlight_name] or false
 end
 
+--- Creates lualine owned Normal mirror. Used for transparent background
+local function create_transparent_hlgroup()
+  local base_color = modules.utils.extract_highlight_colors('Normal')
+  if base_color.reverse then
+    base_color.fg, base_color.bg = base_color.bg, base_color.bg
+  end
+  M.highlight('lualine_transparent', base_color.fg, base_color.bg, nil, nil)
+end
+
 --- clears loaded_highlights table and highlights
 local function clear_highlights()
   for highlight_name, _ in pairs(loaded_highlights) do
     vim.cmd('highlight clear ' .. highlight_name)
   end
   loaded_highlights = {}
+  create_transparent_hlgroup()
 end
 
 ---converts cterm, color_name type colors to #rrggbb format
