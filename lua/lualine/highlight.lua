@@ -52,7 +52,7 @@ end
 local function create_transparent_hlgroup()
   local base_color = modules.utils.extract_highlight_colors('Normal')
   if base_color.reverse then
-    base_color.fg, base_color.bg = base_color.bg, base_color.bg
+    base_color.fg, base_color.bg = base_color.bg, base_color.fg
   end
   M.highlight('lualine_transparent', base_color.fg, base_color.bg, nil, nil)
 end
