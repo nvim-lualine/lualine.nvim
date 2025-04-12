@@ -633,13 +633,4 @@ ins_right(
 	create_mode_based_component('progress', nil, colors.BG)
 )
 
-return {
-	"nvim-lualine/lualine.nvim",
-	lazy = false,
-	-- Configuration function that runs when the plugin is loaded
-	config = function()
-		-- Set up lualine with the cosmicink configuration
-		-- The cosmicink.cfg holds the actual configuration values for lualine
-		require('lualine').setup(config)
-	end,
-}
+require('lualine').setup(config)
