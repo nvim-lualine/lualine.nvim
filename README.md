@@ -532,6 +532,9 @@ sections = {
         alpha = 'Alpha'
       }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
 
+      -- Colors the buffer icons
+      colored_icons = true,
+
       -- Automatically updates active buffer color to match color of other components (will be overidden if buffers_color is set)
       use_mode_colors = false,
 
