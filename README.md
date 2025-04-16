@@ -791,6 +791,9 @@ sections = {
 
       disabled_buftypes = { 'quickfix', 'prompt' }, -- Hide a window if its buffer's type is disabled
 
+      -- Colors the window icons
+      colored_icons = true,
+
       -- Automatically updates active window color to match color of other components (will be overidden if buffers_color is set)
       use_mode_colors = false,
 
