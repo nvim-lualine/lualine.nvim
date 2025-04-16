@@ -191,24 +191,30 @@ function Buffer.apply_padding(str, len, padding)
   return string.rep(' ', l_padding) .. str .. string.rep(' ', r_padding), len + l_padding + r_padding
 end
 
----formats buffer string according to selected mode
+---renders icon block, colorizing it if needed
 ---@return string str
----@return number len displayed length
-function Buffer:apply_mode(name)
-  local extra_len = 0
-
-  local icon
+---@return number len length that won't be displayed (color tags)
+function Buffer:render_icon()
   if self.icon.colors then
     local status = self.current and 'active' or 'inactive'
 
     local icon_color = modules.highlight.component_format_highlight(self.icon.colors[status])
     local default_color = modules.highlight.component_format_highlight(self.highlights[status])
 
-    icon = icon_color .. self.icon.text .. default_color
-    extra_len = vim.fn.strchars(icon_color) + vim.fn.strchars(default_color)
-  else
-    icon = self.icon.text
+    local icon = icon_color .. self.icon.text .. default_color
+    local extra_len = vim.fn.strchars(icon_color) + vim.fn.strchars(default_color)
+
+    return icon, extra_len
   end
+
+  return self.icon.text, 0
+end
+
+---formats buffer string according to selected mode
+---@return string str
+---@return number len displayed length
+function Buffer:apply_mode(name)
+  local icon, extra_len = self:render_icon()
 
   local str
   if self.options.mode == 0 then
