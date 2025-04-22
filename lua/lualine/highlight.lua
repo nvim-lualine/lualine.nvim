@@ -138,7 +138,10 @@ function M.highlight(name, foreground, background, gui, link)
   else
     local foreground_rgb = sanitize_color(foreground)
     local background_rgb = sanitize_color(background)
-    gui = (gui ~= nil and gui ~= '') and gui .. ',nocombine' or 'nocombine'
+    gui = gui or ''
+    if string.find(gui, 'nocombine') == nil then
+      gui = gui ~= '' and gui .. ',nocombine' or 'nocombine'
+    end
     if
       loaded_highlights[name]
       and loaded_highlights[name].fg == foreground_rgb
