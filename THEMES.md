@@ -342,6 +342,18 @@ pywal is another special theme. It will load the colors from your current [pywal
 <img width='700' src='https://user-images.githubusercontent.com/41551030/108649258-48907600-74bd-11eb-9bba-8e82b56777d9.png'/>
 </p>
 
+### tinted
+
+This theme will automatically use colors defined by your colorscheme using [tinted-theming/tinted-nvim](https://github.com/tinted-theming/tinted-nvim) or [tinted-theming/tinted-vim](https://github.com/tinted-theming/tinted-vim) plugin.
+The following example is using the `ayu-dark` colorscheme:
+
+<p>
+<img width='700' src='https://user-images.githubusercontent.com/41551030/108648314-357ca680-74bb-11eb-83de-ec94c3a75d99.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/41551030/108648329-3e6d7800-74bb-11eb-901b-41e1f01315f0.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/41551030/108648342-44fbef80-74bb-11eb-8262-a6f615e5fcfb.png'/>
+<img width='700' src='https://user-images.githubusercontent.com/41551030/108648367-52b17500-74bb-11eb-8ec5-dbb59db60d98.png'/>
+</p>
+
 ### Tomorrow
 
 <p>
