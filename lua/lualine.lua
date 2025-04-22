@@ -478,9 +478,7 @@ local function set_statusline(hide)
   vim.loop.timer_stop(timers.stl_timer)
   timers.halt_stl_refresh = true
   if not hide and (next(config.sections) ~= nil or next(config.inactive_sections) ~= nil) then
-    if vim.go.statusline == '' then
-      modules.nvim_opts.set('statusline', '%#lualine_transparent#', { global = true })
-    end
+    modules.nvim_opts.set('statusline', '%#lualine_transparent#', { global = true })
     if config.options.globalstatus then
       modules.nvim_opts.set('laststatus', 3, { global = true })
       vim.loop.timer_start(
