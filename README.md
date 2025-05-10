@@ -959,6 +959,7 @@ extensions = {'quickfix'}
 #### Available extensions
 
 - aerial
+- avante
 - chadtree
 - ctrlspace
 - fern
