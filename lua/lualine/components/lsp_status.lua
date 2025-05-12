@@ -53,6 +53,7 @@ end
 
 function M:update_status()
   local result = {}
+  local processed = {}
 
   -- Backwards-compatible function to get the active LSP clients.
   ---@diagnostic disable-next-line: deprecated
@@ -77,8 +78,9 @@ function M:update_status()
     -- Backwards-compatible function to check if a list contains a value.
     local list_contains = vim.list_contains or vim.tbl_contains
     -- Append the status to the LSP only if it supports progress reporting and is not ignored.
-    if not list_contains(self.options.ignore_lsp, client.name) then
+    if not processed[client.name] and not list_contains(self.options.ignore_lsp, client.name) then
       table.insert(result, client.name .. ((status and status ~= '') and (' ' .. status) or ''))
+      processed[client.name] = true
     end
   end
   return table.concat(result, self.symbols.separator)
