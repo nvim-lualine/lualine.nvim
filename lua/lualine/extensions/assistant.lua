@@ -3,7 +3,7 @@
 local ok, assistant = pcall(require, 'assistant')
 
 if not ok then
-  return ''
+  return nil
 end
 
 local M = {}
