@@ -1013,6 +1013,7 @@ extensions with:
 
 
 - aerial
+- avante
 - chadtree
 - ctrlspace
 - fern
