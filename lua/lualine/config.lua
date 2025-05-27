@@ -21,9 +21,22 @@ local config = {
     always_show_tabline = true,
     globalstatus = vim.go.laststatus == 3,
     refresh = {
-      statusline = 100,
-      tabline = 100,
-      winbar = 100,
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+      check = 16, -- ~60fps
+      events = {
+        'WinEnter',
+        'BufEnter',
+        'BufWritePost',
+        'SessionLoadPost',
+        'FileChangedShellPost',
+        'VimResized',
+        'Filetype',
+        'CursorMoved',
+        'CursorMovedI',
+        'ModeChanged',
+      },
     },
   },
   sections = {
