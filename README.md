@@ -148,6 +148,19 @@ require('lualine').setup {
       statusline = 100,
       tabline = 100,
       winbar = 100,
+      refresh_time = 16, -- ~60fps
+      events = {
+        'WinEnter',
+        'BufEnter',
+        'BufWritePost',
+        'SessionLoadPost',
+        'FileChangedShellPost',
+        'VimResized',
+        'Filetype',
+        'CursorMoved',
+        'CursorMovedI',
+        'ModeChanged',
+      },
     }
   },
   sections = {
