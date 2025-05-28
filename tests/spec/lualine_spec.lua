@@ -27,7 +27,7 @@ describe('Lualine', function()
           statusline = 1000,
           tabline = 1000,
           winbar = 1000,
-          check = 16,
+          refresh_time = 16, -- ~60fps
           events = {
             'WinEnter',
             'BufEnter',

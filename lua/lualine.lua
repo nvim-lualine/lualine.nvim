@@ -515,7 +515,7 @@ local function set_refresh_checker()
   vim.loop.timer_start(
     timers.refresh_check_timer,
     0,
-    config.options.refresh.check,
+    config.options.refresh.refresh_time,
     modules.utils.timer_call(
       timers.refresh_check_timer,
       'lualine_refresh_check',
