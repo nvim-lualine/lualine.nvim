@@ -64,6 +64,63 @@ local function filename_and_parent(path, sep)
   end
 end
 
+-- return the absolute path of root of the git repo
+local function git_root()
+  local handle = io.popen('git rev-parse --show-toplevel 2>&1')
+  if not handle then
+    return '', 1 -- failed to open process
+  end
+
+  local result = handle:read('*a')
+  local ok, _, exit_code = handle:close()
+
+  -- Remove trailing newline
+  result = result:gsub('%s+$', '')
+
+  -- If handle:close() returns false, use exit_code = 1
+  if not ok then
+    return result, exit_code or 1
+  end
+
+  return result, 0
+end
+
+-- remove all path components from '/' down to the parent of the git repo
+local function remove_git_root_parent(git_root_parent, file_path)
+  local result = {}
+  for i = #git_root_parent + 1, #file_path do
+    table.insert(result, file_path[i])
+  end
+
+  return result
+end
+
+-- return the relative path of the file, including the git repo;
+-- if it's not a git repo, do the same as filename_and_parent (options.path == 4)
+local function path_with_gitroot(path, sep)
+  local segments = vim.split(path, sep)
+  if #segments == 0 then
+    return path
+  elseif #segments == 1 then
+    return segments[#segments]
+  else
+    local git_root_path, status = git_root()
+    if status ~= 0 then
+      -- not a git repo; act just like path type 4
+      return table.concat({ segments[#segments - 1], segments[#segments] }, sep)
+    else
+      -- remove the git repo path from the path, but first split it
+      local git_root_path_segments = {}
+      git_root_path_segments = vim.split(git_root_path, sep)
+      -- remove the last component of the git root path which is the repo name
+      table.remove(git_root_path_segments, nil)
+      local final_segments = remove_git_root_parent(git_root_path_segments, segments)
+      -- rebuild the relative path from the git root, which should include the repo name
+      return table.concat(final_segments, sep)
+    end
+  end
+end
+
 M.init = function(self, options)
   M.super.init(self, options)
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
@@ -84,6 +141,10 @@ M.update_status = function(self)
   elseif self.options.path == 4 then
     -- filename and immediate parent
     data = filename_and_parent(vim.fn.expand('%:p:~'), path_separator)
+  elseif self.options.path == 5 then
+    -- path from top of git repo, including the git repo name and the file name;
+    -- if not in a git repo, default to options.path = 4 as above
+    data = path_with_gitroot(vim.fn.expand('%:p'), path_separator)
   else
     -- just filename
     data = vim.fn.expand('%:t')
