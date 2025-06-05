@@ -51,11 +51,9 @@ function Buffer:get_props()
     else
       dev, _ = require('nvim-web-devicons').get_icon(self.file, vim.fn.expand('#' .. self.bufnr .. ':e'))
     end
-    
     if dev == nil then
       dev, _ = require('nvim-web-devicons').get_icon_by_filetype(self.filetype)
     end
-    
     if dev then
       self.icon = dev .. ' '
     end
