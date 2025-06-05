@@ -27,8 +27,8 @@ end
 ---setup icons, modified status for buffer
 function Buffer:get_props()
   self.file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(self.bufnr))
-  self.buftype = vim.api.nvim_buf_get_option(self.bufnr, 'buftype')
-  self.filetype = vim.api.nvim_buf_get_option(self.bufnr, 'filetype')
+  self.buftype = vim.bo[self.bufnr].buftype
+  self.filetype = vim.bo[self.bufnr].filetype
   local modified = self.options.show_modified_status and vim.api.nvim_buf_get_option(self.bufnr, 'modified')
   self.modified_icon = modified and self.options.symbols.modified or ''
   self.alternate_file_icon = self:is_alternate() and self.options.symbols.alternate_file or ''
@@ -49,7 +49,7 @@ function Buffer:get_props()
     elseif vim.fn.isdirectory(self.file) == 1 then
       dev, _ = self.options.symbols.directory, nil
     else
-      dev, _ = require('nvim-web-devicons').get_icon(self.file, vim.fn.expand('#' .. self.bufnr .. ':e'))
+      dev, _ = require('nvim-web-devicons').get_icon_by_filetype(self.filetype)
     end
     if dev then
       self.icon = dev .. ' '
