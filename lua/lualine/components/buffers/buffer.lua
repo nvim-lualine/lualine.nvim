@@ -49,8 +49,13 @@ function Buffer:get_props()
     elseif vim.fn.isdirectory(self.file) == 1 then
       dev, _ = self.options.symbols.directory, nil
     else
+      dev, _ = require('nvim-web-devicons').get_icon(self.file, vim.fn.expand('#' .. self.bufnr .. ':e'))
+    end
+    
+    if dev == nil then
       dev, _ = require('nvim-web-devicons').get_icon_by_filetype(self.filetype)
     end
+    
     if dev then
       self.icon = dev .. ' '
     end
