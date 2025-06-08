@@ -62,13 +62,14 @@ local config = {
 }
 
 --- Ensure sure user config doesn't disable lualine refresh completely
----@param options table
----@return table
-local function fix_refresh_timer(options)
-  if options.refresh.refresh_time <= 0 then
-    options.refresh.refresh_time = 16
+---@param refresh_options table | nil
+---@return table | nil
+local function fix_refresh_timer(refresh_options)
+  if refresh_options == nil then return end
+  if refresh_options.refresh_time <= 0 then
+    refresh_options.refresh_time = 16
   end
-  return options
+  return refresh_options
 end
 
 --- change separator format 'x' to {left='x', right='x'}
@@ -141,7 +142,7 @@ local function apply_configuration(config_table)
   if config_table.extensions then
     config.extensions = utils.deepcopy(config_table.extensions)
   end
-  config.options = fix_refresh_timer(config.options)
+  config.options.refresh = fix_refresh_timer(config.options.refresh)
   config.options.section_separators = fix_separators(config.options.section_separators)
   config.options.component_separators = fix_separators(config.options.component_separators)
   config.options.disabled_filetypes = fix_disabled_filetypes(config.options.disabled_filetypes)
