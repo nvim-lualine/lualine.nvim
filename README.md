@@ -145,9 +145,9 @@ require('lualine').setup {
     always_show_tabline = true,
     globalstatus = false,
     refresh = {
-      statusline = 100,
-      tabline = 100,
-      winbar = 100,
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
       refresh_time = 16, -- ~60fps
       events = {
         'WinEnter',
