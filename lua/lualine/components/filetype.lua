@@ -3,6 +3,7 @@
 local lualine_require = require('lualine_require')
 local modules = lualine_require.lazy_require {
   highlight = 'lualine.highlight',
+  icons = 'lualine.icons',
   utils = 'lualine.utils.utils',
 }
 local M = lualine_require.require('lualine.component'):extend()
@@ -28,46 +29,23 @@ function M:apply_icon()
     return
   end
 
-  local icon, icon_highlight_group
-  local ok, devicons = pcall(require, 'nvim-web-devicons')
-  if ok then
-    icon, icon_highlight_group = devicons.get_icon(vim.fn.expand('%:t'))
-    if icon == nil then
-      icon, icon_highlight_group = devicons.get_icon_by_filetype(vim.bo.filetype)
-    end
-
-    if icon == nil and icon_highlight_group == nil then
-      icon = ''
-      icon_highlight_group = 'DevIconDefault'
-    end
-    if icon then
-      icon = icon .. ' '
-    end
-    if self.options.colored then
-      local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
-      if highlight_color then
-        local default_highlight = self:get_default_hl()
-        local icon_highlight = self.icon_hl_cache[highlight_color]
-        if not icon_highlight or not modules.highlight.highlight_exists(icon_highlight.name .. '_normal') then
-          icon_highlight = self:create_hl({ fg = highlight_color }, icon_highlight_group)
-          self.icon_hl_cache[highlight_color] = icon_highlight
-        end
-
-        icon = self:format_hl(icon_highlight) .. icon .. default_highlight
-      end
-    end
-  else
-    ok = vim.fn.exists('*WebDevIconsGetFileTypeSymbol')
-    if ok ~= 0 then
-      icon = vim.fn.WebDevIconsGetFileTypeSymbol()
-      if icon then
-        icon = icon .. ' '
-      end
-    end
-  end
-
+  local icon, icon_highlight_group = modules.icons.filetype()
   if not icon then
     return
+  end
+
+  icon = icon .. ' '
+  if self.options.colored and icon_highlight_group then
+    local highlight_color = modules.utils.extract_highlight_colors(icon_highlight_group, 'fg')
+    if highlight_color then
+      local default_highlight = self:get_default_hl()
+      local icon_highlight = self.icon_hl_cache[highlight_color]
+      if not icon_highlight or not modules.highlight.highlight_exists(icon_highlight.name .. '_normal') then
+        icon_highlight = self:create_hl({ fg = highlight_color }, icon_highlight_group)
+        self.icon_hl_cache[highlight_color] = icon_highlight
+      end
+      icon = self:format_hl(icon_highlight) .. icon .. default_highlight
+    end
   end
 
   if self.options.icon_only then
