@@ -17,6 +17,7 @@ local timers = {
   stl_timer = vim.loop.new_timer(),
   tal_timer = vim.loop.new_timer(),
   wb_timer = vim.loop.new_timer(),
+  refresh_check_timer = vim.loop.new_timer(),
   halt_stl_refresh = false, -- mutex ?
   halt_tal_refresh = false,
   halt_wb_refresh = false,
@@ -333,6 +334,13 @@ local function should_ignore_focus(user_config, win)
   end
 end
 
+local refresh_event_queue = {
+  has_events = false,
+  statusline = {},
+  tabline = {},
+  winbar = {},
+}
+
 ---@alias LualineRefreshOptsKind
 ---| 'all'
 ---| 'tabpage'
@@ -344,7 +352,9 @@ end
 ---@class LualineRefreshOpts
 ---@field scope LualineRefreshOptsKind
 ---@field place LualineRefreshOptsPlace[]
----@field trigger 'timer' | 'init' |'unknown'
+---@field trigger 'timer' | 'init' | 'autocmd' |'unknown'
+---@field queued boolean the refresh even was queue and queue is now being processed
+---@field force boolean force refresh now instead of queuing
 --- Refresh contents of lualine
 ---@param opts LualineRefreshOpts
 local function refresh(opts)
@@ -356,6 +366,14 @@ local function refresh(opts)
     place = { 'statusline', 'winbar', 'tabline' },
     trigger = 'unknown',
   })
+
+  if not opts.queued and not opts.force then
+    for _, place in ipairs(opts.place) do
+      refresh_event_queue['has_events'] = true
+      refresh_event_queue[place] = vim.tbl_extend('force', opts, { place = { place }, queued = true })
+    end
+    return
+  end
 
   local wins = {}
   local old_actual_curwin = vim.g.actual_curwin
@@ -449,6 +467,7 @@ end
 local function set_tabline(hide)
   vim.loop.timer_stop(timers.tal_timer)
   timers.halt_tal_refresh = true
+  vim.cmd([[augroup lualine_tal_refresh | exe "autocmd!" | augroup END]])
   if not hide and next(config.tabline) ~= nil then
     vim.loop.timer_start(
       timers.tal_timer,
@@ -458,6 +477,13 @@ local function set_tabline(hide)
         refresh { scope = 'tabpage', place = { 'tabline' }, trigger = 'timer' }
       end, 3, 'lualine: Failed to refresh tabline')
     )
+    modules.utils.define_autocmd(
+      table.concat(config.options.refresh.events, ','),
+      '*',
+      "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['tabline'], 'trigger': 'autocmd'})",
+      'lualine_tal_refresh'
+    )
+
     modules.nvim_opts.set('showtabline', config.options.always_show_tabline and 2 or 1, { global = true })
     timers.halt_tal_refresh = false
     vim.schedule(function()
@@ -471,12 +497,43 @@ local function set_tabline(hide)
   end
 end
 
+local function check_refresh()
+  if not refresh_event_queue.has_events then
+    return
+  end
+  refresh_event_queue.has_events = nil
+
+  for place, refresh_cmd in pairs(refresh_event_queue) do
+    if type(refresh_cmd) == 'table' and refresh_cmd.queued == true then
+      refresh(refresh_cmd)
+      refresh_event_queue[place] = {}
+    end
+  end
+end
+
+local function set_refresh_checker()
+  vim.loop.timer_stop(timers.refresh_check_timer)
+  vim.loop.timer_start(
+    timers.refresh_check_timer,
+    0,
+    config.options.refresh.refresh_time,
+    modules.utils.timer_call(
+      timers.refresh_check_timer,
+      'lualine_refresh_check',
+      check_refresh,
+      3,
+      'lualine: Failed to refresh statusline'
+    )
+  )
+end
+
 --- Sets &statusline option to lualine
 --- adds auto command to redraw lualine on VimResized event
 ---@param hide boolean|nil if should hide statusline
 local function set_statusline(hide)
   vim.loop.timer_stop(timers.stl_timer)
   timers.halt_stl_refresh = true
+  vim.cmd([[augroup lualine_stl_refresh | exe "autocmd!" | augroup END]])
   if not hide and (next(config.sections) ~= nil or next(config.inactive_sections) ~= nil) then
     modules.nvim_opts.set('statusline', '%#lualine_transparent#', { global = true })
     if config.options.globalstatus then
@@ -489,6 +546,12 @@ local function set_statusline(hide)
           refresh { scope = 'window', place = { 'statusline' }, trigger = 'timer' }
         end, 3, 'lualine: Failed to refresh statusline')
       )
+      modules.utils.define_autocmd(
+        table.concat(config.options.refresh.events, ','),
+        '*',
+        "call v:lua.require'lualine'.refresh({'kind': 'window', 'place': ['statusline'], 'trigger': 'autocmd'})",
+        'lualine_stl_refresh'
+      )
     else
       modules.nvim_opts.set('laststatus', 2, { global = true })
       vim.loop.timer_start(
@@ -498,6 +561,13 @@ local function set_statusline(hide)
         modules.utils.timer_call(timers.stl_timer, 'lualine_stl_refresh', function()
           refresh { scope = 'tabpage', place = { 'statusline' }, trigger = 'timer' }
         end, 3, 'lualine: Failed to refresh statusline')
+      )
+
+      modules.utils.define_autocmd(
+        table.concat(config.options.refresh.events, ','),
+        '*',
+        "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['statusline'], 'trigger': 'autocmd'})",
+        'lualine_stl_refresh'
       )
     end
     timers.halt_stl_refresh = false
@@ -524,6 +594,7 @@ end
 local function set_winbar(hide)
   vim.loop.timer_stop(timers.wb_timer)
   timers.halt_wb_refresh = true
+  vim.cmd([[augroup lualine_wb_refresh | exe "autocmd!" | augroup END]])
   if not hide and (next(config.winbar) ~= nil or next(config.inactive_winbar) ~= nil) then
     vim.loop.timer_start(
       timers.wb_timer,
@@ -533,6 +604,13 @@ local function set_winbar(hide)
         refresh { scope = 'tabpage', place = { 'winbar' }, trigger = 'timer' }
       end, 3, 'lualine: Failed to refresh winbar')
     )
+    modules.utils.define_autocmd(
+      table.concat(config.options.refresh.events, ','),
+      '*',
+      "call v:lua.require'lualine'.refresh({'kind': 'tabpage', 'place': ['winbar'], 'trigger': 'autocmd'})",
+      'lualine_wb_refresh'
+    )
+
     timers.halt_wb_refresh = false
     vim.schedule(function()
       -- imediately refresh upon load.
@@ -613,6 +691,7 @@ local function setup(user_config)
     set_statusline()
     set_tabline()
     set_winbar()
+    set_refresh_checker()
   end
   if package.loaded['lualine.utils.notices'] then
     modules.utils_notices.notice_message_startup()
