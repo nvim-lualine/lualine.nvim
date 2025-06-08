@@ -353,7 +353,8 @@ local refresh_event_queue = {
 ---@field scope LualineRefreshOptsKind
 ---@field place LualineRefreshOptsPlace[]
 ---@field trigger 'timer' | 'init' | 'autocmd' |'unknown'
----@field queued boolean
+---@field queued boolean the refresh even was queue and queue is now being processed
+---@field force boolean force refresh now instead of queuing
 --- Refresh contents of lualine
 ---@param opts LualineRefreshOpts
 local function refresh(opts)
@@ -366,7 +367,7 @@ local function refresh(opts)
     trigger = 'unknown',
   })
 
-  if not opts.queued then
+  if not opts.queued and not opts.force then
     for _, place in ipairs(opts.place) do
       refresh_event_queue['has_events'] = true
       refresh_event_queue[place] = vim.tbl_extend('force', opts, { place = { place }, queued = true })
