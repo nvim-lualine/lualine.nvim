@@ -65,7 +65,9 @@ local config = {
 ---@param refresh_options table | nil
 ---@return table | nil
 local function fix_refresh_timer(refresh_options)
-  if refresh_options == nil then return end
+  if refresh_options == nil then
+    return
+  end
   if refresh_options.refresh_time <= 0 then
     refresh_options.refresh_time = 16
   end
