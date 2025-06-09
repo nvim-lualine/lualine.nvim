@@ -744,14 +744,17 @@ describe('Lualine', function()
         tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
-            3: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
-            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            2: lualine_a_buffers_DevIconTxt_active = { bg = "#a89984", fg = "#89e051", nocombine = true }
+            3: lualine_transitional_lualine_a_buffers_active_to_lualine_a_buffers_inactive = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            4: lualine_a_buffers_inactive = { bg = "#3c3836", bold = true, fg = "#a89984", nocombine = true }
+            5: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
-        |{1: 󰈙 a.txt }
-        {2:}
-        {3: ... }
-        {4:                                                                                                         }|
+        |{1: }
+        {2:󰈙 }
+        {1:a.txt }
+        {3:}
+        {4: ... }
+        {5:                                                                                                         }|
         ]===])
       end)
 
@@ -764,12 +767,15 @@ describe('Lualine', function()
         tabline:expect([===[
         highlights = {
             1: lualine_a_buffers_active = { bg = "#a89984", bold = true, fg = "#282828", nocombine = true }
-            2: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
-            3: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            2: lualine_a_buffers_DevIconLua_active = { bg = "#a89984", fg = "#51a0cf", nocombine = true }
+            3: lualine_transitional_lualine_a_buffers_active_to_lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
+            4: lualine_c_normal = { bg = "#3c3836", fg = "#a89984", nocombine = true }
         }
-        |{1:  t.lua }
-        {2:}
-        {3:                                                                                                              }|
+        |{1: }
+        {2: }
+        {1:t.lua }
+        {3:}
+        {4:                                                                                                              }|
         ]===])
       end)
 
