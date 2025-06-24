@@ -259,7 +259,7 @@ local function setup_theme()
       elseif ok and (type(dynamic_theme) == 'table') then
         return dynamic_theme
       else
-        local error_message = 'Invalid theme type returned from function: ' .. type(dynamic_theme)
+        local error_message = Msgstr('Invalid theme type returned from function: %s') .. type(dynamic_theme)
         notify_theme_error(error_message)
         return dynamic_theme
       end

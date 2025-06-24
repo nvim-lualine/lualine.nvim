@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-24 13:14-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: lua/lualine.lua:263
+#, lua-format
+msgid "Invalid theme type returned from function: %s"
+msgstr ""
+
+#: lua/lualine/highlight.lua:21 lua/lualine/utils/mode.lua:17
+#: lua/lualine/utils/mode.lua:18
+msgid "VISUAL"
+msgstr ""
+
+#: lua/lualine/highlight.lua:22 lua/lualine/utils/mode.lua:21
+#: lua/lualine/utils/mode.lua:22
+msgid "V-BLOCK"
+msgstr ""
+
+#: lua/lualine/highlight.lua:23 lua/lualine/utils/mode.lua:19
+#: lua/lualine/utils/mode.lua:20
+msgid "V-LINE"
+msgstr ""
+
+#: lua/lualine/highlight.lua:24 lua/lualine/utils/mode.lua:23
+msgid "SELECT"
+msgstr ""
+
+#: lua/lualine/highlight.lua:25 lua/lualine/utils/mode.lua:24
+msgid "S-LINE"
+msgstr ""
+
+#: lua/lualine/highlight.lua:26 lua/lualine/utils/mode.lua:25
+msgid "S-BLOCK"
+msgstr ""
+
+#: lua/lualine/highlight.lua:27 lua/lualine/utils/mode.lua:29
+#: lua/lualine/utils/mode.lua:30 lua/lualine/utils/mode.lua:31
+#: lua/lualine/utils/mode.lua:38
+msgid "REPLACE"
+msgstr ""
+
+#: lua/lualine/highlight.lua:28 lua/lualine/utils/mode.lua:32
+#: lua/lualine/utils/mode.lua:33 lua/lualine/utils/mode.lua:34
+msgid "V-REPLACE"
+msgstr ""
+
+#: lua/lualine/highlight.lua:29 lua/lualine/utils/mode.lua:26
+#: lua/lualine/utils/mode.lua:27 lua/lualine/utils/mode.lua:28
+msgid "INSERT"
+msgstr ""
+
+#: lua/lualine/highlight.lua:30 lua/lualine/utils/mode.lua:35
+msgid "COMMAND"
+msgstr ""
+
+#: lua/lualine/highlight.lua:31 lua/lualine/utils/mode.lua:36
+#: lua/lualine/utils/mode.lua:37
+msgid "EX"
+msgstr ""
+
+#: lua/lualine/highlight.lua:32 lua/lualine/utils/mode.lua:39
+msgid "MORE"
+msgstr ""
+
+#: lua/lualine/highlight.lua:33 lua/lualine/utils/mode.lua:40
+msgid "CONFIRM"
+msgstr ""
+
+#: lua/lualine/highlight.lua:34 lua/lualine/utils/mode.lua:42
+msgid "TERMINAL"
+msgstr ""
+
+#: lua/lualine/highlight.lua:83 lua/lualine/highlight.lua:95
+#, lua-format
+msgid "What's this it can't be higher then 255 and you've given %s"
+msgstr ""
+
+#: lua/lualine/utils/mode.lua:7 lua/lualine/utils/mode.lua:12
+#: lua/lualine/utils/mode.lua:13 lua/lualine/utils/mode.lua:14
+#: lua/lualine/utils/mode.lua:15 lua/lualine/utils/mode.lua:16
+msgid "NORMAL"
+msgstr ""
+
+#: lua/lualine/utils/mode.lua:8 lua/lualine/utils/mode.lua:9
+#: lua/lualine/utils/mode.lua:10 lua/lualine/utils/mode.lua:11
+msgid "O-PENDING"
+msgstr ""
+
+#: lua/lualine/utils/mode.lua:41
+msgid "SHELL"
+msgstr ""
+
+#: lua/lualine/components/filename.lua:13
+msgid "[No Name]"
+msgstr ""
+
+#: lua/lualine/components/filename.lua:14
+msgid "[New]"
+msgstr ""
+
+#: lua/lualine/components/buffers/init.lua:229
+msgid "Error: Unable to jump buffer position out of range"
+msgstr ""
+
+#: lua/lualine/components/progress.lua:7
+msgid "Top"
+msgstr ""
+
+#: lua/lualine/components/progress.lua:9
+msgid "Bot"
+msgstr ""

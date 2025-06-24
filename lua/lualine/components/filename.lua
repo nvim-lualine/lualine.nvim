@@ -1,6 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local M = require('lualine.component'):extend()
+local Msgstr = require('lualine.langMSG').Msgstr
 
 local modules = require('lualine_require').lazy_require {
   utils = 'lualine.utils.utils',
@@ -10,8 +11,8 @@ local default_options = {
   symbols = {
     modified = '[+]',
     readonly = '[-]',
-    unnamed = '[No Name]',
-    newfile = '[New]',
+    unnamed = Msgstr("[No Name]"),
+    newfile = Msgstr("[New]"),
   },
   file_status = true,
   newfile_status = false,
