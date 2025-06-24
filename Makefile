@@ -12,6 +12,7 @@ test:
 	@mkdir -p tmp_home
 	@export XDG_DATA_HOME='./tmp_home' && \
 	export XDG_CONFIG_HOME='./tmp_home' && \
+	export NVIM_TEST=1 && \
 	bash ./scripts/test_runner.sh
 	@rm -rf tmp_home
 
@@ -21,6 +22,7 @@ testcov:
 	@mkdir -p ./tmp_home/config/nvim
 	@export XDG_DATA_HOME=$(realpath './tmp_home/data') && \
 	export XDG_CONFIG_HOME=$(realpath './tmp_home/config') && \
+	export NVIM_TEST=1 && \
 	export TEST_COV=true && \
 	bash ./scripts/test_runner.sh
 	@luacov-console lua/
