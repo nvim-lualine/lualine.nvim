@@ -138,7 +138,10 @@ function M.highlight(name, foreground, background, gui, link)
   else
     local foreground_rgb = sanitize_color(foreground)
     local background_rgb = sanitize_color(background)
-    gui = (gui ~= nil and gui ~= '') and gui .. ',nocombine' or 'nocombine'
+    gui = gui or ''
+    if string.find(gui, 'nocombine') == nil then
+      gui = gui ~= '' and gui .. ',nocombine' or 'nocombine'
+    end
     if
       loaded_highlights[name]
       and loaded_highlights[name].fg == foreground_rgb
@@ -334,18 +337,20 @@ end
 ---  to retrieve highlight group
 function M.create_component_highlight_group(color, highlight_tag, options, apply_no_default)
   local section = options.self.section
-  local tag_id = 0
+  local tag_id = 1
+  local highlight_tag_counted = highlight_tag
   while
-    M.highlight_exists(table.concat({ 'lualine', section, highlight_tag }, '_'))
-    or (section and M.highlight_exists(table.concat({ 'lualine', section, highlight_tag, 'normal' }, '_')))
+    M.highlight_exists(table.concat({ 'lualine', section, highlight_tag_counted }, '_'))
+    or (section and M.highlight_exists(table.concat({ 'lualine', section, highlight_tag_counted, 'normal' }, '_')))
   do
-    highlight_tag = highlight_tag .. '_' .. tostring(tag_id)
+    highlight_tag_counted = highlight_tag .. '_' .. tostring(tag_id)
     tag_id = tag_id + 1
   end
+  highlight_tag = highlight_tag_counted
 
   if type(color) == 'string' then
     local highlight_group_name = table.concat({ 'lualine', section, highlight_tag }, '_')
-    M.highlight(highlight_group_name, nil, nil, nil, color) -- l8nk to group
+    M.highlight(highlight_group_name, nil, nil, nil, color) -- link to group
     return {
       name = highlight_group_name,
       fn = nil,

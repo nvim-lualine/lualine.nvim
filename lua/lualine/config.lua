@@ -21,9 +21,22 @@ local config = {
     always_show_tabline = true,
     globalstatus = vim.go.laststatus == 3,
     refresh = {
-      statusline = 100,
-      tabline = 100,
-      winbar = 100,
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+      refresh_time = 16, -- ~60fps
+      events = {
+        'WinEnter',
+        'BufEnter',
+        'BufWritePost',
+        'SessionLoadPost',
+        'FileChangedShellPost',
+        'VimResized',
+        'Filetype',
+        'CursorMoved',
+        'CursorMovedI',
+        'ModeChanged',
+      },
     },
   },
   sections = {
@@ -47,6 +60,19 @@ local config = {
   inactive_winbar = {},
   extensions = {},
 }
+
+--- Ensure sure user config doesn't disable lualine refresh completely
+---@param refresh_options table | nil
+---@return table | nil
+local function fix_refresh_timer(refresh_options)
+  if refresh_options == nil then
+    return
+  end
+  if refresh_options.refresh_time <= 0 then
+    refresh_options.refresh_time = 16
+  end
+  return refresh_options
+end
 
 --- change separator format 'x' to {left='x', right='x'}
 ---@param separators string|table
@@ -118,6 +144,7 @@ local function apply_configuration(config_table)
   if config_table.extensions then
     config.extensions = utils.deepcopy(config_table.extensions)
   end
+  config.options.refresh = fix_refresh_timer(config.options.refresh)
   config.options.section_separators = fix_separators(config.options.section_separators)
   config.options.component_separators = fix_separators(config.options.component_separators)
   config.options.disabled_filetypes = fix_disabled_filetypes(config.options.disabled_filetypes)
