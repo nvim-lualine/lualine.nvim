@@ -37,21 +37,28 @@ describe('Utils', function()
     vim.cmd(string.format('hi hl_std guifg=%s guibg=%s', hl_std.fg, hl_std.bg))
     vim.cmd(string.format('hi hl_rvs guifg=%s guibg=%s gui=reverse', hl_rvs.fg, hl_rvs.bg))
     vim.cmd(string.format('hi hl_ul guisp=%s gui=undercurl', hl_ul.sp))
-    vim.cmd(string.format('hi hl_ul_rvs guifg=%s guibg=%s guisp=%s gui=reverse,undercurl', hl_ul_rvs.fg, hl_ul_rvs.bg, hl_ul_rvs.sp))
+    vim.cmd(
+      string.format(
+        'hi hl_ul_rvs guifg=%s guibg=%s guisp=%s gui=reverse,undercurl',
+        hl_ul_rvs.fg,
+        hl_ul_rvs.bg,
+        hl_ul_rvs.sp
+      )
+    )
     -- Can extract color from primary highlight group
-    eq(utils.extract_color_from_hllist('fg', {'hl_std','hl_ul'}, def_clr), fg_clr)
+    eq(utils.extract_color_from_hllist('fg', { 'hl_std', 'hl_ul' }, def_clr), fg_clr)
     -- Can extract color from fallback highlight group
-    eq(utils.extract_color_from_hllist('fg', {'hl_noexist','hl_std'}, def_clr), fg_clr)
+    eq(utils.extract_color_from_hllist('fg', { 'hl_noexist', 'hl_std' }, def_clr), fg_clr)
     -- Can fall back to default color on nonexistent color
-    eq(utils.extract_color_from_hllist('fg', {'hl_ul'}, def_clr), def_clr)
+    eq(utils.extract_color_from_hllist('fg', { 'hl_ul' }, def_clr), def_clr)
     -- Can fall back to default color on nonexistent highlight group
-    eq(utils.extract_color_from_hllist('fg', {'hl_noexist'}, def_clr), def_clr)
+    eq(utils.extract_color_from_hllist('fg', { 'hl_noexist' }, def_clr), def_clr)
     -- Can extract fallback color
-    eq(utils.extract_color_from_hllist({'fg','sp'}, {'hl_ul'}, def_clr), sp_clr)
+    eq(utils.extract_color_from_hllist({ 'fg', 'sp' }, { 'hl_ul' }, def_clr), sp_clr)
     -- Can extract reverse color
-    eq(utils.extract_color_from_hllist('fg', {'hl_rvs'}, def_clr), bg_clr)
+    eq(utils.extract_color_from_hllist('fg', { 'hl_rvs' }, def_clr), bg_clr)
     -- Can extract fallback reverse color
-    eq(utils.extract_color_from_hllist({'sp','fg'}, {'hl_rvs'}, def_clr), bg_clr)
+    eq(utils.extract_color_from_hllist({ 'sp', 'fg' }, { 'hl_rvs' }, def_clr), bg_clr)
     -- clear highlights
     vim.cmd('hi clear hl_std')
     vim.cmd('hi clear hl_rvs')

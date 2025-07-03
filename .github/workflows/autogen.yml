@@ -5,6 +5,7 @@ on:
     paths:
       - "lua/**.lua"
       - "examples/**.lua"
+      - "tests/**.lua"
       - ".stylua.toml"
       - "README.md"
 
@@ -16,7 +17,7 @@ concurrency:
 jobs:
   autogen:
     name: "(vimdoc|formating)"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 10
     permissions:
       contents: write
@@ -32,7 +33,7 @@ jobs:
         uses: JohnnyMorganz/stylua-action@1.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --config-path=.stylua.toml lua/ examples/
+          args: --config-path=.stylua.toml lua/ examples/ tests/
           version: 0.14.1
       - name: Push changes
         uses: stefanzweifel/git-auto-commit-action@v4
@@ -41,4 +42,4 @@ jobs:
           commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
           commit_message: "chore: autogen (vimdocs+formating)"
           branch: ${{ github.head_ref }}
-          file_pattern: lua/ examples/ doc/lualine.txt
+          file_pattern: lua/ examples/ tests/ doc/lualine.txt
