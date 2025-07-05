@@ -53,6 +53,7 @@ local function update_branch()
     -- set to '' when git dir was not found
     current_git_branch = ''
   end
+  branch_cache[vim.api.nvim_get_current_buf()] = current_git_branch
 end
 
 ---updates the current value of current_git_branch and sets up file watch on HEAD file if value changed
