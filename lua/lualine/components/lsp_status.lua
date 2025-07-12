@@ -57,7 +57,7 @@ function M:update_status()
 
   -- Backwards-compatible function to get the active LSP clients.
   ---@diagnostic disable-next-line: deprecated
-  local get_lsp_clients = vim.lsp.get_clients or vim.lsp.get_active_clients
+  local get_lsp_clients = vim.lsp.get_clients
   local clients = get_lsp_clients { bufnr = vim.api.nvim_get_current_buf() }
 
   -- Backwards-compatible function to get the current time in nanoseconds.
