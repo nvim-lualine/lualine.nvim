@@ -922,9 +922,9 @@ describe('lsp_status component', function()
   it('shows LSP name and icon in older nvim version', function()
     vim.cmd('edit ' .. file)
     vim.lsp.get_clients = nil
-    stub(vim.lsp, 'get_active_clients')
+    stub(vim.lsp, 'get_clients')
     ---@diagnostic disable-next-line: deprecated
-    vim.lsp.get_active_clients
+    vim.lsp.get_clients
       .on_call_with({ bufnr = vim.api.nvim_get_current_buf() })
       .returns { { id = 2, name = 'lua_ls' } }
 
