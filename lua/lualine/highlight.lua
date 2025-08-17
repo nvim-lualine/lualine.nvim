@@ -1,6 +1,7 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
 local M = {}
+local Msgstr = require('lualine.langMSG').Msgstr
 local lualine_require = require('lualine_require')
 local require = lualine_require.require
 local modules = lualine_require.lazy_require {
@@ -18,20 +19,20 @@ local loaded_highlights = {}
 
 -- table to map mode to highlight suffixes
 local mode_to_highlight = {
-  ['VISUAL'] = '_visual',
-  ['V-BLOCK'] = '_visual',
-  ['V-LINE'] = '_visual',
-  ['SELECT'] = '_visual',
-  ['S-LINE'] = '_visual',
-  ['S-BLOCK'] = '_visual',
-  ['REPLACE'] = '_replace',
-  ['V-REPLACE'] = '_replace',
-  ['INSERT'] = '_insert',
-  ['COMMAND'] = '_command',
-  ['EX'] = '_command',
-  ['MORE'] = '_command',
-  ['CONFIRM'] = '_command',
-  ['TERMINAL'] = '_terminal',
+  [Msgstr('VISUAL')] = '_visual',
+  [Msgstr('V-BLOCK')] = '_visual',
+  [Msgstr('V-LINE')] = '_visual',
+  [Msgstr('SELECT')] = '_visual',
+  [Msgstr('S-LINE')] = '_visual',
+  [Msgstr('S-BLOCK')] = '_visual',
+  [Msgstr('REPLACE')] = '_replace',
+  [Msgstr('V-REPLACE')] = '_replace',
+  [Msgstr('INSERT')] = '_insert',
+  [Msgstr('COMMAND')] = '_command',
+  [Msgstr('EX')] = '_command',
+  [Msgstr('MORE')] = '_command',
+  [Msgstr('CONFIRM')] = '_command',
+  [Msgstr('TERMINAL')] = '_terminal',
 }
 
 --- Get highlight suffix for current mode, or inactive if not focused
@@ -80,7 +81,7 @@ local function sanitize_color(color)
     return modules.color_utils.color_name2rgb(color)
   elseif type(color) == 'number' then
     if color > 255 then
-      error("What's this it can't be higher then 255 and you've given " .. color)
+      error(Msgstr("What's this it can't be higher then 255 and you've given %s", {tostring(color)}))
     end
     return modules.color_utils.cterm2rgb(color)
   end
@@ -92,7 +93,7 @@ end
 local function sanitize_color_for_cterm(color)
   if type(color) == 'number' then
     if color > 255 then
-      error("What's this it can't be higher then 255 and you've given " .. color)
+      error(Msgstr("What's this it can't be higher then 255 and you've given %s", {tostring(color)}))
     end
     return color
   end
