@@ -13,6 +13,7 @@ local git_diff = nil
 local diff_output_cache = {}
 -- variable to store git_diff job
 local diff_job = nil
+local is_running = false
 
 local active_bufnr = '0'
 local diff_cache = {} -- Stores last known value of diff of a buffer
@@ -110,6 +111,7 @@ function M.update_diff_args()
       end
     end,
     on_exit = function()
+      is_running = false
       if #diff_output_cache > 0 then
         process_diff(diff_output_cache)
       else
@@ -123,13 +125,17 @@ end
 
 ---update git_diff variable
 function M.update_git_diff()
-  if M.diff_args then
+  -- It's important here that we check is_running, since
+  -- calling stop() on a git operation can have index.lock remain
+  -- and block other git operations
+  if M.diff_args and not is_running then
     diff_output_cache = {}
     if diff_job then
       diff_job:stop()
     end
     diff_job = modules.Job(M.diff_args)
     if diff_job then
+      is_running = true
       diff_job:start()
     end
   end
