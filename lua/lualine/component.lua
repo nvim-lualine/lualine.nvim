@@ -31,7 +31,7 @@ end
 M.__is_lualine_component = true
 
 --- Create a component-options table based off of the source options,
---- and adding any additional options for the alt state 
+--- and adding any additional options for the alt state
 --- (which will either supplement or override the source options)
 local function inheritAltOptions(altName, opts, additionalAltOpts)
   local altOpts = {}
@@ -58,8 +58,8 @@ function M:init(options)
   end
   self.component_no = component_no
 
-  -- Store any alternative states for this component 
-  self.alts = {} 
+  -- Store any alternative states for this component
+  self.alts = {}
   dynamicMode.registerAlts(self.options.component_name, self.options.alts)
   if self.options.alts ~= nil then
     for altName, extraOptions in pairs(options.alts) do

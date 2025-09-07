@@ -25,7 +25,7 @@ local component_types = {
   mod = function(component)
     local ok, loaded_component = pcall(require, 'lualine.components.' .. component[1])
     if ok then
-      -- component.component_name = component.component_name or component[1]
+      component.component_name = component.component_name or component[1]
       if type(loaded_component) == 'table' then
         loaded_component = loaded_component(component)
       elseif type(loaded_component) == 'function' then

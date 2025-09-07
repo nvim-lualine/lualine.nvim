@@ -4,10 +4,10 @@ M.MODES = {
   __GLOBAL__ = {}
 }
 
-function M.registerAlts(componentName, altMap) 
+function M.registerAlts(componentName, altMap)
   if altMap == nil then return end
   M.MODES[componentName] = {}
-  for altName, altOptions in pairs(altMap) do
+  for altName, _ in pairs(altMap) do
     M.MODES[componentName][altName] = false
     M.MODES.__GLOBAL__[altName] = false
   end
@@ -16,7 +16,7 @@ end
 function M.setMode(componentName, mode)
   print('Setting mode ' .. (mode or 'nil') .. ' for component ' .. (componentName or 'nil'))
   local alts = M.MODES[componentName]
-  for k, v in pairs(M.MODES[componentName]) do
+  for k, _ in pairs(M.MODES[componentName]) do
     alts[k] = false
   end
 
