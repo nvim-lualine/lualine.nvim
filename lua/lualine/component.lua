@@ -8,6 +8,8 @@ local modules = lualine_require.lazy_require {
   utils_notices = 'lualine.utils.notices',
   fn_store = 'lualine.utils.fn_store',
 }
+local dynamicMode = require('lualine.dynamicMode')
+local loader = require('lualine.utils.loader')
 
 -- Used to provide a unique id for each component
 local component_no = 1
@@ -28,6 +30,24 @@ end
 
 M.__is_lualine_component = true
 
+--- Create a component-options table based off of the source options,
+--- and adding any additional options for the alt state 
+--- (which will either supplement or override the source options)
+local function inheritAltOptions(altName, opts, additionalAltOpts)
+  local altOpts = {}
+  for _, src in pairs({opts, additionalAltOpts}) do
+    for k, v in pairs(src) do
+      if k ~= 'alts' then
+        altOpts[k] = v
+      end
+    end
+  end
+
+  altOpts.__isAlt = true
+  altOpts['component_name'] = opts['component_name'] .. '_mode_' .. altName
+  return altOpts
+end
+
 ---initialize new component
 ---@param options table options for component
 function M:init(options)
@@ -37,6 +57,18 @@ function M:init(options)
     self.options.component_name = tostring(component_no)
   end
   self.component_no = component_no
+
+  -- Store any alternative states for this component 
+  self.alts = {} 
+  dynamicMode.registerAlts(self.options.component_name, self.options.alts)
+  if self.options.alts ~= nil then
+    for altName, extraOptions in pairs(options.alts) do
+      local altOpts = inheritAltOptions(altName, self.options, extraOptions)
+      local altComponent = loader.component_loader(altOpts)
+      self.alts[altName] = altComponent
+    end
+  end
+
   self:set_separator()
   self:create_option_highlights()
   self:set_on_click()
@@ -115,6 +147,12 @@ function M:apply_padding()
   end
 end
 
+function M:getAlt()
+  local mode = dynamicMode.currentMode(self.options.component_name) or 'NOT FOUND'
+  return self.alts[mode]
+end
+
+
 ---applies custom highlights for component
 function M:apply_highlights(default_highlight)
   if self.options.color_highlight then
@@ -130,6 +168,7 @@ function M:apply_highlights(default_highlight)
     -- Also put it in applied sep so when sep get striped so does the hl
     self.applied_separator = default_highlight
   end
+
   -- Prepend default hl when the component doesn't start with hl otherwise
   -- color in previous component can cause side effect
   if not self.status:find('^%%#') then
@@ -277,6 +316,7 @@ function M:draw(default_highlight, is_focused)
   end
   self.default_hl = default_highlight
   local status = self:update_status(is_focused)
+
   if self.options.fmt then
     status = self.options.fmt(status or '', self)
   end

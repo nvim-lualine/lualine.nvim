@@ -18,13 +18,26 @@ function M.draw_section(section, section_name, is_focused)
   local highlight_name = highlight.format_highlight(section_name, is_focused)
 
   local status = {}
-  for _, component in pairs(section) do
+  for compIndex, component in pairs(section) do
+    local alt = component:getAlt()
+    if alt then
+      component = alt
+    end
+    section[compIndex] = component
+
+
     -- load components into status table
     if type(component) ~= 'table' or (type(component) == 'table' and not component.component_no) then
       return '' -- unknown element in section. section possibly not yet loaded
     end
-    table.insert(status, component:draw(highlight_name, is_focused))
+    local drawn = component:draw(highlight_name, is_focused)
+    local altDrawn = alt and alt:draw(highlight_name, is_focused) or ''
+    table.insert(status, drawn)
   end
+
+
+  local dt = os.date("*t")
+  local currTime = dt.min .. dt.sec 
 
   local section_color = utils.extract_highlight_colors(string.match(highlight_name, '%%#(.*)#'))
 
