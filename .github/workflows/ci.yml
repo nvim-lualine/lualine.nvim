@@ -2,7 +2,7 @@ name: Tests
 
 on:
   push:
-    branches: [master]
+    branches: [master, feature/dynamicModes]
   pull_request:
     branches: [master]
 
