@@ -65,7 +65,7 @@ function M:init(options)
   -- Store any alternative states for this component
   self.alts = {}
   local altNames = {}
-  for altName, altConfig in pairs(self.options.alts or {}) do
+  for altName, _ in pairs(self.options.alts or {}) do
     altNames[#altNames+1] = altName
   end
   dynamicMode.registerAlts(self.options.component_name, altNames)

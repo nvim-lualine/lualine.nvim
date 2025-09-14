@@ -3,9 +3,7 @@ local pickers = require "telescope.pickers"
 local finders = require "telescope.finders"
 local conf = require("telescope.config").values
 local actions = require "telescope.actions"
-local previewers = require'telescope.previewers'
 local action_state = require "telescope.actions.state"
-local api = vim.api
 
 local M = {}
 
@@ -26,7 +24,8 @@ end
 
 
 --- Telescope Action: toggle the selected lualine alt-mode
-local function selectMode(prompt_bufnr)
+-- luacheck: push no unused args
+local function selectMode(_)
   local selectedMode = action_state.get_selected_entry().value
   local isOn = dynamicMode.getMode('__GLOBAL__') == selectedMode
   dynamicMode.setGlobalMode(selectedMode, not isOn)
@@ -41,6 +40,7 @@ function M.lualinePick(opts)
     prompt_title = "Lualine Modes",
     sorter = conf.generic_sorter(opts),
     finder = getFinder(),
+    -- luacheck: push no unused args
     attach_mappings = function(prompt_bufnr, map)
       actions.select_default:replace(selectMode)
       return true

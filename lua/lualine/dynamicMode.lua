@@ -37,7 +37,7 @@ end
 
 function M.registeredModes()
   local modes = {}
-  for altName, isOn in pairs(M.MODES.__GLOBAL__) do
+  for altName, _ in pairs(M.MODES.__GLOBAL__) do
     modes[#modes+1] = altName
   end
   return modes
