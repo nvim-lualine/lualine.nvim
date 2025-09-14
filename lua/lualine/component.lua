@@ -88,7 +88,7 @@ function M:init(options)
       self.options.altModes
     )
     self.options.cond = function()
-      local currentMode = dynamicMode.currentMode(self.options.component_name)
+      local currentMode = dynamicMode.getMode(self.options.component_name)
       -- if any altMode is the current mode, display the component
       for _, mode in pairs(self.options.altModes) do
         if mode == currentMode then return true end
@@ -176,7 +176,7 @@ function M:apply_padding()
 end
 
 function M:getAlt()
-  local mode = dynamicMode.currentMode(self.options.component_name) or 'NOT FOUND'
+  local mode = dynamicMode.getMode(self.options.component_name) or 'NOT FOUND'
   return self.alts[mode]
 end
 

@@ -13,7 +13,7 @@ local M = {}
 --- Generate a finder whose results are the current NeoWin terminals 
 local function getFinder()
   return finders.new_table {
-    results = dynamicMode.allModes(),
+    results = dynamicMode.registeredModes(),
     entry_maker = function(entry)
       return {
         value = entry,
@@ -28,8 +28,8 @@ end
 --- Telescope Action: toggle the selected lualine alt-mode
 local function selectMode(prompt_bufnr)
   local selectedMode = action_state.get_selected_entry().value
-  local isOn = dynamicMode.currentMode('__GLOBAL__') == selectedMode
-  dynamicMode.setGlobal(selectedMode, not isOn)
+  local isOn = dynamicMode.getMode('__GLOBAL__') == selectedMode
+  dynamicMode.setGlobalMode(selectedMode, not isOn)
 end
 
 

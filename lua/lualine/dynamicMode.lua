@@ -23,11 +23,11 @@ function M.setMode(componentName, mode)
   end
 end
 
-function M.setGlobal(mode, onOff)
+function M.setGlobalMode(mode, onOff)
   M.MODES.__GLOBAL__[mode] = onOff
 end
 
-function M.currentMode(componentName)
+function M.getMode(componentName)
   -- if M.MODES[componentName] == nil then return end
   local componentModes = M.MODES[componentName] or {}
   for altName, isOn in pairs(componentModes) do
@@ -35,7 +35,7 @@ function M.currentMode(componentName)
   end
 end
 
-function M.allModes()
+function M.registeredModes()
   local modes = {}
   for altName, isOn in pairs(M.MODES.__GLOBAL__) do
     modes[#modes+1] = altName
