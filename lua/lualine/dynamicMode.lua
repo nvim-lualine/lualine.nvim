@@ -4,17 +4,15 @@ M.MODES = {
   __GLOBAL__ = {}
 }
 
-function M.registerAlts(componentName, altMap)
-  if altMap == nil then return end
+function M.registerAlts(componentName, alts)
   M.MODES[componentName] = {}
-  for altName, _ in pairs(altMap) do
+  for _, altName in ipairs(alts) do
     M.MODES[componentName][altName] = false
     M.MODES.__GLOBAL__[altName] = false
   end
 end
 
 function M.setMode(componentName, mode)
-  print('Setting mode ' .. (mode or 'nil') .. ' for component ' .. (componentName or 'nil'))
   local alts = M.MODES[componentName]
   for k, _ in pairs(M.MODES[componentName]) do
     alts[k] = false
@@ -35,6 +33,14 @@ function M.currentMode(componentName)
   for altName, isOn in pairs(componentModes) do
     if isOn or M.MODES.__GLOBAL__[altName] then return altName end
   end
+end
+
+function M.allModes()
+  local modes = {}
+  for altName, isOn in pairs(M.MODES.__GLOBAL__) do
+    modes[#modes+1] = altName
+  end
+  return modes
 end
 
 return M

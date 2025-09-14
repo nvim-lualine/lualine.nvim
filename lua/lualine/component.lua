@@ -58,14 +58,42 @@ function M:init(options)
   end
   self.component_no = component_no
 
+  if self.options.alts ~= nil and self.options.altModes ~= nil then
+    error('"alts" and "altModes" should not be used simultaneously')
+  end
+
   -- Store any alternative states for this component
   self.alts = {}
-  dynamicMode.registerAlts(self.options.component_name, self.options.alts)
+  local altNames = {}
+  for altName, altConfig in pairs(self.options.alts or {}) do
+    altNames[#altNames+1] = altName
+  end
+  dynamicMode.registerAlts(self.options.component_name, altNames)
   if self.options.alts ~= nil then
     for altName, extraOptions in pairs(options.alts) do
       local altOpts = inheritAltOptions(altName, self.options, extraOptions)
       local altComponent = loader.component_loader(altOpts)
       self.alts[altName] = altComponent
+    end
+  end
+
+
+  -- Optionally specify a single "altMode" string
+  -- This is an alternative syntax for the "cond" field.
+  -- Shorthand for "only display this component when its mode is set to {altMode}"
+  -- should not be used in conjuction with an actual "alts" map 
+  if self.options.altModes then
+    dynamicMode.registerAlts(
+      self.options.component_name,
+      self.options.altModes
+    )
+    self.options.cond = function()
+      local currentMode = dynamicMode.currentMode(self.options.component_name)
+      -- if any altMode is the current mode, display the component
+      for _, mode in pairs(self.options.altModes) do
+        if mode == currentMode then return true end
+      end
+      return false
     end
   end
 
