@@ -8,7 +8,7 @@ local action_state = require "telescope.actions.state"
 local M = {}
 
 
---- Generate a finder whose results are the current NeoWin terminals 
+--- Generate a finder whose results are the current NeoWin terminals
 local function getFinder()
   return finders.new_table {
     results = dynamicMode.registeredModes(),
@@ -30,6 +30,7 @@ local function selectMode(_)
   local isOn = dynamicMode.getMode('__GLOBAL__') == selectedMode
   dynamicMode.setGlobalMode(selectedMode, not isOn)
 end
+-- luacheck: pop
 
 
 
@@ -45,6 +46,7 @@ function M.lualinePick(opts)
       actions.select_default:replace(selectMode)
       return true
     end,
+    -- luacheck: pop
 }):find()
 end
 

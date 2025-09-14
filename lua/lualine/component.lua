@@ -81,7 +81,7 @@ function M:init(options)
   -- Optionally specify a single "altMode" string
   -- This is an alternative syntax for the "cond" field.
   -- Shorthand for "only display this component when its mode is set to {altMode}"
-  -- should not be used in conjuction with an actual "alts" map 
+  -- should not be used in conjuction with an actual "alts" map
   if self.options.altModes then
     dynamicMode.registerAlts(
       self.options.component_name,
