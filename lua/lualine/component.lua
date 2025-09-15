@@ -87,7 +87,9 @@ function M:init(options)
       self.options.component_name,
       self.options.altModes
     )
+    local cond = self.options.cond or function() return true end
     self.options.cond = function()
+      if not cond() then return false end
       local currentMode = dynamicMode.getMode(self.options.component_name)
       -- if any altMode is the current mode, display the component
       for _, mode in pairs(self.options.altModes) do

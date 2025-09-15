@@ -12,6 +12,10 @@ M.meths = setmetatable({}, {
   end,
 })
 
+M.MAIN_TEXT = 'test'
+M.ALT_TEXT = 'ALT'
+M.ALT_KEY = 'test_alt'
+
 function M.init_component(component, opts)
   if component == nil then
     component = 'special.function_component'
@@ -38,6 +42,7 @@ end
 function M.assert_component_instance(comp, result)
   eq(result, comp:draw(comp.options.hl))
 end
+
 -- sets defaults for component options
 M.build_component_opts = function(opts)
   if not opts then
@@ -45,7 +50,7 @@ M.build_component_opts = function(opts)
   end
   if opts[1] == nil then
     opts[1] = function()
-      return 'test'
+      return M.MAIN_TEXT
     end
   end
   if not opts.self then
@@ -68,6 +73,7 @@ M.build_component_opts = function(opts)
   end
   return opts
 end
+
 
 M.P = function(t)
   print(vim.inspect(t))

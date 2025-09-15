@@ -27,11 +27,27 @@ function M.setGlobalMode(mode, onOff)
   M.MODES.__GLOBAL__[mode] = onOff
 end
 
+function M.nukeGlobal()
+  for mode, _ in pairs(M.MODES.__GLOBAL__) do
+    M.MODES.__GLOBAL__[mode] = false
+  end
+end
+
+function M.nukeAll()
+for comp, _ in pairs(M.MODES) do
+  if comp ~= '__GLOBAL__' then M.setMode(comp, nil) end
+  end
+end
+
 function M.getMode(componentName)
   -- if M.MODES[componentName] == nil then return end
   local componentModes = M.MODES[componentName] or {}
   for altName, isOn in pairs(componentModes) do
-    if isOn or M.MODES.__GLOBAL__[altName] then return altName end
+    if isOn then return altName end
+  end
+  for altName, _ in pairs(componentModes) do
+    local isOn = M.MODES.__GLOBAL__[altName]
+    if isOn then return altName end
   end
 end
 
