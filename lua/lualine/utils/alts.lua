@@ -75,9 +75,6 @@ function M.altModeCondition(componentName, altModes, existingCond)
     if not existingCond() then return false end
 
     local currentMode = dynamicMode.getMode(componentName)
-    if componentName == 'diagnosticsFilter' then
-      print('Mode for component ' .. componentName .. ': ' .. (currentMode or 'nil'))
-    end
 
     -- If any altMode is the current mode, display the component.
     -- Negations (prefixed with "!") act as an AND gate, 
