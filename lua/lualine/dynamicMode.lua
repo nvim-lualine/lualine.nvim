@@ -10,7 +10,8 @@ function M.registerAlts(componentName, alts)
   M.MODES[componentName] = {}
   for _, altName in ipairs(alts) do
     M.MODES[componentName][altName] = false
-    M.MODES.__GLOBAL__[altName] = false
+    M.setGlobalMode(altName, false)
+    -- M.MODES.__GLOBAL__[altName] = false
   end
   -- print('Registered alts for component ' .. componentName .. ': ' .. vim.inspect(M.MODES[componentName]))
 end
@@ -27,7 +28,13 @@ function M.setMode(componentName, mode)
 end
 
 function M.setGlobalMode(mode, onOff)
+  -- do not allow the "normal" mode to be explicitly edited
+  -- (when a mode is registered, it's set to false by default,
+  -- but we *do* want to register the "normal" mode sometimes,
+  -- so that a component can require that mode=normal as a display condition)
+  if mode == 'normal' then return end
   M.MODES.__GLOBAL__[mode] = onOff
+  print('Setting global mode ' .. mode .. ' to ' .. (onOff and 'true' or 'false'))
   local allOff = true
   for mode, isOn in pairs(M.MODES.__GLOBAL__) do
     if mode ~= 'normal' then
