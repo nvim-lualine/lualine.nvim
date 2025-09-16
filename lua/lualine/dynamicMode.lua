@@ -34,7 +34,6 @@ function M.setGlobalMode(mode, onOff)
   -- so that a component can require that mode=normal as a display condition)
   if mode == 'normal' then return end
   M.MODES.__GLOBAL__[mode] = onOff
-  print('Setting global mode ' .. mode .. ' to ' .. (onOff and 'true' or 'false'))
   local allOff = true
   for mode, isOn in pairs(M.MODES.__GLOBAL__) do
     if mode ~= 'normal' then
