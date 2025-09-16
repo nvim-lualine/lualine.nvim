@@ -25,7 +25,7 @@ end
 
 --- Telescope Action: toggle the selected lualine alt-mode
 -- luacheck: push no unused args
-local function selectMode(_)
+local function toggleMode()
   local selectedMode = action_state.get_selected_entry().value
   local isOn = dynamicMode.getMode('__GLOBAL__') == selectedMode
   dynamicMode.setGlobalMode(selectedMode, not isOn)
@@ -43,7 +43,7 @@ function M.lualinePick(opts)
     finder = getFinder(),
     -- luacheck: push no unused args
     attach_mappings = function(prompt_bufnr, map)
-      actions.select_default:replace(selectMode)
+      actions.select_default:replace(toggleMode)
       return true
     end,
     -- luacheck: pop

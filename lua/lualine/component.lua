@@ -45,61 +45,15 @@ function M:init(options)
     error('"alts" and "altModes" should not be used simultaneously')
   end
 
-  -- Store any alternative states for this component
-  -- self.alts = {}
-  -- local altNames = {}
-  -- for altName, _ in pairs(self.options.alts or {}) do
-  --   altNames[#altNames+1] = altName
-  -- end
-  -- dynamicMode.registerAlts(self.options.component_name, altNames)
-  -- if self.options.alts ~= nil then
-  --   for altName, extraOptions in pairs(options.alts) do
-  --     local altOpts = altUtils.inheritAltOptions(altName, self.options, extraOptions)
-  --     local altComponent = loader.component_loader(altOpts)
-  --     self.alts[altName] = altComponent
-  --   end
-  -- end
-
   self.alts = altUtils.initAlts(self.options)
-  self.cond = altUtils.altModeCondition(
-    self.options.component_name,
-    self.options.altModes or {},
-    self.cond
-  )
-
-  -- -- Optionally specify a single "altMode" string
-  -- -- This is an alternative syntax for the "cond" field.
-  -- -- Shorthand for "only display this component when its mode is set to {altMode}"
-  -- -- should not be used in conjuction with an actual "alts" map
-  -- if self.options.altModes then
-  --   dynamicMode.registerAlts(
-  --     self.options.component_name,
-  --     self.options.altModes
-  --   )
-  --   local cond = self.options.cond or function() return true end
-  --   self.options.cond = function()
-  --     if not cond() then return false end
-  --     local currentMode = dynamicMode.getMode(self.options.component_name)
-  --
-  --     -- If any altMode is the current mode, display the component.
-  --     -- Negations (prefixed with "!") act as an AND gate, 
-  --     -- and assertions act as an OR gate
-  --     -- (any positive match is sufficient, but all negative matches are required)
-  --     local passesNegations = true
-  --     local passesAssertions = nil
-  --     for _, mode in pairs(self.options.altModes) do
-  --       local effectiveName, isNegation = altUtils.effectiveAltname(mode)
-  --       if isNegation then
-  --         print('Negation for name ' .. effectiveName)
-  --         passesNegations = passesNegations and mode ~= currentMode
-  --       else
-  --         print('Non-Negation for name ' .. effectiveName)
-  --         passesAssertions = passesAssertions or mode == currentMode
-  --       end
-  --     end
-  --     return passesNegations and passesAssertions ~= false
-  --   end
-  -- end
+  if self.options.altModes ~= nil then
+    self.options.cond = altUtils.altModeCondition(
+      self.options.component_name,
+      self.options.altModes or {},
+      self.options.cond,
+      self.options.altModeFallback
+    )
+  end
 
   self:set_separator()
   self:create_option_highlights()

@@ -1,7 +1,9 @@
 local M = {}
 
 M.MODES = {
-  __GLOBAL__ = {}
+  __GLOBAL__ = {
+    normal = true
+  }
 }
 
 function M.registerAlts(componentName, alts)
@@ -10,6 +12,7 @@ function M.registerAlts(componentName, alts)
     M.MODES[componentName][altName] = false
     M.MODES.__GLOBAL__[altName] = false
   end
+  -- print('Registered alts for component ' .. componentName .. ': ' .. vim.inspect(M.MODES[componentName]))
 end
 
 function M.setMode(componentName, mode)
@@ -25,6 +28,14 @@ end
 
 function M.setGlobalMode(mode, onOff)
   M.MODES.__GLOBAL__[mode] = onOff
+  local allOff = true
+  for mode, isOn in pairs(M.MODES.__GLOBAL__) do
+    if mode ~= 'normal' then
+      allOff = allOff and not isOn
+    end
+  end
+
+  M.MODES.__GLOBAL__.normal = allOff
 end
 
 function M.nukeGlobal()
