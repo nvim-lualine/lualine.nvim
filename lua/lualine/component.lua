@@ -50,8 +50,7 @@ function M:init(options)
     self.options.cond = altUtils.altModeCondition(
       self.options.component_name,
       self.options.altModes or {},
-      self.options.cond,
-      self.options.altModeFallback
+      self.options.cond
     )
   end
 

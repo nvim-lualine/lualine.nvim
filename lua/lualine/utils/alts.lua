@@ -58,7 +58,7 @@ function M.initAlts(componentOpts)
   
 end
 
-function M.altModeCondition(componentName, altModes, existingCond, fallback)
+function M.altModeCondition(componentName, altModes, existingCond)
   existingCond = existingCond or function() return true end
   local effectiveAltModes = {}
   for _, mode in pairs(altModes) do
@@ -77,10 +77,6 @@ function M.altModeCondition(componentName, altModes, existingCond, fallback)
     local currentMode = dynamicMode.getMode(componentName)
     if componentName == 'diagnosticsFilter' then
       print('Mode for component ' .. componentName .. ': ' .. (currentMode or 'nil'))
-    end
-    if currentMode == nil and fallback then
-      print('Falling back for component ' .. componentName)
-      return true
     end
 
     -- If any altMode is the current mode, display the component.
