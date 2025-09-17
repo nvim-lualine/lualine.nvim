@@ -1,5 +1,8 @@
 local M = {}
 
+-- TODO refactor - no need to map mode->isOn for component-modes
+-- we only need capabilities for multiple *global* modes to be turned on at once - local modes only need to be turned on 
+
 M.MODES = {
   __GLOBAL__ = {
     normal = true
@@ -17,14 +20,14 @@ function M.registerAlts(componentName, alts)
 end
 
 function M.setMode(componentName, mode)
-  local alts = M.MODES[componentName]
-  for k, _ in pairs(M.MODES[componentName]) do
-    alts[k] = false
+  local componentModes = M.MODES[componentName]
+  if mode then 
+    for k, _ in pairs(M.MODES[componentName]) do
+      componentModes[k] = false
+    end
   end
 
-  if mode then
-    M.MODES[componentName][mode] = true
-  end
+  M.MODES[componentName][mode] = mode
 end
 
 function M.setGlobalMode(mode, onOff)
