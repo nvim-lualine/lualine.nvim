@@ -10,8 +10,10 @@ local M = {}
 
 --- Generate a finder whose results are the current NeoWin terminals
 local function getFinder()
+  local modes = dynamicMode.registeredModes()
+  table.sort(modes)
   return finders.new_table {
-    results = dynamicMode.registeredModes(),
+    results = modes,
     entry_maker = function(entry)
       return {
         value = entry,
@@ -28,7 +30,8 @@ end
 local function toggleMode()
   local selectedMode = action_state.get_selected_entry().value
   local isOn = dynamicMode.getMode('__GLOBAL__') == selectedMode
-  dynamicMode.setGlobalMode(selectedMode, not isOn)
+  -- to turn off, set global mode to normal
+  dynamicMode.setGlobalMode(isOn and 'normal' or selectedMode)
 end
 -- luacheck: pop
 

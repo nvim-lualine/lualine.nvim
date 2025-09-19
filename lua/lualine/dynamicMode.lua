@@ -3,80 +3,45 @@ local M = {}
 -- TODO refactor - no need to map mode->isOn for component-modes
 -- we only need capabilities for multiple *global* modes to be turned on at once - local modes only need to be turned on 
 
+
 M.MODES = {
-  __GLOBAL__ = {
-    normal = true
-  }
+  __GLOBAL__ = 'normal'
 }
 
-function M.registerAlts(componentName, alts)
-  M.MODES[componentName] = {}
-  for _, altName in ipairs(alts) do
-    M.MODES[componentName][altName] = false
-    M.setGlobalMode(altName, false)
-    -- M.MODES.__GLOBAL__[altName] = false
-  end
-  -- print('Registered alts for component ' .. componentName .. ': ' .. vim.inspect(M.MODES[componentName]))
-end
+M.REGISTERED_MODES = {}
 
-function M.setMode(componentName, mode)
-  local componentModes = M.MODES[componentName]
-  if mode then 
-    for k, _ in pairs(M.MODES[componentName]) do
-      componentModes[k] = false
-    end
-  end
-
-  M.MODES[componentName][mode] = mode
-end
-
-function M.setGlobalMode(mode, onOff)
-  -- do not allow the "normal" mode to be explicitly edited
-  -- (when a mode is registered, it's set to false by default,
-  -- but we *do* want to register the "normal" mode sometimes,
-  -- so that a component can require that mode=normal as a display condition)
-  if mode == 'normal' then return end
-  M.MODES.__GLOBAL__[mode] = onOff
-  local allOff = true
-  for mode, isOn in pairs(M.MODES.__GLOBAL__) do
-    if mode ~= 'normal' then
-      allOff = allOff and not isOn
-    end
-  end
-
-  M.MODES.__GLOBAL__.normal = allOff
-end
-
-function M.nukeGlobal()
-  for mode, _ in pairs(M.MODES.__GLOBAL__) do
-    M.MODES.__GLOBAL__[mode] = false
-  end
-end
-
-function M.nukeAll()
-for comp, _ in pairs(M.MODES) do
-  if comp ~= '__GLOBAL__' then M.setMode(comp, nil) end
-  end
-end
-
-function M.getMode(componentName)
-  -- if M.MODES[componentName] == nil then return end
-  local componentModes = M.MODES[componentName] or {}
-  for altName, isOn in pairs(componentModes) do
-    if isOn then return altName end
-  end
-  for altName, _ in pairs(componentModes) do
-    local isOn = M.MODES.__GLOBAL__[altName]
-    if isOn then return altName end
+function M.registerAlts(componentName, altModes)
+  M.MODES[componentName] = nil
+  for _, mode in pairs(altModes) do
+    M.REGISTERED_MODES[mode] = true
   end
 end
 
 function M.registeredModes()
   local modes = {}
-  for altName, _ in pairs(M.MODES.__GLOBAL__) do
-    modes[#modes+1] = altName
+  for mode, _ in pairs(M.REGISTERED_MODES) do
+    modes[#modes+1] = mode
   end
   return modes
+end
+
+
+function M.setMode(componentName, mode)
+  M.MODES[componentName] = mode
+end
+
+function M.setGlobalMode(mode)
+  M.MODES.__GLOBAL__ = mode
+end
+
+function M.nukeAll()
+  for comp, _ in pairs(M.MODES) do
+    if comp ~= '__GLOBAL__' then M.setMode(comp, nil) end
+  end
+end
+
+function M.getMode(componentName)
+  return M.MODES[componentName] or M.MODES.__GLOBAL__
 end
 
 return M
