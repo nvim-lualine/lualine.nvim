@@ -25,8 +25,12 @@ local function testAltModes(localMode, globalMode)
     -- reset state
     dynamicMode.clearModes()
 
-    dynamicMode.setMode(name, localMode and helpers.ALT_KEY or nil)
-    dynamicMode.setGlobalMode(helpers.ALT_KEY)
+    if localMode then
+      dynamicMode.setMode(name, helpers.ALT_KEY)
+    end
+    if globalMode then
+      dynamicMode.setGlobalMode(helpers.ALT_KEY)
+    end
 
     local shouldShow = localMode or globalMode
     local found = string.find(comp:draw(opts.hl), helpers.MAIN_TEXT) ~= nil
@@ -51,8 +55,12 @@ local function testAlts(localMode, globalMode)
   -- reset state
   dynamicMode.clearModes()
 
-  dynamicMode.setMode(name, localMode and helpers.ALT_KEY or nil)
-  dynamicMode.setGlobalMode(helpers.ALT_KEY, globalMode)
+  if localMode then
+    dynamicMode.setMode(name, helpers.ALT_KEY)
+  end
+  if globalMode then
+    dynamicMode.setGlobalMode(helpers.ALT_KEY)
+  end
   local alt = comp:getAlt()
   local shouldShow = localMode or globalMode
 
