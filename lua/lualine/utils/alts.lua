@@ -26,14 +26,13 @@ end
 
 ---@param altName string
 function M.effectiveAltname(altName)
-  local effectiveName
+  local effectiveName = altName
   local isNegation = false
 
-  if altName:sub(1, 1)  == '!' then
+  if altName:sub(1, 1) == '!' then
     isNegation = true
     effectiveName = altName:sub(2)
   end
-  effectiveName = altName
 
   return effectiveName, isNegation
 end
@@ -55,14 +54,15 @@ function M.initAlts(componentOpts)
   end
 
   return alts
-  
 end
 
 function M.altModeCondition(componentName, altModes, existingCond)
   existingCond = existingCond or function() return true end
   local effectiveAltModes = {}
   for _, mode in pairs(altModes) do
-    effectiveName, isNegation = M.effectiveAltname(mode)
+    -- luacheck: push no unused
+    local effectiveName, isNegation = M.effectiveAltname(mode)
+    -- luacheck: pop
     effectiveAltModes[#effectiveAltModes+1] = mode
   end
 
@@ -84,7 +84,9 @@ function M.altModeCondition(componentName, altModes, existingCond)
     -- if there are assertions, at least one must be true 
     local hasAssertion = false
     for _, mode in pairs(altModes) do
+      -- luacheck: push no unused
       local effectiveName, isNegation = M.effectiveAltname(mode)
+      -- luacheck: pop
       hasAssertion = hasAssertion or not isNegation
     end
 
@@ -93,7 +95,9 @@ function M.altModeCondition(componentName, altModes, existingCond)
     local passesAssertions = not hasAssertion
     local passesNegations = true
     for _, mode in pairs(altModes) do
+      -- luacheck: push no unused
       local effectiveName, isNegation = M.effectiveAltname(mode)
+      -- luacheck: pop
       if isNegation then
         passesNegations = passesNegations and mode ~= currentMode
       else

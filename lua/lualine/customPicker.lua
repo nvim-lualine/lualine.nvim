@@ -56,7 +56,6 @@ local function toggleMode(prompt_bufnr)
   local isOn = currentGlobal == selectedMode
   -- to turn off, set global mode to normal
   dynamicMode.setGlobalMode(isOn and 'normal' or selectedMode)
-  currentGlobal = dynamicMode.getMode('__GLOBAL__')
   require('lualine').refresh({})
 end
 -- luacheck: pop

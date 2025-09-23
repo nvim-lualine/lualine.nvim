@@ -10,7 +10,6 @@ local modules = lualine_require.lazy_require {
 }
 local altUtils = require('lualine.utils.alts')
 local dynamicMode = require('lualine.dynamicMode')
-local loader = require('lualine.utils.loader')
 
 -- Used to provide a unique id for each component
 local component_no = 1
