@@ -1,7 +1,7 @@
 local M = {}
 
 -- TODO refactor - no need to map mode->isOn for component-modes
--- we only need capabilities for multiple *global* modes to be turned on at once - local modes only need to be turned on 
+-- we only need capabilities for multiple *global* modes to be turned on at once - local modes only need to be turned on
 
 
 M.MODES = {
@@ -31,7 +31,7 @@ function M.setMode(componentName, mode)
 end
 
 function M.setGlobalMode(mode)
-  -- if the user sets the mode to nil, default to "normal" 
+  -- if the user sets the mode to nil, default to "normal"
   M.MODES.__GLOBAL__ = mode or 'normal'
 end
 

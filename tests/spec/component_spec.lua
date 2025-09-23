@@ -18,7 +18,7 @@ local dynamicMode = require('lualine.dynamicMode')
 ---@param globalMode boolean
 ---Test that the "altModes" shorthand pattern shows (or hides) the component when either (or neither) the local/global mode is set
 local function testAltModes(localMode, globalMode)
-    opts = build_component_opts {altModes = {helpers.ALT_KEY}}
+    local opts = build_component_opts {altModes = {helpers.ALT_KEY}}
     local comp = require('lualine.components.special.function_component')(opts)
     local name = comp.options.component_name
 
@@ -26,7 +26,7 @@ local function testAltModes(localMode, globalMode)
     dynamicMode.clearModes()
 
     dynamicMode.setMode(name, localMode and helpers.ALT_KEY or nil)
-    dynamicMode.setGlobalMode(helpers.ALT_KEY, globalMode)
+    dynamicMode.setGlobalMode(helpers.ALT_KEY)
 
     local shouldShow = localMode or globalMode
     local found = string.find(comp:draw(opts.hl), helpers.MAIN_TEXT) ~= nil
@@ -36,7 +36,7 @@ end
 
 ---@param localMode boolean
 ---@param globalMode boolean
----Test that the alt component displays (or doesn't display) when either (or neither) the local/global mode is set 
+---Test that the alt component displays (or doesn't display) when either (or neither) the local/global mode is set
 local function testAlts(localMode, globalMode)
   local opts = build_component_opts {
     alts = {
@@ -476,12 +476,12 @@ describe('Filetype component', function()
     testAltModes(false, true)
   end)
 
-  it('respects component-mode over global mode when both are set', function() 
+  it('respects component-mode over global mode when both are set', function()
     local globalKey = helpers.ALT_KEY
     local globalTxt = helpers.ALT_TEXT
     local additionalKey = 'additional'
     local additionalTxt = 'additional val'
-    opts = build_component_opts {
+    local opts = build_component_opts {
       alts = {
         [globalKey] = {
           function() return globalTxt end
@@ -502,9 +502,11 @@ describe('Filetype component', function()
   end)
 
   it('throws error when altModes and alts are both set', function()
-    opts = build_component_opts {alts = {}, altModes = {}}
+    local opts = build_component_opts {alts = {}, altModes = {}}
     local componentCls = require('lualine.components.special.function_component')
+    --luacheck: push no unused
     local comp, err = pcall(componentCls, opts)
+    --luacheck: pop
     neq(nil, err)
   end)
 

@@ -23,7 +23,6 @@ function M.draw_section(section, section_name, is_focused)
     if alt then
       component = alt
     end
-    -- section[compIndex] = component
 
 
     -- load components into status table

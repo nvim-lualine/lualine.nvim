@@ -33,7 +33,7 @@ local function getFinder()
       }
       return {
         value = entry,
-        display=function(e) 
+        display=function(e)
           local displayArray = { {e.value.mode, e.value.hlGroup} }
           return displayer(displayArray)
         end,
@@ -79,15 +79,15 @@ function M.lualinePick(opts, currentText, currentIndex, currentInputMode)
     initial_mode=currentInputMode,
     -- luacheck: push no unused args
     attach_mappings = function(prompt_bufnr, map)
-      -- map('<C-e>', 
+      -- map('<C-e>',
       actions.select_default:replace(
-        function() 
+        function()
           toggleMode(prompt_bufnr)
           local currentPrompt = action_state.get_current_line()
-          local currentIndex = action_state.get_selected_entry().value.index
+          local entryIndex = action_state.get_selected_entry().value.index
           local inputMode = vim.fn.mode() == 'n' and 'normal' or 'insert'
           actions.close(prompt_bufnr)
-          M.lualinePick(opts, currentPrompt, currentIndex, inputMode)
+          M.lualinePick(opts, currentPrompt, entryIndex, inputMode)
         end
       )
       return true

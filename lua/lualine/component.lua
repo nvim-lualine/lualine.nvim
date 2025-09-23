@@ -131,9 +131,11 @@ function M:apply_padding()
   end
 end
 
+---Based on the current effective mode for this component,
+---retrieve its current alternative configuration (can be nil)
 function M:getAlt()
-  local mode = dynamicMode.getMode(self.options.component_name) or 'NOT FOUND'
-  return self.alts[mode]
+  local mode = dynamicMode.getMode(self.options.component_name)
+  return mode and self.alts[mode]
 end
 
 
