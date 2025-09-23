@@ -31,13 +31,15 @@ function M.setMode(componentName, mode)
 end
 
 function M.setGlobalMode(mode)
-  M.MODES.__GLOBAL__ = mode
+  -- if the user sets the mode to nil, default to "normal" 
+  M.MODES.__GLOBAL__ = mode or 'normal'
 end
 
-function M.nukeAll()
+function M.clearModes()
   for comp, _ in pairs(M.MODES) do
     if comp ~= '__GLOBAL__' then M.setMode(comp, nil) end
   end
+  M.setGlobalMode("normal")
 end
 
 function M.getMode(componentName)

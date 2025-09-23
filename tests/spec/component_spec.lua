@@ -23,8 +23,7 @@ local function testAltModes(localMode, globalMode)
     local name = comp.options.component_name
 
     -- reset state
-    dynamicMode.nukeAll()
-    dynamicMode.nukeGlobal()
+    dynamicMode.clearModes()
 
     dynamicMode.setMode(name, localMode and helpers.ALT_KEY or nil)
     dynamicMode.setGlobalMode(helpers.ALT_KEY, globalMode)
@@ -50,8 +49,7 @@ local function testAlts(localMode, globalMode)
   local name = comp.options.component_name
 
   -- reset state
-  dynamicMode.nukeAll()
-  dynamicMode.nukeGlobal()
+  dynamicMode.clearModes()
 
   dynamicMode.setMode(name, localMode and helpers.ALT_KEY or nil)
   dynamicMode.setGlobalMode(helpers.ALT_KEY, globalMode)
