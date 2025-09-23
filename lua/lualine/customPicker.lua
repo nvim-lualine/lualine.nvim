@@ -27,7 +27,7 @@ local function getFinder()
   return finders.new_table {
     results = makeEntries(),
     entry_maker = function(entry)
-      local widths = {{width=10}}
+      local widths = {{width=string.len(entry.mode)}}
       local displayer = entry_display.create {
         items = widths,
       }
@@ -50,13 +50,13 @@ local function toggleMode(prompt_bufnr)
 
   local entry = action_state.get_selected_entry()
   if entry == nil then return end
-  print('TOGGLING MODE (prompt buf = ' .. prompt_bufnr .. ')')
-
   local selectedMode = entry.value.mode
+
   local currentGlobal = dynamicMode.getMode('__GLOBAL__')
   local isOn = currentGlobal == selectedMode
   -- to turn off, set global mode to normal
   dynamicMode.setGlobalMode(isOn and 'normal' or selectedMode)
+  currentGlobal = dynamicMode.getMode('__GLOBAL__')
   require('lualine').refresh({})
 end
 -- luacheck: pop
@@ -83,7 +83,6 @@ function M.lualinePick(opts, currentText, currentIndex, currentInputMode)
       -- map('<C-e>', 
       actions.select_default:replace(
         function() 
-          print('SELECTING DEFAULT')
           toggleMode(prompt_bufnr)
           local currentPrompt = action_state.get_current_line()
           local currentIndex = action_state.get_selected_entry().value.index
