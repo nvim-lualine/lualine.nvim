@@ -77,11 +77,11 @@ function M.altModeCondition(componentName, altModes, existingCond)
     local currentMode = dynamicMode.getMode(componentName)
 
     -- If any altMode is the current mode, display the component.
-    -- Negations (prefixed with "!") act as an AND gate, 
+    -- Negations (prefixed with "!") act as an AND gate,
     -- and assertions act as an OR gate
     -- (any positive match is sufficient, but all negative matches are required)
 
-    -- if there are assertions, at least one must be true 
+    -- if there are assertions, at least one must be true
     local hasAssertion = false
     for _, mode in pairs(altModes) do
       -- luacheck: push no unused
@@ -90,8 +90,8 @@ function M.altModeCondition(componentName, altModes, existingCond)
       hasAssertion = hasAssertion or not isNegation
     end
 
-    -- if there are any assertions, so we will start off with a false condition 
-    -- otherwise, we default to true and assume only negation conditions 
+    -- if there are any assertions, so we will start off with a false condition
+    -- otherwise, we default to true and assume only negation conditions
     local passesAssertions = not hasAssertion
     local passesNegations = true
     for _, mode in pairs(altModes) do
