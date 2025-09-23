@@ -12,8 +12,6 @@ test:
 	@mkdir -p tmp_home
 	@export XDG_DATA_HOME='./tmp_home' && \
 	export XDG_CONFIG_HOME='./tmp_home' && \
-	git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ./tmp_home/nvim/pack/vendor/start/plenary.nvim && \
-	git clone --depth 1 https://github.com/nvim-tree/nvim-web-devicons ./tmp_home/nvim/pack/vendor/start/nvim-web-devicons && \
 	bash ./scripts/test_runner.sh
 	@rm -rf tmp_home
 
