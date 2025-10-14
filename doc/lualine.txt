@@ -874,7 +874,6 @@ Component specific options             These are options that are available on
           },
           -- List of LSP names to ignore (e.g., `null-ls`):
           ignore_lsp = {},
-          show_name = true,
         }
       }
     }
