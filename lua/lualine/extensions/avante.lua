@@ -1,8 +1,6 @@
 -- MIT license, see LICENSE for more details.
 -- Extension for avante.nvim
 
-local avante_ok, avante_config = pcall(require, 'avante.config')
-
 local M = {}
 
 local function ft_info()
@@ -13,7 +11,8 @@ local function ft_info()
     return require('lualine.utils.mode').get_mode()
   elseif ft == 'AvanteSelectedCode' then
     local max_shown = vim.api.nvim_win_get_height(0)
-    if avante_config.windows.sidebar_header.enabled then
+    local avante_ok, avante_config = pcall(require, 'avante.config')
+    if avante_ok and avante_config.windows.sidebar_header.enabled then
       max_shown = max_shown - 1
     end
     local num_lines = vim.api.nvim_buf_line_count(0)
@@ -34,7 +33,6 @@ end
 
 M.sections = { lualine_a = { ft_info } }
 
-M.filetypes = avante_ok and { 'Avante', 'AvanteInput', 'AvanteSelectedCode', 'AvanteSelectedFiles', 'AvanteTodos' }
-  or {}
+M.filetypes = { 'Avante', 'AvanteInput', 'AvanteSelectedCode', 'AvanteSelectedFiles', 'AvanteTodos' }
 
 return M
