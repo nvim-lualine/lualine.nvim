@@ -150,6 +150,8 @@ function M.get_branch(bufnr)
   end
   if bufnr then
     return branch_cache[bufnr] or ''
+  else
+    branch_cache[vim.api.nvim_get_current_buf()] = current_git_branch
   end
   return current_git_branch
 end
