@@ -82,9 +82,9 @@ function M:update_status()
     if not processed[client.name] and not list_contains(self.options.ignore_lsp, client.name) then
       local status_display = ((status and status ~= '') and (' ' .. status) or '')
       if self.options.show_name then
-          table.insert(result, client.name .. status_display)
+        table.insert(result, client.name .. status_display)
       else
-          table.insert(result, status_display)
+        table.insert(result, status_display)
       end
       processed[client.name] = true
     end
