@@ -17,15 +17,19 @@ function Window:is_current()
 end
 
 function Window:apply_mode(name)
+  local icon, extra_len = self:render_icon()
+
+  local str
   if self.options.mode == 0 then
-    return string.format('%s%s%s', self.icon, name, self.modified_icon)
+    str = string.format('%s%s%s', icon, name, self.modified_icon)
+  elseif self.options.mode == 1 then
+    str = string.format('%s %s%s', self.win_number, icon, self.modified_icon)
+  else
+    str = string.format('%s %s%s%s', self.win_number, icon, name, self.modified_icon)
   end
 
-  if self.options.mode == 1 then
-    return string.format('%s %s%s', self.win_number, self.icon, self.modified_icon)
-  end
-
-  return string.format('%s %s%s%s', self.win_number, self.icon, name, self.modified_icon)
+  local len = vim.fn.strchars(str) - extra_len
+  return str, len
 end
 
 function Window:configure_mouse_click(name)
