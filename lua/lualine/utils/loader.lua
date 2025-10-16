@@ -25,7 +25,7 @@ local component_types = {
   mod = function(component)
     local ok, loaded_component = pcall(require, 'lualine.components.' .. component[1])
     if ok then
-      component.component_name = component[1]
+      component.component_name = component.component_name or component[1]
       if type(loaded_component) == 'table' then
         loaded_component = loaded_component(component)
       elseif type(loaded_component) == 'function' then
@@ -35,6 +35,7 @@ local component_types = {
       return loaded_component
     end
   end,
+
   --- loads builtin statusline patterns as component
   stl = function(component)
     local stl_expr = component[1] -- Vim's %p %l statusline elements
@@ -256,4 +257,5 @@ end
 return {
   load_all = load_all,
   load_theme = load_theme,
+  component_loader=component_loader
 }

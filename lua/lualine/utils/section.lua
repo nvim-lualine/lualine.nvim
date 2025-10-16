@@ -19,12 +19,21 @@ function M.draw_section(section, section_name, is_focused)
 
   local status = {}
   for _, component in pairs(section) do
+    local alt = component:getAlt()
+    if alt then
+      component = alt
+    end
+
+
     -- load components into status table
     if type(component) ~= 'table' or (type(component) == 'table' and not component.component_no) then
       return '' -- unknown element in section. section possibly not yet loaded
     end
-    table.insert(status, component:draw(highlight_name, is_focused))
+    local drawn = component:draw(highlight_name, is_focused)
+    table.insert(status, drawn)
   end
+
+
 
   local section_color = utils.extract_highlight_colors(string.match(highlight_name, '%%#(.*)#'))
 
@@ -41,7 +50,8 @@ function M.draw_section(section, section_name, is_focused)
     -- Remove component separator with highlight for last component
     if not last_component_found and #status[component_no] > 0 then
       last_component_found = true
-      status[component_no] = section[component_no]:strip_separator()
+      local component = section[component_no]:getAlt() or section[component_no]
+      status[component_no] = component:strip_separator()
       if section_name < 'c' then
         if
           type(section[first_component_no].options.separator) ~= 'table'
