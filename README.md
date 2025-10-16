@@ -272,6 +272,7 @@ sections = {lualine_a = {'mode'}}
 - `diff` (git diff status)
 - `encoding` (file encoding)
 - `fileformat` (file format)
+- `filepermissions`
 - `filename`
 - `filesize`
 - `filetype`
@@ -657,6 +658,20 @@ sections = {
         unix = '', -- e712
         dos = '',  -- e70f
         mac = '',  -- e711
+      }
+    }
+  }
+}
+```
+
+#### filepermissions component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      'filepermissions',
+        octal = false, -- Displays file permissions in octal format if set to true
       }
     }
   }
