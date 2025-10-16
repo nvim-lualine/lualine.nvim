@@ -1,0 +1,7 @@
+# Hashes of file build rules.
+a65b9425b70fb1006d2dc0a0e0b161b2 /Users/andre/.ghq/github.com/AndreM222/lualine.nvim/po/en.po
+a30e6538e03b92bcc5b17293dbf513d5 /Users/andre/.ghq/github.com/AndreM222/lualine.nvim/po/ja.po
+7593b63df7a3d15afeb04b097b5346eb /Users/andre/.ghq/github.com/AndreM222/lualine.nvim/po/template.pot
+c4f8a21fd94d273b8a6227cc70797e41 CMakeFiles/en_po
+c4f8a21fd94d273b8a6227cc70797e41 CMakeFiles/ja_po
+c4f8a21fd94d273b8a6227cc70797e41 CMakeFiles/update_translations
