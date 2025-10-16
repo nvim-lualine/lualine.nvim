@@ -4,7 +4,6 @@
 
 ![code size](https://img.shields.io/github/languages/code-size/nvim-lualine/lualine.nvim?style=flat-square)
 ![license](https://img.shields.io/github/license/nvim-lualine/lualine.nvim?style=flat-square)
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-F7941D?style=plastic&logo=buy-me-a-coffee&logoColor=white)](https://buymeacoffee.com/shadmansalj)
 
 <!-- panvimdoc-ignore-end -->
 
@@ -1114,11 +1113,3 @@ You can find some useful [configuration snippets](https://github.com/nvim-lualin
 
 If you want to extend lualine with plugins or want to know
 which ones already do, [wiki/plugins](https://github.com/nvim-lualine/lualine.nvim/wiki/Plugins) is for you.
-
-### Support
-
-If you find this project useful, consider supporting development:
-
-<a href="https://buymeacoffee.com/shadmansalj" target="_blank">
-    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" width="200">
-</a>
