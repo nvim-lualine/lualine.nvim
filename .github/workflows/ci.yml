@@ -11,7 +11,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
-
 jobs:
   tests:
     name: ${{ matrix.os }} ${{ matrix.flavor }}
@@ -20,19 +19,27 @@ jobs:
       matrix:
         include:
           - flavor: nvim-0.7
-            runner: ubuntu-20.04
+            runner: ubuntu-22.04
             os: linux
             nvim_version: v0.7.0
           - flavor: nvim-0.8
-            runner: ubuntu-20.04
+            runner: ubuntu-22.04
             os: linux
             nvim_version: v0.8.0
           - flavor: nvim-0.9
-            runner: ubuntu-20.04
+            runner: ubuntu-22.04
             os: linux
             nvim_version: v0.9.0
+          - flavor: nvim-0.10
+            runner: ubuntu-22.04
+            os: linux
+            nvim_version: v0.10.0
+          - flavor: nvim-0.11
+            runner: ubuntu-22.04
+            os: linux
+            nvim_version: v0.11.0
           - flavor: nvim-nightly
-            runner: ubuntu-20.04
+            runner: ubuntu-22.04
             os: linux
             nvim_version: nightly
     runs-on: ${{ matrix.runner }}
@@ -48,13 +55,13 @@ jobs:
       - name: Setup neovim ${{matrix.nvim_version}}
         uses: rhysd/action-setup-vim@v1
         with:
-            neovim: true
-            version: ${{matrix.nvim_version}}
+          neovim: true
+          version: ${{matrix.nvim_version}}
       - name: Run tests
         run: |
           make test
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
