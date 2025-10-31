@@ -988,6 +988,7 @@ extensions = {'quickfix'}
 - assistant
 - avante
 - chadtree
+- copilot-chat
 - ctrlspace
 - fern
 - fugitive
