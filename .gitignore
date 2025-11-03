@@ -56,3 +56,6 @@ tags
 # tests
 /tmp_home/
 .luarc.json
+
+./po/build/*
+!./po/build/README.md
