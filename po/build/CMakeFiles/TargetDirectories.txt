@@ -1,5 +1,0 @@
-/Users/andre/.ghq/github.com/AndreM222/lualine.nvim/po/build/CMakeFiles/en_po.dir
-/Users/andre/.ghq/github.com/AndreM222/lualine.nvim/po/build/CMakeFiles/ja_po.dir
-/Users/andre/.ghq/github.com/AndreM222/lualine.nvim/po/build/CMakeFiles/update_translations.dir
-/Users/andre/.ghq/github.com/AndreM222/lualine.nvim/po/build/CMakeFiles/edit_cache.dir
-/Users/andre/.ghq/github.com/AndreM222/lualine.nvim/po/build/CMakeFiles/rebuild_cache.dir

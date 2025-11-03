@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/andre/.ghq/github.com/AndreM222/lualine.nvim/po/build/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
