@@ -2,6 +2,7 @@
 -- MIT license, see LICENSE for more details.
 local require = require('lualine_require').require
 local Buffer = require('lualine.components.buffers.buffer')
+local Msgstr = require('lualine.langMSG').Msgstr
 local M = require('lualine.component'):extend()
 local highlight = require('lualine.highlight')
 
@@ -226,7 +227,7 @@ function M.buffer_jump(buf_pos, bang)
   end
   if buf_pos < 1 or buf_pos > #M.bufpos2nr then
     if bang ~= '!' then
-      error('Error: Unable to jump buffer position out of range')
+      error(Msgstr('Error: Unable to jump buffer position out of range'))
     else
       return
     end
