@@ -24,8 +24,17 @@ function M:update_status()
     return ''
   end
 
-  local denominator = math.min(result.total, result.maxcount)
-  return string.format('[%d/%d]', result.current, denominator)
+  if result.incomplete == 0 then
+    return string.format('[%d/%d]', result.current, result.total)
+  elseif result.incomplete == 1 then
+    return '[?/??]'
+  elseif result.incomplete == 2 then
+    if result.current <= result.maxcount then
+      return string.format('[%d/>%d]', result.current, result.maxcount)
+    else
+      return string.format('[>%d/>%d]', result.maxcount, result.maxcount)
+    end
+  end
 end
 
 return M
