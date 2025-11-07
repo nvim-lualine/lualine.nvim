@@ -15,6 +15,7 @@ describe('Lualine', function()
         theme = 'gruvbox',
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
+        show_separators_if_empty = false,
         disabled_filetypes = {
           statusline = {},
           winbar = {},
