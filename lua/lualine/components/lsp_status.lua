@@ -15,6 +15,10 @@ local default_options = {
   show_name = true,
 }
 
+---The difference between the `begin` and `end` progress events for each LSP.
+---@type table<integer, integer>
+M.lsp_work_by_client_id = {}
+
 function M:init(options)
   -- Run `super()`.
   M.super.init(self, options)
@@ -25,11 +29,6 @@ function M:init(options)
   -- Apply symbols.
   self.symbols = self.options.symbols or {}
 
-  ---The difference between the `begin` and `end` progress events for each LSP.
-  ---
-  ---@type table<integer, integer>
-  self.lsp_work_by_client_id = {}
-
   -- Listen to progress updates only if `nvim` supports the `LspProgress` event.
   pcall(vim.api.nvim_create_autocmd, 'LspProgress', {
     desc = 'Update the Lualine LSP status component with progress',
@@ -39,10 +38,10 @@ function M:init(options)
       local kind = event.data.params.value.kind
       local client_id = event.data.client_id
 
-      local work = self.lsp_work_by_client_id[client_id] or 0
+      local work = M.lsp_work_by_client_id[client_id] or 0
       local work_change = kind == 'begin' and 1 or (kind == 'end' and -1 or 0)
 
-      self.lsp_work_by_client_id[client_id] = math.max(work + work_change, 0)
+      M.lsp_work_by_client_id[client_id] = math.max(work + work_change, 0)
 
       -- Refresh Lualine to update the LSP status symbol if it changed.
       if (work == 0 and work_change > 0) or (work == 1 and work_change < 0) then
@@ -69,7 +68,7 @@ function M:update_status()
 
   for _, client in ipairs(clients) do
     local status
-    local work = self.lsp_work_by_client_id[client.id]
+    local work = M.lsp_work_by_client_id[client.id]
     if work ~= nil and work > 0 then
       status = spinner_symbol
     elseif work ~= nil and work == 0 then
