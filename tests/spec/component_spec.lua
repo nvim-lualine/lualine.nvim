@@ -40,12 +40,9 @@ describe('Component:', function()
     -- color highlight wan't in options when create_comp_hl was
     -- called so remove it before assert
     comp1.options.color_highlight = nil
-    assert.stub(hl.create_component_highlight_group).was_called_with(
-      color,
-      comp1.options.component_name,
-      comp1.options,
-      false
-    )
+    assert
+      .stub(hl.create_component_highlight_group)
+      .was_called_with(color, comp1.options.component_name, comp1.options, false)
     hl.create_component_highlight_group:revert()
     color = 'MyHl'
     local opts2 = build_component_opts { color = color }
@@ -56,12 +53,9 @@ describe('Component:', function()
     -- color highlight wan't in options when create_comp_hl was
     -- called so remove it before assert
     comp2.options.color_highlight = nil
-    assert.stub(hl.create_component_highlight_group).was_called_with(
-      color,
-      comp2.options.component_name,
-      comp2.options,
-      false
-    )
+    assert
+      .stub(hl.create_component_highlight_group)
+      .was_called_with(color, comp2.options.component_name, comp2.options, false)
     hl.create_component_highlight_group:revert()
   end)
 
@@ -261,7 +255,7 @@ describe('Encoding component', function()
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
       padding = 0,
-      show_bomb = true
+      show_bomb = true,
     }
     local tmp_path = 'tmp.txt'
     local tmp_fp = io.open(tmp_path, 'w')
@@ -357,12 +351,9 @@ describe('Filetype component', function()
     assert_component('filetype', opts, '%#MyCompHl_normal#* %#lualine_c_normal#lua%#lualine_c_normal#')
     assert.stub(devicons.get_icon).was_called_with('test.lua')
     assert.stub(utils.extract_highlight_colors).was_called_with('test_highlight_group', 'fg')
-    assert.stub(hl.create_component_highlight_group).was_called_with(
-      { fg = '#000' },
-      'filetype_test_highlight_group',
-      opts,
-      false
-    )
+    assert
+      .stub(hl.create_component_highlight_group)
+      .was_called_with({ fg = '#000' }, 'filetype_test_highlight_group', opts, false)
     assert.stub(vim.fn.expand).was_called_with('%:t')
 
     devicons.get_icon:revert()
@@ -455,7 +446,7 @@ describe('Filetype component', function()
       padding = 0,
       colored = false,
       icon_only = false,
-      icon = { align = 'right' }
+      icon = { align = 'right' },
     }
     assert_component('filetype', opts, 'lua * ')
     assert.stub(devicons.get_icon).was_called_with('test.lua')
@@ -528,7 +519,7 @@ describe('Location component', function()
     assert_component('location', opts, '  1:1 ')
     vim.cmd('normal! 9o')
     assert_component('location', opts, ' 10:1 ')
-    vim.api.nvim_win_set_cursor(0, {5, 0})
+    vim.api.nvim_win_set_cursor(0, { 5, 0 })
     assert_component('location', opts, '  5:1 ')
     -- test column number
     vim.cmd('normal! oTest')
@@ -549,7 +540,7 @@ describe('Progress component', function()
     assert_component('progress', opts, 'Top')
     vim.cmd('normal! 9o')
     assert_component('progress', opts, 'Bot')
-    vim.api.nvim_win_set_cursor(0, {5, 0})
+    vim.api.nvim_win_set_cursor(0, { 5, 0 })
     assert_component('progress', opts, '50%%')
     vim.cmd('bdelete!')
   end)
@@ -617,7 +608,7 @@ describe('Filename component', function()
     vim.cmd(':bdelete!')
   end)
 
-  it('can show new_file_status', function ()
+  it('can show new_file_status', function()
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
       padding = 0,
@@ -870,5 +861,149 @@ describe('Branch component', function()
     vim.cmd('e ' .. file)
     local rev = git('rev-parse --short=6 HEAD'):sub(1, 6)
     assert_component('branch', opts, rev)
+  end)
+end)
+
+describe('lsp_status component', function()
+  local assert_comp_ins = helpers.assert_component_instance
+  local tmpdir
+  local file
+  local opts = build_component_opts {
+    component_separators = { left = '', right = '' },
+    padding = 0,
+    ignore_lsp = { 'null-ls' },
+  }
+  local lsp_status_comp
+
+  before_each(function()
+    require('lualine').setup {}
+    tmpdir = os.tmpname()
+    file = os.tmpname() .. '/test.lua'
+    vim.cmd([[
+      augroup lualine
+        autocmd!
+      augroup END
+    ]])
+    lsp_status_comp = helpers.init_component('lsp_status', opts)
+  end)
+
+  after_each(function()
+    os.remove(tmpdir)
+  end)
+
+  it('is empty when no LSP', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns {}
+
+    assert_comp_ins(lsp_status_comp, '')
+  end)
+
+  it('is empty when LSP is ignored', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns {
+      { id = 2, name = 'null-ls' },
+    }
+
+    assert_comp_ins(lsp_status_comp, '')
+  end)
+
+  it('shows LSP name and icon when attached', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    vim.cmd('edit ' .. file)
+
+    assert_comp_ins(lsp_status_comp, ' lua_ls')
+  end)
+
+  it('shows LSP name and icon in older nvim version', function()
+    vim.cmd('edit ' .. file)
+    vim.lsp.get_clients = nil
+    stub(vim.lsp, 'get_active_clients')
+    ---@diagnostic disable-next-line: deprecated
+    vim.lsp.get_active_clients
+      .on_call_with({ bufnr = vim.api.nvim_get_current_buf() })
+      .returns { { id = 2, name = 'lua_ls' } }
+
+    assert_comp_ins(lsp_status_comp, ' lua_ls')
+  end)
+
+  it('shows LSP progress when supported', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+    if vim.uv and vim.uv.hrtime then
+      stub(vim.uv, 'hrtime')
+      vim.uv.hrtime.on_call_with().returns(12 * 1e6 * 80)
+    elseif vim.loop and vim.loop.hrtime then
+      stub(vim.loop, 'hrtime')
+      vim.loop.hrtime.on_call_with().returns(12 * 1e6 * 80)
+    end
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'begin' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      -- Use spinner symbol 12 (time) % 10 (symbol table size) = 2.
+      assert_comp_ins(lsp_status_comp, ' lua_ls ⠹')
+    end
+  end)
+
+  it('shows LSP done when supported', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'begin' } } },
+    }) and pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'end' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      assert_comp_ins(lsp_status_comp, ' lua_ls ✓')
+    end
+  end)
+
+  it('shows LSP done when supported and no begin', function()
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'end' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      assert_comp_ins(lsp_status_comp, ' lua_ls ✓')
+    end
+  end)
+
+  it('does not add unnecessary space separator when LSP progress symbol is empty', function()
+    local opts_no_done = opts
+    opts_no_done.symbols = { done = '' }
+    local lsp_status_comp_no_done = helpers.init_component('lsp_status', opts)
+
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'begin' } } },
+    }) and pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { value = { kind = 'end' } } },
+    })
+
+    -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
+    if ok then
+      assert_comp_ins(lsp_status_comp_no_done, ' lua_ls')
+    end
   end)
 end)

@@ -92,11 +92,18 @@ function M.update_diff_args()
     return
   end
   M.diff_args = {
-    cmd = string.format(
-      [[git -C %s --no-pager diff --no-color --no-ext-diff -U0 -- %s]],
+    cmd = {
+      'git',
+      '-C',
       vim.fn.expand('%:h'),
-      vim.fn.expand('%:t')
-    ),
+      '--no-pager',
+      'diff',
+      '--no-color',
+      '--no-ext-diff',
+      '-U0',
+      '--',
+      vim.fn.expand('%:t'),
+    },
     on_stdout = function(_, data)
       if next(data) then
         diff_output_cache = vim.list_extend(diff_output_cache, data)
