@@ -93,9 +93,14 @@ M.update_status = function(self)
     data = self.options.symbols.unnamed
   end
 
-  if self.options.shorting_target ~= 0 then
+  local shorting_target = self.options.shorting_target
+  if type(shorting_target) == 'function' then
+    shorting_target = shorting_target()
+  end
+
+  if shorting_target ~= 0 then
     local windwidth = self.options.globalstatus and vim.go.columns or vim.fn.winwidth(0)
-    local estimated_space_available = windwidth - self.options.shorting_target
+    local estimated_space_available = windwidth - shorting_target
 
     data = shorten_path(data, path_separator, estimated_space_available)
   end
