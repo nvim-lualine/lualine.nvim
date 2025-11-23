@@ -957,12 +957,12 @@ describe('lsp_status component', function()
   it('shows LSP done when supported', function()
     vim.cmd('edit ' .. file)
     stub(vim.lsp, 'get_clients')
-    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 3, name = 'lua_ls' } }
 
     local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
-      data = { client_id = 2, params = { value = { kind = 'begin' } } },
+      data = { client_id = 3, params = { value = { kind = 'begin' } } },
     }) and pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
-      data = { client_id = 2, params = { value = { kind = 'end' } } },
+      data = { client_id = 3, params = { value = { kind = 'end' } } },
     })
 
     -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
