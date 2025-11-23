@@ -1008,6 +1008,8 @@ extensions = {'quickfix'}
 - symbols-outline
 - toggleterm
 - trouble
+- telescope
+- floaterm
 
 #### Custom extensions
 
