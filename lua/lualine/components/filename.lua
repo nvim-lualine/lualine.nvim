@@ -84,6 +84,26 @@ M.update_status = function(self)
   elseif self.options.path == 4 then
     -- filename and immediate parent
     data = filename_and_parent(vim.fn.expand('%:p:~'), path_separator)
+  elseif self.options.path == 5 then
+    -- check for duplicate filenames in current buffers and add parent dir if a duplicate is found
+    local current_filename = vim.fn.expand('%:t')
+    local buffer_list = vim.fn.getbufinfo { buflisted = 1 }
+    local duplicate_found = false
+
+    for _, buf in ipairs(buffer_list) do
+      if buf.name ~= vim.fn.expand('%:p') and vim.fn.fnamemodify(buf.name, ':t') == current_filename then
+        duplicate_found = true
+        break
+      end
+    end
+
+    if duplicate_found then
+      -- add parent directory to distinguish duplicate filenames
+      local parent_dir = vim.fn.fnamemodify(vim.fn.expand('%:p:~'), ':h:t:~')
+      data = parent_dir .. path_separator .. current_filename
+    else
+      data = current_filename
+    end
   else
     -- just filename
     data = vim.fn.expand('%:t')
