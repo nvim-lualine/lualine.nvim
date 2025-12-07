@@ -6,6 +6,7 @@ local utils = require('lualine.utils.utils')
 -- vars
 local current_git_branch = ''
 local current_git_dir = ''
+local current_git_dir_is_reftable = false -- whether current git dir uses reftable format
 local branch_cache = {} -- stores last known branch for a buffer
 local active_bufnr = '0'
 -- os specific path separator
@@ -15,6 +16,56 @@ local sep = package.config:sub(1, 1)
 -- Windows doesn't like file watch for some reason.
 local file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
 local git_dir_cache = {} -- Stores git paths that we already know of
+
+---checks if git directory uses reftable format
+---@param git_dir string full path to .git directory
+---@return boolean
+local function is_reftable_repo(git_dir)
+  local reftable_dir = git_dir .. sep .. 'reftable'
+  local stat = vim.loop.fs_stat(reftable_dir)
+  return stat ~= nil and stat.type == 'directory'
+end
+
+---runs git command asynchronously and calls callback with result
+---@param git_dir string full path to .git directory
+---@param args string[] git command arguments
+---@param callback fun(result: string|nil) called with output or nil on error
+local function git_cmd_async(git_dir, args, callback)
+  local stdout = vim.loop.new_pipe(false)
+  local output = ''
+
+  local full_args = { '--git-dir=' .. git_dir }
+  for _, arg in ipairs(args) do
+    table.insert(full_args, arg)
+  end
+
+  local handle
+  handle = vim.loop.spawn('git', {
+    args = full_args,
+    stdio = { nil, stdout, nil },
+  }, function(code)
+    stdout:read_stop()
+    stdout:close()
+    handle:close()
+    vim.schedule(function()
+      if code == 0 and output and #output > 0 then
+        callback(vim.trim(output))
+      else
+        callback(nil)
+      end
+    end)
+  end)
+
+  if handle then
+    stdout:read_start(function(err, data)
+      if not err and data then
+        output = output .. data
+      end
+    end)
+  else
+    callback(nil)
+  end
+end
 
 ---sets git_branch variable to branch name or commit hash if not on branch
 ---@param head_file string full path of .git/HEAD file
@@ -33,22 +84,57 @@ local function get_git_head(head_file)
   return nil
 end
 
+---gets branch name for reftable repos using git command (async)
+---@param git_dir string full path to .git directory
+local function get_branch_reftable(git_dir)
+  -- Use symbolic-ref first to get branch name, fall back to rev-parse for detached HEAD
+  git_cmd_async(git_dir, { 'symbolic-ref', '--short', 'HEAD' }, function(branch)
+    if branch then
+      current_git_branch = branch
+    else
+      -- Detached HEAD - get short commit hash
+      git_cmd_async(git_dir, { 'rev-parse', '--short', 'HEAD' }, function(hash)
+        current_git_branch = hash or ''
+        branch_cache[vim.api.nvim_get_current_buf()] = current_git_branch
+      end)
+      return
+    end
+    branch_cache[vim.api.nvim_get_current_buf()] = current_git_branch
+  end)
+end
+
 ---updates the current value of git_branch and sets up file watch on HEAD file
 local function update_branch()
   active_bufnr = tostring(vim.api.nvim_get_current_buf())
   file_changed:stop()
   local git_dir = current_git_dir
   if git_dir and #git_dir > 0 then
-    local head_file = git_dir .. sep .. 'HEAD'
-    get_git_head(head_file)
-    file_changed:start(
-      head_file,
-      sep ~= '\\' and {} or 1000,
-      vim.schedule_wrap(function()
-        -- reset file-watch
-        update_branch()
-      end)
-    )
+    if current_git_dir_is_reftable then
+      -- Reftable format: use git command to get branch name
+      get_branch_reftable(git_dir)
+      -- Watch tables.list for changes instead of HEAD
+      local tables_list = git_dir .. sep .. 'reftable' .. sep .. 'tables.list'
+      file_changed:start(
+        tables_list,
+        sep ~= '\\' and {} or 1000,
+        vim.schedule_wrap(function()
+          -- reset file-watch
+          update_branch()
+        end)
+      )
+    else
+      -- Normal git format: read HEAD file directly
+      local head_file = git_dir .. sep .. 'HEAD'
+      get_git_head(head_file)
+      file_changed:start(
+        head_file,
+        sep ~= '\\' and {} or 1000,
+        vim.schedule_wrap(function()
+          -- reset file-watch
+          update_branch()
+        end)
+      )
+    end
   else
     -- set to '' when git dir was not found
     current_git_branch = ''
@@ -60,6 +146,7 @@ end
 local function update_current_git_dir(git_dir)
   if current_git_dir ~= git_dir then
     current_git_dir = git_dir
+    current_git_dir_is_reftable = git_dir and is_reftable_repo(git_dir) or false
     update_branch()
   end
 end
