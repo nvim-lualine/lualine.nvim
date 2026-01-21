@@ -276,6 +276,9 @@ sections = {lualine_a = {'mode'}}
 - `filesize`
 - `filetype`
 - `hostname`
+- `battery`
+- `wifi`
+- `ram`
 - `location` (location in file in line:column format)
 - `mode` (vim mode)
 - `progress` (%progress in file)
@@ -584,6 +587,83 @@ sections = {
       'datetime',
       -- options: default, us, uk, iso, or your own format string ("%H:%M", etc..)
       style = 'default'
+    }
+  }
+}
+```
+
+#### wifi component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      "wifi",
+      status = {
+        connected = "󰤪",
+        disconnected = "󰤫",
+        show = true
+      },
+      essid = {
+        show = true
+      },
+      bit_rate = {
+        unit = "mbps", -- or dbm
+        show = true
+      }
+    }
+  }
+}
+```
+
+#### battery component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      "battery",
+      show_percentage = true,
+      show_status_text = false,
+      view = {
+        charge = {
+          zeros = { icon = "󰂎 " },
+          tens = { icon = "󰁺 " },
+          twenties = { icon = "󰁻 " },
+          thirties = { icon = "󰁼 " },
+          forties = { icon = "󰁽 " },
+          fifties = { icon = "󰁾 " },
+          sixties = { icon = "󰁿 " },
+          seventies = { icon = "󰂀 " },
+          eighties = { icon = "󰂁 " },
+          nineties = { icon = "󰂂 " },
+          hundred = { icon = "󰁹 " },
+        },
+        status = {
+          enabled = true,
+          charging = { icon = " 󱐋" },
+          discharging = { icon = " 󱐌" },
+          not_charging = { icon = "  " },
+          full = { icon = "  " },
+          unknown = { icon = " " },
+          critical = { icon = " " },
+          percentage = { icon = " 󰏰" },
+        },
+      },
+    }
+  }
+}
+```
+
+
+#### ram component options
+
+```lua
+sections = {
+  lualine_a = {
+    {
+      icon = "󰍛",
+      show_percentage = true,
     }
   }
 }
