@@ -1006,6 +1006,7 @@ extensions = {'quickfix'}
 - overseer
 - quickfix
 - symbols-outline
+- textcount
 - toggleterm
 - trouble
 
