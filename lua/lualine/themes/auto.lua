@@ -3,18 +3,29 @@
 local utils = require('lualine.utils.utils')
 local loader = require('lualine.utils.loader')
 
-local color_name = vim.g.colors_name
-if color_name then
-  -- All base16 colorschemes share the same theme
-  if 'base16' == color_name:sub(1, 6) then
-    color_name = 'base16'
-  end
-
-  -- Check if there's a theme for current colorscheme
-  -- If there is load that instead of generating a new one
-  local ok, theme = pcall(loader.load_theme, color_name)
+local function try_load_theme(theme_name)
+  local ok, theme = pcall(loader.load_theme, theme_name)
   if ok and theme then
     return theme
+  end
+  return nil
+end
+
+local color_name = vim.g.colors_name
+if color_name then
+  -- Base16/Base24 colorschemes can be provided by either base16 or tinted themes.
+  if color_name:find('^base16%-') or color_name:find('^base24%-') then
+    local theme = try_load_theme('tinted') or try_load_theme('base16')
+    if theme then
+      return theme
+    end
+  else
+    -- Check if there's a theme for current colorscheme
+    -- If there is load that instead of generating a new one
+    local theme = try_load_theme(color_name)
+    if theme then
+      return theme
+    end
   end
 end
 
