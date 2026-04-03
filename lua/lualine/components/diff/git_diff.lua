@@ -86,7 +86,7 @@ end
 function M.update_diff_args()
   -- Don't show git diff when current buffer doesn't have a filename
   active_bufnr = tostring(vim.api.nvim_get_current_buf())
-  if #vim.fn.expand('%') == 0 then
+  if #vim.fn.expand('%') == 0 or vim.fn.executable('git') == 0 then
     M.diff_args = nil
     git_diff = nil
     return
