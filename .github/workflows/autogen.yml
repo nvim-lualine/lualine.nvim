@@ -3,6 +3,7 @@ on:
   push:
     branches: [master]
     paths:
+      - ".github/workflows/autogen.yml"
       - "lua/**.lua"
       - "examples/**.lua"
       - "tests/**.lua"
@@ -25,10 +26,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Generate docs with panvimdoc
-        uses: kdheepak/panvimdoc@v2.7.1
+        uses: kdheepak/panvimdoc@v4.0.1
         with:
           vimdoc: lualine
           description: fast and easy to configure statusline plugin for neovim
+          pandoc: README.md
+          version: NVIM v0.7.0
+          toc: true
+          treesitter: true
+          docmapping: true
+          docmappingprojectname: false
+          shiftheadinglevelby: "-1"
+          incrementheadinglevelby: 0
+          dedupsubheadings: false
       - name: Apply stylua
         uses: JohnnyMorganz/stylua-action@1.0.0
         with:

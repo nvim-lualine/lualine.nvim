@@ -3,15 +3,25 @@
 ==============================================================================
 Table of Contents                                  *lualine-table-of-contents*
 
-1. lualine.nvim                                         |lualine-lualine.nvim|
-  - Contributing                                        |lualine-contributing|
-  - Performance compared to other plugins|lualine-performance-compared-to-other-plugins|
-  - Installation                                        |lualine-installation|
-  - Usage and customization                  |lualine-usage-and-customization|
-
-==============================================================================
-1. lualine.nvim                                         *lualine-lualine.nvim*
-
+1. Contributing                                         |lualine-contributing|
+2. Performance compared to other plugins|lualine-performance-compared-to-other-plugins|
+3. Installation                                         |lualine-installation|
+  - vim-plug                                                |lualine-vim-plug|
+  - packer.nvim                                          |lualine-packer.nvim|
+  - lazy.nvim                                              |lualine-lazy.nvim|
+4. Usage and customization                   |lualine-usage-and-customization|
+  - Configuring lualine in init.vim  |lualine-configuring-lualine-in-init.vim|
+  - Starting lualine                                |lualine-starting-lualine|
+  - Setting a theme                                  |lualine-setting-a-theme|
+  - Separators                                            |lualine-separators|
+  - Changing components in lualine sections|lualine-changing-components-in-lualine-sections|
+  - Component options                              |lualine-component-options|
+  - Tabline                                                  |lualine-tabline|
+  - Winbar                                                    |lualine-winbar|
+  - Extensions                                            |lualine-extensions|
+  - Refreshing lualine                            |lualine-refreshing-lualine|
+  - Disabling lualine                              |lualine-disabling-lualine|
+  - Wiki                                                        |lualine-wiki|
 A blazing fast and easy to configure Neovim statusline written in Lua.
 
 `lualine.nvim` requires Neovim >= 0.7.
@@ -19,7 +29,9 @@ A blazing fast and easy to configure Neovim statusline written in Lua.
 For previous versions of neovim please use compatability tags for example
 compat-nvim-0.5
 
-CONTRIBUTING                                            *lualine-contributing*
+
+==============================================================================
+1. Contributing                                         *lualine-contributing*
 
 Feel free to create an issue/PR if you want to see anything else implemented.
 If you have some question or need help with configuration, start a discussion
@@ -29,7 +41,9 @@ Please read CONTRIBUTING.md <./CONTRIBUTING.md> before opening a PR. You can
 also help with documentation in the wiki
 <https://github.com/nvim-lualine/lualine.nvim/wiki>.
 
-PERFORMANCE COMPARED TO OTHER PLUGINS*lualine-performance-compared-to-other-plugins*
+
+==============================================================================
+2. Performance compared to other plugins*lualine-performance-compared-to-other-plugins*
 
 Unlike other statusline plugins, lualine loads only the components you specify,
 and nothing else.
@@ -43,26 +57,28 @@ Times are measured with a clean `init.vim` with only `vim-startuptime`,
 startuptime of vim not time spent on specific plugin. These numbers are the
 average of 20 runs.
 
-│control│lualine│lightline│airline│
-│17.2 ms│24.8 ms│ 25.5 ms │79.9 ms│
-
-
+   control   lualine   lightline   airline
+  --------- --------- ----------- ---------
+   17.2 ms   24.8 ms    25.5 ms    79.9 ms
 Last Updated On: 18-04-2022
 
-INSTALLATION                                            *lualine-installation*
 
-VIM-PLUG <HTTPS://GITHUB.COM/JUNEGUNN/VIM-PLUG> ~
+==============================================================================
+3. Installation                                         *lualine-installation*
 
->
+
+VIM-PLUG                                                    *lualine-vim-plug*
+
+>vim
     Plug 'nvim-lualine/lualine.nvim'
     " If you want to have icons in your statusline choose one of these
     Plug 'nvim-tree/nvim-web-devicons'
 <
 
 
-PACKER.NVIM <HTTPS://GITHUB.COM/WBTHOMASON/PACKER.NVIM> ~
+PACKER.NVIM                                              *lualine-packer.nvim*
 
->
+>lua
     use {
       'nvim-lualine/lualine.nvim',
       requires = { 'nvim-tree/nvim-web-devicons', opt = true }
@@ -70,48 +86,49 @@ PACKER.NVIM <HTTPS://GITHUB.COM/WBTHOMASON/PACKER.NVIM> ~
 <
 
 
-LAZY.NVIM <HTTPS://GITHUB.COM/FOLKE/LAZY.NVIM> ~
+LAZY.NVIM                                                  *lualine-lazy.nvim*
 
->
+>lua
     {
         'nvim-lualine/lualine.nvim',
         dependencies = { 'nvim-tree/nvim-web-devicons' }
     }
 <
 
-
 You’ll also need to have a patched font if you want icons.
 
-USAGE AND CUSTOMIZATION                      *lualine-usage-and-customization*
+
+==============================================================================
+4. Usage and customization                   *lualine-usage-and-customization*
 
 Lualine has sections as shown below.
 
->
+>text
     +-------------------------------------------------+
     | A | B | C                             X | Y | Z |
     +-------------------------------------------------+
 <
 
-
 Each sections holds its components e.g. Vim’s current mode.
 
-CONFIGURING LUALINE IN INIT.VIM ~
+
+CONFIGURING LUALINE IN INIT.VIM      *lualine-configuring-lualine-in-init.vim*
 
 All the examples below are in lua. You can use the same examples in `.vim`
 files by wrapping them in lua heredoc like this:
 
->
+>vim
     lua << END
     require('lualine').setup()
     END
 <
 
-
 For more information, check out `:help lua-heredoc`.
 
-                                               *lualine-Default-configuration*
 
->
+DEFAULT CONFIGURATION ~
+
+>lua
     require('lualine').setup {
       options = {
         icons_enabled = true,
@@ -168,42 +185,37 @@ For more information, check out `:help lua-heredoc`.
     }
 <
 
+If you want to get your current lualine config, you can do so with:
 
-Default configuration                  If you want to get your current lualine
-                                       config, you can do so with:
-
-
->
+>lua
     require('lualine').get_config()
 <
 
-
 ------------------------------------------------------------------------------
 
-STARTING LUALINE ~
+STARTING LUALINE                                    *lualine-starting-lualine*
 
->
+>lua
     require('lualine').setup()
 <
 
-
 ------------------------------------------------------------------------------
 
-SETTING A THEME ~
+SETTING A THEME                                      *lualine-setting-a-theme*
 
->
+>lua
     options = { theme = 'gruvbox' }
 <
-
 
 All available themes are listed in THEMES.md <./THEMES.md>.
 
 Please create a PR if you managed to port a popular theme before us, here is
 how to do it <./CONTRIBUTING.md>.
 
-                                                  *lualine-Customizing-themes*
 
->
+CUSTOMIZING THEMES ~
+
+>lua
     local custom_gruvbox = require'lualine.themes.gruvbox'
     
     -- Change the background of lualine_c section for normal mode
@@ -215,54 +227,48 @@ how to do it <./CONTRIBUTING.md>.
     }
 <
 
-
-Customizing themes                     Theme structure is available here
-                                       <https://github.com/nvim-lualine/lualine.nvim/wiki/Writing-a-theme>.
-
+Theme structure is available here
+<https://github.com/nvim-lualine/lualine.nvim/wiki/Writing-a-theme>.
 
 ------------------------------------------------------------------------------
 
-SEPARATORS ~
+SEPARATORS                                                *lualine-separators*
 
 lualine defines two kinds of separators:
-
 
 - `section_separators` - separators between sections
 - `component_separators` - separators between the different components in sections
 
-
 **Note**: if viewing this README in a browser, chances are the characters below
 will not be visible.
 
->
+>lua
     options = {
       section_separators = { left = '', right = '' },
       component_separators = { left = '', right = '' }
     }
 <
 
-
 Here, left refers to the left-most sections (a, b, c), and right refers to the
 right-most sections (x, y, z).
 
-                                                *lualine-Disabling-separators*
 
->
+DISABLING SEPARATORS ~
+
+>lua
     options = { section_separators = '', component_separators = '' }
 <
 
-
 ------------------------------------------------------------------------------
 
-CHANGING COMPONENTS IN LUALINE SECTIONS ~
+CHANGING COMPONENTS IN LUALINE SECTIONS*lualine-changing-components-in-lualine-sections*
 
->
+>lua
     sections = {lualine_a = {'mode'}}
 <
 
 
-                                                *lualine-Available-components*
-
+AVAILABLE COMPONENTS ~
 
 - `branch` (git branch)
 - `buffers` (shows currently available buffers)
@@ -284,11 +290,12 @@ CHANGING COMPONENTS IN LUALINE SECTIONS ~
 - `lsp_status` (shows active LSPs in the current buffer and a progress spinner)
 
 
-                                                   *lualine-Custom-components*
+CUSTOM COMPONENTS ~
 
-LUA FUNCTIONS AS LUALINE COMPONENT
 
->
+Lua functions as lualine component        *Lua-functions-as-lualine-component*
+
+>lua
     local function hello()
       return [[hello world]]
     end
@@ -296,67 +303,61 @@ LUA FUNCTIONS AS LUALINE COMPONENT
 <
 
 
-VIM FUNCTIONS AS LUALINE COMPONENT
+Vim functions as lualine component        *Vim-functions-as-lualine-component*
 
->
+>lua
     sections = { lualine_a = {'FugitiveHead'} }
 <
 
 
-VIM’S STATUSLINE ITEMS AS LUALINE COMPONENT
+Vim’s statusline items as lualine component*Vim’s-statusline-items-as-lualine-component*
 
->
+>lua
     sections = { lualine_c = {'%=', '%t%m', '%3p'} }
 <
 
 
-VIM VARIABLES AS LUALINE COMPONENT
+Vim variables as lualine component        *Vim-variables-as-lualine-component*
 
 Variables from `g:`, `v:`, `t:`, `w:`, `b:`, `o:`, `to:`, `wo:`, `bo:` scopes
 can be used.
 
-See `:h lua-vim-variables` and `:h lua-vim-options` if you are not sure what to
-use.
+See |lua-vim-variables| and |lua-vim-options| if you are not sure what to use.
 
->
+>lua
     sections = { lualine_a = { 'g:coc_status', 'bo:filetype' } }
 <
 
 
-LUA EXPRESSIONS AS LUALINE COMPONENT
+Lua expressions as lualine component    *Lua-expressions-as-lualine-component*
 
 You can use any valid lua expression as a component including:
-
 
 - oneliners
 - global variables
 - require statements
 
-
->
+>lua
     sections = { lualine_c = { "os.date('%a')", 'data', "require'lsp-status'.status()" } }
 <
-
 
 `data` is a global variable in this example.
 
 ------------------------------------------------------------------------------
 
-COMPONENT OPTIONS ~
+COMPONENT OPTIONS                                  *lualine-component-options*
 
 Component options can change the way a component behave. There are two kinds of
 options:
 
-
 - global options affecting all components
 - local options affecting specific
-
 
 Global options can be used as local options (can be applied to specific
 components) but you cannot use local options as global. Global option used
 locally overwrites the global, for example:
 
->
+>lua
         require('lualine').setup {
           options = { fmt = string.lower },
           sections = { lualine_a = {
@@ -365,19 +366,18 @@ locally overwrites the global, for example:
         }
 <
 
-
 `mode` will be formatted with the passed function so only first char will be
 shown. On the other hand branch will be formatted with global formatter
 `string.lower` so it will be showed in lower case.
 
-                                                   *lualine-Available-options*
 
-                                                      *lualine-Global-options*
+AVAILABLE OPTIONS ~
 
-Global options                         These are `options` that are used in
-                                       options table. They set behavior of
-                                       lualine.
 
+GLOBAL OPTIONS ~
+
+These are `options` that are used in options table. They set behavior of
+lualine.
 
 Values set here are treated as default for other options that work in component
 level.
@@ -387,7 +387,7 @@ set `icons_enabled` to `false` and icons will be disabled on all component. You
 can still overwrite defaults set in option table by specifying the option value
 in component.
 
->
+>lua
     options = {
       theme = 'auto', -- lualine theme
       component_separators = { left = '', right = '' },
@@ -446,14 +446,12 @@ in component.
 <
 
 
-                                           *lualine-General-component-options*
+GENERAL COMPONENT OPTIONS ~
 
-General component options              These are options that control behavior
-                                       at component level and are available for
-                                       all components.
+These are options that control behavior at component level and are available
+for all components.
 
-
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -539,18 +537,16 @@ General component options              These are options that control behavior
 <
 
 
-                                          *lualine-Component-specific-options*
+COMPONENT SPECIFIC OPTIONS ~
 
-Component specific options             These are options that are available on
-                                       specific components. For example, you
-                                       have option on `diagnostics` component
-                                       to specify what your diagnostic sources
-                                       will be.
+These are options that are available on specific components. For example, you
+have option on `diagnostics` component to specify what your diagnostic sources
+will be.
 
 
-                                           *lualine-buffers-component-options*
+BUFFERS COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -596,9 +592,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                          *lualine-datetime-component-options*
+DATETIME COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -611,9 +607,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                       *lualine-diagnostics-component-options*
+DIAGNOSTICS COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -645,9 +641,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                              *lualine-diff-component-options*
+DIFF COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -670,9 +666,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                        *lualine-fileformat-component-options*
+FILEFORMAT COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -688,9 +684,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                          *lualine-filename-component-options*
+FILENAME COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -719,9 +715,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                          *lualine-filetype-component-options*
+FILETYPE COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -737,9 +733,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                          *lualine-encoding-component-options*
+ENCODING COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -752,9 +748,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                       *lualine-searchcount-component-options*
+SEARCHCOUNT COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -767,9 +763,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                              *lualine-tabs-component-options*
+TABS COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -817,9 +813,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                           *lualine-windows-component-options*
+WINDOWS COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -858,9 +854,9 @@ Component specific options             These are options that are available on
 <
 
 
-                                        *lualine-lsp-status-component-options*
+LSP STATUS COMPONENT OPTIONS ~
 
->
+>lua
     sections = {
       lualine_a = {
         {
@@ -883,15 +879,14 @@ Component specific options             These are options that are available on
     }
 <
 
-
 ------------------------------------------------------------------------------
 
-TABLINE ~
+TABLINE                                                      *lualine-tabline*
 
 You can use lualine to display components in tabline. The configuration for
 tabline sections is exactly the same as that of the statusline.
 
->
+>lua
     tabline = {
       lualine_a = {},
       lualine_b = {'branch'},
@@ -902,14 +897,13 @@ tabline sections is exactly the same as that of the statusline.
     }
 <
 
-
 This will show the branch and filename components on top of neovim inside
 tabline.
 
 lualine also provides 2 components, buffers and tabs, that you can use to get a
 more traditional tabline/bufferline.
 
->
+>lua
     tabline = {
       lualine_a = {'buffers'},
       lualine_b = {'branch'},
@@ -921,12 +915,12 @@ more traditional tabline/bufferline.
 <
 
 
-WINBAR ~
+WINBAR                                                        *lualine-winbar*
 
 From neovim-0.8 you can customize your winbar with lualine. Winbar
 configuration is similar to statusline.
 
->
+>lua
     winbar = {
       lualine_a = {},
       lualine_b = {},
@@ -946,64 +940,50 @@ configuration is similar to statusline.
     }
 <
 
-
 Just like statusline you can separately specify winbar for active and inactive
 windows. Any lualine component can be placed in winbar. All kinds of custom
 components supported in statusline are also supported for winbar too. In
 general You can treat winbar as another lualine statusline that just appears on
 top of windows instead of at bottom.
 
-                                                             *lualine-Buffers*
 
-Buffers                                Shows currently open buffers. Like
-                                       bufferline. See
-                                       |lualine-buffers-options| for all
-                                       builtin behaviors of buffers component.
-                                       You can use `:LualineBuffersJump` to
-                                       jump to buffer based on index of buffer
-                                       in buffers component. Jumping to
-                                       non-existent buffer indices generates an
-                                       error. To avoid these errors
-                                       `LualineBuffersJump` provides `<bang>`
-                                       support, meaning that you can call
-                                       `:LualineBufferJump!` to ignore these
-                                       errors.
+BUFFERS ~
 
+Shows currently open buffers. Like bufferline. See |lualine-buffers-options|
+for all builtin behaviors of buffers component. You can use
+`:LualineBuffersJump` to jump to buffer based on index of buffer in buffers
+component. Jumping to non-existent buffer indices generates an error. To avoid
+these errors `LualineBuffersJump` provides `<bang>` support, meaning that you
+can call `:LualineBufferJump!` to ignore these errors.
 
->
+>vim
       :LualineBuffersJump 2  " Jumps to 2nd buffer in buffers component.
       :LualineBuffersJump $  " Jumps to last buffer in buffers component.
       :LualineBuffersJump! 3  " Attempts to jump to 3rd buffer, if it exists.
 <
 
 
-                                                                *lualine-Tabs*
+TABS ~
 
-Tabs                                   Shows currently open tab. Like usual
-                                       tabline. See |lualine-tabs-options| for
-                                       all builtin behaviors of tabs component.
-                                       You can also use `:LualineRenameTab` to
-                                       set a name for a tabpage. For example:
+Shows currently open tab. Like usual tabline. See |lualine-tabs-options| for
+all builtin behaviors of tabs component. You can also use `:LualineRenameTab`
+to set a name for a tabpage. For example:
 
-
->
+>vim
     :LualineRenameTab Project_K
 <
-
 
 It’s useful when you’re using rendering mode 2/3 in tabs. To unname a
 tabpage run `:LualineRenameTab` without argument.
 
-                                               *lualine-Tabline-as-statusline*
 
-Tabline as statusline                  You can also completely move your
-                                       statusline to a tabline by configuring
-                                       `lualine.tabline` and disabling
-                                       `lualine.sections` and
-                                       `lualine.inactive_sections`:
+TABLINE AS STATUSLINE ~
 
+You can also completely move your statusline to a tabline by configuring
+`lualine.tabline` and disabling `lualine.sections` and
+`lualine.inactive_sections`:
 
->
+>lua
     tabline = {
     ......
       },
@@ -1011,21 +991,18 @@ Tabline as statusline                  You can also completely move your
     inactive_sections = {},
 <
 
-
 If you want a more sophisticated tabline you can use other tabline plugins with
 lualine too, for example:
 
-
 - nvim-bufferline <https://github.com/akinsho/nvim-bufferline.lua>
 - tabline.nvim <https://github.com/kdheepak/tabline.nvim>
-
 
 tabline.nvim even uses lualine’s theme by default 🙌 You can find a bigger
 list here <https://github.com/rockerBOO/awesome-neovim#tabline>.
 
 ------------------------------------------------------------------------------
 
-EXTENSIONS ~
+EXTENSIONS                                                *lualine-extensions*
 
 lualine extensions change statusline appearance for a window/buffer with
 specified filetypes.
@@ -1033,13 +1010,12 @@ specified filetypes.
 By default no extensions are loaded to improve performance. You can load
 extensions with:
 
->
+>lua
     extensions = {'quickfix'}
 <
 
 
-                                                *lualine-Available-extensions*
-
+AVAILABLE EXTENSIONS ~
 
 - aerial
 - assistant
@@ -1065,44 +1041,39 @@ extensions with:
 - trouble
 
 
-                                                   *lualine-Custom-extensions*
+CUSTOM EXTENSIONS ~
 
-Custom extensions                      You can define your own extensions. If
-                                       you believe an extension may be useful
-                                       to others, then please submit a PR.
+You can define your own extensions. If you believe an extension may be useful
+to others, then please submit a PR.
 
-
->
+>lua
     local my_extension = { sections = { lualine_a = {'mode'} }, filetypes = {'lua'} }
     require('lualine').setup { extensions = { my_extension } }
 <
 
-
 ------------------------------------------------------------------------------
 
-REFRESHING LUALINE ~
+REFRESHING LUALINE                                *lualine-refreshing-lualine*
 
 By default lualine refreshes itself based on timer and some events. You can set
 the interval of the timer with refresh option. However you can also force
 lualine to refresh at any time by calling `lualine.refresh` function.
 
->
+>lua
     require('lualine').refresh({
       scope = 'tabpage',  -- scope of refresh all/tabpage/window
       place = { 'statusline', 'winbar', 'tabline' },  -- lualine segment ro refresh.
     })
 <
 
-
 The arguments shown here are default values. So not passing any of them will be
 treated as if a default value was passed.
 
 So you can simply do
 
->
+>lua
     require('lualine').refresh()
 <
-
 
 Also, note by default when you call refresh a refresh event is queued in
 lualine. It desn’t refresh event immidiately. It’ll refresh on next refresh
@@ -1111,7 +1082,7 @@ can be configured with `options.refresh.refresh_time` option. If you want to
 bypass the refresh queue and want lualine to process the refresh immmidiately
 call refresh with `force=true` parameter set like this.
 
->
+>lua
     require('lualine').refresh({
       force = true,       -- do an immidiate refresh
       scope = 'tabpage',  -- scope of refresh all/tabpage/window
@@ -1119,50 +1090,47 @@ call refresh with `force=true` parameter set like this.
     })
 <
 
-
 Practically, speaking this is almost never needed. Also you should avoid
 calling `lualine.refresh` with `force` inside components. Since components are
 evaluated during refresh, calling refresh while refreshing can have undesirable
 effects.
 
-DISABLING LUALINE ~
+
+DISABLING LUALINE                                  *lualine-disabling-lualine*
 
 You can disable lualine for specific filetypes:
 
->
+>lua
     options = { disabled_filetypes = {'lua'} }
 <
-
 
 You can also disable lualine completely. Note that you need to call this after
 the setup
 
->
+>lua
       require('lualine').hide({
         place = {'statusline', 'tabline', 'winbar'}, -- The segment this change applies to.
         unhide = false,  -- whether to re-enable lualine again/
       })
 <
 
-
 The arguments show for hide above are default values. Which means even if the
 hide function is called without arguments it’ll work as if these were passed.
 
 So in short to disable lualine completely you can do
 
->
+>lua
     require('lualine').hide()
 <
 
-
 To enable it again you can do
 
->
+>lua
     require('lualine').hide({unhide=true})
 <
 
 
-WIKI ~
+WIKI                                                            *lualine-wiki*
 
 Check out the wiki <https://github.com/nvim-lualine/lualine.nvim/wiki> for more
 info.
