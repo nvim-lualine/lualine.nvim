@@ -3,6 +3,7 @@
 local M = {}
 local require = require('lualine_require').require
 local utils = require('lualine.utils.utils')
+local color_utils = require('lualine.utils.color_utils')
 local highlight = require('lualine.highlight')
 
 ---runs draw function on components in section
@@ -62,14 +63,16 @@ function M.draw_section(section, section_name, is_focused)
       (
         type(section[component_no].options.color) == 'table'
         and section[component_no].options.color.bg
-        and string.upper(section[component_no].options.color.bg) ~= string.upper(section_color.bg)
+        and color_utils.sanitize_color(section[component_no].options.color.bg)
+          ~= color_utils.sanitize_color(section_color.bg)
       )
       or type(section[component_no].options.color) == 'string'
       or (
         type(section[component_no].options.color) == 'function'
         and section[component_no].color_fn_cache
         and section[component_no].color_fn_cache.bg
-        and string.upper(section[component_no].color_fn_cache.bg) ~= string.upper(section_color.bg)
+        and color_utils.sanitize_color(section[component_no].color_fn_cache.bg)
+          ~= color_utils.sanitize_color(section_color.bg)
       )
     then
       strip_next_component = true

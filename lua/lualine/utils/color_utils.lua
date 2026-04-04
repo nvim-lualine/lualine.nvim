@@ -328,4 +328,37 @@ function M.cterm2rgb(color)
   end
 end
 
+---converts cterm, color_name type colors to #rrggbb format
+---@param color string|number
+---@return string
+function M.sanitize_color(color)
+  if color == nil or color == '' or (type(color) == 'string' and color:lower() == 'none') then
+    return 'None'
+  end
+  if type(color) == 'string' then
+    if color:sub(1, 1) == '#' then
+      return color
+    end -- RGB value
+    return M.color_name2rgb(color)
+  elseif type(color) == 'number' then
+    if color > 255 then
+      error("What's this it can't be higher then 255 and you've given " .. color)
+    end
+    return M.cterm2rgb(color)
+  end
+end
+
+---converts color_name type colors to cterm format and let cterm color pass through
+---@param color string|number
+---@return string
+function M.sanitize_color_for_cterm(color)
+  if type(color) == 'number' then
+    if color > 255 then
+      error("What's this it can't be higher then 255 and you've given " .. color)
+    end
+    return color
+  end
+  return M.rgb2cterm(M.sanitize_color(color))
+end
+
 return M
