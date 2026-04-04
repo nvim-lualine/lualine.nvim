@@ -66,39 +66,6 @@ local function clear_highlights()
   create_transparent_hlgroup()
 end
 
----converts cterm, color_name type colors to #rrggbb format
----@param color string|number
----@return string
-local function sanitize_color(color)
-  if color == nil or color == '' or (type(color) == 'string' and color:lower() == 'none') then
-    return 'None'
-  end
-  if type(color) == 'string' then
-    if color:sub(1, 1) == '#' then
-      return color
-    end -- RGB value
-    return modules.color_utils.color_name2rgb(color)
-  elseif type(color) == 'number' then
-    if color > 255 then
-      error("What's this it can't be higher then 255 and you've given " .. color)
-    end
-    return modules.color_utils.cterm2rgb(color)
-  end
-end
-
----converts color_name type colors to cterm format and let cterm color pass through
----@param color string|number
----@return string
-local function sanitize_color_for_cterm(color)
-  if type(color) == 'number' then
-    if color > 255 then
-      error("What's this it can't be higher then 255 and you've given " .. color)
-    end
-    return color
-  end
-  return modules.color_utils.rgb2cterm(sanitize_color(color))
-end
-
 function M.get_lualine_hl(name)
   local hl = loaded_highlights[name]
   if hl and not hl.empty then
@@ -136,8 +103,8 @@ function M.highlight(name, foreground, background, gui, link)
     end
     vim.list_extend(command, { 'link', name, link })
   else
-    local foreground_rgb = sanitize_color(foreground)
-    local background_rgb = sanitize_color(background)
+    local foreground_rgb = modules.color_utils.sanitize_color(foreground)
+    local background_rgb = modules.color_utils.sanitize_color(background)
     gui = gui or ''
     if string.find(gui, 'nocombine') == nil then
       gui = gui ~= '' and gui .. ',nocombine' or 'nocombine'
@@ -156,8 +123,8 @@ function M.highlight(name, foreground, background, gui, link)
     table.insert(command, 'gui=' .. gui)
     if create_cterm_colors then
       -- Not setting color from xxxground_rgb to let possible user 256 number through
-      table.insert(command, 'ctermfg=' .. sanitize_color_for_cterm(foreground))
-      table.insert(command, 'ctermbg=' .. sanitize_color_for_cterm(background))
+      table.insert(command, 'ctermfg=' .. modules.color_utils.sanitize_color_for_cterm(foreground))
+      table.insert(command, 'ctermbg=' .. modules.color_utils.sanitize_color_for_cterm(background))
       table.insert(command, 'cterm=' .. gui)
     end
   end
@@ -321,8 +288,8 @@ local function get_default_component_color(hl_name, mode, section, color, option
   if not ret.fg or not ret.bg then
     apply_default(default_theme_color, string.format('lualine_%s_%s', section, mode))
   end
-  ret.fg = sanitize_color(ret.fg)
-  ret.bg = sanitize_color(ret.bg)
+  ret.fg = modules.color_utils.sanitize_color(ret.fg)
+  ret.bg = modules.color_utils.sanitize_color(ret.bg)
   return ret
 end
 
