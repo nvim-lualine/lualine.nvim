@@ -277,7 +277,7 @@ CHANGING COMPONENTS IN LUALINE SECTIONS ~
 - `location` (location in file in line:column format)
 - `mode` (vim mode)
 - `progress` (%progress in file)
-- `searchcount` (number of search matches when hlsearch is active)
+- `searchcount` (number of search matches)
 - `selectioncount` (number of selected characters or lines)
 - `tabs` (shows currently available tabs)
 - `windows` (shows currently available windows)
@@ -761,6 +761,7 @@ Component specific options             These are options that are available on
           'searchcount',
           maxcount = 999,
           timeout = 500,
+	  require_hl = true,
         }
       }
     }
