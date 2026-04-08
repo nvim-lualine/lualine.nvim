@@ -73,6 +73,14 @@ Last Updated On: 18-04-2022
 
 ## Installation
 
+### [vim.pack](https://neovim.io/doc/user/pack/#vim.pack) (Only for neovim 0.12)
+
+```lua
+vim.pack.add({
+    src = 'https://github.com/nvim-tree/nvim-web-devicons',
+    src = 'https://github.com/nvim-lualine/lualine.nvim'
+})
+```
 ### [vim-plug](https://github.com/junegunn/vim-plug)
 
 ```vim
