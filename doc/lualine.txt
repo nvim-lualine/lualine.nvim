@@ -51,6 +51,16 @@ Last Updated On: 18-04-2022
 
 INSTALLATION                                            *lualine-installation*
 
+|VIM.PACK| (ONLY FOR NEOVIM 0.12) ~
+
+>
+    vim.pack.add({
+        src = 'https://github.com/nvim-tree/nvim-web-devicons',
+        src = 'https://github.com/nvim-lualine/lualine.nvim'
+    })
+<
+
+
 VIM-PLUG <HTTPS://GITHUB.COM/JUNEGUNN/VIM-PLUG> ~
 
 >
