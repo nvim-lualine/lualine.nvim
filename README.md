@@ -77,8 +77,8 @@ Last Updated On: 18-04-2022
 
 ```lua
 vim.pack.add({
-    src = 'https://github.com/nvim-tree/nvim-web-devicons',
-    src = 'https://github.com/nvim-lualine/lualine.nvim'
+    'https://github.com/nvim-tree/nvim-web-devicons',
+    'https://github.com/nvim-lualine/lualine.nvim'
 })
 ```
 ### [vim-plug](https://github.com/junegunn/vim-plug)
