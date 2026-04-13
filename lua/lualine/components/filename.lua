@@ -72,21 +72,38 @@ end
 M.update_status = function(self)
   local path_separator = package.config:sub(1, 1)
   local data
+
+  local function set_data(arg)
+    data = vim.fn.expand('%' .. arg)
+
+    if package.loaded.oil and vim.bo.filetype == 'oil' then
+      data = vim.fn.fnamemodify(require('oil').get_current_dir(), arg)
+    end
+  end
+
+  local arg
+
   if self.options.path == 1 then
     -- relative path
-    data = vim.fn.expand('%:~:.')
+    arg = ':~:.'
   elseif self.options.path == 2 then
     -- absolute path
-    data = vim.fn.expand('%:p')
+    arg = ':p'
   elseif self.options.path == 3 then
     -- absolute path, with tilde
-    data = vim.fn.expand('%:p:~')
+    arg = ':p:~'
   elseif self.options.path == 4 then
     -- filename and immediate parent
-    data = filename_and_parent(vim.fn.expand('%:p:~'), path_separator)
+    arg = ':p:~'
+    set_data(arg)
+    data = filename_and_parent(data, path_separator)
   else
     -- just filename
-    data = vim.fn.expand('%:t')
+    arg = ':t'
+  end
+
+  if not data then
+    set_data(arg)
   end
 
   if data == '' then
