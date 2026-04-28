@@ -76,8 +76,10 @@ function M.show_notices()
   end
 
   local flatten
-  if vim.version.ge(vim.version(), {0, 10, 0}) then
-    flatten = function(t) return vim.iter(t):flatten():totable() end
+  if vim.version.ge(vim.version(), { 0, 10, 0 }) then
+    flatten = function(t)
+      return vim.iter(t):flatten():totable()
+    end
   else
     flatten = vim.tbl_flatten
   end
