@@ -292,6 +292,7 @@ sections = {lualine_a = {'mode'}}
 - `tabs` (shows currently available tabs)
 - `windows` (shows currently available windows)
 - `lsp_status` (shows active LSPs in the current buffer and a progress spinner)
+- `spinner` (shows an animated spinner which can be triggered programmatically)
 
 #### Custom components
 
@@ -860,6 +861,42 @@ sections = {
 }
 ```
 
+#### spinner component options
+
+```lua
+sections = {
+    lualine_c = {
+        {
+            'spinner',
+            -- Spinner id, used as the key to start/stop independently.
+            id = 'default',
+            spinner = {
+                -- Frames used to render the spinner animation.
+                texts = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
+                -- Time (in milliseconds) between spinner frame updates.
+                interval = 80,
+                -- Auto-stop the spinner after this timeout (in milliseconds); 0 disable it.
+                ttl = 0,
+                -- Delay display spinner after {initial_delay} millisecond. 0 disable it
+                initial_delay = 200,
+            }
+        }
+    }
+}
+```
+
+Once the spinner component is configured, you can start or stop it
+programmatically whenever needed.
+
+```lua
+-- Use id to start/stop spinners independently.
+-- start spinner
+require('lualine').spinner.start('default')
+
+-- stop spinner
+require('lualine').spinner.stop('default')
+```
+
 ---
 
 ### Tabline
@@ -1056,6 +1093,7 @@ By default this time is set to 16ms to match 60fps. This duration can be configu
 with `options.refresh.refresh_time` option. If you want to bypass the refresh queue
 and want lualine to process the refresh immmidiately call refresh with `force=true`
 parameter set like this.
+
 ```lua
 require('lualine').refresh({
   force = true,       -- do an immidiate refresh
@@ -1063,11 +1101,11 @@ require('lualine').refresh({
   place = { 'statusline', 'winbar', 'tabline' },  -- lualine segment ro refresh.
 })
 ```
+
 Practically, speaking this is almost never needed. Also you should avoid calling
 `lualine.refresh` with `force` inside components. Since components are
 evaluated during refresh, calling refresh while refreshing can have undesirable
 effects.
-
 
 ### Disabling lualine
 

@@ -8,6 +8,7 @@ local neq = assert.are_not.same
 local assert_component = helpers.assert_component
 local build_component_opts = helpers.build_component_opts
 local stub = require('luassert.stub')
+local spinner = require('lualine').spinner
 
 describe('Component:', function()
   it('can select separators', function()
@@ -1005,5 +1006,91 @@ describe('lsp_status component', function()
     if ok then
       assert_comp_ins(lsp_status_comp_no_done, ' lua_ls')
     end
+  end)
+end)
+
+describe('spinner component', function()
+  before_each(function()
+    stub(vim.uv and vim.uv or vim.loop, 'new_timer').returns {
+      start = function(_, _, _, callback)
+        callback()
+      end,
+      stop = function(_) end,
+      close = function(_) end,
+    }
+    stub(vim, 'schedule_wrap').invokes(function(fn)
+      return fn
+    end)
+    stub(vim, 'defer_fn').invokes(function(fn)
+      fn()
+    end)
+  end)
+
+  it('spinner is empty by default', function()
+    local opts = build_component_opts {
+      id = 'sp',
+    }
+
+    local component = helpers.init_component('spinner', opts)
+    helpers.assert_component_instance(component, '')
+  end)
+
+  it('start spinner with id', function()
+    local id = 'sp'
+    local opts = build_component_opts {
+      id = id,
+      spinner = {
+        texts = { 'a', 'b' },
+      },
+      component_separators = { left = '', right = '' },
+      padding = 0,
+    }
+
+    local component = helpers.init_component('spinner', opts)
+
+    spinner.start(id)
+    helpers.assert_component_instance(component, 'b')
+
+    -- stop
+    spinner.stop(id)
+    helpers.assert_component_instance(component, '')
+  end)
+
+  it('stop spinner after ttl', function()
+    local id = 'sp'
+    local opts = build_component_opts {
+      id = id,
+      spinner = {
+        ttl = 2,
+        texts = { 'a', 'b', 'c', 'd' },
+      },
+      component_separators = { left = '', right = '' },
+      padding = 0,
+    }
+
+    local component = helpers.init_component('spinner', opts)
+    stub(vim.uv and vim.uv or vim.loop, 'new_timer').returns {
+      start = function(_, _, _, callback)
+        callback()
+        helpers.assert_component_instance(component, 'b')
+
+        -- now = 2, ttl = 2, should stop here
+        callback()
+        helpers.assert_component_instance(component, '')
+      end,
+      stop = function(_) end,
+      close = function(_) end,
+    }
+
+    local now = 0
+    stub(vim.uv and vim.uv or vim.loop, 'now').invokes(function()
+      now = now + 1
+      return now
+    end)
+
+    spinner.start(id)
+
+    -- auto stop
+    helpers.assert_component_instance(component, '')
   end)
 end)
