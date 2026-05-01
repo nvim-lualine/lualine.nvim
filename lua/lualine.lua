@@ -409,13 +409,13 @@ local function refresh(opts)
   if opts.scope == 'all' then
     if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
       wins = vim.tbl_filter(function(win)
-        return vim.fn.win_gettype(win) ~= 'popup'
+        return vim.api.nvim_win_get_config(win).focusable and vim.bo[vim.api.nvim_win_get_buf(win)].modifiable or false
       end, vim.api.nvim_list_wins())
     end
   elseif opts.scope == 'tabpage' then
     if vim.tbl_contains(opts.place, 'statusline') or vim.tbl_contains(opts.place, 'winbar') then
       wins = vim.tbl_filter(function(win)
-        return vim.fn.win_gettype(win) ~= 'popup'
+        return vim.api.nvim_win_get_config(win).focusable and vim.bo[vim.api.nvim_win_get_buf(win)].modifiable or false
       end, vim.api.nvim_tabpage_list_wins(0))
     end
   elseif opts.scope == 'window' then
