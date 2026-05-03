@@ -38,6 +38,7 @@ local config = {
         'ModeChanged',
       },
     },
+    line_total_in_location = false,
   },
   sections = {
     lualine_a = { 'mode' },
