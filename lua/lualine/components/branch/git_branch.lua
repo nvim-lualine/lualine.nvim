@@ -18,16 +18,16 @@ local git_dir_cache = {} -- Stores git paths that we already know of
 
 ---sets git_branch variable to branch name or commit hash if not on branch
 ---@param head_file string full path of .git/HEAD file
-local function get_git_head(head_file)
+local function get_git_head_from_head_file(head_file)
   local f_head = io.open(head_file)
   if f_head then
     local HEAD = f_head:read()
     f_head:close()
     local branch = HEAD:match('ref: refs/heads/(.+)$')
     if branch then
-      current_git_branch = branch
+      return branch
     else
-      current_git_branch = HEAD:sub(1, 6)
+      return HEAD:sub(1, 6)
     end
   end
   return nil
@@ -40,15 +40,41 @@ local function update_branch()
   local git_dir = current_git_dir
   if git_dir and #git_dir > 0 then
     local head_file = git_dir .. sep .. 'HEAD'
-    get_git_head(head_file)
-    file_changed:start(
-      head_file,
-      sep ~= '\\' and {} or 1000,
-      vim.schedule_wrap(function()
-        -- reset file-watch
-        update_branch()
-      end)
-    )
+    local branch_name_from_head_file = get_git_head_from_head_file(head_file)
+
+    if branch_name_from_head_file ~= nil and branch_name_from_head_file ~= '.invalid' then
+      current_git_branch = branch_name_from_head_file
+
+      file_changed:start(
+        head_file,
+        sep ~= '\\' and {} or 1000,
+        vim.schedule_wrap(function()
+          -- reset file-watch
+          update_branch()
+        end)
+      )
+    elseif branch_name_from_head_file == '.invalid' then
+      -- Git reftable enabled: use `git symbolic-ref` to get branch name
+      local branch_output =
+        vim.fn.system('git --git-dir=' .. vim.fn.shellescape(git_dir) .. ' symbolic-ref --short HEAD')
+      if vim.v.shell_error == 0 and branch_output and #branch_output > 0 then
+        current_git_branch = vim.fn.trim(branch_output)
+
+        -- Watch reftable directory if it exists
+        local reftable_dir = git_dir .. sep .. 'reftable'
+        local reftable_stat = vim.loop.fs_stat(reftable_dir)
+        if reftable_stat and reftable_stat.type == 'directory' then
+          file_changed:start(
+            reftable_dir,
+            sep ~= '\\' and {} or 1000,
+            vim.schedule_wrap(function()
+              -- reset file-watch
+              update_branch()
+            end)
+          )
+        end
+      end
+    end
   else
     -- set to '' when git dir was not found
     current_git_branch = ''
