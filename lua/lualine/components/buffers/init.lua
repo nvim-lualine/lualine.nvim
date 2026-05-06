@@ -126,7 +126,7 @@ function M:update_status()
   if max_length == 0 then
     max_length = math.floor(2 * vim.o.columns / 3)
   end
-  local total_length
+  local total_length = 0
   for i, buffer in pairs(buffers) do
     if buffer.current then
       current = i
@@ -154,8 +154,10 @@ function M:update_status()
     end
   end
   local current_buffer = buffers[current]
-  data[#data + 1] = current_buffer:render()
-  total_length = current_buffer.len
+  if vim.bo.buflisted then
+    data[#data + 1] = current_buffer:render()
+    total_length = current_buffer.len
+  end
   local i = 0
   local before, after
   while true do
