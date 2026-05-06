@@ -3,7 +3,7 @@
 -- Credit: itchyny(lightline)
 -- License: MIT License
 local background = vim.opt.background:get()
-local colors = {}
+local colors
 
 if vim.o.termguicolors then
   colors = {
