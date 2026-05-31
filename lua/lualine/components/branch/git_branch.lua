@@ -66,12 +66,17 @@ local function get_branch_reftable_hash(git_dir, bufnr)
     end,
     on_exit = function(_, code)
       if code == -1 then return end
+      local branch = ''
       if code == 0 and #output > 0 then
-        current_git_branch = vim.trim(table.concat(output, ''))
-      else
-        current_git_branch = ''
+        branch = vim.trim(table.concat(output, ''))
       end
-      branch_cache[bufnr] = current_git_branch
+      if current_git_dir == git_dir then
+        current_git_branch = branch
+      end
+      branch_cache[bufnr] = branch
+      vim.schedule(function()
+        require('lualine').refresh()
+      end)
     end,
   }
   branch_job:start()
@@ -98,8 +103,13 @@ local function get_branch_reftable(git_dir, bufnr)
       if code == 0 and #output > 0 then
         local branch = vim.trim(table.concat(output, ''))
         if #branch > 0 then
-          current_git_branch = branch
-          branch_cache[bufnr] = current_git_branch
+          if current_git_dir == git_dir then
+            current_git_branch = branch
+          end
+          branch_cache[bufnr] = branch
+          vim.schedule(function()
+            require('lualine').refresh()
+          end)
           return
         end
       end
@@ -127,6 +137,7 @@ local function update_branch()
       local head_file = git_dir .. sep .. 'HEAD'
       get_git_head(head_file)
       watch_file = head_file
+      branch_cache[bufnr] = current_git_branch
     end
     file_changed:start(
       watch_file,
@@ -139,8 +150,8 @@ local function update_branch()
   else
     -- set to '' when git dir was not found
     current_git_branch = ''
+    branch_cache[bufnr] = current_git_branch
   end
-  branch_cache[bufnr] = current_git_branch
 end
 
 ---updates the current value of current_git_branch and sets up file watch on HEAD file if value changed
