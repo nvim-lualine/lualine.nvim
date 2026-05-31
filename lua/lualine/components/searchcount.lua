@@ -3,6 +3,7 @@ local M = require('lualine.component'):extend()
 local default_options = {
   maxcount = 999,
   timeout = 500,
+  require_hl = true,
 }
 
 -- Initializer
@@ -15,7 +16,7 @@ end
 
 -- Function that runs every time statusline is updated
 function M:update_status()
-  if vim.v.hlsearch == 0 then
+  if vim.v.hlsearch == 0 and self.options.require_hl then
     return ''
   end
 
