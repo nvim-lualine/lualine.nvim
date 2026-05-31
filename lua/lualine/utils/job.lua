@@ -6,6 +6,7 @@
 local Job = setmetatable({
   --- start the job
   start = function(self)
+    self.killed = false
     self.job_id = vim.fn.jobstart(self.args.cmd, self.args)
     return self.job_id > 0
   end,
@@ -14,11 +15,11 @@ local Job = setmetatable({
     if self.killed then
       return
     end
+    self.killed = true
     if self.job_id and self.job_id > 0 then
       vim.fn.jobstop(self.job_id)
     end
     self.job_id = 0
-    self.killed = true
   end,
   -- Wraps callbacks so they are only called when job is alive
   -- This avoids race conditions
@@ -29,6 +30,17 @@ local Job = setmetatable({
         if not self.killed then
           return original_cb(...)
         end
+      end
+    end
+  end,
+  wrap_on_exit = function(self)
+    local original_cb = self.args.on_exit
+    if original_cb then
+      self.args.on_exit = function(job_id, exit_code, event_type)
+        if self.killed then
+          exit_code = -1
+        end
+        return original_cb(job_id, exit_code, event_type)
       end
     end
   end,
@@ -47,6 +59,7 @@ local Job = setmetatable({
     job:wrap_cb_alive('on_stdout')
     job:wrap_cb_alive('on_stderr')
     job:wrap_cb_alive('on_stdin')
+    job:wrap_on_exit()
     return job
   end,
 })
