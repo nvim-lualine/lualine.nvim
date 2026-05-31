@@ -43,8 +43,7 @@ local Job = setmetatable({
         return original_cb(job_id, exit_code, event_type)
       end
     end
-  end
-
+  end,
 }, {
   ---create new job handler
   ---@param self table base job table
