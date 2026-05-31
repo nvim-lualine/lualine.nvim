@@ -65,6 +65,7 @@ local function get_branch_reftable_hash(git_dir, bufnr)
       end
     end,
     on_exit = function(_, code)
+      if code == -1 then return end
       if code == 0 and #output > 0 then
         current_git_branch = vim.trim(table.concat(output, ''))
       else
@@ -93,6 +94,7 @@ local function get_branch_reftable(git_dir, bufnr)
       end
     end,
     on_exit = function(_, code)
+      if code == -1 then return end
       if code == 0 and #output > 0 then
         local branch = vim.trim(table.concat(output, ''))
         if #branch > 0 then
