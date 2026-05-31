@@ -183,6 +183,8 @@ Extension named `%s` was not found . Check if spelling is correct.
       local local_extension = modules.utils.deepcopy(extension)
       for _, section in ipairs(sec_names) do
         if local_extension[section] then
+          -- break shared refs across sections (e.g. inactive_winbar = winbar) so load_sections doesn't mutate twice (#1507)
+          local_extension[section] = modules.utils.deepcopy(local_extension[section])
           load_sections(local_extension[section], config.options)
         end
       end

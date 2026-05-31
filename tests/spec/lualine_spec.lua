@@ -358,6 +358,25 @@ describe('Lualine', function()
     vim.bo.ft = old_ft
   end)
 
+  it('extensions with shared section subtables load without error', function()
+    local ext = {
+      filetypes = { 'test_ft_shared' },
+      winbar = {
+        lualine_a = {
+          function()
+            return 'shared_extension_component'
+          end,
+        },
+      },
+    }
+    ext.inactive_winbar = ext.winbar
+    table.insert(config.extensions, ext)
+    local old_ft = vim.bo.ft
+    vim.bo.ft = 'test_ft_shared'
+    require('lualine').setup(config)
+    vim.bo.ft = old_ft
+  end)
+
   -- TODO: figure put why some of the tablines tests fail in CI
   describe('tabline', function()
     local tab_conf = vim.deepcopy(config)
