@@ -1013,6 +1013,7 @@ extensions = {'quickfix'}
 - oil
 - overseer
 - quickfix
+- spectre
 - symbols-outline
 - toggleterm
 - trouble
