@@ -53,6 +53,9 @@ function Tab:label()
   elseif self.buftype == 'terminal' then
     local match = string.match(vim.split(self.file, ' ')[1], 'term:.*:(%a+)')
     return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ':t')
+  elseif self.filetype == 'oil' and vim.startswith(self.file, 'oil://') then
+    local path = self.file:gsub('^oil://', '')
+    return vim.fn.fnamemodify(path, ':~')
   elseif self.file == '' then
     return '[No Name]'
   end
