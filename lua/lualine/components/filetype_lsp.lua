@@ -15,38 +15,44 @@ local modules = lualine_require.lazy_require {
 }
 local M = lualine_require.require('lualine.component'):extend()
 
--- ── Default options ────────────────────────────────────────────────────────
-
 local default_options = {
   -- filetype options
-  colored = true, -- colour the devicon with its highlight group
-  icon_only = false, -- show only the icon, hide the filetype text
+  colored = true,
+  icon_only = false,
 
   -- lsp options
-  lsp_icon = '', -- icon prepended to the LSP portion (set '' to hide)
+  lsp_icon = '', -- f013
   lsp_separator = '  ', -- string placed between the filetype and LSP parts
   symbols = {
+    -- Use standard unicode characters for the spinner and done symbols:
     spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
     done = '✓',
-    separator = ' ', -- separator between multiple LSP names
+    separator = ' ',
   },
-  ignore_lsp = {}, -- list of LSP client names to hide, e.g. { 'null-ls' }
-  show_name = true, -- show the LSP client name alongside its symbol
+  -- List of LSP names to ignore (e.g., `null-ls`):
+  ignore_lsp = {},
+  show_name = true,
 }
 
 function M:init(options)
+  -- Run `super()`.
   M.super.init(self, options)
+
+  -- Apply default options.
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
+
+  -- Apply symbols.
   self.symbols = self.options.symbols or {}
 
   -- Cache for coloured devicon highlight groups.
   self.icon_hl_cache = {}
 
-  -- Per-client work counter: >0 means busy, ==0 means just finished.
+  ---The difference between the `begin` and `end` progress events for each LSP.
+  ---
   ---@type table<integer, integer>
   self.lsp_work_by_client_id = {}
 
-  -- Track LSP progress so the spinner stays live.
+  -- Listen to progress updates only if `nvim` supports the `LspProgress` event.
   pcall(vim.api.nvim_create_autocmd, 'LspProgress', {
     desc = 'Refresh lualine filetype_lsp on LSP progress',
     group = vim.api.nvim_create_augroup('lualine_filetype_lsp_progress', { clear = true }),
@@ -54,10 +60,13 @@ function M:init(options)
     callback = function(event)
       local kind = event.data.params.value.kind
       local cid = event.data.client_id
+
       local work = self.lsp_work_by_client_id[cid] or 0
       local delta = kind == 'begin' and 1 or (kind == 'end' and -1 or 0)
+
       self.lsp_work_by_client_id[cid] = math.max(work + delta, 0)
-      -- Only refresh on transitions to avoid hammering lualine.
+
+      -- Refresh Lualine to update the LSP status symbol if it changed.
       if (work == 0 and delta > 0) or (work == 1 and delta < 0) then
         require('lualine').refresh()
       end
@@ -65,29 +74,34 @@ function M:init(options)
   })
 end
 
--- Returns the raw filetype string (used by the base class before apply_icon).
 function M.update_status()
   return modules.utils.stl_escape(vim.bo.filetype or '')
 end
 
 -- Returns the combined LSP names + symbols, or nil when nothing is attached.
 function M:get_lsp_status()
+  local result = {}
+  local processed = {}
+
+  -- Backwards-compatible function to get the active LSP clients.
   ---@diagnostic disable-next-line: deprecated
-  local get_clients = vim.lsp.get_clients or vim.lsp.get_active_clients
-  local clients = get_clients { bufnr = vim.api.nvim_get_current_buf() }
-  local list_contains = vim.list_contains or vim.tbl_contains
+  local get_lsp_clients = vim.lsp.get_clients or vim.lsp.get_active_clients
+  local clients = get_lsp_clients { bufnr = vim.api.nvim_get_current_buf() }
 
   if #clients == 0 then
     return nil
   end
 
+  -- Backwards-compatible function to get the current time in nanoseconds.
   local hrtime = (vim.uv or vim.loop).hrtime
+  -- Advance the spinner every 80ms only once, not for each client (otherwise the spinners will skip steps).
+  -- NOTE: the spinner symbols table is 1-indexed.
   local spinner = self.symbols.spinner[math.floor(hrtime() / (1e6 * 80)) % #self.symbols.spinner + 1]
 
-  local result = {}
-  local processed = {}
-
   for _, client in ipairs(clients) do
+    -- Backwards-compatible function to check if a list contains a value.
+    local list_contains = vim.list_contains or vim.tbl_contains
+    -- Append the status to the LSP only if it supports progress reporting and is not ignored.
     if not processed[client.name] and not list_contains(self.options.ignore_lsp, client.name) then
       local work = self.lsp_work_by_client_id[client.id]
       local symbol = (work ~= nil and work > 0) and spinner or (work ~= nil and work == 0) and self.symbols.done or nil
