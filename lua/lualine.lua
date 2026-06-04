@@ -11,6 +11,7 @@ local modules = lualine_require.lazy_require {
   utils_notices = 'lualine.utils.notices',
   config_module = 'lualine.config',
   nvim_opts = 'lualine.utils.nvim_opts',
+  spinner = 'lualine.components.spinner.spinner',
 }
 local config -- Stores currently applied config
 local timers = {
@@ -706,6 +707,13 @@ M = {
   refresh = refresh,
   winbar = status_dispatch('winbar'),
   hide = hide,
+
+  spinner = {
+    ---@type fun(id: string)
+    start = modules.spinner.start,
+    ---@type fun(id: string)
+    stop = modules.spinner.stop,
+  },
 }
 
 return M
