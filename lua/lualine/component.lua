@@ -8,6 +8,8 @@ local modules = lualine_require.lazy_require {
   utils_notices = 'lualine.utils.notices',
   fn_store = 'lualine.utils.fn_store',
 }
+local altUtils = require('lualine.utils.alts')
+local dynamicMode = require('lualine.dynamicMode')
 
 -- Used to provide a unique id for each component
 local component_no = 1
@@ -37,6 +39,20 @@ function M:init(options)
     self.options.component_name = tostring(component_no)
   end
   self.component_no = component_no
+
+  if self.options.alts ~= nil and self.options.altModes ~= nil then
+    error('"alts" and "altModes" should not be used simultaneously')
+  end
+
+  self.alts = altUtils.initAlts(self.options)
+  if self.options.altModes ~= nil then
+    self.options.cond = altUtils.altModeCondition(
+      self.options.component_name,
+      self.options.altModes or {},
+      self.options.cond
+    )
+  end
+
   self:set_separator()
   self:create_option_highlights()
   self:set_on_click()
@@ -115,6 +131,14 @@ function M:apply_padding()
   end
 end
 
+---Based on the current effective mode for this component,
+---retrieve its current alternative configuration (can be nil)
+function M:getAlt()
+  local mode = dynamicMode.getMode(self.options.component_name)
+  return mode and self.alts[mode]
+end
+
+
 ---applies custom highlights for component
 function M:apply_highlights(default_highlight)
   if self.options.color_highlight then
@@ -130,6 +154,7 @@ function M:apply_highlights(default_highlight)
     -- Also put it in applied sep so when sep get striped so does the hl
     self.applied_separator = default_highlight
   end
+
   -- Prepend default hl when the component doesn't start with hl otherwise
   -- color in previous component can cause side effect
   if not self.status:find('^%%#') then
@@ -277,6 +302,7 @@ function M:draw(default_highlight, is_focused)
   end
   self.default_hl = default_highlight
   local status = self:update_status(is_focused)
+
   if self.options.fmt then
     status = self.options.fmt(status or '', self)
   end

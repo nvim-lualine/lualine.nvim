@@ -4,10 +4,73 @@
 local helpers = require('tests.helpers')
 
 local eq = assert.are.same
-local neq = assert.are_not.same
 local assert_component = helpers.assert_component
 local build_component_opts = helpers.build_component_opts
 local stub = require('luassert.stub')
+local function neq(...)
+  return assert.are_not.same(...)
+end
+
+local dynamicMode = require('lualine.dynamicMode')
+
+
+---@param localMode boolean
+---@param globalMode boolean
+---Test that the "altModes" shorthand pattern shows (or hides) the component when either (or neither) the local/global mode is set
+local function testAltModes(localMode, globalMode)
+    local opts = build_component_opts {altModes = {helpers.ALT_KEY}}
+    local comp = require('lualine.components.special.function_component')(opts)
+    local name = comp.options.component_name
+
+    -- reset state
+    dynamicMode.clearModes()
+
+    if localMode then
+      dynamicMode.setMode(name, helpers.ALT_KEY)
+    end
+    if globalMode then
+      dynamicMode.setGlobalMode(helpers.ALT_KEY)
+    end
+
+    local shouldShow = localMode or globalMode
+    local found = string.find(comp:draw(opts.hl), helpers.MAIN_TEXT) ~= nil
+    eq(found, shouldShow)
+end
+
+
+---@param localMode boolean
+---@param globalMode boolean
+---Test that the alt component displays (or doesn't display) when either (or neither) the local/global mode is set
+local function testAlts(localMode, globalMode)
+  local opts = build_component_opts {
+    alts = {
+      [helpers.ALT_KEY] = {
+        function() return helpers.ALT_TEXT end
+      }
+    }
+  }
+  local comp = require('lualine.components.special.function_component')(opts)
+  local name = comp.options.component_name
+
+  -- reset state
+  dynamicMode.clearModes()
+
+  if localMode then
+    dynamicMode.setMode(name, helpers.ALT_KEY)
+  end
+  if globalMode then
+    dynamicMode.setGlobalMode(helpers.ALT_KEY)
+  end
+  local alt = comp:getAlt()
+  local shouldShow = localMode or globalMode
+
+  if shouldShow then
+    neq(nil, alt)
+    eq(helpers.ALT_TEXT, alt:update_status())
+  else
+    eq(nil, alt)
+  end
+end
 
 describe('Component:', function()
   it('can select separators', function()
@@ -393,6 +456,66 @@ describe('Filetype component', function()
     utils.extract_highlight_colors:revert()
     hl.create_component_highlight_group:revert()
     vim.fn.expand:revert()
+  end)
+
+  it('does not create alt-component when component-mode and global-mode are both unset', function()
+    testAlts(false, false)
+  end)
+  it('creates alt-component when component-mode and global-mode are both set', function()
+    testAlts(true, true)
+  end)
+  it('creates alt-component when component-mode is set and global-mode is unset', function()
+    testAlts(true, false)
+  end)
+  it('creates alt-component when component-mode is unset and global-mode is set', function()
+    testAlts(false, true)
+  end)
+
+  it('respects altModes when component-mode and global-mode are both unset', function()
+    testAltModes(false, false)
+  end)
+  it('respects altModes when component-mode and global-mode are both set', function()
+    testAltModes(true, true)
+  end)
+  it('respects altModes when component-mode is set and global-mode is unset', function()
+    testAltModes(true, false)
+  end)
+  it('respects altModes when component-mode is unset and global-mode is set', function()
+    testAltModes(false, true)
+  end)
+
+  it('respects component-mode over global mode when both are set', function()
+    local globalKey = helpers.ALT_KEY
+    local globalTxt = helpers.ALT_TEXT
+    local additionalKey = 'additional'
+    local additionalTxt = 'additional val'
+    local opts = build_component_opts {
+      alts = {
+        [globalKey] = {
+          function() return globalTxt end
+        },
+        [additionalKey] = {
+          function() return additionalTxt end
+        }
+      }
+    }
+    local comp = require('lualine.components.special.function_component')(opts)
+    local name = comp.options.component_name
+    dynamicMode.setMode(name, additionalKey)
+    dynamicMode.setGlobalMode(globalKey, true)
+    dynamicMode.setGlobalMode(additionalKey, false)
+    local alt = comp:getAlt()
+    neq(nil, alt)
+    eq(additionalTxt, alt:update_status())
+  end)
+
+  it('throws error when altModes and alts are both set', function()
+    local opts = build_component_opts {alts = {}, altModes = {}}
+    local componentCls = require('lualine.components.special.function_component')
+    --luacheck: push no unused
+    local comp, err = pcall(componentCls, opts)
+    --luacheck: pop
+    neq(nil, err)
   end)
 
   it('displays only icon when icon_only is true', function()
