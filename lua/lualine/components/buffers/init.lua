@@ -18,6 +18,7 @@ local default_options = {
     fzf = 'FZF',
     alpha = 'Alpha',
   },
+  colored_icons = true,
   use_mode_colors = false,
   buffers_color = {
     active = nil,
@@ -61,6 +62,7 @@ function M:init(options)
     inactive = get_hl('lualine_' .. options.self.section, false),
   }
   self.options = vim.tbl_deep_extend('keep', self.options or {}, default_options)
+  self.icon_hl_cache = {}
   if self.options.component_name == 'buffers' then
     self.highlights = {
       active = self:create_hl(self.options.buffers_color.active, 'active'),
@@ -73,6 +75,7 @@ function M:new_buffer(bufnr, buf_index)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   buf_index = buf_index or ''
   return Buffer:new {
+    component = self,
     bufnr = bufnr,
     buf_index = buf_index,
     options = self.options,

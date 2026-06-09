@@ -9,6 +9,7 @@ local modules = require('lualine_require').lazy_require {
 ---@param opts table
 function Buffer:init(opts)
   assert(opts.bufnr, 'Cannot create Buffer without bufnr')
+  self.component = opts.component
   self.bufnr = opts.bufnr
   self.buf_index = opts.buf_index
   self.options = opts.options
@@ -32,27 +33,54 @@ function Buffer:get_props()
   local modified = self.options.show_modified_status and vim.api.nvim_buf_get_option(self.bufnr, 'modified')
   self.modified_icon = modified and self.options.symbols.modified or ''
   self.alternate_file_icon = self:is_alternate() and self.options.symbols.alternate_file or ''
-  self.icon = ''
+  self.icon = { text = '' }
+
   if self.options.icons_enabled then
-    local dev
-    local status, _ = pcall(require, 'nvim-web-devicons')
+    local dev, hl_group
+
+    local status, devicons = pcall(require, 'nvim-web-devicons')
     if not status then
-      dev, _ = '', ''
+      dev, hl_group = '', ''
     elseif self.filetype == 'TelescopePrompt' then
-      dev, _ = require('nvim-web-devicons').get_icon('telescope')
+      dev, hl_group = devicons.get_icon('telescope')
     elseif self.filetype == 'fugitive' then
-      dev, _ = require('nvim-web-devicons').get_icon('git')
+      dev, hl_group = devicons.get_icon('git')
     elseif self.filetype == 'vimwiki' then
-      dev, _ = require('nvim-web-devicons').get_icon('markdown')
+      dev, hl_group = devicons.get_icon('markdown')
     elseif self.buftype == 'terminal' then
-      dev, _ = require('nvim-web-devicons').get_icon('zsh')
+      dev, hl_group = devicons.get_icon('zsh')
     elseif vim.fn.isdirectory(self.file) == 1 then
-      dev, _ = self.options.symbols.directory, nil
+      dev, hl_group = self.options.symbols.directory, nil
     else
-      dev, _ = require('nvim-web-devicons').get_icon(self.file, vim.fn.expand('#' .. self.bufnr .. ':e'))
+      dev, hl_group = devicons.get_icon(vim.fn.fnamemodify(self.file, ":t"), nil, {default=true})
     end
-    if dev then
-      self.icon = dev .. ' '
+
+    if not dev then
+      return
+    end
+
+    self.icon.text = dev .. ' '
+
+    if not self.options.colored_icons then
+      return
+    end
+
+    local highlight_color = modules.utils.extract_highlight_colors(hl_group, 'fg')
+    if highlight_color then
+      local icon_highlight = self.component.icon_hl_cache[highlight_color]
+      if not icon_highlight then
+        local active_bg = modules.utils.extract_highlight_colors(self.highlights["active"].name, 'bg')
+        local inactive_bg = modules.utils.extract_highlight_colors(self.highlights["inactive"].name, 'bg')
+
+        icon_highlight = {
+          active = self.component:create_hl({ fg = highlight_color, bg = active_bg }, hl_group .. '_active'),
+          inactive = self.component:create_hl({ fg = highlight_color, bg = inactive_bg }, hl_group .. '_inactive')
+        }
+
+        self.component.icon_hl_cache[highlight_color] = icon_highlight
+      end
+
+      self.icon.colors = icon_highlight
     end
   end
 end
@@ -74,11 +102,11 @@ function Buffer:render()
 
   if self.ellipse then -- show ellipsis
     name = '...'
+    self.len = 3
   else
-    name = self:apply_mode(name)
+    name, self.len = self:apply_mode(name)
   end
-  name = Buffer.apply_padding(name, self.options.padding)
-  self.len = vim.fn.strchars(name)
+  name, self.len = Buffer.apply_padding(name, self.len, self.options.padding)
 
   -- setup for mouse clicks
   local line = self:configure_mouse_click(name)
@@ -151,42 +179,65 @@ function Buffer:name()
 end
 
 ---adds spaces to left and right
-function Buffer.apply_padding(str, padding)
+---@return string str
+---@return number len displayed length
+function Buffer.apply_padding(str, len, padding)
   local l_padding, r_padding = 1, 1
   if type(padding) == 'number' then
     l_padding, r_padding = padding, padding
   elseif type(padding) == 'table' then
     l_padding, r_padding = padding.left or 0, padding.right or 0
   end
-  return string.rep(' ', l_padding) .. str .. string.rep(' ', r_padding)
+  return string.rep(' ', l_padding) .. str .. string.rep(' ', r_padding), len + l_padding + r_padding
 end
 
+---renders icon block, colorizing it if needed
+---@return string str
+---@return number len length that won't be displayed (color tags)
+function Buffer:render_icon()
+  if self.icon.colors then
+    local status = self.current and 'active' or 'inactive'
+
+    local icon_color = modules.highlight.component_format_highlight(self.icon.colors[status])
+    local default_color = modules.highlight.component_format_highlight(self.highlights[status])
+
+    local icon = icon_color .. self.icon.text .. default_color
+    local extra_len = vim.fn.strchars(icon_color) + vim.fn.strchars(default_color)
+
+    return icon, extra_len
+  end
+
+  return self.icon.text, 0
+end
+
+---formats buffer string according to selected mode
+---@return string str
+---@return number len displayed length
 function Buffer:apply_mode(name)
+  local icon, extra_len = self:render_icon()
+
+  local str
   if self.options.mode == 0 then
-    return string.format('%s%s%s%s', self.alternate_file_icon, self.icon, name, self.modified_icon)
-  end
-
-  if self.options.mode == 1 then
-    return string.format('%s%s %s%s', self.alternate_file_icon, self.buf_index or '', self.icon, self.modified_icon)
-  end
-
-  if self.options.mode == 2 then
-    return string.format(
+    str = string.format('%s%s%s%s', self.alternate_file_icon, icon, name, self.modified_icon)
+  elseif self.options.mode == 1 then
+    str = string.format('%s%s %s%s', self.alternate_file_icon, self.buf_index or '', icon, self.modified_icon)
+  elseif self.options.mode == 2 then
+    str = string.format(
       '%s%s %s%s%s',
       self.alternate_file_icon,
       self.buf_index or '',
-      self.icon,
+      icon,
       name,
       self.modified_icon
     )
+  elseif self.options.mode == 3 then
+    str = string.format('%s%s %s%s', self.alternate_file_icon, self.bufnr or '', icon, self.modified_icon)
+  else -- if self.options.mode == 4 then
+    str = string.format('%s%s %s%s%s', self.alternate_file_icon, self.bufnr or '', icon, name, self.modified_icon)
   end
 
-  if self.options.mode == 3 then
-    return string.format('%s%s %s%s', self.alternate_file_icon, self.bufnr or '', self.icon, self.modified_icon)
-  end
-
-  -- if self.options.mode == 4 then
-  return string.format('%s%s %s%s%s', self.alternate_file_icon, self.bufnr or '', self.icon, name, self.modified_icon)
+  local len = vim.fn.strchars(str) - extra_len
+  return str, len
 end
 
 return Buffer
