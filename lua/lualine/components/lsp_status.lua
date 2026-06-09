@@ -13,7 +13,13 @@ local default_options = {
   -- List of LSP names to ignore (e.g., `null-ls`):
   ignore_lsp = {},
   show_name = true,
+  progress_display = 'spinner',
+  show_done = true,
 }
+
+local function progress_token(params)
+  return vim.inspect(params.token)
+end
 
 function M:init(options)
   -- Run `super()`.
@@ -25,10 +31,11 @@ function M:init(options)
   -- Apply symbols.
   self.symbols = self.options.symbols or {}
 
-  ---The difference between the `begin` and `end` progress events for each LSP.
+  ---Active and completed LSP progress state, indexed by client id and progress token.
   ---
-  ---@type table<integer, integer>
-  self.lsp_work_by_client_id = {}
+  ---@type table<integer, {active: table<string, {percentage: integer?, seq: integer}>, done: boolean}>
+  self.lsp_progress_by_client_id = {}
+  self.progress_seq = 0
 
   -- Listen to progress updates only if `nvim` supports the `LspProgress` event.
   pcall(vim.api.nvim_create_autocmd, 'LspProgress', {
@@ -36,20 +43,72 @@ function M:init(options)
     group = vim.api.nvim_create_augroup('lualine_lsp_progress', {}),
     ---@param event {data: {client_id: integer, params: lsp.ProgressParams}}
     callback = function(event)
-      local kind = event.data.params.value.kind
-      local client_id = event.data.client_id
-
-      local work = self.lsp_work_by_client_id[client_id] or 0
-      local work_change = kind == 'begin' and 1 or (kind == 'end' and -1 or 0)
-
-      self.lsp_work_by_client_id[client_id] = math.max(work + work_change, 0)
-
-      -- Refresh Lualine to update the LSP status symbol if it changed.
-      if (work == 0 and work_change > 0) or (work == 1 and work_change < 0) then
-        require('lualine').refresh()
+      local data = event.data or {}
+      local params = data.params or {}
+      local value = params.value
+      if type(value) ~= 'table' then
+        return
       end
+
+      local kind = value.kind
+      local client_id = data.client_id
+      if not client_id or not kind then
+        return
+      end
+
+      local client_progress = self.lsp_progress_by_client_id[client_id] or { active = {}, done = false }
+      local token = progress_token(params)
+
+      if kind == 'end' then
+        client_progress.active[token] = nil
+        client_progress.done = next(client_progress.active) == nil
+      elseif kind == 'begin' or kind == 'report' then
+        self.progress_seq = self.progress_seq + 1
+        local previous = client_progress.active[token] or {}
+        client_progress.active[token] = {
+          percentage = value.percentage ~= nil and value.percentage or previous.percentage,
+          seq = self.progress_seq,
+        }
+        client_progress.done = false
+      else
+        return
+      end
+
+      self.lsp_progress_by_client_id[client_id] = client_progress
+
+      -- Refresh Lualine to update spinner, percentage, and done status.
+      require('lualine').refresh()
     end,
   })
+end
+
+local function select_progress(client_progress)
+  local latest
+  local latest_with_percentage
+
+  for _, progress in pairs(client_progress.active) do
+    if latest == nil or progress.seq > latest.seq then
+      latest = progress
+    end
+    if progress.percentage ~= nil and (latest_with_percentage == nil or progress.seq > latest_with_percentage.seq) then
+      latest_with_percentage = progress
+    end
+  end
+
+  return latest_with_percentage or latest
+end
+
+local function current_spinner(symbols)
+  local spinner = symbols.spinner or {}
+  if #spinner == 0 then
+    return ''
+  end
+
+  -- Backwards-compatible function to get the current time in nanoseconds.
+  local hrtime = (vim.uv or vim.loop).hrtime
+  -- Advance the spinner every 80ms only once, not for each client (otherwise the spinners will skip steps).
+  -- NOTE: the spinner symbols table is 1-indexed.
+  return spinner[math.floor(hrtime() / (1e6 * 80)) % #spinner + 1]
 end
 
 function M:update_status()
@@ -61,30 +120,39 @@ function M:update_status()
   local get_lsp_clients = vim.lsp.get_clients or vim.lsp.get_active_clients
   local clients = get_lsp_clients { bufnr = vim.api.nvim_get_current_buf() }
 
-  -- Backwards-compatible function to get the current time in nanoseconds.
-  local hrtime = (vim.uv or vim.loop).hrtime
-  -- Advance the spinner every 80ms only once, not for each client (otherwise the spinners will skip steps).
-  -- NOTE: the spinner symbols table is 1-indexed.
-  local spinner_symbol = self.symbols.spinner[math.floor(hrtime() / (1e6 * 80)) % #self.symbols.spinner + 1]
+  local spinner_symbol = current_spinner(self.symbols)
+  -- Backwards-compatible function to check if a list contains a value.
+  local list_contains = vim.list_contains or vim.tbl_contains
 
   for _, client in ipairs(clients) do
     local status
-    local work = self.lsp_work_by_client_id[client.id]
-    if work ~= nil and work > 0 then
-      status = spinner_symbol
-    elseif work ~= nil and work == 0 then
-      status = self.symbols.done
+    local client_progress = self.lsp_progress_by_client_id[client.id]
+    local skip_client = false
+
+    if client_progress ~= nil then
+      local progress = select_progress(client_progress)
+      if progress ~= nil then
+        if self.options.progress_display == 'percentage' and progress.percentage ~= nil then
+          status = string.format('%d%%%%', progress.percentage)
+        else
+          status = spinner_symbol
+        end
+      elseif client_progress.done then
+        if self.options.show_done then
+          status = self.symbols.done
+        else
+          skip_client = true
+        end
+      end
     end
 
-    -- Backwards-compatible function to check if a list contains a value.
-    local list_contains = vim.list_contains or vim.tbl_contains
     -- Append the status to the LSP only if it supports progress reporting and is not ignored.
-    if not processed[client.name] and not list_contains(self.options.ignore_lsp, client.name) then
+    if not skip_client and not processed[client.name] and not list_contains(self.options.ignore_lsp, client.name) then
       local status_display = ((status and status ~= '') and (' ' .. status) or '')
       if self.options.show_name then
         table.insert(result, client.name .. status_display)
-      else
-        table.insert(result, status_display)
+      elseif status and status ~= '' then
+        table.insert(result, status)
       end
       processed[client.name] = true
     end

@@ -291,7 +291,7 @@ sections = {lualine_a = {'mode'}}
 - `selectioncount` (number of selected characters or lines)
 - `tabs` (shows currently available tabs)
 - `windows` (shows currently available windows)
-- `lsp_status` (shows active LSPs in the current buffer and a progress spinner)
+- `lsp_status` (shows active LSPs in the current buffer and progress status)
 
 #### Custom components
 
@@ -855,6 +855,11 @@ sections = {
       ignore_lsp = {},
       -- Display the LSP name
       show_name = true,
+      -- Display LSP progress as 'spinner' or 'percentage'.
+      -- Percentage mode falls back to spinner when percentage is unavailable.
+      progress_display = 'spinner',
+      -- Display the LSP name and done symbol after progress completes.
+      show_done = true,
     }
   }
 }

@@ -868,27 +868,42 @@ describe('lsp_status component', function()
   local assert_comp_ins = helpers.assert_component_instance
   local tmpdir
   local file
-  local opts = build_component_opts {
-    component_separators = { left = '', right = '' },
-    padding = 0,
-    ignore_lsp = { 'null-ls' },
-  }
   local lsp_status_comp
+
+  local function lsp_status_opts(opts)
+    return build_component_opts(vim.tbl_deep_extend('force', {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+      ignore_lsp = { 'null-ls' },
+    }, opts or {}))
+  end
+
+  local function stub_spinner_time()
+    if vim.uv and vim.uv.hrtime then
+      stub(vim.uv, 'hrtime')
+      vim.uv.hrtime.on_call_with().returns(12 * 1e6 * 80)
+    elseif vim.loop and vim.loop.hrtime then
+      stub(vim.loop, 'hrtime')
+      vim.loop.hrtime.on_call_with().returns(12 * 1e6 * 80)
+    end
+  end
 
   before_each(function()
     require('lualine').setup {}
     tmpdir = os.tmpname()
-    file = os.tmpname() .. '/test.lua'
+    os.remove(tmpdir)
+    file = tmpdir .. '/test.lua'
+    vim.fn.mkdir(tmpdir, 'p')
     vim.cmd([[
       augroup lualine
         autocmd!
       augroup END
     ]])
-    lsp_status_comp = helpers.init_component('lsp_status', opts)
+    lsp_status_comp = helpers.init_component('lsp_status', lsp_status_opts())
   end)
 
   after_each(function()
-    os.remove(tmpdir)
+    vim.fn.delete(tmpdir, 'rf')
   end)
 
   it('is empty when no LSP', function()
@@ -935,13 +950,7 @@ describe('lsp_status component', function()
     vim.cmd('edit ' .. file)
     stub(vim.lsp, 'get_clients')
     vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
-    if vim.uv and vim.uv.hrtime then
-      stub(vim.uv, 'hrtime')
-      vim.uv.hrtime.on_call_with().returns(12 * 1e6 * 80)
-    elseif vim.loop and vim.loop.hrtime then
-      stub(vim.loop, 'hrtime')
-      vim.loop.hrtime.on_call_with().returns(12 * 1e6 * 80)
-    end
+    stub_spinner_time()
 
     local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
       data = { client_id = 2, params = { value = { kind = 'begin' } } },
@@ -987,9 +996,7 @@ describe('lsp_status component', function()
   end)
 
   it('does not add unnecessary space separator when LSP progress symbol is empty', function()
-    local opts_no_done = opts
-    opts_no_done.symbols = { done = '' }
-    local lsp_status_comp_no_done = helpers.init_component('lsp_status', opts)
+    local lsp_status_comp_no_done = helpers.init_component('lsp_status', lsp_status_opts { symbols = { done = '' } })
 
     vim.cmd('edit ' .. file)
     stub(vim.lsp, 'get_clients')
@@ -1004,6 +1011,71 @@ describe('lsp_status component', function()
     -- Skip assertion if LSP progress updates are not supported by the current `nvim` version.
     if ok then
       assert_comp_ins(lsp_status_comp_no_done, ' lua_ls')
+    end
+  end)
+
+  it('shows LSP progress percentage when configured', function()
+    lsp_status_comp = helpers.init_component('lsp_status', lsp_status_opts { progress_display = 'percentage' })
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { token = 'progress', value = { kind = 'report', percentage = 42 } } },
+    })
+
+    if ok then
+      assert_comp_ins(lsp_status_comp, ' lua_ls 42%%')
+    end
+  end)
+
+  it('falls back to LSP progress spinner when percentage is unavailable', function()
+    lsp_status_comp = helpers.init_component('lsp_status', lsp_status_opts { progress_display = 'percentage' })
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+    stub_spinner_time()
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { token = 'progress', value = { kind = 'begin' } } },
+    })
+
+    if ok then
+      assert_comp_ins(lsp_status_comp, ' lua_ls ⠹')
+    end
+  end)
+
+  it('prefers LSP progress percentage over spinner', function()
+    lsp_status_comp = helpers.init_component('lsp_status', lsp_status_opts { progress_display = 'percentage' })
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { token = 'spinner', value = { kind = 'begin' } } },
+    }) and pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { token = 'percentage', value = { kind = 'report', percentage = 7 } } },
+    })
+
+    if ok then
+      assert_comp_ins(lsp_status_comp, ' lua_ls 7%%')
+    end
+  end)
+
+  it('hides completed LSP progress when done display is disabled', function()
+    lsp_status_comp = helpers.init_component('lsp_status', lsp_status_opts { show_done = false })
+    vim.cmd('edit ' .. file)
+    stub(vim.lsp, 'get_clients')
+    vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
+
+    local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { token = 'progress', value = { kind = 'begin', percentage = 3 } } },
+    }) and pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
+      data = { client_id = 2, params = { token = 'progress', value = { kind = 'end' } } },
+    })
+
+    if ok then
+      assert_comp_ins(lsp_status_comp, '')
     end
   end)
 end)
