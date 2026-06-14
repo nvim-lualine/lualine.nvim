@@ -2,6 +2,7 @@ local Buffer = require('lualine.utils.class'):extend()
 
 local modules = require('lualine_require').lazy_require {
   highlight = 'lualine.highlight',
+  icons = 'lualine.icons',
   utils = 'lualine.utils.utils',
 }
 
@@ -34,25 +35,14 @@ function Buffer:get_props()
   self.alternate_file_icon = self:is_alternate() and self.options.symbols.alternate_file or ''
   self.icon = ''
   if self.options.icons_enabled then
-    local dev
-    local status, _ = pcall(require, 'nvim-web-devicons')
-    if not status then
-      dev, _ = '', ''
-    elseif self.filetype == 'TelescopePrompt' then
-      dev, _ = require('nvim-web-devicons').get_icon('telescope')
-    elseif self.filetype == 'fugitive' then
-      dev, _ = require('nvim-web-devicons').get_icon('git')
-    elseif self.filetype == 'vimwiki' then
-      dev, _ = require('nvim-web-devicons').get_icon('markdown')
-    elseif self.buftype == 'terminal' then
-      dev, _ = require('nvim-web-devicons').get_icon('zsh')
-    elseif vim.fn.isdirectory(self.file) == 1 then
-      dev, _ = self.options.symbols.directory, nil
+    local icon
+    if vim.fn.isdirectory(self.file) == 1 then
+      icon = self.options.symbols.directory
     else
-      dev, _ = require('nvim-web-devicons').get_icon(self.file, vim.fn.expand('#' .. self.bufnr .. ':e'))
+      icon = modules.icons.file(self.file, self.bufnr, self.buftype, self.filetype)
     end
-    if dev then
-      self.icon = dev .. ' '
+    if icon then
+      self.icon = icon .. ' '
     end
   end
 end
