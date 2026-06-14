@@ -39,7 +39,7 @@ end
 ---error_code = { added = -1, modified = -1, removed = -1 }
 ---@param bufnr number|nil
 function M.get_sign_count(bufnr)
-  if bufnr then
+  if bufnr and (type(M.src) ~= 'function') then
     return diff_cache[bufnr]
   end
   if M.src then
