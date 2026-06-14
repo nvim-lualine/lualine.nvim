@@ -1016,6 +1016,7 @@ extensions = {'quickfix'}
 - symbols-outline
 - toggleterm
 - trouble
+- tagbar
 
 #### Custom extensions
 
