@@ -35,6 +35,8 @@ function M:init(options)
       warn = self:create_hl(self.options.diagnostics_color.warn, 'warn'),
       info = self:create_hl(self.options.diagnostics_color.info, 'info'),
       hint = self:create_hl(self.options.diagnostics_color.hint, 'hint'),
+      ok = self:create_hl(self.options.diagnostics_color.ok, 'ok'),
+      working = self:create_hl(self.options.diagnostics_color.working, 'working'),
     }
   end
 
@@ -48,12 +50,25 @@ function M:init(options)
       '### diagnostics.sources\n\nno sources for diagnostics configured.\nPlease specify which diagnostics source you want lualine to use with `sources` option.\n'
     )
   end
+
+  -- Check if a language server reports working progress.
+  self.lsp_started = false
+  self.lsp_working = false
+  vim.lsp.handlers["$/progress"] = function(_, result)
+    self.lsp_started = true
+    if result.value.kind == "report" then
+      self.lsp_working = true
+    elseif result.value.kind == "end" then
+      self.lsp_working = false
+    end
+  end
 end
 
 function M:update_status()
   local bufnr = vim.api.nvim_get_current_buf()
   local diagnostics_count
   local result = {}
+  local ok_count = 0
   if self.options.update_in_insert or vim.api.nvim_get_mode().mode:sub(1, 1) ~= 'i' then
     local error_count, warning_count, info_count, hint_count = 0, 0, 0, 0
     local diagnostic_data = modules.sources.get_diagnostics(self.options.sources)
@@ -63,6 +78,9 @@ function M:update_status()
       warning_count = warning_count + data.warn
       info_count = info_count + data.info
       hint_count = hint_count + data.hint
+    end
+    if error_count + warning_count + info_count + hint_count == 0 then
+      ok_count = 1
     end
     diagnostics_count = {
       error = error_count,
@@ -98,11 +116,21 @@ function M:update_status()
         table.insert(result, colors[section] .. padding .. self.symbols[section] .. diagnostics_count[section])
       end
     end
+    if self.lsp_working then
+      table.insert(result, colors['working'] .. self.symbols['working'])
+    elseif self.lsp_started and ok_count == 1 then
+      table.insert(result, colors['ok'] .. self.symbols['ok'])
+    end
   else
     for _, section in ipairs(self.options.sections) do
       if diagnostics_count[section] ~= nil and (always_visible or diagnostics_count[section] > 0) then
         table.insert(result, self.symbols[section] .. diagnostics_count[section])
       end
+    end
+    if self.lsp_working then
+      table.insert(result, self.symbols['working'])
+    elseif self.lsp_started and ok_count == 1 then
+      table.insert(result, self.symbols['ok'])
     end
   end
   return table.concat(result, ' ')
