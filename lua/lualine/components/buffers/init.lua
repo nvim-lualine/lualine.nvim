@@ -173,6 +173,7 @@ function M:update_status()
       if total_length > max_length then
         break
       end
+      before = buffers[current - i - 1]
       table.insert(data, 1, rendered_before)
     end
     -- draw right most undrawn buffer if fits in max_length
