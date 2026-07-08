@@ -17,6 +17,7 @@ local config = {
       winbar = {},
     },
     ignore_focus = {},
+    disable_statusline = {},
     always_divide_middle = true,
     always_show_tabline = true,
     globalstatus = vim.go.laststatus == 3,

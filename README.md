@@ -148,6 +148,7 @@ require('lualine').setup {
       winbar = {},
     },
     ignore_focus = {},
+    disable_statusline = {},
     always_divide_middle = true,
     always_show_tabline = true,
     globalstatus = false,
@@ -403,6 +404,16 @@ options = {
                              -- currently focused window as its only argument
                              -- and returns a boolean representing whether the
                              -- window's statusline should be drawn as inactive.
+
+  disable_statusline = {},   -- If current filetype is in this list it'll
+                             -- always have its statusline disabled.
+                             -- for example if you don't want statusline on
+                             -- specific filetypes you can add them here.
+                             --
+                             -- Can also be set to a function that takes the
+                             -- currently checked window as its only argument
+                             -- and returns a boolean representing whether the
+                             -- window's statusline should be disabled.
 
   always_divide_middle = true, -- When set to true, left sections i.e. 'a','b' and 'c'
                                -- can't take over the entire statusline even
