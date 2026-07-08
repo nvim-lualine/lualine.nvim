@@ -280,6 +280,26 @@ local function setup_theme()
     autocmd lualine OptionSet background lua require'lualine'.setup()]])
 end
 
+---Determines if the statusline for this window should be disabled.
+---
+---@param user_config table The user's config
+---@param win number The Neovim window handle to check
+---@return boolean Whether the statusline for this window should be disabled
+local function should_disable_statusline(user_config, win)
+  local disable_statusline = user_config.options.disable_statusline
+  if type(disable_statusline) == 'table' then
+    local buf = vim.api.nvim_win_get_buf(win)
+    local filetype = vim.api.nvim_buf_get_option(buf, 'filetype')
+    return vim.tbl_contains(disable_statusline, filetype)
+  elseif type(disable_statusline) == 'function' then
+    return vim.api.nvim_win_call(win, function()
+      return disable_statusline(win)
+    end)
+  else
+    return false
+  end
+end
+
 ---@alias StatusDispatchSecs
 ---| 'sections'
 ---| 'winbar'
@@ -289,6 +309,12 @@ end
 ---@return function(focused:bool):string
 local function status_dispatch(sec_name)
   return function(focused)
+    if sec_name == 'sections' then
+      local win = refresh_real_curwin or vim.api.nvim_get_current_win()
+      if should_disable_statusline(config, win) then
+        return nil
+      end
+    end
     local retval
     local current_ft = refresh_real_curwin
         and vim.api.nvim_buf_get_option(vim.api.nvim_win_get_buf(refresh_real_curwin), 'filetype')

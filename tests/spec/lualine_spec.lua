@@ -20,6 +20,7 @@ describe('Lualine', function()
           winbar = {},
         },
         ignore_focus = {},
+        disable_statusline = {},
         always_divide_middle = true,
         always_show_tabline = true,
         globalstatus = false,
@@ -265,6 +266,23 @@ describe('Lualine', function()
 
   it('can be desabled for specific filetypes', function()
     config.options.disabled_filetypes = { 'test_ft' }
+    require('lualine').setup(config)
+    local old_ft = vim.bo.ft
+    vim.bo.ft = 'test_ft'
+    statusline:expect(nil)
+    vim.bo.ft = old_ft
+  end)
+
+  it('can disable statusline dynamically using a function in disable_statusline', function()
+    config.options.disable_statusline = function(win)
+      return vim.api.nvim_win_is_valid(win)
+    end
+    require('lualine').setup(config)
+    statusline:expect(nil)
+  end)
+
+  it('can disable statusline using a filetype table in disable_statusline', function()
+    config.options.disable_statusline = { 'test_ft' }
     require('lualine').setup(config)
     local old_ft = vim.bo.ft
     vim.bo.ft = 'test_ft'
