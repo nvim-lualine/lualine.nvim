@@ -546,6 +546,27 @@ describe('Progress component', function()
   end)
 end)
 
+describe('Lines component', function()
+  it('works', function()
+    local opts = build_component_opts {
+      component_separators = { left = '', right = '' },
+      padding = 0,
+    }
+    assert_component('lines', opts, '  1/1:1 ')
+    vim.cmd('normal! 9o')
+    assert_component('lines', opts, ' 10/10:1 ')
+    vim.api.nvim_win_set_cursor(0, { 5, 0 })
+    assert_component('lines', opts, '  5/10:1 ')
+    -- test column number
+    vim.cmd('normal! oTest')
+    assert_component('lines', opts, '  6/11:4 ')
+    -- test column number in line containing cyrillic symbols
+    vim.cmd('normal! oТест')
+    assert_component('lines', opts, '  7/12:4 ')
+    vim.cmd('bdelete!')
+  end)
+end)
+
 describe('Mode component', function()
   it('works', function()
     stub(vim.api, 'nvim_get_mode')
