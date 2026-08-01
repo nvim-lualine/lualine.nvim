@@ -193,6 +193,13 @@ function M.find_git_dir(dir_path)
     file_dir = vim.fn.expand(file_dir:gsub('term://(.+)//.+', '%1'))
   end
 
+  -- Normalize separators on Windows. Paths may use `/` when 'shellslash' is set
+  -- or when plugins supply Unix-style paths; upward search uses `sep` (`\`).
+  -- See: https://github.com/nvim-lualine/lualine.nvim/issues/1452
+  if sep == '\\' and file_dir then
+    file_dir = file_dir:gsub('/', '\\')
+  end
+
   local root_dir = file_dir
   -- Search upward for .git file or folder
   while root_dir do
