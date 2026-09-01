@@ -8,6 +8,7 @@ local neq = assert.are_not.same
 local assert_component = helpers.assert_component
 local build_component_opts = helpers.build_component_opts
 local stub = require('luassert.stub')
+local uv = vim.uv or vim.loop
 
 describe('Component:', function()
   it('can select separators', function()
@@ -499,14 +500,14 @@ end)
 
 describe('Hostname component', function()
   it('works', function()
-    stub(vim.loop, 'os_gethostname')
-    vim.loop.os_gethostname.returns('localhost')
+    stub(uv, 'os_gethostname')
+    uv.os_gethostname.returns('localhost')
     local opts = build_component_opts {
       component_separators = { left = '', right = '' },
       padding = 0,
     }
     assert_component('hostname', opts, 'localhost')
-    vim.loop.os_gethostname:revert()
+    uv.os_gethostname:revert()
   end)
 end)
 
@@ -935,12 +936,9 @@ describe('lsp_status component', function()
     vim.cmd('edit ' .. file)
     stub(vim.lsp, 'get_clients')
     vim.lsp.get_clients.on_call_with({ bufnr = vim.api.nvim_get_current_buf() }).returns { { id = 2, name = 'lua_ls' } }
-    if vim.uv and vim.uv.hrtime then
-      stub(vim.uv, 'hrtime')
-      vim.uv.hrtime.on_call_with().returns(12 * 1e6 * 80)
-    elseif vim.loop and vim.loop.hrtime then
-      stub(vim.loop, 'hrtime')
-      vim.loop.hrtime.on_call_with().returns(12 * 1e6 * 80)
+    if uv and uv.hrtime then
+      stub(uv, 'hrtime')
+      uv.hrtime.on_call_with().returns(12 * 1e6 * 80)
     end
 
     local ok = pcall(vim.api.nvim_exec_autocmds, 'LspProgress', {
