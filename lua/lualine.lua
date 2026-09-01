@@ -3,6 +3,7 @@
 local M = {}
 
 local lualine_require = require('lualine_require')
+local uv = vim.uv or vim.loop
 local modules = lualine_require.lazy_require {
   highlight = 'lualine.highlight',
   loader = 'lualine.utils.loader',
@@ -14,10 +15,10 @@ local modules = lualine_require.lazy_require {
 }
 local config -- Stores currently applied config
 local timers = {
-  stl_timer = vim.loop.new_timer(),
-  tal_timer = vim.loop.new_timer(),
-  wb_timer = vim.loop.new_timer(),
-  refresh_check_timer = vim.loop.new_timer(),
+  stl_timer = uv.new_timer(),
+  tal_timer = uv.new_timer(),
+  wb_timer = uv.new_timer(),
+  refresh_check_timer = uv.new_timer(),
   halt_stl_refresh = false, -- mutex ?
   halt_tal_refresh = false,
   halt_wb_refresh = false,
@@ -465,11 +466,11 @@ end
 --- Sets &tabline option to lualine
 ---@param hide boolean|nil if should hide tabline
 local function set_tabline(hide)
-  vim.loop.timer_stop(timers.tal_timer)
+  uv.timer_stop(timers.tal_timer)
   timers.halt_tal_refresh = true
   vim.cmd([[augroup lualine_tal_refresh | exe "autocmd!" | augroup END]])
   if not hide and next(config.tabline) ~= nil then
-    vim.loop.timer_start(
+    uv.timer_start(
       timers.tal_timer,
       0,
       config.options.refresh.tabline,
@@ -512,8 +513,8 @@ local function check_refresh()
 end
 
 local function set_refresh_checker()
-  vim.loop.timer_stop(timers.refresh_check_timer)
-  vim.loop.timer_start(
+  uv.timer_stop(timers.refresh_check_timer)
+  uv.timer_start(
     timers.refresh_check_timer,
     0,
     config.options.refresh.refresh_time,
@@ -531,14 +532,14 @@ end
 --- adds auto command to redraw lualine on VimResized event
 ---@param hide boolean|nil if should hide statusline
 local function set_statusline(hide)
-  vim.loop.timer_stop(timers.stl_timer)
+  uv.timer_stop(timers.stl_timer)
   timers.halt_stl_refresh = true
   vim.cmd([[augroup lualine_stl_refresh | exe "autocmd!" | augroup END]])
   if not hide and (next(config.sections) ~= nil or next(config.inactive_sections) ~= nil) then
     modules.nvim_opts.set('statusline', '%#lualine_transparent#', { global = true })
     if config.options.globalstatus then
       modules.nvim_opts.set('laststatus', 3, { global = true })
-      vim.loop.timer_start(
+      uv.timer_start(
         timers.stl_timer,
         0,
         config.options.refresh.statusline,
@@ -554,7 +555,7 @@ local function set_statusline(hide)
       )
     else
       modules.nvim_opts.set('laststatus', 2, { global = true })
-      vim.loop.timer_start(
+      uv.timer_start(
         timers.stl_timer,
         0,
         config.options.refresh.statusline,
@@ -592,11 +593,11 @@ end
 --- Sets &winbar option to lualine
 ---@param hide boolean|nil if should unset winbar
 local function set_winbar(hide)
-  vim.loop.timer_stop(timers.wb_timer)
+  uv.timer_stop(timers.wb_timer)
   timers.halt_wb_refresh = true
   vim.cmd([[augroup lualine_wb_refresh | exe "autocmd!" | augroup END]])
   if not hide and (next(config.winbar) ~= nil or next(config.inactive_winbar) ~= nil) then
-    vim.loop.timer_start(
+    uv.timer_start(
       timers.wb_timer,
       0,
       config.options.refresh.winbar,

@@ -1,4 +1,5 @@
 local lualine_require = require('lualine_require')
+local uv = vim.uv or vim.loop
 
 local M = lualine_require.require('lualine.component'):extend()
 
@@ -62,7 +63,7 @@ function M:update_status()
   local clients = get_lsp_clients { bufnr = vim.api.nvim_get_current_buf() }
 
   -- Backwards-compatible function to get the current time in nanoseconds.
-  local hrtime = (vim.uv or vim.loop).hrtime
+  local hrtime = uv.hrtime
   -- Advance the spinner every 80ms only once, not for each client (otherwise the spinners will skip steps).
   -- NOTE: the spinner symbols table is 1-indexed.
   local spinner_symbol = self.symbols.spinner[math.floor(hrtime() / (1e6 * 80)) % #self.symbols.spinner + 1]

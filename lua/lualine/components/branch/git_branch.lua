@@ -5,6 +5,7 @@ local modules = lualine_require.lazy_require {
   utils = 'lualine.utils.utils',
   Job = 'lualine.utils.job',
 }
+local uv = vim.uv or vim.loop
 
 -- vars
 local current_git_branch = ''
@@ -17,7 +18,7 @@ local sep = package.config:sub(1, 1)
 -- event watcher to watch head file
 -- Use file watch for non Windows and poll for Windows.
 -- Windows doesn't like file watch for some reason.
-local file_changed = sep ~= '\\' and vim.loop.new_fs_event() or vim.loop.new_fs_poll()
+local file_changed = sep ~= '\\' and uv.new_fs_event() or uv.new_fs_poll()
 local git_dir_cache = {} -- Stores git paths that we already know of
 ---job handle for async git commands (reftable repos)
 local branch_job = nil
@@ -27,7 +28,7 @@ local branch_job = nil
 ---@return boolean
 local function is_reftable_repo(git_dir)
   local reftable_dir = git_dir .. sep .. 'reftable'
-  local stat = vim.loop.fs_stat(reftable_dir)
+  local stat = uv.fs_stat(reftable_dir)
   return stat ~= nil and stat.type == 'directory'
 end
 
@@ -201,7 +202,7 @@ function M.find_git_dir(dir_path)
       break
     end
     local git_path = root_dir .. sep .. '.git'
-    local git_file_stat = vim.loop.fs_stat(git_path)
+    local git_file_stat = uv.fs_stat(git_path)
     if git_file_stat then
       if git_file_stat.type == 'directory' then
         git_dir = git_path
@@ -220,12 +221,12 @@ function M.find_git_dir(dir_path)
       end
       if git_dir then
         -- Check for traditional HEAD file or reftable format
-        local head_file_stat = vim.loop.fs_stat(git_dir .. sep .. 'HEAD')
+        local head_file_stat = uv.fs_stat(git_dir .. sep .. 'HEAD')
         if head_file_stat and head_file_stat.type == 'file' then
           break
         end
         -- Also accept reftable repos (they may not have a traditional HEAD file)
-        local reftable_stat = vim.loop.fs_stat(git_dir .. sep .. 'reftable' .. sep .. 'tables.list')
+        local reftable_stat = uv.fs_stat(git_dir .. sep .. 'reftable' .. sep .. 'tables.list')
         if reftable_stat and reftable_stat.type == 'file' then
           break
         end

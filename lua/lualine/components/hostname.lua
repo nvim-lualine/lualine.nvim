@@ -3,9 +3,10 @@
 local modules = require('lualine_require').lazy_require {
   utils = 'lualine.utils.utils',
 }
+local uv = vim.uv or vim.loop
 
 local function hostname()
-  return modules.utils.stl_escape(vim.loop.os_gethostname())
+  return modules.utils.stl_escape(uv.os_gethostname())
 end
 
 return hostname

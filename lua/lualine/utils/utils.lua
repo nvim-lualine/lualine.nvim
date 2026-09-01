@@ -1,6 +1,7 @@
 -- Copyright (c) 2020-2021 shadmansaleh
 -- MIT license, see LICENSE for more details.
 local M = {}
+local uv = vim.uv or vim.loop
 
 -- Note for now only works for termguicolors scope can be bg or fg or any other
 -- attr parameter like bold/italic/reverse
@@ -204,7 +205,7 @@ function M.timer_call(timer, augroup, fn, max_err, err_msg)
   max_err = max_err or 3
   return vim.schedule_wrap(function(...)
     if err_cnt > max_err then
-      vim.loop.timer_stop(timer)
+      uv.timer_stop(timer)
       if augroup then
         vim.cmd(string.format([[augroup %s | exe "autocmd!" | augroup END]], augroup))
       end
