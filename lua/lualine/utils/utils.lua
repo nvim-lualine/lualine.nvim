@@ -201,8 +201,10 @@ end
 ---stops the timer after max_err errors in calling fn
 function M.timer_call(timer, augroup, fn, max_err, err_msg)
   local err_cnt, ret = 0, nil
+  local pending = false
   max_err = max_err or 3
-  return vim.schedule_wrap(function(...)
+  local callback = vim.schedule_wrap(function(...)
+    pending = false
     if err_cnt > max_err then
       vim.loop.timer_stop(timer)
       if augroup then
@@ -219,6 +221,15 @@ function M.timer_call(timer, augroup, fn, max_err, err_msg)
     end
     return ret
   end)
+  return function(...)
+    -- Incomplete commands can delay scheduled callbacks while the timer keeps firing.
+    -- Keep at most one pending callback for this timer.
+    if pending then
+      return
+    end
+    pending = true
+    callback(...)
+  end
 end
 
 return M
