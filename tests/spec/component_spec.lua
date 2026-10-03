@@ -931,6 +931,83 @@ describe('lsp_status component', function()
     assert_comp_ins(lsp_status_comp, ' lua_ls')
   end)
 
+  describe('when LSP names and progress symbols are hidden', function()
+    local hidden_opts
+
+    before_each(function()
+      hidden_opts = vim.tbl_deep_extend('force', vim.deepcopy(opts), {
+        icon = 'LSP',
+        show_name = false,
+        symbols = { spinner = '', done = '', separator = '|' },
+      })
+      lsp_status_comp = helpers.init_component('lsp_status', hidden_opts)
+      vim.cmd('edit ' .. file)
+      stub(vim.lsp, 'get_clients')
+      vim.lsp.get_clients.returns {
+        { id = 2, name = 'lua_ls' },
+      }
+    end)
+
+    it('shows only the icon when an LSP is attached', function()
+      assert_comp_ins(lsp_status_comp, 'LSP')
+    end)
+
+    it('shows the icon only once for multiple LSPs', function()
+      vim.lsp.get_clients.returns {
+        { id = 2, name = 'lua_ls' },
+        { id = 3, name = 'another_ls' },
+      }
+
+      assert_comp_ins(lsp_status_comp, 'LSP')
+    end)
+
+    it('hides the icon when no LSP is attached', function()
+      vim.lsp.get_clients.returns {}
+
+      assert_comp_ins(lsp_status_comp, '')
+    end)
+
+    it('hides the icon when all LSPs are ignored', function()
+      vim.lsp.get_clients.returns {
+        { id = 2, name = 'null-ls' },
+      }
+
+      assert_comp_ins(lsp_status_comp, '')
+    end)
+
+    it('hides the icon after the LSP detaches', function()
+      assert_comp_ins(lsp_status_comp, 'LSP')
+      vim.lsp.get_clients.returns {}
+
+      assert_comp_ins(lsp_status_comp, '')
+    end)
+
+    it('is empty when icons are disabled', function()
+      hidden_opts.icons_enabled = false
+      lsp_status_comp = helpers.init_component('lsp_status', hidden_opts)
+
+      assert_comp_ins(lsp_status_comp, '')
+    end)
+
+    it('is empty when the configured icon is empty', function()
+      hidden_opts.icon = ''
+      lsp_status_comp = helpers.init_component('lsp_status', hidden_opts)
+
+      assert_comp_ins(lsp_status_comp, '')
+    end)
+
+    it('supports a colored, right-aligned icon without extra spaces', function()
+      local hl = require('lualine.highlight')
+      stub(hl, 'component_format_highlight')
+      hl.component_format_highlight.returns('%#TestIcon#')
+      hidden_opts.icon = { 'LSP', align = 'right', color = { fg = '#aabbcc' } }
+      lsp_status_comp = helpers.init_component('lsp_status', hidden_opts)
+
+      assert_comp_ins(lsp_status_comp, '%#TestIcon#LSP')
+      hl.component_format_highlight:revert()
+    end)
+  end)
+
   it('shows LSP progress when supported', function()
     vim.cmd('edit ' .. file)
     stub(vim.lsp, 'get_clients')
