@@ -853,7 +853,8 @@ sections = {
       },
       -- List of LSP names to ignore (e.g., `null-ls`):
       ignore_lsp = {},
-      -- Display the LSP name
+      -- Display the LSP name. Set to false and clear the progress symbols
+      -- to show only the icon for attached, non-ignored LSPs.
       show_name = true,
     }
   }

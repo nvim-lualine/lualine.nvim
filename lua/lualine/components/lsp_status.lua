@@ -81,16 +81,28 @@ function M:update_status()
     -- Append the status to the LSP only if it supports progress reporting and is not ignored.
     if not processed[client.name] and not list_contains(self.options.ignore_lsp, client.name) then
       local status_display = ((status and status ~= '') and (' ' .. status) or '')
-      if self.options.show_name then
-        table.insert(result, client.name .. status_display)
-      else
-        table.insert(result, status_display)
+      local name = self.options.show_name and client.name or ''
+      local client_status = name .. status_display
+      if client_status ~= '' then
+        table.insert(result, client_status)
       end
       processed[client.name] = true
     end
   end
 
-  return table.concat(result, self.symbols.separator)
+  local status = table.concat(result, self.symbols.separator)
+  local icon = self.options.icon
+  if type(icon) == 'table' then
+    icon = icon[1]
+  end
+  -- An attached LSP can have no text when its name and progress symbols are hidden.
+  self.draw_empty_icon = next(processed) ~= nil
+    and status == ''
+    and self.options.icons_enabled
+    and type(icon) == 'string'
+    and icon ~= ''
+
+  return status
 end
 
 return M

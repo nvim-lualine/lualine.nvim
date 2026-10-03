@@ -144,6 +144,7 @@ function M:apply_icon()
     if type(icon) == 'table' then
       icon = icon[1]
     end
+    local icon_separator = self.status == '' and '' or ' '
     if
       self.options.icon_color_highlight
       and type(self.options.icon) == 'table'
@@ -151,7 +152,7 @@ function M:apply_icon()
     then
       self.status = table.concat {
         self.status,
-        ' ',
+        icon_separator,
         self:format_hl(self.options.icon_color_highlight),
         icon,
         self:get_default_hl(),
@@ -161,13 +162,13 @@ function M:apply_icon()
         self:format_hl(self.options.icon_color_highlight),
         icon,
         self:get_default_hl(),
-        ' ',
+        icon_separator,
         self.status,
       }
     elseif type(self.options.icon) == 'table' and self.options.icon.align == 'right' then
-      self.status = table.concat({ self.status, icon }, ' ')
+      self.status = table.concat({ self.status, icon }, icon_separator)
     else
-      self.status = table.concat({ icon, self.status }, ' ')
+      self.status = table.concat({ icon, self.status }, icon_separator)
     end
   end
 end
@@ -280,9 +281,9 @@ function M:draw(default_highlight, is_focused)
   if self.options.fmt then
     status = self.options.fmt(status or '', self)
   end
-  if type(status) == 'string' and (#status > 0 or self.options.draw_empty) then
+  if type(status) == 'string' and (#status > 0 or self.options.draw_empty or self.draw_empty_icon) then
     self.status = status
-    if #status > 0 then
+    if #status > 0 or self.draw_empty_icon then
       self:apply_icon()
       self:apply_padding()
     end
