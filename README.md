@@ -11,7 +11,7 @@ A blazing fast and easy to configure Neovim statusline written in Lua.
 
 `lualine.nvim` requires Neovim >= 0.7.
 
-For previous versions of neovim please use compatability tags for example
+For previous versions of neovim please use compatibility tags for example
 compat-nvim-0.5
 
 ## Contributing
@@ -418,10 +418,10 @@ options = {
 
   refresh = {                  -- sets how often lualine should refresh it's contents (in ms)
     statusline = 100,         -- The refresh option sets minimum time that lualine tries
-    tabline = 100,            -- to maintain between refresh. It's not guarantied if situation
+    tabline = 100,            -- to maintain between refresh. It's not guaranteed if situation
     winbar = 100              -- arises that lualine needs to refresh itself before this time
                               -- it'll do it.
-    refresh_time = 16,        -- ~60fps the time after which refresh queue is processed. Mininum refreshtime for lualine
+    refresh_time = 16,        -- ~60fps the time after which refresh queue is processed. Minimum refreshtime for lualine
     events = {                -- The auto command events at which lualine refreshes
       'WinEnter',
       'BufEnter',
@@ -564,7 +564,7 @@ sections = {
         alpha = 'Alpha'
       }, -- Shows specific buffer name for that filetype ( { `filetype` = `buffer_name`, ... } )
 
-      -- Automatically updates active buffer color to match color of other components (will be overidden if buffers_color is set)
+      -- Automatically updates active buffer color to match color of other components (will be overridden if buffers_color is set)
       use_mode_colors = false,
 
       buffers_color = {
@@ -767,7 +767,7 @@ sections = {
                 -- 2: shows the full path
                 -- 3: shows the full path and shorten $HOME to ~
 
-      -- Automatically updates active tab color to match color of other components (will be overidden if buffers_color is set)
+      -- Automatically updates active tab color to match color of other components (will be overridden if buffers_color is set)
       use_mode_colors = false,
 
       tabs_color = {
@@ -822,7 +822,7 @@ sections = {
 
       disabled_buftypes = { 'quickfix', 'prompt' }, -- Hide a window if its buffer's type is disabled
 
-      -- Automatically updates active window color to match color of other components (will be overidden if buffers_color is set)
+      -- Automatically updates active window color to match color of other components (will be overridden if buffers_color is set)
       use_mode_colors = false,
 
       windows_color = {
@@ -1051,14 +1051,14 @@ require('lualine').refresh()
 ```
 
 Also, note by default when you call refresh a refresh event is queued in lualine.
-It desn't refresh event immidiately. It'll refresh on next refresh check pass.
+It doesn't refresh event immediately. It'll refresh on next refresh check pass.
 By default this time is set to 16ms to match 60fps. This duration can be configured
 with `options.refresh.refresh_time` option. If you want to bypass the refresh queue
 and want lualine to process the refresh immmidiately call refresh with `force=true`
 parameter set like this.
 ```lua
 require('lualine').refresh({
-  force = true,       -- do an immidiate refresh
+  force = true,       -- do an immediate refresh
   scope = 'tabpage',  -- scope of refresh all/tabpage/window
   place = { 'statusline', 'winbar', 'tabline' },  -- lualine segment ro refresh.
 })
